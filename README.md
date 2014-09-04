@@ -42,8 +42,6 @@ yum install php-intl
 Failure to do so will result in the following error message:
 > Fatal error: Uncaught exception 'Zend\I18n\Exception\ExtensionNotLoadedException' with message 'Zend\I18n\Translator component requires the intl PHP extension'
 
-As documented per [JIRA AL-59: Latest version of nginad causes FATAL ERROR on 404](https://cdnpal.atlassian.net/browse/AL-59)
-
 ------------------
 December 20, 2013
 ------------------
