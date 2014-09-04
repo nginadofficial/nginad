@@ -1,0 +1,77 @@
+<?php
+$this->headScript()->prependFile($this->basePath() . '/js/script.js');
+?>
+<div class="row headtop">
+  <div class="span12">
+    <h4 class="headbreadcrumb">Account Settings</h4>
+    </div>
+</div>
+
+<div class="bs-docs-example">
+            <ul class="nav nav-tabs" id="myTab">
+              <li class="active"><a data-toggle="tab" href="#profile">Profile</a></li>
+              <li><a href="/users/changepassword">Change Password</a></li>
+              <li><a href="/users/websites">Websites</a></li>
+            </ul>
+            <div class="tab-content" id="myTabContent">
+              <div id="profile" class="tab-pane fade active in">
+ 			<?php 
+ 			if(isset($success_msg) && $success_msg != null):
+	    	    echo '<div id="cdn_form_success" class="alert alert-success" style="margin: 5px;">Account updated successfully.</div>';
+		    endif;
+    		?>
+<div id="cdn_form_msg" class="alert alert-error" style="margin: 5px; display:none;"></div>
+ 			<form id="accountform" name="accountform" method="POST" action="/users/account">
+				<fieldset>
+				     <div class="form-group">
+						<label for="email">Email: </label>
+						<input type="text" class="input-medium" name="email" value="<?php echo $user_data->user_email;?>" readonly="readonly">
+					</div>
+					<div class="form-group">
+						<label for="name">Name: <span class="hlp"><small><i>(This name will appear on your profile)</i></small></span></label>
+						<input type="text" class="input-medium" name="name" value="<?php echo $user_data->user_fullname;?>">
+					</div>
+				    <div class="form-group">
+						<label for="description">Profile Bio:</label>
+						<textarea maxlength="5000" name="description"><?php echo $user_data->user_description;?></textarea>
+					</div>
+					<div class="form-group">
+					   <input type="submit" class="btn btn-primary" name="update" value="Update account" />
+					</div>
+				</fieldset>
+				<input type="hidden" name="user_id" value="<?php echo $user_data->user_id;?>">
+				</form>        
+              </div>
+              <div id="change_password" class="tab-pane fade <?php if($user_tab=='password'): echo "active in";endif;?>">
+               <?php 
+                if(isset($error_msg) && $error_msg != null):
+				    echo '<div id="cdn_form_error" class="alert alert-error" style="margin: 5px;">'.$error_msg.'</div>';
+			    endif;
+			    if(isset($success_msg1) && $success_msg1 != null):
+		    	    echo '<div id="cdn_form_success1" class="alert alert-success" style="margin: 5px;">Password updated successfully.</div>';
+			    endif;
+			   ?>
+               <div id="cdn_change_pass" class="alert alert-error" style="margin: 5px; display:none;"></div>
+               <form id="changepassform" name="changepassform" method="POST" action="/users/changepassword">
+				<fieldset>
+				<div class="form-group">
+					<label for="password">Old Password: </label>
+					<input type="password" class="input-medium" name="old_password" id="old_password" class="input-mini">
+				</div>
+				<div class="form-group">
+					<label for="password">New Password: </label>
+					<input type="password" class="input-medium" name="password" id="password">
+				</div>
+				<div class="form-group">
+					<label for="confirm_password">Confirm password:</label>
+					<input type="password" name="confirm_password" class="input-medium" id="confirm_password">
+				</div>
+				 <div class="form-group">
+					<input type="submit" class="btn btn-primary" name="update" value="Change Password" />
+				</div>
+				</fieldset>
+				<input type="hidden" name="user_id" value="<?php echo $user_data->user_id;?>">
+			</form>
+              </div>
+            </div>
+          </div>

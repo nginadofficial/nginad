@@ -1,0 +1,178 @@
+<?php
+$this->headScript()->appendFile($this->basePath() . '/js/3rdparty/jquery-ui-1.9.2.custom.min.js');
+$this->headLink()->appendStylesheet($this->basePath() . '/css/jquery-ui/smoothness/jquery-ui-1.9.2.custom.min.css');
+$this->headScript()->appendFile($this->basePath() . '/js/banner.js');
+$this->headScript()->appendFile($this->basePath() . '/js/script.js');
+
+$preview_query = $ispreview == true ? "?ispreview=true" : "";
+if ($ispreview == true):
+	$rtb_banner_id = $bannerpreviewid;
+	$ad_campaign_id = $campaignpreviewid;
+else:
+	$rtb_banner_id = $bannerid;
+	$ad_campaign_id = $campaignid;
+endif;
+
+$minEndDate = explode("/", $enddate);
+
+
+$this->headScript()->captureStart(); ?>
+
+$(function() {
+	$( "#startdate" ).datepicker(
+	{
+		changeMonth: true,
+		changeYear: true,
+		showOtherMonths: true,
+        selectOtherMonths: false,
+        yearRange: "-1:+6",
+	    onSelect: function(date){
+	        var selectedDate = new Date(date);
+	        var msecsInADay = 86400000;
+	        var endDate = new Date(selectedDate.getTime() + msecsInADay);
+	        $("#enddate").datepicker( "option", "minDate", endDate );
+	    }
+	});
+	
+	$( '#startdateicon' ).click(function() {
+          $('#startdate').datepicker('show');
+    });
+    
+
+    $( "#enddate" ).datepicker(
+	{
+		changeMonth: true,
+		changeYear: true,
+		showOtherMonths: true,
+        selectOtherMonths: false,
+        yearRange: "-1:+6",
+       <?php if($minEndDate[2]!='0000'):?>
+        minDate:new Date(<?php echo $minEndDate[2];?>,<?php echo $minEndDate[0];?>,<?php echo $minEndDate[1];?>)
+       <?php endif;?> 
+	});
+	
+	$( '#enddateicon' ).click(function() {
+          $('#enddate').datepicker('show');
+    });
+});
+<?php $this->headScript()->captureEnd();  ?>
+
+   <ul class="breadcrumb">
+    <li><a href="/demand/<?php echo $preview_query; ?>">Ad Campaigns</a><span class="divider">/</span></li>
+    <li><?php echo $bread_crumb_info["BCAdCampaign"]; ?><span class="divider">/</span></li>
+    <li><a href="/demand/viewbanner/<?php echo $ad_campaign_id; ?><?php echo $preview_query; ?>">Banners</a><span class="divider">/</span></li>
+    <li><?php echo $bread_crumb_info["BCBanner"]; ?><span class="divider">/</span></li>
+    <li>Edit Banner</li>
+    </ul>
+
+<div id="cdn_form_msg" class="alert alert-error" style="margin: 5px; display: none;"></div>
+<form id="bannerform" name="bannerform" method="POST" class="form-horizontal form-top-magin" action="/demand/newbanner">
+<div class="formbox">
+<fieldset>
+<div class="span7">
+    <input type="hidden" name="campaignid" value="<?php echo $campaignid;?>">
+    <input type="hidden" name="campaignpreviewid" value="<?php echo $campaignpreviewid;?>">
+    <input type="hidden" name="bannerid" value="<?php echo $bannerid;?>">
+	<input type="hidden" name="bannerpreviewid" value="<?php echo $bannerpreviewid;?>">
+	<input type="hidden" name="ispreview" value="<?php echo $ispreview;?>">
+	  <div class="control-group">
+		<label for="bannername">Banner Name</label>
+		<input type="text" name="bannername" class="zone-txtbox" value="<?php echo $bannername;?>">
+	</div>
+
+	  <div class="control-group">
+	    <label for="startdate">Start Date</label>
+        <div class="input-append date">
+		  <input name="startdate" id="startdate" class=" banner-datepicket" size="16" type="text" value="<?php echo $startdate;?>" readonly="readonly" />
+		  <span class="add-on" id="startdateicon"><i class="icon-calendar"></i></span>
+	   </div>
+	</div>
+
+	<div class="control-group">
+	    <label for="enddate">End Date</label>
+        <div class="input-append date banner-datepicket">
+		  <input name="enddate" id="enddate" class=" banner-datepicket" size="16" type="text" value="<?php echo $enddate;?>" readonly="readonly" />
+		  <span class="add-on" id="enddateicon"><i class="icon-calendar"></i></span>
+	   </div>
+	</div>
+	  <div class="control-group">
+		<label for="adcampaigntype">What type of ad campaign banner is this?</label>
+        <select id="adcampaigntype" class="zone-txtarea" name="adcampaigntype" onchange="switchAdCampaignType();">
+            <?php foreach ($adcampaigntype_options as $code => $name): ?>
+                <?php if ((string)$code === $current_adcampaigntype): ?>
+                    <option value="<?php echo $code;?>" selected="selected"><?php echo $name;?></option>
+                <?php else: ?>
+                    <option value="<?php echo $code;?>"><?php echo $name;?></option>
+                <?php endif; ?>
+            <?php endforeach; ?>
+        </select>
+        <div id="weight-box">
+		    <label for="weight" class="control-label">Ad Display Priority</label>
+		    <div class="controls">
+		    <input type="text" class="input-mini" value="<?php echo $weight;?>" size="5" maxlength="10" id="weight" name="weight">    </div> 
+    	</div>
+        <div id="zone-picker"></div>
+       </div>
+	  <div class="control-group">
+		<label for="ismobile">Is this a mobile ad?</label>
+        <select id="ismobile" class="zone-txtarea" name="ismobile" onchange="switchMobile(this);">
+            <?php foreach ($mobile_options as $code => $name): ?>
+                <?php if ((string)$code === $current_mobile): ?>
+                    <option value="<?php echo $code;?>" selected="selected"><?php echo $name;?></option>
+                <?php else: ?>
+                    <option value="<?php echo $code;?>"><?php echo $name;?></option>
+                <?php endif; ?>
+            <?php endforeach; ?>
+        </select>
+	</div>
+
+ <div class="control-group">
+		<label for="iabsize">IAB Size</label>
+		<div id="size-select">
+<select id="iabsize" class="zone-txtarea" name="iabsize" onchange="formSelectSize(this);">
+    <option value="">[ SELECT A SIZE ]</option>
+    <?php foreach ($size_list as $shortcode => $name): ?>
+        <?php if ((string)$shortcode === $current_iabsize): ?>
+            <option value="<?php echo $shortcode;?>" selected="selected"><?php echo $name;?></option>
+        <?php else: ?>
+            <option value="<?php echo $shortcode;?>"><?php echo $name;?></option>
+        <?php endif; ?>
+    <?php endforeach; ?>
+</select>
+  </div>
+	</div>
+ <div class="control-group">
+		<label for="height">Height</label>
+		<input type="text" class="input-mini" id="height" name="height" value="<?php echo $height;?>">
+	</div>
+	</div>
+	<div class="span7">
+	 <div class="control-group">
+		<label for="width">Width</label>
+		<input type="text" id="width" class="input-mini" name="width"  value="<?php echo $width;?>">
+	</div>
+	 <div class="control-group">
+		<label for="bidamount">Bid Amount ( CPM )</label>
+		<div class="input-prepend">
+		<span class="add-on">$</span>
+		<input type="text" name="bidamount"  class="input-small" value="<?php echo $bidamount;?>">
+		</div>
+	</div>
+	 <div class="control-group">
+		<label for="adtag">Ad Tag</label>
+		<textarea  class="banner-txtarea"  name="adtag" rows="6"><?php echo htmlentities($adtag);?></textarea>
+	</div>
+	 <div class="control-group">
+		<label for="landingpagetld" class="input">LandingPage TLD [top level domain] <span class="hlp"><br/><small><i>(eg. nginad.com - required by RTB [if not known just use the tld of the tag])</i></small></span></label>
+		<input type="text" class="zone-txtbox" name="landingpagetld" value="<?php echo $landingpagetld;?>">
+	</div>
+	
+	</div>
+	<div class="span12">
+	 <div class="control-group">
+		   <input type="submit" class="btn btn-primary" name="B1" value="Update Banner" />
+		</div>
+	</div>
+</fieldset>
+</div>
+</form>

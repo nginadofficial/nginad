@@ -1,0 +1,80 @@
+<?php
+$this->headScript()->prependFile($this->basePath() . '/js/script.js');
+?>
+<style>
+#main-container.centerj {
+    width: 45%;
+}
+	
+</style>
+<div class="loginbox">
+<form class="form-horizontal" method="POST" action="/auth/authenticate" name="loginform" id="loginform" >
+						<fieldset>
+							<div id="legend" class="headbreadcrumb">
+								<h1 class="loginhead">Login</h1>
+							</div>  
+<?php
+if (isset($_SESSION['user']['message'])) {
+   echo '<div id="cdn_form_msg" class="alert alert-error" style="margin: 5px;">'.$_SESSION['user']['message'].'</div>';
+   unset($_SESSION['user']['message']);
+}
+?>  
+							<div class="control-group">
+								<!-- Username -->
+								<label class="control-label"  for="username">Email Address</label>
+								<div class="controls">
+									<input type="text" id="username" name="username" placeholder="" class="input-xlarge">
+								</div>
+							</div>
+							
+							<div class="control-group">
+								<!-- Password-->
+								<label class="control-label" for="password">Password</label>
+								<div class="controls">
+									<input type="password" id="password" name="password" placeholder="" class="input-xlarge">
+								</div>
+							</div>
+							
+							<div class="control-group">
+								<!-- Password-->
+								
+								<div class="controls">
+									<label  style="display: inline; float: left; margin-right: 10px;" for="password"><input type="checkbox" name="rememberme" /></label><label for="rememberme"  style="float: left; margin-top: 4px;">Remember Me</label>
+								</div>
+							</div>
+							
+							
+							<div class="control-group">
+							<!-- Button -->
+								<div class="controls">
+									 <input type="submit" class="btn btn-primary" value="Login to Dashboard" name="B1">
+								</div>
+							</div>
+						</fieldset>
+					</form>       
+</div>					
+<!--<form method="POST" action="/auth/authenticate" name="login"  class="form-horizontal">
+<fieldset>
+    <div>
+        <label for="username">Email Address</label>
+        <input name="username" type="text" />
+    </div>
+    <div>
+        <label for="password">Password</label>
+        <input name="password" type="password" />
+    </div>
+    <div style="position: relative; height: 35px; display: block;">
+    	<div class="" style="position: relative">
+    	<div style="position: absolute; left: 0px; top: 0px;">
+    		<input type="checkbox" name="rememberme" />
+    	</div>
+    	<div style="position: absolute; left: 20px; top: 3px;">
+    		<label for="rememberme">Remember Me</label>
+    	</div>
+    	</div>
+    </div>
+    <div>
+        <input type="submit" class="btn btn-primary" value="Login to Dashboard" name="B1">
+    </div>
+</fieldset>
+</form>-->

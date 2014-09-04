@@ -1,0 +1,80 @@
+<?php
+$this->headScript()->prependFile($this->basePath() . '/js/script.js');
+
+$this->headScript()->captureStart();
+$this->headScript()->captureEnd();
+?>
+<h4 class="headbreadcrumb blue-color" style="float: left;">Create Demand Customer account.</h4>
+<h4 class="headbreadcrumb blue-color" style="font-size: 14px;text-decoration: underline;text-align: right;"><a href="/signup">Publishers Sign-up Here</a></h4>
+
+<?php 
+    if(isset($error_msg) && $error_msg != null):
+    
+	    echo '<div id="cdn_form_error" class="alert alert-error" style="margin: 5px;">'.$error_msg.'</div>';
+    endif;
+    if(isset($success_msg) && $success_msg != null):
+    
+	    echo '<div id="cdn_form_success" class="alert alert-success" style="margin: 5px;">Account created successfully. You will receive a welcome email when your account is approved by our Ad Operations Team</div>';
+    endif;
+?>
+<div id="cdn_form_msg" class="alert alert-error" style="margin: 5px; display:none;"></div>
+<div class="left">
+	<form id="customersignupform" name="customersignupform" class="form-horizontal form-top-magin" name="signup" method="post" action="/signup/customer">
+	<div class="control-group">
+	    <label for="Customer Name" class="control-label">Customer Name</label>
+	    <div class="controls">
+	    <input type="text" value="" maxlength="100" name="customer_name" id="customer_name" placeholder="Name">    </div>
+	</div>
+	<div class="control-group">
+	    <label for="Email" class="control-label">Email</label>
+	    <div class="controls">
+	    <input type="text" value="" maxlength="50" name="email" id="email" placeholder="me@example.com">
+	    </div>
+	</div>
+	<div class="control-group">
+	    <label for="Company" class="control-label">Company</label>
+	    <div class="controls">
+	    <input type="text" value="" maxlength="50" name="company" id="company" placeholder="Company">    </div>
+	</div>
+	<div class="control-group">
+	    <label for="Website" class="control-label">Website</label>
+	    <div class="controls">
+	    <input type="text" value="" maxlength="50" name="website" id="website" placeholder="example.com">    </div>
+	</div>
+	<div class="control-group">
+	    <label for="Partner Type" class="control-label">Partner Type</label>
+	    <div class="controls">
+	    <select id="partner_type" name="partner_type">
+	     <?php 
+	     foreach($partner_type as $key=>$value): 
+		 	echo '<option value="'. $key .'">'. $value .'</option>';
+		 endforeach;
+		 ?>
+		</select>
+		</div>
+	    </div> 
+	<div class="control-group">
+	    <label for="Username" class="control-label">Username</label>
+	    <div class="controls">
+	    	<input type="text" value="" maxlength="50" name="user_login" id="user_login" placeholder="username">
+	    </div>
+	</div>
+	    <div class="control-group">
+	    <label for="Password" class="control-label">Password</label>
+	    <div class="controls">
+	    <input type="password" value=""  name="password" id="password">    </div>
+		</div> 
+		<div class="control-group">
+	    <label for="Confirm Password" class="control-label">Confirm Password</label>
+	    <div class="controls">
+	    <input type="Password" value=""  name="confirm_password" id="confirm_password">    </div>
+		</div> 
+	    <div class="controls">
+	    <button name="submit" type="submit" class="btn btn-primary btn-margin" id="submitbutton" >Create Account</button>
+	    </div>
+	    </div>
+	</form>
+</div>
+<div class="right">
+	<img src="/img/larry.nginad.jpg" />
+</div>

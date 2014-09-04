@@ -1,0 +1,111 @@
+<?php
+echo $this->headScript()->prependFile($this->basePath() . '/js/script.js');
+
+$preview_query = $ispreview == true ? "?ispreview=true" : "";
+
+if ($ispreview == true):
+	$rtb_banner_id = $banner_preview_id;
+	$ad_campaign_id = $campaign_preview_id;
+else:
+	$rtb_banner_id = $banner_id;
+	$ad_campaign_id = $campaign_id;
+endif;
+?>
+<div class="steps-container step1">
+
+    <h4 class="breadcrumb" style="margin-bottom: 0"><a href="/demand/<?php echo $preview_query; ?>">Ad Campaigns</a> &raquo; <?php echo $bread_crumb_info["BCAdCampaign"]; ?> &raquo; <a href="/demand/viewbanner/<?php echo $ad_campaign_id; ?><?php echo $preview_query; ?>">Banners</a> >> <?php echo $bread_crumb_info["BCBanner"]; ?> >> Exclusive Inclusions</h4>
+
+    
+<div id="main-container">
+    <div id="selection-results" class="steps-box">
+ <div class="formbox" > 
+<h4 style="margin-bottom: 10px"><a href="/demand/createexclusiveinclusion/<?php echo $rtb_banner_id; ?><?php echo $preview_query; ?>">Create Exclusive Inclusion</a></h4>
+          <table id="result-table"  class="table table-striped table-bordered table-margin">
+            <tr>
+           <th>
+			<?php if ($ispreview == true): ?>
+					PEI_ID
+			<?php else: ?>
+					EI_ID
+			<?php endif; ?>
+           </th>
+           <th>
+			<?php if ($ispreview == true): ?>
+					PB_ID
+			<?php else: ?>
+					B_ID
+			<?php endif; ?>
+           </th>
+           <th>
+            Delete Exclusive Inclusion
+           </th>
+           <th>
+            Inclusion Type
+           </th>
+           <th>
+            Domain Name
+           </th>
+           <th>
+            Date Created
+           </th>
+           </tr>
+
+    <?php foreach ($rtb_domain_exclusive_inclusions as $rtb_domain_exclusive_inclusion) :
+
+    $rtb_domain_exclusive_inclusion_id = "";
+
+    if (isset($rtb_domain_exclusive_inclusion->AdCampaignBannerDomainExclusiveInclusionPreviewID)):
+    	$rtb_domain_exclusive_inclusion_id = $rtb_domain_exclusive_inclusion->AdCampaignBannerDomainExclusiveInclusionPreviewID;
+    else:
+    	$rtb_domain_exclusive_inclusion_id = $rtb_domain_exclusive_inclusion->AdCampaignBannerDomainExclusiveInclusionID;
+    endif;
+    ?>
+            <tr>
+           <td>
+            <?php echo $rtb_domain_exclusive_inclusion_id; ?>
+           </td>
+           <td>
+            <?php echo $rtb_banner_id; ?>
+           </td>
+           <td>
+            <a href="javascript:void(0);" onclick="deleteExclusiveInclusionModal('/demand/deleteexclusiveinclusion/<?php echo $rtb_domain_exclusive_inclusion_id;?><?php echo $preview_query;?>','<?php echo $rtb_domain_exclusive_inclusion->DomainName;?>');">Delete Exclusive Inclusion</a>
+           </td>
+           <td>
+            <?php echo $rtb_domain_exclusive_inclusion->InclusionType; ?>
+           </td>
+           <td>
+            <?php echo $rtb_domain_exclusive_inclusion->DomainName; ?>
+           </td>
+           <td>
+           <?php echo $rtb_domain_exclusive_inclusion->DateCreated; ?>
+           </td>
+           </tr>
+    <?php endforeach; ?>
+    </table>
+    </div>
+    </div>
+    </div>
+</div>
+<div style="clear:both"></div>
+
+<!-- ExclusiveInclusion Delete Modal -->
+<input  type="hidden" name="modal_exclusive_inclusion_id" id="modal_exclusive_inclusion_id" value="0" />
+<div class="modal fade" id="DeleteExclusiveInclusionModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="myModalLabel">Delete Exclusive Inclusion</h4>
+      </div>
+      <div class="modal-body">
+      <div id="exclusive_inclusion_alert_msg" class="alert alert-error" style="display: none;">Error</div>
+		<p id="msg"></p>
+<h5 style="color: #b94a48;">This action is IMMEDIATE and NOT REVERSABLE!</h5>
+      </div>
+      <div class="modal-footer">
+      <button type="button" data-loading-text="Processing..." id="exclusive_inclusion_yes_btn" class="btn btn-primary" onclick="deleteExclusiveInclusionConfirm();">Yes</button>
+        <button type="button" class="btn btn-default" id="exclusive_inclusion_no_btn" data-dismiss="modal">No</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- ExclusiveInclusion Delete Modal -->

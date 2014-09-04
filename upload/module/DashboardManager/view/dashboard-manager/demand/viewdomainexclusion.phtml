@@ -1,0 +1,116 @@
+<?php
+echo $this->headScript()->prependFile($this->basePath() . '/js/script.js');
+
+$preview_query = $ispreview == true ? "?ispreview=true" : "";
+
+if ($ispreview == true):
+	$rtb_banner_id = $banner_preview_id;
+	$ad_campaign_id = $campaign_preview_id;
+else:
+	$rtb_banner_id = $banner_id;
+	$ad_campaign_id = $campaign_id;
+endif;
+?>
+<div class="steps-container step1">
+<h4 class="headbreadcrumb"><a href="/demand/createdomainexclusion/<?php echo $rtb_banner_id; ?><?php echo $preview_query; ?>">Create Domain Exclusion</a></h4>
+
+  <ul class="breadcrumb breadcrumb-heading">
+    <li><a href="/demand/<?php echo $preview_query; ?>">Ad Campaigns</a><span class="divider">/</span></li>
+    <li><?php echo $bread_crumb_info["BCAdCampaign"]; ?><span class="divider">/</span></li>
+    <li><a href="/demand/viewbanner/<?php echo $ad_campaign_id; ?><?php echo $preview_query; ?>">Banners</a><span class="divider">/</span></li>
+    <li><?php echo $bread_crumb_info["BCBanner"]; ?><span class="divider">/</span></li>
+    <li>Domain Exclusions</li>
+    </ul>
+
+   <div id="selection-results" class="steps-box">
+
+<div class="formbox">
+       <table class="table table-striped table-bordered table-margin">
+            <tr>
+           <th>
+			<?php if ($ispreview == true): ?>
+					PDE_ID
+			<?php else: ?>
+					DE_ID
+			<?php endif; ?>
+           </th>
+           <th>
+			<?php if ($ispreview == true): ?>
+					PB_ID
+			<?php else: ?>
+					B_ID
+			<?php endif; ?>
+           </th>
+           <th>
+            Delete Domain Exclusion
+           </th>
+           <th>
+            Exclusion Type
+           </th>
+           <th>
+            Domain Name
+           </th>
+           <th>
+            Date Created
+           </th>
+           </tr>
+
+    <?php foreach ($rtb_domain_exclusions as $rtb_domain_exclusion) :
+
+    $rtb_domain_exclusion_id = "";
+
+    if (isset($rtb_domain_exclusion->AdCampaignBannerDomainExclusionPreviewID)):
+    	$rtb_domain_exclusion_id = $rtb_domain_exclusion->AdCampaignBannerDomainExclusionPreviewID;
+    else:
+    	$rtb_domain_exclusion_id = $rtb_domain_exclusion->AdCampaignBannerDomainExclusionID;
+    endif;
+    ?>
+            <tr>
+           <td>
+            <?php echo $rtb_domain_exclusion_id; ?>
+           </td>
+           <td>
+            <?php echo $rtb_banner_id; ?>
+           </td>
+           <td>
+            <a href="javascript:void(0);" onclick="deleteDomainExclusionModal('/demand/deletedomainexclusion/<?php echo $rtb_domain_exclusion_id;?><?php echo $preview_query;?>','<?php echo $rtb_domain_exclusion->DomainName;?>');">Delete Domain Exclusion</a>
+           </td>
+           <td>
+            <?php echo $rtb_domain_exclusion->ExclusionType; ?>
+           </td>
+           <td>
+            <?php echo $rtb_domain_exclusion->DomainName; ?>
+           </td>
+           <td>
+           <?php echo $rtb_domain_exclusion->DateCreated; ?>
+           </td>
+           </tr>
+    <?php endforeach; ?>
+    </table>
+    </div>
+    </div>
+</div>
+<div style="clear:both"></div>
+
+<!-- Domain Exclusion Delete Modal -->
+<input  type="hidden" name="modal_domain_exclusion_id" id="modal_domain_exclusion_id" value="0" />
+<div class="modal fade" id="DeleteDomainExclusionModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="myModalLabel">Delete Domain Exclusion</h4>
+      </div>
+      <div class="modal-body">
+      <div id="domain_exclusion_alert_msg" class="alert alert-error" style="display: none;">Error</div>
+	  <p id="msg"></p>
+<h5 style="color: #b94a48;">This action is IMMEDIATE and NOT REVERSABLE!</h5>
+      </div>
+      <div class="modal-footer">
+      <button type="button" data-loading-text="Processing..." id="domain_exclusion_yes_btn" class="btn btn-primary" onclick="deleteDomainExclusionConfirm();">Yes</button>
+      <button type="button" class="btn btn-default" id="domain_exclusion_no_btn" data-dismiss="modal">No</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Domain Exclusion Delete Modal -->
+

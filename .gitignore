@@ -1,0 +1,14 @@
+/upload/config/autoload/*.local.php
+/upload/config/autoload/local.php
+/upload/config/autoload/*.production.php
+/upload/vendor
+/.settings
+/.buildpath
+/.project
+/upload/.settings
+/upload/.project
+/upload/.buildpath
+/upload/composer.lock
+write
+read
+logs

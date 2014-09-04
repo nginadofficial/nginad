@@ -1,0 +1,256 @@
+<?php
+$this->headScript()->appendFile($this->basePath() . '/js/script.js');
+
+$this->headScript()->captureStart() ?>
+function submitForm() {
+	$('#loginas').submit();
+}
+<?php $this->headScript()->captureEnd();  
+$effective_user_in_dashboard = false;
+?>
+<div class="steps-container step1">
+<div class="row headtop">
+<div class="span12">
+    <h4 class="headbreadcrumb"><a href="/demand/createcampaign">Create New Ad Campaign</a></h4>
+    </div>
+     <div class="span3"> 
+         <?php if ($is_admin === true): ?>
+			
+			 <form name="loginas" id="loginas" action="/demand/loginas" class="forms pull-left"  style="margin-top: 10px;">
+			  <span style="font-size: 12px; font-weight: bold;">LOG IN AS USER</span>	<select name="userid" onchange="submitForm();">
+			 		<option value="0">Admin (<?php echo $true_user_name; ?>)</option>
+					<?php foreach ($user_id_list as $user_info_id => $user_info_name): ?>
+						<option <?php 
+						if ($user_info_id == $effective_id): 
+							$effective_user_in_dashboard = true; 
+							echo 'selected="selected"'; 
+						endif; ?> value="<?php echo $user_info_id;?>"><?php echo $user_info_name;?></option>
+					<?php endforeach; ?>
+			 	</select>
+			 </form>
+			
+     </div>
+	</div>    
+<div id="main-container">
+<div class="pull-left" style="margin: 10px 0 0 10px;">
+<?php if ($effective_id != 0 && $effective_user_in_dashboard === true): ?>
+
+					<form name="changeusermarkup" id="changeusermarkup" action="/demand/changeusermarkup"class="forms pull-right" >
+						<input type="hidden" name="markupuserid" value="<?php echo $effective_id;?>" />
+				
+					<span style="font-size: 12px; font-weight: bold;">User Markup Rate:</span>	 <input type="text"  style="text-align: right" name="user-markup" class="span1" value="<?php echo $user_markup_rate;?>">%
+						
+						<input type="submit" name="user-markup-submit" class="btn actv  btn-small" value="Change User Markup" style="margin-left: 8px; margin-bottom: 10px;" />
+					</form>
+
+			<?php endif; ?>
+	<?php endif; ?>
+	</div>
+	   <div class="formbox">  
+	<br clear="all">
+    <div id="selection-results">
+
+    <table class="table table-striped table-bordered table-margin">
+       <tr>
+    <?php if ($is_admin === true): ?>
+           <th>
+            USER ID
+           </th>
+           <th>
+            ADMIN ACTION
+           </th>
+	<?php endif; ?>
+	<?php if ($is_admin === true && $effective_id != 0): ?>
+           <th>
+            CAMPAIGN MARKUP
+           </th>
+	<?php endif; ?>
+           <th>
+            STATUS
+           </th>
+           <th>
+            A_ID
+           </th>
+           <th>
+            Name
+           </th>
+           <th>
+            StartDate/EndDate
+           </th>
+           <!--
+           <th>
+            Customer
+           </th>
+           <th>
+            CustomerID
+           </th>
+            -->
+           <th>
+            ImpressionsCounter
+           </th>
+           <th>
+            MaxImpressions
+           </th>
+           <th>
+            CurrentSpend
+           </th>
+           <th>
+            MaxSpend
+           </th>
+           <!--
+           <th>
+            Date Created
+           </th>
+           -->
+          <?php if (($is_admin === true && $effective_id != 0) || $is_admin === false): ?>
+           <th>
+            Modify Campaign
+           </th>
+           <th>
+            Modify Banner
+           </th>
+           <?php endif; ?>
+           </tr>
+
+    <?php foreach ($ad_campaigns as $ad_campaign) :
+    		$preview_query = isset($ad_campaign->AdCampaignPreviewID) ? "?ispreview=true" : "";
+		    if (isset($ad_campaign->AdCampaignPreviewID)):
+			    $campaign_id = $ad_campaign->AdCampaignPreviewID;
+		    else:
+			    $campaign_id = $ad_campaign->AdCampaignID;
+		    endif;
+    ?>
+            <tr>
+    <?php if ($is_admin === true): ?>
+           <td>
+              <?php if (isset($user_id_list[$ad_campaign->UserID])): ?>
+					<?php echo $user_id_list[$ad_campaign->UserID]; ?>
+              <?php else: ?>
+					User Unknown
+              <?php endif; ?>
+           </td>
+           <?php if (isset($ad_campaign->AdCampaignPreviewID)): ?>
+           <td>
+              <a href="/demand/approvecampaign/<?php echo $ad_campaign->AdCampaignPreviewID;?>" onclick="return confirm('Are you sure?');">APPROVE CAMPAIGN CHANGES</a>
+              <hr /><a href="/demand/rejectcampaign/<?php echo $ad_campaign->AdCampaignPreviewID; ?>" onclick="return confirm('Are you sure?');">REJECT CAMPAIGN CHANGES</a>
+           </td>
+           <?php else: ?>
+           <td>
+              N/A
+           </td>
+           <?php endif; ?>
+
+	<?php if ($is_admin === true && $effective_id != 0): ?>
+           <td>
+           		<?php if (isset($ad_campaign->AdCampaignID) && $ad_campaign->AdCampaignID != null && isset($campaign_markup_rate_list[$ad_campaign->AdCampaignID])): ?>
+					<form name="change-campaign-markup-<?php echo $ad_campaign->AdCampaignID;?>" class="change-campaign-markup" action="/demand/changecampaignmarkup">
+						<input type="hidden" name="markupcampaignid" value="<?php echo $ad_campaign->AdCampaignID;?>" />
+						<div style="float: right;">
+							<input type="text" style="text-align: right" name="campaign-markup" class="input-mini" value="<?php echo $campaign_markup_rate_list[$ad_campaign->AdCampaignID];?>">%
+						</div>
+						<div>
+							<input type="submit" name="campaign-markup-submit" class="btn btn-warning btn-mini" value="Update Markup" style="" />
+						</div>
+					</form>
+				<?php else: ?>
+					NOT AVAILABLE
+				<?php endif; ?>
+           </td>
+	<?php endif; ?>
+
+
+	<?php endif; ?>
+           <td>
+            <?php if (!isset($ad_campaign->AdCampaignPreviewID)): ?>
+            	<?php echo '<span style="color:green; font-weight: bold;">APROVED</span>'; ?>
+            <?php elseif (isset($ad_campaign->Deleted) && $ad_campaign->Deleted == 1): ?>
+            	<?php echo '<span style="color:red; font-weight: bold;">DELETED</span>'; ?>
+            	<?php if ($is_admin === false): ?>
+            		<hr /><a href="/demand/cancelcampaign/<?php echo $ad_campaign->AdCampaignPreviewID; ?>" onclick="return confirm('Are you sure?');">CANCEL CAMPAIGN CHANGES</a>
+            	<?php endif; ?>
+            <?php else: ?>
+            	<?php echo '<span style="color:brown; font-weight: bold;">PENDING APPROVAL</span>'; ?>
+            	<?php if ($is_admin === false): ?>
+            		<hr /><a href="/demand/cancelcampaign/<?php echo $ad_campaign->AdCampaignPreviewID; ?>" onclick="return confirm('Are you sure?');">CANCEL CAMPAIGN CHANGES</a>
+            	<?php endif; ?>
+            <?php endif; ?>
+           </td>
+           <td>
+            <?php
+            if (isset($ad_campaign->AdCampaignID)):
+            	echo '<span style="color:black;">' . $ad_campaign->AdCampaignID . '</span>';
+            elseif (isset($ad_campaign->Deleted) && $ad_campaign->Deleted == 1):
+            	echo '<span style="color:red; font-weight: bold;">DELETED</span>';
+            else:
+            	echo '<span style="color:black; font-weight: bold;">PENDING ASSIGNMENT</span>';
+            endif;
+            ?>
+           </td>
+           <td>
+            <?php echo $ad_campaign->Name; ?>
+           </td>
+           <td>
+            <?php echo $ad_campaign->StartDate; ?><hr /><?php echo $ad_campaign->EndDate; ?>
+           </td>
+           <td>
+           	<?php if (!isset($ad_campaign->AdCampaignPreviewID)): ?>
+            	<?php echo number_format($ad_campaign->ImpressionsCounter); ?>
+            <?php else: ?>
+				N/A in Edit Mode
+            <?php endif; ?>
+           </td>
+           <td>
+           <?php echo number_format($ad_campaign->MaxImpressions); ?>
+           </td>
+           <td>
+           	<?php if (!isset($ad_campaign->AdCampaignPreviewID)): ?>
+            	$<?php echo number_format($ad_campaign->CurrentSpend, 4, '.', ','); ?>
+            <?php else: ?>
+				N/A in Edit Mode
+            <?php endif; ?>
+
+           </td>
+           <td>
+           $<?php echo number_format($ad_campaign->MaxSpend, 2, '.', ','); ?>
+           </td>
+            <?php if (($is_admin === true && $effective_id != 0) || $is_admin === false): ?>
+           <td>
+            <a href="/demand/editcampaign/<?php echo $campaign_id; ?><?php echo $preview_query; ?>">Edit Ad Campaign</a>
+            <hr />
+           
+            <a href="javascript:void(0);" onclick="deleteCampaignModal('/demand/deletecampaign/<?php echo $campaign_id; ?><?php echo $preview_query;?>','<?php echo $ad_campaign->Name;?>');">Delete Ad Campaign</a>
+           </td>
+           <td>
+            <a href="/demand/createbanner/<?php echo $campaign_id; ?><?php echo $preview_query;?>">Create Banner</a>
+            <hr /><a href="/demand/viewbanner/<?php echo $campaign_id; ?><?php echo $preview_query;?>">View Banners</a>
+           </td>
+           <?php endif; ?>
+           </tr>
+    <?php endforeach; ?>
+    </table>
+</div>
+        
+    </div>  </div>
+</div>
+<div style="clear:both"></div>
+<!-- Campaign Delete Modal -->
+<input  type="hidden" name="modal_campaign_id" id="modal_campaign_id" value="0" />
+<div class="modal fade" id="DeleteCampaignModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="myModalLabel">Delete Campaign</h4>
+      </div>
+      <div class="modal-body">
+      <div id="campaign_alert_msg" class="alert alert-error" style="display: none;">Error</div>
+		<p id="msg"></p>
+<h5 style="color: #b94a48;">This action is IMMEDIATE and NOT REVERSABLE!</h5>
+      </div>
+      <div class="modal-footer">
+      <button type="button" data-loading-text="Processing..." id="campaign_yes_btn" class="btn btn-primary" onclick="deleteCampaignConfirm();">Yes</button>
+        <button type="button" class="btn btn-default" id="campaign_no_btn" data-dismiss="modal">No</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Campaign Delete Modal -->

@@ -1,0 +1,184 @@
+<?php
+/*
+ * GRAB LAYOUT INFO SET IN THE PRIMARY VIEW
+ */
+$children = $this->viewModel()->getCurrent()->getChildren();
+$child = null;
+if (isset($children[0])):
+	$child = $children[0];
+endif;
+$extra_main_content_class = "";
+$home_dashboard_view = "demand";
+if ($child != null && isset($child->dashboard_view)):
+	$home_dashboard_view = $child->dashboard_view;
+endif;
+if ($child != null && isset($child->center_class)):
+	$extra_main_content_class = " " . $child->center_class;
+endif;
+/*if ($child != null && isset($child->dashboard_account)):
+	$dashboard_account = $child->dashboard_account;
+	$home_dashboard_view = null;
+endif;*/
+
+$user_name = $user_data = $userRole = null;
+if(isset($child->user_identity)):
+	//$user_name = strtoupper($child->user_identity->getUsername());
+	
+	$user_data = unserialize($child->user_identity->serialize());
+	$user_name = strtoupper($user_data->user_fullname);
+	
+	$userRole = $child->user_identity->getRoles();
+	$userRole = $userRole[0];
+endif;
+
+echo $this->doctype(); ?>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <?php echo $this->headTitle('NGINAD RTB Portal')->setSeparator(' - ')->setAutoEscape(false) ?>
+
+        <?php echo $this->headMeta()->appendName('viewport', 'width=device-width, initial-scale=1.0') ?>
+        <!-- Le styles -->
+        <?php echo $this->headLink(array('rel' => 'shortcut icon', 'href' => $this->basePath() . '/img/favicon.png'))
+                        ->prependStylesheet($this->basePath() . '/css/style.css')
+                        ->prependStylesheet($this->basePath() . '/css/bootstrap.css')
+                        ->prependStylesheet($this->basePath() . '/css/default.dashboard.css')
+        ?>
+
+        <!-- Scripts -->
+        <?php echo $this->headScript()->prependFile($this->basePath() . '/js/3rdparty/html5.js', 'text/javascript', array('conditional' => 'lt IE 9',))
+                                      ->prependFile($this->basePath() . '/js/3rdparty/jquery.validate.min.js')
+                                      ->prependFile($this->basePath() . '/js/3rdparty/bootstrap.min.js')
+                                      ->prependFile($this->basePath() . '/js/3rdparty/jquery.min.js');
+                                      
+                                       ?>
+                                       <!--<link href='http://fonts.googleapis.com/css?family=Cabin' rel='stylesheet' type='text/css'>-->
+                                       <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+                                      
+    </head>
+    <body class="demand-dashboard">
+        <div class="navbar navbar-inverse navbar-fixed-top header">
+            <div class="navbar-inner">
+            <div class="compLayout-top">
+                <div class="container" style="position: relative;">
+
+                    <a class="brand" href="/<?php echo $home_dashboard_view == "account" ? "users/" : ""; ?><?php echo $home_dashboard_view; ?>">
+					<img src="/img/nginad_logo.png" class="logo-img" />
+                     <em>Real Time Bidding Dashboard</em>
+                    </a>
+
+                       <div class="navbar">
+    <div class="navbar-inner">
+    <ul class="nav">
+    <?php if ($this->Login_bool() == false):?>
+    <li class="<?php if($home_dashboard_view == "signup") echo "active";?>"><a class="navlink" href="/signup">Signup</a></li>
+    <li class="divider-vertical"></li>
+    <?php else:?>
+   	<?php if (($user_data != null && $user_data->DemandCustomerInfoID != null)
+   			|| $userRole=='admin' || $userRole=='superadmin'): ?>
+    <li class="<?php if($home_dashboard_view == "demand") echo "active";?>"><a  class="navlink"  href="/demand">Campaign</a></li>
+    <li class="divider-vertical"></li>
+    <?php endif;?>
+    <?php if (($user_data != null && $user_data->PublisherInfoID != null)
+    		|| $userRole=='admin' || $userRole=='superadmin'): ?>
+    <li class="<?php if($home_dashboard_view == "publisher") echo "active";?>"><a class="navlink"   href="/publisher">Websites</a></li>
+    <li class="divider-vertical"></li>
+    <?php endif;?>
+    <li class="<?php if($home_dashboard_view == "report") echo "active";?>"><a class="navlink"   href="/report">Report</a></li>
+    <li class="divider-vertical"></li>
+	<?php endif;?>
+    <li class="<?php if($home_dashboard_view == "login") echo "active";?><?php if($home_dashboard_view == "account") echo "active";?>"><?php if ($this->Login_bool() == true):?>
+<a data-toggle="dropdown" class="dropdown-toggle navlink"><?php echo $user_name;?> <span class="caret"></span></a>
+<ul class="dropdown-menu pull-right">
+                  <li><a href="/users/account">Account Settings</a></li>
+                  <?php if($userRole=='admin' || $userRole=='superadmin'): ?>
+                  <li><a href="/users/publishers">Publisher List</a></li> 
+                  <li><a href="/users/customers">Customer List</a></li> 
+                  <li><a href="/websites">Websites List</a></li>
+                  <?php endif;?>
+                  <li><a href="<?php echo $this->url('login/process', array('action'=>'logout')); ?>">Logout</a></li>
+                </ul>
+<?php else:  ?>
+<a  class="navlink"  href="<?php echo $this->url('login/process', array('action'=>'login')); ?>">Login</a>
+   <?php endif;  ?></li>
+    </ul>
+    </div>
+    </div>
+                    <!--    <ul>
+ <div class="btn-group login-botton">
+ <a class="btn btn-inverse">Dashboard</a>
+<a class="btn btn-inverse <?php if($home_dashboard_view == "demand") echo "active";?>" href="/demand">Campaign</a>
+<a class="btn btn-inverse <?php if($home_dashboard_view == "publisher") echo "active";?>" href="/publisher">Websites</a>
+<?php if ($this->Login_bool() == true):?>
+<a data-toggle="dropdown" class="btn btn-inverse dropdown-toggle">nginad <span class="caret"></span></a>
+<ul class="dropdown-menu pull-right">
+                  <li><a href="javascript:void(0);">Account Settings</a></li>
+                  <li><a href="<?php echo $this->url('login/process', array('action'=>'logout')); ?>">Logout</a></li>
+                </ul>
+<?php else:  ?>
+<a class="btn btn-inverse" href="<?php echo $this->url('login/process', array('action'=>'login')); ?>">Login</a>
+   <?php endif;  ?>
+         </div>                   
+                       
+
+  <li class="active">
+  <?php if ($this->Login_bool() == true):?>
+  <a href="<?php echo $this->url('login/process', array('action'=>'logout')); ?>">Logout</a>
+ <?php else:  ?>
+<a href="<?php echo $this->url('login/process', array('action'=>'login')); ?>">Login</a>
+   <?php endif;  ?>
+     </li>
+
+ </ul>-->
+
+
+</div>
+                </div>
+            </div>
+        </div>
+        <div class="container bottom-container">
+        	<div class="compLayout<?php echo $extra_main_content_class; ?>" id="main-container">
+	        	<?php /* echo "Breadcrumbs: " . $this->navigation('navigation')->breadcrumbs()->setMinDepth(0)->setLinkLast(false); */ ?>
+	            <?php echo $this->content; ?>
+            </div>
+        </div> <!-- /container -->
+        
+	            <footer class="footer">
+	            <div class="container">
+<p>
+	<div class="btn-group footer_buttons">
+    <a class="btn" href="/company">Company</a>
+    <a class="btn" href="/company/press">Press</a>
+    <a class="btn" href="/company/leadership">Leadership</a>
+    <a class="btn" href="/company/testimonials">Testimonials</a>
+    <a class="btn" href="/company/jobs">jobs</a>
+    </div>
+   <span class="help_center pull-right">
+    <a class="btn">Help Center</a> 
+    <a class="btn">Blog</a>
+    <!--<a class="btn">Follow Us <img src="../img/facebook.jpg" width="24" /><img src="../img/twitter.jpg" width="24" /></a>-->
+    </span>
+	  
+</p>
+	                <p class="copyrights">
+<ul class="breadcrumb">
+<span class="pull-right">
+&copy; 2013 - <?php echo date('Y') ?> by CDNPAL NGINAD. <?php echo $this->translate('All rights reserved.') ?>
+</span>
+
+    <li><a href="javascript:void(0);">Privacy Policy</a> <span class="divider">|</span></li>
+    <li><a href="javascript:void(0);">Terms of Use</a> <span class="divider">|</span></li>
+    <li><a href="javascript:void(0);">Publisher Agreement</a> <span class="divider">|</span></li>
+    <li><a href="javascript:void(0);">legal Terms</a> <span class="divider">|</span></li>
+    <li><a href="javascript:void(0);">Opt-Out</a></li>
+    </ul>
+	                	
+	                </p>
+	                </div>
+	            </footer>
+           
+        
+        <?php echo $this->inlineScript() ?>
+    </body>
+</html>

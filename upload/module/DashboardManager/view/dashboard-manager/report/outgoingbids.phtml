@@ -1,0 +1,125 @@
+<?php
+$this->headScript()->appendFile($this->basePath() . '/js/3rdparty/moment.min.js');
+$this->headScript()->appendFile($this->basePath() . '/js/3rdparty/bootstrap-datetimepicker.min.js');
+
+$this->headScript()->appendFile($this->basePath() . '/js/3rdparty/bootstrap.min.js');
+$this->headLink()->appendStylesheet($this->basePath() . '/css/bootstrap-datetimepicker.min.css');
+
+$this->headScript()->appendFile($this->basePath() . '/js/reporting_scripts.js');
+?>
+
+
+
+<div class="btn-group report_menu">
+    <a class="btn <?php if ($action == 'index') echo 'actv' ?>" href="/report/index">Impressions</a>
+    <a class="btn <?php if ($action == 'incomingBids') echo 'actv' ?>" href="/report/IncomingBids">Incoming bids</a>
+    <a class="btn <?php if ($action == 'outgoingBids') echo 'actv' ?>" href="/report/Outgoingbids">Outgoing bids</a>
+    <a class="btn <?php if ($action == 'contractImpressions') echo 'actv' ?>" href="/report/contractImpressions">Contract impressions</a>
+    <a class="btn <?php if ($action == 'spend') echo 'actv' ?>" href="/report/spend">Spend impressions</a>
+    <a class="btn <?php if ($action == 'charts') echo 'actv' ?>" href="/report/charts">Charts</a>
+    <a class="btn <?php if ($action == 'mailer') echo 'actv' ?>" href="/report/mailer">Mailer config</a>
+</div>
+
+
+
+<div>
+    Select interval
+    <select id="interval_type">
+        <option value="0" selected>15 minutes</option>
+        <option value="1">set the interval</option>
+    </select>
+
+    <div id="datetimepicker1" class="input-append date datetimepicker">
+        <input id="time_from" data-format="yyyy-MM-dd hh:mm" type="text" placeholder="from" disabled />
+        <span class="add-on">
+            <i data-time-icon="icon-time" data-date-icon="icon-calendar">
+            </i>
+        </span>
+    </div>
+
+    <div id="datetimepicker2" class="input-append date datetimepicker">
+        <input id="time_to" data-format="yyyy-MM-dd hh:mm" type="text" placeholder="to" disabled />
+        <span class="add-on">
+            <i data-time-icon="icon-time" data-date-icon="icon-calendar">
+            </i>
+        </span>
+    </div>
+
+    <input id="interval_setter_btn" class="btn report_btn"  data-refresh="0" data-action="getOutgoingBidsPerTime" value="Show" type="button" />
+    <input id="refresh_chache_btn" class="btn report_btn" data-refresh="1" data-action="getOutgoingBidsPerTime"  data-tab="3" value="Refresh" type="button" />
+</div>
+
+<div id="report_list">
+    <div class="step_navigation">
+        <a href="#" data-step="2" class="step_btn">Prev 15 minutes</a>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <?php foreach ($outgoing_bids_header as $one): ?>
+                    <th><?php echo $one; ?></th>
+                <?php endforeach; ?>
+<!--                <th>SellSidePartnerID</th>
+                <th>MDYH</th>
+                <th>BidsWonCounter</th>
+                <th>BidsLostCounter</th>
+                <th>BidsErrorCounter</th>
+                <th>SpendTotal</th>
+                <th>DateCreated</th>
+                <th>DateUpdated</th>
+                <th>PublisherAdZone</th>-->
+            </tr>
+        </thead>
+        <tbody>
+<?php foreach ($outgoing_bids as $one): ?>
+                <tr>
+                    <?php foreach ($one as $two): ?>
+                        <td><?php echo $two;?></td>
+                    <?php endforeach;?>
+<!--                    <td><?php // echo $one->SellSidePartnerID; ?></td>
+                    <td><?php // echo $one->MDYH; ?></td>
+                    <td><?php // echo $one->BidsWonCounter; ?></td>
+                    <td><?php // echo $one->BidsLostCounter; ?></td>
+                    <td><?php // echo $one->BidsErrorCounter; ?></td>
+                    <td><?php // echo $one->SpendTotalNet; ?></td>
+                    <td><?php // echo $one->DateCreated; ?></td>
+                    <td><?php // echo $one->DateUpdated; ?></td>
+                    <td><?php // echo $one->AdName; ?></td>-->
+                </tr>
+<?php endforeach; ?>
+        </tbody>
+    </table>
+
+    <div class="step_navigation">
+        <a href="#" data-step="2" class="step_btn">Prev 15 minutes</a>
+    </div>
+</div>
+
+<div id="spend_by_webdomain_area">
+    <h4>Spend by webdomain</h4>
+
+    <table>
+        <thead>
+            <tr>
+                <th>SpendTotal</th>
+                <th>SellSidePartnerID</th>
+                <th>PublisherAdZone</th>
+                <th>WebDomain</th>
+
+            </tr>
+        </thead>
+        <tbody>
+<?php foreach ($spend_per_webdomain as $one): ?>
+                <tr>
+                    <td><?php echo $one->SpendTotalNet; ?></td>
+                    <td><?php echo $one->SellSidePartnerID; ?></td>
+                    <td><?php echo $one->AdName; ?></td>
+                    <td><?php echo $one->WebDomain; ?></td>
+
+                </tr>
+<?php endforeach; ?>
+        </tbody>
+    </table>
+
+</div>

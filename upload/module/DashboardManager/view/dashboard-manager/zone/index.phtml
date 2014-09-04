@@ -1,0 +1,284 @@
+<?php
+
+$this->headScript()->appendFile($this->basePath() . '/js/script.js');
+
+$this->headScript()->captureStart() ?>
+function submitForm() {
+	$('#loginas').submit();
+}
+<?php $this->headScript()->captureEnd();  ?>
+<div class="steps-container step1">
+
+<h4 class="headbreadcrumb blue-color"><a href="/publisher/zone/<?php echo $domain_obj->PublisherWebsiteID;?>/create/">Create New Ad Zone</a>
+<span class="pull-right black-color negative-margin">
+    	    <?php  if ($is_admin === true) { /* ?>
+    			 LOGGED IN AS USER: <?php 
+                    if($impersonate_id == null)
+                    {
+                        echo $true_user_name;
+                    }
+                    else 
+                    {
+                        echo $user_id_list[intval($effective_id)] . " (" . $effective_id . ")";
+                    } */?>
+                
+                <strong>Current Domain: <?php 
+                    if($domain_obj !== null)
+                    {
+                        echo $domain_obj->WebDomain;
+                    }
+              }  
+         ?></strong>
+    </span>
+<br clear="all">
+<span class="pull-right black-color negative-margin"> <?php 
+        // If Admin, show which account you are creating for.
+            if($impersonate_id == "0" || $impersonate_id == null)
+                echo "<img src='/img/man-icon.png' /> " . $true_user_name;
+            else
+                echo "<img src='/img/man-icon.png' /> " . $user_id_list[intval($effective_id)] . " (" . $effective_id . ")";
+        ?></span>
+</h4>
+
+
+
+<!--<ul class="breadcrumb">
+    <li><a href="/publisher">Domains</a> / 
+    <?php if ($domain_obj !== null)
+    {
+      ?>
+      <a href="/publisher/zone/<?php echo $domain_obj->PublisherWebsiteID; ?>/create/">Create New Ad Zone</a>
+      <?php
+    }?></li>
+     <div class="pull-right">
+    	    <?php  if ($is_admin === true) { /* ?>
+    			 LOGGED IN AS USER: <?php 
+                    if($impersonate_id == null)
+                    {
+                        echo $true_user_name;
+                    }
+                    else 
+                    {
+                        echo $user_id_list[intval($effective_id)] . " (" . $effective_id . ")";
+                    } */?>
+                
+                <strong>Current Domain: <?php 
+                    if($domain_obj !== null)
+                    {
+                        echo $domain_obj->WebDomain;
+                    }
+              }  
+              if($error_message != "" && $error_message !== null && isset($error_message))
+              {
+                  echo "<div style=\"font-weight:bold;color:#FF0000;font-size:110%;\">";
+                  echo $error_message;
+                  echo "</div>";
+              }
+         ?></strong>
+    </div>
+    <br clear="all">
+    <div class="pull-right"> <?php 
+        // If Admin, show which account you are creating for.
+            if($impersonate_id == "0" || $impersonate_id == null)
+                echo "<img src='/img/man-icon.png' /> " . $true_user_name;
+            else
+                echo "<img src='/img/man-icon.png' /> " . $user_id_list[intval($effective_id)] . " (" . $effective_id . ")";
+        ?></div>
+          <br clear="all">
+	</ul>-->
+   
+   <ul class="breadcrumb breadcrumb-heading">
+    <li><a href="/publisher/">Domains</a><span class="divider">/</span></li>
+    <li><?php echo $domain_obj->WebDomain;?> <span class="divider">/</span></li>
+    <li class="active">Zones</li>
+    </ul>
+    
+    
+    <!--<h4 class="breadcrumb"><a href="/publisher">Domains</a> / 
+    <?php if ($domain_obj !== null)
+    {
+      ?>
+      <a href="/publisher/zone/<?php echo $domain_obj->PublisherWebsiteID; ?>/create/">Create New Ad Zone</a>
+      <?php
+    }?>
+    </h4>-->
+        <?php  if ($is_admin === true) { /* ?>
+    			 LOGGED IN AS USER: <?php 
+                    if($impersonate_id == null)
+                    {
+                        echo $true_user_name;
+                    }
+                    else 
+                    {
+                        echo $user_id_list[intval($effective_id)] . " (" . $effective_id . ")";
+                    } ?>
+                
+                Domain: <?php 
+                    if($domain_obj !== null)
+                    {
+                        echo $domain_obj->WebDomain;
+                    }
+              }  
+              if($error_message != "" && $error_message !== null && isset($error_message))
+              {
+                  echo "<div style=\"font-weight:bold;color:#FF0000;font-size:110%;\">";
+                  echo $error_message;
+                  echo "</div>";
+            */  } 
+         ?>
+ <?php        
+  if($error_message != "" && $error_message !== null && isset($error_message))
+              {
+                  echo "<div style=\"font-weight:bold;color:#FF0000;font-size:110%;\">";
+                  echo $error_message;
+                  echo "</div>";
+              }
+?>                      
+ <div class="formbox">  
+    <div id="selection-results" class="steps-box">
+        <table class="table table-striped table-bordered table-margin">
+            <tr>
+            <?php 
+            foreach($zone_list['header'] as $order => $title)
+            {
+            	if ($title == "AutoApprove"):
+            		continue;
+            	endif;
+                echo "\n<th style=\"text-align:center;\">" . $title . "</th>\n"; 
+            }
+            ?>
+            </tr>
+            <?php
+            if(count($zone_list["data"]) > 0) { 
+                foreach ($zone_list["data"] AS $row_number => $row_data) {
+            ?>
+                <tr>
+                    <td><?php echo $row_number+1; ?></td>
+                    <?php foreach ($row_data AS $column_key => $data) {
+
+                    	if ($zone_list["meta"][$column_key] == 'AutoApprove'):
+                    		continue;
+                    	endif;
+	                    $auto_approved = $zone_list_raw[$row_number]["AutoApprove"];
+	                    $domain_id = $zone_list_raw[$row_number]["PublisherWebsiteID"];
+	                    $ad_id = $zone_list_raw[$row_number]["PublisherAdZoneID"];
+                        ?>
+                        <td>
+                            <?php 
+                                // Change display format according to column specified.
+                                switch($zone_list["meta"][$column_key]) { 
+                                    case "AdName":
+                                        echo $data . " (" . $ad_id .")";
+                                        break; 
+                                	case "AdStatus":
+                                		$approved_verb = 'Approved';
+                                		$pending_verb = 'Pending';
+
+                                		if ($auto_approved == 1):
+                                			$approved_verb = 'Auto-Approved';
+                                		endif;
+                                	    $admin_approval = array(
+                                	           0 => "<a href=\"/publisher/zone/" . $domain_id . "/approve/" . $ad_id . "\">" . $pending_verb . "</a>",
+                                               1 => "<a href=\"/publisher/zone/" . $domain_id . "/reject/" . $ad_id . "\">" . $approved_verb . "</a>"
+    			 	                           );
+                                	    $approval = array(0=>"Pending",1=>"Approved");
+                                	    
+                                	    if($is_admin)
+                                	        echo $admin_approval[intval($data)];
+                                	    else
+                                	        echo $approval[intval($data)];
+                                        break;
+                                	case "AdTemplateID":
+                                	    if($data == 0)
+                                	    {
+                                	        echo "Custom:<br />" . 
+                                	           $zone_list_raw[$row_number]["Width"] . " x " .
+                                	           $zone_list_raw[$row_number]["Height"];
+                                	    }
+                                	    else
+                                	    {
+                                	        echo $zone_list_raw[$row_number]["TemplateName"] . ":<br />" .
+                                    	        $zone_list_raw[$row_number]["TemplateX"] . " x " .
+                                    	        $zone_list_raw[$row_number]["TemplateY"];
+                                	    }
+                                	    break;
+                                    default:
+                                        echo $data;
+                                        break;
+                                }
+                            ?>
+                        </td>
+                    <?php } ?>
+                    <td><a href="/publisher/zone/<?php echo $domain_id;?>/edit/<?php echo $ad_id;?>">Edit 
+
+Zone</a>&nbsp;&nbsp;&nbsp;
+                    	<a href="javascript:void(0);" onclick="InvocationShow(<?php echo 
+
+$domain_id;?>, <?php echo $zone_list_raw[$row_number]["PublisherAdZoneID"];?>)">Invocation Code</a>
+                        <hr width="100%" />
+                        <!--<a href="/publisher/zone/<?php echo $domain_id; ?>/delete/<?php echo $ad_id; ?>">Delete Zone</a>-->
+                        <a href="javascript:void(0);" onclick="deleteZoneModal(<?php echo $domain_id;?>,<?php echo $ad_id;?>,'<?php echo $zone_list_raw[$row_number]["AdName"];?>');">Delete Zone</a>
+                    </td>
+                </tr>
+            <?php 
+                }
+            }
+            else 
+            { ?>
+                <tr>
+                    <td colspan="<?php echo count($zone_list['header']); ?>" style="text-align:center;">There are no results</td>
+                </tr>
+            <?php } ?>
+        </table>
+    </div>
+</div>
+</div>
+
+<!-- Invocation Code Modal -->
+<div class="modal fade" id="InvocationCodeModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="myModalLabel">Copy/Paste Ad Tag</h4>
+      </div>
+      <div class="modal-body">
+        <div>
+		<p>For most websites just copy & paste the code below into the HTML source of the page where you want to the ad to display.</p>
+		<label for="adtag">&nbsp;</label>
+		<div id="adtag_progress_bar" class="progress progress-striped active">
+             <div class="bar" style="width: 100%;"></div>
+         </div>
+		<textarea rows="6" name="adtag" id="adtag" style="min-width: 516px;display: none;"></textarea>
+		
+	</div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Invocation Code Modal -->
+
+<!-- Zone Delete Modal -->
+<input  type="hidden" name="modal_domain_id" id="modal_domain_id" value="0" />
+<input  type="hidden" name="modal_zone_id" id="modal_zone_id" value="0" />
+<div class="modal fade" id="DeleteZoneModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="myModalLabel">Delete Zone</h4>
+      </div>
+      <div class="modal-body">
+      <div id="zone_alert_msg" class="alert alert-error" style="display: none;">Error</div>
+		<p id="msg"></p>
+<h5 style="color: #b94a48;">This action is IMMEDIATE and NOT REVERSABLE!</h5>
+      </div>
+      <div class="modal-footer">
+      <button type="button" data-loading-text="Processing..." id="zone_yes_btn" class="btn btn-primary" onclick="deleteZoneConfirm();">Yes</button>
+        <button type="button" class="btn btn-default" id="zone_no_btn" data-dismiss="modal">No</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Zone Delete Modal -->

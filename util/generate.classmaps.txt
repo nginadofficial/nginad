@@ -1,0 +1,10 @@
+cd C:\Users\cgu1_000\Desktop\alchemy\upload\vendor\zendframework\zendframework\bin
+
+PS > php .\classmap_generator.php -l "..\..\..\..\module\DashboardManager"
+PS > php .\classmap_generator.php -l "..\..\..\..\module\BuyGenericRTB"
+PS > php .\classmap_generator.php -l "..\..\..\..\module\BuySidePartners"
+PS > php .\classmap_generator.php -l "..\..\..\..\module\Delivery"
+PS > php .\classmap_generator.php -l "..\..\..\..\module\Maintenance"
+PS > php .\classmap_generator.php -l "..\..\..\..\module\Pixel"
+PS > php .\classmap_generator.php -l "..\..\..\..\module\SellGenericRTB"
+PS > php .\classmap_generator.php -l "..\..\..\..\module\SellSidePartners"

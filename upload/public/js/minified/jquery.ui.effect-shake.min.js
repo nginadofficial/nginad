@@ -1,0 +1,5 @@
+/*! jQuery UI - v1.9.2 - 2014-04-02
+* http://jqueryui.com
+* Copyright 2014 jQuery Foundation and other contributors; Licensed MIT */
+
+(function(e){e.effects.effect.shake=function(t,i){var a,s=e(this),n=["position","top","bottom","left","right","height","width"],r=e.effects.setMode(s,t.mode||"effect"),o=t.direction||"left",h=t.distance||20,l=t.times||3,u=2*l+1,d=Math.round(t.duration/u),c="up"===o||"down"===o?"top":"left",p="up"===o||"left"===o,f={},m={},g={},v=s.queue(),y=v.length;for(e.effects.save(s,n),s.show(),e.effects.createWrapper(s),f[c]=(p?"-=":"+=")+h,m[c]=(p?"+=":"-=")+2*h,g[c]=(p?"-=":"+=")+2*h,s.animate(f,d,t.easing),a=1;l>a;a++)s.animate(m,d,t.easing).animate(g,d,t.easing);s.animate(m,d,t.easing).animate(f,d/2,t.easing).queue(function(){"hide"===r&&s.hide(),e.effects.restore(s,n),e.effects.removeWrapper(s),i()}),y>1&&v.splice.apply(v,[1,0].concat(v.splice(y,u+1))),s.dequeue()}})(jQuery);

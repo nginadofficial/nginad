@@ -1,0 +1,35 @@
+<?php
+$this->headScript()->appendFile($this->basePath() . '/js/bootstrap-datepicker.js');
+$this->headScript()->appendFile($this->basePath() . '/js/datepicker.vars.js');
+$this->headLink()->appendStylesheet($this->basePath() . '/css/datepicker.css');
+
+$this->headScript()->captureStart() ?>
+$(function(){
+    $('#dpsd').datepicker().datepicker().on('show', popup);
+    $('#dped').datepicker().datepicker().on('show', popup);
+});
+<?php $this->headScript()->captureEnd();  ?>
+<h4 class="breadcrumb">Confirm Domain Delete</h4>
+
+<?php 
+$url = $this->url('publisher/process', array(
+        'action' => 'deletedomain',
+        'param1' => intval($deleteCheckResultObj->PublisherWebsiteID),
+));
+    if($error_message != "" && $error_message !== null && isset($error_message))
+    {
+        echo "<div style=\"font-weight:bold;color:#FF0000;font-size:110%;\">";
+        echo $error_message;
+        echo "</div>";
+    }
+?>
+<form action="<?php echo $url; ?>" method="post" style="text-align: center;">
+    <div>Are you sure you wish to delete the domain
+    <?php echo " \"" . $deleteCheckResultObj->WebDomain . "\" (ID: " . $deleteCheckResultObj->PublisherWebsiteID . ")?"; ?></div>
+    <div style="font-weight: bold; color: #880000; font-size: 110%">This action is IMMEDIATE and NOT REVERSABLE!</div>
+    <div style="padding: 15px;">
+        <input type="hidden" name="param1" value="<?php echo intval($deleteCheckResultObj->PublisherWebsiteID); ?>" />
+        <input type="submit" name="del" value="Yes" style="margin: 15px; height: 75px; width: 75px;"/>
+        <input type="submit" name="del" value="No" style="margin: 15px;  height: 75px; width: 75px;"/>
+    </div>
+</form>

@@ -1,0 +1,172 @@
+<div class="steps-container step1">
+<div class="row headtop">
+<div class="span6">
+    <h4 class="headbreadcrumb">Job Openings</h4>
+    </div>
+
+	</div>    
+<div id="main-container">
+<div style="margin:40px 0 0 10px;" class="pull-left">
+
+<div class="span3">
+<?php echo $this->partial('layout/sidebar', array('sidebar_active' => $sidebar_active));?>
+</div>
+
+<div class="span12 jobs_inner">
+<div class="job_row_height">
+<ul class="breadcrumb">
+  <li><a href="<?php echo $this->serverUrl('/company/jobs');?>">Current Openings</a> <span class="divider">/</span></li>
+  <li><a href="<?php echo $this->serverUrl('/company/jobs/post/455');?>">Production Support Engineer</a> <span class="divider">/</span></li>
+  <li class="active">Apply </li>
+</ul>
+
+<div class="row">
+<div class="span6">
+<h3>Apply for a Job at NGINAD</h3>
+<h5 class="text-warning">Production Support Engineer | Mountain View, CA</h5>
+</div>
+
+<div class="span5 pull-right">
+<p class="backto_openings text-right"><a href="<?php echo $this->serverUrl('/company/jobs');?>"><i class="icon-arrow-left"></i> Back to Openings</a></p>
+</div>
+
+</div><!-- end of row-->
+
+
+<div class="row top_content_row">
+<p class="alert alert-success success_msg">Thank you for considering a career at NGINAD. Please take a minute to fill out the following form. After you have completed your application an email will be sent to you with information about how to check the status of your application. </p>
+</div><!-- end of content row -->
+
+<div class="row resume_top_mgn">
+<p class="resume_row"><a href="#myModal" role="button"  data-toggle="modal" class="btn btn-primary pull-left">Insert a Resume</a> <p class="pull-left resume_top_mgn">Information will be automatically parsed from the uploaded document and inserted into the fields below.</p>	</p>
+</div><!-- end of row -->
+
+<!-- Modal -->
+<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal-header">
+<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+<h3 class="modal_h3" id="myModalLabel">Upload Resume</h3>
+</div>
+<div class="modal-body">
+<p>Select text, Word or PDF file:</p>
+<p><input type="file" name="file" /></p>
+<p>The document will be attached to your application in its original format.</p>
+</div>
+<div class="modal-footer">
+<button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+<button class="btn btn-primary">Upload</button>
+</div>
+</div><!-- end of modal -->
+
+<div class="row">
+<p class="indicates_required"><span class="star">*</span> indicates required field</p>
+<h4>Personal Information</h4>
+    <form class="form-horizontal">
+    <div class="control-group">
+    <label class="control-label" for="first_name">First Name <span class="star">*</span></label>
+    <div class="controls">
+    <input type="text" id="first_name" name="first_name" placeholder="First Name">
+    </div>
+    </div>
+    
+    <div class="control-group">
+    <label class="control-label" for="last_name">Last Name <span class="star">*</span></label>
+    <div class="controls">
+    <input type="text" id="last_name" name="last_name" placeholder="Last Name">
+    </div>
+    </div>
+   
+    
+    <div class="control-group">
+    <label class="control-label" for="city">City <span class="star">*</span></label>
+    <div class="controls">
+    <input type="text" id="city" name="city" placeholder="City">
+    </div>
+    </div>
+    
+     <div class="control-group">
+    <label class="control-label" for="state">State <span class="star">*</span></label>
+    <div class="controls">
+    <input type="text" id="state" name="state" placeholder="State">
+    </div>
+    </div>
+    
+    <div class="control-group">
+    <label class="control-label" for="email">Email <span class="star">*</span></label>
+    <div class="controls">
+    <input type="text" id="email" name="email" placeholder="Email">
+    </div>
+    </div>
+    
+      <div class="control-group">
+    <label class="control-label" for="phone">Phone <span class="star">*</span></label>
+    <div class="controls">
+    <input type="text" id="phone" name="phone" placeholder="Phone">
+    </div>
+    </div>
+    
+    <h4>Resume and Cover Letter</h4>
+    <div class="control-group">
+    <label class="control-label" >Resume<span class="star">*</span></label>
+    <div class="controls">
+    <input type="file" id="resume" name="resume">
+    </div>
+    <div class="controls">
+    <textarea class="resume_txtarea"></textarea>
+    </div>
+    </div>
+    
+    
+    <div class="control-group">
+    <label class="control-label" for="coverletter" >Cover Letter</label>
+    <div class="controls">
+    <input type="file" id="coverletter" name="coverletter">
+    </div>
+    <div class="controls">
+    <textarea class="resume_txtarea"></textarea>
+    </div>
+    </div>
+    
+    
+      <div class="control-group">
+    <label class="control-label" for="veteran_status">Veteran Status:</label>
+    <div class="controls">
+    <select name="veteran_status" id="veteran_status">
+    <option value=""> - Select - </option>
+    <option value="1">Special Disabled Veteran</option>
+    <option value="2">Vietnam Era Veteran</option>
+    <option value="4">Newly Separated Veteran</option>
+    <option value="8">Other Protected Veteran</option>
+    <option value="16">Not a Veteran</option>
+    <option value="32">Decline To Self Identify</option>
+    </select>
+    </div>
+    </div>
+    
+    
+    <div class="control-group">
+    <div class="controls">
+    <button type="submit" class="btn btn-primary">Send Application</button>
+    </div>
+    </div>
+    </form>
+</div><!-- end of row -->
+
+
+</div>
+
+</div><!-- end of job_row_height-->
+
+<div class="span12 pull-right">
+<p class="jobs_footer_heading">For more information on NGINAD job openings, please contact info@nginad.com.</p>	
+</div>
+
+		</div>
+	   <div class="formbox">  
+	<br clear="all">
+    <div id="selection-results">
+
+   
+</div>
+            </div>  </div>
+</div>

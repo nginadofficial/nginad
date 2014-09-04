@@ -1,0 +1,109 @@
+<?php
+$this->headScript()->appendFile($this->basePath() . '/js/3rdparty/jquery-ui-1.9.2.custom.min.js');
+$this->headLink()->appendStylesheet($this->basePath() . '/css/jquery-ui/smoothness/jquery-ui-1.9.2.custom.min.css');
+$this->headScript()->appendFile($this->basePath() . '/js/script.js');
+
+$preview_query = $ispreview == true ? "?ispreview=true" : "";
+
+$minEndDate = explode("/", $enddate);
+
+$this->headScript()->captureStart() ?>
+$(function() {
+	$( "#startdate" ).datepicker(
+	{
+		changeMonth: true,
+		changeYear: true,
+		showOtherMonths: true,
+        selectOtherMonths: false,
+        yearRange: "-1:+6",
+	    onSelect: function(date){
+	        var selectedDate = new Date(date);
+	        var msecsInADay = 86400000;
+	        var endDate = new Date(selectedDate.getTime() + msecsInADay);
+	        $("#enddate").datepicker( "option", "minDate", endDate );
+	    }
+	});
+	
+	$( '#startdateicon' ).click(function() {
+          $('#startdate').datepicker('show');
+    });
+    
+    $( "#enddate" ).datepicker(
+	{
+		changeMonth: true,
+		changeYear: true,
+		showOtherMonths: true,
+        selectOtherMonths: false,
+        yearRange: "-1:+6",
+        <?php if($minEndDate[2]!='0000'):?>
+        minDate:new Date(<?php echo $minEndDate[2];?>,<?php echo $minEndDate[0];?>,<?php echo $minEndDate[1];?>)
+       <?php endif;?>
+	});
+	
+	$( '#enddateicon' ).click(function() {
+          $('#enddate').datepicker('show');
+    });
+});
+<?php $this->headScript()->captureEnd();  ?>
+
+
+    <ul class="breadcrumb">
+    <li><a href="/demand/<?php echo $preview_query; ?>">Ad Campaigns</a> <span class="divider">/</span></li>
+    <li><?php echo $bread_crumb_info["BCAdCampaign"]; ?> <span class="divider">/</span></li>
+    <li class="active">Edit Ad Campaign</li>
+    </ul>
+    
+<div id="cdn_form_msg" class="alert alert-error" style="margin: 5px; display: none;"></div>
+<form id="campaignform" name="campaignform" class="form-horizontal form-top-magin" method="POST" action="/demand/newcampaign">
+<input type="hidden" name="campaignid" value="<?php echo $campaignid;?>">
+<input type="hidden" name="campaignpreviewid" value="<?php echo $campaignpreviewid;?>">
+<input type="hidden" name="ispreview" value="<?php echo $ispreview;?>">
+
+<fieldset>
+    <div class="control-group">
+	<label for="campaignname" >Campaign Name</label>
+   	<input type="text" class="input-medium" name="campaignname" value="<?php echo $campaignname;?>">
+    </div>
+    
+	<div class="control-group">
+      <label for="startdate" >Start Date</label>
+        <div class="input-append date">
+		  <input name="startdate" id="startdate" class="span2" size="16" type="text" value="<?php echo $startdate;?>" readonly="readonly" />
+		  <span class="add-on" id="startdateicon"><i class="icon-calendar"></i></span>
+      </div>
+	</div>
+	
+ <div class="control-group">
+	 <label for="enddate" >End Date</label>
+	  <div class="input-append date">
+		  <input name="enddate" id="enddate" class="span2" size="16" type="text" value="<?php echo $enddate;?>" readonly="readonly" />
+		  <span class="add-on" id="enddateicon"><i class="icon-calendar"></i></span>
+	 </div>
+	</div>
+	
+	 <div class="control-group">
+	  <label for="enddate" >Customer Name <span class="hlp"><small><i>(Use this field for your own customer reference if any)</i></small></span></label>
+	 		<input type="text" class="input-medium" name="customername" value="<?php echo $customername;?>"> 
+	 		<span id="<?php echo $cdn_form_error;?>"></span>
+</div>	
+	
+		 <div class="control-group">
+	  <label for="enddate" >Customer ID <span class="hlp"><small><i>(Use this field for your own customer reference if any)</i></small></span></label>
+		<input type="text" name="customerid" class="input-medium" value="<?php echo $customerid;?>"> 
+		 </div>
+
+ <div class="control-group">
+	  <label for="enddate" >Maximum Impressions: <span class="hlp"><small><i>(Maximum campaign impressions before the bids stop)</i></small></span></label>
+		<input type="text" name="maximpressions" value="1000000" class="input-medium" value="<?php echo $maximpressions;?>"> 
+ </div>
+ 
+  <div class="control-group">
+	  <label for="enddate" >Maximum Spend: <span class="hlp"><small><i>(Maximum campaign $$$ spent before the bids stop)</i></small></span></label>
+<input type="text" name="maxspend" value="100.00" class="input-medium" value="<?php echo $maxspend;?>"> 
+  </div>
+  
+    <div class="control-group">
+     <input type="submit" class="btn btn-primary btn-margin" name="B1" value="Edit Campaign" />
+    </div>
+</fieldset>
+</form>

@@ -1,0 +1,65 @@
+<?php
+$this->headScript()->appendFile($this->basePath() . '/js/script.js');
+
+
+$this->headScript()->captureStart(); ?>
+/*$(function(){
+    $('#dpsd').datepicker().datepicker().on('show', popup);
+    $('#dped').datepicker().datepicker().on('show', popup);
+});*/
+
+
+<?php $this->headScript()->captureEnd();  ?>
+<h4 class="headbreadcrumb blue-color">Create New Domain
+<span class="pull-right black-color"> <?php 
+        // If Admin, show which account you are creating for.
+            if($impersonate_id == "0" || $impersonate_id == null)
+                echo "<img src='/img/man-icon.png' /> " . $true_user_name;
+            else
+                echo "<img src='/img/man-icon.png' /> " . $user_id_list[$impersonate_id];
+        ?></span>
+</h4>
+<ul class="breadcrumb breadcrumb-heading">
+    <li><a href="/publisher/">Domains</a><span class="divider">/</span></li>
+    <li>Create New Domain</li>
+    </ul>    
+<?php 
+    if($error_message != "" && $error_message !== null && isset($error_message))
+    {
+    	echo '<div id="cdn_form_success" class="alert alert-error" style="margin: 5px;">'. $error_message .'</div>';
+    }
+?>
+<div id="cdn_form_msg" class="alert alert-error" style="margin: 5px; display:none;"></div>
+<form id="domain" class="form-horizontal form-top-magin" name="domain" method="post" action="/publisher/createdomain">
+<input type="hidden" value="" name="PublisherWebsiteID">
+<div class="control-group">
+    <label for="webdomain" class="control-label">Web Domain</label>
+    <div class="controls">
+    <input type="text" value="" maxlength="255" class="zone-txtarea" id="WebDomain" name="WebDomain">    </div>
+    </div>
+    
+<div class="control-group">
+    <label for="IABCategory" class="control-label">IABCategory</label>
+    <div class="controls">
+    <select class="zone-txtarea" id="IABCategory" name="IABCategory">
+	<?php 
+     foreach($vertical_map as $key=>$value): 
+	 	echo '<option value="'. $key .'">'. $value .'</option>';
+	 endforeach;
+	 ?>
+</select>
+    </div>
+    </div>  
+    
+<div class="control-group">
+    <label for="desc" class="control-label">Description</label>
+    <div class="controls">
+    <textarea maxlength="5000" class="zone-txtarea" id="Description" name="Description"></textarea>    </div>
+    </div> 
+<div class="control-group">
+    <div class="controls">
+    <button name="submit" type="submit" class="btn btn-primary btn-margin" id="submitbutton">Create New Domain</button>
+    </div>
+    </div>
+<input type="hidden" value="<?php echo $domain_owner_id;?>" name="DomainOwnerID">
+</form>

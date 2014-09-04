@@ -1,0 +1,45 @@
+<?php
+$this->headScript()->appendFile($this->basePath() . '/js/script.js');
+
+$preview_query = $ispreview == true ? "?ispreview=true" : "";
+
+if ($ispreview == true):
+	$rtb_banner_id = $bannerpreviewid;
+	$ad_campaign_id = $campaignpreviewid;
+else:
+	$rtb_banner_id = $bannerid;
+	$ad_campaign_id = $campaignid;
+endif;
+?>
+
+ <ul class="breadcrumb">
+    <li><a href="/demand/<?php echo $preview_query; ?>">Ad Campaigns</a><span class="divider">/</span></li>
+    <li><?php echo $bread_crumb_info["BCAdCampaign"]; ?><span class="divider">/</span></li>
+    <li><a href="/demand/viewbanner/<?php echo $ad_campaign_id; ?><?php echo $preview_query; ?>">Banners</a><span class="divider">/</span></li>
+    <li><?php echo $bread_crumb_info["BCBanner"]; ?><span class="divider">/</span></li>
+    <li>Create Exclusive Inclusion</li>
+    </ul>
+<div class="formbox">
+<div id="cdn_form_msg" class="alert alert-error" style="margin: 5px; display: none;"></div>
+<form id="exclusiveinclusionform" name="exclusiveinclusionform" method="POST" action="/demand/newexclusiveinclusion">
+<fieldset>
+    <input type="hidden" name="bannerid" value="<?php echo $bannerid; ?>">
+	<input type="hidden" name="bannerpreviewid" value="<?php echo $bannerpreviewid; ?>">
+	<input type="hidden" name="ispreview" value="<?php echo $ispreview; ?>">
+	<div class="control-group">
+		<label for="inclusiontype">InclusionType</label>
+		<select name="inclusiontype" id="inclusiontype" class="zone-txtarea">
+            <option value="url">Filter Domain in URL</option>
+            <option value="referrer">Filter Domain in Referral</option>
+		</select>
+	</div>
+	<div class="control-group">
+		<label for="domainname">Domain Name to Explicitly Include</label>
+		<input type="text" id="domainname" name="domainname" class="zone-txtbox">
+	</div>
+	<div class="control-group">
+	   <input type="submit" class="btn btn-primary" name="B1" value="Create Exclusive Inclusion" />
+	</div>
+</fieldset>
+</form>
+</div>

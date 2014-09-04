@@ -1,0 +1,142 @@
+<?php
+$this->headScript()->appendFile($this->basePath() . '/js/script.js');
+$this->headScript()->appendFile($this->basePath() . '/js/zone.js');
+$this->headScript()->captureStart() ?>
+
+<?php $this->headScript()->captureEnd();  ?>
+<h4 class="headbreadcrumb blue-color">Edit Ad Zone
+    <div class="pull-right negative-margin black-color">
+    	    <?php  if ($is_admin === true) { /* ?>
+    			 LOGGED IN AS USER: <?php 
+                    if($impersonate_id == null)
+                    {
+                        echo $true_user_name;
+                    }
+                    else 
+                    {
+                        echo $user_id_list[intval($effective_id)] . " (" . $effective_id . ")";
+                    } */?>
+                
+                <strong>Current Domain:</strong> <?php 
+                    if($domain_obj !== null)
+                    {
+                        echo $domain_obj->WebDomain;
+                    }
+              }  
+         ?>
+    </div>
+<br clear="all">
+<div class="pull-right negative-margin black-color"> <?php 
+        // If Admin, show which account you are creating for.
+            if($impersonate_id == "0" || $impersonate_id == null)
+                echo "<img src='/img/man-icon.png' /> " . $true_user_name;
+            else
+                echo "<img src='/img/man-icon.png' /> " . $user_id_list[$impersonate_id];
+        ?></div>
+</h4>
+   <ul class="breadcrumb breadcrumb-heading">
+    <li><a href="/publisher/">Domains</a><span class="divider">/</span></li>
+    <li><?php echo $domain_obj->WebDomain;?> <span class="divider">/</span></li>
+    <li><a href="/publisher/zone/<?php echo $domain_obj->PublisherWebsiteID;?>">Zones</a><span class="divider">/</span></li>
+    <li><?php echo $editResultObj->AdName;?><span class="divider">/</span></li>
+    <li>Edit Zone</li>
+    </ul>
+<?php 
+    if($error_message != "" && $error_message !== null && isset($error_message))
+    {
+    	echo '<div id="cdn_form_success" class="alert alert-error" style="margin: 5px;">'. $error_message .'</div>';
+    }
+?>
+<div id="cdn_form_msg" class="alert alert-error" style="margin: 5px; display:none;"></div>
+    <div id="main-container">
+
+    <div class="formbox">
+    
+    <form id="ad" class="form-horizontal form-top-magin" name="ad" method="post" action="/publisher/zone/<?php echo $editResultObj->PublisherWebsiteID;?>/edit/<?php echo $editResultObj->PublisherAdZoneID;?>/">
+    <div class="control-group">
+    <label for="adname" class="control-label">Ad Name</label>
+    <div class="controls">
+    <input type="text" value="<?php echo $editResultObj->AdName;?>" class="zone-txtbox" maxlength="255" id="AdName" name="AdName">    </div>
+    </div>
+<div class="control-group">
+    <label for="Description" class="control-label">Description</label>
+    <div class="controls">
+    <textarea class="zone-txtbox" maxlength="255" id="Description" name="Description"><?php echo $editResultObj->Description;?></textarea>    </div>
+    </div>
+<div class="control-group" id="passback-cg">
+    <label for="PassbackAdTag" class="control-label">Passback Ad Tag</label>
+    <div class="controls">
+ <textarea class="zone-txtbox" maxlength="5000" id="PassbackAdTag" name="PassbackAdTag"><?php echo $editResultObj->PassbackAdTag;?></textarea>    </div>
+    </div>
+    <div class="control-group" id="floor-cg">
+    <label for="FloorPrice" class="control-label">Floor Price</label>
+    <div class="controls">
+    <div class="input-prepend">
+	<span class="add-on">$</span>
+    <input type="text" value="<?php echo $editResultObj->FloorPrice;?>" class="input-mini" maxlength="20" id="FloorPrice" name="FloorPrice">    </div>
+    </div>
+    </div>
+    
+	  <div class="control-group">
+		<label for="PublisherAdZoneTypeID" class="control-label">Zone type?</label>
+		<div class="controls">
+        <select id="PublisherAdZoneTypeID"  class="selbox-width" name="PublisherAdZoneTypeID" onchange="switchPublisherAdZoneType();">
+            <?php foreach ($publisheradzonetype_options as $code => $name): ?>
+                <?php if ((string)$code === $current_publisheradzonetype): ?>
+                    <option value="<?php echo $code;?>" selected="selected"><?php echo $name;?></option>
+                <?php else: ?>
+                    <option value="<?php echo $code;?>"><?php echo $name;?></option>
+                <?php endif; ?>
+            <?php endforeach; ?>
+        </select>
+        <div id="banner-picker"></div>
+       </div>
+    	</div>
+    <div class="control-group">
+     <label for="IsMobileFlag" class="control-label">Is Mobile?</label>
+    <div class="controls">
+    <label><input type="radio" <?php if($editResultObj->IsMobileFlag == "0"): echo 'checked="checked"';endif;?> value="0" id="IsMobileFlag" name="IsMobileFlag">No</label>
+    <label><input type="radio" <?php if($editResultObj->IsMobileFlag == "1"): echo 'checked="checked"';endif;?> value="1" name="IsMobileFlag">Yes</label> 
+       </div>
+    </div>
+     
+     <div class="control-group">
+     <label for="Templates" class="control-label">Templates</label>
+    <div class="controls">
+    <select onchange="getTemplateSizes(this);" class="zone-txtarea" id="AdTemplateID" name="AdTemplateID">
+<?php 
+     foreach($AdTemplateList as $key=>$value):
+     	$selected = '';
+     	if($editResultObj->AdTemplateID == $key):
+     		$selected = "selected";
+     	endif; 
+	 	echo '<option value="'. $key .'" '.$selected.'>'. $value .'</option>';
+	 endforeach;
+	 ?>
+</select>  
+  </div>
+    </div>
+    
+    <div class="control-group">
+    <label for="Width" class="control-label">Ad Width</label>
+    <div class="controls">
+    <input type="text" value="<?php echo $editResultObj->Width;?>" class="input-mini" size="5" maxlength="10" id="Width" name="Width">    </div>
+    </div>   
+    
+    <div class="control-group">
+    <label for="Height" class="control-label">Ad Height</label>
+    <div class="controls">
+    <input type="text" value="<?php echo $editResultObj->Height;?>" class="input-mini" size="5" maxlength="10" id="Height" name="Height">    </div>
+    </div>
+    
+<div class="control-group">
+    <div class="controls">
+    <button name="submit" class="btn btn-margin btn-primary" type="submit" id="submitbutton">Update Ad Zone</button>
+    </div>
+    </div>
+    <input type="hidden" value="0" name="AdOwnerID">
+    <input type="hidden" value="<?php echo $editResultObj->PublisherAdZoneID;?>" name="PublisherAdZoneID">
+    <input type="hidden" value="<?php echo $domain_obj->PublisherWebsiteID;?>" name="PublisherWebsiteID">
+</form> 
+</div>
+    </div>

@@ -1,0 +1,215 @@
+<?php
+$this->headScript()->prependFile($this->basePath() . '/js/script.js');
+?>
+<div class="row headtop">
+  <div class="span12">
+    <h4 class="headbreadcrumb">Account Settings</h4>
+  </div>
+</div>
+
+<div class="bs-docs-example">
+            <ul class="nav nav-tabs" id="myTab">
+              <li><a  href="/users/account">Profile</a></li>
+              <li><a href="/users/changepassword">Change Password</a></li>
+              <li class="active"><a href="/users/websites">Websites</a></li>
+            </ul>
+            <div class="tab-content" id="myTabContent">
+              <div id="websites" class="tab-pane fade active in">
+               
+              
+            <div class="span9">
+             <div id="pending_list_form">
+            <div class="row">
+            	<h4>Pending Site List</h4>
+            	<p>These are the websites that are waiting to be approved for Nginad ads. Approval can take upto 48 hours.</p>   	
+            </div>
+     		<?php 
+                if(isset($error_msg) && $error_msg != null):
+				    echo '<div id="cdn_form_error" class="alert alert-error" style="margin-left: 8px;margin-right: 8px;">'.$error_msg.'</div>';
+			    endif;
+			    if(isset($success_msg) && $success_msg != null):
+		    	    echo '<div id="cdn_form_success" class="alert alert-success" style="margin-left: 8px;margin-right: 8px;">Site has been updated successfully.</div>';
+			    endif;
+			   ?>
+	<div id="cdn_form_error1" class="alert alert-error" style="margin-left: 8px;margin-right: 8px; display: none;"></div>
+	<div id="cdn_form_success1" class="alert alert-success" style="margin-left: 8px;margin-right: 8px; display: none;"></div>
+    <form action="/users/websites" method="post" class="form-horizontal form-top-magin" name="websiteform" id="websiteform">        
+        <fieldset>
+            	<div class="row">
+               <div class="span3">                   
+                <div class="control-group">
+               	<input type="text" name="website" id="website" placeholder="www.example.com" />    
+               	 </div>
+               </div>		
+                <div class="span3">
+                <div class="control-group">
+     			<select name="category" id="category">
+               	<option value="">Site's Category</option>
+               	<?php 
+			     foreach($vertical_map as $key=>$value): 
+				 	echo '<option value="'. $key .'">'. $value .'</option>';
+				 endforeach;
+				 ?>
+               </select>   
+               </div>         	
+               </div>	
+               <div class="span2">
+                <div class="control-group">
+               	<input type="submit" class="btn btn-primary" value="Save Site" />
+               	</div>
+               </div>
+           	</div>	
+             	 </fieldset>
+             	</form>
+             	</div><!-- end of pending_list_form -->
+       <div id="selection-results" class="pending_table_margin"><?php //print_r($site_data);?>
+      <table class="table table-striped table-bordered table-margin">
+             	<tbody>
+     <tr>
+      <th>#</th><th>Website</th><th>IABCategory</th><th>Action</th>
+     </tr>
+    <?php foreach ($pending_list as $website): ?>   
+	<tr>
+		<td><?php echo $website->WebsiteID;?></td><td><?php echo $website->WebDomain;?></td><td><?php echo $vertical_map[$website->IABCategory];?></td><td>
+		<a href="javascript:void(0);" onclick="del_website(this, <?php echo $website->WebsiteID;?>);"><img src="../images/close.png" /></a></td>
+	</tr>
+    <?php endforeach;?>
+
+</tbody>
+</table>      	   
+</div>          	
+             	
+ </div><!-- end of span8 -->
+ 
+ <div class="span6">
+  <div id="pending_list_form" style="padding: 5px;">
+ <div class="row">
+   <h4 class="pending_heading heading_top_mgn1">Approved Site List</h4>
+   <p class="pending_left_bottom_mgn">These are the sites that have been approved for Nginad ads.</p>
+ <ul class="pendinglist">
+   <?php foreach ($approved_list as $website): ?>
+     <li><?php echo $website->WebDomain;?>&nbsp;&nbsp; ( <?php echo $vertical_map[$website->IABCategory]; ?> ) </li>
+  <?php endforeach; ?>
+  </ul>
+
+ 
+ <!--<div class="myaccordion">
+ <div class="accordion" id="accordion2">
+<div class="accordion-group">
+<div class="accordion-heading">
+<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
+Collapsible Group Item #1
+</a>
+</div>
+<div id="collapseOne" class="accordion-body collapse in">
+<div class="accordion-inner">
+Anim pariatur cliche...
+</div>
+</div>
+</div>
+<div class="accordion-group">
+<div class="accordion-heading">
+<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
+Collapsible Group Item #2
+</a>
+</div>
+<div id="collapseTwo" class="accordion-body collapse">
+<div class="accordion-inner">
+Anim pariatur cliche...
+</div>
+</div>
+</div>
+</div>
+ </div>--> <!-- end of myaccordion -->
+ 
+ 
+ 
+</div>
+</div><!-- end of row -->
+
+ <div class="row">
+ 
+  <div id="pending_list_form" style="padding: 5px;">
+ <h4 class="pending_heading heading_top_mgn">Denied Site List</h4>
+ <p class="pending_left_bottom_mgn">These are the sites that have been denied for Nginad ads.</p>
+ 
+<div class="myaccordion">
+	 <div class="accordion" id="accordion2">
+	 <?php foreach ($denied_list as $website): ?>   
+	<div class="accordion-group">
+	<div class="accordion-heading">
+	<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapse<?php echo $website->WebsiteID;?>">
+	<?php echo $website->WebDomain;?>&nbsp;&nbsp; ( <?php echo $vertical_map[$website->IABCategory]; ?> )
+	</a>
+	</div>
+	<div id="collapse<?php echo $website->WebsiteID;?>" class="accordion-body collapse">
+	<div class="accordion-inner">
+	<?php echo $website->Description;?>
+	</div>
+	</div>
+	</div>
+	<?php endforeach; ?>
+	
+	</div>
+ </div>
+
+
+
+<!-- <div class="myaccordion">
+	 <div class="accordion" id="accordion2">
+	<div class="accordion-group">
+	<div class="accordion-heading">
+	<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
+	Collapsible Group Item #1
+	</a>
+	</div>
+	<div id="collapseOne" class="accordion-body collapse">
+	<div class="accordion-inner">
+	Anim pariatur cliche...
+	</div>
+	</div>
+	</div>
+	
+	<div class="accordion-group">
+	<div class="accordion-heading">
+	<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
+	Collapsible Group Item #2
+	</a>
+	</div>
+	<div id="collapseTwo" class="accordion-body collapse">
+	<div class="accordion-inner">
+	Anim pariatur cliche...
+	</div>
+	</div>
+	</div>
+	</div>
+ </div>-->
+ 
+ 
+ 
+ 
+       <!-- <div id="selection-results" class="pending_table_margin">
+      <ul class="pendinglist">
+ <li><a href="">You have applied for ads but no sites have been approved yet. </a></li>	
+ <li><a href="">You have applied for ads but no sites have been approved yet.</a></li>	
+   
+ </ul>   
+</div>  -->
+
+
+
+</div><!-- end of row -->
+</div>
+ </div><!-- end of span7 -->
+    
+               
+              </div>
+            </div>
+          </div>
+          
+          
+
+<script type="text/javascript">
+ //$('#exp').tooltip();
+</script>
+

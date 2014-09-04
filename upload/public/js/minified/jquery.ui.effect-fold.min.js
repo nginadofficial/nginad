@@ -1,0 +1,5 @@
+/*! jQuery UI - v1.9.2 - 2014-04-02
+* http://jqueryui.com
+* Copyright 2014 jQuery Foundation and other contributors; Licensed MIT */
+
+(function(e){e.effects.effect.fold=function(t,i){var a,s,n=e(this),r=["position","top","bottom","left","right","height","width"],o=e.effects.setMode(n,t.mode||"hide"),l="show"===o,h="hide"===o,u=t.size||15,d=/([0-9]+)%/.exec(u),c=!!t.horizFirst,p=l!==c,m=p?["width","height"]:["height","width"],f=t.duration/2,g={},v={};e.effects.save(n,r),n.show(),a=e.effects.createWrapper(n).css({overflow:"hidden"}),s=p?[a.width(),a.height()]:[a.height(),a.width()],d&&(u=parseInt(d[1],10)/100*s[h?0:1]),l&&a.css(c?{height:0,width:u}:{height:u,width:0}),g[m[0]]=l?s[0]:u,v[m[1]]=l?s[1]:0,a.animate(g,f,t.easing).animate(v,f,t.easing,function(){h&&n.hide(),e.effects.restore(n,r),e.effects.removeWrapper(n),i()})}})(jQuery);

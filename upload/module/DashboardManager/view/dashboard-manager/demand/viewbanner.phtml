@@ -1,0 +1,177 @@
+<?php
+echo $this->headScript()->prependFile($this->basePath() . '/js/script.js');
+
+$preview_query = $ispreview == true ? "?ispreview=true" : "";
+
+if ($ispreview == true):
+	$ad_campaign_id = $campaign_preview_id;
+else:
+	$ad_campaign_id = $campaign_id;
+endif;
+
+?>
+<div class="steps-container step1">
+<div class="row headtop">
+    <div class="span12">
+    <h4 class="headbreadcrumb"><a href="/demand/createbanner/<?php echo $ad_campaign_id; ?><?php echo $preview_query; ?>">Create New Banner</a></h4>
+    </div>
+    </div>
+<ul class="breadcrumb breadcrumb-heading">
+    <li><a href="/demand/<?php echo $preview_query; ?>">Ad Campaigns</a><span class="divider">/</span></li>
+    <li><?php echo $bread_crumb_info["BCAdCampaign"]; ?><span class="divider">/</span></li>
+    <li class="active">Banners</li>
+    </ul>
+
+    <div id="selection-results" class="steps-box">
+   <div class="formbox">  
+          <table class="table table-striped table-bordered table-margin">
+            <tr>
+           <th>
+			<?php if ($ispreview == true): ?>
+					PB_ID
+			<?php else: ?>
+					B_ID
+			<?php endif; ?>
+           </th>
+           <th>
+            Modify Banner
+           </th>
+           <th>
+            Modify Filter
+           </th>
+           <th>
+            Modify Exclusion
+           </th>
+           <th>
+            Modify Inclusions
+           </th>
+           <th>
+            Name
+           </th>
+           <th>
+            StartDate/EndDate
+           </th>
+           <th>
+            Width x Height
+           </th>
+           <th>
+            BidAmount ( CPM )
+           </th>
+           <th>
+            BidsCounter
+           </th>
+           <th>
+            ImpressionsCounter
+           </th>
+           <th>
+            CurrentSpend
+           </th>
+           </tr>
+
+    <?php foreach ($rtb_banners as $rtb_banner) :
+
+            if ($ispreview == true):
+           		$banner_id = $rtb_banner->AdCampaignBannerPreviewID;
+            	$campaign_id = $rtb_banner->AdCampaignPreviewID;
+            else:
+            	$banner_id = $rtb_banner->AdCampaignBannerID;
+            	$campaign_id = $rtb_banner->AdCampaignID;
+            endif;
+    ?>
+
+            <tr>
+           <td>
+            <?php echo $banner_id; ?>
+           </td>
+           <td>
+            <a href="/demand/editbanner/<?php echo $banner_id; ?><?php echo $preview_query; ?>">Edit Banner</a>
+            <hr />
+            
+            <a href="javascript:void(0);" onclick="deleteBannerModal('/demand/deletebanner/<?php echo $banner_id;?><?php echo $preview_query;?>','<?php echo $rtb_banner->Name;?>');">Delete Banner</a>
+           </td>
+           <td>
+            <a href="/demand/deliveryfilter/<?php echo $banner_id;?><?php echo $preview_query;?>">Edit Delivery Filter</a>
+            <hr />
+            
+            <a href="javascript:void(0);" onclick="deleteDeliveryFilterModal('/demand/deletedeliveryfilter/<?php echo $banner_id;?><?php echo $preview_query;?>','<?php echo $rtb_banner->Name;?>');">Delete Delivery Filter</a>
+           </td>
+           <td>
+            <a href="/demand/createdomainexclusion/<?php echo $banner_id;?><?php echo $preview_query;?>">Create Domain Exclusion</a>
+            <hr /><a href="/demand/viewdomainexclusion/<?php echo $banner_id;?><?php echo $preview_query;?>">View Domain Exclusions</a>
+           </td>
+           <td>
+            <a href="/demand/createexclusiveinclusion/<?php echo $banner_id;?><?php echo $preview_query; ?>">Create Exclusive Inclusion</a>
+            <hr /><a href="/demand/viewexclusiveinclusion/<?php echo $banner_id;?><?php echo $preview_query;?>">View Exclusive Inclusion</a>
+           </td>
+           <td>
+            <?php echo $rtb_banner->Name; ?>
+           </td>
+           <td>
+            <?php echo $rtb_banner->StartDate; ?><hr /><?php echo $rtb_banner->EndDate; ?>
+           </td>
+           <td>
+            <?php echo $rtb_banner->Width; ?>x<?php echo $rtb_banner->Height; ?>
+           </td>
+           <td>
+           <?php echo $rtb_banner->BidAmount; ?>
+           </td>
+           <td>
+           <?php echo number_format($rtb_banner->BidsCounter); ?>
+           </td>
+           <td>
+           <?php echo number_format($rtb_banner->ImpressionsCounter); ?>
+           </td>
+           <td>
+           $<?php echo number_format($rtb_banner->CurrentSpend, 4, '.', ','); ?>
+           </td>
+           </tr>
+    <?php endforeach; ?>
+    </table>
+    </div>
+    </div>
+</div>
+<div style="clear:both"></div>
+<!-- Banner Delete Modal -->
+<input  type="hidden" name="modal_banner_id" id="modal_banner_id" value="0" />
+<div class="modal fade" id="DeleteBannerModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="myModalLabel">Delete Banner</h4>
+      </div>
+      <div class="modal-body">
+      <div id="banner_alert_msg" class="alert alert-error" style="display: none;">Error</div>
+		<p id="msg"></p>
+<h5 style="color: #b94a48;">This action is IMMEDIATE and NOT REVERSABLE!</h5>
+      </div>
+      <div class="modal-footer">
+      <button type="button" data-loading-text="Processing..." id="banner_yes_btn" class="btn btn-primary" onclick="deleteBannerConfirm();">Yes</button>
+        <button type="button" class="btn btn-default" id="banner_no_btn" data-dismiss="modal">No</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Banner Delete Modal -->
+
+<!-- Delivery Filter Delete Modal -->
+<input  type="hidden" name="modal_delivery_filter_id" id="modal_delivery_filter_id" value="0" />
+<div class="modal fade" id="DeleteDeliveryFilterModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="myModalLabel">Delete Delivery Filter</h4>
+      </div>
+      <div class="modal-body">
+      <div id="delivery_filter_alert_msg" class="alert alert-error" style="display: none;">Error</div>
+	  <p id="msg"></p>
+<h5 style="color: #b94a48;">This action is IMMEDIATE and NOT REVERSABLE!</h5>
+      </div>
+      <div class="modal-footer">
+      <button type="button" data-loading-text="Processing..." id="delivery_filter_yes_btn" class="btn btn-primary" onclick="deleteDeliveryFilterConfirm();">Yes</button>
+      <button type="button" class="btn btn-default" id="delivery_filter_no_btn" data-dismiss="modal">No</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Delivery Filter Delete Modal -->
+

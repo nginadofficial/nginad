@@ -1,0 +1,17 @@
+<?php
+// setting a meta refresh for 3 seconds to a new url:
+$this->headMeta()->appendHttpEquiv('Refresh', '1;URL=' . $refresh_url);
+$this->headScript()->captureStart(); ?>
+$(function(){
+    $('#main-container').addClass("centerj");
+});
+<?php $this->headScript()->captureEnd();  ?>
+<div class="">
+    <h2><?php echo $this->escapeHtml('Information Saved'); ?></h2>
+    <div style="text-align=center">
+        Your information was saved.
+        <br /><br />
+        <a href="<?php echo $refresh_url;?>">Click Here to Return</a> if your browser doesn't automatically redirect you
+    </div>
+</div>
+<div style="clear:both"></div>

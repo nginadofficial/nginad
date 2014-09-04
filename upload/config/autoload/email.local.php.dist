@@ -1,0 +1,27 @@
+<?php 
+return array(
+'mail' => array(
+	'admin-email' => array(
+			'email' => 'admin@localhost',
+			'name'	=> 'NginAd Admin'
+			),
+	'reply-to' => array(
+				'email' => 'admin@localhost',
+				'name'	=> 'NginAd Ad Server'
+			),
+    'transport' => array(
+    	// if SMTP is false sendmail will be used
+    	'smtp'	  => false,
+        'options' => array(
+            'name'              => 'local',
+            'host'              => '127.0.0.1',
+            'connection_class'  => 'plain',
+            'connection_config' => array(
+                'username' => 'example@example.loc',
+                'password' => '',
+                'ssl' => 'tls'
+            ),
+        ),  
+    ),
+),
+);

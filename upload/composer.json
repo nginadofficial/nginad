@@ -1,0 +1,41 @@
+{
+  "name" : "cdnpal/nginad",
+  "description" : "CDNPAL NGINAD",
+  "keywords" : [ "framework", "zf2", "nginad", "cdnpal" ],
+  "version" : "1.0.5",
+  "license" : "No Release, no distribution. Copyright 2013-2014, all rights Reserved.",
+  "homepage" : "http://www.nginad.com/",
+  "minimum-stability" : "beta",
+  "prefer-stable" : true,
+  "authors" : [
+  		{
+  			"name" : "Christopher Gu",
+  			"email" : "resources@cdnpal.com",
+  			"role" : "Owner"
+  		}
+  ],
+  "require" : {
+    "php" : ">=5.3.3",
+    "zendframework/zendframework" : "2.*",
+    "zf-commons/zfc-rbac" : "~2.0",
+    "doctrine/doctrine-orm-module" : "*",
+    "PHPOffice/PHPExcel" : "1.7.8"
+  },
+  "repositories": [{
+    "type": "package",
+    "package": {
+        "name": "PHPOffice/PHPExcel",
+        "version": "1.7.8",
+        "source": {
+            "url": "https://github.com/PHPOffice/PHPExcel.git",
+            "type": "git",
+            "reference": "PHPExcel_1.7.8"
+        },
+        "autoload": {
+            "psr-0": {
+                "PHPExcel": "Classes/"
+            }
+        }
+    }
+	}]
+}
