@@ -107,6 +107,7 @@ function submitForm() {
             <?php
             if(count($zone_list["data"]) > 0):
                 foreach ($zone_list["data"] AS $row_number => $row_data):
+                	$is_rejected = false;
             ?>
                 <tr>
                     <td><?php echo $row_number+1; ?></td>
@@ -144,6 +145,10 @@ function submitForm() {
     			 	                           );
                                 	    $approval = array(0=>$pending_verb,1=>$approved_verb,2=>$rejected_verb);
                                 	    
+                                	    if (intval($data) == 2):
+                                	    	$is_rejected = true;
+                                	    endif;
+                                	    
                                 	    if($is_admin)
                                 	        echo $admin_approval[intval($data)];
                                 	    else
@@ -167,7 +172,9 @@ function submitForm() {
                             ?>
                         </td>
                     <?php endforeach; ?>
-                    <td><a href="/publisher/zone/<?php echo $domain_id;?>/edit/<?php echo $ad_id;?>">Edit 
+                    <td>
+                    <?php if ($is_admin === true || $is_rejected !== true): ?>
+                    	<a href="/publisher/zone/<?php echo $domain_id;?>/edit/<?php echo $ad_id;?>">Edit 
 
 Zone</a>&nbsp;&nbsp;&nbsp;
                     	<a href="javascript:void(0);" onclick="InvocationShow(<?php echo 
@@ -176,6 +183,9 @@ $domain_id;?>, <?php echo $zone_list_raw[$row_number]["PublisherAdZoneID"];?>)">
                         <hr width="100%" />
                         <!--<a href="/publisher/zone/<?php echo $domain_id; ?>/delete/<?php echo $ad_id; ?>">Delete Zone</a>-->
                         <a href="javascript:void(0);" onclick="deleteZoneModal(<?php echo $domain_id;?>,<?php echo $ad_id;?>,'<?php echo $zone_list_raw[$row_number]["AdName"];?>');">Delete Zone</a>
+                    <?php else: ?>
+                        &nbsp;
+                    <?php endif; ?>
                     </td>
                 </tr>
             <?php 

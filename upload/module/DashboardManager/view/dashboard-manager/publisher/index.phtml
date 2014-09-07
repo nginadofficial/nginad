@@ -62,6 +62,7 @@ $effective_user_in_dashboard = false;
             <?php
             if(count($domain_list["data"]) > 0):
                 foreach ($domain_list["data"] AS $row_number => $row_data):
+                	$is_rejected = false;
             ?>
                 <tr>
                     <td><?php echo $row_number+1; ?></td>
@@ -120,10 +121,15 @@ $effective_user_in_dashboard = false;
     			 	                           );
                                 	    $approval = array(0=>$pending_verb,1=>$approved_verb,2=>$rejected_verb);
                                 	    
-                                	    if($is_admin)
+                                	    if (intval($data) == 2):
+                                	    	$is_rejected = true;
+                                	    endif;
+                                	    
+                                	    if($is_admin):
                                 	        echo $admin_approval[intval($data)];
-                                	    else
+                                	    else:
                                 	        echo $approval[intval($data)];
+                                	    endif;
                                         break;
                                     default:
                                         echo $data;
@@ -132,7 +138,9 @@ $effective_user_in_dashboard = false;
                             ?>
                         </td>
                     <?php endforeach; ?>
-                    <td><a href="/publisher/editdomain/<?php echo $domain_id;?>">Edit Domain</a>
+                    <td>
+                    <?php if ($is_admin === true || $is_rejected !== true): ?>
+                    	<a href="/publisher/editdomain/<?php echo $domain_id;?>">Edit Domain</a>
                         &nbsp;&nbsp;&nbsp;
                         <!--<a href="/publisher/deletedomain/<?php echo $domain_id; ?>">Delete Domain</a>-->
                         <a href="javascript:void(0);" onclick="deleteDomainModal(<?php echo $domain_id;?>,'<?php echo $domain_list_raw[$row_number]["WebDomain"];?>');">Delete Domain</a>
@@ -140,6 +148,9 @@ $effective_user_in_dashboard = false;
                         <a href="/publisher/zone/<?php echo $domain_id;?>">Edit/View Zones</a>
                         &nbsp;&nbsp;&nbsp;
                         <a href="/publisher/zone/<?php echo $domain_id;?>/create/">Create Zones</a>
+                    <?php else: ?>
+                        &nbsp;
+                    <?php endif; ?>
                     </td>
                 </tr>
             <?php 
