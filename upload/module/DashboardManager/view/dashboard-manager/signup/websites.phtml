@@ -70,8 +70,8 @@ $this->headScript()->prependFile($this->basePath() . '/js/script.js');
      </tr>
     <?php foreach ($pending_list as $website): ?>   
 	<tr>
-		<td><?php echo $website->WebsiteID;?></td><td><?php echo $website->WebDomain;?></td><td><?php echo $vertical_map[$website->IABCategory];?></td><td>
-		<a href="javascript:void(0);" onclick="del_website(this, <?php echo $website->WebsiteID;?>);"><img src="../images/close.png" /></a></td>
+		<td><?php echo $website->PublisherWebsiteID;?></td><td><?php echo $website->WebDomain;?></td><td><?php echo $vertical_map[$website->IABCategory];?></td><td>
+		<a href="javascript:void(0);" onclick="del_website(this, <?php echo $website->PublisherWebsiteID;?>);"><img src="../images/close.png" /></a></td>
 	</tr>
     <?php endforeach;?>
 
@@ -138,11 +138,11 @@ Anim pariatur cliche...
 	 <?php foreach ($denied_list as $website): ?>   
 	<div class="accordion-group">
 	<div class="accordion-heading">
-	<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapse<?php echo $website->WebsiteID;?>">
+	<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapse<?php echo $website->PublisherWebsiteID;?>">
 	<?php echo $website->WebDomain;?>&nbsp;&nbsp; ( <?php echo $vertical_map[$website->IABCategory]; ?> )
 	</a>
 	</div>
-	<div id="collapse<?php echo $website->WebsiteID;?>" class="accordion-body collapse">
+	<div id="collapse<?php echo $website->PublisherWebsiteID;?>" class="accordion-body collapse">
 	<div class="accordion-inner">
 	<?php echo $website->Description;?>
 	</div>

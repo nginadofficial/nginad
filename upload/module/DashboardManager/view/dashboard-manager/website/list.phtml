@@ -36,11 +36,11 @@ $this->headScript()->prependFile($this->basePath() . '/js/script.js');
     	   foreach ($pending_list as $website):
     	   		$userData = $PublisherInfoFactory->get_row(array("PublisherInfoID" => $website->PublisherInfoID));
     	   ?>   
-           <tr id="sites_row_<?php echo $website->WebsiteID;?>">
+           <tr id="sites_row_<?php echo $website->PublisherWebsiteID;?>">
            <td>
             <?php echo $i; ?>
            </td>
-           <td id="wb_site_<?php echo $website->WebsiteID;?>">
+           <td id="wb_site_<?php echo $website->PublisherWebsiteID;?>">
             <?php echo $website->WebDomain; ?>
             </td>
            <td>

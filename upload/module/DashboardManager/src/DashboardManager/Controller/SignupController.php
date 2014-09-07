@@ -736,7 +736,7 @@ class SignupController extends PublisherAbstractActionController {
 	    	$category = $request->getPost('category');
 	    	$PublisherWebsite->WebDomain = $website;
 	    	$PublisherWebsite->IABCategory = $category;
-	    	$PublisherWebsite->DomainOwnerID = $this->auth->getEffectiveIdentityID();
+	    	$PublisherWebsite->DomainOwnerID = $this->auth->getPublisherInfoID();
 	    	$PublisherWebsite->DateCreated = date("Y-m-d H:i:s");
 	    	$PublisherWebsite->Description = "";
 	    	
@@ -785,9 +785,9 @@ class SignupController extends PublisherAbstractActionController {
 		endif;
 		
     
-	    $pending_list = $PublisherWebsiteFactory->get(array('PublisherInfoID' => $this->auth->getEffectiveIdentityID(), 'ApprovalFlag' => 0));
-	    $approved_list = $PublisherWebsiteFactory->get(array('PublisherInfoID' => $this->auth->getEffectiveIdentityID(), 'ApprovalFlag' => 1));
-	    $denied_list = $PublisherWebsiteFactory->get(array('PublisherInfoID' => $this->auth->getEffectiveIdentityID(), 'ApprovalFlag' => 2));
+	    $pending_list = $PublisherWebsiteFactory->get(array('DomainOwnerID' => $this->auth->getPublisherInfoID(), 'ApprovalFlag' => 0));
+	    $approved_list = $PublisherWebsiteFactory->get(array('DomainOwnerID' => $this->auth->getPublisherInfoID(), 'ApprovalFlag' => 1));
+	    $denied_list = $PublisherWebsiteFactory->get(array('DomainOwnerID' => $this->auth->getPublisherInfoID(), 'ApprovalFlag' => 2));
 		
 		$view = new ViewModel(array(
 	    	'dashboard_view' => 'account',
@@ -822,14 +822,14 @@ class SignupController extends PublisherAbstractActionController {
 		$request = $this->getRequest();
 	    if ($request->isPost()):
 	        
-	    	$website_id = $request->getPost('website_id');
+	    	$website_id = intval($request->getPost('website_id'));
 	    
 	    	$params = array();
-	    	$params["PublisherWebsiteID"] 	= $website_id;
-	    	$params["AdOwnerID"] 			= $this->auth->getEffectiveIdentityID();
+	    	$params["PublisherWebsiteID"] 		= $website_id;
+	    	$params["DomainOwnerID"] 			= $this->auth->getPublisherInfoID();
 	    	$publisher_website_data = $PublisherWebsiteFactory->get_row($params);
 	    	$success = true;
-	    	$PublisherWebsiteFactory->delete_website($website_id);
+	    	$PublisherWebsiteFactory->delete_domain($website_id);
 	    	 
 	    	$params = array();
 	    	$params['PublisherWebsiteID'] = $website_id;
@@ -841,7 +841,7 @@ class SignupController extends PublisherAbstractActionController {
 	    	
 	    	endforeach;
 	    	 
-	    	$msg = '"' . $website_data->WebDomain . '" removed successfully.';
+	    	$msg = '"' . $publisher_website_data->WebDomain . '" removed successfully.';
 	    	
 	    endif;	
 		

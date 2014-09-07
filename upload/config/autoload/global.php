@@ -28,7 +28,7 @@ return array(
 		'settings' => array(
 				'publisher' => array(
 						'auto_approve_zones' => true,
-						'auto_approve_websites' => false
+						'auto_approve_websites' => true
 				)
 		),
 		'maintenance' => array(
