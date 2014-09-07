@@ -24,10 +24,9 @@ $this->headScript()->captureStart(); ?>
     <li>Create New Domain</li>
     </ul>    
 <?php 
-    if($error_message != "" && $error_message !== null && isset($error_message))
-    {
+    if($error_message != "" && $error_message !== null && isset($error_message)):
     	echo '<div id="cdn_form_success" class="alert alert-error" style="margin: 5px;">'. $error_message .'</div>';
-    }
+    endif;
 ?>
 <div id="cdn_form_msg" class="alert alert-error" style="margin: 5px; display:none;"></div>
 <form id="domain" class="form-horizontal form-top-magin" name="domain" method="post" action="/publisher/createdomain">

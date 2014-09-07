@@ -14,10 +14,10 @@ $this->headScript()->prependFile($this->basePath() . '/js/script.js');
 								<h1 class="loginhead">Login</h1>
 							</div>  
 <?php
-if (isset($_SESSION['user']['message'])) {
+if (isset($_SESSION['user']['message'])):
    echo '<div id="cdn_form_msg" class="alert alert-error" style="margin: 5px;">'.$_SESSION['user']['message'].'</div>';
    unset($_SESSION['user']['message']);
-}
+endif;
 ?>  
 							<div class="control-group">
 								<!-- Username -->
@@ -53,28 +53,3 @@ if (isset($_SESSION['user']['message'])) {
 						</fieldset>
 					</form>       
 </div>					
-<!--<form method="POST" action="/auth/authenticate" name="login"  class="form-horizontal">
-<fieldset>
-    <div>
-        <label for="username">Email Address</label>
-        <input name="username" type="text" />
-    </div>
-    <div>
-        <label for="password">Password</label>
-        <input name="password" type="password" />
-    </div>
-    <div style="position: relative; height: 35px; display: block;">
-    	<div class="" style="position: relative">
-    	<div style="position: absolute; left: 0px; top: 0px;">
-    		<input type="checkbox" name="rememberme" />
-    	</div>
-    	<div style="position: absolute; left: 20px; top: 3px;">
-    		<label for="rememberme">Remember Me</label>
-    	</div>
-    	</div>
-    </div>
-    <div>
-        <input type="submit" class="btn btn-primary" value="Login to Dashboard" name="B1">
-    </div>
-</fieldset>
-</form>-->

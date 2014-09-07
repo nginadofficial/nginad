@@ -6,32 +6,23 @@ $this->headScript()->captureStart() ?>
 <?php $this->headScript()->captureEnd();  ?>
 <h4 class="headbreadcrumb blue-color">Edit Ad Zone
     <div class="pull-right negative-margin black-color">
-    	    <?php  if ($is_admin === true) { /* ?>
-    			 LOGGED IN AS USER: <?php 
-                    if($impersonate_id == null)
-                    {
-                        echo $true_user_name;
-                    }
-                    else 
-                    {
-                        echo $user_id_list[intval($effective_id)] . " (" . $effective_id . ")";
-                    } */?>
+    	    <?php  if ($is_admin === true): ?>
                 
                 <strong>Current Domain:</strong> <?php 
-                    if($domain_obj !== null)
-                    {
+                    if($domain_obj !== null):
                         echo $domain_obj->WebDomain;
-                    }
-              }  
+                    endif;
+             endif;
          ?>
     </div>
 <br clear="all">
 <div class="pull-right negative-margin black-color"> <?php 
         // If Admin, show which account you are creating for.
-            if($impersonate_id == "0" || $impersonate_id == null)
+            if($impersonate_id == "0" || $impersonate_id == null):
                 echo "<img src='/img/man-icon.png' /> " . $true_user_name;
-            else
+            else:
                 echo "<img src='/img/man-icon.png' /> " . $user_id_list[$impersonate_id];
+            endif;
         ?></div>
 </h4>
    <ul class="breadcrumb breadcrumb-heading">
@@ -42,10 +33,9 @@ $this->headScript()->captureStart() ?>
     <li>Edit Zone</li>
     </ul>
 <?php 
-    if($error_message != "" && $error_message !== null && isset($error_message))
-    {
+    if($error_message != "" && $error_message !== null && isset($error_message)):
     	echo '<div id="cdn_form_success" class="alert alert-error" style="margin: 5px;">'. $error_message .'</div>';
-    }
+    endif;
 ?>
 <div id="cdn_form_msg" class="alert alert-error" style="margin: 5px; display:none;"></div>
     <div id="main-container">

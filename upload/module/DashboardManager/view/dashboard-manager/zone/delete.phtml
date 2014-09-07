@@ -17,12 +17,11 @@ $url = $this->url('publisher/zone', array(
         'param1' => intval($deleteCheckResultObj->PublisherWebsiteID),
         'id' => intval($deleteCheckResultObj->PublisherAdZoneID),
 ));
-    if($error_message != "" && $error_message !== null && isset($error_message))
-    {
+    if($error_message != "" && $error_message !== null && isset($error_message)):
         echo "<div style=\"font-weight:bold;color:#FF0000;font-size:110%;\">";
         echo $error_message;
         echo "</div>";
-    }
+    endif;
 ?>
 <form action="<?php echo $url; ?>" method="post" style="text-align: center;">
     <div>Are you sure you wish to delete the ad zone

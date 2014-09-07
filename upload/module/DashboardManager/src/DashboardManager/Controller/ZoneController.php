@@ -183,6 +183,10 @@ class ZoneController extends PublisherAbstractActionController {
         
         	$error_message = "An invalid publishing web domain was specified for the specified user.";
             
+        elseif ($DomainObj->ApprovalFlag == 2):
+
+        	$error_message = "This domain was rejected and you can not add any new zones.";
+        
         endif;
         
         $needed_input = array(
@@ -199,7 +203,7 @@ class ZoneController extends PublisherAbstractActionController {
         $request = $this->getRequest();
  
         
-        if ($request->isPost() && $DomainObj !== null):
+        if ($request->isPost() && $DomainObj !== null && $error_message === null):
         
             $ad = new \model\PublisherAdZone();
             
@@ -287,12 +291,17 @@ class ZoneController extends PublisherAbstractActionController {
 		
         $current_publisheradzonetype = AD_TYPE_ANY_REMNANT;
         
+        $editResultObj = new \model\PublisherAdZone();
+        
         $DomainObj = $this->get_domain_data($DomainID, $this->PublisherInfoID);
         
         if ($DomainObj === null):
         
         	$error_message = "An invalid publishing web domain was specified for the specified user.";
         
+        elseif ($DomainObj->ApprovalFlag == 2):
+        
+        	$error_message = "This domain was rejected and you can not edit this zone.";
         
         else:
         

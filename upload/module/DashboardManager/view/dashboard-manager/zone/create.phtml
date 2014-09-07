@@ -8,23 +8,13 @@ $this->headScript()->captureStart() ?>
 <h4 class="headbreadcrumb blue-color">Create New Ad Zone
  
     <div class="pull-right black-color negative-margin">
-    	    <?php  if ($is_admin === true) { /* ?>
-    			 LOGGED IN AS USER: <?php 
-                    if($impersonate_id == null)
-                    {
-                        echo $true_user_name;
-                    }
-                    else 
-                    {
-                        echo $user_id_list[intval($effective_id)] . " (" . $effective_id . ")";
-                    } */?>
+    	    <?php  if ($is_admin === true): ?>
                 
                 <strong>Current Domain: <?php 
-                    if($domain_obj !== null)
-                    {
+                    if ($domain_obj !== null):
                         echo $domain_obj->WebDomain;
-                    }
-              }  
+                    endif;
+              endif;  
          ?></strong>
     	
     </div>
@@ -32,32 +22,15 @@ $this->headScript()->captureStart() ?>
     
     <div class="pull-right black-color negative-margin"> <?php 
         // If Admin, show which account you are creating for.
-            if($impersonate_id == "0" || $impersonate_id == null)
+            if($impersonate_id == "0" || $impersonate_id == null):
                 echo "<img src='/img/man-icon.png' /> " . $true_user_name;
-            else
+            else:
                 echo "<img src='/img/man-icon.png' /> " . $user_id_list[intval($effective_id)] . " (" . $effective_id . ")";
+            endif;
         ?>
         </div> <div class="pull-right">
           <br clear="all">
        
-
-<?php if($is_admin) { /*?>
-    <div>
-        <?php 
-        // If Admin, show which account you are creating for.
-            if($impersonate_id == "0" || $impersonate_id == null)
-                echo "User: " . $true_user_name;
-            else
-                echo "User: " . $user_id_list[$impersonate_id];
-        ?>
-        <br />CURRENT DOMAIN: <?php 
-                    if($domain_obj !== null)
-                    {
-                        echo $domain_obj->WebDomain;
-                    }
-              ?>
-    </div>
-    <?php */} ?>
        </div>
 </h4>
 <ul class="breadcrumb breadcrumb-heading">
