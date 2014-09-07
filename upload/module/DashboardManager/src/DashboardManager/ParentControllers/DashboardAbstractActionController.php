@@ -211,8 +211,11 @@ abstract class DashboardAbstractActionController extends ZendAbstractActionContr
     	foreach ($list_data as $row_key => $row_data):
     	
     		for($counter = 0; $counter < count($meta_data); $counter++):
-    		
-    			$sorted_row[$counter] = $row_data[$meta_data[$counter]];
+    			if (!isset($row_data[$meta_data[$counter]])):
+    				$sorted_row[$counter] = null;
+    			else:
+    				$sorted_row[$counter] = $row_data[$meta_data[$counter]];
+    			endif;
     		endfor;
     		$formatted_output[$row_key] = $sorted_row; // This is done for logic clarity, not code compactness.
     	endforeach;

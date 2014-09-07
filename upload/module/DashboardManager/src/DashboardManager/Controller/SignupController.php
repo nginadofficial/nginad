@@ -677,9 +677,6 @@ class SignupController extends PublisherAbstractActionController {
 	    	         
 	    $this->initialize();
 	
-	    $userRole = $this->auth->getRoles();
-		$userRole = $userRole[0];
-        //($userRole == 'admin' || $userRole == 'superadmin')
 	    if ($this->is_admin && $user_id > 0 && ($flag === 1 || $flag === 0)):
 	    
 	    	$authUsers = new \model\authUsers();
@@ -728,8 +725,8 @@ class SignupController extends PublisherAbstractActionController {
 		
 		$error_msg = null;
 		$success_msg = null;
-		$Websites = new \model\Websites();
-		$WebsitesFactory = \_factory\Websites::get_instance();
+		$PublisherWebsite = new \model\PublisherWebsite();
+		$PublisherWebsiteFactory = \_factory\PublisherWebsite::get_instance();
 			
 		
 		$request = $this->getRequest();
@@ -737,13 +734,31 @@ class SignupController extends PublisherAbstractActionController {
 	        
 	    	$website = $request->getPost('website');
 	    	$category = $request->getPost('category');
-	    	$Websites->WebDomain = $website;
-	    	$Websites->IABCategory = $category;
-	    	$Websites->PublisherInfoID = $this->auth->getUserID();
-	    	$Websites->DateCreated = date("Y-m-d H:i:s");
+	    	$PublisherWebsite->WebDomain = $website;
+	    	$PublisherWebsite->IABCategory = $category;
+	    	$PublisherWebsite->DomainOwnerID = $this->auth->getEffectiveIdentityID();
+	    	$PublisherWebsite->DateCreated = date("Y-m-d H:i:s");
+	    	$PublisherWebsite->Description = "";
 	    	
-	    	if ($WebsitesFactory->get_row(array("WebDomain" => $Websites->WebDomain)) === null):
-	    	  	$WebsitesFactory->save_website($Websites);
+	    	$auto_approve_websites = $this->config_handle['settings']['publisher']['auto_approve_websites'];
+	    	
+	    	$PublisherWebsite->AutoApprove = ($auto_approve_websites == true) ? 1 : 0;
+
+	    	// Disapprove the changes if not admin.
+	    	if ($this->is_admin || $auto_approve_websites == true):
+	    		$PublisherWebsite->ApprovalFlag = 1;
+	    	else:
+	    		$PublisherWebsite->ApprovalFlag = 0;
+	    	endif;
+	    	
+	    	$PublisherWebsite->IABCategory = $category;
+	    	
+	    	$params = array();
+	    	$params["WebDomain"] = $PublisherWebsite->WebDomain;
+	    	$params["DomainOwnerID"] = $this->auth->getEffectiveIdentityID();
+	    	
+	    	if ($PublisherWebsiteFactory->get_row($params) === null):
+	    	  	$PublisherWebsiteFactory->save_domain($PublisherWebsite);
 	    	  	$message = "New website for approval.<br /><b>".$website."</b>";
 				
 				$subject = "New website for approval";
@@ -770,9 +785,9 @@ class SignupController extends PublisherAbstractActionController {
 		endif;
 		
     
-	    $pending_list = $WebsitesFactory->get(array('PublisherInfoID' => $this->auth->getUserID(), 'ApprovalFlag' => 0));
-	    $approved_list = $WebsitesFactory->get(array('PublisherInfoID' => $this->auth->getUserID(), 'ApprovalFlag' => 1));
-	    $denied_list = $WebsitesFactory->get(array('PublisherInfoID' => $this->auth->getUserID(), 'ApprovalFlag' => 2));
+	    $pending_list = $PublisherWebsiteFactory->get(array('PublisherInfoID' => $this->auth->getEffectiveIdentityID(), 'ApprovalFlag' => 0));
+	    $approved_list = $PublisherWebsiteFactory->get(array('PublisherInfoID' => $this->auth->getEffectiveIdentityID(), 'ApprovalFlag' => 1));
+	    $denied_list = $PublisherWebsiteFactory->get(array('PublisherInfoID' => $this->auth->getEffectiveIdentityID(), 'ApprovalFlag' => 2));
 		
 		$view = new ViewModel(array(
 	    	'dashboard_view' => 'account',
@@ -794,22 +809,39 @@ class SignupController extends PublisherAbstractActionController {
 		
 		$this->initialize();
 		
-		if (!$this->auth->hasIdentity()):
-     		return;
+		$auth = $this->getServiceLocator()->get('AuthService');
+		if (!$auth->hasIdentity()):
+     		return $this->redirect()->toRoute('login');
     	endif;
 		
 		$success = false;
 		$msg = null;
-		$WebsitesFactory = \_factory\Websites::get_instance();
+		$PublisherWebsiteFactory = \_factory\PublisherWebsite::get_instance();
+		$PublisherAdZoneFactory = \_factory\PublisherAdZone::get_instance();
 		
 		$request = $this->getRequest();
 	    if ($request->isPost()):
 	        
 	    	$website_id = $request->getPost('website_id');
-	    	$website_data = $WebsitesFactory->get_row(array("WebsiteID" => $website_id));
-	    	if($website_data->ApprovalFlag==0):
+	    
+	    	$params = array();
+	    	$params["PublisherWebsiteID"] 	= $website_id;
+	    	$params["AdOwnerID"] 			= $this->auth->getEffectiveIdentityID();
+	    	$publisher_website_data = $PublisherWebsiteFactory->get_row($params);
+	    	if($publisher_website_data->ApprovalFlag == 0):
 	    		$success = true;
-	    		$WebsitesFactory->delete_website($website_id);
+	    		$PublisherWebsiteFactory->delete_website($website_id);
+	    		
+	    		$params = array();
+	    		$params['PublisherWebsiteID'] = $website_id;
+	    		$PublisherAdZoneList = $PublisherAdZoneFactory->get($params);
+	    		
+	    		foreach ($PublisherAdZoneList as $PublisherAdZone):
+	    			
+	    			$PublisherAdZoneFactory->delete_zone($PublisherAdZone->PublisherAdZoneID);
+	    			
+	    		endforeach;
+	    		
 	    		$msg = '"' . $website_data->WebDomain . '" removed successfully.';
 	    	else:
 	    		$msg = '"' . $website_data->WebDomain . '" in progress. please refresh page.';

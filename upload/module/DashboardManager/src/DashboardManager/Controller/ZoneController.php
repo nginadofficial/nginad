@@ -479,7 +479,7 @@ class ZoneController extends PublisherAbstractActionController {
             		    	// Is this user allowed to delete this entry?
             		    	if ($this->is_admin || $DomainObj->DomainOwnerID == $this->PublisherInfoID):
             		    	
-            		    		if (intval($PublisherAdZoneFactory->delete_ads(intval($deleteCheckResultObj->PublisherAdZoneID))) > -1):
+            		    		if (intval($PublisherAdZoneFactory->delete_zone(intval($deleteCheckResultObj->PublisherAdZoneID))) > -1):
             		    		
             		    			// Delete success! Return to publisher.
             		    			$success = true;

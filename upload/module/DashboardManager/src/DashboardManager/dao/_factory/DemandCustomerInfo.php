@@ -125,7 +125,7 @@ class DemandCustomerInfo extends \_factory\CachedTableRead
 
    /**
     * 
-    * @param \model\Websites $rawData
+    * @param \model\PublisherWebsite $rawData
     * @return int Number of Rows affected by the save.
     */
     public function saveCustomerInfo(\model\DemandCustomerInfo $DemandCustomerInfo) {

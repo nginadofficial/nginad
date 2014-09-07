@@ -72,20 +72,24 @@ class PublisherWebsite extends \_factory\CachedTableRead
      * @param string $params
      * @return multitype:Ambigous <\Zend\Db\ResultSet\ResultSet, NULL, \Zend\Db\ResultSet\ResultSetInterface>
      */
-    public function get($params = null) {
+    public function get($params = null, $orders = null) {
         	// http://files.zend.com/help/Zend-Framework/zend.db.select.html
-
+    	
         $obj_list = array();
 
-    	$resultSet = $this->select(function (\Zend\Db\Sql\Select $select) use ($params) {
+    	$resultSet = $this->select(function (\Zend\Db\Sql\Select $select) use ($params, $orders) {
         		foreach ($params as $name => $value):
         		$select->where(
         				$select->where->equalTo($name, $value)
         		);
         		endforeach;
         		//$select->limit(10, 0);
-        		$select->order('WebDomain');
 
+        		if($orders == null):
+        			$select->order('WebDomain');
+        		else:
+        			$select->order($orders);
+        		endif;
         	}
     	);
 
@@ -154,9 +158,11 @@ class PublisherWebsite extends \_factory\CachedTableRead
        
    	$data['WebDomain'] = substr($rawData->WebDomain,0,255);
    	$data['DomainOwnerID'] = intval($rawData->DomainOwnerID);
-   	if (intval($rawData->ApprovalFlag) == 0 || intval($rawData->ApprovalFlag) == 1): 
-   	
+   	if (intval($rawData->ApprovalFlag) >= 0 && intval($rawData->ApprovalFlag) <= 0): 
    		$data['ApprovalFlag'] = intval($rawData->ApprovalFlag);
+   	endif;
+   	if (intval($rawData->AutoApprove) == 0 || intval($rawData->AutoApprove) == 1):
+   		$data['AutoApprove'] = intval($rawData->AutoApprove);
    	endif;
    	
    	$data['IABCategory'] 	= $rawData->IABCategory;

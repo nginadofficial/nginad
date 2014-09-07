@@ -125,7 +125,7 @@ class PublisherInfo extends \_factory\CachedTableRead
 
    /**
     * 
-    * @param \model\Websites $rawData
+    * @param \model\PublisherWebsite $rawData
     * @return int Number of Rows affected by the save.
     */
     public function savePublisherInfo(\model\PublisherInfo $PublisherInfo) {

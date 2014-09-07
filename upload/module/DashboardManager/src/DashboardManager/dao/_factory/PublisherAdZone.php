@@ -273,7 +273,7 @@ class PublisherAdZone extends \_factory\CachedTableRead
     * @throws \InvalidArgumentException is thrown when an invalid integer is provided.
     * @return boolean|int Returns the rows affected, or FALSE if failure.
     */
-   public function delete_ads($PublisherAdZoneID)
+   public function delete_zone($PublisherAdZoneID)
    {
        $result = 0;
         
@@ -291,7 +291,7 @@ class PublisherAdZone extends \_factory\CachedTableRead
        
        elseif (!is_int($PublisherAdZoneID) && $PublisherAdZoneID !== null ): // Not a number, but not null (EX: string). Throw exception.
        
-       	$message = "delete_ads() requires a positive integer as its first and only parameter. A value of type \"" .
+       	$message = "delete_zone() requires a positive integer as its first and only parameter. A value of type \"" .
        			gettype($PublisherAdZoneID) . "\" was provided instead.";
        	throw new \InvalidArgumentException($message);
        endif;
