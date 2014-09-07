@@ -789,7 +789,7 @@ CREATE TABLE `PublisherWebsite` (
   `DateCreated` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `DateUpdated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`PublisherWebsiteID`),
-  UNIQUE KEY `WebDomain_UNIQUE` (`WebDomain`),
+  UNIQUE KEY `WebDomain_UNIQUE` (`WebDomain`,`DomainOwnerID`),
   KEY `FK_Owner_User_ID` (`DomainOwnerID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
