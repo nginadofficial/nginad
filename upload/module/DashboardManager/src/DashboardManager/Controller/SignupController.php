@@ -837,7 +837,7 @@ class SignupController extends PublisherAbstractActionController {
 	    	 
 	    	foreach ($PublisherAdZoneList as $PublisherAdZone):
 	    	
-	    		$PublisherAdZoneFactory->delete_zone($PublisherAdZone->PublisherAdZoneID);
+	    		$PublisherAdZoneFactory->delete_zone(intval($PublisherAdZone->PublisherAdZoneID));
 	    	
 	    	endforeach;
 	    	 

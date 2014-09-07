@@ -172,6 +172,7 @@ class PublisherController extends PublisherAbstractActionController {
 	    $this->initialize();
 	    $request = $this->getRequest();
 	    $PublisherWebsiteFactory = \_factory\PublisherWebsite::get_instance();
+	    $PublisherAdZoneFactory = \_factory\PublisherAdZone::get_instance();
 	    $deleteCheckResultObj = new \model\PublisherWebsite();
 	    $success = false;
 	    
@@ -192,7 +193,16 @@ class PublisherController extends PublisherAbstractActionController {
     	                if ($this->is_admin || $deleteCheckResultObj->DomainOwnerID == $this->PublisherInfoID):
     	                
     	                   if (intval($PublisherWebsiteFactory->delete_domain($PublisherWebsiteID)) > -1):
-    	                   
+
+	    	                   $params = array();
+	    	                   $params['PublisherWebsiteID'] = intval($PublisherWebsiteID);
+	    	                   $PublisherAdZoneList = $PublisherAdZoneFactory->get($params);
+	    	                    
+	    	                   foreach ($PublisherAdZoneList as $PublisherAdZone):
+	    	                   
+	    	                   		$PublisherAdZoneFactory->delete_zone(intval($PublisherAdZone->PublisherAdZoneID));
+	    	                   
+	    	                   endforeach;    	                   
     	                       // Delete success! Return to publisher.
      	                       $success = true;
     	                   
