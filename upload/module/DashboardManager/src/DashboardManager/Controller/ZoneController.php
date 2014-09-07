@@ -540,7 +540,7 @@ class ZoneController extends PublisherAbstractActionController {
         $DomainID = intval($this->params()->fromRoute('param1', 0));
         $PublisherAdZoneID = intval($this->params()->fromRoute('id',0));
         
-        if ($this->is_admin && $DomainID > 0 && $PublisherAdZoneID > 0 && ($flag === 0 || $flag === 1)):
+        if ($this->is_admin && $DomainID > 0 && $PublisherAdZoneID > 0 && ($flag === 0 || $flag === 1 || $flag === 2)):
         
             $DomainObj = $this->get_domain_data($DomainID, $this->PublisherInfoID);
             
@@ -557,10 +557,8 @@ class ZoneController extends PublisherAbstractActionController {
                 
                 if (intval($AdObject->PublisherAdZoneID) == $PublisherAdZoneID):
                 	
-                	if ($flag === 0):
-                		$AdObject->AutoApprove = 0;
-                	endif;
-                	
+                	$AdObject->AutoApprove = 0;
+
                     $AdObject->AdStatus = intval($flag);
                     if ($PublisherAdZoneFactory->save_ads($AdObject)):
                     
@@ -595,7 +593,7 @@ class ZoneController extends PublisherAbstractActionController {
     {
         $this->initialize();
         $DomainID = intval($this->params()->fromRoute('param1', 0));
-        $this->adApprovalToggle(0);
+        $this->adApprovalToggle(2);
         return $this->redirect()->toRoute('publisher/zone',array("param1" => $DomainID));
         
     }

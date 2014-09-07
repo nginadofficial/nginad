@@ -14,6 +14,7 @@ class PublisherWebsite
     public $PublisherWebsiteID;
     public $WebDomain;
     public $DomainOwnerID;
+    public $AutoApprove;
     public $ApprovalFlag;
     public $IABCategory;
     public $IABSubCategory;

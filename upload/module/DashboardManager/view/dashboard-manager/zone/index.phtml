@@ -11,32 +11,23 @@ function submitForm() {
 
 <h4 class="headbreadcrumb blue-color"><a href="/publisher/zone/<?php echo $domain_obj->PublisherWebsiteID;?>/create/">Create New Ad Zone</a>
 <span class="pull-right black-color negative-margin">
-    	    <?php  if ($is_admin === true) { /* ?>
-    			 LOGGED IN AS USER: <?php 
-                    if($impersonate_id == null)
-                    {
-                        echo $true_user_name;
-                    }
-                    else 
-                    {
-                        echo $user_id_list[intval($effective_id)] . " (" . $effective_id . ")";
-                    } */?>
+    	    <?php  if ($is_admin === true): ?>
                 
                 <strong>Current Domain: <?php 
-                    if($domain_obj !== null)
-                    {
+                    if($domain_obj !== null):
                         echo $domain_obj->WebDomain;
-                    }
-              }  
+                    endif;
+              endif;
          ?></strong>
     </span>
 <br clear="all">
 <span class="pull-right black-color negative-margin"> <?php 
         // If Admin, show which account you are creating for.
-            if($impersonate_id == "0" || $impersonate_id == null)
+            if($impersonate_id == "0" || $impersonate_id == null):
                 echo "<img src='/img/man-icon.png' /> " . $true_user_name;
-            else
+            else:
                 echo "<img src='/img/man-icon.png' /> " . $user_id_list[intval($effective_id)] . " (" . $effective_id . ")";
+            endif;
         ?></span>
 </h4>
 
@@ -44,45 +35,35 @@ function submitForm() {
 
 <!--<ul class="breadcrumb">
     <li><a href="/publisher">Domains</a> / 
-    <?php if ($domain_obj !== null)
-    {
+    <?php if ($domain_obj !== null):
       ?>
       <a href="/publisher/zone/<?php echo $domain_obj->PublisherWebsiteID; ?>/create/">Create New Ad Zone</a>
       <?php
-    }?></li>
+    endif;?></li>
      <div class="pull-right">
-    	    <?php  if ($is_admin === true) { /* ?>
-    			 LOGGED IN AS USER: <?php 
-                    if($impersonate_id == null)
-                    {
-                        echo $true_user_name;
-                    }
-                    else 
-                    {
-                        echo $user_id_list[intval($effective_id)] . " (" . $effective_id . ")";
-                    } */?>
+    	    <?php  if ($is_admin === true): ?>
                 
                 <strong>Current Domain: <?php 
-                    if($domain_obj !== null)
-                    {
+                    if($domain_obj !== null):
                         echo $domain_obj->WebDomain;
-                    }
-              }  
-              if($error_message != "" && $error_message !== null && isset($error_message))
-              {
+                    endif;
+              endif; 
+              if($error_message != "" && $error_message !== null && isset($error_message)):
+
                   echo "<div style=\"font-weight:bold;color:#FF0000;font-size:110%;\">";
                   echo $error_message;
                   echo "</div>";
-              }
+              endif;
          ?></strong>
     </div>
     <br clear="all">
     <div class="pull-right"> <?php 
         // If Admin, show which account you are creating for.
-            if($impersonate_id == "0" || $impersonate_id == null)
+            if($impersonate_id == "0" || $impersonate_id == null):
                 echo "<img src='/img/man-icon.png' /> " . $true_user_name;
-            else
+            else:
                 echo "<img src='/img/man-icon.png' /> " . $user_id_list[intval($effective_id)] . " (" . $effective_id . ")";
+            endif;
         ?></div>
           <br clear="all">
 	</ul>-->
@@ -95,66 +76,41 @@ function submitForm() {
     
     
     <!--<h4 class="breadcrumb"><a href="/publisher">Domains</a> / 
-    <?php if ($domain_obj !== null)
-    {
+    <?php if ($domain_obj !== null):
+
       ?>
       <a href="/publisher/zone/<?php echo $domain_obj->PublisherWebsiteID; ?>/create/">Create New Ad Zone</a>
       <?php
-    }?>
+    endif; ?>
     </h4>-->
-        <?php  if ($is_admin === true) { /* ?>
-    			 LOGGED IN AS USER: <?php 
-                    if($impersonate_id == null)
-                    {
-                        echo $true_user_name;
-                    }
-                    else 
-                    {
-                        echo $user_id_list[intval($effective_id)] . " (" . $effective_id . ")";
-                    } ?>
-                
-                Domain: <?php 
-                    if($domain_obj !== null)
-                    {
-                        echo $domain_obj->WebDomain;
-                    }
-              }  
-              if($error_message != "" && $error_message !== null && isset($error_message))
-              {
-                  echo "<div style=\"font-weight:bold;color:#FF0000;font-size:110%;\">";
-                  echo $error_message;
-                  echo "</div>";
-            */  } 
-         ?>
  <?php        
-  if($error_message != "" && $error_message !== null && isset($error_message))
-              {
+  if($error_message != "" && $error_message !== null && isset($error_message)):
+
                   echo "<div style=\"font-weight:bold;color:#FF0000;font-size:110%;\">";
                   echo $error_message;
                   echo "</div>";
-              }
+  endif;
 ?>                      
  <div class="formbox">  
     <div id="selection-results" class="steps-box">
         <table class="table table-striped table-bordered table-margin">
             <tr>
             <?php 
-            foreach($zone_list['header'] as $order => $title)
-            {
+            foreach($zone_list['header'] as $order => $title):
             	if ($title == "AutoApprove"):
             		continue;
             	endif;
                 echo "\n<th style=\"text-align:center;\">" . $title . "</th>\n"; 
-            }
+            endforeach;
             ?>
             </tr>
             <?php
-            if(count($zone_list["data"]) > 0) { 
-                foreach ($zone_list["data"] AS $row_number => $row_data) {
+            if(count($zone_list["data"]) > 0):
+                foreach ($zone_list["data"] AS $row_number => $row_data):
             ?>
                 <tr>
                     <td><?php echo $row_number+1; ?></td>
-                    <?php foreach ($row_data AS $column_key => $data) {
+                    <?php foreach ($row_data AS $column_key => $data):
 
                     	if ($zone_list["meta"][$column_key] == 'AutoApprove'):
                     		continue;
@@ -166,22 +122,27 @@ function submitForm() {
                         <td>
                             <?php 
                                 // Change display format according to column specified.
-                                switch($zone_list["meta"][$column_key]) { 
+                                switch($zone_list["meta"][$column_key]):
                                     case "AdName":
                                         echo $data . " (" . $ad_id .")";
                                         break; 
                                 	case "AdStatus":
+                                		$approve_verb = 'Approve';
+                                		$reject_verb = 'Reject';
                                 		$approved_verb = 'Approved';
                                 		$pending_verb = 'Pending';
+                                		$rejected_verb = 'Rejected';
 
                                 		if ($auto_approved == 1):
                                 			$approved_verb = 'Auto-Approved';
                                 		endif;
                                 	    $admin_approval = array(
-                                	           0 => "<a href=\"/publisher/zone/" . $domain_id . "/approve/" . $ad_id . "\">" . $pending_verb . "</a>",
-                                               1 => "<a href=\"/publisher/zone/" . $domain_id . "/reject/" . $ad_id . "\">" . $approved_verb . "</a>"
+                                	           0 => "<strong>" . $pending_verb . "</strong><br /><a href=\"/publisher/zone/" . $domain_id . "/approve/" . $ad_id . "\">" . $approve_verb . "</a>"
+												. "<br /><a href=\"/publisher/zone/" . $domain_id . "/reject/" . $ad_id . "\">" . $reject_verb . "</a>",
+                                               1 => "<a href=\"/publisher/zone/" . $domain_id . "/reject/" . $ad_id . "\">" . $approved_verb . "</a>",
+											   2 => "<a href=\"/publisher/zone/" . $domain_id . "/approve/" . $ad_id . "\">" . $rejected_verb . "</a>"
     			 	                           );
-                                	    $approval = array(0=>"Pending",1=>"Approved");
+                                	    $approval = array(0=>$pending_verb,1=>$approved_verb,2=>$rejected_verb);
                                 	    
                                 	    if($is_admin)
                                 	        echo $admin_approval[intval($data)];
@@ -189,26 +150,23 @@ function submitForm() {
                                 	        echo $approval[intval($data)];
                                         break;
                                 	case "AdTemplateID":
-                                	    if($data == 0)
-                                	    {
+                                	    if($data == 0):
                                 	        echo "Custom:<br />" . 
                                 	           $zone_list_raw[$row_number]["Width"] . " x " .
                                 	           $zone_list_raw[$row_number]["Height"];
-                                	    }
-                                	    else
-                                	    {
+                                	    else:
                                 	        echo $zone_list_raw[$row_number]["TemplateName"] . ":<br />" .
                                     	        $zone_list_raw[$row_number]["TemplateX"] . " x " .
                                     	        $zone_list_raw[$row_number]["TemplateY"];
-                                	    }
+                                	    endif;
                                 	    break;
                                     default:
                                         echo $data;
                                         break;
-                                }
+                                endswitch;
                             ?>
                         </td>
-                    <?php } ?>
+                    <?php endforeach; ?>
                     <td><a href="/publisher/zone/<?php echo $domain_id;?>/edit/<?php echo $ad_id;?>">Edit 
 
 Zone</a>&nbsp;&nbsp;&nbsp;
@@ -221,14 +179,12 @@ $domain_id;?>, <?php echo $zone_list_raw[$row_number]["PublisherAdZoneID"];?>)">
                     </td>
                 </tr>
             <?php 
-                }
-            }
-            else 
-            { ?>
+                endforeach;
+            else: ?>
                 <tr>
                     <td colspan="<?php echo count($zone_list['header']); ?>" style="text-align:center;">There are no results</td>
                 </tr>
-            <?php } ?>
+            <?php endif; ?>
         </table>
     </div>
 </div>

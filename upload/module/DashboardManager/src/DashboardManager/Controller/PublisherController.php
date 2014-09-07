@@ -56,7 +56,7 @@ class PublisherController extends PublisherAbstractActionController {
 	    else:
 	    
 	        $headers = array("#","Domain","Created","Updated","Approval","Actions");
-	        $meta_data = array("WebDomain","DateCreated","DateUpdated","ApprovalFlag");
+	        $meta_data = array("WebDomain","AutoApprove","DateCreated","DateUpdated","ApprovalFlag");
 	    endif;
 
 	    foreach ($PublisherWebsiteList as $PublisherWebsite):
@@ -117,20 +117,24 @@ class PublisherController extends PublisherAbstractActionController {
 	{
 	    $this->initialize();
 	    $PublisherWebsiteID = intval($this->params()->fromRoute('param1', 0));
-	    if ($this->is_admin && $PublisherWebsiteID > 0 && ($flag === 1 || $flag === 0)):
-	    
+
+	    if ($this->is_admin && $PublisherWebsiteID > 0 && ($flag === 2 || $flag === 1 || $flag === 0)):
+
 	    	$PublisherWebsiteFactory = \_factory\PublisherWebsite::get_instance();
 	    	$domain_object = new \model\PublisherWebsite();
 	    	$request = $this->getRequest();
 	    	$parameters = array("PublisherWebsiteID" => $PublisherWebsiteID, "DomainOwnerID" => $this->PublisherInfoID);
 	    	$domain_object = $PublisherWebsiteFactory->get_row_object($parameters);
-	    
+
 	    	// Make sure entry exists.
 	    	if (intval($domain_object->PublisherWebsiteID) == $PublisherWebsiteID):
+
+		    	$domain_object->AutoApprove = 0;
 	    	
 	    		$domain_object->ApprovalFlag = $flag;
-	    		if ($PublisherWebsiteFactory->save_domain($domain_object) > 0)
+	    		if ($PublisherWebsiteFactory->save_domain($domain_object) > 0):
 	    		    return TRUE;
+	    		endif;
 	    	endif;
 	    endif;
 	    
@@ -152,7 +156,7 @@ class PublisherController extends PublisherAbstractActionController {
 	 */
 	public function rejectdomainAction()
 	{
-	    $this->domainApprovalToggle(0);
+	    $this->domainApprovalToggle(2);
 		 
 		return $this->redirect()->toRoute('publisher');
 	}

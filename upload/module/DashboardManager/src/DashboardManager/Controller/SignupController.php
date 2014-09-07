@@ -828,24 +828,20 @@ class SignupController extends PublisherAbstractActionController {
 	    	$params["PublisherWebsiteID"] 	= $website_id;
 	    	$params["AdOwnerID"] 			= $this->auth->getEffectiveIdentityID();
 	    	$publisher_website_data = $PublisherWebsiteFactory->get_row($params);
-	    	if($publisher_website_data->ApprovalFlag == 0):
-	    		$success = true;
-	    		$PublisherWebsiteFactory->delete_website($website_id);
-	    		
-	    		$params = array();
-	    		$params['PublisherWebsiteID'] = $website_id;
-	    		$PublisherAdZoneList = $PublisherAdZoneFactory->get($params);
-	    		
-	    		foreach ($PublisherAdZoneList as $PublisherAdZone):
-	    			
-	    			$PublisherAdZoneFactory->delete_zone($PublisherAdZone->PublisherAdZoneID);
-	    			
-	    		endforeach;
-	    		
-	    		$msg = '"' . $website_data->WebDomain . '" removed successfully.';
-	    	else:
-	    		$msg = '"' . $website_data->WebDomain . '" in progress. please refresh page.';
-	    	endif;
+	    	$success = true;
+	    	$PublisherWebsiteFactory->delete_website($website_id);
+	    	 
+	    	$params = array();
+	    	$params['PublisherWebsiteID'] = $website_id;
+	    	$PublisherAdZoneList = $PublisherAdZoneFactory->get($params);
+	    	 
+	    	foreach ($PublisherAdZoneList as $PublisherAdZone):
+	    	
+	    		$PublisherAdZoneFactory->delete_zone($PublisherAdZone->PublisherAdZoneID);
+	    	
+	    	endforeach;
+	    	 
+	    	$msg = '"' . $website_data->WebDomain . '" removed successfully.';
 	    	
 	    endif;	
 		

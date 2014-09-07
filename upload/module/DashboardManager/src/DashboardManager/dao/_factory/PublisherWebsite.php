@@ -158,7 +158,7 @@ class PublisherWebsite extends \_factory\CachedTableRead
        
    	$data['WebDomain'] = substr($rawData->WebDomain,0,255);
    	$data['DomainOwnerID'] = intval($rawData->DomainOwnerID);
-   	if (intval($rawData->ApprovalFlag) >= 0 && intval($rawData->ApprovalFlag) <= 0): 
+   	if (intval($rawData->ApprovalFlag) >= 0 && intval($rawData->ApprovalFlag) <= 2): 
    		$data['ApprovalFlag'] = intval($rawData->ApprovalFlag);
    	endif;
    	if (intval($rawData->AutoApprove) == 0 || intval($rawData->AutoApprove) == 1):
@@ -171,8 +171,7 @@ class PublisherWebsite extends \_factory\CachedTableRead
    	
    	$data['DateUpdated'] = date('Y-m-d H:i:s');
    	if (intval($rawData->PublisherWebsiteID) > 0):
-   	
-   		return $this->update($data,array('PublisherWebsiteID' => intval($rawData->PublisherWebsiteID)));
+   		return $this->update($data, array('PublisherWebsiteID' => intval($rawData->PublisherWebsiteID)));
    	else:
 
    	    $data['DateCreated'] = date('Y-m-d H:i:s');

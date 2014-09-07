@@ -95,18 +95,17 @@ class WebsiteController extends PublisherAbstractActionController {
 	    			$PublisherWebsite->ApprovalFlag = 2;
 	    			$PublisherWebsite->Description = $denied_desciption;
 	    			$PublisherWebsiteFactory->save_domain($PublisherWebsite);
-	    			$subject = "Website Approved ".$PublisherWebsite->WebDomain;
-	    			$message = '<b>Website Approved</b> : ';
+	    			$subject = "Website Denied ".$PublisherWebsite->WebDomain;
+	    			$message = '<b>Website Denied</b> : ';
 	          		$message = $message." ".$PublisherWebsite->WebDomain;
 	          		$message = $message."<p>".$denied_desciption."</p>";
 	    			$this->batchmailAction($publisher_obj->Email, $subject, $message);
 	    			$msg = "Websites denied successfully. And batch mails goes to publisher.";
-	    		endif;
-	    		if($q == 1):
+	    		elseif($q == 1):
 	    			$PublisherWebsite->ApprovalFlag = 1;
 	    			$PublisherWebsiteFactory->save_domain($PublisherWebsite);
-	    			$subject = "Website Denied ".$Websites->WebDomain;
-	    			$message = '<b>Website Denied</b> : ';
+	    			$subject = "Website Approved ".$Websites->WebDomain;
+	    			$message = '<b>Website Approved</b> : ';
 	          		$message = $message." ".$PublisherWebsite->WebDomain;
 	          		$this->batchmailAction($publisher_obj->Email, $subject, $message);
 	    			$msg = "Websites approved successfully. And batch mails goes to publisher.";
