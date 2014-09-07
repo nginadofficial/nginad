@@ -759,24 +759,27 @@ class SignupController extends PublisherAbstractActionController {
 	    	
 	    	if ($PublisherWebsiteFactory->get_row($params) === null):
 	    	  	$PublisherWebsiteFactory->save_domain($PublisherWebsite);
-	    	  	$message = "New website for approval.<br /><b>".$website."</b>";
-				
-				$subject = "New website for approval";
-				
-				$transport = $this->getServiceLocator()->get('mail.transport');
-				
-				$text = new Mime\Part($message);
-				$text->type = Mime\Mime::TYPE_HTML;
-				$text->charset = 'utf-8';
-				
-				$mimeMessage = new Mime\Message();
-				$mimeMessage->setParts(array($text));
-				$zf_message = new Message();
-				$zf_message->addTo($this->config_handle['mail']['admin-email']['email'], $this->config_handle['mail']['admin-email']['name'])
-					->addFrom($this->config_handle['mail']['reply-to']['email'], $this->config_handle['mail']['reply-to']['name'])
-					->setSubject($subject)
-					->setBody($mimeMessage);
-				$transport->send($zf_message);
+	    	
+	    		if ($auto_approve_websites != true):
+		    	  	$message = "New website for approval.<br /><b>".$website."</b>";
+					
+					$subject = "New website for approval: " . $website;
+					
+					$transport = $this->getServiceLocator()->get('mail.transport');
+					
+					$text = new Mime\Part($message);
+					$text->type = Mime\Mime::TYPE_HTML;
+					$text->charset = 'utf-8';
+					
+					$mimeMessage = new Mime\Message();
+					$mimeMessage->setParts(array($text));
+					$zf_message = new Message();
+					$zf_message->addTo($this->config_handle['mail']['admin-email']['email'], $this->config_handle['mail']['admin-email']['name'])
+						->addFrom($this->config_handle['mail']['reply-to']['email'], $this->config_handle['mail']['reply-to']['name'])
+						->setSubject($subject)
+						->setBody($mimeMessage);
+					$transport->send($zf_message);
+				endif;
 				
 		  		$success_msg = 1;
 		  	else:

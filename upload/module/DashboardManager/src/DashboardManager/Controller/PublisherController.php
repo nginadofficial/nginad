@@ -12,6 +12,8 @@ use DashboardManager\ParentControllers\PublisherAbstractActionController;
 use Zend\View\Model\ViewModel;
 use transformation;
 use _factory\PublisherInfo;
+use Zend\Mail\Message;
+use Zend\Mime;
 
 /**
  * @author Kelvin Mok
@@ -300,6 +302,27 @@ class PublisherController extends PublisherAbstractActionController {
     	            
         	            try {
         	            	$PublisherWebsiteFactory->save_domain($domain);
+        	            	
+        	            	if ($auto_approve_websites != true):
+	        	            	$message = "New website for approval.<br /><b>".$domain->WebDomain."</b>";
+	        	            	
+	        	            	$subject = "New website for approval: " . $domain->WebDomain;
+	        	            	
+	        	            	$transport = $this->getServiceLocator()->get('mail.transport');
+	        	            	
+	        	            	$text = new Mime\Part($message);
+	        	            	$text->type = Mime\Mime::TYPE_HTML;
+	        	            	$text->charset = 'utf-8';
+	        	            	
+	        	            	$mimeMessage = new Mime\Message();
+	        	            	$mimeMessage->setParts(array($text));
+	        	            	$zf_message = new Message();
+	        	            	$zf_message->addTo($this->config_handle['mail']['admin-email']['email'], $this->config_handle['mail']['admin-email']['name'])
+	        	            	->addFrom($this->config_handle['mail']['reply-to']['email'], $this->config_handle['mail']['reply-to']['name'])
+	        	            	->setSubject($subject)
+	        	            	->setBody($mimeMessage);
+	        	            	$transport->send($zf_message);
+        	            	endif;
         	            }
         	            catch(\Zend\Db\Adapter\Exception\InvalidQueryException $e) {
         	                $error_msg ="ERROR: A database error has occurred, please contact customer service.";
