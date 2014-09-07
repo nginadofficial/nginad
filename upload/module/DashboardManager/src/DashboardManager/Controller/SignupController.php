@@ -755,7 +755,7 @@ class SignupController extends PublisherAbstractActionController {
 	    	
 	    	$params = array();
 	    	$params["WebDomain"] = $PublisherWebsite->WebDomain;
-	    	$params["DomainOwnerID"] = $this->auth->getEffectiveIdentityID();
+	    	$params["DomainOwnerID"] = $this->auth->getPublisherInfoID();
 	    	
 	    	if ($PublisherWebsiteFactory->get_row($params) === null):
 	    	  	$PublisherWebsiteFactory->save_domain($PublisherWebsite);
