@@ -8,65 +8,6 @@ function submitForm() {
 }
 <?php $this->headScript()->captureEnd();  ?>
 <div class="steps-container step1">
-
-<h4 class="headbreadcrumb blue-color"><a href="/publisher/zone/<?php echo $domain_obj->PublisherWebsiteID;?>/create/">Create New Ad Zone</a>
-<span class="pull-right black-color negative-margin">
-    	    <?php  if ($is_admin === true): ?>
-                
-                <strong>Current Domain: <?php 
-                    if($domain_obj !== null):
-                        echo $domain_obj->WebDomain;
-                    endif;
-              endif;
-         ?></strong>
-    </span>
-<br clear="all">
-<span class="pull-right black-color negative-margin"> <?php 
-        // If Admin, show which account you are creating for.
-            if($impersonate_id == "0" || $impersonate_id == null):
-                echo "<img src='/img/man-icon.png' /> " . $true_user_name;
-            else:
-                echo "<img src='/img/man-icon.png' /> " . $user_id_list[intval($effective_id)] . " (" . $effective_id . ")";
-            endif;
-        ?></span>
-</h4>
-
-
-
-<!--<ul class="breadcrumb">
-    <li><a href="/publisher">Domains</a> / 
-    <?php if ($domain_obj !== null):
-      ?>
-      <a href="/publisher/zone/<?php echo $domain_obj->PublisherWebsiteID; ?>/create/">Create New Ad Zone</a>
-      <?php
-    endif;?></li>
-     <div class="pull-right">
-    	    <?php  if ($is_admin === true): ?>
-                
-                <strong>Current Domain: <?php 
-                    if($domain_obj !== null):
-                        echo $domain_obj->WebDomain;
-                    endif;
-              endif; 
-              if($error_message != "" && $error_message !== null && isset($error_message)):
-
-                  echo "<div style=\"font-weight:bold;color:#FF0000;font-size:110%;\">";
-                  echo $error_message;
-                  echo "</div>";
-              endif;
-         ?></strong>
-    </div>
-    <br clear="all">
-    <div class="pull-right"> <?php 
-        // If Admin, show which account you are creating for.
-            if($impersonate_id == "0" || $impersonate_id == null):
-                echo "<img src='/img/man-icon.png' /> " . $true_user_name;
-            else:
-                echo "<img src='/img/man-icon.png' /> " . $user_id_list[intval($effective_id)] . " (" . $effective_id . ")";
-            endif;
-        ?></div>
-          <br clear="all">
-	</ul>-->
    
    <ul class="breadcrumb breadcrumb-heading">
     <li><a href="/publisher/">Domains</a><span class="divider">/</span></li>
@@ -74,15 +15,6 @@ function submitForm() {
     <li class="active">Zones</li>
     </ul>
     
-    
-    <!--<h4 class="breadcrumb"><a href="/publisher">Domains</a> / 
-    <?php if ($domain_obj !== null):
-
-      ?>
-      <a href="/publisher/zone/<?php echo $domain_obj->PublisherWebsiteID; ?>/create/">Create New Ad Zone</a>
-      <?php
-    endif; ?>
-    </h4>-->
  <?php        
   if($error_message != "" && $error_message !== null && isset($error_message)):
 

@@ -122,7 +122,11 @@ class DemandController extends DemandAbstractActionController {
 	    		'user_markup_rate' => $user_markup_rate,
 	    		'dashboard_view' => 'demand',
 	    		'user_identity' => $this->identity(),
-	    		'true_user_name' => $this->auth->getUserName()
+	    		'true_user_name' => $this->auth->getUserName(),
+				'header_title' => '<a href="/demand/createcampaign/">Create Campaign</a>',
+				'is_admin' => $this->is_admin,
+				'effective_id' => $this->auth->getEffectiveIdentityID(),
+				'impersonate_id' => $this->ImpersonateID
 
 	    ));
 	    // $view->setTemplate('dashboard-manager/demand/index.phtml');
@@ -392,10 +396,6 @@ class DemandController extends DemandAbstractActionController {
    		 
         return $this->getResponse()->setContent(json_encode($data));
 
-		/*$refresh_url = "/demand/viewbanner/" . $AdCampaignBanner->AdCampaignID;
-		$viewModel = new ViewModel(array('refresh_url' => $refresh_url));
-
-		return $viewModel->setTemplate('dashboard-manager/demand/interstitial.phtml');*/
 	}
 
 	/**
@@ -737,7 +737,14 @@ class DemandController extends DemandAbstractActionController {
     		    'vertical_options' => \util\DeliveryFilterOptions::$vertical_options,
     		    'current_verticals' => $current_verticals,
 				'bread_crumb_info' => $this->getBreadCrumbInfoFromBanner($id, $banner_preview_id, $is_preview),
-    			'center_class' => 'centerj'
+				'user_id_list' => $this->user_id_list_demand_customer,
+    			'center_class' => 'centerj',
+    			'user_identity' => $this->identity(),
+    			'true_user_name' => $this->auth->getUserName(),
+				'header_title' => 'Edit Delivery Filter',
+				'is_admin' => $this->is_admin,
+				'effective_id' => $this->auth->getEffectiveIdentityID(),
+				'impersonate_id' => $this->ImpersonateID
 		));
 	}
 
@@ -808,6 +815,14 @@ class DemandController extends DemandAbstractActionController {
 
 		endif;
 
+		if ($is_preview == true):
+			$rtb_banner_id = $banner_preview_id;
+			$ad_campaign_id = $campaign_preview_id;
+		else:
+			$rtb_banner_id = $id;
+			$ad_campaign_id = $campaign_id;
+		endif;
+		
 		return new ViewModel(array(
 				'ispreview'	  => $is_preview == true ? '1' : '0',
 				'rtb_domain_exclusive_inclusions' => $rtb_domain_exclusive_inclusions,
@@ -816,8 +831,14 @@ class DemandController extends DemandAbstractActionController {
 				'campaign_id' => $campaign_id,
 				'campaign_preview_id' => $campaign_preview_id,
 				'bread_crumb_info' => $this->getBreadCrumbInfoFromBanner($id, $banner_preview_id, $is_preview),
+				'user_id_list' => $this->user_id_list_demand_customer,
     			'center_class' => 'centerj',
-	    		'user_identity' => $this->identity()
+				'user_identity' => $this->identity(),
+				'true_user_name' => $this->auth->getUserName(),
+				'header_title' => '<a href="/demand/createexclusiveinclusion/' . $rtb_banner_id . $this->preview_query . '">Create Domain Exclusive Inclusion</a>',
+				'is_admin' => $this->is_admin,
+				'effective_id' => $this->auth->getEffectiveIdentityID(),
+				'impersonate_id' => $this->ImpersonateID
 		));
 	}
 
@@ -957,10 +978,6 @@ class DemandController extends DemandAbstractActionController {
 	   	  );
    		 
       	return $this->getResponse()->setContent(json_encode($data));
-		/*$refresh_url = "/demand/viewexclusiveinclusion/" . $banner_preview_id . "?ispreview=true";
-		$viewModel = new ViewModel(array('refresh_url' => $refresh_url));
-
-		return $viewModel->setTemplate('dashboard-manager/demand/interstitial.phtml');*/
 	}
 
 	/**
@@ -1017,8 +1034,14 @@ class DemandController extends DemandAbstractActionController {
 				'campaignid' => $campaign_id,
 				'campaignpreviewid' => $campaign_preview_id,
 				'bread_crumb_info' => $this->getBreadCrumbInfoFromBanner($id, $banner_preview_id, $is_preview),
+				'user_id_list' => $this->user_id_list_demand_customer,
     			'center_class' => 'centerj',
-    			'user_identity' => $this->identity()
+    			'user_identity' => $this->identity(),
+				'true_user_name' => $this->auth->getUserName(),
+				'header_title' => 'Create Domain Exclusive Inclusion',
+				'is_admin' => $this->is_admin,
+				'effective_id' => $this->auth->getEffectiveIdentityID(),
+				'impersonate_id' => $this->ImpersonateID
 		));
 	}
 
@@ -1147,6 +1170,14 @@ class DemandController extends DemandAbstractActionController {
 
 		endif;
 
+		if ($is_preview == true):
+			$rtb_banner_id = $banner_preview_id;
+			$ad_campaign_id = $campaign_preview_id;
+		else:
+			$rtb_banner_id = $id;
+			$ad_campaign_id = $campaign_id;
+		endif;
+		
 		return new ViewModel(array(
 				'ispreview'	  => $is_preview == true ? '1' : '0',
 				'rtb_domain_exclusions' => $rtb_domain_exclusions,
@@ -1155,8 +1186,14 @@ class DemandController extends DemandAbstractActionController {
 				'campaign_id' => $campaign_id,
 				'campaign_preview_id' => $campaign_preview_id,
 				'bread_crumb_info' => $this->getBreadCrumbInfoFromBanner($id, $banner_preview_id, $is_preview),
+				'user_id_list' => $this->user_id_list_demand_customer,
     			'center_class' => 'centerj',
-	    		'user_identity' => $this->identity()
+    			'user_identity' => $this->identity(),
+				'true_user_name' => $this->auth->getUserName(),
+				'header_title' => '<a href="/demand/createdomainexclusion/' . $rtb_banner_id . $this->preview_query . '">Create Domain Exclusion</a>',
+				'is_admin' => $this->is_admin,
+				'effective_id' => $this->auth->getEffectiveIdentityID(),
+				'impersonate_id' => $this->ImpersonateID
 		));
 	}
 
@@ -1298,10 +1335,7 @@ class DemandController extends DemandAbstractActionController {
 	   		   );
 	   		 
 	    return $this->getResponse()->setContent(json_encode($data));
-		/*$refresh_url = "/demand/viewdomainexclusion/" . $banner_preview_id . "?ispreview=true";
-		$viewModel = new ViewModel(array('refresh_url' => $refresh_url));
-
-		return $viewModel->setTemplate('dashboard-manager/demand/interstitial.phtml');*/
+	    
 	}
 
 	/**
@@ -1357,8 +1391,14 @@ class DemandController extends DemandAbstractActionController {
 				'campaignid' => $campaign_id,
 				'campaignpreviewid' => $campaign_preview_id,
 				'bread_crumb_info' => $this->getBreadCrumbInfoFromBanner($id, $banner_preview_id, $is_preview),
+				'user_id_list' => $this->user_id_list_demand_customer,
     			'center_class' => 'centerj',
-    			'user_identity' => $this->identity()
+    			'user_identity' => $this->identity(),
+				'true_user_name' => $this->auth->getUserName(),
+				'header_title' => 'Create Domain Exclusion',
+				'is_admin' => $this->is_admin,
+				'effective_id' => $this->auth->getEffectiveIdentityID(),
+				'impersonate_id' => $this->ImpersonateID
 		));
 	}
 
@@ -1578,13 +1618,25 @@ class DemandController extends DemandAbstractActionController {
                 $page->set("label","View Banners (" . $this->getBreadCrumbInfoFromAdCampaign($id, $campaign_preview_id, $is_preview)["BCAdCampaign"] . ")");
                 $page->set("params", array("param1" => $id));
 
+        if ($is_preview == true):
+        	$ad_campaign_id = $campaign_preview_id;
+   		else:
+        	$ad_campaign_id = $id;
+     	endif;
+                
 		return new ViewModel(array(
 				'ispreview'	  => $is_preview == true ? '1' : '0',
 				'rtb_banners' => $rtb_banner_list,
 		        'campaign_id' => $id,
 				'campaign_preview_id' => $campaign_preview_id,
 				'bread_crumb_info' => $this->getBreadCrumbInfoFromAdCampaign($id, $campaign_preview_id, $is_preview),
-	    		'user_identity' => $this->identity()
+				'user_id_list' => $this->user_id_list_demand_customer,
+	    		'user_identity' => $this->identity(),
+				'true_user_name' => $this->auth->getUserName(),
+				'header_title' => '<a href="/demand/createbanner/' . $ad_campaign_id . $this->preview_query . '">Create New Ad Campaign Banner</a>',
+				'is_admin' => $this->is_admin,
+				'effective_id' => $this->auth->getEffectiveIdentityID(),
+				'impersonate_id' => $this->ImpersonateID
 		));
 	}
 
@@ -1627,8 +1679,14 @@ class DemandController extends DemandAbstractActionController {
                 'mobile_options'    		=> \util\BannerOptions::$mobile_options,
                 'size_list'         		=> \util\BannerOptions::$iab_banner_options,
 				'bread_crumb_info' 			=> $this->getBreadCrumbInfoFromAdCampaign($id, $campaignpreviewid, $is_preview),
+        		'user_id_list' => $this->user_id_list_demand_customer,
     			'center_class' 				=> 'centerj',
-	    		'user_identity' 			=> $this->identity()
+	    		'user_identity' 			=> $this->identity(),
+	    		'true_user_name' => $this->auth->getUserName(),
+				'header_title' => 'Create Ad Campaign Banner',
+				'is_admin' => $this->is_admin,
+				'effective_id' => $this->auth->getEffectiveIdentityID(),
+				'impersonate_id' => $this->ImpersonateID
         ));
 	}
 
@@ -1877,8 +1935,14 @@ class DemandController extends DemandAbstractActionController {
 		        'landingpagetld'          => $landingpagetld,
     		    'current_iabsize'         => $current_iabsize,
 				'bread_crumb_info'		  => $this->getBreadCrumbInfoFromBanner($bannerid, $bannerpreviewid, $is_preview),
+				'user_id_list' => $this->user_id_list_demand_customer,
     			'center_class' => 'centerj',
-	    		'user_identity' => $this->identity()
+	    		'user_identity' => $this->identity(),
+				'true_user_name' => $this->auth->getUserName(),
+				'header_title' => 'Edit Ad Campaign Banner',
+				'is_admin' => $this->is_admin,
+				'effective_id' => $this->auth->getEffectiveIdentityID(),
+				'impersonate_id' => $this->ImpersonateID
 		));
 	}
 
@@ -2183,8 +2247,14 @@ class DemandController extends DemandAbstractActionController {
 				'maximpressions' => $maximpressions,
 				'maxspend' => $maxspend,
 				'bread_crumb_info' => $this->getBreadCrumbInfoFromAdCampaign($id, $campaign_preview_id, $is_preview),
+				'user_id_list' => $this->user_id_list_demand_customer,
     			'center_class' => 'centerj',
-	    		'user_identity' => $this->identity()
+	    		'user_identity' => $this->identity(),
+	    		'true_user_name' => $this->auth->getUserName(),
+				'header_title' => 'Edit Ad Campaign',
+				'is_admin' => $this->is_admin,
+				'effective_id' => $this->auth->getEffectiveIdentityID(),
+				'impersonate_id' => $this->ImpersonateID
 		));
 	}
 
@@ -2193,16 +2263,17 @@ class DemandController extends DemandAbstractActionController {
 	 */
 	public function createcampaignAction() {
 
-		/*
-		 * ispreview is always true for new campaigns
-		 *
+		$this->initialize();
+		
 		return new ViewModel(array(
-				'ispreview'	  => "true"
-		));
-		*/
-
-		return new ViewModel(array(
-				'user_identity' => $this->identity()
+				'ispreview'	  => "true",
+				'user_id_list' => $this->user_id_list_demand_customer,
+				'user_identity' => $this->identity(),
+	    		'true_user_name' => $this->auth->getUserName(),
+				'header_title' => 'Create New Ad Campaign',
+				'is_admin' => $this->is_admin,
+				'effective_id' => $this->auth->getEffectiveIdentityID(),
+				'impersonate_id' => $this->ImpersonateID
 		));
 	    		
 	}

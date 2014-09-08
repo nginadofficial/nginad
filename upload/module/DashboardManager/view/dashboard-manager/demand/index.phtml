@@ -9,11 +9,7 @@ function submitForm() {
 $effective_user_in_dashboard = false;
 ?>
 <div class="steps-container step1">
-<div class="row headtop">
-<div class="span12">
-    <h4 class="headbreadcrumb"><a href="/demand/createcampaign">Create New Ad Campaign</a></h4>
-    </div>
-     <div class="span3"> 
+     <div class="span3" style="float: right"> 
          <?php if ($is_admin === true): ?>
 			
 			 <form name="loginas" id="loginas" action="/demand/loginas" class="forms pull-left"  style="margin-top: 10px;">
@@ -29,8 +25,7 @@ $effective_user_in_dashboard = false;
 			 	</select>
 			 </form>
 			
-     </div>
-	</div>    
+     </div>  
 <div id="main-container">
 <div class="pull-left" style="margin: 10px 0 0 10px;">
 <?php if ($effective_id != 0 && $effective_user_in_dashboard === true): ?>
