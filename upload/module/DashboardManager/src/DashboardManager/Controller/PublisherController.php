@@ -92,7 +92,8 @@ class PublisherController extends PublisherAbstractActionController {
 	    	 'dashboard_view' => 'publisher',
 	    	 'user_identity' => $this->identity(),
 	    	 'publisher_markup_rate' => $publisher_markup_rate,
-	    	 'website_markup_rate_list' => isset($website_markup_rate_list) ? $website_markup_rate_list : array()
+	    	 'website_markup_rate_list' => isset($website_markup_rate_list) ? $website_markup_rate_list : array(),
+			 'header_title' => '<a href="/publisher/createdomain">Create New Domain</a>',
 	    ));
 
 	    return $view;
@@ -351,7 +352,8 @@ class PublisherController extends PublisherAbstractActionController {
         	                    'domain_owner_id' => $this->PublisherInfoID,
         	                    'vertical_map' => \util\DeliveryFilterOptions::$vertical_map,
         	                    'true_user_name' => $this->true_user_name,
-						    	'user_identity' => $this->identity()
+						    	'user_identity' => $this->identity(),
+        	                	'header_title' => 'Create New Domain'
         	                );
         	            }
         	            
@@ -386,7 +388,8 @@ class PublisherController extends PublisherAbstractActionController {
 	        'domain_owner_id' => $this->PublisherInfoID,
 	        'vertical_map' => \util\DeliveryFilterOptions::$vertical_map,
 	    	'dashboard_view' => 'publisher',
-	    	'user_identity' => $this->identity()
+	    	'user_identity' => $this->identity(),
+        	'header_title' => 'Create New Domain'
 	    );
 	    
 	}
@@ -486,7 +489,8 @@ class PublisherController extends PublisherAbstractActionController {
 	            'editResultObj' => $editResultObj,
 	            'vertical_map' => \util\DeliveryFilterOptions::$vertical_map,
 	    		'dashboard_view' => 'publisher',
-	    		'user_identity' => $this->identity()
+	    		'user_identity' => $this->identity(),
+	    		'header_title' => 'Edit Domain',
 	    );
 	    
 	}

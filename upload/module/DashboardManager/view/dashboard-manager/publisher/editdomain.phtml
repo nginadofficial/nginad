@@ -3,17 +3,6 @@ $this->headScript()->appendFile($this->basePath() . '/js/script.js');
 
 $this->headScript()->captureStart() ?>
 <?php $this->headScript()->captureEnd();  ?>
-<h4 class="headbreadcrumb blue-color">Edit Domain
-<span class="pull-right black-color"> <?php 
- if($is_admin):
-        // If Admin, show which account you are creating for.
-            if($impersonate_id == "0" || $impersonate_id == null):
-                echo "<img src='/img/man-icon.png' /> " . $true_user_name;
-            else:
-                echo "<img src='/img/man-icon.png' /> " . $user_id_list[$impersonate_id];
-            endif;
- endif; ?></span>
-</h4>
 <ul class="breadcrumb breadcrumb-heading">
  <li><a href="/publisher/">Domains</a> <span class="divider">/</span></li>
     <li><?php echo $editResultObj->WebDomain;?> <span class="divider">/</span></li>

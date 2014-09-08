@@ -159,7 +159,8 @@ class ZoneController extends PublisherAbstractActionController {
             'domain_obj' => $DomainObj,
             'error_message' => $error_message,
         	'dashboard_view' => 'publisher',
-	    	'user_identity' => $this->identity()
+	    	'user_identity' => $this->identity(),
+        	'header_title' => '<a href="/publisher/zone/' . $DomainObj->PublisherWebsiteID . '/create">Create New Ad Zone</a>'
         ));
         
         return $view;
@@ -272,7 +273,8 @@ class ZoneController extends PublisherAbstractActionController {
         		'dashboard_view' => 'publisher',
         		'AdOwnerID' => $this->PublisherInfoID,
         		'AdTemplateList' => $this->get_ad_templates(),
-	    		'user_identity' => $this->identity()
+	    		'user_identity' => $this->identity(),
+        		'header_title' => 'Create New Ad Zone'
         );
     }
     
@@ -447,7 +449,8 @@ class ZoneController extends PublisherAbstractActionController {
         		'AdTemplateList' => $this->get_ad_templates(),
         		'true_user_name' => $this->true_user_name,
         		'dashboard_view' => 'publisher',
-	    		'user_identity' => $this->identity()
+	    		'user_identity' => $this->identity(),
+        		'header_title' => 'Edit Ad Zone'
         );
     }
     

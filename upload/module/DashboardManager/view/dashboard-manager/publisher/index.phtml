@@ -9,11 +9,7 @@ function submitForm() {
 $effective_user_in_dashboard = false;
 ?>
 <div class="steps-container step1">
-<div class="row headtop">
-  <div class="span12">
-    <h4 class="headbreadcrumb"><a href="/publisher/createdomain">Create New Domain</a></h4>
-    </div>
-    <div class="span3">  <?php if ($is_admin === true): ?>
+    <div class="span3" style="float: right">  <?php if ($is_admin === true): ?>
     			 
     			 <form name="loginas" id="loginas" action="/publisher/loginas" class="forms pull-left" style="margin-top: 10px;">
     			<span style="font-size: 12px; font-weight: bold;">LOG IN AS USER</span>	
@@ -30,8 +26,8 @@ $effective_user_in_dashboard = false;
     			 </form>
     	<?php endif; ?>    		
     	</div>
-    	</div>
- <div class="pull-left" style="margin: 10px 0 0 10px;">
+<div id="main-container">
+<div class="pull-left" style="margin: 10px 0 0 10px;">
 			<?php if ($effective_id != 0 && $effective_user_in_dashboard === true): ?>
 
 					<form name="changepublishermarkup" id="changepublishermarkup" action="/publisher/changepublishermarkup"class="forms pull-right" >
