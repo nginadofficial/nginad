@@ -39,6 +39,13 @@ class ReportController extends PublisherAbstractActionController {
             'action' => 'index',
             'impressions' => (array)json_decode($this->getImpressionsPerTimeAction()),
             'user_tld_statistic' => $impression->getUserTLDStatistic(),
+            'user_id_list' => $this->user_id_list,
+            'user_identity' => $this->identity(),
+	    	'true_user_name' => $this->auth->getUserName(),
+			'header_title' => 'Reports',
+			'is_admin' => $this->is_admin,
+			'effective_id' => $this->auth->getEffectiveIdentityID(),
+			'impersonate_id' => $this->ImpersonateID
         );
         
         $view = new ViewModel($data);
@@ -62,6 +69,13 @@ class ReportController extends PublisherAbstractActionController {
             'incoming_bids_header' => $incoming_bid->getPerTimeHeader($this->is_admin),
             'average_bids' => $incoming_bid->{'getAverage' . $this->adminFunctionsSufix}(),
             'average_bids_header' => $incoming_bid->{'getAverageHeader' . $this->adminFunctionsSufix}(),
+            'user_id_list' => $this->user_id_list,
+            'user_identity' => $this->identity(),
+	    	'true_user_name' => $this->auth->getUserName(),
+			'header_title' => 'Reports',
+			'is_admin' => $this->is_admin,
+			'effective_id' => $this->auth->getEffectiveIdentityID(),
+			'impersonate_id' => $this->ImpersonateID
         ));
         return $view;
 
@@ -84,6 +98,13 @@ class ReportController extends PublisherAbstractActionController {
             'outgoing_bids' => (array)json_decode($this->getOutgoingBidsPerTimeAction()),
             'outgoing_bids_header' => $outgoing_bid->getPerTimeHeader($this->is_admin),
             'spend_per_webdomain' => $outgoing_bid->getPerZone(),
+            'user_id_list' => $this->user_id_list,
+            'user_identity' => $this->identity(),
+	    	'true_user_name' => $this->auth->getUserName(),
+			'header_title' => 'Reports',
+			'is_admin' => $this->is_admin,
+			'effective_id' => $this->auth->getEffectiveIdentityID(),
+			'impersonate_id' => $this->ImpersonateID
         ));
         return $view;
 
@@ -98,6 +119,13 @@ class ReportController extends PublisherAbstractActionController {
             'action' => 'contractImpressions',
             'impressions' => (array)json_decode($this->getContractImpressionsPerTimeAction()),
             'spend_per_webdomain' => $impression->getPerZone(),
+            'user_id_list' => $this->user_id_list,
+            'user_identity' => $this->identity(),
+	    	'true_user_name' => $this->auth->getUserName(),
+			'header_title' => 'Reports',
+			'is_admin' => $this->is_admin,
+			'effective_id' => $this->auth->getEffectiveIdentityID(),
+			'impersonate_id' => $this->ImpersonateID
         ));
         return $view;
 
@@ -122,6 +150,12 @@ class ReportController extends PublisherAbstractActionController {
             'user_spend_statistic' => $impression_spend->{'getUserImpressionsSpend' . $this->adminFunctionsSufix}(),
             'user_spend_statistic_header' => $impression_spend->{'getUserImpressionsSpendHeaders' . $this->adminFunctionsSufix}(),
             'is_admin' => $this->is_admin,
+            'user_id_list' => $this->user_id_list,
+            'user_identity' => $this->identity(),
+	    	'true_user_name' => $this->auth->getUserName(),
+			'header_title' => 'Reports',
+			'effective_id' => $this->auth->getEffectiveIdentityID(),
+			'impersonate_id' => $this->ImpersonateID
         );
         
         $view = new ViewModel($data);
@@ -130,8 +164,17 @@ class ReportController extends PublisherAbstractActionController {
     
     public function chartsAction(){
         
+    	$this->initialize();
+    	
         $view = new ViewModel(array(
             'action' => 'charts',
+            'user_id_list' => $this->user_id_list,
+            'user_identity' => $this->identity(),
+	    	'true_user_name' => $this->auth->getUserName(),
+			'header_title' => 'Reports',
+			'is_admin' => $this->is_admin,
+			'effective_id' => $this->auth->getEffectiveIdentityID(),
+			'impersonate_id' => $this->ImpersonateID
         ));
         return $view;
         
@@ -139,6 +182,8 @@ class ReportController extends PublisherAbstractActionController {
 
     public function mailerAction(){
         
+    	$this->initialize();
+    	
         $ReportSubscription = \_factory\ReportSubscription::get_instance();
         $params = $this->params()->fromPost();
         
@@ -162,6 +207,13 @@ class ReportController extends PublisherAbstractActionController {
         $view = new ViewModel(array(
             'action' => 'mailer',
             'subscription' => $subscription_record,
+            'user_id_list' => $this->user_id_list,
+            'user_identity' => $this->identity(),
+	    	'true_user_name' => $this->auth->getUserName(),
+			'header_title' => 'Reports',
+			'is_admin' => $this->is_admin,
+			'effective_id' => $this->auth->getEffectiveIdentityID(),
+			'impersonate_id' => $this->ImpersonateID
         ));
         return $view;
         

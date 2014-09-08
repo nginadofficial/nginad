@@ -169,7 +169,13 @@ abstract class DashboardAbstractActionController extends ZendAbstractActionContr
 				endif;
 
     		endforeach;
-    		 
+    		
+    	endif;
+    	
+    	if ($this->PublisherInfoID != null):
+    		$this->user_id_list = $this->user_id_list_publisher;
+    	elseif($this->DemandCustomerInfoID != null):
+    		$this->user_id_list = $this->user_id_list_demand_customer;
     	endif;
     	 
     }
