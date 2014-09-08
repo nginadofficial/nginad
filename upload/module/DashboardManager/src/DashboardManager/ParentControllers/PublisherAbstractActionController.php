@@ -21,6 +21,10 @@ abstract class PublisherAbstractActionController extends DashboardAbstractAction
      */
     protected function initialize()
     {
+    	
+    	if ($this->PublisherInfoID != null):
+	    	$this->dashboard_home = "publisher";
+    	endif;
 		parent::initialize();
 
 		/*

@@ -61,7 +61,11 @@ class AuthController extends AbstractActionController {
     	//if already login, redirect to success page
     	if ($this->getAuthService()->hasIdentity()):
     		$user_session->message = '';
-    		return $this->redirect()->toRoute('demand');
+    		if ($this->getAuthService()->getPublisherInfoID() != null):
+    			return $this->redirect()->toRoute('publisher');
+    		else:
+    			return $this->redirect()->toRoute('demand');
+    		endif;
     	endif;
 
     	return array(
@@ -118,6 +122,9 @@ class AuthController extends AbstractActionController {
     			
    			if ($result->isValid()): 
    				$redirect = 'demand';
+	   			if ($this->getAuthService()->getPublisherInfoID() != null):
+	   				$redirect = 'publisher';
+	   			endif;
    				//check if it has rememberMe :
    				if ($request->getPost('rememberme') == 1 ): 
    					$this->getSessionStorage()

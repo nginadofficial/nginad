@@ -87,11 +87,12 @@ class DemandController extends DemandAbstractActionController {
 	    $params = array();
 	    $params["Active"] = 1;
 	    // $params["Deleted"] = 0;
-	    if ($this->auth->getIsAdmin() === true && $this->auth->getEffectiveIdentityID() != 0):
+	    if ($this->is_admin == true && $this->auth->getEffectiveIdentityID() != 0):
 	   		$params["UserID"] = $this->auth->getEffectiveUserID();
-	    elseif ($this->auth->getIsAdmin() === false):
-	    	$params["UserID"] = $this->auth->getEffectiveUserID();
+	    elseif ($this->is_admin == false):
+	    	$params["UserID"] = $this->auth->getUserID();
 	    endif;
+	    
 	    $_ad_campaign_preview_list = $AdCampaignPreviewFactory->get($params);
 
 	    foreach ($_ad_campaign_preview_list as $ad_campaign_preview):

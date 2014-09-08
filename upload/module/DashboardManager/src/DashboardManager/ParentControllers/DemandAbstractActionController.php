@@ -15,6 +15,11 @@ abstract class DemandAbstractActionController extends DashboardAbstractActionCon
     	
     	$is_preview = $this->getRequest()->getQuery('ispreview');
     	$this->preview_query = $is_preview == true ? "?ispreview=true" : "";
+    	
+    	if($this->DemandCustomerInfoID != null):
+	    	$this->dashboard_home = "demand";
+    	endif;
+    	
 		parent::initialize();
 
 		/*

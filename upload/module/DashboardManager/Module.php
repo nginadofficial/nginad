@@ -78,27 +78,7 @@ class Module implements AutoloaderProviderInterface
             print_r($serviceManager->get('AuthService')->getStorage());
             die();
         endif;
-        
-// This is to be removed after the ZFC-RBAC is setup correctly.        
-/*        if ($is_manager)
-            
-            if (! $serviceManager->get('AuthService')->hasIdentity()):
-            
-                $url = $e->getRouter()->assemble(array(), array('name' => 'login'));
-                $response=$e->getResponse();
-                $response->getHeaders()->addHeaderLine('Location', $url);
-                $response->setStatusCode(302);
-                $response->sendHeaders();
-                //  When an MvcEvent Listener returns a Response object,
-                // It automatically short-circuit the Application running
-                return $response;
-            
-            else:
-            
-        		//$serviceManager->get('AuthService')->getStorage()->setIdentityInfo($serviceManager->get('Config'));
-            endif;
-        endif;
-*/
+     
        
         // TODO: Find out what does this do?
         $moduleRouteListener = new ModuleRouteListener();
@@ -107,15 +87,6 @@ class Module implements AutoloaderProviderInterface
         // set static adapter for all module table gateways
         $dbAdapter = $serviceManager->get('Zend\Db\Adapter\Adapter');
         \Zend\Db\TableGateway\Feature\GlobalAdapterFeature::setStaticAdapter($dbAdapter);
-
-        /*
-         * Do maintenance here if necessary
-        * This may slow down 1 or 2 page loads for the DashboardManager here or there
-        * but it's probably not going to be too big of a deal
-        */
-//        $Maintenance = new \util\Maintenance();
-//        $Maintenance->checkMaintenance($serviceManager->get('Config'));
-
 
     }
 

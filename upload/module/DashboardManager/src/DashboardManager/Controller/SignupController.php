@@ -29,7 +29,8 @@ class SignupController extends PublisherAbstractActionController {
 	{	    
 	    $auth = $this->getServiceLocator()->get('AuthService');
 		if ($auth->hasIdentity()):
-     		return $this->redirect()->toRoute('publisher');
+			$this->initialize();
+     		return $this->redirect()->toRoute($this->dashboard_home);
     	endif;
 	    
 	    $view = new ViewModel(array(
@@ -45,7 +46,8 @@ class SignupController extends PublisherAbstractActionController {
 		$auth = $this->getServiceLocator()->get('AuthService');
 		$config = $this->getServiceLocator()->get('Config');
 		if ($auth->hasIdentity()):
-     		return $this->redirect()->toRoute('publisher');
+			$this->initialize();
+     		return $this->redirect()->toRoute($this->dashboard_home);
     	endif;
     	
     	$error_msg = null;
@@ -355,13 +357,8 @@ class SignupController extends PublisherAbstractActionController {
 		
 		$userData = $authUsersFactory->get_row(array("user_id" => $this->auth->getUserID()));
 		
-		/*$userRole = $this->auth->getRoles();
-		$userRole = $userRole[0];
-		if ($userRole == 'admin' || $userRole == 'superadmin') :*/
-		if ($this->is_admin) :
-		
-		else:
-			$this->redirect()->toRoute('publisher');
+		if (!$this->is_admin) :
+     		return $this->redirect()->toRoute($this->dashboard_home);
 		endif;
 		
 		$PublisherInfo = new \model\PublisherInfo();
@@ -397,14 +394,9 @@ class SignupController extends PublisherAbstractActionController {
 		$authUsersFactory = \_factory\authUsers::get_instance();
 		
 		$userData = $authUsersFactory->get_row(array("user_id" => $this->auth->getUserID()));
-		
-		/*$userRole = $this->auth->getRoles();
-		$userRole = $userRole[0];
-		if ($userRole == 'admin' || $userRole == 'superadmin') :*/
-		if ($this->is_admin) :
-		
-		else:
-			$this->redirect()->toRoute('publisher');
+
+		if (!$this->is_admin) :
+			return $this->redirect()->toRoute($this->dashboard_home);
 		endif;
 		
 		$DemandCustomerInfo = new \model\DemandCustomerInfo();
@@ -437,13 +429,8 @@ class SignupController extends PublisherAbstractActionController {
 		
 		$this->initialize();
 		
-		/*$userRole = $this->auth->getRoles();
-		$userRole = $userRole[0];
-		if ($userRole == 'admin' || $userRole == 'superadmin') :*/
-		if ($this->is_admin) :
-		
-		else:
-			$this->redirect()->toRoute('publisher');
+		if (!$this->is_admin) :
+			return $this->redirect()->toRoute($this->dashboard_home);
 		endif;
 		
 		$request = $this->getRequest();
@@ -464,13 +451,8 @@ class SignupController extends PublisherAbstractActionController {
 		
 		$this->initialize();
 		
-		/*$userRole = $this->auth->getRoles();
-		$userRole = $userRole[0];
-		if ($userRole == 'admin' || $userRole == 'superadmin') :*/
-		if ($this->is_admin) :
-		
-		else:
-			$this->redirect()->toRoute('publisher');
+		if (!$this->is_admin) :
+			return $this->redirect()->toRoute($this->dashboard_home);
 		endif;
 		
 		$request = $this->getRequest();
@@ -491,13 +473,8 @@ class SignupController extends PublisherAbstractActionController {
 
 		$this->initialize();
 		
-		/*$userRole = $this->auth->getRoles();
-		$userRole = $userRole[0];
-		if ($userRole == 'admin' || $userRole == 'superadmin') :*/
-		if ($this->is_admin) :
-		
-		else:
-			$this->redirect()->toRoute('publisher');
+		if (!$this->is_admin) :
+			return $this->redirect()->toRoute($this->dashboard_home);
 		endif;
 		
 		$msg = null;
@@ -548,7 +525,7 @@ class SignupController extends PublisherAbstractActionController {
 		$this->initialize();
 		
 		if (!$this->is_admin) :
-			$this->redirect()->toRoute('publisher');
+			return $this->redirect()->toRoute($this->dashboard_home);
 		endif;
 		
 		$msg = null;
@@ -599,7 +576,7 @@ class SignupController extends PublisherAbstractActionController {
 		$this->initialize();
 		
 		if (!$this->is_admin) :
-			$this->redirect()->toRoute('publisher');
+			return $this->redirect()->toRoute($this->dashboard_home);
 		endif;
 		
 		$msg = null;
@@ -650,7 +627,7 @@ class SignupController extends PublisherAbstractActionController {
 		$this->initialize();
 		
 		if (!$this->is_admin) :
-			$this->redirect()->toRoute('publisher');
+			return $this->redirect()->toRoute($this->dashboard_home);
 		endif;
 		
 		$msg = null;

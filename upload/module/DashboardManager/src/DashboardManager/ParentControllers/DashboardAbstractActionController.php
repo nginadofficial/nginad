@@ -41,6 +41,12 @@ abstract class DashboardAbstractActionController extends ZendAbstractActionContr
      *
      * @var array
      */
+    protected $dashboard_home = "publisher";
+    
+    /**
+     *
+     * @var array
+     */
     protected $user_id_list_publisher = null;
     
     /**
@@ -174,8 +180,10 @@ abstract class DashboardAbstractActionController extends ZendAbstractActionContr
     	
     	if ($this->PublisherInfoID != null):
     		$this->user_id_list = $this->user_id_list_publisher;
+    		$this->dashboard_home = "publisher";
     	elseif($this->DemandCustomerInfoID != null):
     		$this->user_id_list = $this->user_id_list_demand_customer;
+    		$this->dashboard_home = "demand";
     	endif;
     	 
     }
