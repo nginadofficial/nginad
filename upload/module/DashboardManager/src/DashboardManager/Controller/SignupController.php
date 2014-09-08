@@ -263,7 +263,14 @@ class SignupController extends PublisherAbstractActionController {
 	    		'user_identity' => $this->identity(),
 	    		'success_msg' => $success_msg,
 	    		'user_tab' => 'profile',
-	    		'user_data' => $userData
+	    		'user_data' => $userData,
+	            'user_id_list' => $this->user_id_list,
+	            'user_identity' => $this->identity(),
+		    	'true_user_name' => $this->auth->getUserName(),
+				'header_title' => 'Account Settings',
+				'is_admin' => $this->is_admin,
+				'effective_id' => $this->auth->getEffectiveIdentityID(),
+				'impersonate_id' => $this->ImpersonateID
 	    ));
 	    
 	  return $view->setTemplate('dashboard-manager/auth/account.phtml');
@@ -326,7 +333,14 @@ class SignupController extends PublisherAbstractActionController {
 	    		'success_msg1' => $success_msg1,
 	    		'user_tab' => 'password',
 	    		'error_msg' => $error_msg,
-	    		'user_data' => $userData
+	    		'user_data' => $userData,
+	            'user_id_list' => $this->user_id_list,
+	            'user_identity' => $this->identity(),
+		    	'true_user_name' => $this->auth->getUserName(),
+				'header_title' => 'Account Settings',
+				'is_admin' => $this->is_admin,
+				'effective_id' => $this->auth->getEffectiveIdentityID(),
+				'impersonate_id' => $this->ImpersonateID
 	    ));
 	    
 	  return $view->setTemplate('dashboard-manager/auth/changepassword.phtml');
@@ -358,14 +372,20 @@ class SignupController extends PublisherAbstractActionController {
 
 		$view = new ViewModel(array(
 	    	'dashboard_view' => 'account',
-	    	'user_identity' => $this->identity(),
 	    	'user_detail' => $userDetail,
 	    	'authUsersFactory' => $authUsersFactory,
 	    	'user_type' => 'publisher',
-	    	'user_id' => $this->auth->getUserID()
+	    	'user_id' => $this->auth->getUserID(),
+	       	'user_id_list' => $this->user_id_list,
+	      	'user_identity' => $this->identity(),
+		  	'true_user_name' => $this->auth->getUserName(),
+			'header_title' => 'Publishers List',
+			'is_admin' => $this->is_admin,
+			'effective_id' => $this->auth->getEffectiveIdentityID(),
+			'impersonate_id' => $this->ImpersonateID
 	    ));
 	    
-	  return $view->setTemplate('dashboard-manager/auth/userlist.phtml');
+	  return $view->setTemplate('dashboard-manager/auth/publishers.phtml');
 
 	}
 	
@@ -395,11 +415,17 @@ class SignupController extends PublisherAbstractActionController {
 
 		$view = new ViewModel(array(
 	    	'dashboard_view' => 'account',
-	    	'user_identity' => $this->identity(),
 	    	'user_detail' => $userDetail,
 	    	'authUsersFactory' => $authUsersFactory,
 	    	'user_type' => 'customer',
-	    	'user_id' => $this->auth->getUserID()
+	    	'user_id' => $this->auth->getUserID(),
+	       	'user_id_list' => $this->user_id_list,
+	      	'user_identity' => $this->identity(),
+		  	'true_user_name' => $this->auth->getUserName(),
+			'header_title' => 'Demand Customers List',
+			'is_admin' => $this->is_admin,
+			'effective_id' => $this->auth->getEffectiveIdentityID(),
+			'impersonate_id' => $this->ImpersonateID
 	    ));
 	    
 	  return $view->setTemplate('dashboard-manager/auth/customers.phtml');
@@ -797,11 +823,17 @@ class SignupController extends PublisherAbstractActionController {
 	    	'pending_list' => $pending_list,
 	    	'approved_list' => $approved_list,
 	    	'denied_list' => $denied_list,
-	    	'user_identity' => $this->identity(),
 	    	'success_msg' => $success_msg,
 	    	'error_msg' => $error_msg,
 	    	'vertical_map' => \util\DeliveryFilterOptions::$vertical_map,
-	    	'user_id' => $this->auth->getUserID()
+	    	'user_id' => $this->auth->getUserID(),
+	       	'user_id_list' => $this->user_id_list,
+	      	'user_identity' => $this->identity(),
+		  	'true_user_name' => $this->auth->getUserName(),
+			'header_title' => 'Account Settings',
+			'is_admin' => $this->is_admin,
+			'effective_id' => $this->auth->getEffectiveIdentityID(),
+			'impersonate_id' => $this->ImpersonateID
 	    ));
 	    
 	    return $view;

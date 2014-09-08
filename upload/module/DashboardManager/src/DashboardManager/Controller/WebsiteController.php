@@ -47,7 +47,13 @@ class WebsiteController extends PublisherAbstractActionController {
 	    	'pending_list' => $pending_list,
 	    	'PublisherInfoFactory' => $PublisherInfoFactory,
 	    	'vertical_map' => \util\DeliveryFilterOptions::$vertical_map,
-	    	'user_identity' => $this->identity()
+	       	'user_id_list' => $this->user_id_list,
+	      	'user_identity' => $this->identity(),
+		  	'true_user_name' => $this->auth->getUserName(),
+			'header_title' => 'New Websites for Approval',
+			'is_admin' => $this->is_admin,
+			'effective_id' => $this->auth->getEffectiveIdentityID(),
+			'impersonate_id' => $this->ImpersonateID
 	    ));
 	    
 	    return $view;
@@ -186,7 +192,13 @@ class WebsiteController extends PublisherAbstractActionController {
 	    	'pending_list' => $pending_list,
 	    	'PublisherInfoFactory' => $PublisherInfoFactory,
 	    	'vertical_map' => \util\DeliveryFilterOptions::$vertical_map,
-	    	'user_identity' => $this->identity()
+	       	'user_id_list' => $this->user_id_list,
+	      	'user_identity' => $this->identity(),
+		  	'true_user_name' => $this->auth->getUserName(),
+			'header_title' => 'Websites',
+			'is_admin' => $this->is_admin,
+			'effective_id' => $this->auth->getEffectiveIdentityID(),
+			'impersonate_id' => $this->ImpersonateID
 	    ));
    
 	    return $view;
