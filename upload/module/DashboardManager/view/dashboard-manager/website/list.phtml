@@ -34,7 +34,7 @@ $this->headScript()->prependFile($this->basePath() . '/js/script.js');
     	   <?php 
     	   $i=1;
     	   foreach ($pending_list as $website):
-    	   		$userData = $PublisherInfoFactory->get_row(array("PublisherInfoID" => $website->PublisherInfoID));
+    	   		$userData = $PublisherInfoFactory->get_row(array("PublisherInfoID" => $website->DomainOwnerID));
     	   ?>   
            <tr id="sites_row_<?php echo $website->PublisherWebsiteID;?>">
            <td>

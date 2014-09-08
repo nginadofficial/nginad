@@ -134,6 +134,22 @@ class PublisherController extends PublisherAbstractActionController {
 		    	$domain_object->AutoApprove = 0;
 	    	
 	    		$domain_object->ApprovalFlag = $flag;
+	    		
+	    		if ($flag == 2):
+	    			
+		    		$PublisherAdZoneFactory = \_factory\PublisherAdZone::get_instance();
+		    		
+		    		$params = array();
+		    		$params["PublisherWebsiteID"] = $PublisherWebsiteID;
+		    		$PublisherAdZoneList = $PublisherAdZoneFactory->get($params);
+
+		    		foreach ($PublisherAdZoneList as $PublisherAdZone):
+		    		
+		    			$PublisherAdZoneFactory->updatePublisherAdZonePublisherAdZoneStatus($PublisherAdZone->PublisherAdZoneID, 2);
+		    		
+		    		endforeach;
+	    		endif;
+	    		
 	    		if ($PublisherWebsiteFactory->save_domain($domain_object) > 0):
 	    		    return TRUE;
 	    		endif;

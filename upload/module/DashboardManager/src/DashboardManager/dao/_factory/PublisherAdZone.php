@@ -316,6 +316,24 @@ class PublisherAdZone extends \_factory\CachedTableRead
     	endif;
     
     }
+    
+    public function updatePublisherAdZonePublisherAdZoneStatus($publisher_ad_zone_id, $approval_flag) {
+    
+    	$params = array();
+    	$params["PublisherAdZoneID"] = $publisher_ad_zone_id;
+    	$PublisherAdZone = $this->get_row($params);
+    
+    	if ($PublisherAdZone != null):
+    	 
+    	$PublisherAdZone->AutoApprove 	= 0;
+    	$PublisherAdZone->AdStatus 		= $approval_flag;
+    	// get array of data
+    	$data = $PublisherAdZone->getArrayCopy();
+    	 
+    	$this->update($data, array('PublisherAdZoneID' => $publisher_ad_zone_id));
+    	endif;
+    
+    }
 
 };
 ?>

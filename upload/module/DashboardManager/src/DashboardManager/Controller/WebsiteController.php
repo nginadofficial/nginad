@@ -84,17 +84,33 @@ class WebsiteController extends PublisherAbstractActionController {
 	    			continue;
 	    		endif;
 	    		
+	    		$website_id = intval($website_id);
+	    		
 	    		$params = array();
 	    		$params["PublisherWebsiteID"] = $website_id;
 	    		$PublisherWebsite = $PublisherWebsiteFactory->get_row_object($params);
 	    		$params = array();
-	    		$params["PublisherInfoID"] = $PublisherWebsite->PublisherInfoID;
+	    		$params["PublisherInfoID"] = $PublisherWebsite->DomainOwnerID;
 	    		$publisher_obj = $PublisherInfoFactory->get_row_object($params);
 	    		$PublisherWebsite->DateUpdated = date("Y-m-d H:i:s");
 	    		if($q == 0):
+	    			$PublisherWebsite->AutoApprove = 0;
 	    			$PublisherWebsite->ApprovalFlag = 2;
 	    			$PublisherWebsite->Description = $denied_desciption;
 	    			$PublisherWebsiteFactory->save_domain($PublisherWebsite);
+	    			
+	    			$PublisherAdZoneFactory = \_factory\PublisherAdZone::get_instance();
+	    			
+	    			$params = array();
+	    			$params["PublisherWebsiteID"] = $website_id;
+	    			$PublisherAdZoneList = $PublisherAdZoneFactory->get($params);
+
+	    			foreach ($PublisherAdZoneList as $PublisherAdZone):
+	    			
+	    				$PublisherAdZoneFactory->updatePublisherAdZonePublisherAdZoneStatus($PublisherAdZone->PublisherAdZoneID, 2);
+		    			 
+	    			endforeach;
+
 	    			$subject = "Website Denied ".$PublisherWebsite->WebDomain;
 	    			$message = '<b>Website Denied</b> : ';
 	          		$message = $message." ".$PublisherWebsite->WebDomain;
@@ -104,7 +120,7 @@ class WebsiteController extends PublisherAbstractActionController {
 	    		elseif($q == 1):
 	    			$PublisherWebsite->ApprovalFlag = 1;
 	    			$PublisherWebsiteFactory->save_domain($PublisherWebsite);
-	    			$subject = "Website Approved ".$Websites->WebDomain;
+	    			$subject = "Website Approved ".$PublisherWebsite->WebDomain;
 	    			$message = '<b>Website Approved</b> : ';
 	          		$message = $message." ".$PublisherWebsite->WebDomain;
 	          		$this->batchmailAction($publisher_obj->Email, $subject, $message);
@@ -162,7 +178,7 @@ class WebsiteController extends PublisherAbstractActionController {
 	    
 	    $orders = 'DateCreated DESC'; 	    
 	    $params = array();
-	    $params["AdOwnerID"] = $publisher_id;
+	    $params["DomainOwnerID"] = $publisher_id;
 	    $pending_list = $PublisherWebsiteFactory->get($params, $orders);
 	    
 	    $view = new ViewModel(array(
