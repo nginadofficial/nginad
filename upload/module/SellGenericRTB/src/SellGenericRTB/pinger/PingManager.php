@@ -37,6 +37,8 @@ class PingManager {
 	
 	private $auction_was_won = false;
 	
+	private $publisher_markup_rate = 40;
+	
 	private $skipped_partner_list = array();
 	
 	public function __construct($config, $ping_request, $PublisherInfoID, $PublisherWebsiteID, $FloorPrice, $PublisherAdZoneID, $AdName, $WebDomain) {
@@ -49,6 +51,9 @@ class PingManager {
 		$this->PublisherAdZoneID 		= $PublisherAdZoneID;
 		$this->AdName 					= $AdName;
 		$this->WebDomain 				= $WebDomain;
+		
+		$this->publisher_markup_rate = \util\Markup::getPublisherMarkupRate($this->PublisherWebsiteID, $this->PublisherInfoID, $this->config);
+		
 	}
 	
 	public function set_up_local_demand_ping_clients() {
@@ -321,14 +326,26 @@ class PingManager {
 					
 						/*
 						 * Check the passback tag's floor price
-						 * against the bid amount
+						 * against the bid amount minus the publisher's markup rate.
+						 * 
+						 * So if the Publisher's floor price is $0.09
+						 * and the markup rate is 40%
+						 * 
+						 * Then the bid must be at least $0.15
+						 * $0.15 * 40% = 0.09 CPM
+						 * 
 						 * Also make sure it's greater than zero
 						 */
-						if ($this->FloorPrice > $bid_price || $bid_price <= 0):
+						
+
+						
+						$mark_down = floatval($bid_price) * floatval($this->publisher_markup_rate);
+						$adusted_bid_amount = $bid_price - floatval($mark_down);
+						
+						if ($this->FloorPrice > $adusted_bid_amount || $bid_price <= 0):
 							continue;
 						endif;
-						
-						
+
 						if ($this->winning_partner_pinger === null
 								||
 								$bid_price > $this->winning_partner_pinger->winning_bid
@@ -337,7 +354,7 @@ class PingManager {
 										&& $RTBPinger->partner_quality_score > $this->winning_partner_pinger->partner_quality_score
 								)
 								):
-							
+								
 								// unset the last highest bidder
 								if ($this->winning_partner_pinger !== null):
 									$this->winning_partner_pinger->won_auction 		= false;
@@ -402,10 +419,8 @@ class PingManager {
 					$SellSidePartnerHourlyBids->SpendTotalGross	= floatval($RTBPinger->winning_bid) / 1000;
 					
 					// Subtract Ad Exchange Publisher markup
-					
-					$publisher_markup_rate = \util\Markup::getPublisherMarkupRate($this->PublisherWebsiteID, $this->PublisherInfoID, $this->config);
-					
-					$mark_down = floatval($SellSidePartnerHourlyBids->SpendTotalGross) * floatval($publisher_markup_rate);
+
+					$mark_down = floatval($SellSidePartnerHourlyBids->SpendTotalGross) * floatval($this->publisher_markup_rate);
 					$adusted_amount = floatval($SellSidePartnerHourlyBids->SpendTotalGross) - floatval($mark_down);
 					$SellSidePartnerHourlyBids->SpendTotalNet = $adusted_amount;
 
