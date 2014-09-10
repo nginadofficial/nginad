@@ -1,23 +1,4 @@
-<?php
-$this->headScript()->appendFile($this->basePath() . '/js/3rdparty/moment.min.js');
-$this->headScript()->appendFile($this->basePath() . '/js/3rdparty/bootstrap-datetimepicker.min.js');
-
-$this->headScript()->appendFile($this->basePath() . '/js/3rdparty/bootstrap.min.js');
-$this->headLink()->appendStylesheet($this->basePath() . '/css/bootstrap-datetimepicker.min.css');
-
-$this->headScript()->appendFile($this->basePath() . '/js/reporting_scripts.js');
-?>
-
-<div class="btn-group report_menu">
-    <a class="btn <?php if ($action == 'index') echo 'actv' ?>" href="/report/index">Impressions</a>
-    <a class="btn <?php if ($action == 'incomingBids') echo 'actv' ?>" href="/report/IncomingBids">Incoming bids</a>
-    <a class="btn <?php if ($action == 'outgoingBids') echo 'actv' ?>" href="/report/Outgoingbids">Outgoing bids</a>
-    <a class="btn <?php if ($action == 'contractImpressions') echo 'actv' ?>" href="/report/contractImpressions">Contract impressions</a>
-    <a class="btn <?php if ($action == 'spend') echo 'actv' ?>" href="/report/spend">Spend impressions</a>
-    <a class="btn <?php if ($action == 'charts') echo 'actv' ?>" href="/report/charts">Charts</a>
-    <a class="btn <?php if ($action == 'mailer') echo 'actv' ?>" href="/report/mailer">Mailer config</a>
-</div>
-
+<?php echo $menu_tpl; ?>
 <div>
     Select interval
     <select id="interval_type">
