@@ -171,6 +171,9 @@ class BuySideHourlyBidsCounter extends \_factory\CachedTableRead
         $sql = new Sql($this->adapter);
         $select = $sql->select();
         $select->from('buySideHourlyBidsAvarage');
+        if($where_params){
+            $select->where($where_params);
+        }
 
         $statement = $sql->prepareStatementForSqlObject($select);
         $results = $statement->execute();

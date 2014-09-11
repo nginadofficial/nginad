@@ -1,4 +1,5 @@
 <?php
+
 /**
  * CDNPAL NGINAD Project
  *
@@ -11,27 +12,26 @@ namespace _factory;
 
 use Zend\Db\TableGateway\AbstractTableGateway;
 use Zend\Db\TableGateway\Feature;
+use Zend\Db\Sql\Sql;
 
-class BuySideHourlyImpressionsByTLD extends \_factory\CachedTableRead
-{
+class BuySideHourlyImpressionsByTLD extends \_factory\CachedTableRead {
 
-	static protected $instance = null;
+    static protected $instance = null;
 
-	public static function get_instance() {
+    public static function get_instance() {
 
-		if (self::$instance == null):
-			self::$instance = new \_factory\BuySideHourlyImpressionsByTLD();
-		endif;
-		return self::$instance;
-	}
-
+        if (self::$instance == null):
+            self::$instance = new \_factory\BuySideHourlyImpressionsByTLD();
+        endif;
+        return self::$instance;
+    }
 
     function __construct() {
 
-            $this->table = 'BuySideHourlyImpressionsByTLD';
-            $this->featureSet = new Feature\FeatureSet();
-            $this->featureSet->addFeature(new Feature\GlobalAdapterFeature());
-            $this->initialize();
+        $this->table = 'BuySideHourlyImpressionsByTLD';
+        $this->featureSet = new Feature\FeatureSet();
+        $this->featureSet->addFeature(new Feature\GlobalAdapterFeature());
+        $this->initialize();
     }
 
     public function get_row($params = null) {
@@ -40,191 +40,139 @@ class BuySideHourlyImpressionsByTLD extends \_factory\CachedTableRead
         $obj_list = array();
 
         $resultSet = $this->select(function (\Zend\Db\Sql\Select $select) use ($params) {
-        	foreach ($params as $name => $value):
-        	$select->where(
-        			$select->where->equalTo($name, $value)
-        	);
-        	endforeach;
-        	$select->limit(1, 0);
-        	$select->order('BuySideHourlyImpressionsByTLDID');
-
+            foreach ($params as $name => $value):
+                $select->where(
+                        $select->where->equalTo($name, $value)
+                );
+            endforeach;
+            $select->limit(1, 0);
+            $select->order('BuySideHourlyImpressionsByTLDID');
         }
-        	);
+        );
 
-    	    foreach ($resultSet as $obj):
-    	         return $obj;
-    	    endforeach;
+        foreach ($resultSet as $obj):
+            return $obj;
+        endforeach;
 
-        	return null;
+        return null;
     }
 
     public function get($params = null) {
-        	// http://files.zend.com/help/Zend-Framework/zend.db.select.html
+        // http://files.zend.com/help/Zend-Framework/zend.db.select.html
 
         $obj_list = array();
 
-    	$resultSet = $this->select(function (\Zend\Db\Sql\Select $select) use ($params) {
-        		foreach ($params as $name => $value):
-        		$select->where(
-        				$select->where->equalTo($name, $value)
-        		);
-        		endforeach;
-        		//$select->limit(10, 0);
-        		$select->order('BuySideHourlyImpressionsByTLDID');
-
-        	}
-    	);
-
-    	    foreach ($resultSet as $obj):
-    	        $obj_list[] = $obj;
-    	    endforeach;
-
-    		return $obj_list;
-    }
-    
-    public function getPerTime($where_params = null) {
-            
-        $obj_list = array();
-
-        $resultSet = $this->select(function (\Zend\Db\Sql\Select $select) use ($where_params) {
-                $select->columns(array('AdCampaignBannerID', 'PublisherTLD', 'MDYH', 'Impressions', 'DateCreated', 'DateUpdated'));
-                if(!empty($where_params['DateCreatedGreater'])):
-                    $select->where(
-                            $select->where->greaterThanOrEqualTo('DateCreated', $where_params['DateCreatedGreater'])
-                    );
-                endif;
-
-                if(!empty($where_params['DateCreatedLower'])):
-                    $select->where(
-                            $select->where->lessThanOrEqualTo('DateCreated', $where_params['DateCreatedLower'])
-                    );
-                endif;
-                
-                $select->order('AdCampaignBannerID');
-
-            }
+        $resultSet = $this->select(function (\Zend\Db\Sql\Select $select) use ($params) {
+            foreach ($params as $name => $value):
+                $select->where(
+                        $select->where->equalTo($name, $value)
+                );
+            endforeach;
+            //$select->limit(10, 0);
+            $select->order('BuySideHourlyImpressionsByTLDID');
+        }
         );
 
-            foreach ($resultSet as $obj):
-                $obj['MDYH'] = $this->re_normalize_time($obj['MDYH']);
-                $obj_list[] = $obj;
-            endforeach;
+        foreach ($resultSet as $obj):
+            $obj_list[] = $obj;
+        endforeach;
 
-            return $obj_list;
+        return $obj_list;
     }
-    
+
+    public function getPerTime($where_params = null, $is_admin = false) {
+
+        $results = $this->select(function (\Zend\Db\Sql\Select $select) use ($where_params) {
+            $select->columns(array('AdCampaignBannerID', 'PublisherTLD', 'MDYH', 'Impressions', 'DateCreated', 'DateUpdated'));
+            if (!empty($where_params['DateCreatedGreater'])):
+                $select->where(
+                        $select->where->greaterThanOrEqualTo('DateCreated', $where_params['DateCreatedGreater'])
+                );
+            endif;
+
+            if (!empty($where_params['DateCreatedLower'])):
+                $select->where(
+                        $select->where->lessThanOrEqualTo('DateCreated', $where_params['DateCreatedLower'])
+                );
+            endif;
+
+            $select->order('AdCampaignBannerID');
+        }
+        );
+        
+        $headers = $this->getPerTimeHeader($is_admin);
+        return $this->prepareList($results, $headers);
+
+    }
+
     public function getPerTimeHeader($is_admin = false) {
 
-        return array('AdCampaignBannerID', 'PublisherTLD', 'MDYH', 'Impressions', 'DateCreated', 'DateUpdated');
-    }
-
-    public function getUserTLDStatistic(){
-
-        $obj_list = array();
-
-        $resultSet = $this->select(function (\Zend\Db\Sql\Select $select) {
-                
-                
-                $select->columns(array('PublisherTLD', 'total_impressions' => new \Zend\Db\Sql\Expression('SUM(' . $this->table  . '.impressions)')));
-                
-                $select->join(
-                     'AdCampaignBanner',
-                     $this->table . '.AdCampaignBannerID = AdCampaignBanner.AdCampaignBannerID',
-                     array()
-                );
-
-                $select->join(
-                     'AdCampaign',
-                     'AdCampaignBanner.AdCampaignID = AdCampaign.AdCampaignID',
-                     array('Name')
-                );
-
-                $select->join(
-                     'auth_Users',
-                     'auth_Users.user_id = AdCampaignBanner.UserID',
-                     array('user_login')
-                );
-
-                $select->group('AdCampaignBanner.UserID');
-                $select->group('PublisherTLD');
-                $select->order('PublisherTLD');
-
-            }
+        return ($is_admin) ? array(
+            'AdCampaignBannerID' => '',
+            'PublisherTLD' => '',
+            'MDYH' => '',
+            'Impressions' => '',
+            'DateCreated' => '',
+            'DateUpdated' => ''
+                ) : array(
+            'AdCampaignBannerID' => '',
+            'PublisherTLD' => '',
+            'MDYH' => '',
+            'Impressions' => '',
+            'DateCreated' => '',
+            'DateUpdated' => ''
         );
-
-        foreach ($resultSet as $obj):
-            $obj_list[] = $obj;
-        endforeach;
-
-        return $obj_list;
-        
     }
 
-    public function getUserImpressionsSpend(){
+    public function getUserTLDStatistic($is_admin = false) {
 
-        $obj_list = array();
+        $sql = new Sql($this->adapter);
+        $select = $sql->select();
+        $select->from('userTLDStatistic');
 
-        $resultSet = $this->select(function (\Zend\Db\Sql\Select $select) {
-                
-                $select->from('BuySideHourlyImpressionsCounterCurrentSpend');
-                $select->columns(array(
-                    'PublisherTLD', 
-                    'total_impressions' => new \Zend\Db\Sql\Expression('SUM(' . $this->table  . '.impressions)'),
-                    ));
-                
-                $select->join(
-                     'AdCampaignBanner',
-                     $this->table . '.AdCampaignBannerID = AdCampaignBanner.AdCampaignBannerID',
-                     array()
-                );
+        $statement = $sql->prepareStatementForSqlObject($select);
+        $results = $statement->execute();
+        $headers = $this->getUserTLDStatisticHeader($is_admin);
+        return $this->prepareList($results, $headers);
+    }
+    
+    
+    public function getUserTLDStatisticHeader($is_admin = false) {
 
-                $select->join(
-                     'AdCampaign',
-                     'AdCampaignBanner.AdCampaignID = AdCampaign.AdCampaignID',
-                     array('Name')
-                );
-
-                $select->join(
-                     'auth_Users',
-                     'auth_Users.user_id = AdCampaignBanner.UserID',
-                     array('user_login')
-                );
-
-                $select->group('AdCampaignBanner.UserID');
-                $select->group('BuySideHourlyImpressionsCounterCurrentSpend.AdCampaignBannerID');
-                $select->order('PublisherTLD');
-
-            }
+        return ($is_admin) ? array(
+            'PublisherTLD' => 'Publisher TLD',
+            'total_impressions' => 'Total impressions',
+            'Name' => 'Ad Campaign',
+            'user_login' => 'User',
+                ) : array(
+            'PublisherTLD' => 'Publisher TLD',
+            'total_impressions' => 'Total impressions',
+            'Name' => 'Ad Campaign',
+            'user_login' => 'User',
         );
-
-        foreach ($resultSet as $obj):
-            $obj_list[] = $obj;
-        endforeach;
-
-        return $obj_list;
-        
     }
-
 
     public function insertBuySideHourlyImpressionsByTLD(\model\BuySideHourlyImpressionsByTLD $BuySideHourlyImpressionsByTLD) {
-    	$data = array(
-    			'AdCampaignBannerID'   	=> $BuySideHourlyImpressionsByTLD->AdCampaignBannerID,
-    			'MDYH'   				=> $BuySideHourlyImpressionsByTLD->MDYH,
-    			'PublisherTLD'  		=> $BuySideHourlyImpressionsByTLD->PublisherTLD,
-    			'Impressions'  			=> $BuySideHourlyImpressionsByTLD->Impressions,
-    			'DateCreated'   		=> $BuySideHourlyImpressionsByTLD->DateCreated
-    	);
+        $data = array(
+            'AdCampaignBannerID' => $BuySideHourlyImpressionsByTLD->AdCampaignBannerID,
+            'MDYH' => $BuySideHourlyImpressionsByTLD->MDYH,
+            'PublisherTLD' => $BuySideHourlyImpressionsByTLD->PublisherTLD,
+            'Impressions' => $BuySideHourlyImpressionsByTLD->Impressions,
+            'DateCreated' => $BuySideHourlyImpressionsByTLD->DateCreated
+        );
 
-    	$this->insert($data);
+        $this->insert($data);
     }
 
     public function updateBuySideHourlyImpressionsByTLD(\model\BuySideHourlyImpressionsByTLD $BuySideHourlyImpressionsByTLD) {
-    	$data = array(
-    			'Impressions'  	=> $BuySideHourlyImpressionsByTLD->Impressions
-    	);
+        $data = array(
+            'Impressions' => $BuySideHourlyImpressionsByTLD->Impressions
+        );
 
-    	$buyside_hourly_impressions_by_tld_id = (int)$BuySideHourlyImpressionsByTLD->BuySideHourlyImpressionsByTLDID;
-    	$this->update($data, array('BuySideHourlyImpressionsByTLDID' => $buyside_hourly_impressions_by_tld_id));
+        $buyside_hourly_impressions_by_tld_id = (int) $BuySideHourlyImpressionsByTLD->BuySideHourlyImpressionsByTLDID;
+        $this->update($data, array('BuySideHourlyImpressionsByTLDID' => $buyside_hourly_impressions_by_tld_id));
     }
 
-};
+}
+
+;

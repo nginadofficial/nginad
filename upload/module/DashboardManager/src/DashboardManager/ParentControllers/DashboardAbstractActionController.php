@@ -137,16 +137,16 @@ abstract class DashboardAbstractActionController extends ZendAbstractActionContr
     	$this->ImpersonateID = $this->auth->getImpersonatedIdentityID();
     	$this->debug = $this->config_handle['system']['debug'];
     	$this->debug_verbose = $this->config_handle['system']['debug_verbose'];
-    	
+
     	// If Administrator, populate and set adminitrator options.
     	if (strpos($this->auth->getPrimaryRole(), $this->config_handle['roles']['admin']) !== false):
-    	
-    		$this->is_admin = true;
+
+            $this->is_admin = true;
     		// Get a list of all members.
     		$auth_Users_list = $this->auth->getRoleUsers($this->config_handle['roles']['member']);
     		 
     		foreach ($auth_Users_list as $auth_User):
-    		
+
     			// skip disabled users
     			if ($auth_User->user_enabled != 1):
     				continue;
@@ -177,7 +177,7 @@ abstract class DashboardAbstractActionController extends ZendAbstractActionContr
     		endforeach;
     		
     	endif;
-    	
+
     	if ($this->PublisherInfoID != null):
     		$this->user_id_list = $this->user_id_list_publisher;
     		$this->dashboard_home = "publisher";
