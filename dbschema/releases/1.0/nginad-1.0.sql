@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50538
 File Encoding         : 65001
 
-Date: 2014-09-03 23:25:50
+Date: 2014-09-07 10:22:07
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -455,7 +455,7 @@ CREATE TABLE `BuySideDailyImpressionsByTLD` (
   `DateUpdated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`DailyImpressionsByTLDID`),
   UNIQUE KEY `RTBBannerID_IDX` (`AdCampaignBannerID`,`MDY`,`PublisherTLD`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- ----------------------------
 -- Records of BuySideDailyImpressionsByTLD
@@ -475,7 +475,7 @@ CREATE TABLE `BuySideHourlyBidsCounter` (
   `DateUpdated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`BuySideHourlyBidsCounterID`),
   UNIQUE KEY `BuySideHourlyBid_IDX` (`BuySidePartnerID`,`AdCampaignBannerID`,`MDYH`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- ----------------------------
 -- Records of BuySideHourlyBidsCounter
@@ -495,7 +495,7 @@ CREATE TABLE `BuySideHourlyImpressionsByTLD` (
   `DateUpdated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`BuySideHourlyImpressionsByTLDID`),
   UNIQUE KEY `AnyBannerID_IDX` (`AdCampaignBannerID`,`MDYH`,`PublisherTLD`)
-) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- ----------------------------
 -- Records of BuySideHourlyImpressionsByTLD
@@ -517,7 +517,7 @@ CREATE TABLE `BuySideHourlyImpressionsCounterCurrentSpend` (
   `DateUpdated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`BuySideHourlyImpressionsCounterCurrentSpendID`),
   UNIQUE KEY `BuySideHourlyIC_IDX` (`BuySidePartnerID`,`AdCampaignBannerID`,`MDYH`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- ----------------------------
 -- Records of BuySideHourlyImpressionsCounterCurrentSpend
@@ -540,7 +540,7 @@ CREATE TABLE `ContractPublisherZoneHourlyImpressions` (
   PRIMARY KEY (`ContractPublisherZoneHourlyImpressionsID`),
   UNIQUE KEY `ContractPublisherZoneHourlyImpression_IDX` (`ContractPublisherZoneHourlyImpressionsID`,`AdCampaignBannerID`,`PublisherAdZoneID`,`MDYH`) USING BTREE,
   UNIQUE KEY `ContractPublisherZoneHourlyImpressions_IDX` (`AdCampaignBannerID`,`PublisherAdZoneID`,`MDYH`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- ----------------------------
 -- Records of ContractPublisherZoneHourlyImpressions
@@ -664,8 +664,8 @@ CREATE TABLE `Maintenance` (
 -- ----------------------------
 -- Records of Maintenance
 -- ----------------------------
-INSERT INTO `Maintenance` VALUES ('daily', '2014-09-03 21:10:02');
-INSERT INTO `Maintenance` VALUES ('ten_minute', '2014-09-03 23:05:02');
+INSERT INTO `Maintenance` VALUES ('daily', '2014-09-06 16:05:03');
+INSERT INTO `Maintenance` VALUES ('ten_minute', '2014-09-07 10:20:04');
 
 -- ----------------------------
 -- Table structure for PublisherAdIndustry
@@ -780,8 +780,8 @@ DROP TABLE IF EXISTS `PublisherWebsite`;
 CREATE TABLE `PublisherWebsite` (
   `PublisherWebsiteID` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `WebDomain` varchar(255) NOT NULL,
-  `DomainMarkupRate` float NOT NULL,
   `DomainOwnerID` int(10) unsigned NOT NULL,
+  `AutoApprove` smallint(6) NOT NULL DEFAULT '1',
   `ApprovalFlag` smallint(6) NOT NULL DEFAULT '0',
   `IABCategory` char(8) DEFAULT NULL,
   `IABSubCategory` char(8) DEFAULT NULL,
@@ -789,14 +789,14 @@ CREATE TABLE `PublisherWebsite` (
   `DateCreated` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `DateUpdated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`PublisherWebsiteID`),
-  UNIQUE KEY `WebDomain_UNIQUE` (`WebDomain`),
+  UNIQUE KEY `WebDomain_UNIQUE` (`WebDomain`,`DomainOwnerID`),
   KEY `FK_Owner_User_ID` (`DomainOwnerID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of PublisherWebsite
 -- ----------------------------
-INSERT INTO `PublisherWebsite` VALUES ('4', 'blowmedianow.com', '0', '3', '1', 'IAB19', null, 'Blow Media Website', '2014-09-03 22:38:06', '2014-09-03 22:38:06');
+INSERT INTO `PublisherWebsite` VALUES ('4', 'blowmedianow.com', '3', '1', '1', 'IAB19', null, 'Blow Media Website', '2014-09-03 22:38:06', '2014-09-03 22:38:06');
 
 -- ----------------------------
 -- Table structure for PublisherWebsiteMarkup
@@ -910,7 +910,7 @@ CREATE TABLE `SellSidePartnerHourlyBids` (
   PRIMARY KEY (`SellSidePartnerHourlyBidsID`),
   UNIQUE KEY `SellSidePartnerToZoneBid_IDX` (`SellSidePartnerHourlyBidsID`,`SellSidePartnerID`,`PublisherAdZoneID`,`MDYH`) USING BTREE,
   UNIQUE KEY `SellSidePartnerHourlyBids_IDX` (`SellSidePartnerID`,`PublisherAdZoneID`,`MDYH`)
-) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- ----------------------------
 -- Records of SellSidePartnerHourlyBids
@@ -930,29 +930,6 @@ CREATE TABLE `UserMarkupDemand` (
 -- ----------------------------
 -- Records of UserMarkupDemand
 -- ----------------------------
-
--- ----------------------------
--- Table structure for Websites
--- ----------------------------
-DROP TABLE IF EXISTS `Websites`;
-CREATE TABLE `Websites` (
-  `WebsiteID` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `WebDomain` varchar(255) NOT NULL,
-  `PublisherInfoID` int(10) unsigned NOT NULL,
-  `ApprovalFlag` smallint(6) NOT NULL DEFAULT '0',
-  `IABCategory` char(8) DEFAULT NULL,
-  `Description` text,
-  `DateCreated` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `DateUpdated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`WebsiteID`),
-  UNIQUE KEY `WebDomain_UNIQUE` (`WebDomain`),
-  KEY `FK_Owner_User_ID` (`PublisherInfoID`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
-
--- ----------------------------
--- Records of Websites
--- ----------------------------
-INSERT INTO `Websites` VALUES ('1', 'blowmedianow.com', '20', '0', 'IAB19', null, '2014-09-03 22:24:24', '2014-09-03 22:24:24');
 
 -- ----------------------------
 -- View structure for auth_userslogin
