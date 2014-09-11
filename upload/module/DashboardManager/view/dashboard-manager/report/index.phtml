@@ -31,27 +31,20 @@
     <div class="step_navigation">
         <a href="#" data-step="2" class="step_btn">Prev 15 minutes</a>
     </div>
-
     <table>
         <thead>
             <tr>
-                <th>AdCampaignBannerID</th>
-                <th>PublisherTLD</th>
-                <th>MDYH</th>
-                <th>Impressions</th>
-                <th>DateCreated</th>
-                <th>DateUpdated</th>
+                <?php foreach ($impressions_header as $key=>$one): ?>
+                    <th><?php echo (!empty($one)) ? $one : $key; ?></th>
+                <?php endforeach; ?>
             </tr>
         </thead>
         <tbody>
             <?php foreach ($impressions as $one): ?>
                 <tr>
-                    <td><?php echo $one->AdCampaignBannerID; ?></td>
-                    <td><?php echo $one->PublisherTLD; ?></td>
-                    <td><?php echo $one->MDYH; ?></td>
-                    <td><?php echo $one->Impressions; ?></td>
-                    <td><?php echo $one->DateCreated; ?></td>
-                    <td><?php echo $one->DateUpdated; ?></td>
+                    <?php foreach ($one as $two): ?>
+                        <td><?php echo $two; ?></td>
+                    <?php endforeach; ?>
                 </tr>
             <?php endforeach; ?>
         </tbody>
@@ -67,23 +60,20 @@
     <table>
         <thead>
             <tr>
-                <th>Publisher TLD</th>
-                <th>Total impressions</th>
-                <th>Ad Campaign</th>
-                <th>User</th>
+                <?php foreach ($user_tld_statistic_header as $key=>$one): ?>
+                    <th><?php echo (!empty($one)) ? $one : $key; ?></th>
+                <?php endforeach; ?>
             </tr>
         </thead>
         <tbody>
             <?php foreach ($user_tld_statistic as $one): ?>
                 <tr>
-                    <td><?php echo $one->PublisherTLD; ?></td>
-                    <td><?php echo $one->total_impressions; ?></td>
-                    <td><?php echo $one->Name; ?></td>
-                    <td><?php echo $one->user_login; ?></td>
+                    <?php foreach ($one as $two): ?>
+                        <td><?php echo $two; ?></td>
+                    <?php endforeach; ?>
                 </tr>
             <?php endforeach; ?>
         </tbody>
     </table>
-
 
 </div>

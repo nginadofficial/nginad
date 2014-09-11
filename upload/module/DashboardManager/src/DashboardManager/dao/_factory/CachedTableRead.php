@@ -62,16 +62,16 @@ abstract class CachedTableRead extends AbstractTableGateway
     
     	$cached_data = \util\CacheSql::get_cached_read_result_apc($config, $where_params, $this->table . '_M');
     	 
-    	if ($cached_data !== null && !$refresh):
-//         if (0):
+//    	if ($cached_data !== null && !$refresh):
+         if (0):
     	
     		return $cached_data;
     	
     	else:
 
     		$data = $this->getPerTime($where_params, $is_admin);
-    	
-    		\util\CacheSql::put_cached_read_result_apc($config, $where_params, $this->table . '_M', $data, $time_to_live);
+
+                \util\CacheSql::put_cached_read_result_apc($config, $where_params, $this->table . '_M', $data, $time_to_live);
     	
     		return $data;
     		
@@ -82,11 +82,12 @@ abstract class CachedTableRead extends AbstractTableGateway
      
         $metadata = new Metadata($this->adapter);
         $header = $metadata->getColumnNames($this->table);
-        return ($is_admin) ? $header : array_diff($header, $this->adminFields);
+//        return ($is_admin) ? $header : array_diff($header, $this->adminFields);
+        return ($is_admin) ? $header : $header;
         
     }
     
-    function re_normalize_time($str_time) {
+    public function re_normalize_time($str_time) {
 	
 	$denormalized_time = "";
 	
@@ -107,6 +108,23 @@ abstract class CachedTableRead extends AbstractTableGateway
 	
 	return $denormalized_time;
 
+    }
+    
+    protected function prepareList($records, $headers){
+        
+        $obj_list = array();
+        foreach ($records as $obj):
+            $row = array();
+            foreach ($headers as $key => $val) {
+                $row[$key] = $obj[$key];
+            }
+//            $obj = array_intersect_ukey($obj, $this->getPerTimeHeader($is_admin), function ($key1, $key2) { return (int)!($key1 == $key2);});
+            if (!empty($row['MDYH']))
+                $row['MDYH'] = $this->re_normalize_time($row['MDYH']);
+            $obj_list[] = $row;
+        endforeach;
+        return $obj_list;
+        
     }
     
 }

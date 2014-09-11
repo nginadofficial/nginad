@@ -49,15 +49,18 @@ class ReportController extends PublisherAbstractActionController {
                 ->get('viewrenderer')
                 ->render($view);
 
-
         $impression = \_factory\BuySideHourlyImpressionsByTLD::get_instance();
-        $impression_spend = \_factory\BuySideHourlyImpressionsCounterCurrentSpend::get_instance();
+        
         $data = array(
             'dashboard_view' => 'report',
             'action' => 'index',
             'menu_tpl' => $menu_tpl,
-            'impressions' => (array) json_decode($this->getImpressionsPerTimeAction()),
+            
+            'impressions' => json_decode($this->getPerTime($impression), TRUE)['data'],
+            'impressions_header' => $impression->getPerTimeHeader($this->is_admin),
+            
             'user_tld_statistic' => $impression->getUserTLDStatistic(),
+            'user_tld_statistic_header' => $impression->getUserTLDStatisticHeader(),
             'user_id_list' => $this->user_id_list,
             'user_identity' => $this->identity(),
             'true_user_name' => $this->auth->getUserName(),
@@ -249,8 +252,8 @@ class ReportController extends PublisherAbstractActionController {
             'menu_tpl' => $menu_tpl,
             'impressions_spend' => (array) json_decode($this->getImpressionsCurrentSpendPerTimeAction()),
             'impressions_spend_header' => $impression_spend->getPerTimeHeader($this->is_admin),
-            'user_spend_statistic' => $impression_spend->{'getUserImpressionsSpend' . $this->adminFunctionsSufix}(),
-            'user_spend_statistic_header' => $impression_spend->{'getUserImpressionsSpendHeaders' . $this->adminFunctionsSufix}(),
+            'user_spend_statistic' => $impression_spend->getUserImpressionsSpend($this->is_admin),
+            'user_spend_statistic_header' => $impression_spend->getUserImpressionsSpendHeaders($this->is_admin),
             'is_admin' => $this->is_admin,
             'user_id_list' => $this->user_id_list,
             'user_identity' => $this->identity(),
@@ -418,7 +421,6 @@ class ReportController extends PublisherAbstractActionController {
     }
 
     public function getImpressionsPerTimeAction() {
-
         return $this->getPerTime(\_factory\BuySideHourlyImpressionsByTLD::get_instance());
     }
 
@@ -463,7 +465,8 @@ class ReportController extends PublisherAbstractActionController {
             $step = 1;
         }
 
-        $DateCreatedGreater = date('Y-m-d H:i:s', time() - 15 * $step * 60);
+//        $DateCreatedGreater = date('Y-m-d H:i:s', time() - 15 * $step * 60);
+        $DateCreatedGreater = '2010-12-12 12:12:12';
         $DateCreatedLower = date('Y-m-d H:i:s', time() - 15 * ($step - 1) * 60);
 
         if (!empty($params['step'])) {
@@ -505,7 +508,7 @@ class ReportController extends PublisherAbstractActionController {
             'data' => $obj->getPerTimeCached($this->config_handle, $where_params, 900, $refresh, $this->is_admin),
             'step' => $step
         );
-        return $this->getResponse()->setContent(json_encode($data));
+        return json_encode($data);
     }
 
 }

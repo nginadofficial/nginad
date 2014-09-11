@@ -34,8 +34,8 @@
     <table>
         <thead>
             <tr>
-                <?php foreach ($impressions_spend_header as $one): ?>
-                    <th><?php echo $one; ?></th>
+                <?php foreach ($impressions_spend_header as $key=>$one): ?>
+                    <th><?php echo (!empty($one)) ? $one : $key; ?></th>
                 <?php endforeach; ?>
             </tr>
         </thead>
@@ -60,8 +60,8 @@
     <table>
         <thead>
             <tr>
-                <?php foreach ($user_spend_statistic_header as $one): ?>
-                    <th><?php echo $one; ?></th>
+                <?php foreach ($user_spend_statistic_header as $key => $one): ?>
+                    <th><?php echo (!empty($one)) ? $one : $key; ?></th>
                 <?php endforeach; ?>
             </tr>
         </thead>

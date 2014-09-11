@@ -107,97 +107,56 @@ class BuySideHourlyImpressionsCounterCurrentSpend extends \_factory\CachedTableR
         endif;
 
         $statement = $sql->prepareStatementForSqlObject($select);
+        
         $results = $statement->execute();
+        $headers = $this->getPerTimeHeader($is_admin);
 
-        foreach ($results as $obj):
-            if (!$is_admin) {
-                array_walk($obj, function($item, $key) use (&$obj) {
-                    if (array_search($key, $this->adminFields) !== FALSE) {
-                        $obj[$key] = FALSE;
-                    }
-                });
-                $obj = array_filter($obj, function($value) {
-                    return $value !== FALSE;
-                });
-            }
-            $obj['MDYH'] = $this->re_normalize_time($obj['MDYH']);
-            $obj_list[] = $obj;
-        endforeach;
+        return $this->prepareList($results, $headers);
 
-        return $obj_list;
     }
 
     public function getPerTimeHeader($is_admin = false) {
 
-        $metadata = new Metadata($this->adapter);
-        $header = $metadata->getColumnNames('impressionsCurrentSpendPerTime');
-        return ($is_admin) ? $header : array_values(array_diff($header, $this->adminFields));
+        return ($is_admin) ? array(
+            'BuySidePartnerID' => '',
+            'MDYH' => '',
+            'ImpressionsCounter' => '',
+            'CurrentSpendGross' => '',
+            'CurrentSpendNet' => '',
+            'AverageBidCurrentSpendNet' => '',
+            'AverageBidCurrentSpendGross' => '',
+            'DateCreated' => '',
+            'DateUpdated' => '',
+            'Name' => ''
+                ) : array(
+            'MDYH' => '',
+            'ImpressionsCounter' => '',
+            'CurrentSpendGross' => '',
+            'AverageBidCurrentSpendGross' => '',
+            'DateCreated' => '',
+            'DateUpdated' => '',
+            'Name' => ''
+        );
     }
 
-//    public function getUserImpressionsSpendAdmin(){
+//    public function getUserImpressionsSpendAdmin() {
+//
+//        $sql = new Sql($this->adapter);
+//        $select = $sql->select();
+//        $select->from('userImpressionsSpendAdmin');
+//
+//        $statement = $sql->prepareStatementForSqlObject($select);
+//        $results = $statement->execute();
 //
 //        $obj_list = array();
-//
-//        $resultSet = $this->select(function (\Zend\Db\Sql\Select $select) {
-//                
-//                $select->columns(array(
-//                    'BuySidePartnerID',
-//                    'TotalSpendGross' => new \Zend\Db\Sql\Expression('ROUND(SUM(' . $this->table  . '.CurrentSpendGross), 7)'),
-//                    'TotalSpendNet' => new \Zend\Db\Sql\Expression('ROUND(SUM(' . $this->table  . '.CurrentSpendNet), 7)'),
-//                    ));
-//                
-//                $select->join(
-//                     'AdCampaignBanner',
-//                     $this->table . '.AdCampaignBannerID = AdCampaignBanner.AdCampaignBannerID',
-//                     array()
-//                );
-//
-//                $select->join(
-//                     'AdCampaign',
-//                     'AdCampaignBanner.AdCampaignID = AdCampaign.AdCampaignID',
-//                     array('Name')
-//                );
-//
-//                $select->join(
-//                     'auth_Users',
-//                     'auth_Users.user_id = AdCampaignBanner.UserID',
-//                     array('user_login')
-//                );
-//
-////                $select->group('AdCampaignBanner.UserID');
-//                $select->group('BuySidePartnerID');
-//                $select->group('BuySideHourlyImpressionsCounterCurrentSpend.AdCampaignBannerID');
-//                $select->order('user_login');
-//
-//            }
-//        );
-//
-//        foreach ($resultSet as $obj):
-//            $obj_list[] = $obj;
+//        foreach ($results as $obj):
+//            $obj_list[] = (object) $obj;
 //        endforeach;
 //
 //        return $obj_list;
-//        
 //    }
 
-    public function getUserImpressionsSpendAdmin() {
-
-        $sql = new Sql($this->adapter);
-        $select = $sql->select();
-        $select->from('userImpressionsSpendAdmin');
-
-        $statement = $sql->prepareStatementForSqlObject($select);
-        $results = $statement->execute();
-
-        $obj_list = array();
-        foreach ($results as $obj):
-            $obj_list[] = (object) $obj;
-        endforeach;
-
-        return $obj_list;
-    }
-
-    public function getUserImpressionsSpend() {
+    public function getUserImpressionsSpend($is_admin = false) {
 
         $sql = new Sql($this->adapter);
         $select = $sql->select();
@@ -207,17 +166,26 @@ class BuySideHourlyImpressionsCounterCurrentSpend extends \_factory\CachedTableR
         $results = $statement->execute();
 
         $obj_list = array();
-        foreach ($results as $obj):
-            $obj_list[] = (object) $obj;
-        endforeach;
-
-        return $obj_list;
+        $headers = $this->getUserImpressionsSpendHeaders($is_admin);
+        
+        return $this->prepareList($results, $headers);
+        
     }
 
-    public function getUserImpressionsSpendHeaders() {
+    public function getUserImpressionsSpendHeaders($is_admin = false) {
 
-        $metadata = new Metadata($this->adapter);
-        return $metadata->getColumnNames('userImpressionsSpend');
+        return ($is_admin) ? array(
+            'BuySidePartnerID' => '',
+            'TotalSpendGross' => '',
+            'TotalSpendNet' => '',
+            'Name' => '',
+            'user_login' => '',
+                ) : array(
+            'BuySidePartnerID' => '',
+            'TotalSpendGross' => '',
+            'Name' => '',
+            'user_login' => '',
+        );
     }
 
     public function getUserImpressionsSpendHeadersAdmin() {
