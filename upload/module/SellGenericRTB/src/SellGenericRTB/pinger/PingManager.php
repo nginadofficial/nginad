@@ -187,7 +187,7 @@ class PingManager {
 		endfor;
 		$active = null;
 		do {
-			usleep(100); // micro-seconds = 1/1000th of a millisecond
+			// usleep(100); // micro-seconds = 1/1000th of a millisecond
 			$status = curl_multi_exec($mh, $active);
 		} while($status === CURLM_CALL_MULTI_PERFORM || $active);
 		
