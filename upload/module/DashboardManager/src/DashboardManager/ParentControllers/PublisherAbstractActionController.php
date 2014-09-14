@@ -25,8 +25,20 @@ abstract class PublisherAbstractActionController extends DashboardAbstractAction
     	if ($this->PublisherInfoID != null):
 	    	$this->dashboard_home = "publisher";
     	endif;
-		parent::initialize();
 
+		$initialized = parent::initialize();
+		if (!$initialized) return $initialized;
+
+		$route_name = $this->getEvent()->getRouteMatch()->getMatchedRouteName();
+		if (!$this->is_admin &&
+			(strpos($route_name, 'publisher') === 0
+			&& $this->PublisherInfoID == null
+			&& $this->DemandCustomerInfoID != null)):
+			return $this->redirect()->toRoute('demand');
+		endif;
+		
+		return $initialized;
+		
 		/*
 		 * ADD STUFF HERE
 		*/

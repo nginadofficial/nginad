@@ -61,25 +61,7 @@ class Module implements AutoloaderProviderInterface
         $eventManager ->attach(
             $zfcrbac_exception
         );
-        
-        
-        /*
-         * The event stack doesn't seem to be working properly, so lets put the
-        * preDispatch code inline here instead. There's no apparent reason not to
-        */
-        //$eventManager->attach(\Zend\Mvc\MvcEvent::EVENT_DISPATCH, array($this, 'preDispatch'));
-        
-        // This is retained for legacy code that may reference the $is_manager variable.
-        $is_manager = strpos(strtolower($e->getRequest()->getUri()->getPath()), "/demand") === 0;
-        
-        if($sm->get('config')['system']['debug']):
-        
-            echo "\n<br />Identity: " . $serviceManager->get('AuthService')->hasIdentity() . "<br />\n";
-            print_r($serviceManager->get('AuthService')->getStorage());
-            die();
-        endif;
-     
-       
+
         // TODO: Find out what does this do?
         $moduleRouteListener = new ModuleRouteListener();
         $moduleRouteListener->attach($eventManager);

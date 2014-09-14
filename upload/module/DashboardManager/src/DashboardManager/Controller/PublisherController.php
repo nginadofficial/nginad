@@ -29,7 +29,8 @@ class PublisherController extends PublisherAbstractActionController {
      */
 	public function indexAction()
 	{	    
-	    $this->initialize();
+		$initialized = $this->initialize();
+		if ($initialized !== true) return $initialized;
 	    
 	    //Pull list of websites.
 	    $PublisherWebsiteFactory = \_factory\PublisherWebsite::get_instance();
@@ -125,7 +126,8 @@ class PublisherController extends PublisherAbstractActionController {
 	 */
 	private function domainApprovalToggle($flag)
 	{
-	    $this->initialize();
+		$initialized = $this->initialize();
+		if ($initialized !== true) return $initialized;
 	    $PublisherWebsiteID = intval($this->params()->fromRoute('param1', 0));
 
 	    if ($this->is_admin && $PublisherWebsiteID > 0 && ($flag === 2 || $flag === 1 || $flag === 0)):
@@ -195,7 +197,8 @@ class PublisherController extends PublisherAbstractActionController {
 	{
 	    // Initialize things.
 	    $error_message = null;
-	    $this->initialize();
+		$initialized = $this->initialize();
+		if ($initialized !== true) return $initialized;
 	    $request = $this->getRequest();
 	    $PublisherWebsiteFactory = \_factory\PublisherWebsite::get_instance();
 	    $PublisherAdZoneFactory = \_factory\PublisherAdZone::get_instance();
@@ -282,7 +285,8 @@ class PublisherController extends PublisherAbstractActionController {
 	 */
 	public function createdomainAction()
 	{
-	    $this->initialize();
+		$initialized = $this->initialize();
+		if ($initialized !== true) return $initialized;
 	    
 	    $error_msg = null;
 	    
@@ -409,7 +413,8 @@ class PublisherController extends PublisherAbstractActionController {
 	public function editdomainAction()
 	{
 	    $error_message = null;
-	    $this->initialize();
+		$initialized = $this->initialize();
+		if ($initialized !== true) return $initialized;
 
 	    $PublisherWebsiteFactory = \_factory\PublisherWebsite::get_instance();
 	    $editResultObj = new \model\PublisherWebsite();
@@ -508,7 +513,8 @@ class PublisherController extends PublisherAbstractActionController {
 	 */
 	public function changepublishermarkupAction() {
 		
-		$this->initialize();
+		$initialized = $this->initialize();
+		if ($initialized !== true) return $initialized;
 		
 		if ($this->is_admin == false):
 			die("You do not have permission to access this page");
@@ -558,7 +564,8 @@ class PublisherController extends PublisherAbstractActionController {
 	 */
 	public function changedomainmarkupAction() {
 		
-		$this->initialize();
+		$initialized = $this->initialize();
+		if ($initialized !== true) return $initialized;
 		
 		if ($this->is_admin == false):
 			die("You do not have permission to access this page");

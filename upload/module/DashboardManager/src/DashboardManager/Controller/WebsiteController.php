@@ -28,7 +28,8 @@ class WebsiteController extends PublisherAbstractActionController {
      */
 	public function indexAction()
 	{	    
-    	$this->initialize();
+		$initialized = $this->initialize();
+		if ($initialized !== true) return $initialized;
     	
     	if (!$this->auth->hasIdentity()):
     		return $this->redirect()->toRoute('login');
@@ -63,7 +64,8 @@ class WebsiteController extends PublisherAbstractActionController {
 	// publishers websites approved/denied by admin
 	public function approvedeniedAction() {
 		
-    	$this->initialize();
+		$initialized = $this->initialize();
+		if ($initialized !== true) return $initialized;
     	
     	if (!$this->auth->hasIdentity()):
     		return $this->redirect()->toRoute('login');
@@ -169,7 +171,8 @@ class WebsiteController extends PublisherAbstractActionController {
 	
 	public function listAction() {
 	
-    	$this->initialize();
+		$initialized = $this->initialize();
+		if ($initialized !== true) return $initialized;
     	
     	if (!$this->auth->hasIdentity()):
     		return $this->redirect()->toRoute('login');

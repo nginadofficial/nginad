@@ -29,8 +29,8 @@ class SignupController extends PublisherAbstractActionController {
 	{	    
 	    $auth = $this->getServiceLocator()->get('AuthService');
 		if ($auth->hasIdentity()):
-			$this->initialize();
-     		return $this->redirect()->toRoute($this->dashboard_home);
+			$initialized = $this->initialize();
+			if ($initialized === true) return $this->redirect()->toRoute($this->dashboard_home);
     	endif;
 	    
 	    $view = new ViewModel(array(
@@ -46,8 +46,8 @@ class SignupController extends PublisherAbstractActionController {
 		$auth = $this->getServiceLocator()->get('AuthService');
 		$config = $this->getServiceLocator()->get('Config');
 		if ($auth->hasIdentity()):
-			$this->initialize();
-     		return $this->redirect()->toRoute($this->dashboard_home);
+			$initialized = $this->initialize();
+			if ($initialized === true) $this->redirect()->toRoute($this->dashboard_home);
     	endif;
     	
     	$error_msg = null;
@@ -211,7 +211,8 @@ class SignupController extends PublisherAbstractActionController {
      	 	return $this->redirect()->toRoute('login');
     	 endif;
     	 
-		$this->initialize();
+		$initialized = $this->initialize();
+		if ($initialized !== true) return $initialized;
 		$success_msg = null;
 		
 		$authUsers = new \model\authUsers();
@@ -286,7 +287,8 @@ class SignupController extends PublisherAbstractActionController {
      	 	return $this->redirect()->toRoute('login');
     	 endif;
     	 
-		$this->initialize();
+		$initialized = $this->initialize();
+		if ($initialized !== true) return $initialized;
 		$success_msg = null;
 		$success_msg1 = null;
 		$error_msg = null;
@@ -350,7 +352,8 @@ class SignupController extends PublisherAbstractActionController {
 	
 	public function publishersAction() {
 		
-		$this->initialize();
+		$initialized = $this->initialize();
+		if ($initialized !== true) return $initialized;
 		
 		$authUsers = new \model\authUsers();
 		$authUsersFactory = \_factory\authUsers::get_instance();
@@ -388,7 +391,8 @@ class SignupController extends PublisherAbstractActionController {
 	
 	public function customersAction() {
 		
-		$this->initialize();
+		$initialized = $this->initialize();
+		if ($initialized !== true) return $initialized;
 		
 		$authUsers = new \model\authUsers();
 		$authUsersFactory = \_factory\authUsers::get_instance();
@@ -427,7 +431,8 @@ class SignupController extends PublisherAbstractActionController {
 	
 	public function rejectuserAction() {
 		
-		$this->initialize();
+		$initialized = $this->initialize();
+		if ($initialized !== true) return $initialized;
 		
 		if (!$this->is_admin) :
 			return $this->redirect()->toRoute($this->dashboard_home);
@@ -449,7 +454,8 @@ class SignupController extends PublisherAbstractActionController {
 	
 	public function acceptuserAction() {
 		
-		$this->initialize();
+		$initialized = $this->initialize();
+		if ($initialized !== true) return $initialized;
 		
 		if (!$this->is_admin) :
 			return $this->redirect()->toRoute($this->dashboard_home);
@@ -471,7 +477,8 @@ class SignupController extends PublisherAbstractActionController {
 	
 	public function rejectpublisherAction($publisher_id, $description, $user_type) {
 
-		$this->initialize();
+		$initialized = $this->initialize();
+		if ($initialized !== true) return $initialized;
 		
 		if (!$this->is_admin) :
 			return $this->redirect()->toRoute($this->dashboard_home);
@@ -522,7 +529,8 @@ class SignupController extends PublisherAbstractActionController {
 	
 	public function acceptpublisherAction($publisher_id, $user_type) {
 
-		$this->initialize();
+		$initialized = $this->initialize();
+		if ($initialized !== true) return $initialized;
 		
 		if (!$this->is_admin) :
 			return $this->redirect()->toRoute($this->dashboard_home);
@@ -573,7 +581,8 @@ class SignupController extends PublisherAbstractActionController {
 	
 	public function rejectcustomerAction($customer_id, $description, $user_type) {
 
-		$this->initialize();
+		$initialized = $this->initialize();
+		if ($initialized !== true) return $initialized;
 		
 		if (!$this->is_admin) :
 			return $this->redirect()->toRoute($this->dashboard_home);
@@ -624,7 +633,8 @@ class SignupController extends PublisherAbstractActionController {
 	
 	public function acceptcustomerAction($customer_id, $user_type) {
 
-		$this->initialize();
+		$initialized = $this->initialize();
+		if ($initialized !== true) return $initialized;
 		
 		if (!$this->is_admin) :
 			return $this->redirect()->toRoute($this->dashboard_home);
@@ -678,7 +688,8 @@ class SignupController extends PublisherAbstractActionController {
 	private function userApprovalToggle($flag, $user_id, $user_type)
 	{
 	    	         
-	    $this->initialize();
+		$initialized = $this->initialize();
+		if ($initialized !== true) return $initialized;
 	
 	    if ($this->is_admin && $user_id > 0 && ($flag === 1 || $flag === 0)):
 	    
@@ -724,7 +735,8 @@ class SignupController extends PublisherAbstractActionController {
      		return $this->redirect()->toRoute('login');
     	endif;
 		
-		$this->initialize();
+		$initialized = $this->initialize();
+		if ($initialized !== true) return $initialized;
 		
 		$error_msg = null;
 		$success_msg = null;
@@ -819,7 +831,8 @@ class SignupController extends PublisherAbstractActionController {
 	
 	public function deletewebsiteAction() {
 		
-		$this->initialize();
+		$initialized = $this->initialize();
+		if ($initialized !== true) return $initialized;
 		
 		$auth = $this->getServiceLocator()->get('AuthService');
 		if (!$auth->hasIdentity()):

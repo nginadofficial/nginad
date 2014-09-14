@@ -20,8 +20,19 @@ abstract class DemandAbstractActionController extends DashboardAbstractActionCon
 	    	$this->dashboard_home = "demand";
     	endif;
     	
-		parent::initialize();
-
+		$initialized = parent::initialize();
+		if (!$initialized) return $initialized;
+		
+		$route_name = $this->getEvent()->getRouteMatch()->getMatchedRouteName();
+		if (!$this->is_admin &&
+			(strpos($route_name, 'demand') === 0
+			&& $this->DemandCustomerInfoID == null
+			&& $this->PublisherInfoID != null)):
+			return $this->redirect()->toRoute('publisher');
+		endif;
+		
+		return $initialized;
+		
 		/*
 		 * ADD STUFF HERE
 		 */

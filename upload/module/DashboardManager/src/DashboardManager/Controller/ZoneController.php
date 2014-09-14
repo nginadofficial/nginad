@@ -101,7 +101,8 @@ class ZoneController extends PublisherAbstractActionController {
      */
     public function indexAction()
     {
-        $this->initialize();
+		$initialized = $this->initialize();
+		if ($initialized !== true) return $initialized;
         
         $error_message = null;
         $ZoneList = array();
@@ -172,7 +173,8 @@ class ZoneController extends PublisherAbstractActionController {
      */
     public function createAction()
     {
-        $this->initialize();
+		$initialized = $this->initialize();
+		if ($initialized !== true) return $initialized;
         
         $error_message = null;
 
@@ -331,7 +333,8 @@ class ZoneController extends PublisherAbstractActionController {
      */
     public function editAction()
     {
-        $this->initialize();
+		$initialized = $this->initialize();
+		if ($initialized !== true) return $initialized;
         $error_message = null;
         
         $DomainID = intval($this->params()->fromRoute('param1', 0));
@@ -506,7 +509,8 @@ class ZoneController extends PublisherAbstractActionController {
     
     public function deleteAction()
     {
-        $this->initialize();
+		$initialized = $this->initialize();
+		if ($initialized !== true) return $initialized;
         $error_message = null;
         $DomainID = intval($this->params()->fromRoute('param1', 0));
         $PublisherAdZoneFactory = \_factory\PublisherAdZone::get_instance();
@@ -641,7 +645,8 @@ class ZoneController extends PublisherAbstractActionController {
      */
     public function approveAction()
     {
-        $this->initialize();
+		$initialized = $this->initialize();
+		if ($initialized !== true) return $initialized;
         $DomainID = intval($this->params()->fromRoute('param1', 0));
         $this->adApprovalToggle(1);
         return $this->redirect()->toRoute('publisher/zone',array("param1" => $DomainID));
@@ -653,7 +658,8 @@ class ZoneController extends PublisherAbstractActionController {
      */
     public function rejectAction()
     {
-        $this->initialize();
+		$initialized = $this->initialize();
+		if ($initialized !== true) return $initialized;
         $DomainID = intval($this->params()->fromRoute('param1', 0));
         $this->adApprovalToggle(2);
         return $this->redirect()->toRoute('publisher/zone',array("param1" => $DomainID));
@@ -668,7 +674,8 @@ class ZoneController extends PublisherAbstractActionController {
      public function generateTagAction()
      {
      	
-        $this->initialize();
+		$initialized = $this->initialize();
+		if ($initialized !== true) return $initialized;
         $request = $this->getRequest();
         
         if ($request->isPost()):
@@ -744,9 +751,7 @@ class ZoneController extends PublisherAbstractActionController {
       * @return JSON encoded data for AJAX call
       */
      public function editlinkedbannerAction() {
-     
-     	$this->initialize();
-     	     	
+     	
      	$id 		= intval($this->params()->fromRoute('id', 0));
      	$height 	= $this->getRequest()->getQuery('height');
      	$width 		= $this->getRequest()->getQuery('width');
@@ -760,7 +765,8 @@ class ZoneController extends PublisherAbstractActionController {
 			return $this->getResponse()->setContent(json_encode($data));
 		endif;
 	
-		$this->initialize();
+		$initialized = $this->initialize();
+		if ($initialized !== true) return $initialized;
 		
 		if (!$this->is_admin):
 			$data = array(

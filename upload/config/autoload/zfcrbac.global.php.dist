@@ -51,15 +51,18 @@ return [
          */
         'guards' => [
 	       'ZfcRbac\Guard\RouteGuard' => [
-    	           'manager' => ['admin'],
+    	           'manager' => ['member'],
     	           'login/*' => ['guest'],
-    	           'demand' => ['member'],
-    	           'publisher' => ['member'],
+    	           'demand' => ['demand'],
     	           'delivery' => ['guest'],
     	           'success' => ['guest'],
     	           'home' => ['guest'],
     	           'bid' => ['guest'],
     	           'impress' => ['guest'],
+    	           'publisher' => ['publisher'],
+    	           'zone' => ['publisher'],
+    	           'signup/customer' => ['guest'],
+    	           'signup' => ['guest'],
             ],
         ],
 
@@ -94,15 +97,23 @@ return [
             'ZfcRbac\Role\InMemoryRoleProvider' => [
                 'superadmin' => [
 	                   'children'      => ['admin'],
-	                   'permissions'   => ['insert'],
+	                   'permissions'   => ['insert','edit','read','delete','view'],
                 ],
                 'admin' => [
                     'children'    => ['member'],
-                    'permissions' => ['delete'],
+                    'permissions' => ['insert','edit','read','delete','view'],
                 ],
                 'member' => [
+                    'children'    => ['publisher','demand'],
+                    'permissions' => ['insert','edit','read'],
+                ],
+                'demand' => [
                     'children'    => ['guest'],
-                    'permissions' => ['edit'],
+                    'permissions' => ['insert','edit','read'],
+                ],
+                'publisher' => [
+                    'children'    => ['guest'],
+                    'permissions' => ['insert','edit','read'],
                 ],
                 'guest' => [
 	                'permissions' => ['view'],
@@ -118,7 +129,7 @@ return [
             /**
              * Set the template name to render
              */
-             'template' => 'error/403'
+            'template' => 'unauthorized_template'
         ],
 
         /**
@@ -129,24 +140,24 @@ return [
             /**
              * Set the route to redirect when user is connected (of course, it must exist!)
              */
-            // 'redirect_to_route_connected' => 'home',
+             'redirect_to_route_connected' => 'login',
 
             /**
              * Set the route to redirect when user is disconnected (of course, it must exist!)
              */
-            // 'redirect_to_route_disconnected' => 'login',
+            'redirect_to_route_disconnected' => 'login',
 
             /**
              * If a user is unauthorized and redirected to another route (login, for instance), should we
              * append the previous URI (the one that was unauthorized) in the query params?
              */
-            // 'append_previous_uri' => true,
+            'append_previous_uri' => true,
 
             /**
              * If append_previous_uri option is set to true, this option set the query key to use when
              * the previous uri is appended
              */
-            // 'previous_uri_query_key' => 'redirectTo'
+            'previous_uri_query_key' => 'redirectTo'
         ],
 
         /**

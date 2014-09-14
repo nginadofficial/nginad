@@ -28,7 +28,8 @@ class DemandController extends DemandAbstractActionController {
      */
 	public function indexAction() {
 
-		$this->initialize();
+		$initialized = $this->initialize();
+		if ($initialized !== true) return $initialized;
 
 		$user_markup_rate = $this->config_handle['system']['default_demand_markup_rate'];
 		$campaign_markup_rate_list = array();
@@ -157,7 +158,8 @@ class DemandController extends DemandAbstractActionController {
 	 */
 	public function changeusermarkupAction() {
 		
-		$this->initialize();
+		$initialized = $this->initialize();
+		if ($initialized !== true) return $initialized;
 
 		if (strpos($this->auth->getPrimaryRole(), $this->config_handle['roles']['admin']) === false):
 			die("You do not have permission to access this page");
@@ -207,7 +209,8 @@ class DemandController extends DemandAbstractActionController {
 	 */
 	public function changecampaignmarkupAction() {
 		
-		$this->initialize();
+		$initialized = $this->initialize();
+		if ($initialized !== true) return $initialized;
 
 		if (strpos($this->auth->getPrimaryRole(), $this->config_handle['roles']['admin']) === false):
 			die("You do not have permission to access this page");
@@ -257,7 +260,8 @@ class DemandController extends DemandAbstractActionController {
 	 */
 	public function approvecampaignAction() {
 		
-		$this->initialize();
+		$initialized = $this->initialize();
+		if ($initialized !== true) return $initialized;
 
 		if (strpos($this->auth->getPrimaryRole(), $this->config_handle['roles']['admin']) === false):
 			die("You do not have permission to access this page");
@@ -287,7 +291,8 @@ class DemandController extends DemandAbstractActionController {
 			die("Invalid Campaign Preview ID");
 		endif;
 
-		$this->initialize();
+		$initialized = $this->initialize();
+		if ($initialized !== true) return $initialized;
 
 		// ACL PREVIEW PERMISSIONS CHECK
 		transformation\CheckPermissions::checkEditPermissionAdCampaignPreview($id, $this->auth, $this->config_handle);
@@ -305,7 +310,8 @@ class DemandController extends DemandAbstractActionController {
 	 */
 	public function rejectcampaignAction() {
 		
-		$this->initialize();
+		$initialized = $this->initialize();
+		if ($initialized !== true) return $initialized;
 
 		if (strpos($this->auth->getPrimaryRole(), $this->config_handle['roles']['admin']) === false):
 			die("You do not have permission to access this page");
@@ -348,7 +354,8 @@ class DemandController extends DemandAbstractActionController {
 			return $this->getResponse()->setContent(json_encode($data));
 		endif;
 
-		$this->initialize();
+		$initialized = $this->initialize();
+		if ($initialized !== true) return $initialized;
 
 		// ACL PERMISSIONS CHECK
 		//transformation\CheckPermissions::checkEditPermissionAdCampaignBanner($id, $auth, $config);
@@ -412,7 +419,8 @@ class DemandController extends DemandAbstractActionController {
 	 */
 	public function editdeliveryfilterAction() {
 
-		$this->initialize();
+		$initialized = $this->initialize();
+		if ($initialized !== true) return $initialized;
 
 		$needed_input = array(
 				'ispreview'
@@ -575,7 +583,8 @@ class DemandController extends DemandAbstractActionController {
 				die("Invalid Banner ID");
 			endif;
 
-		$this->initialize();
+		$initialized = $this->initialize();
+		if ($initialized !== true) return $initialized;
 
 		$is_preview = $this->getRequest()->getQuery('ispreview');
 
@@ -774,7 +783,8 @@ class DemandController extends DemandAbstractActionController {
 			die("Invalid Banner ID");
 		endif;
 
-		$this->initialize();
+		$initialized = $this->initialize();
+		if ($initialized !== true) return $initialized;
 
 		$is_preview = $this->getRequest()->getQuery('ispreview');
 
@@ -872,7 +882,8 @@ class DemandController extends DemandAbstractActionController {
           return $this->getResponse()->setContent(json_encode($data));
 		endif;
 
-		$this->initialize();
+		$initialized = $this->initialize();
+		if ($initialized !== true) return $initialized;
 
 		$is_preview = $this->getRequest()->getQuery('ispreview');
 
@@ -998,7 +1009,8 @@ class DemandController extends DemandAbstractActionController {
 			die("Invalid Banner ID");
 		endif;
 
-		$this->initialize();
+		$initialized = $this->initialize();
+		if ($initialized !== true) return $initialized;
 
 		$is_preview = $this->getRequest()->getQuery('ispreview');
 
@@ -1064,7 +1076,8 @@ class DemandController extends DemandAbstractActionController {
 				'domainname'
 		);
 
-		$this->initialize();
+		$initialized = $this->initialize();
+		if ($initialized !== true) return $initialized;
 
 		$this->validateInput($needed_input);
 
@@ -1129,7 +1142,8 @@ class DemandController extends DemandAbstractActionController {
 			die("Invalid Banner ID");
 		endif;
 
-		$this->initialize();
+		$initialized = $this->initialize();
+		if ($initialized !== true) return $initialized;
 
 		$is_preview = $this->getRequest()->getQuery('ispreview');
 
@@ -1226,7 +1240,8 @@ class DemandController extends DemandAbstractActionController {
            return $this->getResponse()->setContent(json_encode($data));
 		endif;
 
-		$this->initialize();
+		$initialized = $this->initialize();
+		if ($initialized !== true) return $initialized;
 
 		$is_preview = $this->getRequest()->getQuery('ispreview');
 
@@ -1356,7 +1371,8 @@ class DemandController extends DemandAbstractActionController {
 			die("Invalid Banner ID");
 		endif;
 
-		$this->initialize();
+		$initialized = $this->initialize();
+		if ($initialized !== true) return $initialized;
 
 		$is_preview = $this->getRequest()->getQuery('ispreview');
 
@@ -1421,7 +1437,8 @@ class DemandController extends DemandAbstractActionController {
 				'domainname'
 		);
 
-		$this->initialize();
+		$initialized = $this->initialize();
+		if ($initialized !== true) return $initialized;
 
 		$this->validateInput($needed_input);
 
@@ -1496,7 +1513,8 @@ class DemandController extends DemandAbstractActionController {
           return $this->getResponse()->setContent(json_encode($data));
 		endif;
 
-		$this->initialize();
+		$initialized = $this->initialize();
+		if ($initialized !== true) return $initialized;
 
 		$is_preview = $this->getRequest()->getQuery('ispreview');
 
@@ -1587,7 +1605,8 @@ class DemandController extends DemandAbstractActionController {
             die("Invalid Campaign ID");
         endif;
 
-        $this->initialize();
+		$initialized = $this->initialize();
+		if ($initialized !== true) return $initialized;
 
         $is_preview = $this->getRequest()->getQuery('ispreview');
         $campaign_preview_id = "";
@@ -1658,7 +1677,8 @@ class DemandController extends DemandAbstractActionController {
             die("Invalid Campaign ID");
         endif;
 
-        $this->initialize();
+		$initialized = $this->initialize();
+		if ($initialized !== true) return $initialized;
 
         $is_preview = $this->getRequest()->getQuery('ispreview');
 
@@ -1734,7 +1754,8 @@ class DemandController extends DemandAbstractActionController {
 		        'landingpagetld'
 		);
 
-		$this->initialize();
+		$initialized = $this->initialize();
+		if ($initialized !== true) return $initialized;
 
 		$this->validateInput($needed_input);
 
@@ -1871,7 +1892,8 @@ class DemandController extends DemandAbstractActionController {
 		  die("Invalid Banner ID");
 		endif;
 
-		$this->initialize();
+		$initialized = $this->initialize();
+		if ($initialized !== true) return $initialized;
 
 		$is_preview = $this->getRequest()->getQuery('ispreview');
 		
@@ -1991,7 +2013,8 @@ class DemandController extends DemandAbstractActionController {
 			return $this->getResponse()->setContent(json_encode($data));
 		endif;
 	
-		$this->initialize();
+		$initialized = $this->initialize();
+		if ($initialized !== true) return $initialized;
 		
 		if (!$this->is_admin):
 			$data = array(
@@ -2119,7 +2142,8 @@ class DemandController extends DemandAbstractActionController {
          return $this->getResponse()->setContent(json_encode($data));
 		endif;
 
-		$this->initialize();
+		$initialized = $this->initialize();
+		if ($initialized !== true) return $initialized;
 
 		$is_preview = $this->getRequest()->getQuery('ispreview');
 
@@ -2223,7 +2247,8 @@ class DemandController extends DemandAbstractActionController {
 			die("Invalid Campaign ID");
 		endif;
 
-		$this->initialize();
+		$initialized = $this->initialize();
+		if ($initialized !== true) return $initialized;
 
 		$is_preview = $this->getRequest()->getQuery('ispreview');
 
@@ -2302,7 +2327,8 @@ class DemandController extends DemandAbstractActionController {
 	 */
 	public function createcampaignAction() {
 
-		$this->initialize();
+		$initialized = $this->initialize();
+		if ($initialized !== true) return $initialized;
 		
 		return new ViewModel(array(
 				'ispreview'	  => "true",
@@ -2331,7 +2357,8 @@ class DemandController extends DemandAbstractActionController {
 	        'maxspend'
 	    );
 
-	    $this->initialize();
+		$initialized = $this->initialize();
+		if ($initialized !== true) return $initialized;
 
 	    $this->validateInput($needed_input);
 

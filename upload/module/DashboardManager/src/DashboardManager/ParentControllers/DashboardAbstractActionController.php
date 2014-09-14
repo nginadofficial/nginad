@@ -124,6 +124,7 @@ abstract class DashboardAbstractActionController extends ZendAbstractActionContr
         // As such, you can't put it in the __construct(), and preDispatch() is not working. Do not know why.
     	$this->auth = $this->getServiceLocator()->get('AuthService');
     	$this->config_handle = $this->getServiceLocator()->get('Config');
+
     	if (!$this->auth->hasIdentity()):
      		return $this->redirect()->toRoute('login');
     	endif;
@@ -185,6 +186,8 @@ abstract class DashboardAbstractActionController extends ZendAbstractActionContr
     		$this->user_id_list = $this->user_id_list_demand_customer;
     		$this->dashboard_home = "demand";
     	endif;
+    	
+    	return true;
     	 
     }
     

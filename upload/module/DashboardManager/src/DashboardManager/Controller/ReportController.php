@@ -23,7 +23,8 @@ class ReportController extends PublisherAbstractActionController {
 
     public function indexAction() {
 
-        $this->initialize();
+		$initialized = $this->initialize();
+		if ($initialized !== true) return $initialized;
 
         if ($this->is_admin) {
             $this->EffectiveID;
@@ -76,7 +77,8 @@ class ReportController extends PublisherAbstractActionController {
 
     public function incomingBidsAction() {
 
-        $this->initialize();
+		$initialized = $this->initialize();
+		if ($initialized !== true) return $initialized;
 
         if ($this->is_admin) {
             $this->EffectiveID;
@@ -125,7 +127,8 @@ class ReportController extends PublisherAbstractActionController {
 
     public function outgoingBidsAction() {
 
-        $this->initialize();
+		$initialized = $this->initialize();
+		if ($initialized !== true) return $initialized;
 
         if ($this->is_admin) {
             $this->EffectiveID;
@@ -174,7 +177,8 @@ class ReportController extends PublisherAbstractActionController {
 
     public function contractImpressionsAction() {
         
-        $this->initialize();
+		$initialized = $this->initialize();
+		if ($initialized !== true) return $initialized;
         if ($this->is_admin) {
             $this->EffectiveID;
             $this->adminFunctionsSufix = 'Admin';
@@ -220,7 +224,8 @@ class ReportController extends PublisherAbstractActionController {
 
     public function spendAction() {
 
-        $this->initialize();
+		$initialized = $this->initialize();
+		if ($initialized !== true) return $initialized;
 
         if ($this->is_admin) {
             $this->EffectiveID;
@@ -271,7 +276,8 @@ class ReportController extends PublisherAbstractActionController {
 
     public function chartsAction() {
 
-       $this->initialize();
+		$initialized = $this->initialize();
+		if ($initialized !== true) return $initialized;
 
         if ($this->is_admin) {
             $this->EffectiveID;
@@ -313,7 +319,8 @@ class ReportController extends PublisherAbstractActionController {
 
     public function mailerAction() {
 
-       $this->initialize();
+		$initialized = $this->initialize();
+		if ($initialized !== true) return $initialized;
 
         if ($this->is_admin) {
             $this->EffectiveID;
@@ -448,7 +455,8 @@ class ReportController extends PublisherAbstractActionController {
 
     private function getPerTime($obj) {
 
-        $this->initialize();
+		$initialized = $this->initialize();
+		if ($initialized !== true) return $initialized;
 
         if ($this->is_admin) {
             $this->EffectiveID;
