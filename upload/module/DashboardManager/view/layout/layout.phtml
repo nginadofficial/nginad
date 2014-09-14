@@ -17,7 +17,7 @@ $home_link = $home_dashboard_view;
 if ($home_link == "account"):
 	$home_link = "users/" . $home_dashboard_view;
 elseif ($home_link == "login"):
-	$home_link = "auth/login";
+	$home_link = "";
 endif;
 
 if ($child != null && isset($child->center_class)):
