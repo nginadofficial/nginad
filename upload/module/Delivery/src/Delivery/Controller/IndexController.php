@@ -270,9 +270,7 @@ class IndexController extends AbstractActionController
     	$banner_request["publisher_name"] 			= "Demo Publisher"; 	// will be populated from the initial publisher signup.
     	$banner_request["publisher_iab_category"] 	= null;
     	
-    	$ip_address = isset($_SERVER['HTTP_X_REAL_IP']) ? $_SERVER['HTTP_X_REAL_IP'] : $_SERVER["REMOTE_ADDR"];
-    	// test
-    	$ip_address = "67.79.109.245";
+    	$ip_address = isset($_SERVER['HTTP_X_REAL_IP']) && !empty($_SERVER['HTTP_X_REAL_IP']) ? $_SERVER['HTTP_X_REAL_IP'] : $_SERVER["REMOTE_ADDR"];
     	
     	$banner_request["ip_address"] 				= $ip_address;
     	$banner_request["user_id"] 					= md5($banner_request["ip_address"]);

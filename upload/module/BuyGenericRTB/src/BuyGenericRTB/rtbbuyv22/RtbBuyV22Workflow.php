@@ -439,17 +439,20 @@ abstract class RtbBuyV22Workflow
 			                			$maxmind = new \geoip\maxmind();
 									endif;
 
-						            $geo_info = $maxmind->get_geo_code($RtbBid->bid_request_ip);
-						            $RtbBid->bid_request_geo["state"] = $geo_info["state"];
-						           	$RtbBid->bid_request_geo["city"] = $geo_info["city"];
+						            $geo_info = $maxmind->get_geo_code($RtbBid->bid_request_device_ip);
+
+						            if ($geo_info !== null):
+							            $RtbBid->bid_request_geo["state"] = $geo_info["state"];
+							           	$RtbBid->bid_request_geo["city"] = $geo_info["city"];
+						           	endif;
 
 				                endif;
 
 			                	if ($AdCampaignBannerRestrictions->GeoState !== null && isset($RtbBid->bid_request_geo["state"])):
 
 			                		if (!isset($RtbBid->bid_request_geo["state"]) && $geo_info === null):
-			                			$geo_info = $maxmind->get_geo_code($this->bid_request_ip);
-			                		$this->bid_request_geo["state"] = $geo_info["state"];
+			                			$geo_info = $maxmind->get_geo_code($this->bid_request_device_ip);
+			                			$this->bid_request_geo["state"] = $geo_info["state"];
 			                		endif;
 
 				                	$has_state = false;
@@ -485,7 +488,7 @@ abstract class RtbBuyV22Workflow
 						                		$maxmind = new \geoip\maxmind();
 						                	endif;
 
-						                	$geo_info = $maxmind->get_geo_code($RtbBid->bid_request_ip);
+						                	$geo_info = $maxmind->get_geo_code($RtbBid->bid_request_device_ip);
 						                	$RtbBid->bid_request_geo["state"] = $geo_info["state"];
 						                	$RtbBid->bid_request_geo["city"] = $geo_info["city"];
 

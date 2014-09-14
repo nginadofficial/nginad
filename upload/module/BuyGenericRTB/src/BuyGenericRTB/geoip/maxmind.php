@@ -25,8 +25,12 @@ class maxmind {
 
 		geoip_close($gi);
 
-		return $record;
-
+		if (!empty($record)):
+			return $record;
+		else:
+			return null;
+		endif;
+		
 	}
 
     public function get_geo_code($ip_address) {
