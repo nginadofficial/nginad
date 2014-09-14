@@ -227,7 +227,7 @@ class IndexController extends AbstractActionController
     	$params = array();
     	$params["PublisherAdZoneID"] = $banner_request_id;
     	$params["AdStatus"] = 1;
-    	$PublisherAdZone = $PublisherAdZoneFactory->get_row($params);
+    	$PublisherAdZone = $PublisherAdZoneFactory->get_row_cached($params);
 
     	$PublisherWebsite = null;
     	

@@ -45,7 +45,7 @@ class Markup {
 		$AdCampainMarkupFactory = \_factory\AdCampainMarkup::get_instance();
 		$params = array();
 		$params["AdCampaignID"] = $ad_campaign_id;
-		$ad_campaign_markup = $AdCampainMarkupFactory->get_row($params);
+		$ad_campaign_markup = $AdCampainMarkupFactory->get_row_cached($params);
 
 		return $ad_campaign_markup;
 	}
@@ -55,7 +55,7 @@ class Markup {
 		$PublisherWebsiteMarkupFactory = \_factory\PublisherWebsiteMarkup::get_instance();
 		$params = array();
 		$params["PublisherWebsiteID"] = $publisher_website_id;
-		$publisher_website_markup = $PublisherWebsiteMarkupFactory->get_row($params);
+		$publisher_website_markup = $PublisherWebsiteMarkupFactory->get_row_cached($params);
 		
 		return $publisher_website_markup;
 	}
@@ -66,7 +66,7 @@ class Markup {
 		$UserMarkupDemandFactory = \_factory\UserMarkupDemand::get_instance();
 		$params = array();
 		$params["UserID"] = $user_id;
-		$user_markup = $UserMarkupDemandFactory->get_row($params);
+		$user_markup = $UserMarkupDemandFactory->get_row_cached($params);
 
 		return $user_markup;
 
@@ -77,7 +77,7 @@ class Markup {
 		$PublisherMarkupFactory = \_factory\PublisherMarkup::get_instance();
 		$params = array();
 		$params["PublisherInfoID"] = $publisher_info_id;
-		$user_markup = $PublisherMarkupFactory->get_row($params);
+		$user_markup = $PublisherMarkupFactory->get_row_cached($params);
 	
 		return $user_markup;
 	

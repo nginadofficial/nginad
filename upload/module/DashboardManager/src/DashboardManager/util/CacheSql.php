@@ -26,6 +26,8 @@ class CacheSql {
 	* 2. we create the new file and write to it
 	*/
 
+	private static $null_value = "_NULL";
+	private static $empty_array_value = "_EMPTY_ARRAY";
 	
 	public static function get_cached_read_result_apc($config, $params, $class_name) {
 	
@@ -36,7 +38,8 @@ class CacheSql {
 		$success = false;
 		$data = apc_fetch($key, $success);
 		if ($success == true):
-			return unserialize(apc_fetch($key));
+			$unserialized_data = unserialize($data);
+			return $unserialized_data;
 		endif;
 		
 		return null;
@@ -49,8 +52,13 @@ class CacheSql {
 		$key = serialize($params);
 		$key = md5($key);
 
-		apc_store($key, serialize($data), $ttl);
+		if (is_array($data) && count($data) == 0):
+			$data = self::$empty_array_value;
+		elseif ($data == null):
+			$data = self::$null_value;
+		endif;
 
+		apc_store($key, serialize($data), $ttl);
 		return true;
 	
 	}	
