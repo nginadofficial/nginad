@@ -89,17 +89,20 @@ $(function() {
 	
 		 <div class="control-group">
 	  <label for="enddate" >Customer ID <span class="hlp"><small><i>(Use this field for your own customer reference if any)</i></small></span></label>
-		<input type="text" name="customerid" class="input-medium" value="<?php echo $customerid;?>"> 
+		<input type="text" name="customerid" class="input-small" value="<?php echo $customerid;?>"> 
 		 </div>
 
  <div class="control-group">
 	  <label for="enddate" >Maximum Impressions: <span class="hlp"><small><i>(Maximum campaign impressions before the bids stop)</i></small></span></label>
-		<input type="text" name="maximpressions" value="1000000" class="input-medium" value="<?php echo $maximpressions;?>"> 
+		<input type="text" name="maximpressions" value="1000000" class="input-small" value="<?php echo $maximpressions;?>"> 
  </div>
  
   <div class="control-group">
 	  <label for="enddate" >Maximum Spend: <span class="hlp"><small><i>(Maximum campaign $$$ spent before the bids stop)</i></small></span></label>
-<input type="text" name="maxspend" value="100.00" class="input-medium" value="<?php echo $maxspend;?>"> 
+    <div class="input-prepend">
+	<span class="add-on">$</span>
+    <input type="text" value="<?php echo $maxspend;?>" class="input-mini" maxlength="20" id="maxspend" name="maxspend">    </div>
+    </div>
   </div>
   
     <div class="control-group">

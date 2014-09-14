@@ -93,9 +93,16 @@ class PublisherController extends PublisherAbstractActionController {
 	    	 'user_identity' => $this->identity(),
 	    	 'publisher_markup_rate' => $publisher_markup_rate,
 	    	 'website_markup_rate_list' => isset($website_markup_rate_list) ? $website_markup_rate_list : array(),
-			 'header_title' => '<a href="/publisher/createdomain">Create New Domain</a>',
 	    ));
 
+	    if ($this->is_admin == false
+	    		|| ($this->is_admin == true && $this->PublisherInfoID != null && $this->auth->getEffectiveIdentityID() != 0)):
+	    
+	    	$view->header_title = '<a href="/publisher/createdomain">Create New Domain</a>';
+	    else:
+	    	$view->header_title = '&nbsp;';
+	    endif;
+	    
 	    return $view;
 	    
 	}

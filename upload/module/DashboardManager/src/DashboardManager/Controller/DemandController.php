@@ -124,13 +124,20 @@ class DemandController extends DemandAbstractActionController {
 	    		'dashboard_view' => 'demand',
 	    		'user_identity' => $this->identity(),
 	    		'true_user_name' => $this->auth->getUserName(),
-				'header_title' => '<a href="/demand/createcampaign/">Create Campaign</a>',
 				'is_admin' => $this->is_admin,
 				'effective_id' => $this->auth->getEffectiveIdentityID(),
 				'impersonate_id' => $this->ImpersonateID
 
 	    ));
-	    // $view->setTemplate('dashboard-manager/demand/index.phtml');
+	    
+	    if ($this->is_admin == false 
+	    	|| ($this->is_admin == true && $this->DemandCustomerInfoID != null && $this->auth->getEffectiveIdentityID() != 0)):
+	    	
+	    	$view->header_title = '<a href="/demand/createcampaign/">Create Campaign</a>';
+	    else:
+	   		$view->header_title = '&nbsp;';
+	    endif;
+
 	    return $view;
 	}
 
@@ -2494,7 +2501,7 @@ class DemandController extends DemandAbstractActionController {
 
 		$AdCampaign = $AdCampaignFactory->get_row($params);
 
-		return array("BCAdCampaign"=>$AdCampaign->Name);
+		return array("BCAdCampaign"=>'<a href="/demand/viewbanner/' . $AdCampaign->AdCampaignID . '">' . $AdCampaign->Name . "</a>");
 
 	}
 
@@ -2511,7 +2518,7 @@ class DemandController extends DemandAbstractActionController {
 
 		$AdCampaignPreview = $AdCampaignPreviewFactory->get_row($params);
 
-		return array("BCAdCampaign"=>$AdCampaignPreview->Name);
+		return array("BCAdCampaign"=>'<a href="/demand/viewbanner/' . $AdCampaignPreview->AdCampaignPreviewID . '?ispreview=true">' . $AdCampaignPreview->Name . "</a>");
 
 	}
 

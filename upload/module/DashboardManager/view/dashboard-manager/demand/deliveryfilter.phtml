@@ -1,4 +1,7 @@
 <?php
+
+$this->headScript()->appendFile($this->basePath() . '/js/filter.js');
+
 $preview_query = $ispreview == true ? "?ispreview=true" : "";
 if ($ispreview == true):
 	$rtb_banner_id = $bannerpreviewid;
@@ -77,19 +80,19 @@ var currentStates = "<?php echo $current_states; ?>";
 	</div>
 	<div class="control-group">
 		<label for="adpositionminleft">Ad Position Min Left : <span class="hlp"><small><i>(eg. 100 [in px])</i></small></span></label>
-		<input type="text" name="adpositionminleft" value="<?php echo $adpositionminleft_option;?>" class="zone-txtbox">
+		<input type="text" name="adpositionminleft" value="<?php echo $adpositionminleft_option;?>" class="input-mini">
 	</div>
 	<div class="control-group">
 		<label for="adpositionmaxleft">Ad Position Max Left : <span class="hlp"><small><i>(eg. 100 [in px])</i></small></span></label>
-		<input type="text" name="adpositionmaxleft" value="<?php echo $adpositionmaxleft_option;?>" class="zone-txtbox">
+		<input type="text" name="adpositionmaxleft" value="<?php echo $adpositionmaxleft_option;?>" class="input-mini">
 	</div>
 	<div class="control-group">
 		<label for="adpositionmintop">Ad Position Min Top : <span class="hlp"><small><i>(eg. 100 [in px])</i></small></span></label>
-		<input type="text" name="adpositionmintop" value="<?php echo $adpositionmintop_option;?>" class="zone-txtbox">
+		<input type="text" name="adpositionmintop" value="<?php echo $adpositionmintop_option;?>" class="input-mini">
 	</div>
 	<div class="control-group">
 		<label for="adpositionmaxtop">Ad Position Max Top : <span class="hlp"><small><i>(eg. 100 [in px])</i></small></span></label>
-		<input type="text" name="adpositionmaxtop" value="<?php echo $adpositionmaxtop_option;?>" class="zone-txtbox">
+		<input type="text" name="adpositionmaxtop" value="<?php echo $adpositionmaxtop_option;?>" class="input-mini">
 	</div>
 	<div class="control-group">
 		<label for="foldpos">Fold Position</label>
@@ -106,7 +109,7 @@ var currentStates = "<?php echo $current_states; ?>";
 	</div>
 <div class="control-group">
 		<label for="frequency">Frequency in last 24 hours</label>
-		<input type="text" name="frequency" value="<?php echo $frequency_option;?>" class="zone-txtbox">
+		<input type="text" name="frequency" value="<?php echo $frequency_option;?>" class="input-mini">
 	</div>
 	</div>
 	<div class="span7">
@@ -150,23 +153,23 @@ var currentStates = "<?php echo $current_states; ?>";
 	</div>
 <div class="control-group">
 		<label for="minscreenresolutionwidth">Min Screen Resolution Width : <span class="hlp"><small><i>(eg. 500 [in px])</i></small></span></label>
-		<input type="text" name="minscreenresolutionwidth" value="<?php echo $minscreenresolutionwidth_option;?>" class="zone-txtbox">
+		<input type="text" name="minscreenresolutionwidth" value="<?php echo $minscreenresolutionwidth_option;?>" class="input-mini">
 	</div>
 <div class="control-group">
 		<label for="maxscreenresolutionwidth">Max Screen Resolution Width : <span class="hlp"><small><i>(eg. 1400 [in px])</i></small></span></label>
-		<input type="text" name="maxscreenresolutionwidth" value="<?php echo $maxscreenresolutionwidth_option;?>" class="zone-txtbox">
+		<input type="text" name="maxscreenresolutionwidth" value="<?php echo $maxscreenresolutionwidth_option;?>" class="input-mini">
 	</div>
 <div class="control-group">
 		<label for="minscreenresolutionheight">Min Screen Resolution Height : <span class="hlp"><small><i>(eg. 300 [in px])</i></small></span></label>
-		<input type="text" name="minscreenresolutionheight" value="<?php echo $minscreenresolutionheight_option;?>" class="zone-txtbox">
+		<input type="text" name="minscreenresolutionheight" value="<?php echo $minscreenresolutionheight_option;?>" class="input-mini">
 	</div>
 <div class="control-group">
 		<label for="maxscreenresolutionheight">Max Screen Resolution Height : <span class="hlp"><small><i>(eg. 1200 [in px])</i></small></span></label>
-		<input type="text" name="maxscreenresolutionheight" value="<?php echo $maxscreenresolutionheight_option;?>" class="zone-txtbox">
+		<input type="text" name="maxscreenresolutionheight" value="<?php echo $maxscreenresolutionheight_option;?>" class="input-mini">
 	</div>
 	<div class="control-group">
 		<label for="httplanguage">Http Language : <span class="hlp"><small><i>( Example: en-us,en;q=0.5 )</i></small></span></label>
-		<input type="text" name="httplanguage" value="<?php echo $httplanguage_option;?>" class="zone-txtbox">
+		<input type="text" name="httplanguage" value="<?php echo $httplanguage_option;?>" class="input-medium">
 	</div>
 
 <div class="control-group">

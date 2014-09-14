@@ -6,7 +6,7 @@ $this->headScript()->captureStart() ?>
 <?php $this->headScript()->captureEnd();  ?>
    <ul class="breadcrumb breadcrumb-heading">
     <li><a href="/publisher/">Domains</a><span class="divider">/</span></li>
-    <li><?php echo $domain_obj->WebDomain;?> <span class="divider">/</span></li>
+    <li><a href="/publisher/zone/<?php echo $domain_obj->PublisherWebsiteID;?>"><?php echo $domain_obj->WebDomain;?></a><span class="divider">/</span></li>
     <li><a href="/publisher/zone/<?php echo $domain_obj->PublisherWebsiteID;?>">Zones</a><span class="divider">/</span></li>
     <li><?php echo $editResultObj->AdName;?><span class="divider">/</span></li>
     <li>Edit Zone</li>

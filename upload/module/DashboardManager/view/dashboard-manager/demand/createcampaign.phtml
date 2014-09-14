@@ -78,15 +78,18 @@ margin-left: 253px;
 	</div>
 	  <div class="control-group">
 		<label for="customerid">Customer ID <nobr><span class="hlp"><small><i>(Use this field for your own customer reference if any)</i></small></span></nobr></label>
-		<input type="text" class="input-medium" name="customerid" class="input-mini">
+		<input type="text" name="customerid" class="input-small">
 	</div>
   <div class="control-group">
 		<label for="maximpressions">Maximum Impressions: <nobr><span class="hlp"><small><i>(Maximum campaign impressions before the bids stop)</i></small></span></nobr></label>
-		<input type="text" name="maximpressions" value="1000000"  class="input-medium">
+		<input type="text" name="maximpressions" value="1000000"  class="input-small">
 	</div>
   <div class="control-group">
 		<label for="maxspend">Maximum Spend: <nobr><span class="hlp"><small><i>(Maximum campaign $$$ spent before the bids stop)</i></small></span></nobr></label>
-		<input type="text" name="maxspend" value="100.00" class="input-medium">
+	    <div class="input-prepend">
+		<span class="add-on">$</span>
+	    <input type="text" value="100.00" class="input-mini" maxlength="20" id="maxspend" name="maxspend">    </div>
+	    </div>
 	</div>
 	  <div class="control-group">
 	   <input type="submit" class="btn btn-primary" name="B1" value="Create New Campaign" />
