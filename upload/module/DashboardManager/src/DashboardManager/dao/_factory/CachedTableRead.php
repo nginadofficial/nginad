@@ -127,7 +127,9 @@ abstract class CachedTableRead extends AbstractTableGateway
         foreach ($records as $obj):
             $row = array();
             foreach ($headers as $key => $val) {
-                $row[$key] = $obj[$key];
+                if (isset($obj[$key])):
+            		$row[$key] = $obj[$key];
+                endif;
             }
 //            $obj = array_intersect_ukey($obj, $this->getPerTimeHeader($is_admin), function ($key1, $key2) { return (int)!($key1 == $key2);});
             if (!empty($row['MDYH']))

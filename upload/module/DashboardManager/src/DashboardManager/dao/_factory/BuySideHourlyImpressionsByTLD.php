@@ -124,18 +124,47 @@ class BuySideHourlyImpressionsByTLD extends \_factory\CachedTableRead {
         );
     }
 
-    public function getUserTLDStatistic($is_admin = false) {
+    public function getUserTLDStatistic(){
 
-        $sql = new Sql($this->adapter);
-        $select = $sql->select();
-        $select->from('userTLDStatistic');
+        $obj_list = array();
 
-        $statement = $sql->prepareStatementForSqlObject($select);
-        $results = $statement->execute();
-        $headers = $this->getUserTLDStatisticHeader($is_admin);
-        return $this->prepareList($results, $headers);
+        $resultSet = $this->select(function (\Zend\Db\Sql\Select $select) {
+                
+                
+                $select->columns(array('PublisherTLD', 'total_impressions' => new \Zend\Db\Sql\Expression('SUM(' . $this->table  . '.impressions)')));
+                
+                $select->join(
+                     'AdCampaignBanner',
+                     $this->table . '.AdCampaignBannerID = AdCampaignBanner.AdCampaignBannerID',
+                     array()
+                );
+
+                $select->join(
+                     'AdCampaign',
+                     'AdCampaignBanner.AdCampaignID = AdCampaign.AdCampaignID',
+                     array('Name')
+                );
+
+                $select->join(
+                     'auth_Users',
+                     'auth_Users.user_id = AdCampaignBanner.UserID',
+                     array('user_login')
+                );
+
+                $select->group('AdCampaignBanner.UserID');
+                $select->group('PublisherTLD');
+                $select->order('PublisherTLD');
+
+            }
+        );
+
+        foreach ($resultSet as $obj):
+            $obj_list[] = $obj;
+        endforeach;
+
+        return $obj_list;
+        
     }
-    
     
     public function getUserTLDStatisticHeader($is_admin = false) {
 

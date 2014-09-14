@@ -44,7 +44,9 @@
             </tr>
         </thead>
         <tbody>
-<?php foreach ($impressions as $one): ?>
+<?php foreach ($impressions as $one): 
+			if (is_object($one)):
+?>
                 <tr>
                     <td><?php echo $one->MDYH; ?></td>
                     <td><?php echo $one->Impressions; ?></td>
@@ -53,7 +55,8 @@
                     <td><?php echo $one->DateUpdated; ?></td>
                     <td><?php echo $one->AdName; ?></td>
                 </tr>
-<?php endforeach; ?>
+<?php	endif;
+	 endforeach; ?>
         </tbody>
     </table>
 

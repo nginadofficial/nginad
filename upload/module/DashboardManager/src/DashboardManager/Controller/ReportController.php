@@ -31,9 +31,9 @@ class ReportController extends PublisherAbstractActionController {
             $user_role = 1;
         } elseif ($this->PublisherInfoID != null) {
             $user_role = 2;
-            return $this->redirect()->toUrl('outgoingBids');
         } elseif ($this->DemandCustomerInfoID != null) {
             $user_role = 3;
+            return $this->redirect()->toUrl('report/spend');
         }
 
 
@@ -84,9 +84,10 @@ class ReportController extends PublisherAbstractActionController {
             $user_role = 1;
         } elseif ($this->PublisherInfoID != null) {
             $user_role = 2;
-            return $this->redirect()->toUrl('outgoingBids');
+            return $this->redirect()->toUrl('/report/');
         } elseif ($this->DemandCustomerInfoID != null) {
             $user_role = 3;
+            return $this->redirect()->toUrl('/report/spend');
         }
 
         $view = new ViewModel();
@@ -132,9 +133,10 @@ class ReportController extends PublisherAbstractActionController {
             $user_role = 1;
         } elseif ($this->PublisherInfoID != null) {
             $user_role = 2;
+            return $this->redirect()->toUrl('/report/');
         } elseif ($this->DemandCustomerInfoID != null) {
             $user_role = 3;
-            return $this->redirect()->toUrl('incomingBids');
+            return $this->redirect()->toUrl('/report/spend');
         }
 
 
@@ -226,7 +228,7 @@ class ReportController extends PublisherAbstractActionController {
             $user_role = 1;
         } elseif ($this->PublisherInfoID != null) {
             $user_role = 2;
-            return $this->redirect()->toUrl('outgoingBids');
+            return $this->redirect()->toUrl('report/');
         } elseif ($this->DemandCustomerInfoID != null) {
             $user_role = 3;
         }

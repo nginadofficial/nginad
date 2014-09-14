@@ -50,20 +50,24 @@
         </thead>
         <tbody>
 <?php foreach ($outgoing_bids as $one): ?>
-                <tr>
-                    <?php foreach ($one as $two): ?>
-                        <td><?php echo $two;?></td>
-                    <?php endforeach;?>
-<!--                    <td><?php // echo $one->SellSidePartnerID; ?></td>
-                    <td><?php // echo $one->MDYH; ?></td>
-                    <td><?php // echo $one->BidsWonCounter; ?></td>
-                    <td><?php // echo $one->BidsLostCounter; ?></td>
-                    <td><?php // echo $one->BidsErrorCounter; ?></td>
-                    <td><?php // echo $one->SpendTotalNet; ?></td>
-                    <td><?php // echo $one->DateCreated; ?></td>
-                    <td><?php // echo $one->DateUpdated; ?></td>
-                    <td><?php // echo $one->AdName; ?></td>-->
-                </tr>
+                
+                    <?php 
+                    if (is_array($one)):
+                    foreach ($one as $two): ?>
+                    <tr>
+	                    <td><?php echo $two->SellSidePartnerID; ?></td>
+	                    <td><?php echo $two->MDYH; ?></td>
+	                    <td><?php echo $two->BidsWonCounter; ?></td>
+	                    <td><?php echo $two->BidsLostCounter; ?></td>
+	                    <td><?php echo $two->BidsErrorCounter; ?></td>
+	                    <td><?php echo $two->SpendTotalNet; ?></td>
+	                    <td><?php echo $two->DateCreated; ?></td>
+	                    <td><?php echo $two->DateUpdated; ?></td>
+	                    <td><?php echo $two->AdName; ?></td>
+                    </tr>
+                    <?php endforeach;
+                    endif; ?>
+                
 <?php endforeach; ?>
         </tbody>
     </table>
