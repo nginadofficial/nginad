@@ -12,6 +12,14 @@ $home_dashboard_view = "demand";
 if ($child != null && isset($child->dashboard_view)):
 	$home_dashboard_view = $child->dashboard_view;
 endif;
+
+$home_link = $home_dashboard_view;
+if ($home_link == "account"):
+	$home_link = "users/" . $home_dashboard_view;
+elseif ($home_link == "login"):
+	$home_link = "auth/login";
+endif;
+
 if ($child != null && isset($child->center_class)):
 	$extra_main_content_class = " " . $child->center_class;
 endif;
@@ -59,7 +67,7 @@ echo $this->doctype(); ?>
             <div class="compLayout-top">
                 <div class="container" style="position: relative;">
 
-                    <a class="brand" href="/<?php echo $home_dashboard_view == "account" ? "users/" : ""; ?><?php echo $home_dashboard_view; ?>">
+                    <a class="brand" href="/<?php echo $home_link; ?>">
 					<img src="/images/nginad_logo.png" class="logo-img" />
                      <em>Real Time Bidding Dashboard</em>
                     </a>
