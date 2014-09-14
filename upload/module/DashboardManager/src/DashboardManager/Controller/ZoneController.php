@@ -193,8 +193,6 @@ class ZoneController extends PublisherAbstractActionController {
         $needed_input = array(
 				'AdName',
 				'Description',
-				'PassbackAdTag',
-				'FloorPrice',
 				'Width',
 				'Height'
 		);
@@ -214,15 +212,29 @@ class ZoneController extends PublisherAbstractActionController {
             
                 $PublisherAdZoneFactory = \_factory\PublisherAdZone::get_instance();
                 
-                $ad->AdName = $request->getPost("AdName");
-				$ad->Description = $request->getPost("Description");
-				$ad->PassbackAdTag = $request->getPost("PassbackAdTag");
-				$ad->FloorPrice = $request->getPost("FloorPrice");
-				$ad->AdTemplateID = $request->getPost("AdTemplateID");
-				$ad->IsMobileFlag = $request->getPost("IsMobileFlag");
-				$ad->Width = $request->getPost("Width");
-				$ad->Height = $request->getPost("Height");
-                
+                $ad->AdName					= $request->getPost("AdName");
+				$ad->Description	 		= $request->getPost("Description");
+				$ad->PassbackAdTag 			= $request->getPost("PassbackAdTag");
+				$floor_price 				= $request->getPost("FloorPrice") == null ? 0 : $request->getPost("FloorPrice");
+				$ad->FloorPrice 			= floatval($floor_price);
+				$ad->AdTemplateID 			= $request->getPost("AdTemplateID");
+				$ad->IsMobileFlag 			= $request->getPost("IsMobileFlag");
+				$ad->Width 					= $request->getPost("Width");
+				$ad->Height 				= $request->getPost("Height");
+				$ad->AdOwnerID				= $this->PublisherInfoID;
+				
+				$publisher_ad_zone_type_id = AD_TYPE_ANY_REMNANT;
+				$linkedbanners = array();
+				
+				// only the admin can create direct contracts between publishers and demand customers
+				if ($this->is_admin):
+					$publisher_ad_zone_type_id = $request->getPost("PublisherAdZoneTypeID");
+					$linkedbanners = $this->getRequest()->getPost('linkedbanners');
+					$ad->AdStatus 			   = 1;
+				endif;
+				
+				$ad->PublisherAdZoneTypeID	= $publisher_ad_zone_type_id;
+				
                 // Check to see if an entry exists with the same name for the same website domain. A NULL means there are no duplicates.
                 if ($PublisherAdZoneFactory->get_row(array("PublisherWebsiteID" => $DomainObj->PublisherWebsiteID, "AdName" => $ad->AdName)) === null):
                 
@@ -237,8 +249,43 @@ class ZoneController extends PublisherAbstractActionController {
                     
                     
                     try {
-                    $PublisherAdZoneFactory->save_ads($ad);
-                    return $this->redirect()->toRoute('publisher/zone',array('param1' => $DomainObj->PublisherWebsiteID));
+	                    $publisher_ad_zone_id = $PublisherAdZoneFactory->save_ads($ad);
+	                    
+	                    // only the admin can create direct contracts between publishers and demand customers
+	                    if ($this->is_admin):
+	                    
+	                    	$AdCampaignBannerFactory = \_factory\AdCampaignBanner::get_instance();
+		                    $LinkedBannerToAdZoneFactory = \_factory\LinkedBannerToAdZone::get_instance();
+		                    
+		                    // campaigntype AD_TYPE_CONTRACT case
+		                    if ($publisher_ad_zone_type_id == AD_TYPE_CONTRACT && $linkedbanners != null && count($linkedbanners) > 0):
+		                    
+			                    foreach($linkedbanners as $linked_banner_id):
+			                    
+			                    	$params = array();
+			                    	$params["AdCampaignBannerID"] = $linked_banner_id;
+			                    	$LinkedAdCampaignBanner = $AdCampaignBannerFactory->get_row($params);
+			                    
+			                    	if ($LinkedAdCampaignBanner == null):
+			                    		continue;
+			                    	endif;
+			                    	 
+			                    	$LinkedBannerToAdZone = new \model\LinkedBannerToAdZone();
+			                    	$LinkedBannerToAdZone->AdCampaignBannerID 			= intval($linked_banner_id);
+			                    	$LinkedBannerToAdZone->PublisherAdZoneID			= $publisher_ad_zone_id;
+			                    	$LinkedBannerToAdZone->Weight						= intval($LinkedAdCampaignBanner->Weight);
+			                    	$LinkedBannerToAdZone->DateCreated					= date("Y-m-d H:i:s");
+			                    	$LinkedBannerToAdZone->DateUpdated					= date("Y-m-d H:i:s");
+			                    	$LinkedBannerToAdZoneFactory->saveLinkedBannerToAdZone($LinkedBannerToAdZone);
+			                    
+			                    	$AdCampaignBannerFactory->updateAdCampaignBannerAdCampaignType($LinkedAdCampaignBanner->AdCampaignBannerID, AD_TYPE_CONTRACT);
+			                    
+			                    endforeach;
+		                    
+		                    endif;
+						endif;
+	                    
+	                    return $this->redirect()->toRoute('publisher/zone',array('param1' => $DomainObj->PublisherWebsiteID));
                     }
                     catch(\Zend\Db\Adapter\Exception\InvalidQueryException $e) {
                         $error_message ="ERROR " . $e->getCode().  ": A database error has occurred, please contact customer service.";
@@ -292,7 +339,7 @@ class ZoneController extends PublisherAbstractActionController {
         $AdCampaignBannerFactory = \_factory\AdCampaignBanner::get_instance();
 		
         $current_publisheradzonetype = AD_TYPE_ANY_REMNANT;
-        
+
         $editResultObj = new \model\PublisherAdZone();
         
         $DomainObj = $this->get_domain_data($DomainID, $this->PublisherInfoID);
@@ -308,16 +355,14 @@ class ZoneController extends PublisherAbstractActionController {
         else:
         
             $needed_input = array(
-            	'PublisherAdZoneTypeID',
 				'AdName',
 				'Description',
-				'PassbackAdTag',
-				'FloorPrice',
 				'Width',
 				'Height'
 			);
 		
             $publisher_ad_zone_type_id = AD_TYPE_ANY_REMNANT;
+            $linkedbanners = array();
             
             $AdTemplateList = $this->get_ad_templates();
             $request = $this->getRequest();
@@ -339,21 +384,24 @@ class ZoneController extends PublisherAbstractActionController {
                     	$validate = $this->validateInput($needed_input, false);
             
             			if ($validate):
-            			
-            				$publisher_ad_zone_type_id 				= $request->getPost("PublisherAdZoneTypeID");
+            				
+            				// only the admin can change the ad zone type
+            				if ($this->is_admin):
+	            				$publisher_ad_zone_type_id 				= $request->getPost("PublisherAdZoneTypeID");
+	            				$linkedbanners 							= $request->getPost('linkedbanners');
+	            				$editResultObj->PublisherAdZoneTypeID	= $publisher_ad_zone_type_id;
+							endif;            			
 
-            				$editResultObj->PublisherAdZoneTypeID	= $publisher_ad_zone_type_id;
 	                    	$editResultObj->AdName 					= $request->getPost("AdName");
 							$editResultObj->Description 			= $request->getPost("Description");
 							$editResultObj->PassbackAdTag 			= $request->getPost("PassbackAdTag");
-							$editResultObj->FloorPrice 				= $request->getPost("FloorPrice");
+							$floor_price 							= $request->getPost("FloorPrice") == null ? 0 : $request->getPost("FloorPrice");
+							$editResultObj->FloorPrice 						= floatval($floor_price);
 							$editResultObj->AdTemplateID 			= $request->getPost("AdTemplateID");
 							$editResultObj->IsMobileFlag 			= $request->getPost("IsMobileFlag");
 							$editResultObj->Width 					= $request->getPost("Width");
 							$editResultObj->Height 					= $request->getPost("Height");
-                    	
-							$linkedbanners 							= $this->getRequest()->getPost('linkedbanners');
-							
+
 							$auto_approve_zones = $this->config_handle['settings']['publisher']['auto_approve_zones'];
 							$editResultObj->AutoApprove = ($auto_approve_zones == true) ? 1 : 0;
 							
@@ -376,34 +424,36 @@ class ZoneController extends PublisherAbstractActionController {
                 			try {
                 				$PublisherAdZoneFactory->save_ads($editResultObj);
                 				
-                				$LinkedBannerToAdZoneFactory = \_factory\LinkedBannerToAdZone::get_instance();
-                				$LinkedBannerToAdZoneFactory->deleteLinkedBannerToAdZoneByPublisherAdZoneID($editResultObj->PublisherAdZoneID);
-
-                				// campaigntype AD_TYPE_CONTRACT case
-                				if ($publisher_ad_zone_type_id == AD_TYPE_CONTRACT && $linkedbanners != null && count($linkedbanners) > 0):
-                				
-	                				foreach($linkedbanners as $linked_banner_id):
-	                					
-	                					$params = array();
-	                					$params["AdCampaignBannerID"] = $linked_banner_id;
-	                					$LinkedAdCampaignBanner = $AdCampaignBannerFactory->get_row($params);
-	                					
-	                					if ($LinkedAdCampaignBanner == null):
-	                						continue;
-	                					endif;
+                				if ($this->is_admin):
+	                				$LinkedBannerToAdZoneFactory = \_factory\LinkedBannerToAdZone::get_instance();
+	                				$LinkedBannerToAdZoneFactory->deleteLinkedBannerToAdZoneByPublisherAdZoneID($editResultObj->PublisherAdZoneID);
+	
+	                				// campaigntype AD_TYPE_CONTRACT case
+	                				if ($publisher_ad_zone_type_id == AD_TYPE_CONTRACT && $linkedbanners != null && count($linkedbanners) > 0):
 	                				
-		                				$LinkedBannerToAdZone = new \model\LinkedBannerToAdZone();
-		                				$LinkedBannerToAdZone->AdCampaignBannerID 			= intval($linked_banner_id);
-		                				$LinkedBannerToAdZone->PublisherAdZoneID			= $editResultObj->PublisherAdZoneID;
-		                				$LinkedBannerToAdZone->Weight						= intval($LinkedAdCampaignBanner->Weight);
-		                				$LinkedBannerToAdZone->DateCreated					= date("Y-m-d H:i:s");
-		                				$LinkedBannerToAdZone->DateUpdated					= date("Y-m-d H:i:s");
-		                				$LinkedBannerToAdZoneFactory->saveLinkedBannerToAdZone($LinkedBannerToAdZone);
+		                				foreach($linkedbanners as $linked_banner_id):
+		                					
+		                					$params = array();
+		                					$params["AdCampaignBannerID"] = $linked_banner_id;
+		                					$LinkedAdCampaignBanner = $AdCampaignBannerFactory->get_row($params);
+		                					
+		                					if ($LinkedAdCampaignBanner == null):
+		                						continue;
+		                					endif;
 		                				
-		                				$AdCampaignBannerFactory->updateAdCampaignBannerAdCampaignType($LinkedAdCampaignBanner->AdCampaignBannerID, AD_TYPE_CONTRACT);
-		                				
-	                				endforeach;
-                				
+			                				$LinkedBannerToAdZone = new \model\LinkedBannerToAdZone();
+			                				$LinkedBannerToAdZone->AdCampaignBannerID 			= intval($linked_banner_id);
+			                				$LinkedBannerToAdZone->PublisherAdZoneID			= $editResultObj->PublisherAdZoneID;
+			                				$LinkedBannerToAdZone->Weight						= intval($LinkedAdCampaignBanner->Weight);
+			                				$LinkedBannerToAdZone->DateCreated					= date("Y-m-d H:i:s");
+			                				$LinkedBannerToAdZone->DateUpdated					= date("Y-m-d H:i:s");
+			                				$LinkedBannerToAdZoneFactory->saveLinkedBannerToAdZone($LinkedBannerToAdZone);
+			                				
+			                				$AdCampaignBannerFactory->updateAdCampaignBannerAdCampaignType($LinkedAdCampaignBanner->AdCampaignBannerID, AD_TYPE_CONTRACT);
+			                				
+		                				endforeach;
+	                				
+	                				endif;
                 				endif;
                 				
                 				return $this->redirect()->toRoute('publisher/zone',array('param1' => $DomainObj->PublisherWebsiteID));
@@ -701,9 +751,25 @@ class ZoneController extends PublisherAbstractActionController {
      	$height 	= $this->getRequest()->getQuery('height');
      	$width 		= $this->getRequest()->getQuery('width');
      
-     	if ($height == null || $width == null):
-     		die("Invalid Request");
-     	endif;
+		if ($height == null || $width == null):
+			$data = array(
+					'success' => false,
+					'linked_ad_zones' => "", 
+					'complete_zone_list' => array()
+			);
+			return $this->getResponse()->setContent(json_encode($data));
+		endif;
+	
+		$this->initialize();
+		
+		if (!$this->is_admin):
+			$data = array(
+					'success' => false,
+					'linked_ad_zones' => "", 
+					'complete_zone_list' => array()
+			);
+			return $this->getResponse()->setContent(json_encode($data));
+		endif;
 
      	// verify
      	$linked_ad_banners = array();
@@ -737,7 +803,7 @@ class ZoneController extends PublisherAbstractActionController {
      	$params["Height"] 	= $height;
      	$params["Width"] 	= $width;
      	$params["Active"] 	= 1;
-     	$params["UserID"] 	= $this->EffectiveID;
+     	// $params["UserID"] 	= $this->EffectiveID;
      
      	$AdCampaignBannerFactory = \_factory\AdCampaignBanner::get_instance();
      	$AdCampaignBannerList = $AdCampaignBannerFactory->get($params);

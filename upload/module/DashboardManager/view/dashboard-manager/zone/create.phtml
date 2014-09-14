@@ -44,6 +44,7 @@ $this->headScript()->captureStart() ?>
     <input type="text" value="" class="input-mini" maxlength="20" id="FloorPrice" name="FloorPrice"></div>
     </div>
     </div>
+    <?php if ($is_admin): ?>
 	<div class="form-group">
 		<label for="PublisherAdZoneTypeID" class="control-label">Zone type?</label>
 		<div class="controls">
@@ -55,6 +56,7 @@ $this->headScript()->captureStart() ?>
         <div id="banner-picker"></div>
 		</div>
 	</div>
+	<?php endif; ?>
     <div class="control-group">
      <label for="IsMobileFlag" class="control-label">Is Mobile?</label>
     <div class="controls">

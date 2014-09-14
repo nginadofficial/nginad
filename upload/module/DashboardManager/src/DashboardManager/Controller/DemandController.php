@@ -1731,14 +1731,15 @@ class DemandController extends DemandAbstractActionController {
 
 		$this->validateInput($needed_input);
 
+		$adcampaigntype 		= AD_TYPE_ANY_REMNANT;
+		$linkedzones 			= array();
+		
 		$campaignid 			= $this->getRequest()->getPost('campaignid');
 		$campaign_preview_id 	= $this->getRequest()->getPost('campaignpreviewid');
 		$bannerid 				= $this->getRequest()->getPost('bannerid');
 		$banner_preview_id 		= $this->getRequest()->getPost('bannerpreviewid');
 		$ispreview 				= $this->getRequest()->getPost('ispreview');
 
-		$linkedzones 			= $this->getRequest()->getPost('linkedzones');
-		
 		if ($ispreview != true):
 			/*
 			 * THIS METHOD CHECKS IF THERE IS AN EXISTING PREVIEW MODE CAMPAIGN
@@ -1770,7 +1771,10 @@ class DemandController extends DemandAbstractActionController {
 		$bannername = $this->getRequest()->getPost('bannername');
 		$startdate = $this->getRequest()->getPost('startdate');
 		$enddate = $this->getRequest()->getPost('enddate');
-		$adcampaigntype = $this->getRequest()->getPost('adcampaigntype');
+		if ($this->is_admin):
+			$adcampaigntype 		= $this->getRequest()->getPost('adcampaigntype');
+			$linkedzones 			= $this->getRequest()->getPost('linkedzones');
+		endif;
 		$ismobile = $this->getRequest()->getPost('ismobile');
 		$iabsize = $this->getRequest()->getPost('iabsize');
 		$height = $this->getRequest()->getPost('height');
@@ -1792,12 +1796,14 @@ class DemandController extends DemandAbstractActionController {
 		$BannerPreview->AdCampaignPreviewID       = $campaign_preview_id;
 		$BannerPreview->StartDate                 = date("Y-m-d H:i:s", strtotime($startdate));
 		$BannerPreview->EndDate                   = date("Y-m-d H:i:s", strtotime($enddate));
-		$BannerPreview->AdCampaignTypeID          = $adcampaigntype;
+		if ($this->is_admin || $banner_preview_id == null):
+			$BannerPreview->AdCampaignTypeID      = $adcampaigntype;
+		endif;
 		$BannerPreview->IsMobile                  = $ismobile;
 		$BannerPreview->IABSize                   = $iabsize;
 		$BannerPreview->Height                    = $height;
 		$BannerPreview->Width                     = $width;
-		$BannerPreview->Weight          		  = $weight;
+		$BannerPreview->Weight          		  = $weight == null ? 5 : $weight;
 		$BannerPreview->BidAmount                 = $bidamount;
 		$BannerPreview->AdTag                     = $adtag;
 		$BannerPreview->DeliveryType              = 'js';
@@ -1811,25 +1817,33 @@ class DemandController extends DemandAbstractActionController {
 		$BannerPreview->ChangeWentLive       	  = 0;
 
 		$AdCampaignBannerPreviewFactory = \_factory\AdCampaignBannerPreview::get_instance();
-		$AdCampaignBannerPreviewFactory->saveAdCampaignBannerPreview($BannerPreview);
+		$banner_preview_id = $AdCampaignBannerPreviewFactory->saveAdCampaignBannerPreview($BannerPreview);
 
-		$LinkedBannerToAdZonePreviewFactory = \_factory\LinkedBannerToAdZonePreview::get_instance();
-		$LinkedBannerToAdZonePreviewFactory->deleteLinkedBannerToAdZonePreview($BannerPreview->AdCampaignBannerPreviewID);
+		if ($BannerPreview->AdCampaignBannerPreviewID == null):
+			$BannerPreview->AdCampaignBannerPreviewID = $banner_preview_id;
+		endif;
 		
-		// campaigntype AD_TYPE_CONTRACT case
-		if ($adcampaigntype == AD_TYPE_CONTRACT && $linkedzones != null && count($linkedzones) > 0):
+		if ($this->is_admin):
 		
-			foreach($linkedzones as $linked_zone_id):
-				
-				$LinkedBannerToAdZonePreview = new \model\LinkedBannerToAdZonePreview();
-				$LinkedBannerToAdZonePreview->AdCampaignBannerPreviewID = $BannerPreview->AdCampaignBannerPreviewID;
-				$LinkedBannerToAdZonePreview->PublisherAdZoneID			= intval($linked_zone_id);
-				$LinkedBannerToAdZonePreview->Weight					= intval($weight);
-				$LinkedBannerToAdZonePreview->DateCreated				= date("Y-m-d H:i:s");
-				$LinkedBannerToAdZonePreview->DateUpdated				= date("Y-m-d H:i:s");
-				$LinkedBannerToAdZonePreviewFactory->saveLinkedBannerToAdZonePreview($LinkedBannerToAdZonePreview);
-			endforeach;
-		
+			$LinkedBannerToAdZonePreviewFactory = \_factory\LinkedBannerToAdZonePreview::get_instance();
+			$LinkedBannerToAdZonePreviewFactory->deleteLinkedBannerToAdZonePreview($BannerPreview->AdCampaignBannerPreviewID);
+			
+			// campaigntype AD_TYPE_CONTRACT case
+			if ($adcampaigntype == AD_TYPE_CONTRACT && $linkedzones != null && count($linkedzones) > 0):
+			
+				foreach($linkedzones as $linked_zone_id):
+					
+					$LinkedBannerToAdZonePreview = new \model\LinkedBannerToAdZonePreview();
+					$LinkedBannerToAdZonePreview->AdCampaignBannerPreviewID = $BannerPreview->AdCampaignBannerPreviewID;
+					$LinkedBannerToAdZonePreview->PublisherAdZoneID			= intval($linked_zone_id);
+					$LinkedBannerToAdZonePreview->Weight					= intval($weight);
+					$LinkedBannerToAdZonePreview->DateCreated				= date("Y-m-d H:i:s");
+					$LinkedBannerToAdZonePreview->DateUpdated				= date("Y-m-d H:i:s");
+					$LinkedBannerToAdZonePreviewFactory->saveLinkedBannerToAdZonePreview($LinkedBannerToAdZonePreview);
+				endforeach;
+			
+			endif;
+			
 		endif;
 
 		$refresh_url = "/demand/viewbanner/" . $BannerPreview->AdCampaignPreviewID . "?ispreview=true";
@@ -1953,16 +1967,33 @@ class DemandController extends DemandAbstractActionController {
 	 */
 	public function editlinkedzoneAction() {
 	
+		
+		
+		
 		$id 		= $this->getEvent()->getRouteMatch()->getParam('param1');
 		$height 	= $this->getRequest()->getQuery('height');
 		$width 		= $this->getRequest()->getQuery('width');
 		$is_preview = $this->getRequest()->getQuery('is_preview');
 				
 		if ($height == null || $width == null):
-			die("Invalid Request");
+			$data = array(
+					'success' => false,
+					'linked_ad_zones' => "", 
+					'complete_zone_list' => array()
+			);
+			return $this->getResponse()->setContent(json_encode($data));
 		endif;
 	
 		$this->initialize();
+		
+		if (!$this->is_admin):
+			$data = array(
+					'success' => false,
+					'linked_ad_zones' => "", 
+					'complete_zone_list' => array()
+			);
+			return $this->getResponse()->setContent(json_encode($data));
+		endif;
 
 		// verify
 		if ($is_preview == "true"):
@@ -2015,7 +2046,7 @@ class DemandController extends DemandAbstractActionController {
 		$params = array();
 		$params["Height"] = $height;
 		$params["Width"] = $width;
-		$params["AdOwnerID"] = \transformation\UserToPublisher::user_id_to_publisher_info_id($this->auth->getEffectiveUserID());
+		// $params["AdOwnerID"] = \transformation\UserToPublisher::user_id_to_publisher_info_id($this->auth->getEffectiveUserID());
 		
 		$PublisherAdZoneFactory = \_factory\PublisherAdZone::get_instance();
 		$PublisherAdZoneList = $PublisherAdZoneFactory->get($params);

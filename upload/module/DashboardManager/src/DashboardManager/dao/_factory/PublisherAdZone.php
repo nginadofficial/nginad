@@ -261,7 +261,8 @@ class PublisherAdZone extends \_factory\CachedTableRead
    	else:
    	
    	    $data['DateCreated'] = date('Y-m-d H:i:s');
-   		return $this->insert($data);
+   		$this->insert($data);
+   		return $this->lastInsertValue;
    	endif;
    
    }

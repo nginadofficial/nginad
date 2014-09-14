@@ -89,7 +89,6 @@ class AdCampaignBannerPreview extends AbstractTableGateway
     			// convert to MySQL DateTime
     			'StartDate'            			=> $BannerPreview->StartDate,
     			'EndDate'              			=> $BannerPreview->EndDate,
-    			'AdCampaignTypeID'             	=> $BannerPreview->AdCampaignTypeID,
     			'IsMobile'             			=> $BannerPreview->IsMobile,
     			'IABSize'              			=> $BannerPreview->IABSize,
     			'Height'               			=> $BannerPreview->Height,
@@ -104,6 +103,10 @@ class AdCampaignBannerPreview extends AbstractTableGateway
     			'WentLiveDate'          		=> $BannerPreview->WentLiveDate
     	);
 
+    	if (intval($BannerPreview->AdCampaignTypeID)):
+    		$data['AdCampaignTypeID'] = $BannerPreview->AdCampaignTypeID;
+    	endif;
+    	
     	if (isset($BannerPreview->AdCampaignBannerID) && !empty($BannerPreview->AdCampaignBannerID)):
     		$data['AdCampaignBannerID'] = $BannerPreview->AdCampaignBannerID;
     	endif;
