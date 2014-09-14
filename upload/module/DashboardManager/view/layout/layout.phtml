@@ -36,7 +36,7 @@ echo $this->doctype(); ?>
 
         <?php echo $this->headMeta()->appendName('viewport', 'width=device-width, initial-scale=1.0') ?>
         <!-- Le styles -->
-        <?php echo $this->headLink(array('rel' => 'shortcut icon', 'href' => $this->basePath() . '/img/favicon.png'))
+        <?php echo $this->headLink(array('rel' => 'shortcut icon', 'href' => $this->basePath() . '/images/favicon.png'))
                         ->prependStylesheet($this->basePath() . '/css/style.css')
                         ->prependStylesheet($this->basePath() . '/css/bootstrap.css')
                         ->prependStylesheet($this->basePath() . '/css/default.dashboard.css')
@@ -60,7 +60,7 @@ echo $this->doctype(); ?>
                 <div class="container" style="position: relative;">
 
                     <a class="brand" href="/<?php echo $home_dashboard_view == "account" ? "users/" : ""; ?><?php echo $home_dashboard_view; ?>">
-					<img src="/img/nginad_logo.png" class="logo-img" />
+					<img src="/images/nginad_logo.png" class="logo-img" />
                      <em>Real Time Bidding Dashboard</em>
                     </a>
 
@@ -117,9 +117,9 @@ echo $this->doctype(); ?>
     <div class="pull-right black-color negative-margin"> <?php 
         // If Admin, show which account you are creating for.
             if($child->impersonate_id == "0" || $child->impersonate_id == null || !isset($child->user_id_list[intval($child->effective_id)])):
-                echo "<img src='/img/man-icon.png' /> " . $child->true_user_name;
+                echo "<img src='/images/man-icon.png' /> " . $child->true_user_name;
             else:
-                echo "<img src='/img/man-icon.png' /> " . $child->user_id_list[intval($child->effective_id)];
+                echo "<img src='/images/man-icon.png' /> " . $child->user_id_list[intval($child->effective_id)];
             	if ($child->is_admin === true):
             		echo " (" . $child->effective_id . ")";
             	endif;
@@ -148,7 +148,7 @@ echo $this->doctype(); ?>
    <span class="help_center pull-right">
     <a class="btn">Help Center</a> 
     <a class="btn">Blog</a>
-    <!--<a class="btn">Follow Us <img src="../img/facebook.jpg" width="24" /><img src="../img/twitter.jpg" width="24" /></a>-->
+    <!--<a class="btn">Follow Us <img src="../images/facebook.jpg" width="24" /><img src="../images/twitter.jpg" width="24" /></a>-->
     </span>
 	  
 </p>
