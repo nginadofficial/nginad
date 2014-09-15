@@ -73,10 +73,13 @@ abstract class CachedTableRead extends AbstractTableGateway
     
     	$cached_data = \util\CacheSql::get_cached_read_result_apc($config, $where_params, $this->table . '_M');
     	 
-//    	if ($cached_data !== null && !$refresh):
-         if (0):
+	   	if ($cached_data !== null && !$refresh):
     	
-    		return $cached_data;
+    		if ($cached_data == self::$empty_array_value):
+    			return array();
+    		else:
+    			return $cached_data;
+    		endif;
     	
     	else:
 

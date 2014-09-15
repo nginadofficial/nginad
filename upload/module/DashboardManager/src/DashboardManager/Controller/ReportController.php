@@ -430,27 +430,35 @@ class ReportController extends PublisherAbstractActionController {
     }
 
     public function getImpressionsPerTimeAction() {
-        return $this->getPerTime(\_factory\BuySideHourlyImpressionsByTLD::get_instance());
+        return $this->getResponse()->setContent(
+        		$this->getPerTime(\_factory\BuySideHourlyImpressionsByTLD::get_instance())
+        );
     }
 
     public function getIncomingBidsPerTimeAction() {
 
-        return $this->getPerTime(\_factory\BuySideHourlyBidsCounter::get_instance());
+    	return $this->getResponse()->setContent(
+        		$this->getPerTime(\_factory\BuySideHourlyBidsCounter::get_instance())
+    	);
     }
 
     public function getOutgoingBidsPerTimeAction() {
 
-        return $this->getPerTime(\_factory\SellSidePartnerHourlyBids::get_instance());
+    	return $this->getResponse()->setContent(
+        		$this->getPerTime(\_factory\SellSidePartnerHourlyBids::get_instance())
+    	);
     }
 
     public function getContractImpressionsPerTimeAction() {
-
-        return $this->getPerTime(\_factory\ContractPublisherZoneHourlyImpressions::get_instance());
+    	return $this->getResponse()->setContent(
+        		$this->getPerTime(\_factory\ContractPublisherZoneHourlyImpressions::get_instance())
+    	);
     }
 
     public function getImpressionsCurrentSpendPerTimeAction() {
-
-        return $this->getPerTime(\_factory\BuySideHourlyImpressionsCounterCurrentSpend::get_instance());
+    	return $this->getResponse()->setContent(
+        		$this->getPerTime(\_factory\BuySideHourlyImpressionsCounterCurrentSpend::get_instance())
+    	);
     }
 
     private function getPerTime($obj) {
@@ -518,7 +526,9 @@ class ReportController extends PublisherAbstractActionController {
             'data' => $obj->getPerTimeCached($this->config_handle, $where_params, 900, $refresh, $this->is_admin),
             'step' => $step
         );
+        
         return json_encode($data);
+
     }
 
 }
