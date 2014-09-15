@@ -16,7 +16,7 @@ endif;
 $home_link = $home_dashboard_view;
 if ($home_link == "account"):
 	$home_link = "users/" . $home_dashboard_view;
-elseif ($home_link == "login"):
+elseif ($home_link == "login" || $home_link == "company"):
 	$home_link = "";
 endif;
 
