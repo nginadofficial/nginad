@@ -28,8 +28,10 @@ return array (
 							
 					),
 						
-					// SPECIAL PARTNER	
-					// DO NOT REMOVE GenericBuysidePartner, as it is needed
+					// This is the default buy side partner
+					// You may remove this partner if you do not wish to buy impressions via
+					// OpenRTB, or you may set the buyer_id and secret_key to your partner's
+					// actual buyer_id and secret_key
 					'GenericBuysidePartner' => array(
 							'module_name' 		=> 'GenericBuysidePartner',
 							'partner_name' 		=> 'My First Sample Generic OpenRTB DSP Partner',
@@ -103,8 +105,10 @@ return array (
 							'timeout_enabled'	=> false
 					),
 						
-					// SPECIAL PARTNER
-					// DO NOT REMOVE LoopbackPartner, as it is needed
+					// DO NOT REMOVE Default CDNPAL Media Exchange partner
+					// Or you will have no one to sell impressions to
+					// Sign up on the http://www.nginad.com website for a 
+					// seller account if you want to get paid for impressions via paypal
 					'GenericSellsidePartner' => array(
 							'class_name' 		=> 'GenericSellsidePartner',
 							'partner_id'		=> '0001',
