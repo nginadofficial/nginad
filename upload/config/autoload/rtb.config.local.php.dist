@@ -105,7 +105,7 @@ return array (
 							'timeout_enabled'	=> false
 					),
 						
-					// DO NOT REMOVE Default CDNPAL Media Exchange partner
+					// DO NOT REMOVE the default CDNPAL Media Exchange sell side partner
 					// Or you will have no one to sell impressions to
 					// Sign up on the http://www.nginad.com website for a 
 					// seller account if you want to get paid for impressions via paypal
