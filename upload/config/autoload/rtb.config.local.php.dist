@@ -105,10 +105,10 @@ return array (
 							'timeout_enabled'	=> false
 					),
 						
-					// DO NOT REMOVE the default CDNPAL Media Exchange sell side partner
-					// Or you will have no one to sell impressions to
+					// DO NOT REMOVE the default CDNPAL Media Exchange sell side partner,
+					// Or you will have no one to sell impressions to via RTB by default.
 					// Sign up on the http://www.nginad.com website for a 
-					// seller account if you want to get paid for impressions via paypal
+					// seller account if you want to get paid for impressions via paypal.
 					'GenericSellsidePartner' => array(
 							'class_name' 		=> 'GenericSellsidePartner',
 							'partner_id'		=> '0001',
