@@ -98,7 +98,7 @@ class ReportController extends PublisherAbstractActionController {
     	$view->setTerminal(true);
     	$view->setTemplate('dashboard-manager/report/header.phtml');
     	$view->setVariables(array(
-    			'action' => 'index',
+    			'action' => 'demandindex',
     			'user_role' => $user_role
     	));
     
@@ -111,7 +111,7 @@ class ReportController extends PublisherAbstractActionController {
     
     	$data = array(
     			'dashboard_view' => 'report',
-    			'action' => 'index',
+    			'action' => 'demandindex',
     			'menu_tpl' => $menu_tpl,
     
     			'impressions' => json_decode($this->getPerTime($impression, $extra_params), TRUE)['data'],
