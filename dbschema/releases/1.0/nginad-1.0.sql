@@ -998,6 +998,12 @@ DROP VIEW IF EXISTS `userImpressionsSpendAdmin`;
 CREATE VIEW `userImpressionsSpendAdmin` AS select `BuySideHourlyImpressionsCounterCurrentSpend`.`BuySidePartnerID` AS `BuySidePartnerID`,round(sum(`BuySideHourlyImpressionsCounterCurrentSpend`.`CurrentSpendGross`),7) AS `TotalSpendGross`,round(sum(`BuySideHourlyImpressionsCounterCurrentSpend`.`CurrentSpendNet`),7) AS `TotalSpendNet`,`AdCampaign`.`Name` AS `Name`,`auth_Users`.`user_login` AS `user_login` from (((`BuySideHourlyImpressionsCounterCurrentSpend` join `AdCampaignBanner` on((`BuySideHourlyImpressionsCounterCurrentSpend`.`AdCampaignBannerID` = `AdCampaignBanner`.`AdCampaignBannerID`))) join `AdCampaign` on((`AdCampaignBanner`.`AdCampaignID` = `AdCampaign`.`AdCampaignID`))) join `auth_Users` on((`auth_Users`.`user_id` = `AdCampaignBanner`.`UserID`))) group by `BuySideHourlyImpressionsCounterCurrentSpend`.`BuySidePartnerID`,`BuySideHourlyImpressionsCounterCurrentSpend`.`AdCampaignBannerID` order by `auth_Users`.`user_login` ;
 
 -- ----------------------------
+-- View structure for PublisherImpressionsAndSpendHourly
+-- ----------------------------
+DROP VIEW IF EXISTS `PublisherImpressionsAndSpendHourly`;
+CREATE VIEW `PublisherImpressionsAndSpendHourly` AS select `ssphb`.`MDYH`, `ssphb`.`PublisherAdZoneID`, `pi`.`Name` as PublisherName, pad.`AdOwnerID` as PublisherInfoID, `pad`.`AdName`, round(sum(`ssphb`.`BidsWonCounter`), 7) as `Impressions`, round(sum(`ssphb`.`SpendTotalNet`), 7) as `Revenue`, round(sum(`ssphb`.`SpendTotalGross`), 7) as `GrossRevenue`, round((sum(`ssphb`.`SpendTotalNet`) / sum(`ssphb`.`BidsWonCounter`)),7) AS `eCPM`, round((sum(`ssphb`.`SpendTotalGross`) / sum(`ssphb`.`BidsWonCounter`)),7) AS `GrossECPM`, `ssphb`.`DateCreated` from `SellSidePartnerHourlyBids` ssphb inner join `PublisherAdZone` pad on ssphb.`PublisherAdZoneID` = pad.`PublisherAdZoneID` inner join `PublisherInfo` pi on pad.`AdOwnerID` = pi.`PublisherInfoID` group by ssphb.`PublisherAdZoneID`, ssphb.`MDYH`
+
+-- ----------------------------
 -- Function structure for MD5_SPLIT_SALT
 -- ----------------------------
 DROP FUNCTION IF EXISTS `MD5_SPLIT_SALT`;

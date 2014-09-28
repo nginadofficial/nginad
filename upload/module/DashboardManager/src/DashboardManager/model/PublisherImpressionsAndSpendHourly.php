@@ -10,13 +10,17 @@
 namespace model;
 
 class PublisherImpressionsAndSpendHourly {
+	public $MDYH;
 	public $PublisherAdZoneID;
-    public $Name;
+    public $PublisherName;
     public $AdName;
     public $Impressions;
     public $Revenue;
-    public $MDYH;
     public $eCPM;
+    public $GrossRevenue;
+    public $GrossECPM;
+    public $PublisherInfoID;
+    public $DateCreated;
 }
 
 ?>

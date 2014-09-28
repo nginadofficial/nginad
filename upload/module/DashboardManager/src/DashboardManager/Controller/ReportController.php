@@ -25,16 +25,18 @@ class ReportController extends PublisherAbstractActionController {
 
 		$initialized = $this->initialize();
 		if ($initialized !== true) return $initialized;
-
+		
+		$extra_params = null;
+		
         if ($this->is_admin) {
-            $this->EffectiveID;
             $this->adminFunctionsSufix = 'Admin';
             $user_role = 1;
         } elseif ($this->PublisherInfoID != null) {
             $user_role = 2;
+            $extra_params = array('PublisherInfoID' => $this->PublisherInfoID);
         } elseif ($this->DemandCustomerInfoID != null) {
             $user_role = 3;
-            return $this->redirect()->toUrl('report/spend');
+            return $this->redirect()->toUrl('report/demandindex');
         }
 
 
@@ -50,18 +52,16 @@ class ReportController extends PublisherAbstractActionController {
                 ->get('viewrenderer')
                 ->render($view);
 
-        $impression = \_factory\BuySideHourlyImpressionsByTLD::get_instance();
-        
+        $impression = \_factory\PublisherImpressionsAndSpendHourly::get_instance();
+
         $data = array(
             'dashboard_view' => 'report',
             'action' => 'index',
             'menu_tpl' => $menu_tpl,
             
-            'impressions' => json_decode($this->getPerTime($impression), TRUE)['data'],
+            'impressions' => json_decode($this->getPerTime($impression, $extra_params), TRUE)['data'],
             'impressions_header' => $impression->getPerTimeHeader($this->is_admin),
             
-            'user_tld_statistic' => $impression->getUserTLDStatistic(),
-            'user_tld_statistic_header' => $impression->getUserTLDStatisticHeader(),
             'user_id_list' => $this->user_id_list,
             'user_identity' => $this->identity(),
             'true_user_name' => $this->auth->getUserName(),
@@ -73,6 +73,62 @@ class ReportController extends PublisherAbstractActionController {
 
         $view = new ViewModel($data);
         return $view;
+    }
+    
+    public function demandindexAction() {
+    
+    	$initialized = $this->initialize();
+    	if ($initialized !== true) return $initialized;
+    
+    	$extra_params = null;
+    	
+    	if ($this->is_admin) {
+    		$this->adminFunctionsSufix = 'Admin';
+    		$user_role = 1;
+    	} elseif ($this->PublisherInfoID != null) {
+    		return $this->redirect()->toUrl('report/');
+    		$user_role = 2;
+    	} elseif ($this->DemandCustomerInfoID != null) {
+    		$user_role = 3;
+    		$extra_params = array('DemandCustomerInfoID' => $this->DemandCustomerInfoID);
+    	}
+    
+    
+    	$view = new ViewModel();
+    	$view->setTerminal(true);
+    	$view->setTemplate('dashboard-manager/report/header.phtml');
+    	$view->setVariables(array(
+    			'action' => 'index',
+    			'user_role' => $user_role
+    	));
+    
+    	$menu_tpl = $this->getServiceLocator()
+    	->get('viewrenderer')
+    	->render($view);
+    
+    	$impression = \_factory\BuySideHourlyImpressionsByTLD::get_instance();
+    
+    	$data = array(
+    			'dashboard_view' => 'report',
+    			'action' => 'index',
+    			'menu_tpl' => $menu_tpl,
+    
+    			'impressions' => json_decode($this->getPerTime($impression /* , add where here for security */), TRUE)['data'],
+    			'impressions_header' => $impression->getPerTimeHeader($this->is_admin),
+    
+    			'user_tld_statistic' => $impression->getUserTLDStatistic(),
+    			'user_tld_statistic_header' => $impression->getUserTLDStatisticHeader(),
+    			'user_id_list' => $this->user_id_list,
+    			'user_identity' => $this->identity(),
+    			'true_user_name' => $this->auth->getUserName(),
+    			'header_title' => 'Reports',
+    			'is_admin' => $this->is_admin,
+    			'effective_id' => $this->auth->getEffectiveIdentityID(),
+    			'impersonate_id' => $this->ImpersonateID
+    	);
+    
+    	$view = new ViewModel($data);
+    	return $view;
     }
 
     public function incomingBidsAction() {
@@ -429,10 +485,42 @@ class ReportController extends PublisherAbstractActionController {
         return $this->getResponse()->setContent(json_encode($data));
     }
 
-    public function getImpressionsPerTimeAction() {
+    public function getDemandImpressionsPerTimeAction() {
+    	
+    	$initialized = $this->initialize();
+    	if ($initialized !== true) return $initialized;
+    	 
+    	$extra_params = null;
+    	 
+    	if (!$this->is_admin && $this->DemandCustomerInfoID != null):
+    		$user_role = 2;
+    		$extra_params = array('DemandCustomerInfoID' => $this->DemandCustomerInfoID);
+    	elseif ($this->DemandCustomerInfoID == null):
+    		die("bad request");
+    	endif;
+    	
         return $this->getResponse()->setContent(
-        		$this->getPerTime(\_factory\BuySideHourlyImpressionsByTLD::get_instance())
+        		$this->getPerTime(\_factory\BuySideHourlyImpressionsByTLD::get_instance() /* , add where here for security */ )
         );
+    }
+  
+    public function getPublisherImpressionsPerTimeAction() {
+    	
+    	$initialized = $this->initialize();
+    	if ($initialized !== true) return $initialized;
+    	
+    	$extra_params = null;
+    	
+    	if (!$this->is_admin && $this->PublisherInfoID != null):
+    		$user_role = 2;
+    		$extra_params = array('PublisherInfoID' => $this->PublisherInfoID);
+    	elseif ($this->PublisherInfoID == null):
+    		die("bad request");
+    	endif;
+    	
+    	return $this->getResponse()->setContent(
+        		$this->getPerTime(\_factory\PublisherImpressionsAndSpendHourly::get_instance(), $extra_params)
+    	);
     }
 
     public function getIncomingBidsPerTimeAction() {
@@ -461,7 +549,7 @@ class ReportController extends PublisherAbstractActionController {
     	);
     }
 
-    private function getPerTime($obj) {
+    private function getPerTime($obj, $extra_params = null) {
 
 		$initialized = $this->initialize();
 		if ($initialized !== true) return $initialized;
@@ -516,6 +604,12 @@ class ReportController extends PublisherAbstractActionController {
             );
         }
 
+        if ($extra_params !== null):
+        	foreach ($extra_params as $key => $value):
+        		$where_params[$key] = $value;
+        	endforeach;
+        endif;
+        
         if (!empty($params['refresh'])) {
             $refresh = true;
         } else {
