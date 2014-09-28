@@ -106,18 +106,19 @@ class ReportController extends PublisherAbstractActionController {
     	->get('viewrenderer')
     	->render($view);
     
-    	$impression = \_factory\BuySideHourlyImpressionsByTLD::get_instance();
+    	$user_tld_impression = \_factory\BuySideHourlyImpressionsByTLD::get_instance();
+    	$impression = \_factory\DemandImpressionsAndSpendHourly::get_instance();
     
     	$data = array(
     			'dashboard_view' => 'report',
     			'action' => 'index',
     			'menu_tpl' => $menu_tpl,
     
-    			'impressions' => json_decode($this->getPerTime($impression /* , add where here for security */), TRUE)['data'],
+    			'impressions' => json_decode($this->getPerTime($impression, $extra_params), TRUE)['data'],
     			'impressions_header' => $impression->getPerTimeHeader($this->is_admin),
     
-    			'user_tld_statistic' => $impression->getUserTLDStatistic(),
-    			'user_tld_statistic_header' => $impression->getUserTLDStatisticHeader(),
+    			'user_tld_statistic' => $user_tld_impression->getUserTLDStatistic(),
+    			'user_tld_statistic_header' => $user_tld_impression->getUserTLDStatisticHeader(),
     			'user_id_list' => $this->user_id_list,
     			'user_identity' => $this->identity(),
     			'true_user_name' => $this->auth->getUserName(),
@@ -487,7 +488,7 @@ class ReportController extends PublisherAbstractActionController {
 
     public function getDemandImpressionsPerTimeAction() {
     	
-    	$initialized = $this->initialize();
+    	$initialized = $this->initialize(); 
     	if ($initialized !== true) return $initialized;
     	 
     	$extra_params = null;
@@ -500,7 +501,7 @@ class ReportController extends PublisherAbstractActionController {
     	endif;
     	
         return $this->getResponse()->setContent(
-        		$this->getPerTime(\_factory\BuySideHourlyImpressionsByTLD::get_instance() /* , add where here for security */ )
+        		$this->getPerTime(\_factory\DemandImpressionsAndSpendHourly::get_instance(), $extra_params)
         );
     }
   
