@@ -89,10 +89,84 @@ class PublisherImpressionsAndSpendHourly extends \_factory\CachedTableRead {
         return $obj_list;
     }
 
+    public function getPerTimeCustom($where_params = null, $is_admin = 0) {
+    
+    	$obj_list = array();
+    
+    
+    	$sql = new Sql($this->adapter);
+    	$select = $sql->select();
+    	$select->columns(array(
+    			'PublisherAdZoneID',
+    			'PublisherName',
+    			'AdName',
+    			'MDYH' => new \Zend\Db\Sql\Expression('MAX(MDYH)'),
+    			'Impressions' => new \Zend\Db\Sql\Expression('SUM(Impressions)'),
+    			'Revenue' => new \Zend\Db\Sql\Expression('SUM(Revenue)'),
+    			'eCPM' => new \Zend\Db\Sql\Expression('SUM(eCPM)'),
+    			'GrossRevenue' => new \Zend\Db\Sql\Expression('SUM(GrossRevenue)'),
+    			'GrossECPM' => new \Zend\Db\Sql\Expression('SUM(GrossECPM)'),
+    			'PublisherInfoID',
+    			'DateCreated' => new \Zend\Db\Sql\Expression('MAX(DateCreated)')
+    			 
+    	));
+    	$select->from('PublisherImpressionsAndSpendHourly');
+    	if (!empty($where_params['DateCreatedGreater'])):
+    	$select->where(
+    			$select->where->greaterThanOrEqualTo('DateCreated', $where_params['DateCreatedGreater'])
+    	);
+    	endif;
+    
+    	if (!empty($where_params['DateCreatedLower'])):
+    	$select->where(
+    			$select->where->lessThanOrEqualTo('DateCreated', $where_params['DateCreatedLower'])
+    	);
+    	endif;
+    	$select->group('PublisherAdZoneID');
+    	$select->order('PublisherAdZoneID');
+    	$statement = $sql->prepareStatementForSqlObject($select);
+    	$results = $statement->execute();
+    
+    	foreach ($results as $obj):
+    	if (!$is_admin) {
+    		array_walk($obj, function($item, $key) use (&$obj) {
+    			if (array_search($key, $this->adminFields) !== FALSE) {
+    				$obj[$key] = FALSE;
+    			}
+    		});
+    		$obj = array_filter($obj, function($value) {
+    			return $value !== FALSE;
+    		});
+    	}
+    	$obj['MDYH'] = $this->re_normalize_time($obj['MDYH']);
+    	$obj_list[] = $obj;
+    	endforeach;
+    
+    	return $obj_list;
+    }
+    
     public function getPerTime($where_params = null, $is_admin = 0) {
 
         $obj_list = array();
 
+        $low_range = $high_range = time();
+        
+        if (!empty($where_params['DateCreatedGreater'])):
+       		$low_range = strtotime($where_params['DateCreatedGreater']);
+        endif;
+        
+        if (!empty($where_params['DateCreatedLower'])):
+        	$high_range = strtotime($where_params['DateCreatedLower']);
+        endif;   
+
+        $date_span = $high_range - $low_range;
+        
+        // if span is greater than 2 days switch to custom reporting format
+        $switch_to_custom_threshold = 2 * 86400;
+        
+        if ($date_span > $switch_to_custom_threshold):
+        	return $this->getPerTimeCustom($where_params, $is_admin);
+        endif;
 
         $sql = new Sql($this->adapter);
         $select = $sql->select();

@@ -573,6 +573,7 @@ class ReportController extends PublisherAbstractActionController {
         }
 
 		$DateCreatedGreater = date('Y-m-d H:i:s', time() - 15 * $step * 60);
+		// $DateCreatedGreater = '2010-12-12 12:12:12';
         $DateCreatedLower = date('Y-m-d H:i:s', time() - 15 * ($step - 1) * 60);
 
         if (!empty($params['step'])) {
