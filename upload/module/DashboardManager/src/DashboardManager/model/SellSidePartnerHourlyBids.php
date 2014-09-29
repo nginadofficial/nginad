@@ -9,14 +9,17 @@
 
 namespace model;
 
-class PublisherImpressionsAndSpendHourly {
-	public $PublisherAdZoneID;
-    public $Name;
-    public $AdName;
-    public $Impressions;
-    public $Revenue;
+class SellSidePartnerHourlyBids {
+	public $SellSidePartnerHourlyBidsID;
+    public $SellSidePartnerID;
+    public $PublisherAdZoneID;
     public $MDYH;
-    public $eCPM;
+    public $BidsWonCounter;
+    public $BidsLostCounter;
+    public $BidsErrorCounter;
+    public $SpendTotalGross;
+    public $SpendTotalNet;
+    public $DateCreated;
 }
 
 ?>

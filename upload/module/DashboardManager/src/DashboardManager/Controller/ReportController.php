@@ -493,7 +493,7 @@ class ReportController extends PublisherAbstractActionController {
     	 
     	$extra_params = null;
     	 
-    	if (!$this->is_admin && $this->DemandCustomerInfoID != null):
+    	if ($this->is_admin || $this->DemandCustomerInfoID != null):
     		$user_role = 2;
     		$extra_params = array('DemandCustomerInfoID' => $this->DemandCustomerInfoID);
     	elseif ($this->DemandCustomerInfoID == null):
@@ -512,7 +512,7 @@ class ReportController extends PublisherAbstractActionController {
     	
     	$extra_params = null;
     	
-    	if (!$this->is_admin && $this->PublisherInfoID != null):
+    	if ($this->is_admin || $this->PublisherInfoID != null):
     		$user_role = 2;
     		$extra_params = array('PublisherInfoID' => $this->PublisherInfoID);
     	elseif ($this->PublisherInfoID == null):
@@ -572,8 +572,7 @@ class ReportController extends PublisherAbstractActionController {
             $step = 1;
         }
 
-//        $DateCreatedGreater = date('Y-m-d H:i:s', time() - 15 * $step * 60);
-        $DateCreatedGreater = '2010-12-12 12:12:12';
+		$DateCreatedGreater = date('Y-m-d H:i:s', time() - 15 * $step * 60);
         $DateCreatedLower = date('Y-m-d H:i:s', time() - 15 * ($step - 1) * 60);
 
         if (!empty($params['step'])) {
