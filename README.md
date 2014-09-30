@@ -1,6 +1,11 @@
 nginad
 =======
 
+September 30, 2014
+------------------
+Fixed some of Mike/Ukraine team's Reporting module bugs. I did not create JIRAs since they are so numerous it requires a re-factor.
+Also I will add a lightbox with the publisher and demand agreement acceptance on login in a commit soon to come
+
 September 3, 2014
 ------------------
 Many changes and updates were made to the project. Unfortunately the commit log had to be wiped to make the project public.
