@@ -121,6 +121,15 @@ class DemandImpressionsAndSpendHourly extends \_factory\CachedTableRead {
 	    			$select->where->lessThanOrEqualTo('DateCreated', $where_params['DateCreatedLower'])
 	    	);
     	endif;
+    	
+    	foreach ($where_params as $name => $value):
+	    	if ($name != 'DateCreatedLower' && $name != 'DateCreatedGreater'):
+		    	$select->where(
+		    			$select->where->equalTo($name, $value)
+		    	);
+	    	endif;
+    	endforeach;
+    	
     	$select->group('AdCampaignBannerID');
     	$select->order('AdCampaignBannerID');
     	$statement = $sql->prepareStatementForSqlObject($select);
@@ -184,6 +193,14 @@ class DemandImpressionsAndSpendHourly extends \_factory\CachedTableRead {
             );
         endif;
 
+        foreach ($where_params as $name => $value):
+        	if ($name != 'DateCreatedLower' && $name != 'DateCreatedGreater'):
+		        $select->where(
+		        		$select->where->equalTo($name, $value)
+		        );
+        	endif;
+        endforeach;
+        
         $statement = $sql->prepareStatementForSqlObject($select);
         $results = $statement->execute();
 

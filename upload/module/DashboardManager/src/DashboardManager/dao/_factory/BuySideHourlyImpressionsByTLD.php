@@ -124,11 +124,11 @@ class BuySideHourlyImpressionsByTLD extends \_factory\CachedTableRead {
         );
     }
 
-    public function getUserTLDStatistic(){
+    public function getUserTLDStatistic($where_params){
 
         $obj_list = array();
 
-        $resultSet = $this->select(function (\Zend\Db\Sql\Select $select) {
+        $resultSet = $this->select(function (\Zend\Db\Sql\Select $select) use ($where_params) {
                 
                 
                 $select->columns(array('PublisherTLD', 'total_impressions' => new \Zend\Db\Sql\Expression('SUM(' . $this->table  . '.impressions)')));
@@ -151,6 +151,12 @@ class BuySideHourlyImpressionsByTLD extends \_factory\CachedTableRead {
                      array('user_login')
                 );
 
+                foreach ($where_params as $name => $value):
+	                $select->where(
+	                		$select->where->equalTo($name, $value)
+	                );
+                endforeach;
+                
                 $select->group('AdCampaignBanner.UserID');
                 $select->group('PublisherTLD');
                 $select->order('PublisherTLD');

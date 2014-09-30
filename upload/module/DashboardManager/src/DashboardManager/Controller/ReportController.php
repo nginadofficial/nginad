@@ -26,7 +26,7 @@ class ReportController extends PublisherAbstractActionController {
 		$initialized = $this->initialize();
 		if ($initialized !== true) return $initialized;
 		
-		$extra_params = null;
+		$extra_params = array();
 		
         if ($this->is_admin) {
             $this->adminFunctionsSufix = 'Admin';
@@ -80,7 +80,7 @@ class ReportController extends PublisherAbstractActionController {
     	$initialized = $this->initialize();
     	if ($initialized !== true) return $initialized;
     
-    	$extra_params = null;
+    	$extra_params = $extra_params_user = array();
     	
     	if ($this->is_admin) {
     		$this->adminFunctionsSufix = 'Admin';
@@ -91,6 +91,7 @@ class ReportController extends PublisherAbstractActionController {
     	} elseif ($this->DemandCustomerInfoID != null) {
     		$user_role = 3;
     		$extra_params = array('DemandCustomerInfoID' => $this->DemandCustomerInfoID);
+    		$extra_params_user = array('auth_Users.user_id' => $this->EffectiveID);
     	}
     
     
@@ -117,7 +118,7 @@ class ReportController extends PublisherAbstractActionController {
     			'impressions' => json_decode($this->getPerTime($impression, $extra_params), TRUE)['data'],
     			'impressions_header' => $impression->getPerTimeHeader($this->is_admin),
     
-    			'user_tld_statistic' => $user_tld_impression->getUserTLDStatistic(),
+    			'user_tld_statistic' => $user_tld_impression->getUserTLDStatistic($extra_params_user),
     			'user_tld_statistic_header' => $user_tld_impression->getUserTLDStatisticHeader(),
     			'user_id_list' => $this->user_id_list,
     			'user_identity' => $this->identity(),
@@ -333,6 +334,11 @@ class ReportController extends PublisherAbstractActionController {
 
     public function chartsAction() {
 
+    	die("bad request"); 	
+    	
+    	/* 
+    	 * Mike did not implement this before the release date
+    	 */
 		$initialized = $this->initialize();
 		if ($initialized !== true) return $initialized;
 
@@ -438,16 +444,32 @@ class ReportController extends PublisherAbstractActionController {
 
     public function getUserTLDStatisticAction() {
 
+    	$initialized = $this->initialize();
+    	if ($initialized !== true) return $initialized;
+    	
+    	$extra_params_user = array();
+    	
+    	if ($this->is_admin || $this->DemandCustomerInfoID != null):
+	    	$user_role = 2;
+	    	$extra_params_user = array('auth_Users.user_id' => $this->EffectiveID);
+    	elseif ($this->DemandCustomerInfoID == null):
+    		die("bad request");
+    	endif;
+    	
         $impression = \_factory\BuySideHourlyImpressionsByTLD::get_instance();
 
         $data = array(
-            'data' => $impression->getUserTLDStatistic(),
+            'data' => $impression->getUserTLDStatistic($extra_params_user),
         );
         return $this->getResponse()->setContent(json_encode($data));
     }
 
     public function getUserImpressionsSpendAction() {
 
+    	if (!$this->is_admin):
+    		die("bad request");
+    	endif;
+    	
         $impression_spend = \_factory\BuySideHourlyImpressionsCounterCurrentSpend::get_instance();
 
         $data = array(
@@ -458,6 +480,10 @@ class ReportController extends PublisherAbstractActionController {
 
     public function getAverageIncomingBidsAction() {
 
+    	if (!$this->is_admin):
+    		die("bad request");
+    	endif;
+    	
         $incoming_bid = \_factory\BuySideHourlyBidsCounter::get_instance();
 
         $data = array(
@@ -468,6 +494,10 @@ class ReportController extends PublisherAbstractActionController {
 
     public function getOutgoingBidsPerZoneAction() {
 
+    	if (!$this->is_admin):
+    		die("bad request");
+    	endif;
+    	
         $outgoing_bid = \_factory\SellSidePartnerHourlyBids::get_instance();
 
         $data = array(
@@ -478,6 +508,10 @@ class ReportController extends PublisherAbstractActionController {
 
     public function getImpressionsPerContractZoneAction() {
 
+    	if (!$this->is_admin):
+    		die("bad request");
+    	endif;
+    	
         $impressions = \_factory\ContractPublisherZoneHourlyImpressions::get_instance();
 
         $data = array(
@@ -491,12 +525,12 @@ class ReportController extends PublisherAbstractActionController {
     	$initialized = $this->initialize(); 
     	if ($initialized !== true) return $initialized;
     	 
-    	$extra_params = null;
+    	$extra_params = array();
     	 
-    	if ($this->is_admin || $this->DemandCustomerInfoID != null):
+    	if ($this->DemandCustomerInfoID != null):
     		$user_role = 2;
     		$extra_params = array('DemandCustomerInfoID' => $this->DemandCustomerInfoID);
-    	elseif ($this->DemandCustomerInfoID == null):
+    	elseif (!$this->is_admin):
     		die("bad request");
     	endif;
     	
@@ -510,12 +544,12 @@ class ReportController extends PublisherAbstractActionController {
     	$initialized = $this->initialize();
     	if ($initialized !== true) return $initialized;
     	
-    	$extra_params = null;
+    	$extra_params = array();
     	
-    	if ($this->is_admin || $this->PublisherInfoID != null):
+    	if ($this->PublisherInfoID != null):
     		$user_role = 2;
     		$extra_params = array('PublisherInfoID' => $this->PublisherInfoID);
-    	elseif ($this->PublisherInfoID == null):
+    	elseif (!$this->is_admin):
     		die("bad request");
     	endif;
     	
@@ -526,6 +560,10 @@ class ReportController extends PublisherAbstractActionController {
 
     public function getIncomingBidsPerTimeAction() {
 
+    	if (!$this->is_admin):
+    		die("bad request");
+    	endif;
+    	
     	return $this->getResponse()->setContent(
         		$this->getPerTime(\_factory\BuySideHourlyBidsCounter::get_instance())
     	);
@@ -533,18 +571,32 @@ class ReportController extends PublisherAbstractActionController {
 
     public function getOutgoingBidsPerTimeAction() {
 
+    	if (!$this->is_admin):
+    		die("bad request");
+    	endif;
+    	
     	return $this->getResponse()->setContent(
         		$this->getPerTime(\_factory\SellSidePartnerHourlyBids::get_instance())
     	);
     }
 
     public function getContractImpressionsPerTimeAction() {
+    	
+    	if (!$this->is_admin):
+    		die("bad request");
+    	endif;
+    	
     	return $this->getResponse()->setContent(
         		$this->getPerTime(\_factory\ContractPublisherZoneHourlyImpressions::get_instance())
     	);
     }
 
     public function getImpressionsCurrentSpendPerTimeAction() {
+    	
+    	if (!$this->is_admin):
+    		die("bad request");
+    	endif;
+    	
     	return $this->getResponse()->setContent(
         		$this->getPerTime(\_factory\BuySideHourlyImpressionsCounterCurrentSpend::get_instance())
     	);
@@ -604,8 +656,8 @@ class ReportController extends PublisherAbstractActionController {
                 'DateCreatedLower' => $DateCreatedLower,
             );
         }
-
-        if ($extra_params !== null):
+        
+        if ($extra_params !== null && count($extra_params) > 0):
         	foreach ($extra_params as $key => $value):
         		$where_params[$key] = $value;
         	endforeach;
