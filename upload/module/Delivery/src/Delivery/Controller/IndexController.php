@@ -339,17 +339,50 @@ class IndexController extends AbstractActionController
     	$AdCampaignBanner 				= $AdCampaignBannerFactory->get_row_cached($config, $params);    	
 
 	    if ($AdCampaignBanner != null):
+	    
 
+		    
 		    $banner_impression_cost 		= $AdCampaignBanner->BidAmount;
 		    $spend_increase_gross 			= floatval($banner_impression_cost) / 1000;
 		    $spend_increase_net				= $spend_increase_gross;
+		    
+		    $found_second_price 			= false;
+		    
 		    if ($banner_request["sndprc"] !== null && !empty($banner_request["sndprc"])):
 		    	$decrypted_second_price = $this->decrypt_second_price($banner_request["sndprc"]);
 			    if (floatval($decrypted_second_price)):
-			    	$spend_increase_net		= floatval($decrypted_second_price) / 1000;
+			    	$spend_increase_net				= floatval($decrypted_second_price) / 1000;
+			    	$found_second_price 			= true;
 			    endif;
 		    endif;
-	    
+		    
+		    if ($found_second_price === false):
+			    /*
+			     * We already marked down this demand customer's bid when we sent it to the DSP
+			     * So at this point we have to get the original bid price set by the demand user
+			     * in the demand dashboard and set it to the gross cost for the demand customer.
+			     * If we got a second price URL Macro parameter from the DSP, then we are finished.
+			     * We set the second price to the net price for the impression.
+			     * Otherwise we have to calculate the markup on the demand dashboard bid again
+			     * and get the net impression price that way.
+			     * 
+			     * Remember that the RTB bid price sent to the DSP was already marked down by the markup
+			     * price in class RtbBuyV22Workflow:
+			     * Line 544: $adusted_amount = floatval($AdCampaignBanner->BidAmount) - floatval($mark_down);
+			     */
+
+			    $AdCampaignFactory		= \_factory\AdCampaign::get_instance();
+		    	$params					= array();
+		    	$params["AdCampaignID"] = $AdCampaignBanner->AdCampaignID;
+			    $AdCampaign				= $AdCampaignFactory->get_row_cached($config, $params);
+			    
+			    $markup_rate 			= \util\Markup::getMarkupRate($AdCampaign, $config);
+			    
+			    $mark_down 				= floatval($spend_increase_gross) * floatval($markup_rate);
+			    $spend_increase_net 	= floatval($spend_increase_gross) - floatval($mark_down);
+		    
+			endif;
+		    
 		    $AdCampaignBannerFactory->incrementAdCampaignBannerImpressionsCounterAndSpendCached($config, $buyer_id, $banner_request_id, $spend_increase_gross, $spend_increase_net);
 		    $AdCampaignBannerFactory->incrementBuySideHourlyImpressionsByTLDCached($config, $banner_request_id, $banner_request["tld"]);
 
