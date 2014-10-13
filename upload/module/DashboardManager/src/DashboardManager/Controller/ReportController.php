@@ -608,12 +608,7 @@ class ReportController extends PublisherAbstractActionController {
 		if ($initialized !== true) return $initialized;
 
         if ($this->is_admin) {
-            $this->EffectiveID;
             $this->adminFunctionsSufix = 'Admin';
-        } elseif ($this->PublisherInfoID != null) {
-            
-        } elseif ($this->DemandCustomerInfoID != null) {
-            
         }
 
 

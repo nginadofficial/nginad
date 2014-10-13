@@ -97,10 +97,10 @@ class PublisherImpressionsAndSpendHourly extends \_factory\CachedTableRead {
     	$sql = new Sql($this->adapter);
     	$select = $sql->select();
     	$select->columns(array(
+    			'MDYH' => new \Zend\Db\Sql\Expression('MAX(MDYH)'),
     			'PublisherAdZoneID',
     			'PublisherName',
     			'AdName',
-    			'MDYH' => new \Zend\Db\Sql\Expression('MAX(MDYH)'),
     			'Impressions' => new \Zend\Db\Sql\Expression('SUM(Impressions)'),
     			'Revenue' => new \Zend\Db\Sql\Expression('SUM(Revenue)'),
     			'eCPM' => new \Zend\Db\Sql\Expression('SUM(eCPM)'),

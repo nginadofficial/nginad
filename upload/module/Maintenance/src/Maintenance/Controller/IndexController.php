@@ -78,34 +78,59 @@ class IndexController extends AbstractActionController {
     }
 
     public function dailyAction() {
-
+    	
         $date = date('Y-m-d', time() - 60 * 60 * 24);
         $config = $this->getServiceLocator()->get('Config');
 
         $ReportSubscription = \_factory\ReportSubscription::get_instance();
-        $subscibe_users = $ReportSubscription->get(array(
-            'Status' => 1,
-            'user_role' => 1,
+        $subscribed_users = $ReportSubscription->get(array(
+            'Status' => 1
         ));
 
         $transport = $this->getServiceLocator()->get('mail.transport');
 
         $where_params = array(
-            'DateCreatedGreater' => $date . ' 00:00:00',
-//            'DateCreatedGreater' => '2013-12-12 00:00:00',
+        	//'DateCreatedGreater' => $date . ' 00:00:00',
+        	'DateCreatedGreater' => '2012-12-12 00:00:00',
             'DateCreatedLower' => $date . ' 23:59:59',
         );
 
         $letters = range('A', 'Z');
-        foreach ($subscibe_users as $one) {
-            $is_admin = ($one['user_role'] != 1) ? TRUE : FALSE;
+        
+        $publisher_impression_factory 	= \_factory\PublisherImpressionsAndSpendHourly::get_instance();
+        $demand_impression_factory 		= \_factory\DemandImpressionsAndSpendHourly::get_instance();
+        $authUsersFactory 				= \_factory\authUsers::get_instance();
+        
+        foreach ($subscribed_users as $subscribed_user):
+        	
+            $is_admin = ($subscribed_user['user_role'] == 1) ? TRUE : FALSE;
 
-            $impressions_obj = \_factory\BuySideHourlyImpressionsByTLD::get_instance();
-            $impressions = $impressions_obj->getPerTimeCached($config, $where_params, 900, TRUE, $is_admin);
-            $impressions_header = $impressions_obj->getPerTimeHeader($is_admin);
+            if ($is_admin):
+            	continue;
+            endif;
+            
+            $params = array();
+            
+            $where_params = array(
+            		'DateCreatedGreater' => $date . ' 00:00:00',
+            		//'DateCreatedGreater' => '2012-12-12 00:00:00',
+            		'DateCreatedLower' => $date . ' 23:59:59',
+            );
+            
+            $params["user_id"]	= $subscribed_user->UserID;
+            $authUsers			= $authUsersFactory->get_row($params);
 
+            if ($authUsers->PublisherInfoID != null):
+	            $where_params['PublisherInfoID'] = $authUsers->PublisherInfoID;
+	            $impressions = json_decode($this->getPerTime($publisher_impression_factory, $config, $is_admin, $where_params), TRUE)['data'];
+	            $impressions_header = $publisher_impression_factory->getPerTimeHeader($is_admin);
+	        elseif ($authUsers->DemandCustomerInfoID != null):
+	        	$where_params['DemandCustomerInfoID'] = $authUsers->DemandCustomerInfoID;
+	        	$impressions = json_decode($this->getPerTime($demand_impression_factory, $config, $is_admin, $where_params), TRUE)['data'];
+	        	$impressions_header = $demand_impression_factory->getPerTimeHeader($is_admin);
+            endif;
 
-            $text = new Mime\Part('Hi!');
+            $text = new Mime\Part('Excel');
             $text->type = Mime\Mime::TYPE_TEXT;
             $text->charset = 'utf-8';
 
@@ -119,11 +144,11 @@ class IndexController extends AbstractActionController {
                     ->setKeywords("")
                     ->setCategory("");
 
-
+            
 //            
 //            Strat first sheet
 
-            if ($one['user_role'] != 2) {
+
                 $objPHPExcel->setActiveSheetIndex(0);
                 $objPHPExcel->getSheet(0)->setTitle('Impressions');
                 $objPHPExcel->getActiveSheet()->SetCellValue('A1', 'Impressions stats for ' . $date);
@@ -140,11 +165,11 @@ class IndexController extends AbstractActionController {
                     $objPHPExcel->getActiveSheet()->SetCellValue('A5', 'No records');
                     $objPHPExcel->getActiveSheet()->mergeCells('A5:' . $letters[count($impressions_header) - 1] . '5');
                 } else {
-                    $i = 5;
+                    $i = 6;
                     foreach ($impressions as $impression) {
 
                         $impression = array_values((array) ($impression));
-                        for ($j = 0; $j < count($impressions_header); $j++) {
+                        for ($j = 0; $j < count($impression); $j++) {
                             $objPHPExcel->getActiveSheet()->SetCellValue($letters[$j] . $i, $impression[$j]);
                         }
 
@@ -156,169 +181,9 @@ class IndexController extends AbstractActionController {
                     $objPHPExcel->getActiveSheet()->getColumnDimension($columnID)
                             ->setAutoSize(true);
                 }
-            }
 
-
-//            
-//            Strat second sheet
-//            
-            if ($one['user_role'] != 2) {
-                $incoming_bids_obj = \_factory\BuySideHourlyBidsCounter::get_instance();
-                $incoming_bids = $incoming_bids_obj->getPerTimeCached($config, $where_params, 900, TRUE, $is_admin);
-                $incoming_bids_header = $incoming_bids_obj->getPerTimeHeader($is_admin);
-
-                $objPHPExcel->createSheet(1);
-                $objPHPExcel->getSheet(1)->setTitle('Incoming bids');
-                $objPHPExcel->setActiveSheetIndex(1);
-                $objPHPExcel->getActiveSheet()->SetCellValue('A1', 'Incoming bids stats for ' . $date);
-                $objPHPExcel->getActiveSheet()->mergeCells('A1:' . $letters[count($incoming_bids_header) - 1] . '1');
-
-                for ($i = 0; $i < count($incoming_bids_header); $i++) {
-                    $objPHPExcel->getActiveSheet()->SetCellValue($letters[$i] . '3', $incoming_bids_header[$i]);
-                }
-
-                if (empty($incoming_bids)) {
-                    $objPHPExcel->getActiveSheet()->SetCellValue('A5', 'No records');
-                    $objPHPExcel->getActiveSheet()->mergeCells('A5:' . $letters[count($incoming_bids_header) - 1] . '5');
-                } else {
-                    $i = 5;
-                    foreach ($incoming_bids as $bid) {
-                        $bid = array_values((array) ($bid));
-                        for ($j = 0; $j < count($incoming_bids_header); $j++) {
-                            $objPHPExcel->getActiveSheet()->SetCellValue($letters[$j] . $i, $bid[$j]);
-                        }
-                        $i++;
-                    }
-                }
-
-                foreach ($letters as $columnID) {
-                    $objPHPExcel->getActiveSheet()->getColumnDimension($columnID)
-                            ->setAutoSize(true);
-                }
-            }
-
-
-//            
-//            Strat third sheet
-//            
-//            
-            if ($one['user_role'] != 3) {
-                $outgoing_bids_obj = \_factory\SellSidePartnerHourlyBids::get_instance();
-                $outgoing_bids = $outgoing_bids_obj->getPerTimeCached($config, $where_params, 900, TRUE, $is_admin);
-                $outgoing_bids_header = $outgoing_bids_obj->getPerTimeHeader($is_admin);
-
-                $objPHPExcel->createSheet(2);
-                $objPHPExcel->getSheet(2)->setTitle('Outgoing bids');
-                $objPHPExcel->setActiveSheetIndex(2);
-
-                $objPHPExcel->getActiveSheet()->SetCellValue('A1', 'Outgoing bids stats for ' . $date);
-                $objPHPExcel->getActiveSheet()->mergeCells('A1:' . $letters[count($outgoing_bids_header) - 1] . '1');
-
-                for ($i = 0; $i < count($outgoing_bids_header); $i++) {
-                    $objPHPExcel->getActiveSheet()->SetCellValue($letters[$i] . '3', $outgoing_bids_header[$i]);
-                }
-
-                if (empty($outgoing_bids)) {
-                    $objPHPExcel->getActiveSheet()->SetCellValue('A5', 'No records');
-                    $objPHPExcel->getActiveSheet()->mergeCells('A5:' . $letters[count($outgoing_bids_header) - 1] . '5');
-                } else {
-                    $i = 5;
-                    foreach ($outgoing_bids as $bid) {
-
-                        $bid = array_values((array) ($bid));
-                        for ($j = 0; $j < count($outgoing_bids_header); $j++) {
-                            $objPHPExcel->getActiveSheet()->SetCellValue($letters[$j] . $i, $bid[$j]);
-                        }
-                        $i++;
-                    }
-                }
-
-                foreach ($letters as $columnID) {
-                    $objPHPExcel->getActiveSheet()->getColumnDimension($columnID)
-                            ->setAutoSize(true);
-                }
-            }
-//            
-//            Strat fourth sheet
-//           
-            if ($one['user_role'] != 3) {
-                $contracts_obj = \_factory\ContractPublisherZoneHourlyImpressions::get_instance();
-                $contracts = $contracts_obj->getPerTimeCached($config, $where_params, 900, TRUE, $is_admin);
-                $contracts_header = $contracts_obj->getPerTimeHeader($is_admin);
-
-                $objPHPExcel->createSheet(3);
-                $objPHPExcel->getSheet(3)->setTitle('Contract impressions');
-                $objPHPExcel->setActiveSheetIndex(3);
-
-                $objPHPExcel->getActiveSheet()->SetCellValue('A1', 'Contract impressions stats for ' . $date);
-                $objPHPExcel->getActiveSheet()->mergeCells('A1:' . $letters[count($contracts_header) - 1] . '1');
-
-                for ($i = 0; $i < count($contracts_header); $i++) {
-                    $objPHPExcel->getActiveSheet()->SetCellValue($letters[$i] . '3', $contracts_header[$i]);
-                }
-
-                if (empty($contracts)) {
-                    $objPHPExcel->getActiveSheet()->SetCellValue('A5', 'No records');
-                    $objPHPExcel->getActiveSheet()->mergeCells('A5:' . $letters[count($contracts_header) - 1] . '5');
-                } else {
-                    $i = 5;
-                    foreach ($contracts as $contract) {
-
-                        $contract = array_values((array) ($contract));
-                        for ($j = 0; $j < count($contracts_header); $j++) {
-                            $objPHPExcel->getActiveSheet()->SetCellValue($letters[$j] . $i, $contract[$j]);
-                        }
-                        $i++;
-                    }
-                }
-
-                foreach ($letters as $columnID) {
-                    $objPHPExcel->getActiveSheet()->getColumnDimension($columnID)
-                            ->setAutoSize(true);
-                }
-            }
-//            
-//            Strat fifth sheet
-//            
-            if ($one['user_role'] != 2) {
-                $current_spend_obj = \_factory\BuySideHourlyImpressionsCounterCurrentSpend::get_instance();
-                $current_spend = $current_spend_obj->getPerTimeCached($config, $where_params, 900, TRUE, $is_admin);
-                $current_spend_header = $current_spend_obj->getPerTimeHeader($is_admin);
-
-                $objPHPExcel->createSheet(4);
-                $objPHPExcel->getSheet(4)->setTitle('Current spend');
-                $objPHPExcel->setActiveSheetIndex(4);
-
-                $objPHPExcel->getActiveSheet()->SetCellValue('A1', 'Current spend stats for ' . $date);
-                $objPHPExcel->getActiveSheet()->mergeCells('A1:' . $letters[count($current_spend_header) - 1] . '1');
-
-                for ($i = 0; $i < count($current_spend_header); $i++) {
-                    $objPHPExcel->getActiveSheet()->SetCellValue($letters[$i] . '3', $current_spend_header[$i]);
-                }
-
-                if (empty($current_spend)) {
-                    $objPHPExcel->getActiveSheet()->SetCellValue('A5', 'No records');
-                    $objPHPExcel->getActiveSheet()->mergeCells('A5:' . $letters[count($current_spend_header) - 1] . '5');
-                } else {
-                    $i = 5;
-                    foreach ($current_spend as $impression) {
-
-                        $impression = array_values((array) ($impression));
-                        for ($j = 0; $j < count($current_spend_header); $j++) {
-                            $objPHPExcel->getActiveSheet()->SetCellValue($letters[$j] . $i, $impression[$j]);
-                        }
-                        $i++;
-                    }
-                }
-
-                foreach ($letters as $columnID) {
-                    $objPHPExcel->getActiveSheet()->getColumnDimension($columnID)
-                            ->setAutoSize(true);
-                }
-            }
-
-//            header('Content-type: application/vnd.ms-excel');
-//            header('Content-Disposition: attachment; filename="file.xls"');
+            //header('Content-type: application/vnd.ms-excel');
+            //header('Content-Disposition: attachment; filename="file.xls"');
 
             $objPHPExcel->setActiveSheetIndex(0);
             $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
@@ -334,19 +199,18 @@ class IndexController extends AbstractActionController {
             $attachment->type = 'application/octet-stream';
             $attachment->encoding = Mime\Mime::ENCODING_BASE64;
 
-
             $mimeMessage = new Mime\Message();
             $mimeMessage->setParts(array($text, $attachment));
             $message = new Message();
-//            $message->addTo('michael.mitrofanov@gmail.com')
-            $message->addTo($one['user_email'])
+			//$message->addTo('test@example.com')
+     		$message->addTo($subscribed_user['user_email'])
 //                    ->addFrom('noreply@nginad.com')
                     ->addFrom($config['mail']['reply-to']['email'], $config['mail']['reply-to']['name'])
                     ->setSubject('Statistic for ' . $date)
                     ->setBody($mimeMessage);
             $transport->send($message);
 //            die();
-        }
+        endforeach;
 
         exit(1);
     }
@@ -393,6 +257,71 @@ class IndexController extends AbstractActionController {
             $AdCampaignBannerFactory->saveAdCampaignBannerFromDataArray($data);
 
         endforeach;
+    }
+    
+    private function getPerTime($obj, $config, $is_admin, $extra_params = null) {
+    
+    
+    	$params = $this->params()->fromQuery();
+    	if (!empty($params['step'])) {
+    		$step = $params['step'];
+    	} else {
+    		$step = 1;
+    	}
+    
+    	$DateCreatedGreater = date('Y-m-d H:i:s', time() - 15 * $step * 60);
+    	$DateCreatedLower = date('Y-m-d H:i:s', time() - 15 * ($step - 1) * 60);
+    
+    	if (!empty($params['step'])) {
+    
+    		switch ($params['interval']) {
+    
+    			case '0':
+    				$where_params = array(
+    				'DateCreatedGreater' => $DateCreatedGreater,
+    				'DateCreatedLower' => $DateCreatedLower,
+    				);
+    				break;
+    
+    			case '1':
+    				$where_params = array(
+    				'DateCreatedGreater' => ($params['time_from'] < $params['time_to']) ? $params['time_from'] : $params['time_to'],
+    				'DateCreatedLower' => ($params['time_from'] > $params['time_to']) ? $params['time_from'] : $params['time_to'],
+    				);
+    				break;
+    
+    			default:
+    				return false;
+    				break;
+    		}
+    	} else {
+    		$where_params = array(
+    				'DateCreatedGreater' => $DateCreatedGreater,
+    				'DateCreatedLower' => $DateCreatedLower,
+    		);
+    	}
+    
+    	if ($extra_params !== null && count($extra_params) > 0):
+	    	foreach ($extra_params as $key => $value):
+	    		$where_params[$key] = $value;
+	    	endforeach;
+    	endif;
+    
+    	
+    	if (!empty($params['refresh'])) {
+    		$refresh = true;
+    	} else {
+    		$refresh = false;
+    	}
+    
+    	$data = array(
+    			// 'data' => $obj->getPerTimeCached($config, $where_params, 900, $refresh, $is_admin),
+    			'data' => $obj->getPerTime($where_params),
+    			'step' => $step
+    	);
+    
+    	return json_encode($data);
+    
     }
 
 }

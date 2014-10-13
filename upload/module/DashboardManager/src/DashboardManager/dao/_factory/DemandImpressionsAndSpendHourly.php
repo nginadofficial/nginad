@@ -21,6 +21,8 @@ class DemandImpressionsAndSpendHourly extends \_factory\CachedTableRead {
     static $visibleAdminFiealds = array();
     static $visibleUserFiealds = array();
 
+    static $perTimeCustomInvoked = false;
+    
     public static function get_instance() {
 
         if (self::$instance == null):
@@ -91,16 +93,18 @@ class DemandImpressionsAndSpendHourly extends \_factory\CachedTableRead {
 
     public function getPerTimeCustom($where_params = null, $is_admin = 0) {
     
+    	self::$perTimeCustomInvoked = true;
+    	
     	$obj_list = array();
 
     	$sql = new Sql($this->adapter);
     	$select = $sql->select();
     	$select->columns(array(
+    			'MDYH' => new \Zend\Db\Sql\Expression('MAX(MDYH)'),
     			'AdCampaignBannerID',
     			'DemandCustomerName',
     			'DemandCustomerInfoID',
     			'BannerName',
-    			'MDYH' => new \Zend\Db\Sql\Expression('MAX(MDYH)'),
     			'Impressions' => new \Zend\Db\Sql\Expression('SUM(Impressions)'),
     			'Cost' => new \Zend\Db\Sql\Expression('SUM(Cost)'),
     			'GrossCost' => new \Zend\Db\Sql\Expression('SUM(GrossCost)'),
@@ -226,6 +230,15 @@ class DemandImpressionsAndSpendHourly extends \_factory\CachedTableRead {
 
         $metadata = new Metadata($this->adapter);
         $header = $metadata->getColumnNames('DemandImpressionsAndSpendHourly');
+        
+        if (self::$perTimeCustomInvoked == true):
+	        foreach ($header as $key => $value):
+				if ($value == "PublisherTLDs"):
+					unset($header[$key]);
+				endif;
+	        endforeach;
+        endif;
+        
         return ($is_admin) ? $header : array_values(array_diff($header, $this->adminFields));
     }
 }
