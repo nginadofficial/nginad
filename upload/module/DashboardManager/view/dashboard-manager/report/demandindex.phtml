@@ -55,6 +55,7 @@
     </div>
 </div>
 
+<?php if ($is_admin): ?>
 <div id="impressions_by_user_tld_area">
     <h3>Total impressions by user and TLD</h3>
     <table>
@@ -75,5 +76,5 @@
             <?php endforeach; ?>
         </tbody>
     </table>
-
 </div>
+<?php endif; ?>

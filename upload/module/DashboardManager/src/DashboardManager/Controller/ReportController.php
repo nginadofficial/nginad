@@ -14,7 +14,8 @@ use DashboardManager\ParentControllers\PublisherAbstractActionController;
 use Zend\View\Model\ViewModel;
 
 /**
- * @author Kelvin Mok
+ * @author Kelvin Mok - Kevin did not author this controller, 
+ * I have no idea why this is here. I am guessing somebody copy/pasted.
  * This is the ManagerController that is the initial display of the Manager class.
  */
 class ReportController extends PublisherAbstractActionController {
@@ -28,16 +29,16 @@ class ReportController extends PublisherAbstractActionController {
 		
 		$extra_params = array();
 		
-        if ($this->is_admin) {
+        if ($this->is_admin):
             $this->adminFunctionsSufix = 'Admin';
             $user_role = 1;
-        } elseif ($this->PublisherInfoID != null) {
+        elseif ($this->PublisherInfoID != null):
             $user_role = 2;
             $extra_params = array('PublisherInfoID' => $this->PublisherInfoID);
-        } elseif ($this->DemandCustomerInfoID != null) {
+        elseif ($this->DemandCustomerInfoID != null):
             $user_role = 3;
             return $this->redirect()->toUrl('report/demandindex');
-        }
+        endif;
 
 
         $view = new ViewModel();
@@ -82,17 +83,17 @@ class ReportController extends PublisherAbstractActionController {
     
     	$extra_params = $extra_params_user = array();
     	
-    	if ($this->is_admin) {
+    	if ($this->is_admin):
     		$this->adminFunctionsSufix = 'Admin';
     		$user_role = 1;
-    	} elseif ($this->PublisherInfoID != null) {
+    	elseif ($this->PublisherInfoID != null):
     		return $this->redirect()->toUrl('report/');
     		$user_role = 2;
-    	} elseif ($this->DemandCustomerInfoID != null) {
+    	elseif ($this->DemandCustomerInfoID != null):
     		$user_role = 3;
     		$extra_params = array('DemandCustomerInfoID' => $this->DemandCustomerInfoID);
     		$extra_params_user = array('auth_Users.user_id' => $this->EffectiveID);
-    	}
+    	endif;
     
     
     	$view = new ViewModel();
@@ -114,12 +115,8 @@ class ReportController extends PublisherAbstractActionController {
     			'dashboard_view' => 'report',
     			'action' => 'demandindex',
     			'menu_tpl' => $menu_tpl,
-    
     			'impressions' => json_decode($this->getPerTime($impression, $extra_params), TRUE)['data'],
     			'impressions_header' => $impression->getPerTimeHeader($this->is_admin),
-    
-    			'user_tld_statistic' => $user_tld_impression->getUserTLDStatistic($extra_params_user),
-    			'user_tld_statistic_header' => $user_tld_impression->getUserTLDStatisticHeader(),
     			'user_id_list' => $this->user_id_list,
     			'user_identity' => $this->identity(),
     			'true_user_name' => $this->auth->getUserName(),
@@ -128,7 +125,12 @@ class ReportController extends PublisherAbstractActionController {
     			'effective_id' => $this->auth->getEffectiveIdentityID(),
     			'impersonate_id' => $this->ImpersonateID
     	);
-    
+    	
+    	if ($this->is_admin):
+    		$data['user_tld_statistic'] = $user_tld_impression->getUserTLDStatistic($extra_params_user);
+    		$data['user_tld_statistic_header'] = $user_tld_impression->getUserTLDStatisticHeader();
+    	endif;
+    	
     	$view = new ViewModel($data);
     	return $view;
     }
@@ -138,17 +140,17 @@ class ReportController extends PublisherAbstractActionController {
 		$initialized = $this->initialize();
 		if ($initialized !== true) return $initialized;
 
-        if ($this->is_admin) {
+        if ($this->is_admin):
             $this->EffectiveID;
             $this->adminFunctionsSufix = 'Admin';
             $user_role = 1;
-        } elseif ($this->PublisherInfoID != null) {
+        elseif ($this->PublisherInfoID != null):
             $user_role = 2;
             return $this->redirect()->toUrl('/report/');
-        } elseif ($this->DemandCustomerInfoID != null) {
+        elseif ($this->DemandCustomerInfoID != null):
             $user_role = 3;
             return $this->redirect()->toUrl('/report/spend');
-        }
+        endif;
 
         $view = new ViewModel();
         $view->setTerminal(true);
@@ -188,17 +190,17 @@ class ReportController extends PublisherAbstractActionController {
 		$initialized = $this->initialize();
 		if ($initialized !== true) return $initialized;
 
-        if ($this->is_admin) {
+        if ($this->is_admin):
             $this->EffectiveID;
             $this->adminFunctionsSufix = 'Admin';
             $user_role = 1;
-        } elseif ($this->PublisherInfoID != null) {
+        elseif ($this->PublisherInfoID != null):
             $user_role = 2;
             return $this->redirect()->toUrl('/report/');
-        } elseif ($this->DemandCustomerInfoID != null) {
+        elseif ($this->DemandCustomerInfoID != null):
             $user_role = 3;
             return $this->redirect()->toUrl('/report/spend');
-        }
+        endif;
 
 
         $view = new ViewModel();
@@ -237,16 +239,16 @@ class ReportController extends PublisherAbstractActionController {
         
 		$initialized = $this->initialize();
 		if ($initialized !== true) return $initialized;
-        if ($this->is_admin) {
+        if ($this->is_admin):
             $this->EffectiveID;
             $this->adminFunctionsSufix = 'Admin';
             $user_role = 1;
-        } elseif ($this->PublisherInfoID != null) {
+        elseif ($this->PublisherInfoID != null):
             $user_role = 2;
-        } elseif ($this->DemandCustomerInfoID != null) {
+        elseif ($this->DemandCustomerInfoID != null):
             $user_role = 3;
             return $this->redirect()->toUrl('incomingBids');
-        }
+        endif;
 
 
         $view = new ViewModel();
@@ -285,16 +287,16 @@ class ReportController extends PublisherAbstractActionController {
 		$initialized = $this->initialize();
 		if ($initialized !== true) return $initialized;
 
-        if ($this->is_admin) {
+        if ($this->is_admin):
             $this->EffectiveID;
             $this->adminFunctionsSufix = 'Admin';
             $user_role = 1;
-        } elseif ($this->PublisherInfoID != null) {
+        elseif ($this->PublisherInfoID != null):
             $user_role = 2;
             return $this->redirect()->toUrl('report/');
-        } elseif ($this->DemandCustomerInfoID != null) {
+        elseif ($this->DemandCustomerInfoID != null):
             $user_role = 3;
-        }
+        endif;
 
 
         $view = new ViewModel();
@@ -342,15 +344,15 @@ class ReportController extends PublisherAbstractActionController {
 		$initialized = $this->initialize();
 		if ($initialized !== true) return $initialized;
 
-        if ($this->is_admin) {
+        if ($this->is_admin):
             $this->EffectiveID;
             $this->adminFunctionsSufix = 'Admin';
             $user_role = 1;
-        } elseif ($this->PublisherInfoID != null) {
+        elseif ($this->PublisherInfoID != null):
             $user_role = 2;
-        } elseif ($this->DemandCustomerInfoID != null) {
+        elseif ($this->DemandCustomerInfoID != null):
             $user_role = 3;
-        }
+        endif;
 
 
         $view = new ViewModel();
@@ -385,15 +387,15 @@ class ReportController extends PublisherAbstractActionController {
 		$initialized = $this->initialize();
 		if ($initialized !== true) return $initialized;
 
-        if ($this->is_admin) {
+        if ($this->is_admin):
             $this->EffectiveID;
             $this->adminFunctionsSufix = 'Admin';
             $user_role = 1;
-        } elseif ($this->PublisherInfoID != null) {
+        elseif ($this->PublisherInfoID != null):
             $user_role = 2;
-        } elseif ($this->DemandCustomerInfoID != null) {
+        elseif ($this->DemandCustomerInfoID != null):
             $user_role = 3;
-        }
+       	endif;
 
 
         $view = new ViewModel();
@@ -412,21 +414,21 @@ class ReportController extends PublisherAbstractActionController {
         $ReportSubscription = \_factory\ReportSubscription::get_instance();
         $params = $this->params()->fromPost();
 
-        if (!empty($params['action']) && $params['action'] == 'update_subscription') {
-            if (!empty($params['subscription'])) {
+        if (!empty($params['action']) && $params['action'] == 'update_subscription'):
+            if (!empty($params['subscription'])):
                 $status = 1;
-            } else {
+            else:
                 $status = 0;
-            }
+            endif;
             $subscription_record = $ReportSubscription->get_row(array('UserId' => $this->EffectiveID));
             $subscription_record['Status'] = $status;
             $subscription_record['UserID'] = $this->EffectiveID;
             $ReportSubscriptionModel = new \model\ReportSubscription();
             $ReportSubscriptionModel->initialize($subscription_record);
             $ReportSubscription->updateReportSubscription($ReportSubscriptionModel);
-        } else {
+        else:
             $subscription_record = $ReportSubscription->get_row(array('UserId' => $this->EffectiveID));
-        }
+        endif;
         $view = new ViewModel(array(
             'action' => 'mailer',
             'menu_tpl' => $menu_tpl,
@@ -607,25 +609,25 @@ class ReportController extends PublisherAbstractActionController {
 		$initialized = $this->initialize();
 		if ($initialized !== true) return $initialized;
 
-        if ($this->is_admin) {
+        if ($this->is_admin):
             $this->adminFunctionsSufix = 'Admin';
-        }
+        endif;
 
 
         $params = $this->params()->fromQuery();
-        if (!empty($params['step'])) {
+        if (!empty($params['step'])):
             $step = $params['step'];
-        } else {
+        else:
             $step = 1;
-        }
+        endif;
 
 		$DateCreatedGreater = date('Y-m-d H:i:s', time() - 15 * $step * 60);
 		// $DateCreatedGreater = '2010-12-12 12:12:12';
         $DateCreatedLower = date('Y-m-d H:i:s', time() - 15 * ($step - 1) * 60);
 
-        if (!empty($params['step'])) {
+        if (!empty($params['step'])):
 
-            switch ($params['interval']) {
+            switch ($params['interval']):
 
                 case '0':
                     $where_params = array(
@@ -644,13 +646,13 @@ class ReportController extends PublisherAbstractActionController {
                 default:
                     return false;
                     break;
-            }
-        } else {
+            endswitch;
+        else:
             $where_params = array(
                 'DateCreatedGreater' => $DateCreatedGreater,
                 'DateCreatedLower' => $DateCreatedLower,
             );
-        }
+        endif;
         
         if ($extra_params !== null && count($extra_params) > 0):
         	foreach ($extra_params as $key => $value):
@@ -658,11 +660,11 @@ class ReportController extends PublisherAbstractActionController {
         	endforeach;
         endif;
         
-        if (!empty($params['refresh'])) {
+        if (!empty($params['refresh'])):
             $refresh = true;
-        } else {
+        else:
             $refresh = false;
-        }
+        endif;
 
         $data = array(
             'data' => $obj->getPerTimeCached($this->config_handle, $where_params, 900, $refresh, $this->is_admin),

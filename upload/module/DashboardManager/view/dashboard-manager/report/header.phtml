@@ -17,6 +17,8 @@ $this->headScript()->appendFile($this->basePath() . '/js/reporting_scripts.js');
     <?php if($user_role == 1):?><a class="btn <?php if ($action == 'outgoingBids') echo 'actv' ?>" href="/report/Outgoingbids">Outgoing bids</a><?php endif;?>
     <?php if($user_role == 1):?><a class="btn <?php if ($action == 'contractImpressions') echo 'actv' ?>" href="/report/contractImpressions">Contract impressions</a><?php endif;?>
     
-    <!-- <a class="btn <?php if ($action == 'charts') echo 'actv' ?>" href="/report/charts">Charts</a>  -->
-    <a class="btn <?php if ($action == 'mailer') echo 'actv' ?>" href="/report/mailer">Mailer config</a>
+    <?php /* <a class="btn <?php if ($action == 'charts') echo 'actv' ?>" href="/report/charts">Charts</a>  */ ?>
+    <?php if($user_role != 1): ?>
+    <a class="btn <?php if ($action == 'mailer') echo 'actv' ?>" href="/report/mailer">Excel Email Reports</a>
+    <?php endif; ?>
 </div>

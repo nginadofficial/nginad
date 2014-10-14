@@ -1,9 +1,13 @@
 <?php echo $menu_tpl; ?>
 <div class="formbox">
     <form action="" method="POST">
-        Subscribe for daily e-mail reporting
-        <input type="checkbox" name="subscription" value="1" <?php if($subscription['Status']) echo 'checked="checked"'?> />
-        <input type="hidden" name="action" value="update_subscription" />
-        <input type="submit" value="Update" />
+    	<div>
+    		<label for="subscription" style="display: inline">
+	        Subscribe for daily e-mail reporting
+	        </label>
+	        <input style="margin-bottom: 4px; margin-left: 10px; margin-right: 10px;" type="checkbox" name="subscription" value="1" <?php if($subscription['Status']) echo 'checked="checked"'?> />
+	        <input type="hidden" name="action" value="update_subscription" />
+	        <input type="submit" value="Update" />
+        </div>
     </form>
 </div>
