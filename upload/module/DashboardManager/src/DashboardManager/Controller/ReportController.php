@@ -16,7 +16,7 @@ use Zend\View\Model\ViewModel;
 /**
  * @author Kelvin Mok - Kelvin did not author this controller, 
  * I have no idea why this is here. I am guessing somebody copy/pasted.
- * This is the ManagerController that is the initial display of the Manager class.
+ * This is the ReportController that is the initial display of the ReportController class.
  */
 class ReportController extends PublisherAbstractActionController {
 
