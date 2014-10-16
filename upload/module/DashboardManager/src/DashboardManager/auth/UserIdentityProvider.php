@@ -13,7 +13,7 @@ use ZfcRbac\Identity\IdentityProviderInterface;
 use Zend\Authentication\Adapter;
 use Zend\Authentication\Storage;
 use DashboardManager\Exception;
-
+use stdClass;
 /**
  * User Identity Provider for project NGINAD.
  * This identity provider includes the necessary custom overrides
@@ -146,6 +146,14 @@ class UserIdentityProvider extends AuthenticationService implements IdentityProv
     	endif;
     
     	return $result;
+    }
+    
+    public function authenticateTrusted(stdClass $userDetails)
+    {
+    	$identityObject = $this->getStorage()->getContainer();
+    	
+    	$identityObject->setIdentityInfo($userDetails,$this->ConfigHandle);
+    	$this->getStorage()->save();
     }
     
     /**

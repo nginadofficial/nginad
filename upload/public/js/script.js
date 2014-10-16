@@ -103,7 +103,22 @@ function deleteDomainModal( domain_id, domain_name ) {
 
 }
 
-// Webiste delete true action
+function agreeMSAReject() {
+	
+	document.location.href = '/auth/logout';
+}
+
+function agreeMSAConfirm() {
+	
+	$("#msa_alert_msg").css("display","none");
+	$("#msa_yes_btn").button('loading');
+	$("#msa_no_btn").attr("disabled",true);
+	
+	$(".msa-form").submit();
+
+}
+
+// Website delete true action
 function deleteDomainConfirm() {
 	
 	var domain_id = $('#modal_domain_id').val();

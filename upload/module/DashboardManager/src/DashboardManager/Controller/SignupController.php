@@ -82,14 +82,15 @@ class SignupController extends PublisherAbstractActionController {
 
 				$lastInsertID = $DemandCustomerInfoFactory->saveCustomerInfo($DemandCustomerInfo);
 				
-				$authUsers->DemandCustomerInfoID  = $lastInsertID;
-				$authUsers->user_login		      = $user_login;
-				$authUsers->user_email		      = $Email;
-				$authUsers->user_password	      = \util\Password::md5_split_salt($Password);
-				$authUsers->user_role		      = 3; //role as member
-				$authUsers->user_enabled	      = 0; 
-				$authUsers->user_verified         = 0; 
-				$authUsers->create_date	   	      = date("Y-m-d H:i:s");
+				$authUsers->DemandCustomerInfoID  	= $lastInsertID;
+				$authUsers->user_login		      	= $user_login;
+				$authUsers->user_email		      	= $Email;
+				$authUsers->user_password	      	= \util\Password::md5_split_salt($Password);
+				$authUsers->user_role		      	= 3; //role as member
+				$authUsers->user_enabled	      	= 0; 
+				$authUsers->user_verified         	= 0; 
+				$authUsers->user_agreement_accepted = 0;
+				$authUsers->create_date	   	      	= date("Y-m-d H:i:s");
 				
 				$authUsersFactory->saveUser($authUsers);
 				
@@ -349,7 +350,7 @@ class SignupController extends PublisherAbstractActionController {
 	    
 	  return $view->setTemplate('dashboard-manager/auth/changepassword.phtml');
 	}
-	
+
 	public function publishersAction() {
 		
 		$initialized = $this->initialize();
@@ -704,11 +705,11 @@ class SignupController extends PublisherAbstractActionController {
 				$DemandCustomerFactory = \_factory\DemandCustomerInfo::get_instance();
 				$authUsers = $authUsersFactory->get_row_object(array("DemandCustomerInfoID" => $user_id));
 	        endif;
-		    
-	   		
-	   		$authUsers->user_enabled = $flag;
-    		$authUsers->user_verified = $flag;
-	    		
+
+	   		$authUsers->user_enabled 				= $flag;
+    		$authUsers->user_verified 				= $flag;
+    		$authUsers->user_agreement_accepted		= 0;
+    		
     		if($flag === 1):
     			$authUsersFactory->saveUser($authUsers);
     			return true;

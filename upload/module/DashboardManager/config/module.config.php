@@ -175,7 +175,7 @@ return array(
             				),
             		),
             ),
-	'report' => array(
+			'report' => array(
                     'type'    => 'segment',
                     'options' => array(
                             'route'    =>  '/report[/[:action[/[:param1[/]]]]]',
@@ -247,22 +247,6 @@ return array(
             		               ),
             		          ),
             		    ),
-            		    /*'account' => array(
-            			     'type' => 'segment',
-            			     'options' => array(
-            			           'route' => '/account',
-            			           'constraints' => array(
-                			             'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                			             'param1' => '[0-9]+',
-                			             'id'     => '[0-9]+',
-            		               ),
-            		               'defaults' => array(
-            		                      '__NAMESPACE__' => 'DashboardManager\Controller',
-            		                      'controller' => 'DashboardManager\Controller\Signup',
-            		                      'action'     => 'account',
-            		               ),
-            		          ),
-            		    ),*/
             		),
             ),
             'login' => array(
@@ -287,6 +271,19 @@ return array(
             								'defaults' => array(
             								),
             						),
+            				),
+            		),
+            ),
+            'msa' => array(
+            		'type'    => 'segment',
+            		'options' => array(
+            				'route'    =>  '/auth/msa[/[:param1[/]]]',
+            				'constraints' => array(
+            						'param1' => '[a-zA-Z][a-zA-Z0-9_-]*',
+            				),
+            				'defaults' => array(
+            						'controller' => 'DashboardManager\Controller\Auth',
+            						'action'     => 'msa',
             				),
             		),
             ),

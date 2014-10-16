@@ -1,0 +1,29 @@
+<?php
+echo $this->headScript()->prependFile($this->basePath() . '/js/script.js');
+
+$this->headScript()->captureStart() ?>
+$(function() {
+	$("#msa_alert_msg").css("display","none");
+});
+<?php $this->headScript()->captureEnd();  
+?>
+    <div class="msa-agree">
+      <div class="agreement-body">
+      
+      <?php echo $this->msa_agreement; ?> 
+      <form class="msa-form" method="post" action="/auth/msa/publisher">
+	      <input type="hidden" name="sechash" value="<?php echo $this->sechash; ?>">
+	      <input type="hidden" name="user_id" value="<?php echo $this->user_id; ?>">
+	      <div id="msa_alert_msg" class="alert alert-error" style="display: none;">Error</div>
+			<p id="msg"></p>
+			<h5 style="color: #b94a48;">YOU MUST AGREE TO THE TERMS BEFORE USING THE SERVICE!</h5>
+	      </div>
+	      <div class="modal-footer" >
+	      	<div class="modal-footer-msa">
+	        	<button type="button" data-loading-text="Processing..." id="domain_yes_btn" class="btn btn-primary" onclick="agreeMSAConfirm();">I Accept the Terms</button>
+	        	<button type="button" class="btn btn-default" id="domain_no_btn" data-dismiss="modal" onclick="agreeMSAReject();">I Do Not Accept</button>
+	      	</div>
+	      </div>
+      </form>
+    </div>
+

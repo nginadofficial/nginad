@@ -154,3 +154,23 @@ table tr:hover td {
 	background: -webkit-gradient(linear, left top, left bottom, from(#f2f2f2), to(#f0f0f0));
 	background: -moz-linear-gradient(top,  #f2f2f2,  #f0f0f0);
 }
+
+.modal-footer-msa {
+	margin-left: auto; 
+	margin-right: auto; 
+	width: 450px;
+}
+
+.modal-footer-msa button {
+	font-size: 1.3rem;
+	padding: 10px;
+}
+
+.msa-form {
+	margin: 0px;
+	padding: 0px;
+}
+
+.agreement-body {
+	padding: 20px;
+}

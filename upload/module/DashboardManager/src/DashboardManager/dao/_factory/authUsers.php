@@ -99,22 +99,23 @@ class authUsers extends \_factory\CachedTableRead
     
     public function saveUser(\model\authUsers $authUsers) {
     	
-    	$data['user_id'] =  $authUsers->user_id;
-    	$data['user_description'] = $authUsers->user_description;
-    	$data['user_fullname'] = $authUsers->user_fullname;
-    	$data['user_login']    	  = $authUsers->user_login;
-	    $data['user_email']       = $authUsers->user_email;
-	    $data['user_password']    = $authUsers->user_password;
+    	$data['user_id'] 			= $authUsers->user_id;
+    	$data['user_description'] 	= $authUsers->user_description;
+    	$data['user_fullname'] 		= $authUsers->user_fullname;
+    	$data['user_login']    	  	= $authUsers->user_login;
+	    $data['user_email']       	= $authUsers->user_email;
+	    $data['user_password']    	= $authUsers->user_password;
 	    if(isset($authUsers->PublisherInfoID)) {
 			$data['PublisherInfoID']  = $authUsers->PublisherInfoID;
 		}
 		if(isset($authUsers->DemandCustomerInfoID)) {
-			$data['DemandCustomerInfoID']  = $authUsers->DemandCustomerInfoID;
+			$data['DemandCustomerInfoID']  	= $authUsers->DemandCustomerInfoID;
 		}
-	    $data['user_role']        = $authUsers->user_role;
-	    $data['user_verified']    = $authUsers->user_verified;
-	    $data['user_enabled']     = $authUsers->user_enabled;
-
+	    $data['user_role']        			= $authUsers->user_role;
+	    $data['user_verified']    			= $authUsers->user_verified;
+	    $data['user_enabled']     			= $authUsers->user_enabled;
+	    $data['user_agreement_accepted']    = $authUsers->user_agreement_accepted;
+	    
     	$user_id = (int)$authUsers->user_id;
     	if ($user_id === 0): 
     		$data['create_date']  = $authUsers->create_date;

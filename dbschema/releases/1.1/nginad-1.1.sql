@@ -419,6 +419,7 @@ CREATE TABLE `auth_Users` (
   `user_description` text,
   `user_enabled` smallint(6) NOT NULL DEFAULT '0',
   `user_verified` tinyint(4) NOT NULL DEFAULT '0',
+  `user_agreement_accepted` tinyint(4) NOT NULL DEFAULT '0',
   `PublisherInfoID` int(11) DEFAULT NULL,
   `DemandCustomerInfoID` int(11) DEFAULT NULL,
   `create_date` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
@@ -437,9 +438,9 @@ CREATE TABLE `auth_Users` (
 -- ----------------------------
 -- Records of auth_Users
 -- ----------------------------
-INSERT INTO `auth_Users` VALUES ('1', 'admin', 'admin@localhost', '86a65acd94b33daa87c1c6a2d1408593', null, null, null, null, '1', '1', null, null, '2013-11-06 09:24:00', '2013-11-06 09:25:07', null, '1');
-INSERT INTO `auth_Users` VALUES ('20', 'blowmedia', 'sergey.page@blowmedianow.com', '86a65acd94b33daa87c1c6a2d1408593', null, null, null, null, '1', '1', '3', null, '2014-09-03 21:25:33', '2014-09-03 21:25:33', null, '3');
-INSERT INTO `auth_Users` VALUES ('21', 'suckmedia', 'larry.brin@suckmedianow.com', '86a65acd94b33daa87c1c6a2d1408593', null, null, null, null, '1', '1', null, '18', '2014-09-03 21:32:24', '2014-09-03 21:32:24', null, '3');
+INSERT INTO `auth_Users` VALUES ('1', 'admin', 'admin@localhost', '86a65acd94b33daa87c1c6a2d1408593', null, null, null, null, '1', '1', '1', null, null, '2013-11-06 09:24:00', '2013-11-06 09:25:07', null, '1');
+INSERT INTO `auth_Users` VALUES ('20', 'blowmedia', 'sergey.page@blowmedianow.com', '86a65acd94b33daa87c1c6a2d1408593', null, null, null, null, '1', '1', '1', '3', null, '2014-09-03 21:25:33', '2014-09-03 21:25:33', null, '3');
+INSERT INTO `auth_Users` VALUES ('21', 'suckmedia', 'larry.brin@suckmedianow.com', '86a65acd94b33daa87c1c6a2d1408593', null, null, null, null, '1', '1', '1', null, '18', '2014-09-03 21:32:24', '2014-09-03 21:32:24', null, '3');
 
 -- ----------------------------
 -- Table structure for BuySideDailyImpressionsByTLD
@@ -935,7 +936,7 @@ CREATE TABLE `UserMarkupDemand` (
 -- View structure for auth_userslogin
 -- ----------------------------
 DROP VIEW IF EXISTS `auth_userslogin`;
-CREATE VIEW `auth_userslogin` AS select `auth_Users`.`user_id` AS `user_id`,`auth_Users`.`user_login` AS `user_login`,`auth_Users`.`user_email` AS `user_email`,`auth_Users`.`user_password` AS `user_password`,`auth_Users`.`user_password_salt` AS `user_password_salt`,`auth_Users`.`user_2factor_secret` AS `user_2factor_secret`,`auth_Users`.`user_fullname` AS `user_fullname`,`auth_Users`.`user_description` AS `user_description`,`auth_Users`.`user_enabled` AS `user_enabled`,`auth_Users`.`user_verified` AS `user_verified`,`auth_Users`.`DemandCustomerInfoID` AS `DemandCustomerInfoID`,`auth_Users`.`PublisherInfoID` AS `PublisherInfoID`,`auth_Users`.`create_date` AS `create_date`,`auth_Users`.`update_date` AS `update_date`,`auth_Users`.`user_permission_cache` AS `user_permission_cache`,`auth_Users`.`user_role` AS `user_role`,`rbac_role`.`role_name` AS `user_role_name` from (`auth_Users` join `rbac_role` on((`auth_Users`.`user_role` = `rbac_role`.`role_id`))) where ((`auth_Users`.`user_enabled` > 0) and (`auth_Users`.`user_verified` > 0)) ;
+CREATE VIEW `auth_userslogin` AS select `auth_Users`.`user_id` AS `user_id`,`auth_Users`.`user_login` AS `user_login`,`auth_Users`.`user_email` AS `user_email`,`auth_Users`.`user_password` AS `user_password`,`auth_Users`.`user_password_salt` AS `user_password_salt`,`auth_Users`.`user_2factor_secret` AS `user_2factor_secret`,`auth_Users`.`user_fullname` AS `user_fullname`,`auth_Users`.`user_description` AS `user_description`,`auth_Users`.`user_enabled` AS `user_enabled`,`auth_Users`.`user_verified` AS `user_verified`,`auth_Users`.`user_agreement_accepted` AS `user_agreement_accepted`,`auth_Users`.`DemandCustomerInfoID` AS `DemandCustomerInfoID`,`auth_Users`.`PublisherInfoID` AS `PublisherInfoID`,`auth_Users`.`create_date` AS `create_date`,`auth_Users`.`update_date` AS `update_date`,`auth_Users`.`user_permission_cache` AS `user_permission_cache`,`auth_Users`.`user_role` AS `user_role`,`rbac_role`.`role_name` AS `user_role_name` from (`auth_Users` join `rbac_role` on((`auth_Users`.`user_role` = `rbac_role`.`role_id`))) where ((`auth_Users`.`user_enabled` > 0) and (`auth_Users`.`user_verified` > 0) and (`auth_Users`.`user_agreement_accepted` > 0)) ;
 
 -- ----------------------------
 -- View structure for auth_usersview
