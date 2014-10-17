@@ -9,6 +9,7 @@
 $request_path = $_SERVER['REQUEST_URI'];
 
 $is_company = strpos(strtolower($request_path), "/company") === 0;
+$is_legal = strpos(strtolower($request_path), "/legal") === 0;
 $is_users = strpos(strtolower($request_path), "/users") === 0;
 $is_signup = strpos(strtolower($request_path), "/signup") === 0;
 $is_manager = strpos(strtolower($request_path), "/demand") === 0;
@@ -60,6 +61,13 @@ if ($is_delivery):
 			'config/autoload/rtb.config.{local,staging,production}.php',
 	);
 
+elseif ($is_legal):
+	
+	$modules = array( 'WebsiteCustom' );
+	$config_glob_paths = array(
+			'config/autoload/{global,local}.php',
+	);
+	
 elseif ($is_maintenance):
 
 	$modules = array( 'Maintenance' );

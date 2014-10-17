@@ -1059,3 +1059,10 @@ function web_appr_denie_confirm() {
 		}
 	},'json');
 }
+
+function termsWindow(page, width, height) {
+	properties = "toolbar=0,status=1,scrollbars=1,resizable=1,width=" + width + ", height=" + height;
+	win = window.open( page, "terms", properties);
+	win.focus();
+	return false;
+}

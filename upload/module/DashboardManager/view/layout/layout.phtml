@@ -154,8 +154,8 @@ echo $this->doctype(); ?>
     <a class="btn" href="/company/jobs">jobs</a>
     </div>
    <span class="help_center pull-right">
-    <a class="btn">Help Center</a> 
-    <a class="btn">Blog</a>
+    <a class="btn" href="https://nginad.zendesk.com">Help Center</a> 
+    <!-- <a class="btn">Blog</a> -->
     <!--<a class="btn">Follow Us <img src="../images/facebook.jpg" width="24" /><img src="../images/twitter.jpg" width="24" /></a>-->
     </span>
 	  
@@ -166,11 +166,10 @@ echo $this->doctype(); ?>
 &copy; 2013 - <?php echo date('Y') ?> by CDNPAL NGINAD. <?php echo $this->translate('All rights reserved.') ?>
 </span>
 
-    <li><a href="javascript:void(0);">Privacy Policy</a> <span class="divider">|</span></li>
-    <li><a href="javascript:void(0);">Terms of Use</a> <span class="divider">|</span></li>
-    <li><a href="javascript:void(0);">Publisher Agreement</a> <span class="divider">|</span></li>
-    <li><a href="javascript:void(0);">legal Terms</a> <span class="divider">|</span></li>
-    <li><a href="javascript:void(0);">Opt-Out</a></li>
+    <li><a href="#" onclick="return termsWindow('/legal/privacy', 600, 400);">Privacy Policy</a> <span class="divider">|</span></li>
+    <li><a href="#" onclick="return termsWindow('/legal/terms', 600, 400);">Terms of Use</a> <span class="divider">|</span></li>
+    <li><a href="#" onclick="return termsWindow('/legal/publisheragreement', 600, 400);">Publisher Agreement</a> <span class="divider">|</span></li>
+    <li><a href="#" onclick="return termsWindow('/legal/demandagreement', 600, 400);">Demand Customer Agreement</a> </li>
     </ul>
 	                	
 	                </p>
@@ -179,5 +178,6 @@ echo $this->doctype(); ?>
            
         
         <?php echo $this->inlineScript() ?>
+		<?php echo file_get_contents("module/DashboardManager/view/support/support.js"); ?>
     </body>
 </html>
