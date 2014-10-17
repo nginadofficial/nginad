@@ -114,10 +114,11 @@ class authUsers extends \_factory\CachedTableRead
 		if(isset($authUsers->user_agreement_acceptance_date)) {
 			$data['user_agreement_acceptance_date']  = $authUsers->user_agreement_acceptance_date;
 		}
+		
+		$data['user_agreement_accepted']  	= $authUsers->user_agreement_accepted;
 	    $data['user_role']        			= $authUsers->user_role;
 	    $data['user_verified']    			= $authUsers->user_verified;
 	    $data['user_enabled']     			= $authUsers->user_enabled;
-	    $data['user_agreement_accepted']    = $authUsers->user_agreement_accepted;
 	    
     	$user_id = (int)$authUsers->user_id;
     	if ($user_id === 0): 

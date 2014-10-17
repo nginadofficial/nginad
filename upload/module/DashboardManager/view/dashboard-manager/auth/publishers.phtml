@@ -30,7 +30,7 @@ $this->headScript()->prependFile($this->basePath() . '/js/script.js');
     	   foreach ($user_detail as $user_data) :  
     	   		$userData = $authUsersFactory->get_row(array("PublisherInfoID" => $user_data->PublisherInfoID));
     	   		$approval = false;
-    	   		if($userData->user_enabled == 1 && $userData->user_verified == 1):
+    	   		if(isset($userData) && $userData->user_enabled == 1 && $userData->user_verified == 1):
     	   			$approval = true;
     	   		endif;
     	   ?>
