@@ -26,6 +26,7 @@ class authUsers {
     public $DemandCustomerInfoID;
     public $create_date;
     public $update_date;
+    public $user_agreement_acceptance_date;
     public $user_permission_cache;
     public $user_role;
 }

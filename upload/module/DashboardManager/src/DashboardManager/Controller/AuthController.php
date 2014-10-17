@@ -166,11 +166,11 @@ class AuthController extends ZendAbstractActionController {
     	$params["user_id"] = $user_id;
     	$auth_User = $authUsersFactory->get_row_object($params);
     
-    	$sechash_compare = substr($auth_User->user_password, 0, 12);
+    	$sechash_compare = md5(substr($auth_User->user_password, 0, 12));
     
     	if ($sechash == $sechash_compare):
-	    	$auth_User->user_agreement_accepted		= 1;
-
+	    	$auth_User->user_agreement_accepted				= 1;
+    		$auth_User->user_agreement_acceptance_date		= date("Y-m-d H:i:s");
 	    	$auth_service_trusted = $this->serviceLocator->get('AuthService');
 	    		
 	    	$userDetails = new \stdClass();
@@ -204,7 +204,7 @@ class AuthController extends ZendAbstractActionController {
     	
     	$view = new ViewModel(array(
     			'user_id' => $auth_User->user_id,
-    			'sechash' => substr($auth_User->user_password, 0, 12),
+    			'sechash' => md5(substr($auth_User->user_password, 0, 12)),
     			'msa_agreement' => file_get_contents($msa_text),
     			'header_title' => ucfirst($view_directory) . ' Customer Master Services Agreement',
     			'user_id_list' => array(),

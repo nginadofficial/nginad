@@ -424,6 +424,7 @@ CREATE TABLE `auth_Users` (
   `DemandCustomerInfoID` int(11) DEFAULT NULL,
   `create_date` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `update_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `user_agreement_acceptance_date` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `user_permission_cache` blob,
   `user_role` int(11) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`user_id`),
