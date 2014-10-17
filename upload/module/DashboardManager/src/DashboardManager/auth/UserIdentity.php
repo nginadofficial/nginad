@@ -175,7 +175,7 @@ implements IdentityInterface
                 $this->PublisherInfoID = intval($userDetails->PublisherInfoID);
                 $this->DemandCustomerInfoID = intval($userDetails->DemandCustomerInfoID);
                 
-                if (in_array($this->AdminRolesConfig, $this->TrueIdentityRole) !== false):
+                if (strpos($this->getPrimaryRole(), $this->AdminRolesConfig) !== false):
                 
                     $this->TrueIdentityAdmin = true;
                 
