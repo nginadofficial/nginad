@@ -546,7 +546,7 @@ $().ready(function() {
                required: true
            },
 			PassbackAdTag: {
-				required: true
+				required: false
 			},
 			FloorPrice: {
 				required: true,
