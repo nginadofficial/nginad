@@ -227,7 +227,7 @@ class IndexController extends AbstractActionController
     	$params = array();
     	$params["PublisherAdZoneID"] = $banner_request_id;
     	$params["AdStatus"] = 1;
-    	$PublisherAdZone = $PublisherAdZoneFactory->get_row_cached($params);
+    	$PublisherAdZone = $PublisherAdZoneFactory->get_row_cached($config, $params);
 
     	$PublisherWebsite = null;
     	
@@ -238,7 +238,7 @@ class IndexController extends AbstractActionController
     	$PublisherWebsiteFactory = \_factory\PublisherWebsite::get_instance();
     	$params = array();
     	$params["PublisherWebsiteID"] = $PublisherAdZone->PublisherWebsiteID;
-    	$PublisherWebsite = $PublisherWebsiteFactory->get_row_cached($params);
+    	$PublisherWebsite = $PublisherWebsiteFactory->get_row_cached($config, $params);
     	
     	if ($PublisherWebsite == null):
     		return null;

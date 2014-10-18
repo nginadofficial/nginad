@@ -50,7 +50,7 @@ class PublisherController extends PublisherAbstractActionController {
 	        // admin is logged in as a user, get the markup if any for that user
 	        if ($this->EffectiveID != 0):
 
-		        $publisher_markup = \util\Markup::getMarkupForPublisher($this->EffectiveID);
+		        $publisher_markup = \util\Markup::getMarkupForPublisher($this->EffectiveID, $this->config_handle);
 		        if ($publisher_markup != null):
 		        	$publisher_markup_rate = $publisher_markup->MarkupRate;
 		        endif;
@@ -64,7 +64,7 @@ class PublisherController extends PublisherAbstractActionController {
 
 	    foreach ($PublisherWebsiteList as $PublisherWebsite):
 
-			$website_markup = \util\Markup::getMarkupForPublisherWebsite($PublisherWebsite->PublisherWebsiteID);
+			$website_markup = \util\Markup::getMarkupForPublisherWebsite($PublisherWebsite->PublisherWebsiteID, $this->config_handle);
 			    
 			if ($website_markup != null):
 			    $website_markup_rate_list[$PublisherWebsite->PublisherWebsiteID] = $website_markup->MarkupRate * 100;
