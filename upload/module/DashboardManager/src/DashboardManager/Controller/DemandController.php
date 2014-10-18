@@ -2296,7 +2296,7 @@ class DemandController extends DemandAbstractActionController {
 		$customername              = $AdCampaign->Customer;
 		$customerid                = $AdCampaign->CustomerID;
 		$maximpressions            = $AdCampaign->MaxImpressions;
-		$maxspend                  = $AdCampaign->CurrentSpend;
+		$maxspend                  = sprintf("%1.2f", $AdCampaign->MaxSpend);
 
 
 		return new ViewModel(array(
