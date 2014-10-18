@@ -547,9 +547,9 @@ class SignupController extends PublisherAbstractActionController {
 	        if($bol == true):
 	          $publisher_obj = $PublisherInfoFactory->get_row_object(array('PublisherInfoID'=>$publisher_id));
 	          
-				$message = 'Publisher approved.';
+				$message = 'Your server.nginad.com Publisher account was approved.<br /><br />Please login <a href="http://server.nginad.com/auth/login">here</a> with your email and password';
 	
-				$subject = "Publisher approved.";
+				$subject = "Your NGINAD Exchange Publisher account was approved";
 					
 				$transport = $this->getServiceLocator()->get('mail.transport');
 					
@@ -651,16 +651,16 @@ class SignupController extends PublisherAbstractActionController {
 	        if($bol == true):
 	           $customer_obj = $DemandCustomerFactory->get_row_object(array('DemandCustomerInfoID'=>$customer_id));
 	          
-				$message = 'Customer approved.';
+				$message = 'Your server.nginad.com Demand Customer account was approved.<br /><br />Please login <a href="http://server.nginad.com/auth/login">here</a> with your email and password';
 	
-				$subject = "Customer approved.";
+				$subject = "Your NGINAD Exchange Demand Customer account was approved";
 					
 				$transport = $this->getServiceLocator()->get('mail.transport');
 					
 				$text = new Mime\Part($message);
 				$text->type = Mime\Mime::TYPE_HTML;
 				$text->charset = 'utf-8';
-					
+				
 				$mimeMessage = new Mime\Message();
 				$mimeMessage->setParts(array($text));
 				$zf_message = new Message();

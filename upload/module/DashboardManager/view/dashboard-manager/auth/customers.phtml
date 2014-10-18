@@ -30,7 +30,7 @@ $this->headScript()->prependFile($this->basePath() . '/js/script.js');
     	   <?php foreach ($user_detail as $user_data) :  
     	   		$userData = $authUsersFactory->get_row(array("DemandCustomerInfoID" => $user_data->DemandCustomerInfoID));
     	   		$approval = false;
-    	   		if($userData->user_enabled == 1 && $userData->user_verified == 1):
+    	   		if(isset($userData) && $userData->user_enabled == 1 && $userData->user_verified == 1):
     	   			$approval = true;
     	   		endif;
     	   ?>
