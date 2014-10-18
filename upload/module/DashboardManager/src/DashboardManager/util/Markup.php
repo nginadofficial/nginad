@@ -40,7 +40,7 @@ class Markup {
 		return $config['system']['default_demand_markup_rate'];
 	}
 
-	private static function getMarkupForAdCampaign($ad_campaign_id, $config) {
+	public static function getMarkupForAdCampaign($ad_campaign_id, $config) {
 
 		$AdCampainMarkupFactory = \_factory\AdCampainMarkup::get_instance();
 		$params = array();
@@ -61,7 +61,7 @@ class Markup {
 	}
 	
 	
-	private static function getMarkupForUser($user_id, $config) {
+	public static function getMarkupForUser($user_id, $config) {
 
 		$UserMarkupDemandFactory = \_factory\UserMarkupDemand::get_instance();
 		$params = array();

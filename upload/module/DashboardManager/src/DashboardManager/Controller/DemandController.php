@@ -39,7 +39,7 @@ class DemandController extends DemandAbstractActionController {
 		    // admin is logged in as a user, get the markup if any for that user
 		    if ($this->auth->getEffectiveIdentityID() != 0):
 		    
-		    	$user_markup = \util\Markup::getMarkupForUser($this->auth->getEffectiveIdentityID());
+		    	$user_markup = \util\Markup::getMarkupForUser($this->auth->getEffectiveIdentityID(), $this->config_handle);
 		    	if ($user_markup != null):
 		   			$user_markup_rate = $user_markup->MarkupRate;
 				endif;
@@ -73,7 +73,7 @@ class DemandController extends DemandAbstractActionController {
 		  	$is_preview = \transformation\TransformPreview::doesPreviewAdCampaignExistForAdCampaign($ad_campaign->AdCampaignID, $this->auth);
 		 	if ($is_preview != true):
 		    	$ad_campaign_list[] = $ad_campaign;
-		 		$ad_campaign_markup = \util\Markup::getMarkupForAdCampaign($ad_campaign->AdCampaignID);
+		 		$ad_campaign_markup = \util\Markup::getMarkupForAdCampaign($ad_campaign->AdCampaignID, $this->config_handle);
 
 		 		if ($ad_campaign_markup != null):
 		 			$campaign_markup_rate_list[$ad_campaign->AdCampaignID] = $ad_campaign_markup->MarkupRate * 100;
@@ -101,7 +101,7 @@ class DemandController extends DemandAbstractActionController {
 		    	$ad_campaign_list[] = $ad_campaign_preview;
 		    	if ($ad_campaign_preview->AdCampaignID != null):
 
-				    $ad_campaign_markup = \util\Markup::getMarkupForAdCampaign($ad_campaign_preview->AdCampaignID);
+				    $ad_campaign_markup = \util\Markup::getMarkupForAdCampaign($ad_campaign_preview->AdCampaignID, $this->config_handle);
 
 				    if ($ad_campaign_markup != null):
 				    	$campaign_markup_rate_list[$ad_campaign_preview->AdCampaignID] = $ad_campaign_markup->MarkupRate * 100;
