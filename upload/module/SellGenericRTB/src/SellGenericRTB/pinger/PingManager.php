@@ -368,12 +368,7 @@ class PingManager {
 								$this->winning_partner_pinger->won_auction 			= true;
 								$this->winning_partner_pinger->winning_bid 			= $bid_price;
 								$this->winning_ad_tag								= $bid_adm;	
-								if (isset($bid->bidprice)):
-									$this->winning_bid_price						= $bid->bidprice;
-								else:
-									$this->winning_bid_price						= $bid_adm;
-								endif;
-								
+								$this->winning_bid_price							= sprintf("%1.4f", $this->encrypt_bid($bid_price));
 								$this->auction_was_won 								= true; 
 						endif;			
 					endforeach;
@@ -390,6 +385,11 @@ class PingManager {
 		
 		return $this->auction_was_won;
 		
+	}
+	
+	private function encrypt_bid($unencrypted_bid_price) {
+
+		return $unencrypted_bid_price;
 	}
 	
 	public function process_rtb_ping_statistics() {
