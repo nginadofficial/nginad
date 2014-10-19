@@ -795,3 +795,10 @@ padding:0;
 	display: inline;
 	float: right;
 }
+
+.instructions-btn {
+	display: inline;
+	position: absolute;
+	margin-top: 10px;
+	margin-left: 20px;
+}
