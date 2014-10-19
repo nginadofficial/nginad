@@ -301,7 +301,13 @@ abstract class RtbBuyV22Bid {
 
 			$cache_buster = time();
 			
-			$effective_tag = "<script type='text/javascript' src='" . $delivery_adtag . "?zoneid=" . $AdCampaignBanner->AdCampaignBannerID . "&buyerid=" . $this->rtb_seat_id . "&height=" . $AdCampaignBanner->Height . "&width=" . $AdCampaignBanner->Width . "&tld=" . $tld . "&clktrc={NGINCLKTRK}&winbid={NGINWBIDPRC}&ui=" . $this->user_ip_hash . "&cb=" . $cache_buster . "'></script>";
+			$winning_bid_auction_name_param = "winbid";
+				
+			if ($this->rtb_provider == "BuyLoopbackPartner"):
+				$winning_bid_auction_name_param = "winbidlcl";
+			endif;
+			
+			$effective_tag = "<script type='text/javascript' src='" . $delivery_adtag . "?zoneid=" . $AdCampaignBanner->AdCampaignBannerID . "&buyerid=" . $this->rtb_seat_id . "&height=" . $AdCampaignBanner->Height . "&width=" . $AdCampaignBanner->Width . "&tld=" . $tld . "&clktrc={NGINCLKTRK}&" . $winning_bid_auction_name_param . "={NGINWBIDPRC}&ui=" . $this->user_ip_hash . "&cb=" . $cache_buster . "'></script>";
 			
 			return $effective_tag;
 	}

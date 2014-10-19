@@ -40,7 +40,7 @@ class IndexController extends AbstractActionController
     	$banner_request["ref"] 					= $this->getRequest()->getQuery('ref');
     	$banner_request["scres_height"] 		= $this->getRequest()->getQuery('scres_height');
     	$banner_request["scres_width"] 			= $this->getRequest()->getQuery('scres_width');
-    	$banner_request["sndprc"] 				= $this->getRequest()->getQuery('sndprc');
+    	$banner_request["winbid"] 				= $this->getRequest()->getQuery('winbid');
     	$banner_request["tld"] 					= $this->getRequest()->getQuery('tld');
     	$banner_request["ui"] 					= $this->getRequest()->getQuery('ui');
     	
@@ -362,8 +362,8 @@ class IndexController extends AbstractActionController
 		    
 		    $found_second_price 			= false;
 		    
-		    if ($banner_request["sndprc"] !== null && !empty($banner_request["sndprc"])):
-		    	$decrypted_second_price = $this->decrypt_second_price($banner_request["sndprc"]);
+		    if ($banner_request["winbid"] !== null && !empty($banner_request["winbid"])):
+		    	$decrypted_second_price = $this->decrypt_second_price($banner_request["winbid"]);
 			    if (floatval($decrypted_second_price)):
 			    	$spend_increase_net				= floatval($decrypted_second_price) / 1000;
 			    	$found_second_price 			= true;
