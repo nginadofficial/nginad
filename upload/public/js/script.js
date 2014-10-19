@@ -1066,3 +1066,10 @@ function termsWindow(page, width, height) {
 	win.focus();
 	return false;
 }
+
+function helpWindow(page, width, height) {
+	properties = "toolbar=1,status=1,scrollbars=1,resizable=1,width=" + width + ", height=" + height;
+	win = window.open( page, "help center", properties);
+	win.focus();
+	return false;
+}
