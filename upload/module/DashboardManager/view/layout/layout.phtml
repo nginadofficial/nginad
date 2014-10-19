@@ -71,7 +71,9 @@ echo $this->doctype(); ?>
 					<img src="/images/nginad_logo.png" class="logo-img" />
                      <em>Real Time Bidding Dashboard</em>
                     </a>
-
+					<div class="instructions-btn">
+						<input onclick="return termsWindow('https://nginad.atlassian.net/wiki/display/NGIN/Using+NginAd+Ad+Server', 1200,1000);" type="button" name="help-button" value="I Need Instructions" class="btn btn-primary">
+					</div>
                        <div class="navbar">
     <div class="navbar-inner">
     <ul class="nav">
@@ -154,7 +156,8 @@ echo $this->doctype(); ?>
     <a class="btn" href="/company/jobs">jobs</a>
     </div>
    <span class="help_center pull-right">
-    <a class="btn" href="https://nginad.zendesk.com">Help Center</a> 
+    <a class="btn" href="#" onclick="return termsWindow('https://nginad.atlassian.net/wiki/display/NGIN/Using+NginAd+Ad+Server', 1200,1000);">Help Center</a> 
+    <a class="btn" href="#" onclick="return termsWindow('https://nginad.zendesk.com', 1200,1000);">Support Tickets</a> 
     <!-- <a class="btn">Blog</a> -->
     <!--<a class="btn">Follow Us <img src="../images/facebook.jpg" width="24" /><img src="../images/twitter.jpg" width="24" /></a>-->
     </span>
