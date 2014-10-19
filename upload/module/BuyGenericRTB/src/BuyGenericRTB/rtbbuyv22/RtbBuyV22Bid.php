@@ -264,6 +264,11 @@ abstract class RtbBuyV22Bid {
     		$bidresponse["adid"] = $this->generate_transaction_id();
     		$bidresponse["impid"] = $bidresponse["adid"];
     		$bidresponse["price"] = $AdCampaignBanner->BidAmount;
+    		
+    		if ($this->rtb_provider == "BuyLoopbackPartner"):
+    			$bidresponse["bidprice"] = $AdCampaignBanner->NonAdjustedBidAmount;
+    		endif;
+    		
     		$bidresponse["adm"] = $this->get_effective_ad_tag($AdCampaignBanner, $tld);
     		$bidresponse["adomain"][] = $AdCampaignBanner->LandingPageTLD;
     		$bidresponse["cid"] = "cdnpl_" . $AdCampaignBanner->AdCampaignBannerID;
@@ -296,7 +301,7 @@ abstract class RtbBuyV22Bid {
 
 			$cache_buster = time();
 			
-			$effective_tag = "<script type='text/javascript' src='" . $delivery_adtag . "?zoneid=" . $AdCampaignBanner->AdCampaignBannerID . "&buyerid=" . $this->rtb_seat_id . "&height=" . $AdCampaignBanner->Height . "&width=" . $AdCampaignBanner->Width . "&tld=" . $tld . "&ct0={NGINTRK}&sndprc={NGIN2PRC}&ui=" . $this->user_ip_hash . "&cb=" . $cache_buster . "'></script>";
+			$effective_tag = "<script type='text/javascript' src='" . $delivery_adtag . "?zoneid=" . $AdCampaignBanner->AdCampaignBannerID . "&buyerid=" . $this->rtb_seat_id . "&height=" . $AdCampaignBanner->Height . "&width=" . $AdCampaignBanner->Width . "&tld=" . $tld . "&clktrc={NGINCLKTRK}&winbid={NGINWBIDPRC}&ui=" . $this->user_ip_hash . "&cb=" . $cache_buster . "'></script>";
 			
 			return $effective_tag;
 	}

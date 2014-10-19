@@ -32,6 +32,8 @@ class AdCampaignBanner {
     public $CurrentSpend;
     public $Active;
     public $DateCreated;
+    // extra
+    public $NonAdjustedBidAmount;
 
 }
 

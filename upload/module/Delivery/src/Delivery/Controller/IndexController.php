@@ -201,6 +201,20 @@ class IndexController extends AbstractActionController
 	 			else:	
 	 				return;
 	 			endif;
+	 		else: 
+		 		/*
+		 		 * Process the macro replacements in the winning Ad tag:
+		 		 *
+		 		 * NGINCLKTRK: The click tracking URL, TBD, generic click tracking not yet implemented.
+		 		 * Try implementing your own custom CTR rate tracking
+		 		 *
+		 		 * NGINWBIDPRC: The winning bid price expressed as CPM.
+		 		 * If this was a 2nd price auction, the value would be the second price expressed as CPM
+		 		 */
+		 		
+		 		$winning_ad_tag = str_replace("{NGINCLKTRK}", "", $winning_ad_tag);
+		 		$winning_ad_tag = str_replace("{NGINWBIDPRC}", $PingManager->winning_bid_price, $winning_ad_tag);
+		 		
 	 		endif;
 	 		
 	 		$PingManager->process_rtb_ping_statistics();

@@ -542,8 +542,11 @@ abstract class RtbBuyV22Workflow
 
                 $mark_down = floatval($AdCampaignBanner->BidAmount) * floatval($markup_rate);
                 $adusted_amount = floatval($AdCampaignBanner->BidAmount) - floatval($mark_down);
+                if ($this->rtb_provider == "BuyLoopbackPartner"):
+                	$AdCampaignBanner->NonAdjustedBidAmount = sprintf("%1.4f", $AdCampaignBanner->BidAmount);
+                endif;
                 $AdCampaignBanner->BidAmount = sprintf("%1.4f", $adusted_amount);
-
+                
             	$AdCampaignBanner_Match_List[] = $AdCampaignBanner;
 
         	endforeach;

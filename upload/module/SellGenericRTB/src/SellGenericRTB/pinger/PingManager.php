@@ -35,6 +35,8 @@ class PingManager {
 	
 	public $winning_ad_tag;
 	
+	public $winning_bid_price;
+	
 	private $auction_was_won = false;
 	
 	private $publisher_markup_rate = 40;
@@ -365,7 +367,13 @@ class PingManager {
 								$this->winning_partner_pinger = $RTBPinger;
 								$this->winning_partner_pinger->won_auction 			= true;
 								$this->winning_partner_pinger->winning_bid 			= $bid_price;
-								$this->winning_ad_tag								= $bid_adm;		
+								$this->winning_ad_tag								= $bid_adm;	
+								if (isset($bid->bidprice)):
+									$this->winning_bid_price						= $bid->bidprice;
+								else:
+									$this->winning_bid_price						= $bid_adm;
+								endif;
+								
 								$this->auction_was_won 								= true; 
 						endif;			
 					endforeach;
