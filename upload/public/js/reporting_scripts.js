@@ -49,9 +49,9 @@ function sendFilterData() {
             }
         }
         else {
-            $('.step_navigation').append('<a href="#" data-step="' + (step + 1) + '" class="step_btn">Prev 15 minutes</a>');
+            $('.step_navigation').append('<a href="#" data-step="' + (step + 1) + '" class="step_btn">Prev 12 Hours</a>');
             if (step > 1) {
-                $('.step_navigation').append('<a href="#" data-step="' + (step - 1) + '" class="step_btn">Next 15 minutes</a>');
+                $('.step_navigation').append('<a href="#" data-step="' + (step - 1) + '" class="step_btn">Next 12 Hours</a>');
             }
         }
 
