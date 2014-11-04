@@ -257,6 +257,43 @@ class IndexController extends AbstractActionController {
             $AdCampaignBannerFactory->saveAdCampaignBannerFromDataArray($data);
 
         endforeach;
+        
+        /*
+         * Update all AdCampaign tables with the new info from the AdCampaignBanner tables
+         */
+        
+        $AdCampaignFactory = \_factory\AdCampaign::get_instance();
+        $params = array();
+        $params["Active"] = 1;
+        $AdCampaignList = $AdCampaignFactory->get($params);
+        
+        foreach ($AdCampaignList as $AdCampaign):
+        
+	        $ad_campaign_id = $AdCampaign->AdCampaignID;
+
+	        $AdCampaignBannerFactory = \_factory\AdCampaignBanner::get_instance();
+	        $params = array();
+	        $params["AdCampaignID"] = $ad_campaign_id;
+	        $AdCampaignBannerList = $AdCampaignBannerFactory->get($params);
+        
+	        $impressions_counter 	= 0;
+	        $current_spend			= 0;
+	        
+	        foreach ($AdCampaignBannerList as $AdCampaignBanner):
+	        
+	        	$impressions_counter 	+= $AdCampaignBanner->ImpressionsCounter;
+	        	$current_spend 			+= floatval($AdCampaignBanner->CurrentSpend);
+	        
+	        endforeach;
+
+	        $AdCampaign->ImpressionsCounter 	= $impressions_counter;
+	        $AdCampaign->CurrentSpend 			= $current_spend;
+	        
+	        $data = $AdCampaign->getArrayCopy();
+	        
+	        $AdCampaignFactory->saveAdCampaignFromDataArray($data);
+	        
+        endforeach;
     }
     
     private function getPerTime($obj, $config, $is_admin, $extra_params = null) {
