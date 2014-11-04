@@ -622,9 +622,9 @@ class ReportController extends PublisherAbstractActionController {
         endif;
 
         // default 12 hours
-		$DateCreatedGreater = date('Y-m-d H:i:s', time() - 12 * 3600 * $step);
+		$DateCreatedGreater = date('Y-m-d H:i:s', time() - (12 * 3600 * $step));
 		// $DateCreatedGreater = '2010-12-12 12:12:12';
-        $DateCreatedLower = date('Y-m-d H:i:s', time() - 12 * 3600 * ($step - 1));
+        $DateCreatedLower = date('Y-m-d H:i:s', time() - (12 * 3600 * ($step - 1)));
 
         if (!empty($params['step'])):
 
