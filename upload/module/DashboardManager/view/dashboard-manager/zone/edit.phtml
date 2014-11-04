@@ -2,7 +2,11 @@
 $this->headScript()->appendFile($this->basePath() . '/js/script.js');
 $this->headScript()->appendFile($this->basePath() . '/js/zone.js');
 $this->headScript()->captureStart() ?>
-
+$(function() {
+	$("form.form-horizontal").validate({
+	   ignore: ".ignore"
+	})
+});
 <?php $this->headScript()->captureEnd();  ?>
    <ul class="breadcrumb breadcrumb-heading">
     <li><a href="/publisher/">Domains</a><span class="divider">/</span></li>
@@ -35,7 +39,7 @@ $this->headScript()->captureStart() ?>
 <div class="control-group" id="passback-cg">
     <label for="PassbackAdTag" class="control-label">Passback Ad Tag</label>
     <div class="controls">
- <textarea class="zone-txtbox" maxlength="5000" id="PassbackAdTag" name="PassbackAdTag"><?php echo $editResultObj->PassbackAdTag;?></textarea>    </div>
+ <textarea class="zone-txtbox ignore" maxlength="5000" id="PassbackAdTag" name="PassbackAdTag"><?php echo $editResultObj->PassbackAdTag;?></textarea>    </div>
     </div>
     <div class="control-group" id="floor-cg">
     <label for="FloorPrice" class="control-label">Floor Price</label>
