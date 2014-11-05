@@ -57,6 +57,11 @@
                 </tr>
 <?php	endif;
 	 endforeach; ?>
+        	<tr>
+            <?php foreach ($totals as $name => $value): ?>
+            	<td><?php echo $value; ?></td>
+            <?php endforeach; ?>
+            </tr>
         </tbody>
     </table>
 
@@ -64,32 +69,4 @@
         <a href="#" data-step="2" class="step_btn">Prev 12 Hours</a>
 
     </div>
-</div>
-
-<div id="spend_per_webdomain">
-    <table>
-        <thead>
-            <tr>
-                <th>Impressions Total</th>
-                <th>Spend Total</th>
-                <th>Ad name</th>
-                <th>WebDomain</th>
-                <th>Banner name</th>
-                <th>User</th>
-            </tr>
-        </thead>
-        <tbody>
-<?php foreach ($spend_per_webdomain as $one): ?>
-                <tr>
-                    <td><?php echo $one->ImpressionsTotal; ?></td>
-                    <td><?php echo $one->SpendTotalNet; ?></td>
-                    <td><?php echo $one->AdName; ?></td>
-                    <td><?php echo $one->WebDomain; ?></td>
-                    <td><?php echo $one->banner_name; ?></td>
-                    <td><?php echo $one->user_login; ?></td>
-                </tr>
-<?php endforeach; ?>
-        </tbody>
-    </table>
-
 </div>

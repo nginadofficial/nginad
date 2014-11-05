@@ -98,7 +98,6 @@ function sendFilterData() {
 }
 
 function updateStatistic(target, method, datasend){
-    
         url = '/report/' + method;
         $.ajax({
             type: "GET",
@@ -114,7 +113,13 @@ function updateStatistic(target, method, datasend){
                     });
                     html += '</tr>';
                     $('#' + target + ' tbody').append(html);
-                })
+                });
+                var html = '<tr>';
+                for (i in data['totals']) {
+                	 html += ('<td>' + data['totals'][i] + '</td>');
+                }
+                html += '</tr>';
+                $('#' + target + ' tbody').append(html);
             }
         });
     

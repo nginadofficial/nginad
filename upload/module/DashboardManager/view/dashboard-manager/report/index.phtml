@@ -47,6 +47,11 @@
                     <?php endforeach; ?>
                 </tr>
             <?php endforeach; ?>
+        	<tr>
+            <?php foreach ($totals as $name => $value): ?>
+            	<td><?php echo $value; ?></td>
+            <?php endforeach; ?>
+            </tr>
         </tbody>
     </table>
 

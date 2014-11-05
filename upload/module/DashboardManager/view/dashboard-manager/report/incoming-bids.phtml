@@ -63,6 +63,11 @@
                     endif; ?>
                 
 <?php endforeach; ?>
+        	<tr>
+            <?php foreach ($totals as $name => $value): ?>
+            	<td><?php echo $value; ?></td>
+            <?php endforeach; ?>
+            </tr>
         </tbody>
     </table>
 
@@ -70,38 +75,4 @@
         <a href="#" data-step="2" class="step_btn">Prev 12 Hours</a>
 
     </div>
-</div>
-
-<div id="average_bids_area">
-    <table>
-        <thead>
-            <tr>
-                <?php foreach ($average_bids_header as $one): ?>
-                    <th><?php echo $one; ?></th>
-                <?php endforeach; ?>
-<!--                <th>Buy Side Partner</th>
-                <th>Average Bids</th>
-                <th>Total Bids</th>
-                <th>Ad Campaign Banner</th>
-                <th>AdCampaign</th>
-                <th>User</th>-->
-            </tr>
-        </thead>
-        <tbody>
-<?php foreach ($average_bids as $one): ?>
-                <tr>
-                    <?php foreach ($one as $two): ?>
-                        <td><?php echo $two;?></td>
-                    <?php endforeach;?>
-<!--                    <td><?php //echo $one->BuySidePartnerID; ?></td>
-                    <td><?php //echo $one->avg_bids; ?></td>
-                    <td><?php //echo $one->total_bids; ?></td>
-                    <td><?php //echo $one->banner_name; ?></td>
-                    <td><?php //echo $one->Name; ?></td>
-                    <td><?php //echo $one->user_login; ?></td>-->
-                </tr>
-<?php endforeach; ?>
-        </tbody>
-    </table>
-
 </div>

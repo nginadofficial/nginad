@@ -1,0 +1,31 @@
+<?php echo $menu_tpl; ?>
+
+<div id="report_list">
+<?php if ($is_admin): ?>
+<div id="impressions_by_user_tld_area">
+    <h3>Total impressions by user and TLD</h3>
+    <table>
+        <thead>
+            <tr>
+                <?php foreach ($user_tld_statistic_header as $key=>$one): ?>
+                    <th><?php echo (!empty($one)) ? $one : $key; ?></th>
+                <?php endforeach; ?>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($user_tld_statistic as $one): ?>
+                <tr>
+                    <?php foreach ($one as $two): ?>
+                        <td><?php echo $two; ?></td>
+                    <?php endforeach; ?>
+                </tr>
+            <?php endforeach; ?>
+        	<tr>
+            <?php foreach ($totals as $name => $value): ?>
+            	<td><?php echo $value; ?></td>
+            <?php endforeach; ?>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<?php endif; ?>

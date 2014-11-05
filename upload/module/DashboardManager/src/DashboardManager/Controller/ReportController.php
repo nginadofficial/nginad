@@ -55,14 +55,17 @@ class ReportController extends PublisherAbstractActionController {
 
         $impression = \_factory\PublisherImpressionsAndSpendHourly::get_instance();
 
+        $stats	= json_decode($this->getPerTime($impression, $extra_params), TRUE);
+        
         $data = array(
             'dashboard_view' => 'report',
             'action' => 'index',
             'menu_tpl' => $menu_tpl,
             
-            'impressions' => json_decode($this->getPerTime($impression, $extra_params), TRUE)['data'],
+            'impressions' => $stats['data'],
             'impressions_header' => $impression->getPerTimeHeader($this->is_admin),
-            
+        	'totals' => $stats['totals'],
+        		
             'user_id_list' => $this->user_id_list,
             'user_identity' => $this->identity(),
             'true_user_name' => $this->auth->getUserName(),
@@ -108,15 +111,17 @@ class ReportController extends PublisherAbstractActionController {
     	->get('viewrenderer')
     	->render($view);
     
-    	$user_tld_impression = \_factory\BuySideHourlyImpressionsByTLD::get_instance();
     	$impression = \_factory\DemandImpressionsAndSpendHourly::get_instance();
     
+    	$stats	= json_decode($this->getPerTime($impression, $extra_params), TRUE);
+    	
     	$data = array(
     			'dashboard_view' => 'report',
     			'action' => 'demandindex',
     			'menu_tpl' => $menu_tpl,
-    			'impressions' => json_decode($this->getPerTime($impression, $extra_params), TRUE)['data'],
+    			'impressions' => $stats['data'],
     			'impressions_header' => $impression->getPerTimeHeader($this->is_admin),
+    			'totals' => $stats['totals'],
     			'user_id_list' => $this->user_id_list,
     			'user_identity' => $this->identity(),
     			'true_user_name' => $this->auth->getUserName(),
@@ -126,11 +131,64 @@ class ReportController extends PublisherAbstractActionController {
     			'impersonate_id' => $this->ImpersonateID
     	);
     	
-    	if ($this->is_admin):
-    		$data['user_tld_statistic'] = $user_tld_impression->getUserTLDStatistic($extra_params_user);
-    		$data['user_tld_statistic_header'] = $user_tld_impression->getUserTLDStatisticHeader();
+    	$view = new ViewModel($data);
+    	return $view;
+    }
+    
+    public function usertotalsAction() {
+    
+    	$initialized = $this->initialize();
+    	if ($initialized !== true) return $initialized;
+    
+    	$extra_params = $extra_params_user = array();
+    	 
+    	if (!$this->is_admin):
+    		return $this->redirect()->toUrl('report/');
+    	else:	
+	    	$this->adminFunctionsSufix = 'Admin';
+	    	$user_role = 1;
     	endif;
+    
+    
+    	$view = new ViewModel();
+    	$view->setTerminal(true);
+    	$view->setTemplate('dashboard-manager/report/header.phtml');
+    	$view->setVariables(array(
+    			'action' => 'usertotals',
+    			'user_role' => $user_role
+    	));
+    
+    	$menu_tpl = $this->getServiceLocator()
+    	->get('viewrenderer')
+    	->render($view);
+    
+    	$user_tld_impression = \_factory\BuySideHourlyImpressionsByTLD::get_instance();
     	
+    	$user_tld_statistic 		= $user_tld_impression->getUserTLDStatistic($extra_params_user);
+    	$user_tld_statistic_header 	= $user_tld_impression->getUserTLDStatisticHeader();
+    	
+    	$impression = \_factory\DemandImpressionsAndSpendHourly::get_instance();
+    	
+    	$totals = $this->createTotals($user_tld_statistic);
+    	
+    	$totals["PublisherTLD"] = "Totals:";
+
+    	$data = array(
+    			'dashboard_view' => 'report',
+    			'action' => 'demandindex',
+    			'menu_tpl' => $menu_tpl,
+    			'user_tld_statistic' => $user_tld_statistic,
+    			'user_tld_statistic_header' => $user_tld_statistic_header,
+    			'totals' => $totals,
+    			'user_id_list' => $this->user_id_list,
+    			'user_identity' => $this->identity(),
+    			'true_user_name' => $this->auth->getUserName(),
+    			'header_title' => 'Reports',
+    			'is_admin' => $this->is_admin,
+    			'effective_id' => $this->auth->getEffectiveIdentityID(),
+    			'impersonate_id' => $this->ImpersonateID
+    	);
+    	 
     	$view = new ViewModel($data);
     	return $view;
     }
@@ -171,8 +229,6 @@ class ReportController extends PublisherAbstractActionController {
             'menu_tpl' => $menu_tpl,
             'incoming_bids' => (array) json_decode($this->getIncomingBidsPerTimeAction()),
             'incoming_bids_header' => $incoming_bid->getPerTimeHeader($this->is_admin),
-            'average_bids' => $incoming_bid->{'getAverage' . $this->adminFunctionsSufix}(),
-            'average_bids_header' => $incoming_bid->{'getAverageHeader' . $this->adminFunctionsSufix}(),
             'user_id_list' => $this->user_id_list,
             'user_identity' => $this->identity(),
             'true_user_name' => $this->auth->getUserName(),
@@ -223,7 +279,6 @@ class ReportController extends PublisherAbstractActionController {
             'menu_tpl' => $menu_tpl,
             'outgoing_bids' => (array) json_decode($this->getOutgoingBidsPerTimeAction()),
             'outgoing_bids_header' => $outgoing_bid->getPerTimeHeader($this->is_admin),
-            'spend_per_webdomain' => $outgoing_bid->getPerZone(),
             'user_id_list' => $this->user_id_list,
             'user_identity' => $this->identity(),
             'true_user_name' => $this->auth->getUserName(),
@@ -265,12 +320,15 @@ class ReportController extends PublisherAbstractActionController {
 
         $impression = \_factory\ContractPublisherZoneHourlyImpressions::get_instance();
 //        die();
+
+        $stats	= json_decode($this->getPerTime($impression), TRUE);
+        
         $view = new ViewModel(array(
             'dashboard_view' => 'report',
             'menu_tpl' => $menu_tpl,
             'action' => 'contractImpressions',
-            'impressions' => (array) json_decode($this->getContractImpressionsPerTimeAction()),
-            'spend_per_webdomain' => $impression->getPerZone(),
+            'impressions' => $stats['data'],
+        	'totals' 	=> $stats['totals'],
             'user_id_list' => $this->user_id_list,
             'user_identity' => $this->identity(),
             'true_user_name' => $this->auth->getUserName(),
@@ -494,34 +552,6 @@ class ReportController extends PublisherAbstractActionController {
         return $this->getResponse()->setContent(json_encode($data));
     }
 
-    public function getOutgoingBidsPerZoneAction() {
-
-    	if (!$this->is_admin):
-    		die("bad request");
-    	endif;
-    	
-        $outgoing_bid = \_factory\SellSidePartnerHourlyBids::get_instance();
-
-        $data = array(
-            'data' => $outgoing_bid->getPerZone(),
-        );
-        return $this->getResponse()->setContent(json_encode($data));
-    }
-
-    public function getImpressionsPerContractZoneAction() {
-
-    	if (!$this->is_admin):
-    		die("bad request");
-    	endif;
-    	
-        $impressions = \_factory\ContractPublisherZoneHourlyImpressions::get_instance();
-
-        $data = array(
-            'data' => $impressions->getPerZone(),
-        );
-        return $this->getResponse()->setContent(json_encode($data));
-    }
-
     public function getDemandImpressionsPerTimeAction() {
     	
     	$initialized = $this->initialize(); 
@@ -562,6 +592,9 @@ class ReportController extends PublisherAbstractActionController {
 
     public function getIncomingBidsPerTimeAction() {
 
+    	$initialized = $this->initialize();
+    	if ($initialized !== true) return $initialized;
+    	
     	if (!$this->is_admin):
     		die("bad request");
     	endif;
@@ -573,6 +606,9 @@ class ReportController extends PublisherAbstractActionController {
 
     public function getOutgoingBidsPerTimeAction() {
 
+    	$initialized = $this->initialize();
+    	if ($initialized !== true) return $initialized;
+    	
     	if (!$this->is_admin):
     		die("bad request");
     	endif;
@@ -583,6 +619,9 @@ class ReportController extends PublisherAbstractActionController {
     }
 
     public function getContractImpressionsPerTimeAction() {
+    	
+    	$initialized = $this->initialize();
+    	if ($initialized !== true) return $initialized;
     	
     	if (!$this->is_admin):
     		die("bad request");
@@ -595,6 +634,9 @@ class ReportController extends PublisherAbstractActionController {
 
     public function getImpressionsCurrentSpendPerTimeAction() {
     	
+    	$initialized = $this->initialize();
+    	if ($initialized !== true) return $initialized;
+    	
     	if (!$this->is_admin):
     		die("bad request");
     	endif;
@@ -604,6 +646,73 @@ class ReportController extends PublisherAbstractActionController {
     	);
     }
 
+    private function createTotals($data) {
+    	 
+    	$totals = array();
+    	 
+    	$count = 0;
+    	 
+    	foreach ($data as $data_obj):
+	    	$count++;
+	    	foreach ($data_obj as $name => $value):
+		    	if ($name == "MDYH"):
+		    		$totals[$name] = "Totals:";
+		    	elseif (is_numeric($value) && strpos($name, "ID") === false):
+			    	if (isset($totals[$name])):
+			    		$totals[$name] += $value;
+			    	else:
+			    		$totals[$name] = $value;
+			    	endif;
+		    	else:
+		    		$totals[$name] = "";
+		    	endif;
+	    	endforeach;
+    	endforeach;
+    	 
+    	// format numbers
+    	foreach ($totals as $name => $value):
+	    	if (is_numeric($totals[$name])):
+		    	if ($this->isRevWord($name)):
+		    		$totals[$name] = "$" . number_format(sprintf("%1.2f", $totals[$name]), 2);
+		    	elseif ($this->isCpmWord($name)):
+		    		$totals[$name] =  "Avg: $" . sprintf("%1.7f", $totals[$name] / $count);
+		    	else:
+			    	if (!is_float($totals[$name])):
+			    		$totals[$name] = number_format($totals[$name]);
+			    	endif;
+		    	endif;
+	    	endif;
+    	endforeach;
+    	 
+    	return $totals;
+    	 
+    }
+    
+    private function isRevWord($test_word) {
+    	$match_words = array(
+    		"revenue",
+    		"cost"	
+    	);
+    	return $this->isWordMatch($match_words, $test_word);
+    }
+    
+    private function isCpmWord($test_word) {
+    	$match_words = array(
+    			"cpm"
+    	);
+    	return $this->isWordMatch($match_words, $test_word);
+    }
+    
+    private function isWordMatch($match_words, $test_word) {
+    	
+    	foreach ($match_words as $match_word):
+    		if (strpos(strtolower($test_word), $match_word) !== false):
+    			return true;
+    		endif;
+    	endforeach;
+    }
+    
+    
     private function getPerTime($obj, $extra_params = null) {
 
 		$initialized = $this->initialize();
@@ -667,9 +776,13 @@ class ReportController extends PublisherAbstractActionController {
             $refresh = false;
         endif;
 
+        $stats_data 	= $obj->getPerTimeCached($this->config_handle, $where_params, 900, $refresh, $this->is_admin);
+        $totals_data 	= $this->createTotals($stats_data);
+        
         $data = array(
-            'data' => $obj->getPerTimeCached($this->config_handle, $where_params, 900, $refresh, $this->is_admin),
-            'step' => $step
+            'data' 		=> $stats_data,
+        	'totals' 	=> $totals_data,
+            'step' 		=> $step
         );
         
         return json_encode($data);

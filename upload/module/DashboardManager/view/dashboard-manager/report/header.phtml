@@ -13,6 +13,7 @@ $this->headScript()->appendFile($this->basePath() . '/js/reporting_scripts.js');
 <div class="btn-group report_menu">
     <?php if($user_role != 3):?><a class="btn <?php if ($action == 'index') echo 'actv' ?>" href="/report/">Publisher Impressions</a><?php endif;?>
     <?php if($user_role != 2):?><a class="btn <?php if ($action == 'demandindex') echo 'actv' ?>" href="/report/demandindex">Demand Impressions</a><?php endif;?>
+    <?php if($user_role != 2):?><a class="btn <?php if ($action == 'usertotals') echo 'actv' ?>" href="/report/usertotals">User Totals</a><?php endif;?>
     <?php if($user_role == 1):?><a class="btn <?php if ($action == 'incomingBids') echo 'actv' ?>" href="/report/IncomingBids">Incoming bids</a><?php endif;?>
     <?php if($user_role == 1):?><a class="btn <?php if ($action == 'outgoingBids') echo 'actv' ?>" href="/report/Outgoingbids">Outgoing bids</a><?php endif;?>
     <?php if($user_role == 1):?><a class="btn <?php if ($action == 'contractImpressions') echo 'actv' ?>" href="/report/contractImpressions">Contract impressions</a><?php endif;?>

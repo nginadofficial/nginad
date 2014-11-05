@@ -69,38 +69,15 @@
                     endif; ?>
                 
 <?php endforeach; ?>
+        	<tr>
+            <?php foreach ($totals as $name => $value): ?>
+            	<td><?php echo $value; ?></td>
+            <?php endforeach; ?>
+            </tr>
         </tbody>
     </table>
 
     <div class="step_navigation">
         <a href="#" data-step="2" class="step_btn">Prev 12 Hours</a>
     </div>
-</div>
-
-<div id="spend_by_webdomain_area">
-    <h4>Spend by webdomain</h4>
-
-    <table>
-        <thead>
-            <tr>
-                <th>SpendTotal</th>
-                <th>SellSidePartnerID</th>
-                <th>PublisherAdZone</th>
-                <th>WebDomain</th>
-
-            </tr>
-        </thead>
-        <tbody>
-<?php foreach ($spend_per_webdomain as $one): ?>
-                <tr>
-                    <td><?php echo $one->SpendTotalNet; ?></td>
-                    <td><?php echo $one->SellSidePartnerID; ?></td>
-                    <td><?php echo $one->AdName; ?></td>
-                    <td><?php echo $one->WebDomain; ?></td>
-
-                </tr>
-<?php endforeach; ?>
-        </tbody>
-    </table>
-
 </div>

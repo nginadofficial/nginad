@@ -92,28 +92,6 @@ class SellSidePartnerHourlyBids extends \_factory\CachedTableRead {
 
         $obj_list = array();
 
-//        $resultSet = $this->select(function (\Zend\Db\Sql\Select $select) use ($where_params) {
-//            $select->columns(array('SellSidePartnerID', 'MDYH', 'BidsWonCounter', 'BidsLostCounter', 'BidsErrorCounter', 'SpendTotalNet', 'DateCreated', 'DateUpdated'));
-//            if (!empty($where_params['DateCreatedGreater'])):
-//                $select->where(
-//                        $select->where->greaterThanOrEqualTo($this->table . '.DateCreated', $where_params['DateCreatedGreater'])
-//                );
-//            endif;
-//
-//            if (!empty($where_params['DateCreatedLower'])):
-//                $select->where(
-//                        $select->where->lessThanOrEqualTo($this->table . '.DateCreated', $where_params['DateCreatedLower'])
-//                );
-//            endif;
-//
-//            $select->join(
-//                    'PublisherAdZone', $this->table . '.PublisherAdZoneID = PublisherAdZone.PublisherAdZoneID', array('AdName')
-//            );
-//
-//            $select->order($this->table . '.SellSidePartnerID');
-//        }
-//        );
-
         $sql = new Sql($this->adapter);
         $select = $sql->select();
         $select->from('sellSidePartnerHourlyBidsPerTime');
@@ -155,39 +133,6 @@ class SellSidePartnerHourlyBids extends \_factory\CachedTableRead {
         $metadata = new Metadata($this->adapter);
         $header = $metadata->getColumnNames('sellSidePartnerHourlyBidsPerTime');
         return ($is_admin) ? $header : array_values(array_diff($header, $this->adminFields));
-    }
-
-    public function getPerZone($where_params = null) {
-
-        $obj_list = array();
-
-        $resultSet = $this->select(function (\Zend\Db\Sql\Select $select) use ($where_params) {
-
-            $select->columns(array(
-                'SpendTotalNet' => new \Zend\Db\Sql\Expression('ROUND(SUM(' . $this->table . '.SpendTotalNet), 7)'),
-                'SellSidePartnerID'
-            ));
-
-            $select->join(
-                    'PublisherAdZone', $this->table . '.PublisherAdZoneID = PublisherAdZone.PublisherAdZoneID', array('AdName')
-            );
-
-            $select->join(
-                    'PublisherWebsite', 'PublisherAdZone.PublisherWebsiteID = PublisherWebsite.PublisherWebsiteID', array('WebDomain')
-            );
-
-            $select->group($this->table . '.PublisherAdZoneID');
-            $select->group($this->table . '.SellSidePartnerID');
-
-            $select->order('PublisherWebsite.WebDomain');
-        }
-        );
-
-        foreach ($resultSet as $obj):
-            $obj_list[] = $obj;
-        endforeach;
-
-        return $obj_list;
     }
 
     public function insertSellSidePartnerHourlyBids(\model\SellSidePartnerHourlyBids $SellSidePartnerHourlyBids) {
