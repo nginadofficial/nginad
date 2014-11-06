@@ -294,6 +294,8 @@ abstract class RtbBuyV22Bid {
 
 			$classname = $this->random_classname();
 
+			$winning_bid_auction_param = "";
+			
 			$cache_buster = time();
 
 			if ($this->rtb_provider != "BuyLoopbackPartner"):
