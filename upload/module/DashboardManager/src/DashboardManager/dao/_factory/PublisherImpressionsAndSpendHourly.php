@@ -38,7 +38,9 @@ class PublisherImpressionsAndSpendHourly extends \_factory\CachedTableRead {
         $this->adminFields = array_merge($this->adminFields, array(
         	'PublisherInfoID',
             'GrossECPM',
-            'GrossRevenue'
+            'GrossRevenue',
+        	'PublisherName',
+        	'DateCreated'
         ));
         $this->initialize();
     }

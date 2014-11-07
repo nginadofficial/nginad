@@ -402,6 +402,8 @@ class PingManager {
 		$bids_won				 	= 0;
 		$bids_lost					= 0;
 		$bid_errors				 	= 0;
+		$spend_total_gross			= 0;
+		$spend_total_net			= 0;
 		$error_list				= array();
 		
 		foreach ($this->RTBPingerList as $RTBPinger):
@@ -426,11 +428,15 @@ class PingManager {
 					$SellSidePartnerHourlyBids->BidsWonCounter 	= 1;
 					$SellSidePartnerHourlyBids->SpendTotalGross	= floatval($RTBPinger->winning_bid) / 1000;
 					
+					$spend_total_gross = $SellSidePartnerHourlyBids->SpendTotalGross;
+					
 					// Subtract Ad Exchange Publisher markup
 
 					$mark_down = floatval($SellSidePartnerHourlyBids->SpendTotalGross) * floatval($this->publisher_markup_rate);
 					$adusted_amount = floatval($SellSidePartnerHourlyBids->SpendTotalGross) - floatval($mark_down);
 					$SellSidePartnerHourlyBids->SpendTotalNet = $adusted_amount;
+					
+					$spend_total_net = $SellSidePartnerHourlyBids->SpendTotalNet;
 
 				else:
 				
@@ -450,6 +456,18 @@ class PingManager {
 			\util\CachedStatsWrites::incrementSellSideBidsCounterCached($this->config, $SellSidePartnerHourlyBids);
 			
 		endforeach;
+		
+		$PublisherHourlyBids = new \model\PublisherHourlyBids();
+			
+		$PublisherHourlyBids->PublisherAdZoneID		= $this->PublisherAdZoneID;
+		$PublisherHourlyBids->AuctionCounter		= 1;
+		$PublisherHourlyBids->BidsWonCounter		= $bids_won;
+		$PublisherHourlyBids->BidsLostCounter		= $bids_lost;
+		$PublisherHourlyBids->BidsErrorCounter		= $bid_errors;
+		$PublisherHourlyBids->SpendTotalGross		= $spend_total_gross;
+		$PublisherHourlyBids->SpendTotalNet			= $spend_total_net;
+		
+		\util\CachedStatsWrites::incrementPublisherBidsCounterCached($this->config, $PublisherHourlyBids);
 		
 		$log_header = "----------------------------------------------------------------\n";
 		$log_header.= "NEW BID RESPONSE, WEBSITE: " . $this->WebDomain . ", PubZoneID: " . $this->PublisherAdZoneID . ", AD: " . $this->AdName;

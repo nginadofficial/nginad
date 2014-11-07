@@ -655,6 +655,7 @@ class ReportController extends PublisherAbstractActionController {
     	foreach ($data as $data_obj):
 	    	$count++;
 	    	foreach ($data_obj as $name => $value):
+	    		$value = str_replace(array("$", "%"), array("", ""), $value);
 		    	if ($name == "MDYH"):
 		    		$totals[$name] = "Totals:";
 		    	elseif (is_numeric($value) && strpos($name, "ID") === false):
@@ -671,11 +672,16 @@ class ReportController extends PublisherAbstractActionController {
     	 
     	// format numbers
     	foreach ($totals as $name => $value):
+    		$totals[$name] = str_replace(array("$", "%"), array("", ""), $totals[$name]);
 	    	if (is_numeric($totals[$name])):
 		    	if ($this->isRevWord($name)):
 		    		$totals[$name] = "$" . number_format(sprintf("%1.2f", $totals[$name]), 2);
+		    	elseif ($this->isPercentWord($name)):
+		    		$totals[$name] =  sprintf("%1.2f", $totals[$name] / $count) . '%';
 		    	elseif ($this->isCpmWord($name)):
-		    		$totals[$name] =  "Avg: $" . sprintf("%1.7f", $totals[$name] / $count);
+		    		$totals[$name] =  "$" . sprintf("%1.7f", $totals[$name] / $count);
+		    	elseif ($this->isPercentWord($name)):
+		    		$totals[$name] = number_format(sprintf("%1.2f", $totals[$name]), 2) . "%";
 		    	else:
 			    	if (!is_float($totals[$name])):
 			    		$totals[$name] = number_format($totals[$name]);
@@ -686,6 +692,13 @@ class ReportController extends PublisherAbstractActionController {
     	 
     	return $totals;
     	 
+    }
+    
+    private function isPercentWord($test_word) {
+    	$match_words = array(
+    			"fill"
+    	);
+    	return $this->isWordMatch($match_words, $test_word);
     }
     
     private function isRevWord($test_word) {

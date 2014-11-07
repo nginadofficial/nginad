@@ -215,6 +215,153 @@ class CachedStatsWrites {
 	
 	}
 	
+	public static function incrementPublisherBidsCounterCached($config, \model\PublisherHourlyBids $PublisherHourlyBids) {
+	
+		$params = array();
+		$params["PublisherHourlyBidsID"] = $PublisherHourlyBids->PublisherHourlyBidsID;
+		$params["PublisherAdZoneID"] = $PublisherHourlyBids->PublisherAdZoneID;
+	
+		$class_dir_name = 'PublisherHourlyBids';
+			
+		$cached_key_exists = \util\CacheSql::does_cached_write_exist_apc($config, $params, $class_dir_name);
+			
+		if ($cached_key_exists):
+	
+			// increment bucket
+			self::increment_cached_write_result_publisher_bids_apc($config, $params, $class_dir_name, $PublisherHourlyBids);
+		
+		else:
+		
+			// get value sum from apc
+			$current = \util\CacheSql::get_cached_read_result_apc($config, $params, $class_dir_name);
+		
+			if ($current != null):
+				// write out values
+				$PublisherHourlyBids->AuctionCounter 	+= $current["AuctionCounter"];
+				$PublisherHourlyBids->BidsWonCounter 	+= $current["BidsWonCounter"];
+				$PublisherHourlyBids->BidsLostCounter 	+= $current["BidsLostCounter"];
+				$PublisherHourlyBids->BidsErrorCounter 	+= $current["BidsErrorCounter"];
+				$PublisherHourlyBids->SpendTotalGross 	+= floatval($current["SpendTotalGross"]);
+				$PublisherHourlyBids->SpendTotalNet 	+= floatval($current["SpendTotalNet"]);
+			
+				self::incrementPublisherBidsCounter($PublisherHourlyBids);
+			endif;
+		
+			// delete existing key - reset bucket
+			\util\CacheSql::delete_cached_write_apc($config, $params, $class_dir_name);
+		
+			// increment bucket
+			self::increment_cached_write_result_publisher_bids_apc($config, $params, $class_dir_name, $PublisherHourlyBids);
+		
+		endif;
+	
+	}
+	
+	public static function incrementPublisherBidsCounter(\model\PublisherHourlyBids $PublisherHourlyBidsToAdd) {
+	
+		$PublisherHourlyBidsFactory = \_factory\PublisherHourlyBids::get_instance();
+	
+		$current_hour = date("m/d/Y h");
+	
+		$params = array();
+		$params["PublisherHourlyBidsID"] 	= $PublisherHourlyBidsToAdd->PublisherHourlyBidsID;
+		$params["PublisherAdZoneID"] 		= $PublisherHourlyBidsToAdd->PublisherAdZoneID;
+		$params["MDYH"] 					= $current_hour;
+		$PublisherHourlyBids 				= $PublisherHourlyBidsFactory->get_row($params);
+	
+		$publisher_hourly_bids_counter 							= new \model\PublisherHourlyBids();
+		$publisher_hourly_bids_counter->PublisherHourlyBidsID 	= $PublisherHourlyBidsToAdd->PublisherHourlyBidsID;
+		$publisher_hourly_bids_counter->PublisherAdZoneID 		= $PublisherHourlyBidsToAdd->PublisherAdZoneID;
+	
+	
+		if ($PublisherHourlyBids != null):
+	
+			$publisher_hourly_bids_counter->PublisherHourlyBidsID 		= $PublisherHourlyBids->PublisherHourlyBidsID;
+			$publisher_hourly_bids_counter->AuctionCounter 				= $PublisherHourlyBids->AuctionCounter + $PublisherHourlyBidsToAdd->AuctionCounter;
+			$publisher_hourly_bids_counter->BidsWonCounter 				= $PublisherHourlyBids->BidsWonCounter + $PublisherHourlyBidsToAdd->BidsWonCounter;
+			$publisher_hourly_bids_counter->BidsLostCounter 			= $PublisherHourlyBids->BidsLostCounter + $PublisherHourlyBidsToAdd->BidsLostCounter;
+			$publisher_hourly_bids_counter->BidsErrorCounter 			= $PublisherHourlyBids->BidsErrorCounter + $PublisherHourlyBidsToAdd->BidsErrorCounter;
+			$publisher_hourly_bids_counter->SpendTotalGross 			= floatval($PublisherHourlyBids->SpendTotalGross) + $PublisherHourlyBidsToAdd->SpendTotalGross;
+			$publisher_hourly_bids_counter->SpendTotalNet 				= floatval($PublisherHourlyBids->SpendTotalNet) + $PublisherHourlyBidsToAdd->SpendTotalNet;
+			$PublisherHourlyBidsFactory->updatePublisherHourlyBids($publisher_hourly_bids_counter);
+				
+		else:
+	
+			$publisher_hourly_bids_counter->MDYH 				= $current_hour;
+			$publisher_hourly_bids_counter->AuctionCounter 		= $PublisherHourlyBidsToAdd->AuctionCounter;
+			$publisher_hourly_bids_counter->BidsWonCounter 		= $PublisherHourlyBidsToAdd->BidsWonCounter;
+			$publisher_hourly_bids_counter->BidsLostCounter 	= $PublisherHourlyBidsToAdd->BidsLostCounter;
+			$publisher_hourly_bids_counter->BidsErrorCounter	= $PublisherHourlyBidsToAdd->BidsErrorCounter;
+			$publisher_hourly_bids_counter->SpendTotalGross 	= $PublisherHourlyBidsToAdd->SpendTotalGross;
+			$publisher_hourly_bids_counter->SpendTotalNet 		= $PublisherHourlyBidsToAdd->SpendTotalNet;
+			$publisher_hourly_bids_counter->DateCreated 		= date("Y-m-d H:i:s");
+			$PublisherHourlyBidsFactory->insertPublisherHourlyBids($publisher_hourly_bids_counter);
+		endif;
+	
+	}
+	
+	public static function increment_cached_write_result_publisher_bids_apc($config, $params, $class_name, \model\PublisherHourlyBids $PublisherHourlyBidsToAdd) {
+	
+		$current = \util\CacheSql::get_cached_read_result_apc($config, $params, $class_name);
+	
+		if ($current !== null):
+		
+			$existing_auction_counter = intval($current["AuctionCounter"]);
+			$existing_auction_counter += $PublisherHourlyBidsToAdd->AuctionCounter;
+		
+			$existing_bids_won_counter = intval($current["BidsWonCounter"]);
+			$existing_bids_won_counter += $PublisherHourlyBidsToAdd->BidsWonCounter;
+		
+			$existing_bids_lost_counter = intval($current["BidsLostCounter"]);
+			$existing_bids_lost_counter += $PublisherHourlyBidsToAdd->BidsLostCounter;
+				
+			$existing_bids_error_counter = intval($current["BidsErrorCounter"]);
+			$existing_bids_error_counter += $PublisherHourlyBidsToAdd->BidsErrorCounter;
+				
+			$existing_bids_spend_total_gross = floatval($current["SpendTotalGross"]);
+			$existing_bids_spend_total_gross += $PublisherHourlyBidsToAdd->SpendTotalGross;
+		
+			$existing_bids_spend_total_net = floatval($current["SpendTotalNet"]);
+			$existing_bids_spend_total_net += $PublisherHourlyBidsToAdd->SpendTotalNet;
+				
+		else:
+	
+			$existing_auction_counter			= $PublisherHourlyBidsToAdd->AuctionCounter;
+			$existing_bids_won_counter			= $PublisherHourlyBidsToAdd->BidsWonCounter;
+			$existing_bids_lost_counter			= $PublisherHourlyBidsToAdd->BidsLostCounter;
+			$existing_bids_error_counter		= $PublisherHourlyBidsToAdd->BidsErrorCounter;
+			$existing_bids_spend_total_gross	= $PublisherHourlyBidsToAdd->SpendTotalGross;
+			$existing_bids_spend_total_net		= $PublisherHourlyBidsToAdd->SpendTotalNet;
+				
+		endif;
+	
+		// cache up to 1 hour, the write the the db should occur before that.
+		\util\CacheSql::put_cached_read_result_apc($config,
+				$params,
+				$class_name,
+				array(
+						"AuctionCounter"		=> $existing_auction_counter,
+						"BidsWonCounter"		=> $existing_bids_won_counter,
+						"BidsLostCounter"		=> $existing_bids_lost_counter,
+						"BidsErrorCounter"		=> $existing_bids_error_counter,
+						"SpendTotalGross"		=> $existing_bids_spend_total_gross,
+						"SpendTotalNet"			=> $existing_bids_spend_total_net
+	
+				));
+	
+		$timer_name = 'write_timer';
+		$write_timer = \util\CacheSql::get_cached_read_result_apc($config, $params, $class_name . $timer_name);
+		if ($write_timer == null) :
+			/*
+			 * 60 second write timer, when the apc cache value is gone the
+			* contents are written the DB and the apc value is cleared
+			*/
+			\util\CacheSql::put_cached_read_result_apc($config, $params, $class_name . $timer_name, array("write_timer"=>true), 60);
+		endif;
+	
+	}
+	
+	
 	public static function increment_cached_write_result_sellside_bids_apc($config, $params, $class_name, \model\SellSidePartnerHourlyBids $SellSidePartnerHourlyBidsToAdd) {
 	
 		$current = \util\CacheSql::get_cached_read_result_apc($config, $params, $class_name);
