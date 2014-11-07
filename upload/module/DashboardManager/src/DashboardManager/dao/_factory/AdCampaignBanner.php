@@ -160,7 +160,7 @@ class AdCampaignBanner extends \_factory\CachedTableRead
 
     	$BuySideHourlyImpressionsCounterCurrentSpendFactory = \_factory\BuySideHourlyImpressionsCounterCurrentSpend::get_instance();
 
-    	$current_hour = date("m/d/Y h");
+    	$current_hour = date("m/d/Y H");
 
     	$params = array();
     	$params["BuySidePartnerID"] 	= $buyer_id;
@@ -234,7 +234,7 @@ class AdCampaignBanner extends \_factory\CachedTableRead
 
     	$BuySideHourlyBidsCounterFactory = \_factory\BuySideHourlyBidsCounter::get_instance();
 
-    	$current_hour = date("m/d/Y h");
+    	$current_hour = date("m/d/Y H");
     	
     	$params = array();
     	$params["BuySidePartnerID"] 	= $buyer_id;
@@ -311,7 +311,7 @@ class AdCampaignBanner extends \_factory\CachedTableRead
     
     	$BuySideHourlyImpressionsByTLDFactory = \_factory\BuySideHourlyImpressionsByTLD::get_instance();
     
-        $current_hour = date("m/d/Y h");
+        $current_hour = date("m/d/Y H");
     
     	$params = array();
     	$params["AdCampaignBannerID"] = $banner_id;

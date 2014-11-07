@@ -103,24 +103,24 @@ abstract class CachedTableRead extends AbstractTableGateway
     
     public function re_normalize_time($str_time) {
 	
-	$denormalized_time = "";
-	
-	$timestamp_parts = explode(" ", $str_time);
-	if (count($timestamp_parts) == 2):
+		$denormalized_time = "";
 		
-		$date_timestamp = $timestamp_parts[0];
-		$hour_timestamp = $timestamp_parts[1];
+		$timestamp_parts = explode(" ", $str_time);
+		if (count($timestamp_parts) == 2):
+			
+			$date_timestamp = $timestamp_parts[0];
+			$hour_timestamp = $timestamp_parts[1];
+			
+			$denormalized_time = strtotime($date_timestamp);
+			
+			$timestamp_hours_as_seconds 		= intval($hour_timestamp) * 3600;
+			$denormalized_time					+= $timestamp_hours_as_seconds;
 		
-		$denormalized_time = strtotime($date_timestamp);
+			$denormalized_time 					= date("m/d/Y h:i A", $denormalized_time);
 		
-		$timestamp_hours_as_seconds 		= intval($hour_timestamp) * 3600;
-		$denormalized_time					+= $timestamp_hours_as_seconds;
-	
-		$denormalized_time 					= date("m/d/Y h:i A", $denormalized_time);
-	
-	endif;
-	
-	return $denormalized_time;
+		endif;
+		
+		return $denormalized_time;
 
     }
     

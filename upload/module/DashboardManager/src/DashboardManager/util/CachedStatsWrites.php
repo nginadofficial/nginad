@@ -54,7 +54,7 @@ class CachedStatsWrites {
 	
 		$ContractPublisherZoneHourlyImpressionsFactory = \_factory\ContractPublisherZoneHourlyImpressions::get_instance();
 	
-		$current_hour = date("m/d/Y h");
+		$current_hour = date("m/d/Y H");
 	
 		$params = array();
 		$params["AdCampaignBannerID"] 				= $ContractPublisherZoneHourlyImpressionsToAdd->AdCampaignBannerID;
@@ -178,7 +178,7 @@ class CachedStatsWrites {
 	
 		$SellSidePartnerHourlyBidsFactory = \_factory\SellSidePartnerHourlyBids::get_instance();
 	
-		$current_hour = date("m/d/Y h");
+		$current_hour = date("m/d/Y H");
 		
 		$params = array();
 		$params["SellSidePartnerID"] 	= $SellSidePartnerHourlyBidsToAdd->SellSidePartnerID;
@@ -261,7 +261,7 @@ class CachedStatsWrites {
 	
 		$PublisherHourlyBidsFactory = \_factory\PublisherHourlyBids::get_instance();
 	
-		$current_hour = date("m/d/Y h");
+		$current_hour = date("m/d/Y H");
 	
 		$params = array();
 		$params["PublisherHourlyBidsID"] 	= $PublisherHourlyBidsToAdd->PublisherHourlyBidsID;
