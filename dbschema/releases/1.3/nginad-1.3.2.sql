@@ -439,9 +439,9 @@ CREATE TABLE `auth_Users` (
 -- ----------------------------
 -- Records of auth_Users
 -- ----------------------------
-INSERT INTO `auth_Users` VALUES ('1', 'admin', 'admin@localhost', '86a65acd94b33daa87c1c6a2d1408593', null, null, null, null, '1', '1', '1', null, null, '2013-11-06 09:24:00', '2013-11-06 09:25:07', null, '1');
-INSERT INTO `auth_Users` VALUES ('20', 'blowmedia', 'sergey.page@blowmedianow.com', '86a65acd94b33daa87c1c6a2d1408593', null, null, null, null, '1', '1', '1', '3', null, '2014-09-03 21:25:33', '2014-09-03 21:25:33', null, '3');
-INSERT INTO `auth_Users` VALUES ('21', 'suckmedia', 'larry.brin@suckmedianow.com', '86a65acd94b33daa87c1c6a2d1408593', null, null, null, null, '1', '1', '1', null, '18', '2014-09-03 21:32:24', '2014-09-03 21:32:24', null, '3');
+INSERT INTO `auth_Users` VALUES ('1', 'admin', 'admin@localhost', '86a65acd94b33daa87c1c6a2d1408593', null, null, null, null, '1', '1', '1', null, null, '2013-11-06 09:24:00', '2013-11-06 09:25:07', '2013-11-06 09:25:07', null, '1');
+INSERT INTO `auth_Users` VALUES ('20', 'blowmedia', 'sergey.page@blowmedianow.com', '86a65acd94b33daa87c1c6a2d1408593', null, null, null, null, '1', '1', '1', '3', null, '2014-09-03 21:25:33', '2014-09-03 21:25:33', '2013-11-06 09:25:07', null, '3');
+INSERT INTO `auth_Users` VALUES ('21', 'suckmedia', 'larry.brin@suckmedianow.com', '86a65acd94b33daa87c1c6a2d1408593', null, null, null, null, '1', '1', '1', null, '18', '2014-09-03 21:32:24', '2014-09-03 21:32:24', '2013-11-06 09:25:07', null, '3');
 
 -- ----------------------------
 -- Table structure for BuySideDailyImpressionsByTLD
