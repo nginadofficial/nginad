@@ -37,6 +37,10 @@ class PingManager {
 	
 	public $winning_bid_price;
 	
+	public $loopback_demand_partner_won = false;
+	
+	public $loopback_demand_partner_ad_campaign_banner_id;
+	
 	private $auction_was_won = false;
 	
 	private $publisher_markup_rate = 40;
@@ -107,8 +111,8 @@ class PingManager {
 					$partner_class->verify_ssl,
 					false
 				);
-						
-				$this->RTBLoopbackPing = $RTBPinger;
+				$RTBPinger->is_loopback_pinger			= true;
+				$this->RTBLoopbackPing 					= $RTBPinger;
 				
 			endif;
 			
@@ -364,12 +368,20 @@ class PingManager {
 								endif;
 								
 								// set the current highest bidder
-								$this->winning_partner_pinger = $RTBPinger;
+								$this->winning_partner_pinger 						= $RTBPinger;
 								$this->winning_partner_pinger->won_auction 			= true;
 								$this->winning_partner_pinger->winning_bid 			= $bid_price;
 								$this->winning_ad_tag								= $bid_adm;	
 								$this->winning_bid_price							= sprintf("%1.4f", $this->encrypt_bid($bid_price));
 								$this->auction_was_won 								= true; 
+								
+								if ($RTBPinger->is_loopback_pinger):
+
+									if (preg_match("/zoneid=(\\d+)/", $this->winning_ad_tag, $matches) && isset($matches[1])):
+										$this->loopback_demand_partner_ad_campaign_banner_id 	= $matches[1];
+										$this->loopback_demand_partner_won 						= true;
+									endif;
+								endif;
 						endif;			
 					endforeach;
 				

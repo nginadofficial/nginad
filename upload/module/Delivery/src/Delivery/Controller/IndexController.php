@@ -223,9 +223,19 @@ class IndexController extends AbstractActionController
 	
 	 		\rtbsellv22\RtbSellV22Logger::get_instance()->output_log();
 	 		
-	 		header("Content-type: application/javascript");
-	 		$output = "document.write(" . json_encode($winning_ad_tag) . ");";
-	 		echo $output;
+	 		if ($PingManager->loopback_demand_partner_won === true):
+	 			
+	 			$banner_request["demand_banner_id"] = $PingManager->loopback_demand_partner_ad_campaign_banner_id;
+	 			$this->process_demand_tag($config, $banner_request);
+	 			
+	 		else:
+		 		
+	 			header("Content-type: application/javascript");
+		 		$output = "document.write(" . json_encode($winning_ad_tag) . ");";
+		 		echo $output;
+	 		
+		 	endif;
+
 	 		
  		endif;
  		
@@ -354,8 +364,6 @@ class IndexController extends AbstractActionController
 
 	    if ($AdCampaignBanner != null):
 	    
-
-		    
 		    $banner_impression_cost 		= $AdCampaignBanner->BidAmount;
 		    $spend_increase_gross 			= floatval($banner_impression_cost) / 1000;
 		    $spend_increase_net				= $spend_increase_gross;

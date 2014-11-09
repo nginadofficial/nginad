@@ -25,21 +25,24 @@ class RTBPinger {
 	
 	public $partner_quality_score;
 	
-	protected $verify_ssl 		= false;
+	protected $verify_ssl 			= false;
 	
-	protected $timeout_enabled 	= false;
+	protected $timeout_enabled 		= false;
 	
-	public $ping_success 		= false;
+	public $ping_success 			= false;
 	
 	public $ping_response;
 	
 	public $ping_error_message;
 	
-	public $user_agent 			= "NginAd RTB Ping Robot";
+	public $user_agent 				= "NginAd RTB Ping Robot";
 	
 	public $winning_bid;  				// to be filled out by the ping manager
 	
-	public $won_auction			= false;  	// to be filled out by the ping manager
+	public $won_auction				= false;  	// to be filled out by the ping manager
+	
+	public $is_loopback_pinger		= false;
+	
 	
 	public function __construct($partner_name, $partner_id, $ping_url, $ping_data, $ping_connect_timeout_ms, $ping_timeout_ms, $partner_quality_score, $verify_ssl, $timeout_enabled) {
 		
