@@ -218,7 +218,6 @@ class CachedStatsWrites {
 	public static function incrementPublisherBidsCounterCached($config, \model\PublisherHourlyBids $PublisherHourlyBids) {
 	
 		$params = array();
-		$params["PublisherHourlyBidsID"] = $PublisherHourlyBids->PublisherHourlyBidsID;
 		$params["PublisherAdZoneID"] = $PublisherHourlyBids->PublisherAdZoneID;
 	
 		$class_dir_name = 'PublisherHourlyBids';
@@ -264,13 +263,11 @@ class CachedStatsWrites {
 		$current_hour = date("m/d/Y H");
 	
 		$params = array();
-		$params["PublisherHourlyBidsID"] 	= $PublisherHourlyBidsToAdd->PublisherHourlyBidsID;
 		$params["PublisherAdZoneID"] 		= $PublisherHourlyBidsToAdd->PublisherAdZoneID;
 		$params["MDYH"] 					= $current_hour;
 		$PublisherHourlyBids 				= $PublisherHourlyBidsFactory->get_row($params);
 	
 		$publisher_hourly_bids_counter 							= new \model\PublisherHourlyBids();
-		$publisher_hourly_bids_counter->PublisherHourlyBidsID 	= $PublisherHourlyBidsToAdd->PublisherHourlyBidsID;
 		$publisher_hourly_bids_counter->PublisherAdZoneID 		= $PublisherHourlyBidsToAdd->PublisherAdZoneID;
 	
 	
