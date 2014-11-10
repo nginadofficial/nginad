@@ -10,6 +10,68 @@ var adserver_domain = 'server.nginad.com';
 var script_name = 'nginad.js';
 var delivery_path = '/delivery/impress';
 
+var quality_scoring_pixels = [                   
+	// QS SERVICE 1
+	// "http://myqualityscore1.com/server/pixel.htm?uid=user_id", 	
+	// QS SERVICE 2
+	// "http://myqualityscore2.com/server/pixel.htm?uid=user_id",				
+	// QS SERVICE 3
+	// "http://myqualityscore3.com/server/pixel.htm?uid=user_id",		
+];
+
+var cookie_matching_pixels = [                   
+	// ZENOVIA EXCHANGE
+	// "http://sync.nj.zenoviaexchange.com/usersync2/partner_id", 		
+	// TURN
+	// "http://ad.turn.com/server/pixel.htm?fpid=13&r=12345", 	
+	// MEDIA MATH
+	// "http://pixel.mathtag.com/sync/js?sync=auto",				
+	// DSTILLERY
+	// "http://idpix.media6degrees.com/orbserv/hbpix?pixId=1",		
+	// CHANGO
+	// "http://lj.d.chango.com/m/lj?r=12345",	
+	// RFI HUB
+	// "http://p.rfihub.com/cm?in=1&pub=1",					
+	// APPNEXUS
+	// "http://ib.adnxs.com/getuid?http://mydomain.com/merge?pid=12&3pid=$UID",	
+	// RTB BIDDER
+	// "http://match.rtbidder.net/match?p=31&ord=12345",			
+	// SITE SCOUT
+	// "http://pixel.sitescout.com/dmp/pixelSync?network=partner_id",	
+	// CASALE MEDIA
+	// "http://ip.casalemedia.com/usermatch?s=178636&cb=http%3A%2F%2Fmydomain.com%2Fmerge%3Fpid%3D18%263pid%3D",	
+	// IPONWEB:
+	// "http://x.bidswitch.net/sync?ssp=fmx",
+	// TRADE DESK
+	// "http://data.adsrvr.org/track/cmf/generic?ttd_pid=partner_id",
+	// RUBICON PROJECT
+	// "http://pixel.rubiconproject.com/tap.php?v=other&nid=partner_id&put={user_token}&expires={days}",
+	// AUDIENCE SCIENCE
+	// "http://pix04.revsci.net/D08734/a3/0/3/0.302?matchId=100&PV=0"
+];
+                           
+function createTrackingPixel(url) {
+	
+	(new Image()).src = url;
+
+}
+
+function fireCookieMatchingPixels() {
+	
+	for (i in cookie_matching_pixels) {
+		createTrackingPixel(cookie_matching_pixels[i]);
+	}
+
+}
+
+function fireQSPixels() {
+	
+	for (i in quality_scoring_pixels) {
+		createTrackingPixel(quality_scoring_pixels[i]);
+	}
+
+}
+
 if (typeof NGIN_AdsiFrame_Opts === "undefined") {
 	
 	var NGIN_AdsiFrame_Opts = null;
@@ -336,6 +398,13 @@ function createiFrame(id, width, height) {
 	  return ifrm;
 }
 
+// fire off cookie matching pixels first
+fireCookieMatchingPixels();
+
+// next, fire off quality scoring pixels
+fireQSPixels();
+
+// now process the ad tag
 var qs = null;
 var scriptTag;
 var fpTag;
