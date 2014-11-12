@@ -63,6 +63,38 @@ class CacheSql {
 	
 	}	
 	
+	public static function create_reset_write_lock($config, $params, $class_name, $ttl = 60) {
+		
+		$lock_name = 'reset_lock';
+		
+		self::put_cached_read_result_apc($config, $params, $class_name . $lock_name, array($lock_name=>true), $ttl);
+	}
+	
+	public static function reset_write_unlock($config, $params, $class_name) {
+		
+		$lock_name = 'reset_lock';
+		
+		self::delete_cached_write_apc($config, $params, $class_name . $lock_name);
+	}
+	
+	public static function wait_for_reset_lock($config, $params, $class_name) {
+		
+		while (self::does_reset_lock_exist_apc($config, $params, $class_name)):
+			// 5ms sleep to retry lock
+			usleep(5000);
+		endwhile;
+		
+		return true;
+	}
+	
+	public static function does_reset_lock_exist_apc($config, $params, $class_name) {
+	
+		$lock_name = 'reset_lock';
+	
+		$sql_lock = self::get_cached_read_result_apc($config, $params, $class_name . $lock_name);
+		return $sql_lock != null;
+	}
+	
 	public static function does_cached_write_exist_apc($config, $params, $class_name) {
 	
 		$timer_name = 'write_timer';

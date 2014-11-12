@@ -23,6 +23,9 @@ class CachedStatsWrites {
 			
 		if ($cached_key_exists):
 			
+			// WAIT FOR SYNCHRONIZED LOCK TO BE FREED
+			\util\CacheSql::wait_for_reset_lock($config, $params, $class_dir_name);
+			
 			// increment bucket
 			self::increment_cached_write_result_contract_publisher_zone_impressions_apc($config, $params, $class_dir_name, $ContractPublisherZoneHourlyImpressions);
 			
@@ -36,12 +39,18 @@ class CachedStatsWrites {
 			 * A SYNCHRONIZED KEYWORD IN PHP
 			 */
 		
+			// SYNCHRONIZED BLOCK START
+			\util\CacheSql::create_reset_write_lock($config, $params, $class_dir_name);
+		
 			// delete existing key - reset bucket
 			\util\CacheSql::delete_cached_write_apc($config, $params, $class_dir_name);
 				
 			// increment bucket
 			self::increment_cached_write_result_contract_publisher_zone_impressions_apc($config, $params, $class_dir_name, $ContractPublisherZoneHourlyImpressions);
 				
+			// SYNCHRONIZED BLOCK END
+			\util\CacheSql::reset_write_unlock($config, $params, $class_dir_name);
+			
 			if ($current != null):
 				// write out values
 				$ContractPublisherZoneHourlyImpressions->Impressions 		= $current["Impressions"];
@@ -151,6 +160,9 @@ class CachedStatsWrites {
 		 
 		if ($cached_key_exists):
 
+			// WAIT FOR SYNCHRONIZED LOCK TO BE FREED
+			\util\CacheSql::wait_for_reset_lock($config, $params, $class_dir_name);
+			
 			// increment bucket
 			self::increment_cached_write_result_sellside_bids_apc($config, $params, $class_dir_name, $SellSidePartnerHourlyBids);
 			 
@@ -164,12 +176,18 @@ class CachedStatsWrites {
 			 * A SYNCHRONIZED KEYWORD IN PHP
 			 */
 		
+			// SYNCHRONIZED BLOCK START
+			\util\CacheSql::create_reset_write_lock($config, $params, $class_dir_name);
+			
 			// delete existing key - reset bucket
 			\util\CacheSql::delete_cached_write_apc($config, $params, $class_dir_name);
 			
 			// increment bucket
 			self::increment_cached_write_result_sellside_bids_apc($config, $params, $class_dir_name, $SellSidePartnerHourlyBids);
 			
+			// SYNCHRONIZED BLOCK END
+			\util\CacheSql::reset_write_unlock($config, $params, $class_dir_name);
+
 			if ($current != null):
 				// write out values
 				$SellSidePartnerHourlyBids->BidsWonCounter 		= $current["BidsWonCounter"];
@@ -238,6 +256,9 @@ class CachedStatsWrites {
 			
 		if ($cached_key_exists):
 	
+			// WAIT FOR SYNCHRONIZED LOCK TO BE FREED
+			\util\CacheSql::wait_for_reset_lock($config, $params, $class_dir_name);
+
 			// increment bucket
 			self::increment_cached_write_result_publisher_bids_apc($config, $params, $class_dir_name, $PublisherHourlyBids);
 		
@@ -246,6 +267,9 @@ class CachedStatsWrites {
 			// get value sum from apc
 			$current = \util\CacheSql::get_cached_read_result_apc($config, $params, $class_dir_name);
 		
+			// SYNCHRONIZED BLOCK START
+			\util\CacheSql::create_reset_write_lock($config, $params, $class_dir_name);
+			
 			/*
 			 * DO THIS BEFORE SQL OPERATIONS TO AVOID THREAD-LIKE DUPLICATION DUE TO THE LACK OF
 			 * A SYNCHRONIZED KEYWORD IN PHP
@@ -257,6 +281,9 @@ class CachedStatsWrites {
 			// increment bucket
 			self::increment_cached_write_result_publisher_bids_apc($config, $params, $class_dir_name, $PublisherHourlyBids);
 			
+			// SYNCHRONIZED BLOCK END
+			\util\CacheSql::reset_write_unlock($config, $params, $class_dir_name);
+
 			if ($current != null):
 				// write out values
 				$PublisherHourlyBids->AuctionCounter 	= $current["AuctionCounter"];
