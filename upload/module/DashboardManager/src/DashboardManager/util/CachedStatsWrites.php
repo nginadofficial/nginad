@@ -27,25 +27,31 @@ class CachedStatsWrites {
 			self::increment_cached_write_result_contract_publisher_zone_impressions_apc($config, $params, $class_dir_name, $ContractPublisherZoneHourlyImpressions);
 			
 		else:
-			
+
 			// get value sum from apc
 			$current = \util\CacheSql::get_cached_read_result_apc($config, $params, $class_dir_name);
-			
+		
+			/*
+			 * DO THIS BEFORE SQL OPERATIONS TO AVOID THREAD-LIKE DUPLICATION DUE TO THE LACK OF
+			 * A SYNCHRONIZED KEYWORD IN PHP
+			 */
+		
+			// delete existing key - reset bucket
+			\util\CacheSql::delete_cached_write_apc($config, $params, $class_dir_name);
+				
+			// increment bucket
+			self::increment_cached_write_result_contract_publisher_zone_impressions_apc($config, $params, $class_dir_name, $ContractPublisherZoneHourlyImpressions);
+				
 			if ($current != null):
 				// write out values
-				$ContractPublisherZoneHourlyImpressions->Impressions 		+= $current["Impressions"];
-				$ContractPublisherZoneHourlyImpressions->SpendTotalGross 	+= floatval($current["SpendTotalGross"]);
-				$ContractPublisherZoneHourlyImpressions->SpendTotalNet 		+= floatval($current["SpendTotalNet"]);
+				$ContractPublisherZoneHourlyImpressions->Impressions 		= $current["Impressions"];
+				$ContractPublisherZoneHourlyImpressions->SpendTotalGross 	= floatval($current["SpendTotalGross"]);
+				$ContractPublisherZoneHourlyImpressions->SpendTotalNet 		= floatval($current["SpendTotalNet"]);
 				
 				self::incrementContractPublisherZoneHourlyImpressions($ContractPublisherZoneHourlyImpressions);
 			endif;
 			
-			// delete existing key - reset bucket
-			\util\CacheSql::delete_cached_write_apc($config, $params, $class_dir_name);
-			
-			// increment bucket
-			self::increment_cached_write_result_contract_publisher_zone_impressions_apc($config, $params, $class_dir_name, $ContractPublisherZoneHourlyImpressions);
-			
+
 		endif;
 		
 	}
@@ -153,23 +159,29 @@ class CachedStatsWrites {
 			// get value sum from apc
 			$current = \util\CacheSql::get_cached_read_result_apc($config, $params, $class_dir_name);
 
+			/*
+			 * DO THIS BEFORE SQL OPERATIONS TO AVOID THREAD-LIKE DUPLICATION DUE TO THE LACK OF
+			 * A SYNCHRONIZED KEYWORD IN PHP
+			 */
+		
+			// delete existing key - reset bucket
+			\util\CacheSql::delete_cached_write_apc($config, $params, $class_dir_name);
+			
+			// increment bucket
+			self::increment_cached_write_result_sellside_bids_apc($config, $params, $class_dir_name, $SellSidePartnerHourlyBids);
+			
 			if ($current != null):
 				// write out values
-				$SellSidePartnerHourlyBids->BidsWonCounter 		+= $current["BidsWonCounter"];
-				$SellSidePartnerHourlyBids->BidsLostCounter 	+= $current["BidsLostCounter"];
-				$SellSidePartnerHourlyBids->BidsErrorCounter 	+= $current["BidsErrorCounter"];
-				$SellSidePartnerHourlyBids->SpendTotalGross 	+= floatval($current["SpendTotalGross"]);
-				$SellSidePartnerHourlyBids->SpendTotalNet 		+= floatval($current["SpendTotalNet"]);
+				$SellSidePartnerHourlyBids->BidsWonCounter 		= $current["BidsWonCounter"];
+				$SellSidePartnerHourlyBids->BidsLostCounter 	= $current["BidsLostCounter"];
+				$SellSidePartnerHourlyBids->BidsErrorCounter 	= $current["BidsErrorCounter"];
+				$SellSidePartnerHourlyBids->SpendTotalGross 	= floatval($current["SpendTotalGross"]);
+				$SellSidePartnerHourlyBids->SpendTotalNet 		= floatval($current["SpendTotalNet"]);
 				
 				self::incrementSellSideBidsCounter($SellSidePartnerHourlyBids);
 			endif;
 		
-			// delete existing key - reset bucket
-			\util\CacheSql::delete_cached_write_apc($config, $params, $class_dir_name);
-			 
-			// increment bucket
-			self::increment_cached_write_result_sellside_bids_apc($config, $params, $class_dir_name, $SellSidePartnerHourlyBids);
-		
+
 		endif;
 	
 	}
@@ -234,24 +246,29 @@ class CachedStatsWrites {
 			// get value sum from apc
 			$current = \util\CacheSql::get_cached_read_result_apc($config, $params, $class_dir_name);
 		
-			if ($current != null):
-				// write out values
-				$PublisherHourlyBids->AuctionCounter 	+= $current["AuctionCounter"];
-				$PublisherHourlyBids->BidsWonCounter 	+= $current["BidsWonCounter"];
-				$PublisherHourlyBids->BidsLostCounter 	+= $current["BidsLostCounter"];
-				$PublisherHourlyBids->BidsErrorCounter 	+= $current["BidsErrorCounter"];
-				$PublisherHourlyBids->SpendTotalGross 	+= floatval($current["SpendTotalGross"]);
-				$PublisherHourlyBids->SpendTotalNet 	+= floatval($current["SpendTotalNet"]);
-			
-				self::incrementPublisherBidsCounter($PublisherHourlyBids);
-			endif;
+			/*
+			 * DO THIS BEFORE SQL OPERATIONS TO AVOID THREAD-LIKE DUPLICATION DUE TO THE LACK OF
+			 * A SYNCHRONIZED KEYWORD IN PHP
+			 */
 		
 			// delete existing key - reset bucket
 			\util\CacheSql::delete_cached_write_apc($config, $params, $class_dir_name);
-		
+			
 			// increment bucket
 			self::increment_cached_write_result_publisher_bids_apc($config, $params, $class_dir_name, $PublisherHourlyBids);
-		
+			
+			if ($current != null):
+				// write out values
+				$PublisherHourlyBids->AuctionCounter 	= $current["AuctionCounter"];
+				$PublisherHourlyBids->BidsWonCounter 	= $current["BidsWonCounter"];
+				$PublisherHourlyBids->BidsLostCounter 	= $current["BidsLostCounter"];
+				$PublisherHourlyBids->BidsErrorCounter 	= $current["BidsErrorCounter"];
+				$PublisherHourlyBids->SpendTotalGross 	= floatval($current["SpendTotalGross"]);
+				$PublisherHourlyBids->SpendTotalNet 	= floatval($current["SpendTotalNet"]);
+			
+				self::incrementPublisherBidsCounter($PublisherHourlyBids);
+			endif;
+
 		endif;
 	
 	}
