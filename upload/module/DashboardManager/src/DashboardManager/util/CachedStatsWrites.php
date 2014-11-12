@@ -19,28 +19,28 @@ class CachedStatsWrites {
 		
 		$class_dir_name = 'ContractPublisherZoneHourlyImpressions';
 			
+		// WAIT FOR SYNCHRONIZED LOCK TO BE FREED
+		\util\CacheSql::wait_for_reset_lock($config, $params, $class_dir_name);
+
 		$cached_key_exists = \util\CacheSql::does_cached_write_exist_apc($config, $params, $class_dir_name);
 			
 		if ($cached_key_exists):
-			
-			// WAIT FOR SYNCHRONIZED LOCK TO BE FREED
-			\util\CacheSql::wait_for_reset_lock($config, $params, $class_dir_name);
 			
 			// increment bucket
 			self::increment_cached_write_result_contract_publisher_zone_impressions_apc($config, $params, $class_dir_name, $ContractPublisherZoneHourlyImpressions);
 			
 		else:
 
-			// get value sum from apc
-			$current = \util\CacheSql::get_cached_read_result_apc($config, $params, $class_dir_name);
-		
 			/*
-			 * DO THIS BEFORE SQL OPERATIONS TO AVOID THREAD-LIKE DUPLICATION DUE TO THE LACK OF
+			 * DO THIS BEFORE APC RESET OPERATIONS TO AVOID THREAD-LIKE DUPLICATION DUE TO THE LACK OF
 			 * A SYNCHRONIZED KEYWORD IN PHP
 			 */
 		
 			// SYNCHRONIZED BLOCK START
 			\util\CacheSql::create_reset_write_lock($config, $params, $class_dir_name);
+			
+			// get value sum from apc
+			$current = \util\CacheSql::get_cached_read_result_apc($config, $params, $class_dir_name);
 		
 			// delete existing key - reset bucket
 			\util\CacheSql::delete_cached_write_apc($config, $params, $class_dir_name);
@@ -156,29 +156,29 @@ class CachedStatsWrites {
 		
 		$class_dir_name = 'SellSidePartnerHourlyBids';
 		 
+		// WAIT FOR SYNCHRONIZED LOCK TO BE FREED
+		\util\CacheSql::wait_for_reset_lock($config, $params, $class_dir_name);
+		
 		$cached_key_exists = \util\CacheSql::does_cached_write_exist_apc($config, $params, $class_dir_name);
 		 
 		if ($cached_key_exists):
-
-			// WAIT FOR SYNCHRONIZED LOCK TO BE FREED
-			\util\CacheSql::wait_for_reset_lock($config, $params, $class_dir_name);
-			
+		
 			// increment bucket
 			self::increment_cached_write_result_sellside_bids_apc($config, $params, $class_dir_name, $SellSidePartnerHourlyBids);
 			 
 		else:
 
-			// get value sum from apc
-			$current = \util\CacheSql::get_cached_read_result_apc($config, $params, $class_dir_name);
-
 			/*
-			 * DO THIS BEFORE SQL OPERATIONS TO AVOID THREAD-LIKE DUPLICATION DUE TO THE LACK OF
+			 * DO THIS BEFORE APC RESET OPERATIONS TO AVOID THREAD-LIKE DUPLICATION DUE TO THE LACK OF
 			 * A SYNCHRONIZED KEYWORD IN PHP
 			 */
-		
+
 			// SYNCHRONIZED BLOCK START
 			\util\CacheSql::create_reset_write_lock($config, $params, $class_dir_name);
-			
+
+			// get value sum from apc
+			$current = \util\CacheSql::get_cached_read_result_apc($config, $params, $class_dir_name);
+		
 			// delete existing key - reset bucket
 			\util\CacheSql::delete_cached_write_apc($config, $params, $class_dir_name);
 			
@@ -252,28 +252,28 @@ class CachedStatsWrites {
 	
 		$class_dir_name = 'PublisherHourlyBids';
 			
+		// WAIT FOR SYNCHRONIZED LOCK TO BE FREED
+		\util\CacheSql::wait_for_reset_lock($config, $params, $class_dir_name);
+
 		$cached_key_exists = \util\CacheSql::does_cached_write_exist_apc($config, $params, $class_dir_name);
 			
 		if ($cached_key_exists):
 	
-			// WAIT FOR SYNCHRONIZED LOCK TO BE FREED
-			\util\CacheSql::wait_for_reset_lock($config, $params, $class_dir_name);
-
 			// increment bucket
 			self::increment_cached_write_result_publisher_bids_apc($config, $params, $class_dir_name, $PublisherHourlyBids);
 		
 		else:
 		
-			// get value sum from apc
-			$current = \util\CacheSql::get_cached_read_result_apc($config, $params, $class_dir_name);
+			/*
+			 * DO THIS BEFORE APC RESET OPERATIONS TO AVOID THREAD-LIKE DUPLICATION DUE TO THE LACK OF
+			 * A SYNCHRONIZED KEYWORD IN PHP
+			 */
 		
 			// SYNCHRONIZED BLOCK START
 			\util\CacheSql::create_reset_write_lock($config, $params, $class_dir_name);
-			
-			/*
-			 * DO THIS BEFORE SQL OPERATIONS TO AVOID THREAD-LIKE DUPLICATION DUE TO THE LACK OF
-			 * A SYNCHRONIZED KEYWORD IN PHP
-			 */
+
+			// get value sum from apc
+			$current = \util\CacheSql::get_cached_read_result_apc($config, $params, $class_dir_name);
 		
 			// delete existing key - reset bucket
 			\util\CacheSql::delete_cached_write_apc($config, $params, $class_dir_name);
