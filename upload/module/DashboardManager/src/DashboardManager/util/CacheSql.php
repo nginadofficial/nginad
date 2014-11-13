@@ -80,8 +80,8 @@ class CacheSql {
 	public static function wait_for_reset_lock($config, $params, $class_name) {
 		
 		while (self::does_reset_lock_exist_apc($config, $params, $class_name)):
-			// 5ms sleep to retry lock
-			usleep(5000);
+			// 50ms sleep to retry lock
+			usleep(50000);
 		endwhile;
 		
 		return true;
