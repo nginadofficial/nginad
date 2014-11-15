@@ -9,8 +9,9 @@
 
 namespace rtbbuyv22;
 use \Exception;
+use rtbbuy\RtbBuyBid;
 
-abstract class RtbBuyV22Bid {
+abstract class RtbBuyV22Bid extends RtbBuyBid {
 
 	public $rtb_base_url = "http://rtb.demandpartner.com";
 

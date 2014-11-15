@@ -7,8 +7,8 @@
  * @license GPLv3
  */
 
-namespace buyrtb\parsers;
+namespace rtbbuy;
 
-class DisplayParser {
+abstract class RtbBuyWorkflow {
+
 }
-

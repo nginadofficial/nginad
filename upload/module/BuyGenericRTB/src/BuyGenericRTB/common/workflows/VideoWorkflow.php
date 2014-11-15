@@ -9,7 +9,7 @@
 
 namespace buyrtb\workflows;
 
-abstract class VideoWorkflow
+class VideoWorkflow
 {
 	
 	protected $rtb_provider = "none";

@@ -8,7 +8,8 @@
  */
 
 namespace rtbbuyv22;
+use rtbbuy\RtbBuyInit;
 
-abstract class RtbBuyV22Init {
+abstract class RtbBuyV22Init extends RtbBuyInit {
 	
 }

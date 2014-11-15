@@ -9,7 +9,9 @@
 
 namespace rtbbuyv22;
 
-abstract class RtbBuyV22Logger
+use rtbbuy\RtbBuyLogger;
+
+abstract class RtbBuyV22Logger extends RtbBuyLogger
 {
 	
 	// logging settings
