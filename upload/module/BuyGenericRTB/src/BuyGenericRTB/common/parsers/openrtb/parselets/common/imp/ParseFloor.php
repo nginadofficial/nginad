@@ -11,7 +11,7 @@ namespace buyrtb\parsers\openrtb\parselets\common\imp;
 
 class ParseFloor {
 	
-	public static function execute(&$Logger, \buyrtb\parsers\openrtb\OpenRTBParser &$Parser, \model\rtb\RtbBidRequestImp &$RtbBidRequestImp, &$ad_impression) {
+	public static function execute(&$Logger, \buyrtb\parsers\openrtb\OpenRTBParser &$Parser, \model\openrtb\RtbBidRequestImp &$RtbBidRequestImp, &$ad_impression) {
 			
 		/*
 		 * Get floor price

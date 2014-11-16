@@ -12,7 +12,7 @@ use \Exception;
 
 class DisplayParser {
 
-	public function parse_request(&$Logger, \buyrtb\parsers\openrtb\OpenRTBParser &$Parser, \model\rtb\RtbBidRequestBanner &$RtbBidRequestBanner, &$ad_impression_banner) {
+	public function parse_request(&$Logger, \buyrtb\parsers\openrtb\OpenRTBParser &$Parser, \model\openrtb\RtbBidRequestBanner &$RtbBidRequestBanner, &$ad_impression_banner) {
 
 	        // Parse Dimensions
 	        try {

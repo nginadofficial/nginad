@@ -11,19 +11,19 @@ namespace buyrtb\workflows\tasklets\common\adcampaignbannerrestrictions;
 
 class CheckGeo {
 
-	public static function execute(&$Logger, &$Workflow, &$RtbBid, &$AdCampaignBanner, &$AdCampaignBannerRestrictions) {
+	public static function execute(&$Logger, &$Workflow, \model\openrtb\RtbBidRequest &$RtbBidRequest, \model\openrtb\RtbBidRequestImp &$RtbBidRequestImp, &$AdCampaignBanner, &$AdCampaignBannerRestrictions) {
 	
 		/*
 		 * Check banner geography
 		 */
 		
 		// no geo info to base rejection on
-		if ($RtbBid->bid_request_geo === null):
+		if ($RtbBidRequest->RtbBidRequestDevice == null || $RtbBidRequest->RtbBidRequestDevice->RtbBidRequestGeo === null):
 			return true;
 		endif;
 			
 		// no geo info to base rejection on	
-		if ($AdCampaignBannerRestrictions->GeoCountry === null || !isset($RtbBid->bid_request_geo["country"])):
+		if ($AdCampaignBannerRestrictions->GeoCountry === null || !isset($RtbBidRequest->RtbBidRequestDevice->RtbBidRequestGeo->bid_request_geo_country)):
 			return true;
 		endif;
 			

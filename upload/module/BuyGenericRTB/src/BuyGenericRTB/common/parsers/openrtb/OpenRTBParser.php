@@ -26,7 +26,7 @@ class OpenRTBParser {
 		$logger =\rtbbuyv22\RtbBuyV22Logger::get_instance();
 		
 		// prepare the response object
-		$this->RtbBidRequest = new \model\rtb\RtbBidRequest();
+		$this->RtbBidRequest = new \model\openrtb\RtbBidRequest();
 		
 		// Initialize Data
 		try {
@@ -48,7 +48,7 @@ class OpenRTBParser {
         endif;
         
         $ad_campaign_site = $this->json_post["site"];
-        $RtbBidRequestSite = new \model\rtb\RtbBidRequestSite();
+        $RtbBidRequestSite = new \model\openrtb\RtbBidRequestSite();
         
         try {
         	\buyrtb\parsers\openrtb\parselets\common\ParseWebsite::execute($logger, $this, $this->RtbBidRequest, $RtbBidRequestSite, $ad_campaign_site);
@@ -64,7 +64,7 @@ class OpenRTBParser {
         endif;
         
         $device = $this->json_post["device"];
-        $RtbBidRequestDevice = new \model\rtb\RtbBidRequestDevice();
+        $RtbBidRequestDevice = new \model\openrtb\RtbBidRequestDevice();
         
         try {
         	\buyrtb\parsers\openrtb\parselets\common\device\ParseDevice::execute($logger, $this, $this->RtbBidRequest, $RtbBidRequestDevice, $device);
@@ -80,7 +80,7 @@ class OpenRTBParser {
 
         if (isset($this->json_post["regs"])):
 	        $ad_regs = $this->json_post["regs"];
-	        $RtbBidRequestRegs = new \model\rtb\RtbBidRequestRegs();
+	        $RtbBidRequestRegs = new \model\openrtb\RtbBidRequestRegs();
 	        
 	        try {
 	        	\buyrtb\parsers\openrtb\parselets\common\ParseRegs::execute($logger, $this, $this->RtbBidRequest, $RtbBidRequestRegs, $ad_regs);
@@ -100,7 +100,7 @@ class OpenRTBParser {
 
         foreach ($ad_impression_list as $ad_impression):
         
-        	$RtbBidRequestImp = new \model\rtb\RtbBidRequestImp();
+        	$RtbBidRequestImp = new \model\openrtb\RtbBidRequestImp();
 
 	        // Parse Imp ID
 	        try {
@@ -127,7 +127,7 @@ class OpenRTBParser {
 	        	// this is a banner
 	        	$ad_impression_banner = $ad_impression["banner"];
 	        	$RtbBidRequestImp->media_type = "banner";
-	       		$RtbBidRequestImp->RtbBidRequestBanner = new \model\rtb\RtbBidRequestBanner();
+	       		$RtbBidRequestImp->RtbBidRequestBanner = new \model\openrtb\RtbBidRequestBanner();
 	       		$DisplayParser = new \buyrtb\parsers\openrtb\DisplayParser();
 	       		$DisplayParser->parse_request($logger, $this, $RtbBidRequestImp->RtbBidRequestBanner, $ad_impression_banner);
 
@@ -135,7 +135,7 @@ class OpenRTBParser {
 	       		// this is a video
 	       		$ad_impression_video = $ad_impression["video"];
 	       		$RtbBidRequestImp->media_type = "video";
-	       		$RtbBidRequestImp->RtbBidRequestVideo = new \model\rtb\RtbBidRequestVideo();	
+	       		$RtbBidRequestImp->RtbBidRequestVideo = new \model\openrtb\RtbBidRequestVideo();	
 	       		$VideoParser = new \buyrtb\parsers\openrtb\VideoParser();
 	       		$VideoParser->parse_request($logger, $this, $RtbBidRequestImp->RtbBidRequestVideo, $ad_impression_video);
 	       		

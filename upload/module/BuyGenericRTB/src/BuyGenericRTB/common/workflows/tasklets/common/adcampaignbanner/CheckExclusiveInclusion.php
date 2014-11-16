@@ -11,7 +11,7 @@ namespace buyrtb\workflows\tasklets\common\adcampaignbanner;
 
 class CheckExclusiveInclusion {
 
-	public static function execute(&$Logger, &$Workflow, &$RtbBid, &$AdCampaignBanner, &$AdCampaignBannerExclusiveInclusionFactory) {
+	public static function execute(&$Logger, &$Workflow, \model\openrtb\RtbBidRequest &$RtbBidRequest, \model\openrtb\RtbBidRequestImp &$RtbBidRequestImp, &$AdCampaignBanner, &$AdCampaignBannerExclusiveInclusionFactory) {
 		
 		/*
 		 * Check banner domain exclusive inclusions
@@ -22,7 +22,7 @@ class CheckExclusiveInclusion {
 		
 		$params = array();
 		$params["AdCampaignBannerID"] = $AdCampaignBanner->AdCampaignBannerID;
-		$AdCampaignBannerExclusiveInclusionList = $AdCampaignBannerExclusiveInclusionFactory->get_cached($RtbBid->config, $params);
+		$AdCampaignBannerExclusiveInclusionList = $AdCampaignBannerExclusiveInclusionFactory->get_cached($Workflow->config, $params);
 		
 		foreach ($AdCampaignBannerExclusiveInclusionList as $AdCampaignBannerExclusiveInclusion):
 			
@@ -30,23 +30,26 @@ class CheckExclusiveInclusion {
 			
 			if ($AdCampaignBannerExclusiveInclusion->InclusionType == "url"):
 				
-				if (strpos(strtolower($RtbBid->bid_request_site_page), $domain_to_match) === false
-					&& strpos(strtolower($RtbBid->bid_request_site_domain), $domain_to_match) === false):
+				if (strpos(strtolower($RtbBidRequest->RtbBidRequestSite->bid_request_site_page), $domain_to_match) === false
+					&& strpos(strtolower($RtbBidRequest->RtbBidRequestSite->bid_request_site_domain), $domain_to_match) === false):
 				
 					if ($Logger->setting_log === true):
-						$Logger->log[] = "Failed: " . "Check banner page url, site exclusive inclusions do not match :: EXPECTED: " . $domain_to_match . " GOT: bid_request_site_page: " . $RtbBid->bid_request_site_page . ", bid_request_site_domain: " . $RtbBid->bid_request_site_domain;
+						$Logger->log[] = "Failed: " . "Check banner page url, site exclusive inclusions do not match :: EXPECTED: " 
+								. $domain_to_match . " GOT: bid_request_site_page: " 
+								. $RtbBidRequest->RtbBidRequestSite->bid_request_site_page . ", bid_request_site_domain: " 
+								. $RtbBidRequest->RtbBidRequestSite->bid_request_site_domain;
 					endif;
 					// goto next banner
 					return false;
 					
 				endif;
 			
-			elseif ($RtbBid->bid_request_refurl && $AdCampaignBannerExclusiveInclusion->InclusionType == "referrer"):
+			elseif ($RtbBidRequest->bid_request_refurl && $AdCampaignBannerExclusiveInclusion->InclusionType == "referrer"):
 			
-				if (strpos(strtolower($RtbBid->bid_request_refurl), $domain_to_match) === false):
+				if (strpos(strtolower($RtbBidRequest->bid_request_refurl), $domain_to_match) === false):
 				
 					if ($Logger->setting_log === true):
-						$Logger->log[] = "Failed: " . "Check banner page referrer url, site exclusive inclusions do not match :: EXPECTED: " . $domain_to_match . " GOT: " . $RtbBid->bid_request_refurl;
+						$Logger->log[] = "Failed: " . "Check banner page referrer url, site exclusive inclusions do not match :: EXPECTED: " . $domain_to_match . " GOT: " . $RtbBidRequest->bid_request_refurl;
 					endif;
 					return false;
 					

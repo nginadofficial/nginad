@@ -11,14 +11,19 @@ namespace buyrtb\workflows\tasklets\common\adcampaignbannerrestrictions;
 
 class CheckFoldPosition {
 	
-	public static function execute(&$Logger, &$Workflow, &$RtbBid, &$AdCampaignBanner, &$AdCampaignBannerRestrictions) {
+	public static function execute(&$Logger, &$Workflow, \model\openrtb\RtbBidRequest &$RtbBidRequest, \model\openrtb\RtbBidRequestImp &$RtbBidRequestImp, &$AdCampaignBanner, &$AdCampaignBannerRestrictions) {
+		
+		$RtbBidRequestBanner = $RtbBidRequestImp->RtbBidRequestBanner;
 		
 		/*
 		 * Check banner system fold position (sFoldPos), I don't think we can trust the user fold position (uFoldPos)
 		*/
-		if ($AdCampaignBannerRestrictions->FoldPos !== null && $RtbBid->bid_request_sFoldPos !== null && $AdCampaignBannerRestrictions->FoldPos != $RtbBid->bid_request_sFoldPos):
+		if ($AdCampaignBannerRestrictions->FoldPos !== null && $RtbBidRequestBanner->bid_request_imp_banner_pos !== null 
+			&& $AdCampaignBannerRestrictions->FoldPos != $RtbBidRequestBanner->bid_request_imp_banner_pos):
 			if ($Logger->setting_log === true):
-				$Logger->log[] = "Failed: " . "Check banner system fold position :: EXPECTED: " . $AdCampaignBannerRestrictions->FoldPos . " GOT: " . $RtbBid->bid_request_sFoldPos;
+				$Logger->log[] = "Failed: " . "Check banner system fold position :: EXPECTED: " 
+					. $AdCampaignBannerRestrictions->FoldPos
+					. " GOT: " . $RtbBidRequestBanner->bid_request_imp_banner_pos;
 			endif;
 			return false;
 		endif;

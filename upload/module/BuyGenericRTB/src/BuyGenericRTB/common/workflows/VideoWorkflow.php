@@ -11,21 +11,15 @@ namespace buyrtb\workflows;
 
 class VideoWorkflow
 {
+	public $current_time;
 	
-	protected $rtb_provider = "none";
-	public static $rtb_child_class_name = "none";
-
-	// singleton
-	private static $_instance;	
-
-	public static function get_instance() {
-		if (self::$_instance == null):
-			self::$_instance = new self::$rtb_child_class_name();
-		endif;
-		return self::$_instance;	
-	}
+	// geocity light
+	public $geo_info = null;
+	public $maxmind = null;
 	
-    public function process_business_rules_workflow($RtbBid) {
+	public $config;
+	
+    public function process_business_rules_workflow($logger, $config, $rtb_seat_id, \model\openrtb\RtbBidRequest &$RtbBidRequest) {
 
     
     }

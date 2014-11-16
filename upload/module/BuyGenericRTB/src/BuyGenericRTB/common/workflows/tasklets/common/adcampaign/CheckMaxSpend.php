@@ -11,7 +11,7 @@ namespace buyrtb\workflows\tasklets\common\adcampaign;
 
 class CheckMaxSpend {
 	
-	public static function execute(&$Logger, &$Workflow, &$RtbBid, &$AdCampaign) {
+	public static function execute(&$Logger, &$Workflow, \model\openrtb\RtbBidRequest &$RtbBidRequest, &$AdCampaign) {
 	
         	if ($AdCampaign->CurrentSpend >= $AdCampaign->MaxSpend):
             	if ($Logger->setting_log === true):

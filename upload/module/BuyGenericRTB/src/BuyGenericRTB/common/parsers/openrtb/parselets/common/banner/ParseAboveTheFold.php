@@ -12,7 +12,7 @@ use \Exception;
 
 class ParseAboveTheFold {
 	
-	public static function execute(&$Logger, \buyrtb\parsers\openrtb\OpenRTBParser &$Parser, \model\rtb\RtbBidRequestBanner &$RtbBidRequestBanner, &$ad_impression_banner) {
+	public static function execute(&$Logger, \buyrtb\parsers\openrtb\OpenRTBParser &$Parser, \model\openrtb\RtbBidRequestBanner &$RtbBidRequestBanner, &$ad_impression_banner) {
 		
 		/*
 		 * OpenRTB 2.1

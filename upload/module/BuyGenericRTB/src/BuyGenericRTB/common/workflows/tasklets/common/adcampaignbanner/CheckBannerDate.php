@@ -11,7 +11,7 @@ namespace buyrtb\workflows\tasklets\common\adcampaignbanner;
 
 class CheckBannerDate {
 	
-	public static function execute(&$Logger, &$Workflow, &$RtbBid, &$AdCampaignBanner) {
+	public static function execute(&$Logger, &$Workflow, \model\openrtb\RtbBidRequest &$RtbBidRequest, \model\openrtb\RtbBidRequestImp &$RtbBidRequestImp, &$AdCampaignBanner) {
 	
 		/*
 		 * Check banner date

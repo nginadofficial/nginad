@@ -7,7 +7,7 @@
  * @license GPLv3
  */
 
-namespace model\rtb;
+namespace model\openrtb;
 
 class RtbBidRequestImp {
 	

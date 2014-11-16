@@ -182,17 +182,16 @@ abstract class RtbBuyV22Bid extends RtbBuyBid {
 
 	public function process_business_logic() {
 
-	    $this->AdCampaignBanner_Match_List = \rtbbuyv22\RtbBuyV22Workflow::get_instance()->process_business_rules_workflow($this->RtbBidRequest);
+	    $this->AdCampaignBanner_Match_List = \rtbbuyv22\RtbBuyV22Workflow::get_instance()->process_business_rules_workflow($this->config, $this->rtb_seat_id, $this->RtbBidRequest);
 	}
 
 	public function parse_incoming_request($raw_post = null) {
 
 		$OpenRTBParser = new \buyrtb\parsers\openrtb\OpenRTBParser();
+		$this->RtbBidRequest->is_local_request = $this->is_local_request;
 		$this->RtbBidRequest = $OpenRTBParser->parse_request($raw_post);
 
 	}
-
-
 
 }
 

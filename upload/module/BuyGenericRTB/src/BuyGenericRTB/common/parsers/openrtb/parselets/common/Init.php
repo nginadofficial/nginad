@@ -12,7 +12,7 @@ use \Exception;
 
 class Init {
 	
-	public static function execute(&$Logger, \buyrtb\parsers\openrtb\OpenRTBParser &$Parser, \model\rtb\RtbBidRequest &$RtbBidRequest) {
+	public static function execute(&$Logger, \buyrtb\parsers\openrtb\OpenRTBParser &$Parser, \model\openrtb\RtbBidRequest &$RtbBidRequest) {
 	
 		/*
 		 * Initialize Data
@@ -55,7 +55,7 @@ class Init {
 		
 		if (isset($Parser->json_post["id"])):
 		 
-			$RtbBidResponse->bid_request_id = $Parser->json_post["id"];
+			$RtbBidRequest->bid_request_id = $Parser->json_post["id"];
 		 
 		else:
 		 

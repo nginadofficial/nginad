@@ -12,7 +12,7 @@ use \Exception;
 
 class VideoParser {
 
-	public function parse_request(&$Logger, \buyrtb\parsers\openrtb\OpenRTBParser &$Parser, \model\rtb\RtbBidRequestVideo &$RtbBidRequestVideo, &$ad_impression_video) {
+	public function parse_request(&$Logger, \buyrtb\parsers\openrtb\OpenRTBParser &$Parser, \model\openrtb\RtbBidRequestVideo &$RtbBidRequestVideo, &$ad_impression_video) {
 
 
 	}

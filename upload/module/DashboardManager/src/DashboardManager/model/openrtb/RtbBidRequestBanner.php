@@ -7,10 +7,14 @@
  * @license GPLv3
  */
 
-namespace model\rtb;
+namespace model\openrtb;
 
-class RtbBidRequestRegs {
+class RtbBidRequestBanner {
 	
-	// regs // coppa
-	public $bid_request_regs_coppa;
+
+	public $bid_request_imp_banner_h;
+	public $bid_request_imp_banner_w;
+	public $bid_request_imp_banner_pos;
+
+	
 }

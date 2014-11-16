@@ -11,7 +11,7 @@ namespace buyrtb\workflows\tasklets\common\adcampaign;
 
 class CheckMaxImpressions {
 	
-	public static function execute(&$Logger, &$Workflow, &$RtbBid, &$AdCampaign) {
+	public static function execute(&$Logger, &$Workflow, \model\openrtb\RtbBidRequest &$RtbBidRequest, &$AdCampaign) {
 	
         /*
        	 * Check max impressions

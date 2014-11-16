@@ -11,7 +11,7 @@ namespace buyrtb\workflows\tasklets\common\adcampaignbannerrestrictions;
 
 class CheckPrivateMarketPlaceEnabled {
 	
-	public static function execute(&$Logger, &$Workflow, &$RtbBid, &$AdCampaignBanner, &$AdCampaignBannerRestrictions) {
+	public static function execute(&$Logger, &$Workflow, \model\openrtb\RtbBidRequest &$RtbBidRequest, \model\openrtb\RtbBidRequestImp &$RtbBidRequestImp, &$AdCampaignBanner, &$AdCampaignBannerRestrictions) {
 	
 		/*
 		 * Check banner for PMP Enable

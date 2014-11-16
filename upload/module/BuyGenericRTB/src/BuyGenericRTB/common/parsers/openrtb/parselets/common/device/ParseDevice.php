@@ -12,7 +12,7 @@ use \Exception;
 
 class ParseDevice {
 	
-	public static function execute(&$Logger, \buyrtb\parsers\openrtb\OpenRTBParser &$Parser, \model\rtb\RtbBidRequest &$RtbBidRequest, \model\rtb\RtbBidRequestDevice &$RtbBidRequestDevice, &$device) {
+	public static function execute(&$Logger, \buyrtb\parsers\openrtb\OpenRTBParser &$Parser, \model\openrtb\RtbBidRequest &$RtbBidRequest, \model\openrtb\RtbBidRequestDevice &$RtbBidRequestDevice, &$device) {
 	
 		define('DEVICE_DESKTOP', 2);
 		define('DEVICE_MOBILE', 1);
@@ -77,7 +77,7 @@ class ParseDevice {
 		if (isset($default_device["geo"])):
 		
 			$geo = $default_device["geo"];
-			$RtbBidRequestGeo = new \model\rtb\RtbBidRequestGeo();
+			$RtbBidRequestGeo = new \model\openrtb\RtbBidRequestGeo();
 			\buyrtb\parsers\openrtb\parselets\common\device\ParseGeo::execute($Logger, $Parser, $RtbBidRequest, $RtbBidRequestGeo, $geo);
 			$RtbBidRequestDevice->RtbBidRequestGeo = $RtbBidRequestGeo;
 				

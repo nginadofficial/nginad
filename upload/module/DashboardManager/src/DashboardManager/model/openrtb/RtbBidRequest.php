@@ -7,7 +7,7 @@
  * @license GPLv3
  */
 
-namespace model\rtb;
+namespace model\openrtb;
 
 class RtbBidRequest {
 	
@@ -36,4 +36,6 @@ class RtbBidRequest {
 	
 	public $RtbBidRequestRegs;
 	
+	// used only by NginAd internally
+	public $is_local_request;
 }

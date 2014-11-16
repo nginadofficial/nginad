@@ -11,7 +11,7 @@ namespace buyrtb\workflows\tasklets\common\adcampaignbanner;
 
 class CheckIsContract {
 	
-	public static function execute(&$Logger, &$Workflow, &$RtbBid, &$AdCampaignBanner) {
+	public static function execute(&$Logger, &$Workflow, \model\openrtb\RtbBidRequest &$RtbBidRequest, \model\openrtb\RtbBidRequestImp &$RtbBidRequestImp, &$AdCampaignBanner) {
 	
 		/*
      	* Check to see if this AdCampaginBanner is associated to a
@@ -20,9 +20,9 @@ class CheckIsContract {
      	*/
     	if ($AdCampaignBanner->AdCampaignTypeID == AD_TYPE_CONTRACT):
         	return false;
-     	elseif ($AdCampaignBanner->AdCampaignTypeID == AD_TYPE_IN_HOUSE_REMNANT && $RtbBid->is_local_request == false):
+     	elseif ($AdCampaignBanner->AdCampaignTypeID == AD_TYPE_IN_HOUSE_REMNANT && $RtbBidRequest->is_local_request == false):
         	return false;
-       	elseif ($AdCampaignBanner->AdCampaignTypeID == AD_TYPE_RTB_REMNANT && $RtbBid->is_local_request == true):
+       	elseif ($AdCampaignBanner->AdCampaignTypeID == AD_TYPE_RTB_REMNANT && $RtbBidRequest->is_local_request == true):
 	  		return false;
      	endif;
 			

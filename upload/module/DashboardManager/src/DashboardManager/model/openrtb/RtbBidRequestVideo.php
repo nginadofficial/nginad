@@ -7,13 +7,7 @@
  * @license GPLv3
  */
 
-namespace model\rtb;
+namespace model\openrtb;
 
-class RtbBidRequestGeo {
-	
-	public $bid_request_geo_country;
-	// state
-	public $bid_request_geo_state;
-	
-	public $bid_request_geo_city;
+class RtbBidRequestVideo {
 }

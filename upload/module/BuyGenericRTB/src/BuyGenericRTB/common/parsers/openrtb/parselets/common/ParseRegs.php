@@ -11,7 +11,7 @@ namespace buyrtb\parsers\openrtb\parselets\common;
 
 class ParseRegs {
 	
-	public static function execute(&$Logger, \buyrtb\parsers\openrtb\OpenRTBParser &$Parser, \model\rtb\RtbBidRequest &$RtbBidRequest, \model\rtb\RtbBidRequestRegs &$RtbBidRequestRegs, &$ad_regs) {
+	public static function execute(&$Logger, \buyrtb\parsers\openrtb\OpenRTBParser &$Parser, \model\openrtb\RtbBidRequest &$RtbBidRequest, \model\openrtb\RtbBidRequestRegs &$RtbBidRequestRegs, &$ad_regs) {
 	
 		/*
 		 * Opt Out Coppa?

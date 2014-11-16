@@ -11,16 +11,16 @@ namespace buyrtb\workflows\tasklets\common\adcampaign;
 
 class GetGeoCodeCountry {
 	
-	public static function execute(&$Logger, &$Workflow, &$RtbBid) {
+	public static function execute(&$Logger, &$Workflow, \model\openrtb\RtbBidRequest &$RtbBidRequest) {
 		
 		/*
 		 * use maxmind incrementally. The geo-Country pay DB we have is only 1 meg
 		 * if we need city/state ok, but only load it if absolutely necessary
 		 */
 		
-		if ($RtbBid->bid_request_device_ip !== null && $RtbBid->bid_request_geo === null):
+		if ($RtbBidRequest->RtbBidRequestDevice->bid_request_device_ip !== null && $RtbBidRequest->RtbBidRequestDevice->RtbBidRequestGeo === null):
 			$Workflow->maxmind = new \geoip\maxmind();
-			$RtbBid->bid_request_geo["country"] = $Workflow->maxmind->get_geo_code_country($RtbBid->bid_request_device_ip);
+			$RtbBidRequest->RtbBidRequestDevice->RtbBidRequestGeo->bid_request_geo_country = $Workflow->maxmind->get_geo_code_country($RtbBidRequest->RtbBidRequestDevice->bid_request_device_ip);
 		endif;
 	}
 	

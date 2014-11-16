@@ -11,7 +11,7 @@ namespace buyrtb\workflows;
 
 class CheckBannerRestrictionsWorkflow {
 	
-	public static function execute(&$Logger, &$ParentWorkflow, &$RtbBid, &$AdCampaignBanner, &$AdCampaignBannerRestrictionsFactory) {
+	public static function execute(&$Logger, &$ParentWorkflow, \model\openrtb\RtbBidRequestBanner &$RtbBidRequestBanner, \model\openrtb\RtbBidRequestImp &$RtbBidRequestImp, &$AdCampaignBanner, &$AdCampaignBannerRestrictionsFactory) {
 	
 		/*
 		 * Check banner restrictions (optional fields)

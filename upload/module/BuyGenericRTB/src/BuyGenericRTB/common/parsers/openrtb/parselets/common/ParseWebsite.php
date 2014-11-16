@@ -12,7 +12,7 @@ use \Exception;
 
 class ParseWebsite {
 	
-	public static function execute(&$Logger, \buyrtb\parsers\openrtb\OpenRTBParser &$Parser, \model\rtb\RtbBidRequest &$RtbBidRequest, \model\rtb\RtbBidRequestSite &$RtbBidRequestSite, &$ad_campaign_site) {
+	public static function execute(&$Logger, \buyrtb\parsers\openrtb\OpenRTBParser &$Parser, \model\openrtb\RtbBidRequest &$RtbBidRequest, \model\openrtb\RtbBidRequestSite &$RtbBidRequestSite, &$ad_campaign_site) {
 	
 
 	        if (isset($ad_campaign_site["domain"])):

@@ -7,9 +7,10 @@
  * @license GPLv3
  */
 
-namespace model\rtb;
+namespace model\openrtb;
 
-class RtbBidRequestMobile {
+class RtbBidRequestRegs {
 	
-	
+	// regs // coppa
+	public $bid_request_regs_coppa;
 }

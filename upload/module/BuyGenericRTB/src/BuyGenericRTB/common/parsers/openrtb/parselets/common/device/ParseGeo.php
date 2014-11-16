@@ -11,7 +11,7 @@ namespace buyrtb\parsers\openrtb\parselets\common\device;
 
 class ParseGeo {
 	
-	public static function execute(&$Logger, \buyrtb\parsers\openrtb\OpenRTBParser &$Parser, \model\rtb\RtbBidRequest &$RtbBidRequest, \model\rtb\RtbBidRequestGeo &$RtbBidRequestGeo, &$geo) {
+	public static function execute(&$Logger, \buyrtb\parsers\openrtb\OpenRTBParser &$Parser, \model\openrtb\RtbBidRequest &$RtbBidRequest, \model\openrtb\RtbBidRequestGeo &$RtbBidRequestGeo, &$geo) {
 
 		if (isset($geo["country"])):
 			$RtbBidRequestGeo->bid_request_geo_country = $geo["country"];

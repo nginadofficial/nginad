@@ -7,14 +7,13 @@
  * @license GPLv3
  */
 
-namespace model\rtb;
+namespace model\openrtb;
 
-class RtbBidRequestBanner {
+class RtbBidRequestGeo {
 	
-
-	public $bid_request_imp_banner_h;
-	public $bid_request_imp_banner_w;
-	public $bid_request_imp_banner_pos;
-
+	public $bid_request_geo_country;
+	// state
+	public $bid_request_geo_state;
 	
+	public $bid_request_geo_city;
 }
