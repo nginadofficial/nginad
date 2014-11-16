@@ -88,17 +88,17 @@ abstract class RtbBuyV22Bid extends RtbBuyBid {
 		$tld = "not_available";
 		// bid // site
 
-		$parse = parse_url($this->bid_request_site_domain);
+		$parse = parse_url($this->RtbBidRequest->RtbBidRequestSite->domain);
 		if (isset($parse['host'])):
 			$tld = $parse['host'];
 		else:
-			$parse = parse_url($this->bid_request_site_page);
+			$parse = parse_url($this->RtbBidRequest->RtbBidRequestSite->page);
 			if (isset($parse['host'])):
 				$tld = $parse['host'];
 			endif;
 		endif;
 
-		$this->user_ip_hash = md5($this->bid_request_device_ip);
+		$this->user_ip_hash = md5($this->RtbBidRequest->RtbBidRequestDevice->ip);
 		$http_regex = '/https?\:\/\/[^\" ]+/i';
 		 
 		$users_that_dont_fill_list = array();

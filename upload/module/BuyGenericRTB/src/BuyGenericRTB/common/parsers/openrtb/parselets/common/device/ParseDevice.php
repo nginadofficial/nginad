@@ -18,7 +18,7 @@ class ParseDevice {
 		define('DEVICE_MOBILE', 1);
 		define('DEVICE_TABLET', 5);
 		
-		$RtbBidRequest->bid_request_device_type = DEVICE_DESKTOP;
+		$RtbBidRequestDevice->type = DEVICE_DESKTOP;
 		
 		if (!isset($Parser->json_post["device"])):
 			return;
@@ -27,7 +27,7 @@ class ParseDevice {
 		$default_device = $Parser->json_post["device"];
 		
 		if (isset($default_device["ip"])):
-			$RtbBidRequestDevice->bid_request_device_ip 		= $default_device["ip"];
+			$RtbBidRequestDevice->ip 		= $default_device["ip"];
 		else:
 			throw new Exception($Parser->expeption_missing_min_bid_request_params . ": device_ip");
 		endif;
@@ -38,10 +38,10 @@ class ParseDevice {
 		 
 		if (isset($default_device["ua"])):
 		
-			$RtbBidRequestDevice->bid_request_device_ua 		= $default_device["ua"];
+			$RtbBidRequestDevice->ua 		= $default_device["ua"];
 		
-			if (strpos($RtbBidRequestDevice->bid_request_device_ua, '%20') !== false):
-				$RtbBidRequestDevice->bid_request_device_ua = urldecode($RtbBidRequestDevice->bid_request_device_ua);
+			if (strpos($RtbBidRequestDevice->ua, '%20') !== false):
+				$RtbBidRequestDevice->ua = urldecode($RtbBidRequestDevice->ua);
 			endif;
 		
 		endif;
@@ -50,25 +50,25 @@ class ParseDevice {
 			 
 			if (\mobileutil\MobileDeviceType::isPhone($default_device["model"]) === true):
 			 
-				$RtbBidRequestDevice->bid_request_device_type = DEVICE_MOBILE;
+				$RtbBidRequestDevice->type = DEVICE_MOBILE;
 				 
 			elseif(\mobileutil\MobileDeviceType::isTablet($default_device["model"]) === true):
 			 
-				$RtbBidRequestDevice->bid_request_device_type = DEVICE_TABLET;
+				$RtbBidRequestDevice->type = DEVICE_TABLET;
 				 
 			endif;
 			 
-		elseif (isset($RtbBidRequestDevice->bid_request_device_ua) && $RtbBidRequestDevice->bid_request_device_ua != null):
+		elseif (isset($RtbBidRequestDevice->ua) && $RtbBidRequestDevice->ua != null):
 		
-			$detect = new \mobileutil\MobileDetect(null, $RtbBidRequestDevice->bid_request_device_ua);
+			$detect = new \mobileutil\MobileDetect(null, $RtbBidRequestDevice->ua);
 			 
 			if ($detect->isTablet()):
 			 
-				$RtbBidRequestDevice->bid_request_device_type = DEVICE_TABLET;
+				$RtbBidRequestDevice->type = DEVICE_TABLET;
 			 
 			elseif ($detect->isMobile()):
 			 
-				$RtbBidRequestDevice->bid_request_device_type = DEVICE_MOBILE;
+				$RtbBidRequestDevice->type = DEVICE_MOBILE;
 			 
 			endif;
 			

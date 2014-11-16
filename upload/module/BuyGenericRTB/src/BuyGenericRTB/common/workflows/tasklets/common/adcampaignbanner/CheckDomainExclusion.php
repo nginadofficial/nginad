@@ -27,26 +27,26 @@ class CheckDomainExclusion {
 			
 			if ($AdCampaignBannerDomainExclusion->ExclusionType == "url"):
 				
-				if (strpos(strtolower($RtbBidRequest->RtbBidRequestSite->bid_request_site_page), $domain_to_match) !== false
-					|| strpos(strtolower($RtbBidRequest->RtbBidRequestSite->bid_request_site_domain), $domain_to_match) !== false):
+				if (strpos(strtolower($RtbBidRequest->RtbBidRequestSite->page), $domain_to_match) !== false
+					|| strpos(strtolower($RtbBidRequest->RtbBidRequestSite->domain), $domain_to_match) !== false):
 					
 					if ($Logger->setting_log === true):
 						$Logger->log[] = "Failed: " . "Check banner page url, site exclusions match :: EXPECTED: "
 								 . $domain_to_match . " GOT: bid_request_site_page: "
-								 . $RtbBidRequest->RtbBidRequestSite->bid_request_site_page . ", bid_request_site_domain: " 
-								 . $RtbBidRequest->RtbBidRequestSite->bid_request_site_domain;
+								 . $RtbBidRequest->RtbBidRequestSite->page . ", bid_request_site_domain: " 
+								 . $RtbBidRequest->RtbBidRequestSite->domain;
 					endif;
 					// goto next banner
 					return false;
 					
 				endif;
 				
-			elseif ($RtbBidRequest->bid_request_refurl && $AdCampaignBannerDomainExclusion->ExclusionType == "referrer"):
+			elseif ($RtbBidRequest->refurl && $AdCampaignBannerDomainExclusion->ExclusionType == "referrer"):
 			
-				if (strpos(strtolower($RtbBidRequest->bid_request_refurl), $domain_to_match) !== false):
+				if (strpos(strtolower($RtbBidRequest->refurl), $domain_to_match) !== false):
 				
 					if ($Logger->setting_log === true):
-						$Logger->log[] = "Failed: " . "Check banner page referrer url, site exclusions match :: EXPECTED: " . $domain_to_match . " GOT: " . $RtbBidRequest->bid_request_refurl;
+						$Logger->log[] = "Failed: " . "Check banner page referrer url, site exclusions match :: EXPECTED: " . $domain_to_match . " GOT: " . $RtbBidRequest->refurl;
 					endif;
 					return false;
 					

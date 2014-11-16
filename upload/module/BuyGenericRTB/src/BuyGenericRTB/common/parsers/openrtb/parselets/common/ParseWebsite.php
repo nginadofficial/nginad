@@ -15,20 +15,24 @@ class ParseWebsite {
 	public static function execute(&$Logger, \buyrtb\parsers\openrtb\OpenRTBParser &$Parser, \model\openrtb\RtbBidRequest &$RtbBidRequest, \model\openrtb\RtbBidRequestSite &$RtbBidRequestSite, &$ad_campaign_site) {
 	
 
+			$RtbBidRequestPublisher = new \model\openrtb\RtbBidRequestPublisher();
+		
+			$RtbBidRequestSite->RtbBidRequestPublisher = $RtbBidRequestPublisher;
+			
 	        if (isset($ad_campaign_site["domain"])):
-	        	$RtbBidRequestSite->bid_request_site_domain 		= $ad_campaign_site["domain"];
+	        	$RtbBidRequestSite->domain 		= $ad_campaign_site["domain"];
 	        else:
 	        	throw new Exception($this->expeption_missing_min_bid_request_params . ": site_domain");
 	        endif;
         
 	        if (isset($ad_campaign_site["page"])):
-	        	$RtbBidRequestSite->bid_request_site_page 		= $ad_campaign_site["page"];
+	        	$RtbBidRequestSite->page 		= $ad_campaign_site["page"];
 	        endif;
 	        
-	        if (strpos(strtolower($RtbBidRequestSite->bid_request_site_domain), "https://") !== false
-	        	|| strpos(strtolower($RtbBidRequestSite->bid_request_site_page), "https://") !== false):
+	        if (strpos(strtolower($RtbBidRequestSite->domain), "https://") !== false
+	        	|| strpos(strtolower($RtbBidRequestSite->page), "https://") !== false):
 	        
-	        	$RtbBidRequest->bid_request_secure = 1;
+	        	$RtbBidRequest->secure = 1;
 	         
 	        endif;
 
@@ -53,7 +57,7 @@ class ParseWebsite {
 			        	
 			        	if (isset($this->vertical_map[strtoupper($main_category)])):
 			        	
-			        		$RtbBidRequestSite->bid_request_site_publisher_cat = $this->vertical_map[strtoupper($main_category)];
+			        		$RtbBidRequestSite->RtbBidRequestPublisher->cat = $this->vertical_map[strtoupper($main_category)];
 			        	
 			        	endif;
 			        			

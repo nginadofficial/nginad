@@ -23,9 +23,9 @@ class ParseCurrency {
 		
 			$currency = $Parser->json_post["cur"][0];
 		
-			$RtbBidRequest->bid_request_cur = strtoupper($currency);
+			$RtbBidRequest->cur = strtoupper($currency);
 			
-			if ($RtbBidRequest->bid_request_cur != "USD"):
+			if ($RtbBidRequest->cur != "USD"):
 			 
 				throw new Exception($Parser->expeption_missing_min_bid_request_params . ": cur: system only accepts USD currency at this time");
 			 

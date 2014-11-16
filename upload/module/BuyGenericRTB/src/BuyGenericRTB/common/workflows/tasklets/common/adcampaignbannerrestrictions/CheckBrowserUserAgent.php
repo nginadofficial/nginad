@@ -16,13 +16,13 @@ class CheckBrowserUserAgent {
 		/*
 		 * Check browser user-agent for string
 		 */
-		if ($AdCampaignBannerRestrictions->BrowserUserAgentGrep !== null && $RtbBidRequest->RtbBidRequestDevice->bid_request_device_ua !== null):
+		if ($AdCampaignBannerRestrictions->BrowserUserAgentGrep !== null && $RtbBidRequest->RtbBidRequestDevice->ua !== null):
 		
-			if (strpos(strtolower($RtbBidRequest->RtbBidRequestDevice->bid_request_device_ua), strtolower($AdCampaignBannerRestrictions->BrowserUserAgentGrep)) === false):
+			if (strpos(strtolower($RtbBidRequest->RtbBidRequestDevice->ua), strtolower($AdCampaignBannerRestrictions->BrowserUserAgentGrep)) === false):
 				if ($Logger->setting_log === true):
 					$Logger->log[] = "Failed: " . "Check browser user-agent for string :: EXPECTED: " 
 							. $AdCampaignBannerRestrictions->BrowserUserAgentGrep . " GOT: " 
-							. $RtbBidRequest->RtbBidRequestDevice->bid_request_device_ua;
+							. $RtbBidRequest->RtbBidRequestDevice->ua;
 				endif;
 				return false;
 			endif;

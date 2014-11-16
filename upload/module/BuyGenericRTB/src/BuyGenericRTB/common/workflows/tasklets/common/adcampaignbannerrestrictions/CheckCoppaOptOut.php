@@ -16,11 +16,11 @@ class CheckCoppaOptOut {
 		/*
 		 * Check user for Coppa opt out status
 		*/
-		if ($AdCampaignBannerRestrictions->Optout !== null && $RtbBidRequest->RtbBidRequestRegs !== null && $RtbBidRequest->RtbBidRequestRegs->bid_request_regs_coppa != $AdCampaignBannerRestrictions->Optout):
+		if ($AdCampaignBannerRestrictions->Optout !== null && $RtbBidRequest->RtbBidRequestRegs !== null && $RtbBidRequest->RtbBidRequestRegs->coppa != $AdCampaignBannerRestrictions->Optout):
 			if ($Logger->setting_log === true):
 				$Logger->log[] = "Failed: " . "Check user for Coppa opt out status :: EXPECTED: " 
 					. $AdCampaignBannerRestrictions->Optout . " GOT: " 
-					. $RtbBidRequest->RtbBidRequestRegs->bid_request_regs_coppa;
+					. $RtbBidRequest->RtbBidRequestRegs->coppa;
 			endif;
 			return false;
 		endif;

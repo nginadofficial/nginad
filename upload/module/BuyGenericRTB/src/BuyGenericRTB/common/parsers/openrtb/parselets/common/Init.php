@@ -55,7 +55,7 @@ class Init {
 		
 		if (isset($Parser->json_post["id"])):
 		 
-			$RtbBidRequest->bid_request_id = $Parser->json_post["id"];
+			$RtbBidRequest->id = $Parser->json_post["id"];
 		 
 		else:
 		 

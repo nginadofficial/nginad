@@ -9,11 +9,8 @@
 
 namespace model\openrtb;
 
-class RtbBidRequestGeo {
+class RtbBidRequestPublisher {
 	
-	public $country;
-	// state
-	public $state;
+	public $cat;
 	
-	public $city;
 }

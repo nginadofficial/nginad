@@ -52,7 +52,7 @@ class IndexController extends AbstractActionController
         	$LoopbackPartnerBid = new \buyloopbackpartner\LoopbackPartnerBid($config, $rtb_seat_id, $response_seat_id);
         	$LoopbackPartnerBid->is_local_request = false;
         	$LoopbackPartnerBid->parse_incoming_request();
-        	$request_id = $LoopbackPartnerBid->bid_request_id;
+        	$request_id = $LoopbackPartnerBid->RtbBidRequest->id;
         	$LoopbackPartnerBid->process_business_logic();
         	$LoopbackPartnerBid->build_outgoing_bid_response();
         	$LoopbackPartnerBid->send_bid_response();

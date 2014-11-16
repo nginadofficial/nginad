@@ -18,7 +18,7 @@ class RtbBidRequest {
 	// REQUIRED
 	
 	// bid
-	public $bid_request_id;
+	public $id;
 	
 	public $RtbBidRequestImpList = array();
 
@@ -26,11 +26,11 @@ class RtbBidRequest {
 
 	// bid // cur
 	
-	public $bid_request_cur;
+	public $cur;
 	
 	// does not exist in openRTB. Here for compatability with proprietary RTB
-	public $bid_request_refurl = "";
-	public $bid_request_secure;
+	public $refurl = "";
+	public $secure;
 
 	public $RtbBidRequestDevice;
 	

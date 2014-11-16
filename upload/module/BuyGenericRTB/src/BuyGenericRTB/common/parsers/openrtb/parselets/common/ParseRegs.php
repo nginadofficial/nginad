@@ -16,7 +16,7 @@ class ParseRegs {
 		/*
 		 * Opt Out Coppa?
 		 */
-		$this->bid_request_regs_coppa 		= $ad_regs;
+		$RtbBidRequestRegs->coppa 		= $ad_regs;
 
 	}
 }

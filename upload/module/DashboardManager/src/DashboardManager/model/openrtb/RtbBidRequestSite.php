@@ -12,10 +12,10 @@ namespace model\openrtb;
 class RtbBidRequestSite {
 	
 	// bid // site
-	public $bid_request_site_domain;
-	public $bid_request_site_page = "";
+	public $domain;
+	public $page = "";
 	
 	// bid // site // publisher
-	public $bid_request_site_publisher_cat;
+	public $RtbBidRequestPublisher;
 	
 }

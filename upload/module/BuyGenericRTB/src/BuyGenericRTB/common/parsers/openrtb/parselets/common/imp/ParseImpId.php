@@ -18,7 +18,7 @@ class ParseImpId {
 		 * Get impression id
 		 */
 	   	if (isset($ad_impression["id"])):
-	    	$RtbBidRequestImp->bid_request_imp_id = $ad_impression["id"];
+	    	$RtbBidRequestImp->id = $ad_impression["id"];
 	 	else:
 	     	throw new Exception($Parser->expeption_missing_min_bid_request_params . ": imp_id");
 	  	endif;

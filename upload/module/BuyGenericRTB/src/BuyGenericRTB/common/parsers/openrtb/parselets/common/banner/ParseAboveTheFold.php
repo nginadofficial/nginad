@@ -53,16 +53,16 @@ class ParseAboveTheFold {
 			if ($ad_impression_banner["pos"] == 1
 				|| $ad_impression_banner["pos"] == 4):
 			 
-				$RtbBidRequestBanner->bid_request_imp_banner_pos 	= 1;
+				$RtbBidRequestBanner->pos 	= 1;
 			
 			elseif ($ad_impression_banner["pos"] == 6):
 			
-				$RtbBidRequestBanner->bid_request_imp_banner_pos 	= 3;
+				$RtbBidRequestBanner->pos 	= 3;
 			
 			elseif ($ad_impression_banner["pos"] == 3
 				|| $ad_impression_banner["pos"] == 5):
 					 
-				$RtbBidRequestBanner->bid_request_imp_banner_pos 	= 2;
+				$RtbBidRequestBanner->pos 	= 2;
 			
 			endif;
 			

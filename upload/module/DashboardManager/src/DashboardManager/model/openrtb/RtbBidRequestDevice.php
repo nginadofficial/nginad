@@ -12,10 +12,10 @@ namespace model\openrtb;
 class RtbBidRequestDevice {
 	
 	// bid // device
-	public $bid_request_device_ip;
-	public $bid_request_device_ua;
-	public $bid_request_device_language;
-	public $bid_request_device_type;
+	public $ip;
+	public $ua;
+	public $language;
+	public $type;
 	
 	public $RtbBidRequestGeo;
 

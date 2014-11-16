@@ -52,7 +52,7 @@ class IndexController extends AbstractActionController
         	$GenericBuysidePartnerBid = new \buygenericbuysidepartner\GenericBuysidePartnerBid($config, $rtb_seat_id, $response_seat_id);
         	$GenericBuysidePartnerBid->is_local_request = false;
         	$GenericBuysidePartnerBid->parse_incoming_request();
-        	$request_id = $GenericBuysidePartnerBid->bid_request_id;
+        	$request_id = $GenericBuysidePartnerBid->RtbBidRequest->id;
         	$GenericBuysidePartnerBid->process_business_logic();
         	$GenericBuysidePartnerBid->build_outgoing_bid_response();
         	$GenericBuysidePartnerBid->send_bid_response();

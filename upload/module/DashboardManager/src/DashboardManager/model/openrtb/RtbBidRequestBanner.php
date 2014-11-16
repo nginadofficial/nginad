@@ -12,9 +12,9 @@ namespace model\openrtb;
 class RtbBidRequestBanner {
 	
 
-	public $bid_request_imp_banner_h;
-	public $bid_request_imp_banner_w;
-	public $bid_request_imp_banner_pos;
+	public $h;
+	public $w;
+	public $pos;
 
 	
 }

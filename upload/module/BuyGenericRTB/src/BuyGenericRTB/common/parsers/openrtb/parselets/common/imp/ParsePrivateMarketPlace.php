@@ -17,7 +17,7 @@ class ParsePrivateMarketPlace {
 		 * Get impression id
 		 */
         if (isset($ad_impression["pmp"])):
-        	$RtbBidRequestImp->bid_request_imp_pmp = 1;
+        	$RtbBidRequestImp->pmp = 1;
         endif;
 		
 	}

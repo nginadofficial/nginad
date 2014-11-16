@@ -125,7 +125,7 @@ class DisplayWorkflow
 	
 	                $AdCampaignBanner->BidAmount = sprintf("%1.4f", $adusted_amount);
 	                
-	            	$AdCampaignBanner_Match_List[(string)$RtbBidRequestImp->bid_request_imp_id] = $AdCampaignBanner;
+	            	$AdCampaignBanner_Match_List[(string)$RtbBidRequestImp->id] = $AdCampaignBanner;
 	
 	        	endforeach;
         	

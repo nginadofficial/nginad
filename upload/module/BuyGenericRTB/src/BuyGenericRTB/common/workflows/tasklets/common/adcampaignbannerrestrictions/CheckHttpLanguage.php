@@ -16,11 +16,11 @@ class CheckHttpLanguage {
 		/*
 		 * Check browser language
 		*/
-		if ($AdCampaignBannerRestrictions->HttpLanguage !== null && $RtbBid->bid_request_device_language !== null):
+		if ($AdCampaignBannerRestrictions->HttpLanguage !== null && $RtbBidRequest->RtbBidRequestDevice->language !== null):
 		
 			$has_http_language = false;
 			
-			$request_language_list = explode(";", strtolower($RtbBid->bid_request_device_language));
+			$request_language_list = explode(";", strtolower($RtbBidRequest->RtbBidRequestDevice->language));
 			$http_language_list = explode(";", strtolower($AdCampaignBannerRestrictions->HttpLanguage));
 			
 			foreach ($http_language_list as $http_language):
@@ -36,7 +36,7 @@ class CheckHttpLanguage {
 			
 			if ($has_http_language === false):
 				if ($Logger->setting_log === true):
-					$Logger->log[] = "Failed: " . "Check browser language :: EXPECTED: " . $AdCampaignBannerRestrictions->HttpLanguage . " GOT: " . $RtbBid->bid_request_device_language;
+					$Logger->log[] = "Failed: " . "Check browser language :: EXPECTED: " . $AdCampaignBannerRestrictions->HttpLanguage . " GOT: " . $RtbBidRequest->RtbBidRequestDevice->language;
 				endif;
 				return false;
 			endif;

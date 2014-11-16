@@ -16,9 +16,9 @@ class CheckSecureOnly {
 		/*
 		 * Check banner for https:// secure
 		 */
-		if ($AdCampaignBannerRestrictions->Secure !== null && $RtbBid->bid_request_secure !== null && $RtbBid->bid_request_secure != $AdCampaignBannerRestrictions->Secure):
+		if ($AdCampaignBannerRestrictions->Secure !== null && $RtbBidRequest->secure !== null && $RtbBidRequest->secure != $AdCampaignBannerRestrictions->Secure):
 			if ($Logger->setting_log === true):
-				$Logger->log[] = "Failed: " . "Check banner for https:// secure :: EXPECTED: " . $AdCampaignBannerRestrictions->Secure . " GOT: " . $RtbBid->bid_request_secure;
+				$Logger->log[] = "Failed: " . "Check banner for https:// secure :: EXPECTED: " . $AdCampaignBannerRestrictions->Secure . " GOT: " . $RtbBidRequest->secure;
 			endif;
 			return false;
 		endif;		

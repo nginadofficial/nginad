@@ -14,24 +14,24 @@ class ParseGeo {
 	public static function execute(&$Logger, \buyrtb\parsers\openrtb\OpenRTBParser &$Parser, \model\openrtb\RtbBidRequest &$RtbBidRequest, \model\openrtb\RtbBidRequestGeo &$RtbBidRequestGeo, &$geo) {
 
 		if (isset($geo["country"])):
-			$RtbBidRequestGeo->bid_request_geo_country = $geo["country"];
+			$RtbBidRequestGeo->country = $geo["country"];
 		endif;
 			
 		if (isset($geo["region"])):
-			$RtbBidRequestGeo->bid_request_geo_state = $geo["region"];
+			$RtbBidRequestGeo->state = $geo["region"];
 		endif;
 				
 		if (isset($geo["city"])):
-			$RtbBidRequestGeo->bid_request_geo_city = $geo["city"];
+			$RtbBidRequestGeo->city = $geo["city"];
 		endif;
 				
-		if (isset($RtbBidRequestGeo->bid_request_geo_country)):
+		if (isset($RtbBidRequestGeo->country)):
 			$Logger->log[] = "Geo Data Country: " . $this->bid_request_geo["country"];
 		endif;
-		if (isset($RtbBidRequestGeo->bid_request_geo_state)):
+		if (isset($RtbBidRequestGeo->state)):
 			$Logger->log[] = "Geo Data State: " . $this->bid_request_geo["state"];
 		endif;
-		if (isset($RtbBidRequestGeo->bid_request_geo_city)):
+		if (isset($RtbBidRequestGeo->city)):
 			$Logger->log[] = "Geo Data City: " . $this->bid_request_geo["city"];
 		endif;
 	}

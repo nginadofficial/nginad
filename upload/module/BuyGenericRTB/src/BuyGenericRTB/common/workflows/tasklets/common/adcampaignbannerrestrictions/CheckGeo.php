@@ -29,7 +29,7 @@ class CheckGeo {
 			
 		$has_country = false;
 			
-		$country = strtolower($RtbBid->bid_request_geo["country"]);
+		$country = strtolower($RtbBidRequest->RtbBidRequestDevice->RtbBidRequestGeo->bid_request_geo_country);
 		$geo_country_list = explode(",", $AdCampaignBannerRestrictions->GeoCountry);
 			
 		foreach ($geo_country_list as $geo_country):
@@ -54,31 +54,31 @@ class CheckGeo {
 			 * STATE CHECK
 			*/
 				
-			if ($Workflow->geo_info === null && $AdCampaignBannerRestrictions->GeoState !== null && !isset($RtbBid->bid_request_geo["state"])):
+			if ($Workflow->geo_info === null && $AdCampaignBannerRestrictions->GeoState !== null && !isset($RtbBidRequest->RtbBidRequestDevice->RtbBidRequestGeo->state)):
 				
 				if ($Workflow->maxmind === null):
 					$Workflow->maxmind = new \geoip\maxmind();
 				endif;
 				
-				$Workflow->geo_info = $Workflow->maxmind->get_geo_code($RtbBid->bid_request_device_ip);
+				$Workflow->geo_info = $Workflow->maxmind->get_geo_code($RtbBidRequest->RtbBidRequestDevice->ip);
 				
 				if ($Workflow->geo_info !== null):
-					$RtbBid->bid_request_geo["state"] = $Workflow->geo_info["state"];
-					$RtbBid->bid_request_geo["city"] = $Workflow->geo_info["city"];
+					$RtbBidRequest->RtbBidRequestDevice->RtbBidRequestGeo->state = $Workflow->geo_info["state"];
+					$RtbBidRequest->RtbBidRequestDevice->RtbBidRequestGeo->city = $Workflow->geo_info["city"];
 				endif;
 					
 			endif;
 				
-			if ($AdCampaignBannerRestrictions->GeoState !== null && isset($RtbBid->bid_request_geo["state"])):
+			if ($AdCampaignBannerRestrictions->GeoState !== null && isset($RtbBidRequest->RtbBidRequestDevice->RtbBidRequestGeo->state)):
 				
-				if (!isset($RtbBid->bid_request_geo["state"]) && $Workflow->geo_info === null):
-					$Workflow->geo_info = $Workflow->maxmind->get_geo_code($this->bid_request_device_ip);
-					$this->bid_request_geo["state"] = $Workflow->geo_info["state"];
+				if (!isset($RtbBidRequest->RtbBidRequestDevice->RtbBidRequestGeo->state) && $Workflow->geo_info === null):
+					$Workflow->geo_info = $Workflow->maxmind->get_geo_code($RtbBidRequest->RtbBidRequestDevice->ip);
+					$RtbBidRequest->RtbBidRequestDevice->RtbBidRequestGeo->state = $Workflow->geo_info["state"];
 				endif;
 					
 				$has_state = false;
 					
-				$state = strtolower($RtbBid->bid_request_geo["state"]);
+				$state = strtolower($RtbBidRequest->RtbBidRequestDevice->RtbBidRequestGeo->state);
 				$geo_state_list = explode(",", $AdCampaignBannerRestrictions->GeoState);
 				foreach ($geo_state_list as $geo_state):
 						
@@ -103,23 +103,23 @@ class CheckGeo {
 					 * CITY CHECK
 					*/
 						
-					if($Workflow->geo_info === null && $AdCampaignBannerRestrictions->GeoCity !== null && !isset($RtbBid->bid_request_geo["city"])):
+					if($Workflow->geo_info === null && $AdCampaignBannerRestrictions->GeoCity !== null && !isset($RtbBidRequest->RtbBidRequestDevice->RtbBidRequestGeo->city)):
 						
 						if ($Workflow->maxmind === null):
 							$Workflow->maxmind = new \geoip\maxmind();
 						endif;
 							
-						$Workflow->geo_info = $Workflow->maxmind->get_geo_code($RtbBid->bid_request_device_ip);
-						$RtbBid->bid_request_geo["state"] = $Workflow->geo_info["state"];
-						$RtbBid->bid_request_geo["city"] = $Workflow->geo_info["city"];
+						$Workflow->geo_info = $Workflow->maxmind->get_geo_code($RtbBidRequest->RtbBidRequestDevice->ip);
+						$RtbBidRequest->RtbBidRequestDevice->RtbBidRequestGeo->state = $Workflow->geo_info["state"];
+						$RtbBidRequest->RtbBidRequestDevice->RtbBidRequestGeo->city = $Workflow->geo_info["city"];
 							
 					endif;
 						
-					if ($AdCampaignBannerRestrictions->GeoCity !== null && isset($RtbBid->bid_request_geo["city"])):
+					if ($AdCampaignBannerRestrictions->GeoCity !== null && isset($RtbBidRequest->RtbBidRequestDevice->RtbBidRequestGeo->city)):
 						
 						$has_city = false;
 							
-						$city = strtolower($RtbBid->bid_request_geo["city"]);
+						$city = strtolower($RtbBidRequest->RtbBidRequestDevice->RtbBidRequestGeo->city);
 						$geo_city_list = explode(",", $AdCampaignBannerRestrictions->GeoCity);
 						foreach ($geo_city_list as $geo_city):
 							

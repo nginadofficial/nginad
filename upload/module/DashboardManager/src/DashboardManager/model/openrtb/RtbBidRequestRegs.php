@@ -12,5 +12,5 @@ namespace model\openrtb;
 class RtbBidRequestRegs {
 	
 	// regs // coppa
-	public $bid_request_regs_coppa;
+	public $coppa;
 }

@@ -18,12 +18,12 @@ class CheckFoldPosition {
 		/*
 		 * Check banner system fold position (sFoldPos), I don't think we can trust the user fold position (uFoldPos)
 		*/
-		if ($AdCampaignBannerRestrictions->FoldPos !== null && $RtbBidRequestBanner->bid_request_imp_banner_pos !== null 
-			&& $AdCampaignBannerRestrictions->FoldPos != $RtbBidRequestBanner->bid_request_imp_banner_pos):
+		if ($AdCampaignBannerRestrictions->FoldPos !== null && $RtbBidRequestBanner->pos !== null 
+			&& $AdCampaignBannerRestrictions->FoldPos != $RtbBidRequestBanner->pos):
 			if ($Logger->setting_log === true):
 				$Logger->log[] = "Failed: " . "Check banner system fold position :: EXPECTED: " 
 					. $AdCampaignBannerRestrictions->FoldPos
-					. " GOT: " . $RtbBidRequestBanner->bid_request_imp_banner_pos;
+					. " GOT: " . $RtbBidRequestBanner->pos;
 			endif;
 			return false;
 		endif;

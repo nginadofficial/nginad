@@ -74,7 +74,7 @@ class OpenRTBParser {
         
         $this->RtbBidRequest->RtbBidRequestDevice = $RtbBidRequestDevice;
         
-        $logger->log[] = "Is Mobile: " . $this->bid_request_device_type != 2;
+        $logger->log[] = "Is Mobile: " . $this->RtbBidRequest->RtbBidRequestDevice->type != 2;
         
         // Parse Regs
 
