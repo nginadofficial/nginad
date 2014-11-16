@@ -7,9 +7,9 @@
  * @license GPLv3
  */
 
-namespace buyrtb\parsers;
+namespace model\rtb;
 
-class VideoParser {
+class RtbBidRequestVideo {
 }
 
 ?>

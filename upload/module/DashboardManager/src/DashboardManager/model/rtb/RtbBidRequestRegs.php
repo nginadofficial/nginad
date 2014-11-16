@@ -7,8 +7,10 @@
  * @license GPLv3
  */
 
-namespace buyrtb\parsers;
+namespace model\rtb;
 
-class DisplayParser {
+class RtbBidRequestRegs {
+	
+	// regs // coppa
+	public $bid_request_regs_coppa;
 }
-
