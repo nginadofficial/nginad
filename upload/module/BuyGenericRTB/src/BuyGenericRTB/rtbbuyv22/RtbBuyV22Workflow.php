@@ -14,19 +14,6 @@ use rtbbuy\RtbBuyWorkflow;
 abstract class RtbBuyV22Workflow extends RtbBuyWorkflow
 {
 	
-	protected $rtb_provider = "none";
-	public static $rtb_child_class_name = "none";
-
-	// singleton
-	private static $_instance;	
-
-	public static function get_instance() {
-		if (self::$_instance == null):
-			self::$_instance = new self::$rtb_child_class_name();
-		endif;
-		return self::$_instance;	
-	}
-	
     public function process_business_rules_workflow($config, $rtb_seat_id, \model\openrtb\RtbBidRequest &$RtbBidRequest) {
 
     	$logger = \rtbbuyv22\RtbBuyV22Logger::get_instance();

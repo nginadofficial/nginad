@@ -188,9 +188,10 @@ abstract class RtbBuyV22Bid extends RtbBuyBid {
 	public function parse_incoming_request($raw_post = null) {
 
 		$OpenRTBParser = new \buyrtb\parsers\openrtb\OpenRTBParser();
-		$this->RtbBidRequest->is_local_request = $this->is_local_request;
-		$this->RtbBidRequest = $OpenRTBParser->parse_request($raw_post);
+		$this->RtbBidRequest = $OpenRTBParser->parse_request($raw_post, $this->is_local_request);
 
+		var_dump($this->RtbBidRequest);
+		exit;
 	}
 
 }

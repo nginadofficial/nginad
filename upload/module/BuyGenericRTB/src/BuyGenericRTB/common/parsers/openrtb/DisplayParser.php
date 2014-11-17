@@ -16,14 +16,14 @@ class DisplayParser {
 
 	        // Parse Dimensions
 	        try {
-	        	\buyrtb\parsers\openrtb\parselets\common\banner\ParseDimensions::execute($Logger, $this, $RtbBidRequestBanner, $ad_impression_banner);
+	        	\buyrtb\parsers\openrtb\parselets\common\banner\ParseDimensions::execute($Logger, $Parser, $RtbBidRequestBanner, $ad_impression_banner);
 	        } catch (Exception $e) {
 	        	throw new Exception($e->getMessage(), $e->getCode(), $e->getPrevious());
 	        }
 	        
 	        // Parse Above the Fold
 	        try {
-	        	\buyrtb\parsers\openrtb\parselets\common\banner\ParseAboveTheFold::execute($Logger, $this, $RtbBidRequestBanner, $ad_impression_banner);
+	        	\buyrtb\parsers\openrtb\parselets\common\banner\ParseAboveTheFold::execute($Logger, $Parser, $RtbBidRequestBanner, $ad_impression_banner);
 	        } catch (Exception $e) {
 	        	throw new Exception($e->getMessage(), $e->getCode(), $e->getPrevious());
 	        }

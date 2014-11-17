@@ -16,17 +16,21 @@ class ParseWebsite {
 	
 
 			$RtbBidRequestPublisher = new \model\openrtb\RtbBidRequestPublisher();
-		
-			$RtbBidRequestSite->RtbBidRequestPublisher = $RtbBidRequestPublisher;
+			
+	        if (isset($ad_campaign_site["id"])):
+	        	$RtbBidRequestSite->id 		= $ad_campaign_site["id"];
+	        endif;
 			
 	        if (isset($ad_campaign_site["domain"])):
 	        	$RtbBidRequestSite->domain 		= $ad_campaign_site["domain"];
-	        else:
-	        	throw new Exception($this->expeption_missing_min_bid_request_params . ": site_domain");
 	        endif;
         
 	        if (isset($ad_campaign_site["page"])):
 	        	$RtbBidRequestSite->page 		= $ad_campaign_site["page"];
+	        endif;
+	        
+	        if (isset($ad_campaign_site["cat"])):
+	       		$RtbBidRequestSite->cat = self::get_category($ad_campaign_site["cat"]);
 	        endif;
 	        
 	        if (strpos(strtolower($RtbBidRequestSite->domain), "https://") !== false
@@ -36,36 +40,31 @@ class ParseWebsite {
 	         
 	        endif;
 
-	        if (isset($default_site["publisher"])):
+	        if (isset($ad_campaign_site["publisher"])):
 	         
 	        	$default_site_publisher = $ad_campaign_site["publisher"];
+	        
+		        if (isset($default_site_publisher["id"])):
+		        	$RtbBidRequestPublisher->id 		= $default_site_publisher["id"];
+		        endif;
+		        	
+		        if (isset($default_site_publisher["name"])):
+		        	$RtbBidRequestPublisher->name 		= $default_site_publisher["name"];
+		        endif;
+	        
 		        if (isset($default_site_publisher["cat"])):
-		       		$main_category = $default_site_publisher["cat"];
-		        	
-		        	if ($main_category !== null):
-		        	
-			        	/*
-			        	 * Could be a subcategory like IAB10-2
-			        	 * In that case just get the main category and compare
-			        	 */
-						
-			        	if (strpos($main_category, "-") !== false):
-			        		
-			        		$main_category = substr($main_category, 0, strpos($main_category, "-"));
-			        	
-			        	endif;
-			        	
-			        	if (isset($this->vertical_map[strtoupper($main_category)])):
-			        	
-			        		$RtbBidRequestSite->RtbBidRequestPublisher->cat = $this->vertical_map[strtoupper($main_category)];
-			        	
-			        	endif;
-			        			
-		        	endif;
+		        
+		        	$RtbBidRequestPublisher->cat = self::get_category($default_site_publisher["cat"]);
 		        		
+		        endif;
+		        
+		        if (isset($default_site_publisher["domain"])):
+		        	$RtbBidRequestPublisher->domain 		= $default_site_publisher["domain"];
 		        endif;
 	        
 	        endif;
+	        
+	        $RtbBidRequestSite->RtbBidRequestPublisher = $RtbBidRequestPublisher;
 	
 	}
 	
@@ -94,7 +93,33 @@ class ParseWebsite {
 	38 Women's Interest
 	*/	
 	
-	private $vertical_map = array(
+	private static function get_category($main_category) {
+
+		if ($main_category !== null):
+			 
+			/*
+			 * Could be a subcategory like IAB10-2
+			* In that case just get the main category and compare
+			*/
+			
+			if (strpos($main_category, "-") !== false):
+			 
+				$main_category = substr($main_category, 0, strpos($main_category, "-"));
+			
+			endif;
+			
+			if (isset(self::$vertical_map[strtoupper($main_category)])):
+			
+				return self::$vertical_map[strtoupper($main_category)];
+			
+			endif;
+			
+		endif;
+		
+		return null;
+	}
+	
+	private static $vertical_map = array(
 	
 			/*
 			 * also covers 1-x for sub-categories

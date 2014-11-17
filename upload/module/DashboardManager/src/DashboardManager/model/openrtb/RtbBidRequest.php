@@ -24,15 +24,23 @@ class RtbBidRequest {
 
 	public $RtbBidRequestSite;
 
-	// bid // cur
+
 	
-	public $cur;
+
 	
 	// does not exist in openRTB. Here for compatability with proprietary RTB
 	public $refurl = "";
 	public $secure;
 
 	public $RtbBidRequestDevice;
+
+	public $RtbBidRequestUser;
+	
+	public $at;
+	
+	// bid // cur
+	
+	public $cur;
 	
 	public $RtbBidRequestRegs;
 	

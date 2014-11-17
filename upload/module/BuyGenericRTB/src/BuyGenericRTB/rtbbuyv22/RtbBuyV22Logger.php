@@ -25,19 +25,6 @@ abstract class RtbBuyV22Logger extends RtbBuyLogger
     public $log = array();
     public $min_log = array();
 	
-	protected $rtb_provider = "none";
-	public static $rtb_child_class_name = "none";
-	
-	// singleton
-	private static $_instance;
-	
-	public static function get_instance() {
-		if (self::$_instance == null):
-			self::$_instance = new self::$rtb_child_class_name();
-		endif;
-		return self::$_instance;	
-	}
-	
     public function output_min_log() {
 
         $log_file_dir =  $this->setting_log_file_location . date('m.d.Y');

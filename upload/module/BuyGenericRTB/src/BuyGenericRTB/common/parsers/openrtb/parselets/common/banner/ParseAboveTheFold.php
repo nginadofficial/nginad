@@ -63,7 +63,8 @@ class ParseAboveTheFold {
 				|| $ad_impression_banner["pos"] == 5):
 					 
 				$RtbBidRequestBanner->pos 	= 2;
-			
+			else:
+				$RtbBidRequestBanner->pos 	= 0;
 			endif;
 			
 		else:

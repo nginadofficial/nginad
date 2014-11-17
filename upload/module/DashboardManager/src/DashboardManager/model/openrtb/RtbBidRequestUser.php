@@ -9,16 +9,9 @@
 
 namespace model\openrtb;
 
-class RtbBidRequestSite {
+// sort of cookie matching
+class RtbBidRequestUser {
 	
-	// bid // site
 	public $id;
-	public $domain;
-	public $cat;
-	public $page = "";
-	
-	
-	// bid // site // publisher
-	public $RtbBidRequestPublisher;
 	
 }

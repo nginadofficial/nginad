@@ -16,7 +16,7 @@ class RtbBidRequestImp {
 	public $id;
 	
 	// floor price
-	public $floor = 0;	
+	public $bidfloor = 0;	
 	
 	public $media_type;
 	
@@ -24,6 +24,6 @@ class RtbBidRequestImp {
 	
 	public $RtbBidRequestVideo;
 	
-	public $pmp;
+	public $RtbBidRequestPmp;
 	
 }

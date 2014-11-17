@@ -28,12 +28,17 @@ abstract class RtbBuyLogger {
 	// singleton
 	private static $_instance;
 	
-	public static function get_instance();
+	public static function get_instance() {
+		if (self::$_instance == null):
+		self::$_instance = new self::$rtb_child_class_name();
+		endif;
+		return self::$_instance;
+	}
 	
-	public function output_min_log();
+	public function output_min_log() { } 
 	
-	public function output_log();
+	public function output_log() { } 
 	
-	public function output_log_full();
+	public function output_log_full() { } 
 	
 }

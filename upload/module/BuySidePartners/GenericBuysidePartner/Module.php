@@ -57,6 +57,8 @@ class Module implements AutoloaderProviderInterface
     							"geoip" => __DIR__ . '/../../BuyGenericRTB/src/BuyGenericRTB/geoip',
     							// LOAD THE GENERIC RTB PARENT CLASSES
     							"rtbbuyv22" => __DIR__ . '/../../BuyGenericRTB/src/BuyGenericRTB/rtbbuyv22',
+    							"rtbbuy" => __DIR__ . '/../../BuyGenericRTB/src/BuyGenericRTB/rtbbuy',
+    							"buyrtb" => __DIR__ . '/../../BuyGenericRTB/src/BuyGenericRTB/common',
     							// LOAD THE REST OF THE STUFF
     							"buygenericbuysidepartner" => __DIR__ . '/src/GenericBuysidePartner/genericbuysidepartner',
     							"mobileutil" => __DIR__ . '/../../BuyGenericRTB/src/BuyGenericRTB/_mobile'

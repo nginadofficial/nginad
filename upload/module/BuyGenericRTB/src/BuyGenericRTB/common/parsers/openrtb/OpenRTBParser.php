@@ -16,17 +16,18 @@ class OpenRTBParser {
 	public $json_post;
 	public $RtbBidRequest;
 	
-	private $expeption_missing_min_bid_request_params = "Bid Request missing required parameter";
-	private $missing_optional_bid_request_params = "Bid Request missing optional parameter";
-	private $got_optional_bid_request_params = "Got Bid Request optional parameter";
+	public $expeption_missing_min_bid_request_params = "Bid Request missing required parameter";
+	public $missing_optional_bid_request_params = "Bid Request missing optional parameter";
+	public $got_optional_bid_request_params = "Got Bid Request optional parameter";
 	
-	public function parse_request($raw_post = null) {
+	public function parse_request($raw_post = null, $is_local) {
 
 		// prepare the logger
 		$logger =\rtbbuyv22\RtbBuyV22Logger::get_instance();
 		
 		// prepare the response object
 		$this->RtbBidRequest = new \model\openrtb\RtbBidRequest();
+		$this->RtbBidRequest->is_local_request = $is_local;
 		
 		// Initialize Data
 		try {
@@ -38,6 +39,13 @@ class OpenRTBParser {
         // Parse Currency
         try {
         	\buyrtb\parsers\openrtb\parselets\common\ParseCurrency::execute($logger, $this, $this->RtbBidRequest);
+        } catch (Exception $e) {
+        	throw new Exception($e->getMessage(), $e->getCode(), $e->getPrevious());
+        }
+        
+        // Parse Second Price
+        try {
+        	\buyrtb\parsers\openrtb\parselets\common\ParseSecondPrice::execute($logger, $this, $this->RtbBidRequest);
         } catch (Exception $e) {
         	throw new Exception($e->getMessage(), $e->getCode(), $e->getPrevious());
         }
@@ -57,6 +65,22 @@ class OpenRTBParser {
         }
         
         $this->RtbBidRequest->RtbBidRequestSite = $RtbBidRequestSite;
+        
+        // Parse User
+        if (isset($this->json_post["user"])):
+        
+	        $rtb_user = $this->json_post["user"];
+	        $RtbBidRequestUser = new \model\openrtb\RtbBidRequestUser();
+	        
+	        try {
+	        	\buyrtb\parsers\openrtb\parselets\common\ParseUser::execute($logger, $this, $this->RtbBidRequest, $RtbBidRequestUser, $rtb_user);
+	        } catch (Exception $e) {
+	        	throw new Exception($e->getMessage(), $e->getCode(), $e->getPrevious());
+	        }       
+	
+	        $this->RtbBidRequest->RtbBidRequestUser = $RtbBidRequestUser;
+	        
+        endif;
         
         // Parse Device
         if (!isset($this->json_post["device"])):
@@ -78,8 +102,8 @@ class OpenRTBParser {
         
         // Parse Regs
 
-        if (isset($this->json_post["regs"])):
-	        $ad_regs = $this->json_post["regs"];
+        if (isset($this->json_post["regs"]["coppa"])):
+	        $ad_regs = $this->json_post["regs"]["coppa"];
 	        $RtbBidRequestRegs = new \model\openrtb\RtbBidRequestRegs();
 	        
 	        try {

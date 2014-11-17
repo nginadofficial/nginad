@@ -9,16 +9,8 @@
 
 namespace model\openrtb;
 
-class RtbBidRequestSite {
+class RtbBidRequestPmp {
 	
-	// bid // site
-	public $id;
-	public $domain;
-	public $cat;
-	public $page = "";
-	
-	
-	// bid // site // publisher
-	public $RtbBidRequestPublisher;
-	
+	public $private_auction;
+	public $RtbBidRequestPmpDealList = array();
 }
