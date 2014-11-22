@@ -54,6 +54,7 @@ class IndexController extends AbstractActionController
         	$GenericBuysidePartnerBid->parse_incoming_request();
         	$request_id = $GenericBuysidePartnerBid->RtbBidRequest->id;
         	$GenericBuysidePartnerBid->process_business_logic();
+        	$GenericBuysidePartnerBid->convert_ads_to_bid_response();
         	$GenericBuysidePartnerBid->build_outgoing_bid_response();
         	$GenericBuysidePartnerBid->send_bid_response();
         	if ($GenericBuysidePartnerBid->had_bid_response == true && \buygenericbuysidepartner\GenericBuysidePartnerLogger::get_instance()->setting_only_log_bids == true):

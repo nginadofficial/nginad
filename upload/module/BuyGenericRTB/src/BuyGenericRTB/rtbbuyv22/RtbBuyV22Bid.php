@@ -26,6 +26,7 @@ abstract class RtbBuyV22Bid extends RtbBuyBid {
 	
 	
 	public $RtbBidRequest;
+	public $RtbBidResponse;
 	
 	/*
 	 * an array of RtbBidResponse objects
@@ -72,7 +73,7 @@ abstract class RtbBuyV22Bid extends RtbBuyBid {
 	    \rtbbuyv22\RtbBuyV22Logger::get_instance()->log[] = $log_header;
 
 			header("Content-type: application/json");
-		    $bid_response = json_encode($this->bid_responses);
+		    $bid_response = $this->bid_responses;
 			echo $bid_response;
 			\rtbbuyv22\RtbBuyV22Logger::get_instance()->log[] = $bid_response;
 			\rtbbuyv22\RtbBuyV22Logger::get_instance()->min_log[] = $bid_response;
@@ -80,10 +81,8 @@ abstract class RtbBuyV22Bid extends RtbBuyBid {
 	
 	public function build_outgoing_bid_response() {
 
-
-		
-		$this->bid_responses = $RtbBidResponse;
-		
+		// transform to JSON
+		$this->bid_responses = \buyrtb\encoders\openrtb\RtbBidResponseJsonEncoder::execute($this->RtbBidResponse);
 	}
 
 	private function get_effective_ad_tag(&$AdCampaignBanner, $tld) {
@@ -146,7 +145,7 @@ abstract class RtbBuyV22Bid extends RtbBuyBid {
 
 	}
 
-	public function convert_ads_to_bid_responses() {
+	public function convert_ads_to_bid_response() {
 		/*
 		 * get TLD of the site url or page url for the
 		* ad tag in case it's needed for the delivery module
@@ -165,32 +164,55 @@ abstract class RtbBuyV22Bid extends RtbBuyBid {
 			endif;
 		endif;
 
-		$RtbBidResponse = array("id"=>$this->RtbBidRequest->id);
-		$RtbBidResponse["seatbid"] = array();
-		 
-		foreach ($this->AdCampaignBanner_Match_List as $bid_imp_id => $AdCampaignBannerList):
+		$this->user_ip_hash = md5($this->RtbBidRequest->RtbBidRequestDevice->ip);
+		
+		$RtbBidResponse	= new \model\openrtb\RtbBidResponse();
+		$RtbBidResponse->id = $this->RtbBidRequest->id;
+		
+		$currency = null;
+		
+		foreach ($this->AdCampaignBanner_Match_List as $user_id => $AdCampaignBannerObjList):
 			
-			foreach ($AdCampaignBannerList as $AdCampaignBanner):
+			$RtbBidResponseSeatBid	= new \model\openrtb\RtbBidResponseSeatBid();
+		
+			foreach ($AdCampaignBannerObjList as $AdCampaignBannerObj):
 			
-				$bidresponse = array();
-					
-				$bidresponse["id"] = $bid_imp_id;
-				$bidresponse["adid"] = $this->generate_transaction_id();
-				$bidresponse["impid"] = $bidresponse["adid"];
-				$bidresponse["price"] = $AdCampaignBanner->BidAmount;
-				$bidresponse["adm"] = $this->get_effective_ad_tag($AdCampaignBanner, $tld);
-				$bidresponse["adomain"][] = $AdCampaignBanner->LandingPageTLD;
-				$bidresponse["cid"] = "cdnpl_" . $AdCampaignBanner->AdCampaignBannerID;
-				$bidresponse["crid"] = $bidresponse["impid"];
-				$this->had_bid_response = true;
+				$bid_imp_id 				= $AdCampaignBannerObj["impid"];
+				$AdCampaignBanner 			= $AdCampaignBannerObj["AdCampaignBanner"];
 				
-				$RtbBidResponse["seatbid"][] = array("bid"=>array($bidresponse), "seat"=>$this->response_seat_id);
+				if (isset($AdCampaignBannerObj["currency"]) && $currency == null):
+					$currency = $AdCampaignBannerObj["currency"];
+				endif;
+				
+				$RtbBidResponseBid	= new \model\openrtb\RtbBidResponseBid();
+				
+				$RtbBidResponseBid->id			= $this->generate_transaction_id();
+				$RtbBidResponseBid->adid		= $RtbBidResponseBid->id;
+				$RtbBidResponseBid->impid		= $bid_imp_id;
+				$RtbBidResponseBid->price		= $AdCampaignBanner->BidAmount;
+				$RtbBidResponseBid->adm			= $this->get_effective_ad_tag($AdCampaignBanner, $tld);
+				$RtbBidResponseBid->adomain[] 	= $AdCampaignBanner->LandingPageTLD;
+				$RtbBidResponseBid->cid	 		= "nginad_" . $AdCampaignBanner->AdCampaignID;
+				$RtbBidResponseBid->crid	 	= "nginad_" . $AdCampaignBanner->AdCampaignBannerID;
+				$this->had_bid_response = true;
+
+				$RtbBidResponseSeatBid->RtbBidResponseBidList[] = $RtbBidResponseBid;
 				
 			endforeach;
-		 
+
+			$RtbBidResponseSeatBid->seat						= $user_id;
+			$RtbBidResponse->RtbBidResponseSeatBidList[] 		= $RtbBidResponseSeatBid;
+			
 		endforeach;
 		
-		$RtbBidResponse["cur"] = "USD";
+		if (isset($AdCampaignBannerObj["currency"]) && $currency == null):
+			$RtbBidResponse->cur				= $currency;
+		else: 
+			$RtbBidResponse->cur				= "USD";
+		endif;
+		
+		$this->RtbBidResponse = $RtbBidResponse;
+	
 	}
 	
 }

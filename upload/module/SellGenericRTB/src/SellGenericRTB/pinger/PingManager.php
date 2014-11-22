@@ -79,6 +79,7 @@ class PingManager {
 			$LoopbackPartnerBid->parse_incoming_request(json_encode($this->ping_request));
 			$request_id = $LoopbackPartnerBid->bid_request_id;
 			$LoopbackPartnerBid->process_business_logic();
+			$LoopbackPartnerBid->convert_ads_to_bid_response();
 			$LoopbackPartnerBid->build_outgoing_bid_response();
 
 			if ($LoopbackPartnerBid->had_bid_response == true):

@@ -54,6 +54,7 @@ class IndexController extends AbstractActionController
         	$LoopbackPartnerBid->parse_incoming_request();
         	$request_id = $LoopbackPartnerBid->RtbBidRequest->id;
         	$LoopbackPartnerBid->process_business_logic();
+        	$LoopbackPartnerBid->convert_ads_to_bid_response();
         	$LoopbackPartnerBid->build_outgoing_bid_response();
         	$LoopbackPartnerBid->send_bid_response();
         	if ($LoopbackPartnerBid->had_bid_response == true && \buyloopbackpartner\LoopbackPartnerLogger::get_instance()->setting_only_log_bids == true):
