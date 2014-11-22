@@ -13,10 +13,6 @@ class CheckIsMobile {
 	
 	public static function execute(&$Logger, &$Workflow, \model\openrtb\RtbBidRequest &$RtbBidRequest, \model\openrtb\RtbBidRequestImp &$RtbBidRequestImp, &$AdCampaignBanner) {
 	
-		define('DEVICE_DESKTOP', 2);
-		define('DEVICE_MOBILE', 1);
-		define('DEVICE_TABLET', 5);
-		
 		/*
 		 * Check is mobile web, phone, tablet, native iOS or native Android
 		 */

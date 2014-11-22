@@ -14,10 +14,6 @@ class ParseDevice {
 	
 	public static function execute(&$Logger, \buyrtb\parsers\openrtb\OpenRTBParser &$Parser, \model\openrtb\RtbBidRequest &$RtbBidRequest, \model\openrtb\RtbBidRequestDevice &$RtbBidRequestDevice, &$device) {
 	
-		define('DEVICE_DESKTOP', 2);
-		define('DEVICE_MOBILE', 1);
-		define('DEVICE_TABLET', 5);
-		
 		$RtbBidRequestDevice->type = DEVICE_DESKTOP;
 		
 		if (!isset($Parser->json_post["device"])):

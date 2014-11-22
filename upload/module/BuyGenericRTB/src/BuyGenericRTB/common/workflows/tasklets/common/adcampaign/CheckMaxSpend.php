@@ -20,7 +20,7 @@ class CheckMaxSpend {
         	   return false;
         	endif;
         	
-        	return ture;
+        	return true;
 	}
 }
 

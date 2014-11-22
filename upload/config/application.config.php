@@ -32,6 +32,13 @@ define('AD_TYPE_RTB_REMNANT', 		3);
 define('AD_TYPE_CONTRACT', 			4);
 
 /*
+ * Configure Device Types
+*/
+
+define('DEVICE_DESKTOP', 			2);
+define('DEVICE_MOBILE', 			1);
+define('DEVICE_TABLET', 			5);
+/*
  * We do not want autoloading. It does not work 
  * according to the documentation.
  * 

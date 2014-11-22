@@ -119,7 +119,7 @@ class ParseWebsite {
 		return null;
 	}
 	
-	private static $vertical_map = array(
+	public static $vertical_map = array(
 	
 			/*
 			 * also covers 1-x for sub-categories

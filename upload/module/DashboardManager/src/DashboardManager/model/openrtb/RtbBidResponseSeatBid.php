@@ -9,22 +9,10 @@
 
 namespace model\openrtb;
 
-class RtbBidResponse {
+class RtbBidResponseSeatBid {
 	
-
-	/*
-	 * RTB V2 API Response Params
-	*/
-	
-	// REQUIRED
-	
-	public $id;
-	public $RtbBidResponseSeatBidList;
-	public $bidid;
-	public $cur;
-	public $customdata;
-	public $nbr;
+	public $RtbBidResponseBidList;
+	public $seat;
+	public $group;
 	public $ext;
-	
 }
-

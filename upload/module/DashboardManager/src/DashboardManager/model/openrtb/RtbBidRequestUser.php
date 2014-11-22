@@ -13,5 +13,6 @@ namespace model\openrtb;
 class RtbBidRequestUser {
 	
 	public $id;
+	public $buyeruid;
 	
 }

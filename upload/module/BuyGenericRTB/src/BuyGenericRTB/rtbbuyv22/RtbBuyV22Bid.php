@@ -77,59 +77,10 @@ abstract class RtbBuyV22Bid extends RtbBuyBid {
 			\rtbbuyv22\RtbBuyV22Logger::get_instance()->log[] = $bid_response;
 			\rtbbuyv22\RtbBuyV22Logger::get_instance()->min_log[] = $bid_response;
 	}
-
+	
 	public function build_outgoing_bid_response() {
 
-		/*
-		 * get TLD of the site url or page url for the
-		 * ad tag in case it's needed for the delivery module
-		 */
 
-		$tld = "not_available";
-		// bid // site
-
-		$parse = parse_url($this->RtbBidRequest->RtbBidRequestSite->domain);
-		if (isset($parse['host'])):
-			$tld = $parse['host'];
-		else:
-			$parse = parse_url($this->RtbBidRequest->RtbBidRequestSite->page);
-			if (isset($parse['host'])):
-				$tld = $parse['host'];
-			endif;
-		endif;
-
-		$this->user_ip_hash = md5($this->RtbBidRequest->RtbBidRequestDevice->ip);
-		$http_regex = '/https?\:\/\/[^\" ]+/i';
-		 
-		$users_that_dont_fill_list = array();
-		 
-		if (count($this->AdCampaignBanner_Match_List)):
-			$UsersThatDontFillFactory = \_factory\UsersThatDontFill::get_instance();
-			$users_that_dont_fill_list = $UsersThatDontFillFactory->get_cached($this->config, array());
-		endif;
-		
-	    $RtbBidResponse = array("id"=>$this->bid_request_id);
-	    $RtbBidResponse["seatbid"] = array();
-	    
-		foreach ($this->AdCampaignBanner_Match_List as $AdCampaignBanner):
-		
-			$bidresponse = array();
-		
-			$bidresponse["id"] = $this->bid_request_id;
-    		$bidresponse["adid"] = $this->generate_transaction_id();
-    		$bidresponse["impid"] = $bidresponse["adid"];
-    		$bidresponse["price"] = $AdCampaignBanner->BidAmount;
-    		$bidresponse["adm"] = $this->get_effective_ad_tag($AdCampaignBanner, $tld);
-    		$bidresponse["adomain"][] = $AdCampaignBanner->LandingPageTLD;
-    		$bidresponse["cid"] = "cdnpl_" . $AdCampaignBanner->AdCampaignBannerID;
-    		$bidresponse["crid"] = $bidresponse["impid"];
-    		$this->had_bid_response = true;
-
-    		$RtbBidResponse["seatbid"][] = array("bid"=>array($bidresponse), "seat"=>$this->response_seat_id);
-
-		endforeach;
-		
-		$RtbBidResponse["cur"] = "USD";
 		
 		$this->bid_responses = $RtbBidResponse;
 		
@@ -189,10 +140,58 @@ abstract class RtbBuyV22Bid extends RtbBuyBid {
 
 		$OpenRTBParser = new \buyrtb\parsers\openrtb\OpenRTBParser();
 		$this->RtbBidRequest = $OpenRTBParser->parse_request($raw_post, $this->is_local_request);
+		
+		// transform to JSON
+		//\buyrtb\encoders\openrtb\RtbBidRequestJsonEncoder::execute($this->RtbBidRequest);
 
-		var_dump($this->RtbBidRequest);
-		exit;
 	}
 
+	public function convert_ads_to_bid_responses() {
+		/*
+		 * get TLD of the site url or page url for the
+		* ad tag in case it's needed for the delivery module
+		*/
+		
+		$tld = "not_available";
+		// bid // site
+		
+		$parse = parse_url($this->RtbBidRequest->RtbBidRequestSite->domain);
+		if (isset($parse['host'])):
+			$tld = $parse['host'];
+		else:
+			$parse = parse_url($this->RtbBidRequest->RtbBidRequestSite->page);
+			if (isset($parse['host'])):
+				$tld = $parse['host'];
+			endif;
+		endif;
+
+		$RtbBidResponse = array("id"=>$this->RtbBidRequest->id);
+		$RtbBidResponse["seatbid"] = array();
+		 
+		foreach ($this->AdCampaignBanner_Match_List as $bid_imp_id => $AdCampaignBannerList):
+			
+			foreach ($AdCampaignBannerList as $AdCampaignBanner):
+			
+				$bidresponse = array();
+					
+				$bidresponse["id"] = $bid_imp_id;
+				$bidresponse["adid"] = $this->generate_transaction_id();
+				$bidresponse["impid"] = $bidresponse["adid"];
+				$bidresponse["price"] = $AdCampaignBanner->BidAmount;
+				$bidresponse["adm"] = $this->get_effective_ad_tag($AdCampaignBanner, $tld);
+				$bidresponse["adomain"][] = $AdCampaignBanner->LandingPageTLD;
+				$bidresponse["cid"] = "cdnpl_" . $AdCampaignBanner->AdCampaignBannerID;
+				$bidresponse["crid"] = $bidresponse["impid"];
+				$this->had_bid_response = true;
+				
+				$RtbBidResponse["seatbid"][] = array("bid"=>array($bidresponse), "seat"=>$this->response_seat_id);
+				
+			endforeach;
+		 
+		endforeach;
+		
+		$RtbBidResponse["cur"] = "USD";
+	}
+	
 }
 

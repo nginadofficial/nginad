@@ -18,6 +18,8 @@ class GetGeoCodeCountry {
 		 * if we need city/state ok, but only load it if absolutely necessary
 		 */
 		
+		$RtbBidRequestGeo = new \model\openrtb\RtbBidRequestGeo();
+		$RtbBidRequest->RtbBidRequestDevice->RtbBidRequestGeo = $RtbBidRequestGeo;
 		if ($RtbBidRequest->RtbBidRequestDevice->ip !== null && $RtbBidRequest->RtbBidRequestDevice->RtbBidRequestGeo === null):
 			$Workflow->maxmind = new \geoip\maxmind();
 			$RtbBidRequest->RtbBidRequestDevice->RtbBidRequestGeo->country = $Workflow->maxmind->get_geo_code_country($RtbBidRequest->RtbBidRequestDevice->ip);

@@ -107,7 +107,7 @@ class DisplayWorkflow
 		        	endif;
 	
 	            	// Check banner restrictions
-		        	if (\buyrtb\workflows\CheckBannerRestrictionsWorkflow::execute($logger, $this, $RtbBidRequest, $RtbBidRequestImp, $AdCampaignBanner, $AdCampaignBannerRestrictionsFactory) === false):
+		        	if (\buyrtb\workflows\BannerRestrictionsWorkflow::execute($logger, $this, $RtbBidRequest, $RtbBidRequestImp, $AdCampaignBanner, $AdCampaignBannerRestrictionsFactory) === false):
 		        		continue;
 		        	endif;
 		        	
@@ -125,14 +125,14 @@ class DisplayWorkflow
 	
 	                $AdCampaignBanner->BidAmount = sprintf("%1.4f", $adusted_amount);
 	                
-	            	$AdCampaignBanner_Match_List[(string)$RtbBidRequestImp->id] = $AdCampaignBanner;
+	            	$AdCampaignBanner_Match_List[(string)$RtbBidRequestImp->id][] = $AdCampaignBanner;
 	
 	        	endforeach;
         	
         	endforeach;
 
     	endforeach;
-
+    	
     	return $AdCampaignBanner_Match_List;
 
     }
