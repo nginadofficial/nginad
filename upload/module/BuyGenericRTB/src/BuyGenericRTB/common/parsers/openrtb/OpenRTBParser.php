@@ -22,6 +22,8 @@ class OpenRTBParser {
 	
 	public function parse_request($raw_post = null, $is_local) {
 
+		$this->raw_post = $raw_post;
+		
 		// prepare the logger
 		$logger =\rtbbuyv22\RtbBuyV22Logger::get_instance();
 		

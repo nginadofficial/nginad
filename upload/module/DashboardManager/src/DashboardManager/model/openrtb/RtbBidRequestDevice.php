@@ -17,6 +17,10 @@ class RtbBidRequestDevice {
 	public $language;
 	public $type;
 	
+	public $os;
+	public $make;
+	public $model;
+	
 	public $RtbBidRequestGeo;
 
 }

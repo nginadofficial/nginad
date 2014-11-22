@@ -18,99 +18,10 @@ use \Exception;
 
 	protected $rtb_provider = "none";
 
-	/*
-	 * RTB V2 API Request Params
-	 */
-
-	// REQUIRED
-
-	// bid
-	public $bid_request_id;
-	
-	// bid // imp
-	public $bid_request_imp_id;
-	
-	public $bid_request_imp_banner_h;
-	public $bid_request_imp_banner_w;
-	public $bid_request_imp_banner_pos;
-	public $bid_request_imp_bidfloor;
-	public $bid_request_imp_pmp;
-	
-	/*
-	0 Unknown 
-	1 Above the fold 
-	2 DEPRECATED - May or may not be immediately visible depending on 
-	screen size and resolution. 
-	3 Below the fold 
-	4 Header 
-	5 Footer 
-	6 Sidebar 
-	7 Fullscreen 
-	 */
-	
-	// bid // cur
-	
-	public $bid_request_cur;
-	
-	// bid // site
-	public $bid_request_site_domain;
-	public $bid_request_site_page = "";
-	public $bid_request_site_id;
-	public $bid_request_site_category;
-	
-	// bid // site // publisher
-	public $bid_request_site_publisher_id;
-	public $bid_request_site_publisher_name;
-	public $bid_request_site_publisher_cat;
-	public $bid_request_site_publisher_domain;
-	
-	// bid // user
-	public $bid_request_user_id;
-	
-	// does not exist in openRTB. Here for compatability with proprietary RTB
-	public $bid_request_refurl = "";
-	public $bid_request_secure;
-	
-	// bid // device
-	public $bid_request_device_ip;
-	public $bid_request_device_ua;
-	public $bid_request_device_language;
-	public $bid_request_device_os;
-	public $bid_request_device_make;
-	public $bid_request_device_model;
-	
-	// regs // coppa
-	public $bid_request_regs_coppa;
-	
-	public $bid_request_mobile;
-	public $bid_request_geo;
-
 	// object containing the JSON request
-	public $bid_request;
+	public $RtbBidRequest;
+	public $RtbBidResponse;
 	
-	/*
-	 * RTB V2 API Response Params
-	 */
-
-	// REQUIRED
-
-	public $bid_response_id;
-	public $bid_response_bid;
-	public $bid_response_buyer;
-	public $bid_response_creativeId;
-	public $bid_response_landingPageURL;
-	public $bid_response_landingPageTLD;
-	public $bid_response_requestId;
-
-	// NOT REQUIRED
-
-	public $bid_response_ebid;
-	public $bid_response_bidCurrency;
-	public $bid_response_creativeJSURL;
-	public $bid_response_creativeHTMLURL;
-	public $bid_response_creativeTAG;
-	public $bid_response_creativeAttribute;
-
 	public $user_ip_hash;
 	
 	/*
@@ -156,140 +67,109 @@ use \Exception;
 	public function build_rtb_bid_request() {
 		$bid_request = array();
 		
-		$bid_request["id"] 		= $this->bid_request_imp_id;
+		$this->bid_request = \buyrtb\encoders\openrtb\RtbBidRequestJsonEncoder::execute($this->RtbBidRequest);
 		
-		
-		
-		$banner 						= (object) array(
-													'h' 		=> $this->bid_request_imp_banner_h, 
-													'w'			=> $this->bid_request_imp_banner_w, 
-													'pos'		=> $this->bid_request_imp_banner_pos);
-		
-		
-		
-		$impression 					= (object) array(	
-													'id'		=> $this->bid_request_imp_id, 
-													'banner' 	=> $banner,
-													'bidfloor'	=> $this->bid_request_imp_bidfloor);
-		
-		$bid_request["imp"][] 		= $impression;
-
-		$publisher_array				= array();
-		
-		$publisher_array['id'] 			= $this->bid_request_site_publisher_id;
-		$publisher_array['name'] 		= $this->bid_request_site_publisher_name;
-		
-		if ($this->bid_request_site_publisher_cat !== null):
-			$publisher_array['cat'] 	= $this->bid_request_site_publisher_cat;
-		endif;
-		
-		$publisher_array['domain'] 		= $this->bid_request_site_publisher_domain;
-
-		$publisher						= (object) $publisher_array;
-		
-		$site_array						= array();
-		
-		$site_array['id']				= $this->bid_request_site_id;
-		$site_array['domain']			= $this->bid_request_site_domain;
-		
-		if ($this->bid_request_site_category !== null):
-			$site_array['cat'] 	= $this->bid_request_site_category;
-		endif;
-		
-		$site_array['cat']				= $this->bid_request_site_category;
-		$site_array['page']				= $this->bid_request_site_page;
-		// $site_array['publisher']		= $publisher;
-		
-		$bid_request["site"]		= (object) $site_array;
-											
-		$device_array 					= array();
-		
-		$device_array['ua'] 			= $this->bid_request_device_ua;
-		$device_array['ip'] 			= $this->bid_request_device_ip;
-		$device_array['devicetype'] 	= $this->bid_request_mobile == true ? 1 : 2;
-		
-		if ($this->bid_request_device_os !== null):
-			$device_array['os'] 		= $this->bid_request_device_os;
-		endif;
-		
-		if ($this->bid_request_device_make !== null):
-			$device_array['make'] 		= $this->bid_request_device_make;
-		endif;
-		
-		if ($this->bid_request_device_model !== null):
-			$device_array['model'] 		= $this->bid_request_device_model;
-		endif;;
-
-		$bid_request["device"] 	= (object) $device_array;
-		
-		$bid_request["user"]		= (object) array(	
-													'id'		=> $this->bid_request_user_id);
-		
-		/*
-		 * at - auction type
-		 * 1 - first price auction
-		 * 2 - second price auction
-		 */ 
-		$bid_request["at"]			= 1;
-	
-		// currently only USD is supported
-		$bid_request["cur"]			= array("USD");
-		
-		$bid_request["regs"]		= (object) array(
-													'coppa'		=> 1);
-		
-		$this->bid_request 			= $bid_request;
-
 		return $this->bid_request;
-		
-		//var_dump(json_encode($this->bid_request));
-		
 	}
 	
-	public function create_rtb_request_from_publisher_impression($config, $banner_request) {
+	private function setObjParam(&$obj, &$arr, $name, $obj_name = null) {
+		
+		if ($obj_name == null):
+			$obj_name = $name;
+		endif;
+		
+		if (!empty($arr[$name]) ||
+		(isset($arr[$name]) && is_numeric($arr[$name]))):
+			$obj->$obj_name = $arr[$name];
+		endif;
+	}	
+	
+	public function create_rtb_request_from_publisher_display_impression($config, $banner_request) {
 		
 		$this->org_request							= $banner_request;
 		
-		$this->bid_request_id 						= $this->generate_transaction_id();
+		$RtbBidRequest 								= new \model\openrtb\RtbBidRequest();
+		$RtbBidRequest->id 							= $this->generate_transaction_id();
 		
-		// bid // imp
-		$this->bid_request_imp_id					= 1;
+		$RtbBidRequestImp							= new \model\openrtb\RtbBidRequestImp();	
+		$RtbBidRequestImp->media_type 				= "banner";
+		$RtbBidRequestImp->id						= $this->generate_transaction_id();
 		
-		$this->bid_request_imp_banner_h				= $banner_request["height"];
-		$this->bid_request_imp_banner_w				= $banner_request["width"];
-
-		$this->bid_request_imp_banner_pos 			= $banner_request["atf"] == 1 ? 1 : 0;
 		
-		$this->bid_request_imp_bidfloor				= $banner_request["bidfloor"];
+		$RtbBidRequestBanner						= new \model\openrtb\RtbBidRequestBanner();
+		$RtbBidRequestBanner->id					= $this->generate_transaction_id();
 		
-		$this->bid_request_site_publisher_id		= $banner_request["publisher_id"];
-		$this->bid_request_site_publisher_name		= $banner_request["publisher_name"];
+		$this->setObjParam($RtbBidRequestBanner, $banner_request, "height", "h");
+		$this->setObjParam($RtbBidRequestBanner, $banner_request, "width", "w");
 		
-		if (isset($banner_request["publisher_iab_category"]) && !empty($banner_request["publisher_iab_category"])):
+		$RtbBidRequestBanner->pos 					= $banner_request["atf"] == 1 ? 1 : 0;
 		
-			$this->bid_request_site_publisher_cat	= $banner_request["publisher_iab_category"];
-		endif;
+		$RtbBidRequestImp->RtbBidRequestBanner		= $RtbBidRequestBanner;
 		
-		$this->bid_request_site_publisher_domain	= $banner_request["publisher_info_website"];
+		$this->setObjParam($RtbBidRequestImp, $banner_request, "bidfloor");
 		
 		/*
 		 * Private auctions not yet supported
-		 * $this->bid_request_imp_pmp
-		 */
+		*  $RtbBidRequestImp->RtbBidRequestPmp
+		*/
+		
+		$RtbBidRequest->RtbBidRequestImpList[] 		= $RtbBidRequestImp;
+	
+		$RtbBidRequestSite 							= new \model\openrtb\RtbBidRequestSite();
+		$RtbBidRequestPublisher 					= new \model\openrtb\RtbBidRequestPublisher();
+		
+		$this->setObjParam($RtbBidRequestPublisher, $banner_request, "publisher_id", "id");
+		$this->setObjParam($RtbBidRequestPublisher, $banner_request, "publisher_name", "name");
+		// $this->setObjParam($RtbBidRequestPublisher, $banner_request, "publisher_iab_category", "cat");
+		$this->setObjParam($RtbBidRequestPublisher, $banner_request, "publisher_info_website", "domain");
+		$this->setObjParam($RtbBidRequestPublisher, $banner_request, "iab_category", "cat");
+		
+		$this->setObjParam($RtbBidRequestSite, $banner_request, "website_id", "id");
+		$this->setObjParam($RtbBidRequestSite, $banner_request, "org_tld", "domain");
+		$this->setObjParam($RtbBidRequestSite, $banner_request, "iab_category", "category");
+		$this->setObjParam($RtbBidRequestSite, $banner_request, "loc", "page");
+		
+		$RtbBidRequestSite->RtbBidRequestPublisher 	= $RtbBidRequestPublisher;
+		
+		$RtbBidRequest->RtbBidRequestSite 			= $RtbBidRequestSite;
+		
+		$RtbBidRequestDevice 						= new \model\openrtb\RtbBidRequestDevice();
+		
+		$this->setObjParam($RtbBidRequestDevice, $banner_request, "user_agent", "ua");
+		$this->setObjParam($RtbBidRequestDevice, $banner_request, "ip_address", "ip");
+		$this->setObjParam($RtbBidRequestDevice, $banner_request, "language");
+		$this->setObjParam($RtbBidRequestDevice, $banner_request, "devicetype", "type");
+		
+		if (isset($RtbBidRequestDevice->type) && $RtbBidRequestDevice->type != DEVICE_DESKTOP):
+			
+			$this->setObjParam($RtbBidRequestDevice, $banner_request, "mobile_os", "os");
+			$this->setObjParam($RtbBidRequestDevice, $banner_request, "mobile_make", "make");
+			$this->setObjParam($RtbBidRequestDevice, $banner_request, "mobile_model", "model");
+			
+		endif;
 
+		$RtbBidRequest->RtbBidRequestDevice 		= $RtbBidRequestDevice;
+		
+		if (!empty($banner_request["ip_address"])):
+			$RtbBidRequestUser 						= new \model\openrtb\RtbBidRequestUser();
+			$this->user_ip_hash						= md5($banner_request["ip_address"]);			
+			$RtbBidRequestUser->id					= $this->user_ip_hash;
+			$RtbBidRequest->RtbBidRequestUser 			= $RtbBidRequestUser;
+		endif;
+
+		// first price auction
+		$RtbBidRequest->at 							= 1;
+		
 		// currently we only support USD
-		$this->bid_request_cur						= array("USD");
+		$RtbBidRequest->cur							= array("USD");
+
+
+		$RtbBidRequestRegs							= new \model\openrtb\RtbBidRequestRegs();
+		$RtbBidRequestRegs->coppa					= 1;
+
+		$RtbBidRequest->RtbBidRequestRegs 			= $RtbBidRequestRegs;
+
 		
-		// bid // site
-		$this->bid_request_site_id					= $banner_request["website_id"];
-		$this->bid_request_site_domain				= $banner_request["org_tld"];
-		$this->bid_request_site_category			= $banner_request["iab_category"];
-		$this->bid_request_site_page 				= $banner_request["loc"];
-		
-		
-		$this->bid_request_site_publisher_cat		= $banner_request["iab_category"];
-		
-		// bid // site // publisher
 		
 		// does not exist in openRTB. Here for compatability with proprietary RTB
 		if (isset($banner_request["ref"]) && !empty($banner_request["ref"])):
@@ -308,44 +188,9 @@ use \Exception;
 
 		$this->bid_request_secure 					= $is_secure == true ? 1 : 0;
 
-		// bid // device
-		/*
-		 * According to OpenRTB 2.2 we only want to provide 
-		 * either the IP addres OR the geo object, but we do not
-		 * need to provide both of them in a single request.
-		 */
-		$this->bid_request_device_ip				= $banner_request["ip_address"];
-		$this->bid_request_device_ua				= $banner_request["user_agent"];
+		// assign response to instance
+		$this->RtbBidRequest						= $RtbBidRequest;
 		
-		$this->bid_request_user_id					= $banner_request["user_id"];
-		
-		// $this->bid_request_geo; // not needed according to OpenRTB 2.2 since the IP is provided
-		
-		$this->bid_request_mobile					= $banner_request["devicetype"] == 1;
-		
-		if ($this->bid_request_mobile == true):
-		
-			if (isset($banner_request["mobile_os"]) && !empty($banner_request["mobile_os"])):
-				$this->bid_request_device_os 	= $banner_request["mobile_os"];
-			endif;
-			
-			if (isset($banner_request["mobile_make"]) && !empty($banner_request["mobile_make"])):
-				$this->bid_request_device_make 	= $banner_request["mobile_make"];
-			endif;
-			
-			if (isset($banner_request["mobile_model"]) && !empty($banner_request["mobile_model"])):
-				$this->bid_request_device_model = $banner_request["mobile_model"];
-			endif;
-			
-		endif;
-
-		if (isset($banner_request["language"]) && !empty($banner_request["language"])):
-		
-			$this->bid_request_device_language		= $banner_request["language"];
-		endif;
-		
-		// regs // coppa
-		$this->bid_request_regs_coppa				= 1;
 	}
 }
 

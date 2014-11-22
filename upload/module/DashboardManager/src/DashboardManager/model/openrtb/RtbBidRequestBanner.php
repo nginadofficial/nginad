@@ -11,7 +11,7 @@ namespace model\openrtb;
 
 class RtbBidRequestBanner {
 	
-
+	public $id;
 	public $h;
 	public $w;
 	public $pos;

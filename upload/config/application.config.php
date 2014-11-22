@@ -60,7 +60,7 @@ $config_glob_paths = array();
 
 if ($is_delivery):
 	
-	$modules = array( 'Delivery' );
+	$modules = array( 'Delivery', 'GenericBuysidePartner' );
 	$config_glob_paths = array(
 			'config/autoload/{global,local}.php',
 			'config/autoload/database.{local,staging,production}.php',

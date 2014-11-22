@@ -163,7 +163,7 @@ class IndexController extends AbstractActionController
 	
 	 		$RtbSellV22Bid = new \rtbsellv22\RtbSellV22Bid();
 	 		
-	 		$RtbSellV22Bid->create_rtb_request_from_publisher_impression($config, $banner_request);
+	 		$RtbSellV22Bid->create_rtb_request_from_publisher_display_impression($config, $banner_request);
 	 		
 	 		$bid_request = $RtbSellV22Bid->build_rtb_bid_request();
 	 		
@@ -295,6 +295,11 @@ class IndexController extends AbstractActionController
     	$banner_request["publisher_iab_category"] 	= null;
     	
     	$ip_address = isset($_SERVER['HTTP_X_REAL_IP']) && !empty($_SERVER['HTTP_X_REAL_IP']) ? $_SERVER['HTTP_X_REAL_IP'] : $_SERVER["REMOTE_ADDR"];
+    	
+    	// to debug on dev
+    	if (empty($ip_address)):
+    		$ip_address = "127.0.0.1";
+    	endif;
     	
     	$banner_request["ip_address"] 				= $ip_address;
     	$banner_request["user_id"] 					= md5($banner_request["ip_address"]);

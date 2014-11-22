@@ -50,7 +50,7 @@ class PingManager {
 	public function __construct($config, $ping_request, $PublisherInfoID, $PublisherWebsiteID, $FloorPrice, $PublisherAdZoneID, $AdName, $WebDomain) {
 		
 		$this->config 					= $config;
-		$this->ping_request 			= $ping_request;
+		$this->ping_request 			= json_decode($ping_request, true);
 		$this->PublisherInfoID 			= $PublisherInfoID;
 		$this->PublisherWebsiteID 		= $PublisherWebsiteID;
 		$this->FloorPrice 				= floatval($FloorPrice);
@@ -77,7 +77,7 @@ class PingManager {
 			$LoopbackPartnerBid = new \buyloopbackpartner\LoopbackPartnerBid($this->config, $this->config['buyside_rtb']['supply_partners']['BuyLoopbackPartner']['buyer_id']);
 			$LoopbackPartnerBid->is_local_request = true;
 			$LoopbackPartnerBid->parse_incoming_request(json_encode($this->ping_request));
-			$request_id = $LoopbackPartnerBid->bid_request_id;
+			$request_id = $LoopbackPartnerBid->RtbBidRequest->id;
 			$LoopbackPartnerBid->process_business_logic();
 			$LoopbackPartnerBid->convert_ads_to_bid_response();
 			$LoopbackPartnerBid->build_outgoing_bid_response();

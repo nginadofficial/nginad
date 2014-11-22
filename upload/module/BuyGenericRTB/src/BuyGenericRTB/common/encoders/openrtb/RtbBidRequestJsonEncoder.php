@@ -116,6 +116,9 @@ class RtbBidRequestJsonEncoder {
 	private static function getRtbBidRequestBanner(&$RtbBidRequestBanner) {
 		
 		$banner 			= array();
+		
+		self::setArrayParam($RtbBidRequestBanner, $banner, 'id');
+		
 		/*
 		 * Sorry, Dr Neal, height and width are required for a banner
 		 */
