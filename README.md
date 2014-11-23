@@ -1,6 +1,12 @@
 nginad
 =======
 
+November 23, 2014
+------------------
+As a last task before the release of NginAd 1.4 we must add some micro-second timing to the logs for all Workflow processes
+and tasklets to be added to the logs. This way we know exactly how long each new process is taking and adding to the overall
+latency of the new business rules processing engine.
+
 September 30, 2014
 ------------------
 Fixed some of Mike/Ukraine team's Reporting module bugs. I did not create JIRAs since they are so numerous it requires a re-factor.
