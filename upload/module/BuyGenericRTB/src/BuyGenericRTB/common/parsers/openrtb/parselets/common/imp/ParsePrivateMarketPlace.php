@@ -35,14 +35,17 @@ class ParsePrivateMarketPlace {
         	
         		$RtbBidRequestPmpDeal->id = $deal["id"];
         	
-        		if (isset($deal["bidfloor"])):
-        			$RtbBidRequestPmpDeal->bidfloor = $deal["bidfloor"];
-        		endif;
+        		$Parser->parse_item(
+        				$RtbBidRequestPmpDeal,
+        				$deal,
+        				"bidfloor");
         		
         		// second price ?
-        		if (isset($deal["at"])):
-        			$RtbBidRequestPmpDeal->at = $deal["at"];
-        		endif;
+        		
+        		$Parser->parse_item(
+        				$RtbBidRequestPmpDeal,
+        				$deal,
+        				"at");
         		
         		$RtbBidRequestPmp->RtbBidRequestPmpDealList[] = $RtbBidRequestPmpDeal;
         		

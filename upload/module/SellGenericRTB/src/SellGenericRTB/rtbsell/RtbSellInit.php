@@ -7,9 +7,8 @@
  * @license GPLv3
  */
 
-namespace rtbsellv22;
-use rtbsell\RtbSellInit;
+namespace rtbsell;
 
-abstract class RtbSellV22Init extends RtbSellInit {
-	
+abstract class RtbSellInit {
+
 }

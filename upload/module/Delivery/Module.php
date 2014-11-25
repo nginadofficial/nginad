@@ -58,6 +58,8 @@ class Module implements AutoloaderProviderInterface
     							"util" => __DIR__ . '/../DashboardManager/src/DashboardManager/util',
     							"mobileutil" => __DIR__ . '/../BuyGenericRTB/src/BuyGenericRTB/_mobile',
     							"rtbsellv22" => __DIR__ . '/../SellGenericRTB/src/SellGenericRTB/rtbsellv22',
+    							"rtbsell" => __DIR__ . '/../SellGenericRTB/src/SellGenericRTB/rtbsell',
+    							"sellrtb" => __DIR__ . '/../SellGenericRTB/src/SellGenericRTB/common',
 	   							"pinger" => __DIR__ . '/../SellGenericRTB/src/SellGenericRTB/pinger',
     							// LOAD THE GENERIC RTB PARENT CLASSES
     							"rtbbuyv22" => __DIR__ . '/../BuyGenericRTB/src/BuyGenericRTB/rtbbuyv22',

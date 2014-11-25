@@ -8,8 +8,9 @@
  */
 
 namespace rtbsellv22;
+use rtbsell\RtbSellLogger;
 
-class RtbSellV22Logger
+class RtbSellV22Logger extends RtbSellLogger
 {
 	
 	// logging settings

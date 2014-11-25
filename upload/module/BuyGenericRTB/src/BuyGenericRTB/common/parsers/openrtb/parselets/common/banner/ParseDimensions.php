@@ -17,17 +17,18 @@ class ParseDimensions {
 		/*
 		 * Get Height and Width
 		 */
-		if (isset($ad_impression_banner["h"])):
-			$RtbBidRequestBanner->h 	= $ad_impression_banner["h"];
-		else:
-			throw new Exception($Parser->expeption_missing_min_bid_request_params . ": imp_banner_h");
-		endif;
-		 
-		if (isset($ad_impression_banner["w"])):
-			$RtbBidRequestBanner->w 	= $ad_impression_banner["w"];
-		else:
-			throw new Exception($Parser->expeption_missing_min_bid_request_params . ": imp_banner_w");
-		endif;
+		
+		$Parser->parse_with_exception(
+				$RtbBidRequestBanner,
+				$ad_impression_banner,
+				$Parser->expeption_missing_min_bid_request_params . ": imp_banner_h",
+				"h");
+		
+		$Parser->parse_with_exception(
+				$RtbBidRequestBanner,
+				$ad_impression_banner,
+				$Parser->expeption_missing_min_bid_request_params . ": imp_banner_w",
+				"w");
 		
 	}
 }

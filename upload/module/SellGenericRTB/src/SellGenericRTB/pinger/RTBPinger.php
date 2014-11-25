@@ -17,17 +17,25 @@ class RTBPinger {
 	
 	public $partner_id;
 	
-	protected $partner_name;
+	public $partner_name;
 	
 	protected $ping_connect_timeout_ms;
 	
 	protected $ping_timeout_ms;
 	
 	public $partner_quality_score;
-	
+
 	protected $verify_ssl 			= false;
 	
 	protected $timeout_enabled 		= false;
+	
+	public $uid;
+	
+	public $total_bids;
+	
+	public $lost_bids;
+	
+	public $won_bids;
 	
 	public $ping_success 			= false;
 	
@@ -43,6 +51,7 @@ class RTBPinger {
 	
 	public $is_loopback_pinger		= false;
 	
+	public $RtbBidResponse;
 	
 	public function __construct($partner_name, $partner_id, $ping_url, $ping_data, $ping_connect_timeout_ms, $ping_timeout_ms, $partner_quality_score, $verify_ssl, $timeout_enabled) {
 		

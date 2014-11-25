@@ -17,18 +17,21 @@ class ParseWebsite {
 
 			$RtbBidRequestPublisher = new \model\openrtb\RtbBidRequestPublisher();
 			
-	        if (isset($ad_campaign_site["id"])):
-	        	$RtbBidRequestSite->id 		= $ad_campaign_site["id"];
-	        endif;
-			
-	        if (isset($ad_campaign_site["domain"])):
-	        	$RtbBidRequestSite->domain 		= $ad_campaign_site["domain"];
-	        endif;
+			$Parser->parse_item(
+					$RtbBidRequestSite,
+					$ad_campaign_site,
+					"id");
+
+			$Parser->parse_item(
+					$RtbBidRequestSite,
+					$ad_campaign_site,
+					"domain");
         
-	        if (isset($ad_campaign_site["page"])):
-	        	$RtbBidRequestSite->page 		= $ad_campaign_site["page"];
-	        endif;
-	        
+			$Parser->parse_item(
+					$RtbBidRequestSite,
+					$ad_campaign_site,
+					"page");
+			
 	        if (isset($ad_campaign_site["cat"])):
 	       		$RtbBidRequestSite->cat = self::get_category($ad_campaign_site["cat"]);
 	        endif;
@@ -44,13 +47,15 @@ class ParseWebsite {
 	         
 	        	$default_site_publisher = $ad_campaign_site["publisher"];
 	        
-		        if (isset($default_site_publisher["id"])):
-		        	$RtbBidRequestPublisher->id 		= $default_site_publisher["id"];
-		        endif;
-		        	
-		        if (isset($default_site_publisher["name"])):
-		        	$RtbBidRequestPublisher->name 		= $default_site_publisher["name"];
-		        endif;
+	       		$Parser->parse_item(
+		        		$RtbBidRequestPublisher,
+		        		$default_site_publisher,
+		        		"id");
+	        
+	       		$Parser->parse_item(
+	       				$RtbBidRequestPublisher,
+	       				$default_site_publisher,
+	       				"name");
 	        
 		        if (isset($default_site_publisher["cat"])):
 		        
@@ -58,10 +63,11 @@ class ParseWebsite {
 		        		
 		        endif;
 		        
-		        if (isset($default_site_publisher["domain"])):
-		        	$RtbBidRequestPublisher->domain 		= $default_site_publisher["domain"];
-		        endif;
-	        
+		        $Parser->parse_item(
+		        		$RtbBidRequestPublisher,
+		        		$default_site_publisher,
+		        		"domain");
+		        
 	        endif;
 	        
 	        $RtbBidRequestSite->RtbBidRequestPublisher = $RtbBidRequestPublisher;

@@ -13,18 +13,21 @@ class ParseGeo {
 	
 	public static function execute(&$Logger, \buyrtb\parsers\openrtb\OpenRTBParser &$Parser, \model\openrtb\RtbBidRequest &$RtbBidRequest, \model\openrtb\RtbBidRequestGeo &$RtbBidRequestGeo, &$geo) {
 
-		if (isset($geo["country"])):
-			$RtbBidRequestGeo->country = $geo["country"];
-		endif;
-			
-		if (isset($geo["region"])):
-			$RtbBidRequestGeo->state = $geo["region"];
-		endif;
-				
-		if (isset($geo["city"])):
-			$RtbBidRequestGeo->city = $geo["city"];
-		endif;
-				
+		$Parser->parse_item(
+				$RtbBidRequestGeo,
+				$geo,
+				"country");
+		
+		$Parser->parse_item(
+				$RtbBidRequestGeo,
+				$geo,
+				"region");
+		
+		$Parser->parse_item(
+				$RtbBidRequestGeo,
+				$geo,
+				"city");
+
 		if (isset($RtbBidRequestGeo->country)):
 			$Logger->log[] = "Geo Data Country: " . $this->bid_request_geo["country"];
 		endif;

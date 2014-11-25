@@ -53,15 +53,12 @@ class Init {
 		
 		$Logger->log[] = "POST: " . print_r($Parser->json_post, true);
 		
-		if (isset($Parser->json_post["id"])):
-		 
-			$RtbBidRequest->id = $Parser->json_post["id"];
-		 
-		else:
-		 
-			throw new Exception($Parser->expeption_missing_min_bid_request_params . ": id");
-		
-		endif;
+		$Parser->parse_with_exception(
+				$RtbBidRequest, 
+				$Parser->json_post, 
+				$Parser->expeption_missing_min_bid_request_params . ": id", 
+				"id");
+
 	}
 	
 }

@@ -22,19 +22,23 @@ class ParseDevice {
 		
 		$default_device = $Parser->json_post["device"];
 		
-		if (isset($default_device["ip"])):
-			$RtbBidRequestDevice->ip 		= $default_device["ip"];
-		else:
-			throw new Exception($Parser->expeption_missing_min_bid_request_params . ": device_ip");
-		endif;
+		$Parser->parse_with_exception(
+				$RtbBidRequestDevice,
+				$default_device,
+				$Parser->expeption_missing_min_bid_request_params . ": device_ip",
+				"ip");
 		
-		if (isset($default_device["language"])):
-			$RtbBidRequestDevice->bid_request_device_language 		= $default_device["language"];
-		endif;
-		 
+		$Parser->parse_item(
+				$RtbBidRequestDevice,
+				$default_device,
+				"language");
+		
 		if (isset($default_device["ua"])):
 		
-			$RtbBidRequestDevice->ua 		= $default_device["ua"];
+			$Parser->parse_item(
+					$RtbBidRequestDevice,
+					$default_device,
+					"ua");
 		
 			if (strpos($RtbBidRequestDevice->ua, '%20') !== false):
 				$RtbBidRequestDevice->ua = urldecode($RtbBidRequestDevice->ua);

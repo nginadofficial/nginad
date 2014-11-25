@@ -8,6 +8,7 @@
  */
 
 namespace pinger;
+use \Exception;
 
 class PingManager {
 	
@@ -20,7 +21,7 @@ class PingManager {
 	private $ping_request;
 
 	private $winning_partner_pinger;
-	
+
 	private $PublisherAdZoneID;
 	
 	private $PublisherInfoID;
@@ -32,16 +33,6 @@ class PingManager {
 	private $AdName;
 	
 	private $WebDomain;
-	
-	public $winning_ad_tag;
-	
-	public $winning_bid_price;
-	
-	public $loopback_demand_partner_won = false;
-	
-	public $loopback_demand_partner_ad_campaign_banner_id;
-	
-	private $auction_was_won = false;
 	
 	private $publisher_markup_rate = 40;
 	
@@ -105,7 +96,7 @@ class PingManager {
 					$partner_class->partner_name,
 					$partner_class->partner_id,
 					$partner_class->partner_rtb_url,  // no url needed for local demand check
-					json_encode($LoopbackPartnerBid->bid_responses),
+					$LoopbackPartnerBid->bid_responses,
 					$partner_class->rtb_connection_timeout_ms,
 					$partner_class->rtb_timeout_ms,
 					$partner_class->partner_quality_score,
@@ -234,175 +225,29 @@ class PingManager {
 
 	}
 	
-	private function validate_top_level_ping_response($ping_response) {
-		
-		// check the bid id
-		if (!isset($ping_response->id) || $ping_response->id != $this->ping_request["id"]):
-			
-			return false;
-			
-		endif;
-		
-		// check the currency
-		if (!isset($ping_response->cur) || strtoupper($ping_response->cur) != 'USD'):
-			
-			return false;
-			
-		endif;
-		
-		return true;
-		
-	}
-	
-	private function validate_bid_response_object($bid_list) {
-		
-		$required_fields = array("id", "impid", "price", "adm");
-		
-		foreach ($bid_list as $bid):
-			
-			foreach ($required_fields as $required_field):
-		
-				if (!isset($bid->$required_field) || empty($bid->$required_field)):
-					
-					return false;
-					
-				endif;
-				
-			endforeach;
-			
-		endforeach;
 
-		return true;
-	
-	}
 	
 	public function process_rtb_ping_responses() {
 
-		foreach ($this->RTBPingerList as $RTBPinger):
-
-			$error = "";
+		/*
+		 * Plain Old PHP Object (POPO)
+		 * http://en.wikipedia.org/wiki/Plain_Old_Java_Object
+		 * 
+		 * Initialize POPO! to send around the Workflows
+		 */
 		
-			if ($RTBPinger->ping_success == true):
-	
-				$json_response_data = $RTBPinger->ping_response;
-				
-				$ping_response 		= json_decode($json_response_data);
-				
-				if ($ping_response == null):
-				
-					$error = "Invalid JSON Response";
-					continue;
-					
-				endif;
-				
-				// validate
-				if ($this->validate_top_level_ping_response($ping_response) == false):
-					
-					$RTBPinger->ping_success 			= false;
-					$RTBPinger->ping_error_message 		= "OpenRTB Ping Response Base Validation Error";
-					continue;
-					
-				endif;
-				
-
-				
-				foreach ($ping_response->seatbid as $bid_data):
-				
-					/*
-					 * process RTB bid responses and choose a winner
-					 * based on bid price.
-					 */
-				
-					$bid_list = $bid_data->bid;
-				
-					// validate
-					if ($this->validate_bid_response_object($bid_list) == false):
-
-						$RTBPinger->ping_success 			= false;
-						$RTBPinger->ping_error_message 		= "OpenRTB Ping Response Bid Object Validation Error";
-						continue;
-						
-					endif;
-					
-					foreach ($bid_list as $bid):
-	
-						$bid_id 		= $bid->id;
-						$bid_impid 		= $bid->impid;
-						$bid_price 		= floatval($bid->price);
-						$bid_adm 		= $bid->adm;		
-					
-						/*
-						 * Check the passback tag's floor price
-						 * against the bid amount minus the publisher's markup rate.
-						 * 
-						 * So if the Publisher's floor price is $0.09
-						 * and the markup rate is 40%
-						 * 
-						 * Then the bid must be at least $0.15
-						 * $0.15 * 40% = 0.09 CPM
-						 * 
-						 * Also make sure it's greater than zero
-						 */
-						
-
-						
-						$mark_down = floatval($bid_price) * floatval($this->publisher_markup_rate);
-						$adusted_bid_amount = $bid_price - floatval($mark_down);
-						
-						if ($this->FloorPrice > $adusted_bid_amount || $bid_price <= 0):
-							continue;
-						endif;
-
-						if ($this->winning_partner_pinger === null
-								||
-								$bid_price > $this->winning_partner_pinger->winning_bid
-								|| (
-										$bid_price == $this->winning_partner_pinger->winning_bid
-										&& $RTBPinger->partner_quality_score > $this->winning_partner_pinger->partner_quality_score
-								)
-								):
-								
-								// unset the last highest bidder
-								if ($this->winning_partner_pinger !== null):
-									$this->winning_partner_pinger->won_auction 		= false;
-									$this->winning_partner_pinger->winning_bid 		= null;
-								endif;
-								
-								// set the current highest bidder
-								$this->winning_partner_pinger 						= $RTBPinger;
-								$this->winning_partner_pinger->won_auction 			= true;
-								$this->winning_partner_pinger->winning_bid 			= $bid_price;
-								$this->winning_ad_tag								= $bid_adm;	
-								$this->winning_bid_price							= sprintf("%1.4f", $this->encrypt_bid($bid_price));
-								$this->auction_was_won 								= true; 
-								
-								if ($RTBPinger->is_loopback_pinger):
-
-									if (preg_match("/zoneid=(\\d+)/", $this->winning_ad_tag, $matches) && isset($matches[1])):
-										$this->loopback_demand_partner_ad_campaign_banner_id 	= $matches[1];
-										$this->loopback_demand_partner_won 						= true;
-									endif;
-								endif;
-						endif;			
-					endforeach;
-				
-				endforeach;
-				
-			else:
-				
-				$error = $RTBPinger->ping_error_message;
-				
-			endif;
-	
-		endforeach;
+		$AuctionPopo = new \sellrtb\workflows\tasklets\popo\AuctionPopo();
+		$AuctionPopo->publisher_markup_rate = $this->publisher_markup_rate;
 		
-		return $this->auction_was_won;
 		
-	}
-	
-	private function encrypt_bid($unencrypted_bid_price) {
+		
+		$logger = \rtbsellv22\RtbSellV22Logger::get_instance();
+		$OpenRTBWorkflow = new \sellrtb\workflows\OpenRTBWorkflow();
+		 
+		$this->winning_partner_pinger = $OpenRTBWorkflow->process_business_rules_workflow($logger, $this->config, $this->RTBPingerList, $AuctionPopo);
 
-		return $unencrypted_bid_price;
+		return $AuctionPopo;
+		
 	}
 	
 	public function process_rtb_ping_statistics() {
@@ -433,12 +278,12 @@ class PingManager {
 			
 			if ($RTBPinger->ping_success == true):
 			
-				$bids_total++;
+				$bids_total	+= $RTBPinger->total_bids;
 
 				if ($RTBPinger->won_auction === true):
 				
-					$bids_won 									= 1;
-					$SellSidePartnerHourlyBids->BidsWonCounter 	= 1;
+					$bids_won									+= $RTBPinger->won_bids;
+					$SellSidePartnerHourlyBids->BidsWonCounter 	= $RTBPinger->won_bids;
 					$SellSidePartnerHourlyBids->SpendTotalGross	= floatval($RTBPinger->winning_bid) / 1000;
 					
 					$spend_total_gross = $SellSidePartnerHourlyBids->SpendTotalGross;
@@ -452,9 +297,8 @@ class PingManager {
 					$spend_total_net = $SellSidePartnerHourlyBids->SpendTotalNet;
 
 				else:
-				
-					$bids_lost++;
-					$SellSidePartnerHourlyBids->BidsLostCounter 	= 1;
+					$bids_lost										+= $RTBPinger->lost_bids;
+					$SellSidePartnerHourlyBids->BidsLostCounter 	= $RTBPinger->lost_bids;
 				
 				endif;
 				

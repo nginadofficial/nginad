@@ -8,9 +8,9 @@
  */
 
 namespace rtbsellv22;
-use \Exception;
+use rtbsell\RtbSellBid;
 
- class RtbSellV22Bid {
+ class RtbSellV22Bid extends RtbSellBid {
 
 	public $rtb_base_url = "http://rtb.demandpartner.com";
 

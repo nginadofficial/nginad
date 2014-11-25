@@ -26,4 +26,10 @@ class RtbBidResponseBid {
 	public $h;
 	public $w;
 	public $ext;
+	
+	// used internally
+	public $adusted_bid_amount;
+	
+	public $won_auction = false;
+	public $uid;
 }

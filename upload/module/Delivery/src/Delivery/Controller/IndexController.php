@@ -181,9 +181,11 @@ class IndexController extends AbstractActionController
 
 	 		$PingManager->ping_rtb_ping_clients();
 	 		
-	 		$auction_was_won   	= $PingManager->process_rtb_ping_responses();
+	 		$AuctionPopo   		= $PingManager->process_rtb_ping_responses();
 
-	 		$winning_ad_tag 	= $PingManager->winning_ad_tag;
+	 		$auction_was_won 	= $AuctionPopo->auction_was_won;
+	 		
+	 		$winning_ad_tag 	= $AuctionPopo->winning_ad_tag;
 
 	 		/*
 	 		 * The RTB auction may not have been won because
@@ -213,7 +215,7 @@ class IndexController extends AbstractActionController
 		 		 */
 		 		
 		 		$winning_ad_tag = str_replace("{NGINCLKTRK}", "", $winning_ad_tag);
-		 		$winning_ad_tag = str_replace("{NGINWBIDPRC}", $PingManager->winning_bid_price, $winning_ad_tag);
+		 		$winning_ad_tag = str_replace("{NGINWBIDPRC}", $AuctionPopo->winning_bid_price, $winning_ad_tag);
 		 		
 	 		endif;
 	 		
@@ -223,9 +225,9 @@ class IndexController extends AbstractActionController
 	
 	 		\rtbsellv22\RtbSellV22Logger::get_instance()->output_log();
 	 		
-	 		if ($PingManager->loopback_demand_partner_won === true):
+	 		if ($AuctionPopo->loopback_demand_partner_won === true):
 	 			
-	 			$banner_request["demand_banner_id"] = $PingManager->loopback_demand_partner_ad_campaign_banner_id;
+	 			$banner_request["demand_banner_id"] = $AuctionPopo->loopback_demand_partner_ad_campaign_banner_id;
 	 			$this->process_demand_tag($config, $banner_request);
 	 			
 	 		else:

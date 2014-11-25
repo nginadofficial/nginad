@@ -16,9 +16,11 @@ class ParseFloor {
 		/*
 		 * Get floor price
 		 */
-	   	if (isset($ad_impression["bidfloor"])):
-	    	$RtbBidRequestImp->bidfloor = $ad_impression["bidfloor"];
-	  	endif;
+		
+		$Parser->parse_item(
+				$RtbBidRequestImp,
+				$ad_impression,
+				"bidfloor");
 	
 	}
 	

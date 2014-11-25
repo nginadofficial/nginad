@@ -13,9 +13,10 @@ class ParseSecondPrice {
 	// second price?
 	public static function execute(&$Logger, \buyrtb\parsers\openrtb\OpenRTBParser &$Parser, \model\openrtb\RtbBidRequest &$RtbBidRequest) {
 	
-		if (isset($Parser->json_post["at"])):
-			$RtbBidRequest->at 		= $Parser->json_post["at"];
-		endif;
+		$Parser->parse_item(
+				$RtbBidRequest,
+				$Parser->json_post,
+				"at");
 
 	}
 }

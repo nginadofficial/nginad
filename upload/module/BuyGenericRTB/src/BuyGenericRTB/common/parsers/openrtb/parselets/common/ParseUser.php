@@ -13,9 +13,10 @@ class ParseUser {
 	
 	public static function execute(&$Logger, \buyrtb\parsers\openrtb\OpenRTBParser &$Parser, \model\openrtb\RtbBidRequest &$RtbBidRequest, \model\openrtb\RtbBidRequestUser &$RtbBidRequestUser, &$rtb_user) {
 	
-	        if (isset($rtb_user["id"])):
-	        	$RtbBidRequestUser->id 		= $rtb_user["id"];
-	        endif;
+		$Parser->parse_item(
+				$RtbBidRequestUser,
+				$rtb_user,
+				"id");
 
 	}
 	
