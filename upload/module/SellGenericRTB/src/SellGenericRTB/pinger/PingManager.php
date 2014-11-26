@@ -239,8 +239,14 @@ class PingManager {
 		$AuctionPopo = new \sellrtb\workflows\tasklets\popo\AuctionPopo();
 		$AuctionPopo->publisher_markup_rate = $this->publisher_markup_rate;
 		
-		
-		
+		/*
+		 * Get the single impid. If and when we start sending multiple 
+		 * impressions we will send an array of these impids to match
+		 * to the multiple banner responses.
+		 */
+
+		$AuctionPopo->request_impid = $this->ping_request["imp"][0]["id"];
+
 		$logger = \rtbsellv22\RtbSellV22Logger::get_instance();
 		$OpenRTBWorkflow = new \sellrtb\workflows\OpenRTBWorkflow();
 		 

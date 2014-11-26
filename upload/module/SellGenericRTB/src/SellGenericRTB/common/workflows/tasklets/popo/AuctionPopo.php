@@ -33,4 +33,6 @@ class AuctionPopo {
 	
 	public $bid_price_list;
 	public $adjusted_bid_price_list;
+	
+	public $request_impid;
 }

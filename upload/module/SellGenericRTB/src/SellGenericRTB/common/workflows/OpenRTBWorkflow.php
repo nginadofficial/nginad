@@ -25,6 +25,12 @@ class OpenRTBWorkflow {
     		return false;
     	endif;
     	
+    	// Make sure that each bid response matches the impression id of the RTB request
+    	
+    	if (\sellrtb\workflows\tasklets\common\CheckImpId::execute($logger, $this, $RTBPingerList, $AuctionPopo) === false):
+    		return false;
+    	endif;
+    	
     	// Adjust the bid amounts with the correct exchange markup
     	 
     	if (\sellrtb\workflows\tasklets\common\AdjustBidAmountWithMarkup::execute($logger, $this, $RTBPingerList, $AuctionPopo) === false):
