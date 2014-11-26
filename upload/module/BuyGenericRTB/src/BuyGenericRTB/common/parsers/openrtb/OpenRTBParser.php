@@ -49,12 +49,41 @@ class OpenRTBParser {
         }
         
         // Parse Second Price
-        try {
-        	\buyrtb\parsers\openrtb\parselets\common\ParseSecondPrice::execute($logger, $this, $this->RtbBidRequest);
-        } catch (Exception $e) {
-        	throw new Exception($e->getMessage(), $e->getCode(), $e->getPrevious());
-        }
+		$this->parse_item(
+				$this->RtbBidRequest,
+				$Parser->json_post,
+				"at");
+		
+		// Parse Max Timeout on RTB Bid Response
+		$this->parse_item(
+				$this->RtbBidRequest,
+				$Parser->json_post,
+				"tmax");
+		
+		// Parse Allowed Buyer Seat IDs
+		$this->parse_item_list(
+				$this->RtbBidRequest,
+				$Parser->json_post,
+				"wseat");
+		
+		// Parse All Available impressions for this publisher boolean
+		$this->parse_item(
+				$this->RtbBidRequest,
+				$Parser->json_post,
+				"allimps");
         
+		// Parse Blocked Advertiser Categories
+		$this->parse_item_list(
+				$this->RtbBidRequest,
+				$Parser->json_post,
+				"bcat");
+		
+		// Parse Blocked TLDs for this RTB request, Publisher Black Listed
+		$this->parse_item_list(
+				$this->RtbBidRequest,
+				$Parser->json_post,
+				"badv");
+		
         // Parse Site
         if (!isset($this->json_post["site"])):
         	throw new Exception($this->expeption_missing_min_bid_request_params . ": at least 1 site object");
@@ -177,6 +206,19 @@ class OpenRTBParser {
         endforeach;
                 
         return $this->RtbBidRequest;
+	}
+	
+	public function parse_item_list(&$obj, &$arr, $name, $obj_name = null) {
+	
+		if ($obj_name == null):
+			$obj_name = $name;
+		endif;
+	
+		if (isset($arr[$name]) && is_array($arr[$name]) && count($arr[$name])):
+			
+			$obj->$obj_name = $arr[$name];
+	
+		endif;
 	}
 	
 	public function parse_item(&$obj, &$arr, $name, $obj_name = null) {
