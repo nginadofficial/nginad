@@ -57,15 +57,15 @@ class AddBids {
 		
 		$uid = 0;
 		
-		for ($y = 0; $y < count($RTBPingerList); $y++):
+		for ($y = 0; $y < count($AuctionPopo->PingerList); $y++):
 		
-			for ($i = 0; $i < count($RTBPingerList[$y]->RtbBidResponse->RtbBidResponseSeatBidList); $i++):
+			for ($i = 0; $i < count($AuctionPopo->PingerList[$y]->RtbBidResponse->RtbBidResponseSeatBidList); $i++):
 				
-				$RTBPingerList[$y]->total_bids = count($RTBPingerList[$y]->RtbBidResponse->RtbBidResponseSeatBidList[$i]->RtbBidResponseBidList);
+				$AuctionPopo->PingerList[$y]->total_bids = count($AuctionPopo->PingerList[$y]->RtbBidResponse->RtbBidResponseSeatBidList[$i]->RtbBidResponseBidList);
 			
-				for ($j = 0; $j < count($RTBPingerList[$y]->RtbBidResponse->RtbBidResponseSeatBidList[$i]->RtbBidResponseBidList); $j++):
+				for ($j = 0; $j < count($AuctionPopo->PingerList[$y]->RtbBidResponse->RtbBidResponseSeatBidList[$i]->RtbBidResponseBidList); $j++):
 					
-					$RTBPingerList[$y]->RtbBidResponse->RtbBidResponseSeatBidList[$i]->RtbBidResponseBidList[$j]->uid = ++$uid;
+					$AuctionPopo->PingerList[$y]->RtbBidResponse->RtbBidResponseSeatBidList[$i]->RtbBidResponseBidList[$j]->uid = ++$uid;
 					
 				endfor;
 			

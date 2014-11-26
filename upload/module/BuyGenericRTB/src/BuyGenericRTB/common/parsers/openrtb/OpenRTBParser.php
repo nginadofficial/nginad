@@ -12,6 +12,7 @@ use \Exception;
 
 class OpenRTBParser {
 
+	public $config;
 	public $raw_post;
 	public $json_post;
 	public $RtbBidRequest;
@@ -20,8 +21,10 @@ class OpenRTBParser {
 	public $missing_optional_bid_request_params = "Bid Request missing optional parameter";
 	public $got_optional_bid_request_params = "Got Bid Request optional parameter";
 	
-	public function parse_request($raw_post = null, $is_local) {
+	public function parse_request($config, $is_local, $raw_post = null) {
 
+		$this->config = $config;
+		
 		$this->raw_post = $raw_post;
 		
 		// prepare the logger

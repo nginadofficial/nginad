@@ -27,9 +27,13 @@ return array(
 		),
 		'settings' => array(
 				'publisher' => array(
-						'auto_approve_zones' => true,
+						'auto_approve_zones' 	=> true,
 						'auto_approve_websites' => true
-				)
+				),
+				'rtb' => array(
+						// default US dollars
+						'auction_currency' 		=> "USD"
+				),
 		),
 		'maintenance' => array(
 				'secret_key_crontab' => 'nginadxyz',
@@ -59,6 +63,6 @@ return array(
 				// our house publisher ids are exempt from being marked up
 				'markup_exempt_publisher_info_id_list'	=> array(),
 				// version
-				'version_id'							=> '1.0'
+				'version_id'							=> '1.4'
 		),
 );

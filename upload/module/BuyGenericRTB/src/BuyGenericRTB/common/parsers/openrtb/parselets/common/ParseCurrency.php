@@ -16,7 +16,7 @@ class ParseCurrency {
 	
 		/*
 		 * Only grab the main (first currency)
-		 * Currently only USD is supported
+		 * Default currency in global.php
 		 */
 		
 		if (isset($Parser->json_post["cur"][0])):
@@ -31,7 +31,7 @@ class ParseCurrency {
 			
 			endforeach;
 			
-			if ($RtbBidRequest->cur[0] != "USD"):
+			if ($RtbBidRequest->cur[0] != $Parser->config['settings']['rtb']['auction_currency']):
 			 
 				throw new Exception($Parser->expeption_missing_min_bid_request_params . ": cur: system only accepts USD currency at this time");
 			 

@@ -154,14 +154,14 @@ use rtbsell\RtbSellBid;
 			$RtbBidRequestUser 						= new \model\openrtb\RtbBidRequestUser();
 			$this->user_ip_hash						= md5($banner_request["ip_address"]);			
 			$RtbBidRequestUser->id					= $this->user_ip_hash;
-			$RtbBidRequest->RtbBidRequestUser 			= $RtbBidRequestUser;
+			$RtbBidRequest->RtbBidRequestUser 		= $RtbBidRequestUser;
 		endif;
 
 		// first price auction
 		$RtbBidRequest->at 							= 1;
-		
-		// currently we only support USD
-		$RtbBidRequest->cur							= array("USD");
+
+		// currency from the config file
+		$RtbBidRequest->cur							= array($config['settings']['rtb']['auction_currency']);
 
 
 		$RtbBidRequestRegs							= new \model\openrtb\RtbBidRequestRegs();

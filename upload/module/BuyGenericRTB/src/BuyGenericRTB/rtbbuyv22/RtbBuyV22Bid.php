@@ -138,7 +138,7 @@ abstract class RtbBuyV22Bid extends RtbBuyBid {
 	public function parse_incoming_request($raw_post = null) {
 
 		$OpenRTBParser = new \buyrtb\parsers\openrtb\OpenRTBParser();
-		$this->RtbBidRequest = $OpenRTBParser->parse_request($raw_post, $this->is_local_request);
+		$this->RtbBidRequest = $OpenRTBParser->parse_request($this->config, $this->is_local_request, $raw_post);
 		
 		// transform to JSON
 		//\buyrtb\encoders\openrtb\RtbBidRequestJsonEncoder::execute($this->RtbBidRequest);
@@ -208,7 +208,7 @@ abstract class RtbBuyV22Bid extends RtbBuyBid {
 		if (isset($AdCampaignBannerObj["currency"]) && $currency == null):
 			$RtbBidResponse->cur				= $currency;
 		else: 
-			$RtbBidResponse->cur				= "USD";
+			$RtbBidResponse->cur				= $this->config['settings']['rtb']['auction_currency'];
 		endif;
 		
 		$this->RtbBidResponse = $RtbBidResponse;

@@ -125,8 +125,8 @@ class DisplayWorkflow
 	
 	                $AdCampaignBanner->BidAmount = sprintf("%1.4f", $adusted_amount);
 	                
-	                // default US dollars
-					$currency = "USD";
+	                // default in config
+					$currency = $this->config['settings']['rtb']['auction_currency'];
 					
 					if (isset($RtbBidRequest->cur[0])):
 						$currency = $RtbBidRequest->cur[0];
