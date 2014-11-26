@@ -19,11 +19,17 @@ class RtbBidResponse {
 	// REQUIRED
 	
 	public $id;
+	
 	public $RtbBidResponseSeatBidList;
+	
 	public $bidid;
+	
 	public $cur;
+	
 	public $customdata;
+	
 	public $nbr;
+	
 	public $ext;
 	
 }

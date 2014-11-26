@@ -31,23 +31,23 @@ class ParsePrivateMarketPlace {
         			continue;
         		endif;
         		
-        		$RtbBidRequestPmpDeal = new \model\openrtb\RtbBidRequestPmpDeal();
+        		$RtbBidRequestDirectDeals = new \model\openrtb\RtbBidRequestDirectDeals();
         	
-        		$RtbBidRequestPmpDeal->id = $deal["id"];
+        		$RtbBidRequestDirectDeals->id = $deal["id"];
         	
         		$Parser->parse_item(
-        				$RtbBidRequestPmpDeal,
+        				$RtbBidRequestDirectDeals,
         				$deal,
         				"bidfloor");
         		
         		// second price ?
         		
         		$Parser->parse_item(
-        				$RtbBidRequestPmpDeal,
+        				$RtbBidRequestDirectDeals,
         				$deal,
         				"at");
         		
-        		$RtbBidRequestPmp->RtbBidRequestPmpDealList[] = $RtbBidRequestPmpDeal;
+        		$RtbBidRequestPmp->RtbBidRequestDirectDealsList[] = $RtbBidRequestDirectDeals;
         		
         	endforeach;
         	

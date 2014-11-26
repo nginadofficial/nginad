@@ -19,7 +19,7 @@ class CheckIsMobile {
 		
 		$is_mobile = 0;
 		
-		if ($RtbBidRequest->RtbBidRequestDevice->type != DEVICE_DESKTOP) {
+		if ($RtbBidRequest->RtbBidRequestDevice->devicetype != DEVICE_DESKTOP) {
 			$is_mobile = 1;
 		}
 		

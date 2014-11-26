@@ -103,21 +103,21 @@ class OpenRTBParser {
         
         $this->RtbBidRequest->RtbBidRequestDevice = $RtbBidRequestDevice;
         
-        $logger->log[] = "Is Mobile: " . $this->RtbBidRequest->RtbBidRequestDevice->type != 2;
+        $logger->log[] = "Is Mobile: " . $this->RtbBidRequest->RtbBidRequestDevice->devicetype != 2;
         
         // Parse Regs
 
         if (isset($this->json_post["regs"]["coppa"])):
 	        $ad_regs = $this->json_post["regs"]["coppa"];
-	        $RtbBidRequestRegs = new \model\openrtb\RtbBidRequestRegs();
+	        $RtbBidRequestRegulations = new \model\openrtb\RtbBidRequestRegulations();
 	        
 	        try {
-	        	\buyrtb\parsers\openrtb\parselets\common\ParseRegs::execute($logger, $this, $this->RtbBidRequest, $RtbBidRequestRegs, $ad_regs);
+	        	\buyrtb\parsers\openrtb\parselets\common\ParseRegs::execute($logger, $this, $this->RtbBidRequest, $RtbBidRequestRegulations, $ad_regs);
 	        } catch (Exception $e) {
 	        	throw new Exception($e->getMessage(), $e->getCode(), $e->getPrevious());
 	        }
 	        
-	        $this->RtbBidRequest->RtbBidRequestRegs = $RtbBidRequestRegs;
+	        $this->RtbBidRequest->RtbBidRequestRegulations = $RtbBidRequestRegulations;
         endif;
         
         // process all ad impressions

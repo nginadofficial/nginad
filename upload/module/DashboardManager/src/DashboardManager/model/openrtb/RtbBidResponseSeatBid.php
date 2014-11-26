@@ -12,7 +12,10 @@ namespace model\openrtb;
 class RtbBidResponseSeatBid {
 	
 	public $RtbBidResponseBidList;
+	
 	public $seat;
+	
 	public $group;
+	
 	public $ext;
 }

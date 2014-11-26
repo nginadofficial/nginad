@@ -9,11 +9,16 @@
 
 namespace model\openrtb;
 
-class RtbBidRequestPmp {
+class RtbBidRequestProducer {
+
+	public $id;
 	
-	public $private_auction;
+	public $name;
 	
-	public $RtbBidRequestDirectDealsList = array();
+	public $cat;
+	
+	public $domain;
 	
 	public $ext;
+
 }

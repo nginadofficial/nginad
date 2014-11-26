@@ -14,7 +14,7 @@ class ParseDevice {
 	
 	public static function execute(&$Logger, \buyrtb\parsers\openrtb\OpenRTBParser &$Parser, \model\openrtb\RtbBidRequest &$RtbBidRequest, \model\openrtb\RtbBidRequestDevice &$RtbBidRequestDevice, &$device) {
 	
-		$RtbBidRequestDevice->type = DEVICE_DESKTOP;
+		$RtbBidRequestDevice->devicetype = DEVICE_DESKTOP;
 		
 		if (!isset($Parser->json_post["device"])):
 			return;
@@ -50,11 +50,11 @@ class ParseDevice {
 			 
 			if (\mobileutil\MobileDeviceType::isPhone($default_device["model"]) === true):
 			 
-				$RtbBidRequestDevice->type = DEVICE_MOBILE;
+				$RtbBidRequestDevice->devicetype = DEVICE_MOBILE;
 				 
 			elseif(\mobileutil\MobileDeviceType::isTablet($default_device["model"]) === true):
 			 
-				$RtbBidRequestDevice->type = DEVICE_TABLET;
+				$RtbBidRequestDevice->devicetype = DEVICE_TABLET;
 				 
 			endif;
 			 
@@ -64,11 +64,11 @@ class ParseDevice {
 			 
 			if ($detect->isTablet()):
 			 
-				$RtbBidRequestDevice->type = DEVICE_TABLET;
+				$RtbBidRequestDevice->devicetype = DEVICE_TABLET;
 			 
 			elseif ($detect->isMobile()):
 			 
-				$RtbBidRequestDevice->type = DEVICE_MOBILE;
+				$RtbBidRequestDevice->devicetype = DEVICE_MOBILE;
 			 
 			endif;
 			

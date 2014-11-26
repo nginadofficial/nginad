@@ -13,12 +13,33 @@ class RtbBidRequestSite {
 	
 	// bid // site
 	public $id;
+	
+	public $name;
+	
 	public $domain;
+	
 	public $cat;
+	
+	public $sectioncat;
+	
+	public $pagecat;
+	
 	public $page = "";
+
+	public $privacypolicy;
 	
+	public $ref;
 	
-	// bid // site // publisher
+	public $search;
+	
 	public $RtbBidRequestPublisher;
+	
+	public $RtbBidRequestContent;
+	
+	public $keywords;
+	
+	public $storeurl;
+	
+	public $ext;
 	
 }

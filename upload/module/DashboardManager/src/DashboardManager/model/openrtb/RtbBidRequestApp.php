@@ -9,10 +9,7 @@
 
 namespace model\openrtb;
 
-class RtbBidRequestPmpDeal {
+class RtbBidRequestApp {
 	
-	public $id;
-	public $bidfloor;
-	public $at;
 	
 }

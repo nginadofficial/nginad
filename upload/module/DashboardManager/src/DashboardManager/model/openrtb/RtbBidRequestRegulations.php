@@ -9,11 +9,10 @@
 
 namespace model\openrtb;
 
-class RtbBidRequestPmp {
+class RtbBidRequestRegulations {
 	
-	public $private_auction;
-	
-	public $RtbBidRequestDirectDealsList = array();
+	// regs // coppa
+	public $coppa;
 	
 	public $ext;
 }

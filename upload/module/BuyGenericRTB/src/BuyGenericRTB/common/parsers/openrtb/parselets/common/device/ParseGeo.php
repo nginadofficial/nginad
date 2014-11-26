@@ -31,8 +31,8 @@ class ParseGeo {
 		if (isset($RtbBidRequestGeo->country)):
 			$Logger->log[] = "Geo Data Country: " . $this->bid_request_geo["country"];
 		endif;
-		if (isset($RtbBidRequestGeo->state)):
-			$Logger->log[] = "Geo Data State: " . $this->bid_request_geo["state"];
+		if (isset($RtbBidRequestGeo->region)):
+			$Logger->log[] = "Geo Data Region: " . $this->bid_request_geo["region"];
 		endif;
 		if (isset($RtbBidRequestGeo->city)):
 			$Logger->log[] = "Geo Data City: " . $this->bid_request_geo["city"];

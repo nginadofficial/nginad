@@ -140,7 +140,7 @@ use rtbsell\RtbSellBid;
 		$this->setObjParam($RtbBidRequestDevice, $banner_request, "language");
 		$this->setObjParam($RtbBidRequestDevice, $banner_request, "devicetype", "type");
 		
-		if (isset($RtbBidRequestDevice->type) && $RtbBidRequestDevice->type != DEVICE_DESKTOP):
+		if (isset($RtbBidRequestDevice->devicetype) && $RtbBidRequestDevice->type != DEVICE_DESKTOP):
 			
 			$this->setObjParam($RtbBidRequestDevice, $banner_request, "mobile_os", "os");
 			$this->setObjParam($RtbBidRequestDevice, $banner_request, "mobile_make", "make");
@@ -164,10 +164,10 @@ use rtbsell\RtbSellBid;
 		$RtbBidRequest->cur							= array($config['settings']['rtb']['auction_currency']);
 
 
-		$RtbBidRequestRegs							= new \model\openrtb\RtbBidRequestRegs();
-		$RtbBidRequestRegs->coppa					= 1;
+		$RtbBidRequestRegulations					= new \model\openrtb\RtbBidRequestRegulations();
+		$RtbBidRequestRegulations->coppa			= 1;
 
-		$RtbBidRequest->RtbBidRequestRegs 			= $RtbBidRequestRegs;
+		$RtbBidRequest->RtbBidRequestRegulations 	= $RtbBidRequestRegulations;
 
 		
 		

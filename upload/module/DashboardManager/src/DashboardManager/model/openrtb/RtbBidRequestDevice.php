@@ -12,15 +12,50 @@ namespace model\openrtb;
 class RtbBidRequestDevice {
 	
 	// bid // device
-	public $ip;
-	public $ua;
-	public $language;
-	public $type;
+	public $dnt;
 	
-	public $os;
-	public $make;
-	public $model;
+	public $ua;
+	
+	public $ip;
 	
 	public $RtbBidRequestGeo;
+	
+	public $didsha1;
+	
+	public $didmd5;
+	
+	public $dpidsha1;
+	
+	public $dpidmd5;
+	
+	public $macsha1;
+	
+	public $macmd5;
+	
+	public $ipv6;
+	
+	public $carrier;
+	
+	public $language;
+	
+	public $make;
+	
+	public $model;
+	
+	public $os;
+	
+	public $osv;
+	
+	public $js;
+	
+	public $connectiontype;
+	
+	public $devicetype;
+	
+	public $flashver;
+	
+	public $ifa;
+	
+	public $ext;
 
 }

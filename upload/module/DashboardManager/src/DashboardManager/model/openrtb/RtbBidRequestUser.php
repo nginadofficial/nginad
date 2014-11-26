@@ -13,6 +13,21 @@ namespace model\openrtb;
 class RtbBidRequestUser {
 	
 	public $id;
+	
 	public $buyeruid;
+	
+	public $yob;
+	
+	public $gender;
+	
+	public $keywords;
+	
+	public $customdata;
+	
+	public $BidRequestGeo;
+	
+	public $RtbBidRequestData;
+	
+	public $ext;
 	
 }

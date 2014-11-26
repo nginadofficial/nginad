@@ -12,8 +12,13 @@ namespace model\openrtb;
 class RtbBidRequestPublisher {
 	
 	public $id;
+	
 	public $name;
+	
 	public $cat;
+	
 	public $domain;
+	
+	public $ext;
 	
 }

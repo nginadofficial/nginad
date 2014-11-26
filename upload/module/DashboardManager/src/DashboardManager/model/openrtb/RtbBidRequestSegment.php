@@ -9,8 +9,14 @@
 
 namespace model\openrtb;
 
-class RtbBidRequestRegs {
+class RtbBidRequestSegment {
+
+	public $id;
 	
-	// regs // coppa
-	public $coppa;
+	public $name;
+	
+	public $value;
+	
+	public $ext;
+	
 }

@@ -45,7 +45,7 @@ class RtbBidRequestJsonEncoder {
 	
 		if ($RtbBidRequest->RtbBidRequestUser != null):
 	
-			$bid_request["regs"] 	= self::getRtbBidRequestRegs($RtbBidRequest->RtbBidRequestRegs);
+			$bid_request["regs"] 	= self::getRtbBidRequestRegulations($RtbBidRequest->RtbBidRequestRegulations);
 	
 		endif;
 	
@@ -85,9 +85,9 @@ class RtbBidRequestJsonEncoder {
 				$impression['pmp'] = array();
 				self::setArrayParam($RtbBidRequestImp->RtbBidRequestPmp, $impression['pmp'], 'private_auction');
 			
-				foreach ($RtbBidRequestImp->RtbBidRequestPmp->RtbBidRequestPmpDealList as $RtbBidRequestPmpDeal):
+				foreach ($RtbBidRequestImp->RtbBidRequestPmp->RtbBidRequestDirectDealsList as $RtbBidRequestDirectDeals):
 			
-					$impression['pmp']['deals'][] = self::getRtbBidRequestPmpDeal($RtbBidRequestPmpDeal);
+					$impression['pmp']['deals'][] = self::getRtbBidRequestDirectDeals($RtbBidRequestDirectDeals);
 			
 				endforeach;
 			
@@ -101,13 +101,13 @@ class RtbBidRequestJsonEncoder {
 		
 	}
 	
-	private static function getRtbBidRequestPmpDeal(&$RtbBidRequestPmpDeal) {
+	private static function getRtbBidRequestDirectDeals(&$RtbBidRequestDirectDeals) {
 	
 		$pmpdeal	 		=  array();
-		$pmpdeal['id'] 		= $RtbBidRequestPmpDeal->id;
+		$pmpdeal['id'] 		= $RtbBidRequestDirectDeals->id;
 		
-		self::setArrayParam($RtbBidRequestPmpDeal, $pmpdeal, 'bidfloor');
-		self::setArrayParam($RtbBidRequestPmpDeal, $pmpdeal, 'at');
+		self::setArrayParam($RtbBidRequestDirectDeals, $pmpdeal, 'bidfloor');
+		self::setArrayParam($RtbBidRequestDirectDeals, $pmpdeal, 'at');
 	
 		return (object)$pmpdeal;
 	
@@ -226,11 +226,11 @@ class RtbBidRequestJsonEncoder {
 	
 	}
 	
-	private static function getRtbBidRequestRegs(&$RtbBidRequestRegs) {
+	private static function getRtbBidRequestRegulations(&$RtbBidRequestRegulations) {
 	
 		$regs 				= array();
 	
-		self::setArrayParam($RtbBidRequestRegs, $regs, 'coppa');
+		self::setArrayParam($RtbBidRequestRegulations, $regs, 'coppa');
 
 		return (object)$regs;
 	

@@ -9,11 +9,20 @@
 
 namespace model\openrtb;
 
-class RtbBidRequestPmp {
+class RtbBidRequestDirectDeals {
 	
-	public $private_auction;
+	public $id;
 	
-	public $RtbBidRequestDirectDealsList = array();
+	public $bidfloor;
+	
+	public $bidfloorcur = "USD";
+	
+	public $wseat;
+	
+	public $wadomain;
+	
+	public $at;
 	
 	public $ext;
+	
 }
