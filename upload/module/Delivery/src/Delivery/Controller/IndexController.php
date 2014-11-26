@@ -219,7 +219,7 @@ class IndexController extends AbstractActionController
 		 		
 	 		endif;
 	 		
-	 		$PingManager->process_rtb_ping_statistics();
+	 		$PingManager->process_rtb_ping_statistics($AuctionPopo);
 	 		
 	 		// now output the logs to the log file
 	

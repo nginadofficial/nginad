@@ -11,7 +11,7 @@ namespace sellrtb\workflows\tasklets\common;
 
 class CheckPartnerScore {
 	
-	public static function execute(&$Logger, &$Workflow, &$RTBPingerList, \sellrtb\workflows\tasklets\popo\AuctionPopo &$AuctionPopo) {
+	public static function execute(&$Logger, &$Workflow, \sellrtb\workflows\tasklets\popo\AuctionPopo &$AuctionPopo) {
 	
 		$result = false;
 	

@@ -34,6 +34,8 @@ class PingManager {
 	
 	private $WebDomain;
 	
+	private $is_second_price_auction;
+	
 	private $publisher_markup_rate = 40;
 	
 	private $skipped_partner_list = array();
@@ -48,6 +50,10 @@ class PingManager {
 		$this->PublisherAdZoneID 		= $PublisherAdZoneID;
 		$this->AdName 					= $AdName;
 		$this->WebDomain 				= $WebDomain;
+		$this->is_second_price_auction	= $this->config['settings']['rtb']['second_price_auction'];
+		
+		// is this a 1rst price or 2nd price auction?
+		$this->ping_request["at"]		= ($this->is_second_price_auction === true) ? 2 : 1;
 		
 		$this->publisher_markup_rate = \util\Markup::getPublisherMarkupRate($this->PublisherWebsiteID, $this->PublisherInfoID, $this->config);
 		
@@ -237,7 +243,9 @@ class PingManager {
 		 */
 		
 		$AuctionPopo = new \sellrtb\workflows\tasklets\popo\AuctionPopo();
-		$AuctionPopo->publisher_markup_rate = $this->publisher_markup_rate;
+		$AuctionPopo->publisher_markup_rate 	= $this->publisher_markup_rate;
+		$AuctionPopo->FloorPrice 				= $this->FloorPrice;
+		$AuctionPopo->is_second_price_auction 	= $this->is_second_price_auction;
 		
 		/*
 		 * Get the single impid. If and when we start sending multiple 
@@ -256,7 +264,7 @@ class PingManager {
 		
 	}
 	
-	public function process_rtb_ping_statistics() {
+	public function process_rtb_ping_statistics(&$AuctionPopo) {
 		
 		/*
 		 * COLLECT STATS FOR THE BID LOGS
@@ -290,7 +298,12 @@ class PingManager {
 				
 					$bids_won									+= $RTBPinger->won_bids;
 					$SellSidePartnerHourlyBids->BidsWonCounter 	= $RTBPinger->won_bids;
-					$SellSidePartnerHourlyBids->SpendTotalGross	= floatval($RTBPinger->winning_bid) / 1000;
+					
+					if ($AuctionPopo->is_second_price_auction === true):
+						$SellSidePartnerHourlyBids->SpendTotalGross	= floatval($AuctionPopo->second_price_winning_bid_price) / 1000;
+					else:
+						$SellSidePartnerHourlyBids->SpendTotalGross	= floatval($RTBPinger->winning_bid) / 1000;
+					endif;
 					
 					$spend_total_gross = $SellSidePartnerHourlyBids->SpendTotalGross;
 					

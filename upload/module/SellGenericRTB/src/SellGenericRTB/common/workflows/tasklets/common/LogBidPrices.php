@@ -66,7 +66,7 @@ class LogBidPrices {
 	
 		$bid_price 					= floatval($RtbBidResponseBid->price);
 	
-		$adjusted_bid_price 		= floatval($RtbBidResponseBid->price);
+		$adjusted_bid_price 		= floatval($RtbBidResponseBid->adusted_bid_amount);
 		
 		$AuctionPopo->bid_price_list[(string)$bid_price] = true;
 		$AuctionPopo->adjusted_bid_price_list[(string)$adjusted_bid_price] = true;

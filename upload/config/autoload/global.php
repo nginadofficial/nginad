@@ -32,7 +32,8 @@ return array(
 				),
 				'rtb' => array(
 						// default US dollars
-						'auction_currency' 		=> "USD"
+						'auction_currency' 		=> "USD",
+						'second_price_auction' 	=> false
 				),
 		),
 		'maintenance' => array(
