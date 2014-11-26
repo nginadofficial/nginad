@@ -51,37 +51,37 @@ class OpenRTBParser {
         // Parse Second Price
 		$this->parse_item(
 				$this->RtbBidRequest,
-				$Parser->json_post,
+				$this->json_post,
 				"at");
 		
 		// Parse Max Timeout on RTB Bid Response
 		$this->parse_item(
 				$this->RtbBidRequest,
-				$Parser->json_post,
+				$this->json_post,
 				"tmax");
 		
 		// Parse Allowed Buyer Seat IDs
 		$this->parse_item_list(
 				$this->RtbBidRequest,
-				$Parser->json_post,
+				$this->json_post,
 				"wseat");
 		
 		// Parse All Available impressions for this publisher boolean
 		$this->parse_item(
 				$this->RtbBidRequest,
-				$Parser->json_post,
+				$this->json_post,
 				"allimps");
         
 		// Parse Blocked Advertiser Categories
 		$this->parse_item_list(
 				$this->RtbBidRequest,
-				$Parser->json_post,
+				$this->json_post,
 				"bcat");
 		
 		// Parse Blocked TLDs for this RTB request, Publisher Black Listed
 		$this->parse_item_list(
 				$this->RtbBidRequest,
-				$Parser->json_post,
+				$this->json_post,
 				"badv");
 		
         // Parse Site
