@@ -12,7 +12,7 @@ namespace sellrtb\workflows\tasklets\common;
 class CheckPartnerScore {
 	
 	public static function execute(&$Logger, &$Workflow, \sellrtb\workflows\tasklets\popo\AuctionPopo &$AuctionPopo) {
-	
+		
 		$result = false;
 	
 		$RTBPingerList = $AuctionPopo->SelectedPingerList;

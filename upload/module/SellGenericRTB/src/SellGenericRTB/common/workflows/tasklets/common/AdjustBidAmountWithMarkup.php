@@ -11,17 +11,17 @@ namespace sellrtb\workflows\tasklets\common;
 
 class AdjustBidAmountWithMarkup {
 	
-	public static function execute(&$Logger, &$Workflow, &$RTBPingerList, \sellrtb\workflows\tasklets\popo\AuctionPopo &$AuctionPopo) {
+	public static function execute(&$Logger, &$Workflow, \sellrtb\workflows\tasklets\popo\AuctionPopo &$AuctionPopo) {
 	
 		$result = false;
 		
-		for ($y = 0; $y < count($RTBPingerList); $y++):
+		for ($y = 0; $y < count($AuctionPopo->SelectedPingerList); $y++):
 		
-			for ($i = 0; $i < count($RTBPingerList[$y]->RtbBidResponse->RtbBidResponseSeatBidList); $i++):
+			for ($i = 0; $i < count($AuctionPopo->SelectedPingerList[$y]->RtbBidResponse->RtbBidResponseSeatBidList); $i++):
 			
-				for ($j = 0; $j < count($RTBPingerList[$y]->RtbBidResponse->RtbBidResponseSeatBidList[$i]->RtbBidResponseBidList); $j++):
+				for ($j = 0; $j < count($AuctionPopo->SelectedPingerList[$y]->RtbBidResponse->RtbBidResponseSeatBidList[$i]->RtbBidResponseBidList); $j++):
 			
-					self::setAdjustedMarkup($Logger, $AuctionPopo, $RTBPingerList[$y]->RtbBidResponse->RtbBidResponseSeatBidList[$i]->RtbBidResponseBidList[$j]);
+					self::setAdjustedMarkup($Logger, $AuctionPopo, $AuctionPopo->SelectedPingerList[$y]->RtbBidResponse->RtbBidResponseSeatBidList[$i]->RtbBidResponseBidList[$j]);
 					$result = true;
 					
 				endfor;

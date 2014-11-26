@@ -15,11 +15,13 @@ class LogBidPrices {
 	 * Log all ordered bid prices for second price auctions
 	 */
 	
-	public static function execute(&$Logger, &$Workflow, &$RTBPingerList, \sellrtb\workflows\tasklets\popo\AuctionPopo &$AuctionPopo) {
+	public static function execute(&$Logger, &$Workflow, \sellrtb\workflows\tasklets\popo\AuctionPopo &$AuctionPopo) {
 	
 		// init
 		$AuctionPopo->bid_price_list 			= array();
 		$AuctionPopo->adjusted_bid_price_list 	= array();
+		
+		$RTBPingerList = $AuctionPopo->SelectedPingerList;
 		
 		$result = false;
 	

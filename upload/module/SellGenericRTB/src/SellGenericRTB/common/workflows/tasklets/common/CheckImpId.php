@@ -15,36 +15,36 @@ class CheckImpId {
 	 * Make sure all responses match the impid that we sent in the request
 	 */
 	
-	public static function execute(&$Logger, &$Workflow, &$RTBPingerList, \sellrtb\workflows\tasklets\popo\AuctionPopo &$AuctionPopo) {
+	public static function execute(&$Logger, &$Workflow, \sellrtb\workflows\tasklets\popo\AuctionPopo &$AuctionPopo) {
 	
 		$result = false;
 		
 		$AuctionPopo->SelectedPingerList = array();
 		
-		for ($y = 0; $y < count($RTBPingerList); $y++):
+		for ($y = 0; $y < count($AuctionPopo->PingerList); $y++):
 		
-			for ($i = 0; $i < count($RTBPingerList[$y]->RtbBidResponse->RtbBidResponseSeatBidList); $i++):
+			for ($i = 0; $i < count($AuctionPopo->PingerList[$y]->RtbBidResponse->RtbBidResponseSeatBidList); $i++):
 			
-				for ($j = 0; $j < count($RTBPingerList[$y]->RtbBidResponse->RtbBidResponseSeatBidList[$i]->RtbBidResponseBidList); $j++):
+				for ($j = 0; $j < count($AuctionPopo->PingerList[$y]->RtbBidResponse->RtbBidResponseSeatBidList[$i]->RtbBidResponseBidList); $j++):
 			
-					$impid_match = self::isSameImpId($Logger, $AuctionPopo, $RTBPingerList[$y]->RtbBidResponse->RtbBidResponseSeatBidList[$i]->RtbBidResponseBidList[$j]);
+					$impid_match = self::isSameImpId($Logger, $AuctionPopo, $AuctionPopo->PingerList[$y]->RtbBidResponse->RtbBidResponseSeatBidList[$i]->RtbBidResponseBidList[$j]);
 						
 					if ($impid_match == false):
 					
-						unset($RTBPingerList[$y]->RtbBidResponse->RtbBidResponseSeatBidList[$i]->RtbBidResponseBidList[$j]);
+						unset($AuctionPopo->PingerList[$y]->RtbBidResponse->RtbBidResponseSeatBidList[$i]->RtbBidResponseBidList[$j]);
 						
 					endif;
 
 				endfor;
 		
-				if (count($RTBPingerList[$y]->RtbBidResponse->RtbBidResponseSeatBidList) 
-					&& count($RTBPingerList[$y]->RtbBidResponse->RtbBidResponseSeatBidList[0]->RtbBidResponseBidList)):
+				if (count($AuctionPopo->PingerList[$y]->RtbBidResponse->RtbBidResponseSeatBidList) 
+					&& count($AuctionPopo->PingerList[$y]->RtbBidResponse->RtbBidResponseSeatBidList[0]->RtbBidResponseBidList)):
 				
 					/*
 					 * Those RTBPingers that still have at least 1 bid get added
 					* to the selected pingers list in the POPO
 					*/
-					$AuctionPopo->SelectedPingerList[] = $RTBPingerList[$y];
+					$AuctionPopo->SelectedPingerList[] = $AuctionPopo->PingerList[$y];
 						
 					$result = true;
 					

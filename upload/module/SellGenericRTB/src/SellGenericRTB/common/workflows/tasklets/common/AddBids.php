@@ -18,6 +18,8 @@ class AddBids {
 		
 		$uid = 0;
 		
+		$bid_uid = 0;
+		
 		for ($y = 0; $y < count($RTBPingerList); $y++):
 			
 			$RTBPingerList[$y]->uid = ++$uid;
@@ -30,11 +32,16 @@ class AddBids {
 				
 					$OpenRTBParser = new \sellrtb\parsers\openrtb\OpenRTBParser();
 					$RTBPingerList[$y]->RtbBidResponse = $OpenRTBParser->parse_request($json_response_data);
-						
+
+					self::addBidUids($RTBPingerList, $bid_uid);
+										
 					$AuctionPopo->PingerList[] = $RTBPingerList[$y];
 					
 				} catch (Exception $e) {
 				
+					$RTBPingerList[$y]->total_bids				= 0;
+					$RTBPingerList[$y]->won_bids				= 0;
+					$RTBPingerList[$y]->lost_bids				= 0;
 					$RTBPingerList[$y]->ping_success 			= false;
 					$RTBPingerList[$y]->ping_error_message 		= "OpenRTB Ping Response Base Validation Error: " . $e->getMessage() 
 														. " Partner Name: " . $RTBPingerList[$y]->partner_name . " Partner ID: " 
@@ -52,29 +59,38 @@ class AddBids {
 			endif;
 			
 		endfor;
-		
-		// add uids for bids
-		
-		$uid = 0;
-		
-		for ($y = 0; $y < count($AuctionPopo->PingerList); $y++):
-		
-			for ($i = 0; $i < count($AuctionPopo->PingerList[$y]->RtbBidResponse->RtbBidResponseSeatBidList); $i++):
-				
-				$AuctionPopo->PingerList[$y]->total_bids = count($AuctionPopo->PingerList[$y]->RtbBidResponse->RtbBidResponseSeatBidList[$i]->RtbBidResponseBidList);
-			
-				for ($j = 0; $j < count($AuctionPopo->PingerList[$y]->RtbBidResponse->RtbBidResponseSeatBidList[$i]->RtbBidResponseBidList); $j++):
-					
-					$AuctionPopo->PingerList[$y]->RtbBidResponse->RtbBidResponseSeatBidList[$i]->RtbBidResponseBidList[$j]->uid = ++$uid;
-					
-				endfor;
-			
-			endfor;
-		
-		endfor;
 
 		return $result;
 	
+	}
+	
+	private static function addBidUids(&$RTBPingerList, $uid) {
+		
+		for ($y = 0; $y < count($RTBPingerList); $y++):
+			
+			$RTBPingerList[$y]->total_bids = 0;
+		
+			if (isset($RTBPingerList[$y]->RtbBidResponse->RtbBidResponseSeatBidList)):
+		
+				for ($i = 0; $i < count($RTBPingerList[$y]->RtbBidResponse->RtbBidResponseSeatBidList); $i++):
+				
+					$RTBPingerList[$y]->total_bids = count($RTBPingerList[$y]->RtbBidResponse->RtbBidResponseSeatBidList[$i]->RtbBidResponseBidList);
+						
+					if (isset($RTBPingerList[$y]->RtbBidResponse->RtbBidResponseSeatBidList[$i]->RtbBidResponseBidList)):
+				
+						for ($j = 0; $j < count($RTBPingerList[$y]->RtbBidResponse->RtbBidResponseSeatBidList[$i]->RtbBidResponseBidList); $j++):
+							
+							$RTBPingerList[$y]->RtbBidResponse->RtbBidResponseSeatBidList[$i]->RtbBidResponseBidList[$j]->uid = ++$uid;
+							
+						endfor;
+					
+					endif;
+					
+				endfor;
+				
+			endif;
+		
+		endfor;
 	}
 	
 }

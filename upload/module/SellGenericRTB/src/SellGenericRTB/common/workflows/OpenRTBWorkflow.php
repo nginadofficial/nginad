@@ -27,27 +27,27 @@ class OpenRTBWorkflow {
     	
     	// Make sure that each bid response matches the impression id of the RTB request
     	
-    	if (\sellrtb\workflows\tasklets\common\CheckImpId::execute($logger, $this, $AuctionPopo->PingerList, $AuctionPopo) === false):
+    	if (\sellrtb\workflows\tasklets\common\CheckImpId::execute($logger, $this, $AuctionPopo) === false):
     		return false;
     	endif;
     	
     	// Adjust the bid amounts with the correct exchange markup
     	 
-    	if (\sellrtb\workflows\tasklets\common\AdjustBidAmountWithMarkup::execute($logger, $this, $AuctionPopo->PingerList, $AuctionPopo) === false):
-    		return false;
-    	endif;
-    	
-    	// Log and sort bid prices and adjusted bid prices in the case of a second price auction type
-    	
-    	if (\sellrtb\workflows\tasklets\common\LogBidPrices::execute($logger, $this, $AuctionPopo->PingerList, $AuctionPopo) === false):
+    	if (\sellrtb\workflows\tasklets\common\AdjustBidAmountWithMarkup::execute($logger, $this, $AuctionPopo) === false):
     		return false;
     	endif;
     	
     	// Exclude bids that don't meet the floor
     	
-    	if (\sellrtb\workflows\tasklets\common\CheckBidFloor::execute($logger, $this, $AuctionPopo->PingerList, $AuctionPopo) === false):
+    	if (\sellrtb\workflows\tasklets\common\CheckBidFloor::execute($logger, $this, $AuctionPopo) === false):
     		return false;
     	endif;
+    	
+    	// Log and sort bid prices and adjusted bid prices in the case of a second price auction type
+    	 
+    	if (\sellrtb\workflows\tasklets\common\LogBidPrices::execute($logger, $this, $AuctionPopo) === false):
+    		return false;
+    	endif;    	
     	
     	// Exclude bids that aren't the highest or tied for first place
     	 
@@ -62,7 +62,7 @@ class OpenRTBWorkflow {
     	endif;
     	
     	// Pick a winner from the remaining list of bids
-    	 
+    	
     	if (\sellrtb\workflows\tasklets\common\PickAWinner::execute($logger, $this, $RTBPingerList, $AuctionPopo) === false):
     		return false;
     	endif;
