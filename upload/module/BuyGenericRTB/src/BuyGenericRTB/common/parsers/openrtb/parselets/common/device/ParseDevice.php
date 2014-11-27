@@ -63,7 +63,7 @@ class ParseDevice {
 		
 			$geo = $default_device["geo"];
 			$RtbBidRequestGeo = new \model\openrtb\RtbBidRequestGeo();
-			\buyrtb\parsers\openrtb\parselets\common\device\ParseGeo::execute($Logger, $Parser, $RtbBidRequest, $RtbBidRequestGeo, $geo);
+			\buyrtb\parsers\openrtb\parselets\common\ParseGeo::execute($Logger, $Parser, $RtbBidRequest, $RtbBidRequestGeo, $geo);
 			$RtbBidRequestDevice->RtbBidRequestGeo = $RtbBidRequestGeo;
 			
 		endif;

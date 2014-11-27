@@ -13,10 +13,12 @@ class ParseRegs {
 	
 	public static function execute(&$Logger, \buyrtb\parsers\openrtb\OpenRTBParser &$Parser, \model\openrtb\RtbBidRequest &$RtbBidRequest, \model\openrtb\RtbBidRequestRegulations &$RtbBidRequestRegulations, &$ad_regs) {
 	
-		/*
-		 * Opt Out Coppa?
-		 */
-		$RtbBidRequestRegulations->coppa 		= $ad_regs;
+		// Opt Out Coppa?
+		
+		$Parser->parse_item(
+				$RtbBidRequestRegulations,
+				$ad_regs,
+				"coppa");
 
 	}
 }

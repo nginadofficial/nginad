@@ -148,8 +148,8 @@ class OpenRTBParser {
         
         // Parse Regs
 
-        if (isset($this->json_post["regs"]["coppa"])):
-	        $ad_regs = $this->json_post["regs"]["coppa"];
+        if (isset($this->json_post["regs"])):
+	        $ad_regs = $this->json_post["regs"];
 	        $RtbBidRequestRegulations = new \model\openrtb\RtbBidRequestRegulations();
 	        
 	        try {
@@ -241,12 +241,20 @@ class OpenRTBParser {
 					"secure");
 
 	        // Parse Private Markplace (PMP)
-	        try {
-	        	\buyrtb\parsers\openrtb\parselets\common\imp\ParsePrivateMarketPlace::execute($logger, $this, $RtbBidRequestImp, $ad_impression);
-	        } catch (Exception $e) {
-	        	throw new Exception($e->getMessage(), $e->getCode(), $e->getPrevious());
-	        }
 	        
+			if (isset($ad_impression["pmp"])):
+				$pmp = $ad_impression["pmp"];
+				$RtbBidRequestPmp = new \model\openrtb\RtbBidRequestPmp();
+				 
+				try {
+					\buyrtb\parsers\openrtb\parselets\common\imp\ParsePrivateMarketPlace::execute($logger, $this, $this->RtbBidRequest, $RtbBidRequestPmp, $pmp);
+					$RtbBidRequestImp->RtbBidRequestPmp = $RtbBidRequestPmp;
+				} catch (Exception $e) {
+					throw new Exception($e->getMessage(), $e->getCode(), $e->getPrevious());
+				}
+			
+			endif;
+			
 	        if (isset($ad_impression["banner"])):
 	        	// this is a banner
 	        	$ad_impression_banner = $ad_impression["banner"];

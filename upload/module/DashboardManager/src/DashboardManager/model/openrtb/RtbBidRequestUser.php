@@ -24,9 +24,9 @@ class RtbBidRequestUser {
 	
 	public $customdata;
 	
-	public $BidRequestGeo;
+	public $RtbBidRequestGeo;
 	
-	public $RtbBidRequestData;
+	public $RtbBidRequestDataList = array();
 	
 	public $ext;
 	

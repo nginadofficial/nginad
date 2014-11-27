@@ -8,51 +8,38 @@
  */
 
 namespace buyrtb\parsers\openrtb\parselets\common\imp;
+use \Exception;
 
 class ParsePrivateMarketPlace {
 	
-	public static function execute(&$Logger, \buyrtb\parsers\openrtb\OpenRTBParser &$Parser, \model\openrtb\RtbBidRequestImp &$RtbBidRequestImp, &$ad_impression) {
+	public static function execute(&$Logger, \buyrtb\parsers\openrtb\OpenRTBParser &$Parser, \model\openrtb\RtbBidRequest &$RtbBidRequest, \model\openrtb\RtbBidRequestPmp &$RtbBidRequestPmp, &$pmp) {
 		
-		$RtbBidRequestPmp = new \model\openrtb\RtbBidRequestPmp();
+		// Private Auction ?
 		
-		// default
-		$RtbBidRequestPmp->private_auction = 0;
+		$Parser->parse_item(
+				$RtbBidRequestPmp,
+				$pmp,
+				"private_auction");
 		
-		/*
-		 * Get impression id
-		 */
-        if (isset($ad_impression["pmp"]) && isset($ad_impression["pmp"]["deals"])):
-        
-        	$RtbBidRequestPmp->private_auction = 1;
-        
-        	foreach ($ad_impression["pmp"]["deals"] as $deal):
-        	
-        		if (!isset($deal["id"])):
-        			continue;
-        		endif;
-        		
-        		$RtbBidRequestDirectDeals = new \model\openrtb\RtbBidRequestDirectDeals();
-        	
-        		$RtbBidRequestDirectDeals->id = $deal["id"];
-        	
-        		$Parser->parse_item(
-        				$RtbBidRequestDirectDeals,
-        				$deal,
-        				"bidfloor");
-        		
-        		// second price ?
-        		
-        		$Parser->parse_item(
-        				$RtbBidRequestDirectDeals,
-        				$deal,
-        				"at");
-        		
-        		$RtbBidRequestPmp->RtbBidRequestDirectDealsList[] = $RtbBidRequestDirectDeals;
-        		
-        	endforeach;
-        	
-        endif;
-        
-        $RtbBidRequestImp->RtbBidRequestPmp = $RtbBidRequestPmp;
+		// PMP deals
+		
+		if (isset($pmp["deals"]) && is_array($pmp["deals"])):
+			
+			$pmp_deals_list = $pmp["deals"];
+				
+			foreach ($pmp_deals_list as $pmp_deal):
+				
+				try {
+					$RtbBidRequestDirectDeals = new \model\openrtb\RtbBidRequestDirectDeals();
+					\buyrtb\parsers\openrtb\parselets\common\imp\ParseDirectDeals::execute($Logger, $Parser, $RtbBidRequest, $RtbBidRequestDirectDeals, $pmp_deal);
+					$RtbBidRequestUser->RtbBidRequestDirectDealsList[] = $RtbBidRequestDirectDeals;
+				} catch (Exception $e) {
+					throw new Exception($e->getMessage(), $e->getCode(), $e->getPrevious());
+				}
+				
+			endforeach;
+			
+		endif;
+       
 	}
 }

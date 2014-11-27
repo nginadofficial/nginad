@@ -7,7 +7,7 @@
  * @license GPLv3
  */
 
-namespace buyrtb\parsers\openrtb\parselets\common\device;
+namespace buyrtb\parsers\openrtb\parselets\common;
 
 class ParseGeo {
 	
