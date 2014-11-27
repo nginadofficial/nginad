@@ -39,7 +39,7 @@ class RtbBidRequestContent {
 	
 	public $sourcerelationship;
 	
-	public $producer;
+	public $RtbBidRequestProducer;
 	
 	public $len;
 	

@@ -14,28 +14,85 @@ class ParseWebsite {
 	
 	public static function execute(&$Logger, \buyrtb\parsers\openrtb\OpenRTBParser &$Parser, \model\openrtb\RtbBidRequest &$RtbBidRequest, \model\openrtb\RtbBidRequestSite &$RtbBidRequestSite, &$ad_campaign_site) {
 	
-
-			$RtbBidRequestPublisher = new \model\openrtb\RtbBidRequestPublisher();
+			// ID
 			
 			$Parser->parse_item(
 					$RtbBidRequestSite,
 					$ad_campaign_site,
 					"id");
 
+			// Site Name
+			
 			$Parser->parse_item(
 					$RtbBidRequestSite,
 					$ad_campaign_site,
-					"domain");
+					"name");
+			
+			// Site Domain
+			
+			$Parser->parse_item(
+					$RtbBidRequestSite,
+					$ad_campaign_site,
+					"domain");			
+			
+			// Site Categories
+			
+			$Parser->parse_item_list(
+					$RtbBidRequestSite,
+					$ad_campaign_site,
+					"cat");
+			
+			self::fix_iab_categories($RtbBidRequestSite, "cat");
+			
+			// Site Subsection Categories
+				
+			$Parser->parse_item_list(
+					$RtbBidRequestSite,
+					$ad_campaign_site,
+					"sectioncat");
+			
+			self::fix_iab_categories($RtbBidRequestSite, "sectioncat");
+			
+			// Site Page Categories for the page the ad zone for this impression is fired off from
+			
+			$Parser->parse_item_list(
+					$RtbBidRequestSite,
+					$ad_campaign_site,
+					"pagecat");
+			
+			self::fix_iab_categories($RtbBidRequestSite, "pagecat");
+			
+			// URL of the Page the ad zone for this impression is fired off from
         
 			$Parser->parse_item(
 					$RtbBidRequestSite,
 					$ad_campaign_site,
 					"page");
 			
-	        if (isset($ad_campaign_site["cat"])):
-	       		$RtbBidRequestSite->cat = self::get_category($ad_campaign_site["cat"]);
-	        endif;
-	        
+			// Flag for Privacy Policy
+			
+			$Parser->parse_item(
+					$RtbBidRequestSite,
+					$ad_campaign_site,
+					"privacypolicy");
+			
+			// Referrer URL which caused navigation to the page the impression is displayed on
+				
+			$Parser->parse_item(
+					$RtbBidRequestSite,
+					$ad_campaign_site,
+					"ref");
+			
+			// SEO URL which caused the user to land on the page the impression is displayed on
+			
+			$Parser->parse_item(
+					$RtbBidRequestSite,
+					$ad_campaign_site,
+					"search");
+
+	        /*
+	         * If declared this would also be in the impression object
+	         */
 	        if (strpos(strtolower($RtbBidRequestSite->domain), "https://") !== false
 	        	|| strpos(strtolower($RtbBidRequestSite->page), "https://") !== false):
 	        
@@ -43,35 +100,305 @@ class ParseWebsite {
 	         
 	        endif;
 
+	        /*
+	         * Publisher Object
+	         */
+	        
 	        if (isset($ad_campaign_site["publisher"])):
 	         
+	       	 	$RtbBidRequestPublisher = new \model\openrtb\RtbBidRequestPublisher();
+	        
 	        	$default_site_publisher = $ad_campaign_site["publisher"];
 	        
+	        	// Publisher ID
+	        	
 	       		$Parser->parse_item(
 		        		$RtbBidRequestPublisher,
 		        		$default_site_publisher,
 		        		"id");
 	        
+	       		// Publisher Name
+	       		
 	       		$Parser->parse_item(
 	       				$RtbBidRequestPublisher,
 	       				$default_site_publisher,
 	       				"name");
 	        
-		        if (isset($default_site_publisher["cat"])):
+	       		// Publisher Categories
+	       			
+	       		$Parser->parse_item_list(
+	       				$RtbBidRequestPublisher,
+	       				$default_site_publisher,
+	       				"cat");
+	       		
+	       		self::fix_iab_categories($RtbBidRequestPublisher, "cat");
 		        
-		        	$RtbBidRequestPublisher->cat = self::get_category($default_site_publisher["cat"]);
-		        		
-		        endif;
-		        
+	       		// Publisher Domain
+	       		
 		        $Parser->parse_item(
 		        		$RtbBidRequestPublisher,
 		        		$default_site_publisher,
 		        		"domain");
 		        
+		        $RtbBidRequestSite->RtbBidRequestPublisher = $RtbBidRequestPublisher;
+		        
 	        endif;
 	        
-	        $RtbBidRequestSite->RtbBidRequestPublisher = $RtbBidRequestPublisher;
+	        /*
+	         * Site Content Object
+	        */
+	        
+	        if (isset($ad_campaign_site["content"])):
+		        
+		        $RtbBidRequestContent = new \model\openrtb\RtbBidRequestContent();
+		         
+		        $default_site_content = $ad_campaign_site["content"];
+		         
+	        	// Site Content ID
+	        	
+	       		$Parser->parse_item(
+		        		$RtbBidRequestContent,
+		        		$default_site_content,
+		        		"id");
+	       		
+	       		// Episode Number
+	       		
+	       		$Parser->parse_item(
+	       				$RtbBidRequestContent,
+	       				$default_site_content,
+	       				"episode");
+	       		
+	       		// Title
+	       		
+	       		$Parser->parse_item(
+	       				$RtbBidRequestContent,
+	       				$default_site_content,
+	       				"title");
+	       		
+	       		// Content Series
+	       		
+	       		$Parser->parse_item(
+	       				$RtbBidRequestContent,
+	       				$default_site_content,
+	       				"series");
+	       		
+	       		// Content Season
+	       		
+	       		$Parser->parse_item(
+	       				$RtbBidRequestContent,
+	       				$default_site_content,
+	       				"season");
+	       		
+	       		// Content Original URL
+	       		
+	       		$Parser->parse_item(
+	       				$RtbBidRequestContent,
+	       				$default_site_content,
+	       				"url");
+
+	       		// Content Categories
+	       		 
+	       		$Parser->parse_item_list(
+	       				$RtbBidRequestContent,
+	       				$default_site_content,
+	       				"cat");
+	       		
+	       		self::fix_iab_categories($RtbBidRequestContent, "cat");
+	       		
+	       		// Content Video Quality
+	       		
+	       		$Parser->parse_item(
+	       				$RtbBidRequestContent,
+	       				$default_site_content,
+	       				"videoquality");
+	       		
+	       		// Content Video Quality
+	       		
+	       		$Parser->parse_item(
+	       				$RtbBidRequestContent,
+	       				$default_site_content,
+	       				"videoquality");
+	       		
+	       		// Content Keywords Meta
+	       		/*
+	       		 * Apparently Neal and Jim not sure on this one,
+	       		* saying it could be a string or an array of strings
+	       		*/
+	       		
+	       		if (isset($default_site_content["keywords"])):
+		       		 
+		       		if (is_array($default_site_content["keywords"])):
+			       		 
+			       		$Parser->parse_item_list(
+		       					$RtbBidRequestContent,
+	       						$default_site_content,
+			       				"keywords");
+		       		else:
+		       		
+			       		$Parser->parse_item(
+		       					$RtbBidRequestContent,
+	       						$default_site_content,
+			       				"keywords");
+		       		
+		       		endif;
+		       		 
+	       		endif;
+	       		
+	       		// Content Rating
+	       		
+	       		$Parser->parse_item(
+	       				$RtbBidRequestContent,
+	       				$default_site_content,
+	       				"contentrating");
+	       		
+	       		// User Rating
+	       		
+	       		$Parser->parse_item(
+	       				$RtbBidRequestContent,
+	       				$default_site_content,
+	       				"userrating");
+	       		
+	       		// Context of Content
+	       		
+	       		$Parser->parse_item(
+	       				$RtbBidRequestContent,
+	       				$default_site_content,
+	       				"context");
+	       		
+	       		// Flag Indicating if Content is Live
+	       		
+	       		$Parser->parse_item(
+	       				$RtbBidRequestContent,
+	       				$default_site_content,
+	       				"livestream");
+	       		
+	       		// Flag Indicating if Content Source is Direct or Indirect
+	       		
+	       		$Parser->parse_item(
+	       				$RtbBidRequestContent,
+	       				$default_site_content,
+	       				"sourcerelationship");
+	       		
+		        /*
+		         * Site Content Video Producer Object
+		        */
+		        
+		        if (isset($default_site_content["producer"])):
+			        
+			        $RtbBidRequestProducer = new \model\openrtb\RtbBidRequestProducer();
+			         
+			        $default_site_content_producer = $default_site_content["producer"];
+			         
+		        	// Video Producer ID
+		        	
+		       		$Parser->parse_item(
+			        		$RtbBidRequestProducer,
+			        		$default_site_content_producer,
+			        		"id");
+		       		
+		       		// Video Producer Name
+		       		 
+		       		$Parser->parse_item(
+		       				$RtbBidRequestProducer,
+		       				$default_site_content_producer,
+		       				"name");
+		       		
+		       		// Video Producer Categories
+		       		 
+		       		$Parser->parse_item_list(
+		       				$RtbBidRequestProducer,
+		       				$default_site_content_producer,
+		       				"cat");
+		       		
+		       		self::fix_iab_categories($RtbBidRequestProducer, "cat");
+		       		
+		       		// Video Producer Domain
+		       		
+		       		$Parser->parse_item(
+		       				$RtbBidRequestProducer,
+		       				$default_site_content_producer,
+		       				"domain");
+		       		
+		       		$RtbBidRequestContent->RtbBidRequestProducer = $RtbBidRequestProducer;
+		       		
+	       		endif;
+		       		
+	       		// Length of Content
+	       		
+	       		$Parser->parse_item(
+	       				$RtbBidRequestContent,
+	       				$default_site_content,
+	       				"len");
+	       		
+	       		// QAG Media Rating of Content
+	       		
+	       		$Parser->parse_item(
+	       				$RtbBidRequestContent,
+	       				$default_site_content,
+	       				"qagmediarating");
+	       		
+	       		// QAG Video Addendum Embeddable Flag
+	       		
+	       		$Parser->parse_item(
+	       				$RtbBidRequestContent,
+	       				$default_site_content,
+	       				"embeddable");
+	       		
+	       		// Content Language
+	       		
+	       		$Parser->parse_item(
+	       				$RtbBidRequestContent,
+	       				$default_site_content,
+	       				"language");
+		       		
+	        	$RtbBidRequestSite->RtbBidRequestContent = $RtbBidRequestContent;
+	        
+	        endif;
+	        
+	        // Website Keywords Meta
+	        /*
+	         * Apparently Neal and Jim not sure on this one, 
+	         * saying it could be a string or an array of strings
+	         */ 
+	        	
+	        if (isset($ad_campaign_site["keywords"])):
+	        
+	        	if (is_array($ad_campaign_site["keywords"])):
+	        
+			        $Parser->parse_item_list(
+			        		$RtbBidRequestSite,
+			        		$ad_campaign_site,
+			        		"keywords");
+	        	else:
+	        	
+		        	$Parser->parse_item(
+		        			$RtbBidRequestSite,
+		        			$ad_campaign_site,
+		        			"keywords");
+	        	
+	        	endif;
+	        
+	        endif;
+	        
+
+	}
 	
+	private static function fix_iab_categories(&$obj, $name) {
+		if (isset($obj->$name) && is_array($obj->$name)):
+			self::fix_iab_categories($obj->$name);
+		else:
+			unset($obj->$name);
+		endif;
+	}
+	
+	private static function fix_iab_category_list($iab_category_list) {
+		
+		for ($i = 0; $i < count($iab_category_list); $i++):
+			
+			$iab_category_list[$i] = self::get_category($iab_category_list[$i]);
+			
+		endfor;
+		
 	}
 	
 	/*
