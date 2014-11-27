@@ -24,7 +24,7 @@ class ParseDevice {
 		
 		// do not track bit
 		
-		$Parser->parse_item(
+		\util\ParseHelper::parse_item(
 				$RtbBidRequestDevice,
 				$default_device,
 				"dnt");
@@ -33,7 +33,7 @@ class ParseDevice {
 		
 		if (isset($default_device["ua"])):
 		
-			$Parser->parse_item(
+			\util\ParseHelper::parse_item(
 					$RtbBidRequestDevice,
 					$default_device,
 					"ua");
@@ -51,7 +51,7 @@ class ParseDevice {
 		 * 
 		 * The OpenRTB spec states it's optional
 		 */ 
-		$Parser->parse_with_exception(
+		\util\ParseHelper::parse_with_exception(
 				$RtbBidRequestDevice,
 				$default_device,
 				$Parser->expeption_missing_min_bid_request_params . ": device_ip",
@@ -70,105 +70,105 @@ class ParseDevice {
 		
 		// device id SHA1
 		
-		$Parser->parse_item(
+		\util\ParseHelper::parse_item(
 				$RtbBidRequestDevice,
 				$default_device,
 				"didsha1");
 		
 		// device id MD5
 		
-		$Parser->parse_item(
+		\util\ParseHelper::parse_item(
 				$RtbBidRequestDevice,
 				$default_device,
 				"didmd5");
 		
 		// platform device id SHA1
 		
-		$Parser->parse_item(
+		\util\ParseHelper::parse_item(
 				$RtbBidRequestDevice,
 				$default_device,
 				"dpidsha1");
 		
 		// platform device id MD5
 		
-		$Parser->parse_item(
+		\util\ParseHelper::parse_item(
 				$RtbBidRequestDevice,
 				$default_device,
 				"dpidmd5");
 		
 		// mac address SHA1
 		
-		$Parser->parse_item(
+		\util\ParseHelper::parse_item(
 				$RtbBidRequestDevice,
 				$default_device,
 				"macsha1");
 		
 		// mac address MD5
 		
-		$Parser->parse_item(
+		\util\ParseHelper::parse_item(
 				$RtbBidRequestDevice,
 				$default_device,
 				"macmd5");
 		
 		// IPv6 address
 		
-		$Parser->parse_item(
+		\util\ParseHelper::parse_item(
 				$RtbBidRequestDevice,
 				$default_device,
 				"ipv6");
 		
 		// mobile ISP carrier
 		
-		$Parser->parse_item(
+		\util\ParseHelper::parse_item(
 				$RtbBidRequestDevice,
 				$default_device,
 				"carrier");
 
 		// language code ( alpha-2/ISO 639-1 )
 		
-		$Parser->parse_item(
+		\util\ParseHelper::parse_item(
 				$RtbBidRequestDevice,
 				$default_device,
 				"language");
 		
 		// Device OEM make
 		
-		$Parser->parse_item(
+		\util\ParseHelper::parse_item(
 				$RtbBidRequestDevice,
 				$default_device,
 				"make");
 		
 		// Device OEM model
 		
-		$Parser->parse_item(
+		\util\ParseHelper::parse_item(
 				$RtbBidRequestDevice,
 				$default_device,
 				"model");
 		
 		// OS name
 		
-		$Parser->parse_item(
+		\util\ParseHelper::parse_item(
 				$RtbBidRequestDevice,
 				$default_device,
 				"os");
 
 		// OS version
 		
-		$Parser->parse_item(
+		\util\ParseHelper::parse_item(
 				$RtbBidRequestDevice,
 				$default_device,
 				"osv");
 		
 		// Bit Flag for Javascript Enabled
 		
-		$Parser->parse_item(
+		\util\ParseHelper::parse_item(
 				$RtbBidRequestDevice,
 				$default_device,
 				"js");
 		
 		// Connection type id
 		
-		$Parser->parse_item(
+		\util\ParseHelper::parse_item(
 				$RtbBidRequestDevice,
 				$default_device,
 				"connectiontype");
@@ -205,14 +205,14 @@ class ParseDevice {
 		
 		// adobe flash version
 		
-		$Parser->parse_item(
+		\util\ParseHelper::parse_item(
 				$RtbBidRequestDevice,
 				$default_device,
 				"flashver");
 		
 		// native ads unique id
 		
-		$Parser->parse_item(
+		\util\ParseHelper::parse_item(
 				$RtbBidRequestDevice,
 				$default_device,
 				"ifa");

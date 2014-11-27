@@ -42,28 +42,28 @@ class Init {
 		
 		$Logger->log[] = "RESPONSE: " . print_r($Parser->json_response, true);
 
-		$Parser->parse_with_exception(
+		\util\ParseHelper::parse_with_exception(
 				$RtbBidResponse,
 				$Parser->json_response,
 				$Parser->expeption_missing_min_bid_request_params . ": id",
 				"id");
 		
-		$Parser->parse_item(
+		\util\ParseHelper::parse_item(
 				$RtbBidResponse,
 				$Parser->json_response,
 				"bidid");		
 
-		$Parser->parse_item(
+		\util\ParseHelper::parse_item(
 				$RtbBidResponse,
 				$Parser->json_response,
 				"cur");
 
-		$Parser->parse_item(
+		\util\ParseHelper::parse_item(
 				$RtbBidResponse,
 				$Parser->json_response,
 				"customdata");
 
-		$Parser->parse_item(
+		\util\ParseHelper::parse_item(
 				$RtbBidResponse,
 				$Parser->json_response,
 				"nbr");

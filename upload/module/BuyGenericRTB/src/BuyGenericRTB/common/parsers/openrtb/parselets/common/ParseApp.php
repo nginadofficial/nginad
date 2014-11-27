@@ -13,7 +13,7 @@ class ParseApp {
 	
 	public static function execute(&$Logger, \buyrtb\parsers\openrtb\OpenRTBParser &$Parser, \model\openrtb\RtbBidRequest &$RtbBidRequest, \model\openrtb\RtbBidRequestUser &$RtbBidRequestUser, &$rtb_user) {
 	
-		$Parser->parse_item(
+		\util\ParseHelper::parse_item(
 				$RtbBidRequestUser,
 				$rtb_user,
 				"id");	

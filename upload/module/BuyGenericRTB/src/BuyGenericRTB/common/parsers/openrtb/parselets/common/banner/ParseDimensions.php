@@ -18,13 +18,13 @@ class ParseDimensions {
 		 * Get Width and Height
 		 */
 		
-		$Parser->parse_with_exception(
+		\util\ParseHelper::parse_with_exception(
 				$RtbBidRequestBanner,
 				$ad_impression_banner,
 				$Parser->expeption_missing_min_bid_request_params . ": imp_banner_w",
 				"w");
 		
-		$Parser->parse_with_exception(
+		\util\ParseHelper::parse_with_exception(
 				$RtbBidRequestBanner,
 				$ad_impression_banner,
 				$Parser->expeption_missing_min_bid_request_params . ": imp_banner_h",
@@ -32,28 +32,28 @@ class ParseDimensions {
 
 		// Width Max
 		
-		$Parser->parse_item(
+		\util\ParseHelper::parse_item(
 				$RtbBidRequestBanner,
 				$ad_impression_banner,
 				"wmax");
 		
 		// Height Max
 		
-		$Parser->parse_item(
+		\util\ParseHelper::parse_item(
 				$RtbBidRequestBanner,
 				$ad_impression_banner,
 				"hmax");
 		
 		// Width Min
 		
-		$Parser->parse_item(
+		\util\ParseHelper::parse_item(
 				$RtbBidRequestBanner,
 				$ad_impression_banner,
 				"wmin");
 		
 		// Height Min
 		
-		$Parser->parse_item(
+		\util\ParseHelper::parse_item(
 				$RtbBidRequestBanner,
 				$ad_impression_banner,
 				"hmin");

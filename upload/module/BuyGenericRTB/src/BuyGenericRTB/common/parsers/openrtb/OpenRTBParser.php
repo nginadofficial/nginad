@@ -49,37 +49,37 @@ class OpenRTBParser {
         }
         
         // Parse Second Price
-		$this->parse_item(
+		\util\ParseHelper::parse_item(
 				$this->RtbBidRequest,
 				$this->json_post,
 				"at");
 		
 		// Parse Max Timeout on RTB Bid Response
-		$this->parse_item(
+		\util\ParseHelper::parse_item(
 				$this->RtbBidRequest,
 				$this->json_post,
 				"tmax");
 		
 		// Parse Allowed Buyer Seat IDs
-		$this->parse_item_list(
+		\util\ParseHelper::parse_item_list(
 				$this->RtbBidRequest,
 				$this->json_post,
 				"wseat");
 		
 		// Parse All Available impressions for this publisher boolean
-		$this->parse_item(
+		\util\ParseHelper::parse_item(
 				$this->RtbBidRequest,
 				$this->json_post,
 				"allimps");
         
 		// Parse Blocked Advertiser Categories
-		$this->parse_item_list(
+		\util\ParseHelper::parse_item_list(
 				$this->RtbBidRequest,
 				$this->json_post,
 				"bcat");
 		
 		// Parse Blocked TLDs for this RTB request, Publisher Black Listed
-		$this->parse_item_list(
+		\util\ParseHelper::parse_item_list(
 				$this->RtbBidRequest,
 				$this->json_post,
 				"badv");
@@ -175,7 +175,7 @@ class OpenRTBParser {
 	        // Parse Imp ID
 
 	        try {
-		        $this->parse_with_exception(
+		        \util\ParseHelper::parse_with_exception(
 		        		$RtbBidRequestImp,
 		        		$ad_impression,
 		        		$this->expeption_missing_min_bid_request_params . ": imp_id",
@@ -186,56 +186,56 @@ class OpenRTBParser {
 	        
 	        // Parse Imp Display Manager
 	         
-	        $this->parse_item(
+	        \util\ParseHelper::parse_item(
 	        		$RtbBidRequestImp,
 	        		$ad_impression,
 	        		"displaymanager");
 	        
 	        // Parse Imp Display Manager Version
 	        
-	        $this->parse_item(
+	        \util\ParseHelper::parse_item(
 	        		$RtbBidRequestImp,
 	        		$ad_impression,
 	        		"displaymanagerver"); 
 	        
 	        // Parse Imp Is Interstitial
 	         
-	        $this->parse_item(
+	        \util\ParseHelper::parse_item(
 	        		$RtbBidRequestImp,
 	        		$ad_impression,
 	        		"instl");
 	        
 	        // Parse DSP tag id DOM parent of RTB Auction Ad Zone in Publisher web page
 	        
-	        $this->parse_item(
+	        \util\ParseHelper::parse_item(
 	        		$RtbBidRequestImp,
 	        		$ad_impression,
 	        		"tagid");
 	        
 	        // Parse Imp Floor Price
 	        
-			$this->parse_item(
+			\util\ParseHelper::parse_item(
 					$RtbBidRequestImp,
 					$ad_impression,
 					"bidfloor");
 			
 			// Parse Imp Floor Currency
 			 
-			$this->parse_item(
+			\util\ParseHelper::parse_item(
 					$RtbBidRequestImp,
 					$ad_impression,
 					"bidfloorcur");
 			
 			// Parse Imp https:// SSL flag
 			
-			$this->parse_item(
+			\util\ParseHelper::parse_item(
 					$RtbBidRequestImp,
 					$ad_impression,
 					"secure");
 			
 			// Parse Imp IFRAME Buster list
 				
-			$this->parse_item_list(
+			\util\ParseHelper::parse_item_list(
 					$RtbBidRequestImp,
 					$ad_impression,
 					"secure");
@@ -281,64 +281,5 @@ class OpenRTBParser {
                 
         return $this->RtbBidRequest;
 	}
-	
-	public function parse_item_list(&$obj, &$arr, $name, $obj_name = null) {
-	
-		if ($obj_name == null):
-			$obj_name = $name;
-		endif;
-	
-		if (isset($arr[$name]) && is_array($arr[$name]) && count($arr[$name])):
-			
-			$obj->$obj_name = $arr[$name];
-	
-		endif;
-	}
-	
-	public function parse_item(&$obj, &$arr, $name, $obj_name = null) {
-	
-		if ($obj_name == null):
-			$obj_name = $name;
-		endif;
-	
-		if (isset($arr[$name])):
-			
-			$obj->$obj_name = $arr[$name];
-	
-		endif;
-	}
-	
-	public function parse_list_with_exception(&$obj, &$arr, $exception, $name, $obj_name = null) {
-	
-		if ($obj_name == null):
-			$obj_name = $name;
-		endif;
-	
-		if (isset($arr[$name]) && is_array($arr[$name]) && count($arr[$name])):
-			
-			$obj->$obj_name = $arr[$name];
-			
-		else:
-			
-			throw new Exception($exception);
-	
-		endif;
-	}
-	
-	public function parse_with_exception(&$obj, &$arr, $exception, $name, $obj_name = null) {
-	
-		if ($obj_name == null):
-			$obj_name = $name;
-		endif;
-	
-		if (isset($arr[$name])):
-			
-			$obj->$obj_name = $arr[$name];
-			
-		else:
-			
-			throw new Exception($exception);
-	
-		endif;
-	}
+
 }

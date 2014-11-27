@@ -25,75 +25,75 @@ class ParseBids {
 		
 			$RtbBidResponseBid = new \model\openrtb\RtbBidResponseBid();
 
-			$Parser->parse_with_exception(
+			\util\ParseHelper::parse_with_exception(
 					$RtbBidResponseBid,
 					$bid,
 					$Parser->expeption_missing_min_bid_request_params . ": bid id",
 					"id");
 		
-			$Parser->parse_with_exception(
+			\util\ParseHelper::parse_with_exception(
 					$RtbBidResponseBid,
 					$bid,
 					$Parser->expeption_missing_min_bid_request_params . ": bid impid",
 					"impid");
 			
-			$Parser->parse_with_exception(
+			\util\ParseHelper::parse_with_exception(
 					$RtbBidResponseBid,
 					$bid,
 					$Parser->expeption_missing_min_bid_request_params . ": bid price",
 					"price");
 			
-			$Parser->parse_item(
+			\util\ParseHelper::parse_item(
 					$RtbBidResponseBid,
 					$bid,
 					"adid");
 				
-			$Parser->parse_item(
+			\util\ParseHelper::parse_item(
 					$RtbBidResponseBid,
 					$bid,
 					"nurl");
 				
-			$Parser->parse_item(
+			\util\ParseHelper::parse_item(
 					$RtbBidResponseBid,
 					$bid,
 					"adm");
 			
-			$Parser->parse_item(
+			\util\ParseHelper::parse_item(
 					$RtbBidResponseBid,
 					$bid,
 					"adomain");
 			
-			$Parser->parse_item(
+			\util\ParseHelper::parse_item(
 					$RtbBidResponseBid,
 					$bid,
 					"lurl");
 			
-			$Parser->parse_item(
+			\util\ParseHelper::parse_item(
 					$RtbBidResponseBid,
 					$bid,
 					"cid");
 			
-			$Parser->parse_item(
+			\util\ParseHelper::parse_item(
 					$RtbBidResponseBid,
 					$bid,
 					"crid");
 			
-			$Parser->parse_item(
+			\util\ParseHelper::parse_item(
 					$RtbBidResponseBid,
 					$bid,
 					"attr");
 			
-			$Parser->parse_item(
+			\util\ParseHelper::parse_item(
 					$RtbBidResponseBid,
 					$bid,
 					"dealid");
 			
-			$Parser->parse_item(
+			\util\ParseHelper::parse_item(
 					$RtbBidResponseBid,
 					$bid,
 					"h");
 			
-			$Parser->parse_item(
+			\util\ParseHelper::parse_item(
 					$RtbBidResponseBid,
 					$bid,
 					"w");

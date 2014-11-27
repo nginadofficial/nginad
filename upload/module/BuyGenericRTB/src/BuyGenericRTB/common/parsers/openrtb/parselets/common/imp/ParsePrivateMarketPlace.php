@@ -16,7 +16,7 @@ class ParsePrivateMarketPlace {
 		
 		// Private Auction ?
 		
-		$Parser->parse_item(
+		\util\ParseHelper::parse_item(
 				$RtbBidRequestPmp,
 				$pmp,
 				"private_auction");

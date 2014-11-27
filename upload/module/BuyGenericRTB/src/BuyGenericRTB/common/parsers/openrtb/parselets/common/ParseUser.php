@@ -15,21 +15,21 @@ class ParseUser {
 	
 		// User ID
 		
-		$Parser->parse_item(
+		\util\ParseHelper::parse_item(
 				$RtbBidRequestUser,
 				$rtb_user,
 				"id");
 
 		// BuyerID, alternative to User ID
 		
-		$Parser->parse_item(
+		\util\ParseHelper::parse_item(
 				$RtbBidRequestUser,
 				$rtb_user,
 				"buyeruid");
 		
 		// Year of Birth
 		
-		$Parser->parse_item(
+		\util\ParseHelper::parse_item(
 				$RtbBidRequestUser,
 				$rtb_user,
 				"yob");		
@@ -44,13 +44,13 @@ class ParseUser {
 		
 			if (is_array($rtb_user["keywords"])):
 				 
-				$Parser->parse_item_list(
+				\util\ParseHelper::parse_item_list(
 						$RtbBidRequestUser,
 						$rtb_user,
 						"keywords");
 			else:
 				 
-				$Parser->parse_item(
+				\util\ParseHelper::parse_item(
 						$RtbBidRequestUser,
 						$rtb_user,
 						"keywords");
@@ -61,7 +61,7 @@ class ParseUser {
 		
 		// Custom Data
 		
-		$Parser->parse_item(
+		\util\ParseHelper::parse_item(
 				$RtbBidRequestUser,
 				$rtb_user,
 				"customdata");

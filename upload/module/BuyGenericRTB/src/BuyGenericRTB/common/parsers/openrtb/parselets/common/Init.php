@@ -53,7 +53,7 @@ class Init {
 		
 		$Logger->log[] = "POST: " . print_r($Parser->json_post, true);
 		
-		$Parser->parse_with_exception(
+		\util\ParseHelper::parse_with_exception(
 				$RtbBidRequest, 
 				$Parser->json_post, 
 				$Parser->expeption_missing_min_bid_request_params . ": id", 

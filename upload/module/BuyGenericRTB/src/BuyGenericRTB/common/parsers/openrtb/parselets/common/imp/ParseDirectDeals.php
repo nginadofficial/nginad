@@ -15,7 +15,7 @@ class ParseDirectDeals {
 	
 		// Deal ID
 	
-		$Parser->parse_with_exception(
+		\util\ParseHelper::parse_with_exception(
 				$RtbBidRequestDirectDeals,
 				$direct_deal,
 				$Parser->expeption_missing_min_bid_request_params . ": direct deal id",
@@ -23,35 +23,35 @@ class ParseDirectDeals {
 	
 		// Deal Bid Floor
 		
-		$Parser->parse_item(
+		\util\ParseHelper::parse_item(
 				$RtbBidRequestDirectDeals,
 				$direct_deal,
 				"bidfloor");
 		
 		// Deal Bid Floor Currency
 		
-		$Parser->parse_item(
+		\util\ParseHelper::parse_item(
 				$RtbBidRequestDirectDeals,
 				$direct_deal,
 				"bidfloorcur");
 		 
 		// Deal Buyer Seats allowed to bid
 		
-		$Parser->parse_item_list(
+		\util\ParseHelper::parse_item_list(
 				$RtbBidRequestDirectDeals,
 				$direct_deal,
 				"wseat");
 		
 		// Deal Advertiser Domains allowed to bid
 		
-		$Parser->parse_item_list(
+		\util\ParseHelper::parse_item_list(
 				$RtbBidRequestDirectDeals,
 				$direct_deal,
 				"wadomain");
 		
 		// Deal Auction type ( second price or first price )
 		
-		$Parser->parse_item(
+		\util\ParseHelper::parse_item(
 				$RtbBidRequestDirectDeals,
 				$direct_deal,
 				"at");

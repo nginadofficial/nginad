@@ -15,21 +15,21 @@ class ParseSegment {
 	
 		// segment id
 	
-		$Parser->parse_item(
+		\util\ParseHelper::parse_item(
 				$RtbBidRequestSegment,
 				$segment,
 				"id");
 	
 		// segment name
 	
-		$Parser->parse_item(
+		\util\ParseHelper::parse_item(
 				$RtbBidRequestSegment,
 				$segment,
 				"name");
 	
 		// segment value
 		
-		$Parser->parse_item(
+		\util\ParseHelper::parse_item(
 				$RtbBidRequestSegment,
 				$segment,
 				"value");

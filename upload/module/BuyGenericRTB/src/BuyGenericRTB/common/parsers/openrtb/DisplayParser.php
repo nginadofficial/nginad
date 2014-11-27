@@ -23,7 +23,7 @@ class DisplayParser {
 	        
 	        // Banner ID
 	         
-	        $Parser->parse_item(
+	        \util\ParseHelper::parse_item(
 	        		$RtbBidRequestBanner,
 	        		$ad_impression_banner,
 	        		"id");
@@ -37,42 +37,42 @@ class DisplayParser {
 	        
 	        // Blocked Creative Types
 	        
-	        $Parser->parse_item_list(
+	        \util\ParseHelper::parse_item_list(
 	        		$RtbBidRequestBanner,
 	        		$ad_impression_banner,
 	        		"btype");
 
 	        // Blocked Creative Attributes
 	         
-	        $Parser->parse_item_list(
+	        \util\ParseHelper::parse_item_list(
 	        		$RtbBidRequestBanner,
 	        		$ad_impression_banner,
 	        		"battr");
 	        
 	        // Supported Mime Types
 	        
-	        $Parser->parse_item_list(
+	        \util\ParseHelper::parse_item_list(
 	        		$RtbBidRequestBanner,
 	        		$ad_impression_banner,
 	        		"mimes");
 	        
 	        // Is In Top Most DOM Document ( not in IFRAME )
 	         
-	        $Parser->parse_item(
+	        \util\ParseHelper::parse_item(
 	        		$RtbBidRequestBanner,
 	        		$ad_impression_banner,
 	        		"topframe");
 	        
 	        // Expandable Ad Properties ( IAB Rising Stars )
 	         
-	        $Parser->parse_item_list(
+	        \util\ParseHelper::parse_item_list(
 	        		$RtbBidRequestBanner,
 	        		$ad_impression_banner,
 	        		"expdir");
 	        
 	        // Supported API Frameworks
 	        
-	        $Parser->parse_item_list(
+	        \util\ParseHelper::parse_item_list(
 	        		$RtbBidRequestBanner,
 	        		$ad_impression_banner,
 	        		"api");

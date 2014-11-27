@@ -15,7 +15,7 @@ class ParseRegs {
 	
 		// Opt Out Coppa?
 		
-		$Parser->parse_item(
+		\util\ParseHelper::parse_item(
 				$RtbBidRequestRegulations,
 				$ad_regs,
 				"coppa");

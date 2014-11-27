@@ -16,19 +16,19 @@ class VideoParser {
 
 		// get list of supported mime types for video content
 		
-		$Parser->parse_list_with_exception(
+		\util\ParseHelper::parse_list_with_exception(
 				$RtbBidRequestVideo,
 				$ad_impression_video,
 				$Parser->expeption_missing_min_bid_request_params . ": video mimes",
 				"mimes");
 
-		$Parser->parse_with_exception(
+		\util\ParseHelper::parse_with_exception(
 				$RtbBidRequestVideo,
 				$ad_impression_video,
 				$Parser->expeption_missing_min_bid_request_params . ": video minduration",
 				"minduration");
 		
-		$Parser->parse_with_exception(
+		\util\ParseHelper::parse_with_exception(
 				$RtbBidRequestVideo,
 				$ad_impression_video,
 				$Parser->expeption_missing_min_bid_request_params . ": video maxduration",
@@ -36,105 +36,105 @@ class VideoParser {
 		
 		// Protocol
 		
-		$Parser->parse_item(
+		\util\ParseHelper::parse_item(
 				$RtbBidRequestVideo,
 				$ad_impression_video,
 				"protocol");
 		
 		// Protocol List
 		
-		$Parser->parse_item_list(
+		\util\ParseHelper::parse_item_list(
 				$RtbBidRequestVideo,
 				$ad_impression_video,
 				"protocols");
 		
 		// Video Player Width
 		
-		$Parser->parse_item(
+		\util\ParseHelper::parse_item(
 				$RtbBidRequestVideo,
 				$ad_impression_video,
 				"w");
 		
 		// Video Player Height
 		
-		$Parser->parse_item(
+		\util\ParseHelper::parse_item(
 				$RtbBidRequestVideo,
 				$ad_impression_video,
 				"h");
 		
 		// Video Start Delay
 		
-		$Parser->parse_item(
+		\util\ParseHelper::parse_item(
 				$RtbBidRequestVideo,
 				$ad_impression_video,
 				"startdelay");
 		
 		// Video Linearity
 		
-		$Parser->parse_item(
+		\util\ParseHelper::parse_item(
 				$RtbBidRequestVideo,
 				$ad_impression_video,
 				"linearity");
 		
 		// Video Sequence Index
 		
-		$Parser->parse_item(
+		\util\ParseHelper::parse_item(
 				$RtbBidRequestVideo,
 				$ad_impression_video,
 				"sequence");
 		
 		// Blocked Creative Attributes
 		
-		$Parser->parse_item_list(
+		\util\ParseHelper::parse_item_list(
 				$RtbBidRequestVideo,
 				$ad_impression_video,
 				"battr");
 		
 		// Maximum Video extension beyond the max duration
 		
-		$Parser->parse_item(
+		\util\ParseHelper::parse_item(
 				$RtbBidRequestVideo,
 				$ad_impression_video,
 				"maxextended");
 		
 		// Minimum Video Bitrate
 		
-		$Parser->parse_item(
+		\util\ParseHelper::parse_item(
 				$RtbBidRequestVideo,
 				$ad_impression_video,
 				"minbitrate");
 		
 		// Maximum Video Bitrate
 		
-		$Parser->parse_item(
+		\util\ParseHelper::parse_item(
 				$RtbBidRequestVideo,
 				$ad_impression_video,
 				"maxbitrate");
 		
 		// Flag which allows letterboxing
 		
-		$Parser->parse_item(
+		\util\ParseHelper::parse_item(
 				$RtbBidRequestVideo,
 				$ad_impression_video,
 				"boxingallowed");
 		
 		// Allowed Playback Methods
 		
-		$Parser->parse_item_list(
+		\util\ParseHelper::parse_item_list(
 				$RtbBidRequestVideo,
 				$ad_impression_video,
 				"playbackmethod");
 		
 		// Allowed Delivery Methods
 		
-		$Parser->parse_item_list(
+		\util\ParseHelper::parse_item_list(
 				$RtbBidRequestVideo,
 				$ad_impression_video,
 				"delivery");
 		
 		// Video Position in Page
 		
-		$Parser->parse_item(
+		\util\ParseHelper::parse_item(
 				$RtbBidRequestVideo,
 				$ad_impression_video,
 				"pos");
@@ -158,14 +158,14 @@ class VideoParser {
 		
 		// A List of Supported API Frameworks
 		
-		$Parser->parse_item_list(
+		\util\ParseHelper::parse_item_list(
 				$RtbBidRequestVideo,
 				$ad_impression_video,
 				"api");
 		
 		// A List of Supported Companion Types
 		
-		$Parser->parse_item_list(
+		\util\ParseHelper::parse_item_list(
 				$RtbBidRequestVideo,
 				$ad_impression_video,
 				"companiontype");

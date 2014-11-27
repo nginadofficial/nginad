@@ -28,12 +28,12 @@ class ParseSeatBids {
 
 			$RtbBidResponseSeatBid = new \model\openrtb\RtbBidResponseSeatBid();
 		
-			$Parser->parse_item(
+			\util\ParseHelper::parse_item(
 					$RtbBidResponseSeatBid,
 					$seatbid,
 					"seat");
 			
-			$Parser->parse_item(
+			\util\ParseHelper::parse_item(
 					$RtbBidResponseSeatBid,
 					$seatbid,
 					"group");

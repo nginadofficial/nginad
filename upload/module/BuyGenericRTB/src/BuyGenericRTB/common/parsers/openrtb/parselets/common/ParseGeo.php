@@ -15,35 +15,35 @@ class ParseGeo {
 
 		// location latitude
 		
-		$Parser->parse_item(
+		\util\ParseHelper::parse_item(
 				$RtbBidRequestGeo,
 				$geo,
 				"lat");
 		
 		// location longitude
 		
-		$Parser->parse_item(
+		\util\ParseHelper::parse_item(
 				$RtbBidRequestGeo,
 				$geo,
 				"lon");
 		
 		// location country
 		
-		$Parser->parse_item(
+		\util\ParseHelper::parse_item(
 				$RtbBidRequestGeo,
 				$geo,
 				"country");
 		
 		// location state or region
 		
-		$Parser->parse_item(
+		\util\ParseHelper::parse_item(
 				$RtbBidRequestGeo,
 				$geo,
 				"region");
 		
 		// location state or region fips
 		
-		$Parser->parse_item(
+		\util\ParseHelper::parse_item(
 				$RtbBidRequestGeo,
 				$geo,
 				"regionfips104");
@@ -51,7 +51,7 @@ class ParseGeo {
 		// location metro area code
 		// http://code.google.com/apis/adwords/docs/appendix/metrocodes.htm
 		
-		$Parser->parse_item(
+		\util\ParseHelper::parse_item(
 				$RtbBidRequestGeo,
 				$geo,
 				"metro");
@@ -59,21 +59,21 @@ class ParseGeo {
 		// location city code
 		// http://www.unece.org/cefact/locode/service/location.htm
 		
-		$Parser->parse_item(
+		\util\ParseHelper::parse_item(
 				$RtbBidRequestGeo,
 				$geo,
 				"city");
 		
 		// location zip
 		
-		$Parser->parse_item(
+		\util\ParseHelper::parse_item(
 				$RtbBidRequestGeo,
 				$geo,
 				"zip");
 		
 		// location geo data source
 		
-		$Parser->parse_item(
+		\util\ParseHelper::parse_item(
 				$RtbBidRequestGeo,
 				$geo,
 				"type");

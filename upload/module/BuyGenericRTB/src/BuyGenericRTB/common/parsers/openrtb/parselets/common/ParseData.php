@@ -15,14 +15,14 @@ class ParseData {
 	
 		// data id
 	
-		$Parser->parse_item(
+		\util\ParseHelper::parse_item(
 				$RtbBidRequestData,
 				$data,
 				"id");
 		
 		// data name
 		
-		$Parser->parse_item(
+		\util\ParseHelper::parse_item(
 				$RtbBidRequestData,
 				$data,
 				"name");
