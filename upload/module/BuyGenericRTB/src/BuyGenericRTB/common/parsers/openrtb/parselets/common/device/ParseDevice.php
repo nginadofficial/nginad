@@ -22,16 +22,14 @@ class ParseDevice {
 		
 		$default_device = $Parser->json_post["device"];
 		
-		$Parser->parse_with_exception(
-				$RtbBidRequestDevice,
-				$default_device,
-				$Parser->expeption_missing_min_bid_request_params . ": device_ip",
-				"ip");
+		// do not track bit
 		
 		$Parser->parse_item(
 				$RtbBidRequestDevice,
 				$default_device,
-				"language");
+				"dnt");
+		
+		// User Agent. If URL encoded, decode
 		
 		if (isset($default_device["ua"])):
 		
@@ -39,20 +37,151 @@ class ParseDevice {
 					$RtbBidRequestDevice,
 					$default_device,
 					"ua");
-		
+			
 			if (strpos($RtbBidRequestDevice->ua, '%20') !== false):
 				$RtbBidRequestDevice->ua = urldecode($RtbBidRequestDevice->ua);
 			endif;
 		
 		endif;
 		
-		if (isset($default_device["model"])):
+		/*
+		 * NginAd requires the User's IP Address
+		 * for black listing purposes and for fill ratios
+		 * against the MD5 checksum.
+		 * 
+		 * The OpenRTB spec states it's optional
+		 */ 
+		$Parser->parse_with_exception(
+				$RtbBidRequestDevice,
+				$default_device,
+				$Parser->expeption_missing_min_bid_request_params . ": device_ip",
+				"ip");
+		
+		// geo object
+		
+		if (isset($default_device["geo"])):
+		
+			$geo = $default_device["geo"];
+			$RtbBidRequestGeo = new \model\openrtb\RtbBidRequestGeo();
+			\buyrtb\parsers\openrtb\parselets\common\device\ParseGeo::execute($Logger, $Parser, $RtbBidRequest, $RtbBidRequestGeo, $geo);
+			$RtbBidRequestDevice->RtbBidRequestGeo = $RtbBidRequestGeo;
+			
+		endif;
+		
+		// device id SHA1
+		
+		$Parser->parse_item(
+				$RtbBidRequestDevice,
+				$default_device,
+				"didsha1");
+		
+		// device id MD5
+		
+		$Parser->parse_item(
+				$RtbBidRequestDevice,
+				$default_device,
+				"didmd5");
+		
+		// platform device id SHA1
+		
+		$Parser->parse_item(
+				$RtbBidRequestDevice,
+				$default_device,
+				"dpidsha1");
+		
+		// platform device id MD5
+		
+		$Parser->parse_item(
+				$RtbBidRequestDevice,
+				$default_device,
+				"dpidmd5");
+		
+		// mac address SHA1
+		
+		$Parser->parse_item(
+				$RtbBidRequestDevice,
+				$default_device,
+				"macsha1");
+		
+		// mac address MD5
+		
+		$Parser->parse_item(
+				$RtbBidRequestDevice,
+				$default_device,
+				"macmd5");
+		
+		// IPv6 address
+		
+		$Parser->parse_item(
+				$RtbBidRequestDevice,
+				$default_device,
+				"ipv6");
+		
+		// mobile ISP carrier
+		
+		$Parser->parse_item(
+				$RtbBidRequestDevice,
+				$default_device,
+				"carrier");
+
+		// language code ( alpha-2/ISO 639-1 )
+		
+		$Parser->parse_item(
+				$RtbBidRequestDevice,
+				$default_device,
+				"language");
+		
+		// Device OEM make
+		
+		$Parser->parse_item(
+				$RtbBidRequestDevice,
+				$default_device,
+				"make");
+		
+		// Device OEM model
+		
+		$Parser->parse_item(
+				$RtbBidRequestDevice,
+				$default_device,
+				"model");
+		
+		// OS name
+		
+		$Parser->parse_item(
+				$RtbBidRequestDevice,
+				$default_device,
+				"os");
+
+		// OS version
+		
+		$Parser->parse_item(
+				$RtbBidRequestDevice,
+				$default_device,
+				"osv");
+		
+		// Bit Flag for Javascript Enabled
+		
+		$Parser->parse_item(
+				$RtbBidRequestDevice,
+				$default_device,
+				"js");
+		
+		// Connection type id
+		
+		$Parser->parse_item(
+				$RtbBidRequestDevice,
+				$default_device,
+				"connectiontype");
+		
+		// device type id
+		
+		if (isset($RtbBidRequestDevice->model)):
 			 
-			if (\mobileutil\MobileDeviceType::isPhone($default_device["model"]) === true):
+			if (\mobileutil\MobileDeviceType::isPhone($RtbBidRequestDevice->model) === true):
 			 
 				$RtbBidRequestDevice->devicetype = DEVICE_MOBILE;
 				 
-			elseif(\mobileutil\MobileDeviceType::isTablet($default_device["model"]) === true):
+			elseif(\mobileutil\MobileDeviceType::isTablet($RtbBidRequestDevice->model) === true):
 			 
 				$RtbBidRequestDevice->devicetype = DEVICE_TABLET;
 				 
@@ -74,14 +203,19 @@ class ParseDevice {
 			
 		endif;
 		
-		if (isset($default_device["geo"])):
+		// adobe flash version
 		
-			$geo = $default_device["geo"];
-			$RtbBidRequestGeo = new \model\openrtb\RtbBidRequestGeo();
-			\buyrtb\parsers\openrtb\parselets\common\device\ParseGeo::execute($Logger, $Parser, $RtbBidRequest, $RtbBidRequestGeo, $geo);
-			$RtbBidRequestDevice->RtbBidRequestGeo = $RtbBidRequestGeo;
-				
-		endif;
+		$Parser->parse_item(
+				$RtbBidRequestDevice,
+				$default_device,
+				"flashver");
+		
+		// native ads unique id
+		
+		$Parser->parse_item(
+				$RtbBidRequestDevice,
+				$default_device,
+				"ifa");
 		
 	}
 	
