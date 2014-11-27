@@ -300,6 +300,23 @@ class OpenRTBParser {
 		endif;
 	}
 	
+	public function parse_list_with_exception(&$obj, &$arr, $exception, $name, $obj_name = null) {
+	
+		if ($obj_name == null):
+			$obj_name = $name;
+		endif;
+	
+		if (isset($arr[$name]) && is_array($arr[$name]) && count($arr[$name])):
+			
+			$obj->$obj_name = $arr[$name];
+			
+		else:
+			
+			throw new Exception($exception);
+	
+		endif;
+	}
+	
 	public function parse_with_exception(&$obj, &$arr, $exception, $name, $obj_name = null) {
 	
 		if ($obj_name == null):
