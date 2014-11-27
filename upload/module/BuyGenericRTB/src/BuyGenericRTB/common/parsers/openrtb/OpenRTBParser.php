@@ -94,11 +94,25 @@ class OpenRTBParser {
         
         try {
         	\buyrtb\parsers\openrtb\parselets\common\ParseWebsite::execute($logger, $this, $this->RtbBidRequest, $RtbBidRequestSite, $ad_campaign_site);
+        	$this->RtbBidRequest->RtbBidRequestSite = $RtbBidRequestSite;
         } catch (Exception $e) {
         	throw new Exception($e->getMessage(), $e->getCode(), $e->getPrevious());
         }
+       
+        // Parse App
+        if (isset($this->json_post["app"])):
         
-        $this->RtbBidRequest->RtbBidRequestSite = $RtbBidRequestSite;
+	        $rtb_app = $this->json_post["app"];
+	        $RtbBidRequestApp = new \model\openrtb\RtbBidRequestApp();
+	         
+	        try {
+	        	\buyrtb\parsers\openrtb\parselets\common\ParseApp::execute($logger, $this, $this->RtbBidRequest, $RtbBidRequestApp, $rtb_app);
+	        	$this->RtbBidRequest->RtbBidRequestApp = $RtbBidRequestApp;
+	        } catch (Exception $e) {
+	        	throw new Exception($e->getMessage(), $e->getCode(), $e->getPrevious());
+	        }
+
+        endif;
         
         // Parse User
         if (isset($this->json_post["user"])):
@@ -108,12 +122,11 @@ class OpenRTBParser {
 	        
 	        try {
 	        	\buyrtb\parsers\openrtb\parselets\common\ParseUser::execute($logger, $this, $this->RtbBidRequest, $RtbBidRequestUser, $rtb_user);
+	        	$this->RtbBidRequest->RtbBidRequestUser = $RtbBidRequestUser;
 	        } catch (Exception $e) {
 	        	throw new Exception($e->getMessage(), $e->getCode(), $e->getPrevious());
 	        }       
-	
-	        $this->RtbBidRequest->RtbBidRequestUser = $RtbBidRequestUser;
-	        
+
         endif;
         
         // Parse Device
@@ -126,13 +139,12 @@ class OpenRTBParser {
         
         try {
         	\buyrtb\parsers\openrtb\parselets\common\device\ParseDevice::execute($logger, $this, $this->RtbBidRequest, $RtbBidRequestDevice, $device);
+        	$this->RtbBidRequest->RtbBidRequestDevice = $RtbBidRequestDevice;
+        	$logger->log[] = "Is Mobile: " . $this->RtbBidRequest->RtbBidRequestDevice->devicetype != 2;
+        
         } catch (Exception $e) {
         	throw new Exception($e->getMessage(), $e->getCode(), $e->getPrevious());
         }
-        
-        $this->RtbBidRequest->RtbBidRequestDevice = $RtbBidRequestDevice;
-        
-        $logger->log[] = "Is Mobile: " . $this->RtbBidRequest->RtbBidRequestDevice->devicetype != 2;
         
         // Parse Regs
 
@@ -142,11 +154,11 @@ class OpenRTBParser {
 	        
 	        try {
 	        	\buyrtb\parsers\openrtb\parselets\common\ParseRegs::execute($logger, $this, $this->RtbBidRequest, $RtbBidRequestRegulations, $ad_regs);
+	        	$this->RtbBidRequest->RtbBidRequestRegulations = $RtbBidRequestRegulations;
 	        } catch (Exception $e) {
 	        	throw new Exception($e->getMessage(), $e->getCode(), $e->getPrevious());
 	        }
-	        
-	        $this->RtbBidRequest->RtbBidRequestRegulations = $RtbBidRequestRegulations;
+
         endif;
         
         // process all ad impressions
@@ -161,18 +173,72 @@ class OpenRTBParser {
         	$RtbBidRequestImp = new \model\openrtb\RtbBidRequestImp();
 
 	        // Parse Imp ID
+
 	        try {
-	        	\buyrtb\parsers\openrtb\parselets\common\imp\ParseImpId::execute($logger, $this, $RtbBidRequestImp, $ad_impression);
+		        $this->parse_with_exception(
+		        		$RtbBidRequestImp,
+		        		$ad_impression,
+		        		$this->expeption_missing_min_bid_request_params . ": imp_id",
+		        		"id");
 	        } catch (Exception $e) {
 	        	throw new Exception($e->getMessage(), $e->getCode(), $e->getPrevious());
 	        }
 	        
+	        // Parse Imp Display Manager
+	         
+	        $this->parse_item(
+	        		$RtbBidRequestImp,
+	        		$ad_impression,
+	        		"displaymanager");
+	        
+	        // Parse Imp Display Manager Version
+	        
+	        $this->parse_item(
+	        		$RtbBidRequestImp,
+	        		$ad_impression,
+	        		"displaymanagerver"); 
+	        
+	        // Parse Imp Is Interstitial
+	         
+	        $this->parse_item(
+	        		$RtbBidRequestImp,
+	        		$ad_impression,
+	        		"instl");
+	        
+	        // Parse DSP tag id DOM parent of RTB Auction Ad Zone in Publisher web page
+	        
+	        $this->parse_item(
+	        		$RtbBidRequestImp,
+	        		$ad_impression,
+	        		"tagid");
+	        
 	        // Parse Imp Floor Price
-	        try {
-	        	\buyrtb\parsers\openrtb\parselets\common\imp\ParseFloor::execute($logger, $this, $RtbBidRequestImp, $ad_impression);
-	        } catch (Exception $e) {
-	        	throw new Exception($e->getMessage(), $e->getCode(), $e->getPrevious());
-	        }
+	        
+			$this->parse_item(
+					$RtbBidRequestImp,
+					$ad_impression,
+					"bidfloor");
+			
+			// Parse Imp Floor Currency
+			 
+			$this->parse_item(
+					$RtbBidRequestImp,
+					$ad_impression,
+					"bidfloorcur");
+			
+			// Parse Imp https:// SSL flag
+			
+			$this->parse_item(
+					$RtbBidRequestImp,
+					$ad_impression,
+					"secure");
+			
+			// Parse Imp IFRAME Buster list
+				
+			$this->parse_item_list(
+					$RtbBidRequestImp,
+					$ad_impression,
+					"secure");
 
 	        // Parse Private Markplace (PMP)
 	        try {
