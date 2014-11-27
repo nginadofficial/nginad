@@ -172,7 +172,3 @@ class VideoParser {
 		
 	}
 }
-
-
-
-
