@@ -76,4 +76,11 @@ class ParseHelper {
 	
 		endif;
 	}
+	
+	public static function setArrayParam(&$obj, &$arr, $name) {
+		if (!empty($obj->$name) ||
+			(isset($obj->$name) && is_numeric($obj->$name))):
+				$arr[$name] = $obj->$name;
+		endif;
+	}
 }

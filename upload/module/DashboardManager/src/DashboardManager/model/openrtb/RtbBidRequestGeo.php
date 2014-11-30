@@ -16,6 +16,7 @@ class RtbBidRequestGeo {
 	public $lon;
 	
 	public $country;
+	
 	// state
 	public $region;
 	
