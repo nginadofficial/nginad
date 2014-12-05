@@ -57,4 +57,75 @@ class BannerOptions {
     		"4"=>"Native App ( Android )"
     );
 
+    public static $mimes = array(
+    
+    		"video/x-flv",
+    		"video/mp4",
+    		"application/x-shockwave-flash",
+    		"application/javascript",
+    		"video/ogg",
+    		"video/webm",
+    		"video/mp4",
+    		"video/x-mswmv",
+    		"video/x-flv"
+    
+    );
+
+    public static $protocols = array(
+    
+    		"1" => "Linear/In-stream",
+    		"2" => "Non-Linear/Overlay",
+    
+    );
+
+    public static $apis_supported = array(
+    
+    		"1" => "VAST 1.0",
+    		"2" => "VAST 2.0",
+    		"3" => "VAST 3.0",
+    		"4" => "VAST 1.0 Wrapper",
+    		"5" => "VAST 2.0 Wrapper",
+    		"6" => "VAST 3.0 Wrapper"
+    );
+
+    public static $delivery_methods = array(
+    
+    		"1" => "Streaming",
+    		"2" => "Progressive"
+    );
+    
+    public static $playback_methods = array(
+    
+    		"1" => "Auto-play sound on",
+    		"2" => "Auto-play sound off",
+    		"3" => "Click-to-play",
+    		"4" => "Mouse-over"
+    );
+    
+    public static $start_delay = array(
+    
+    		"0" => "Pre-roll",
+    		"-1" => "Generic mid-roll",
+    		"-2" => "Generic Post-roll"
+    );
+    
+    
+    public static $linearity = array(
+    
+    		"1" => "Linear/In-stream",
+    		"2" => "Non-Linear/Overlay"
+    );
+    
+    public static $fold_pos = array(
+    
+    		"0" => "Unknown",
+    		"1" => "Above the fold",
+    		"3" => "Below the fold",
+    		"4" => "Header",
+    		"5" => "Footer",
+    		"6" => "Sidebar",
+    		"7" => "Fullscreen",
+    );
+    
+    
 }

@@ -1,6 +1,26 @@
 var currentBanners = {};
 var completeBannerList = {};
 
+function switchImpressionType() {
+	
+	var impType = $("#ImpressionType").val();
+	
+	if (impType == 'video') {
+		
+		$(".novideo").hide();
+		$(".nobanner").show();
+		$("#passbackTag").html("Passback VAST XML");
+		
+	} else {
+		
+		$(".novideo").show();
+		$(".nobanner").hide();
+		$("#passbackTag").html(" Passback Ad Tag");
+		
+	}
+	
+}
+
 function switchPublisherAdZoneType() {
 	
 	var publisherAdZoneType = $("#PublisherAdZoneTypeID :selected").text();

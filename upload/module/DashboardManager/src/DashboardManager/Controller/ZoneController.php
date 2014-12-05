@@ -224,6 +224,53 @@ class ZoneController extends PublisherAbstractActionController {
 				$ad->Width 					= $request->getPost("Width");
 				$ad->Height 				= $request->getPost("Height");
 				$ad->AdOwnerID				= $this->PublisherInfoID;
+
+				$ad->ImpressionType			= $request->getPost("ImpressionType") == 'video' ? 'video' : 'banner';
+				
+				if ($ad->ImpressionType == 'video'):
+				
+					$mimes 						= $request->getPost("Mimes");
+					if ($mimes && is_array($mimes) && count($mimes) > 0):
+						$mimes = join(',', $mimes);
+					else:
+						$mimes = "";
+					endif;
+					
+					$protocols 					= $request->getPost("Protocols");
+					if ($protocols && is_array($protocols) && count($protocols) > 0):
+						$protocols = join(',', $protocols);
+					else:
+						$protocols = "";
+					endif;
+					
+					$apis_supported 			= $request->getPost("ApisSupported");
+					if ($apis_supported && is_array($apis_supported) && count($apis_supported) > 0):
+						$apis_supported = join(',', $apis_supported);
+					else:
+						$apis_supported = "";
+					endif;
+					
+					$delivery 					= $request->getPost("Delivery");
+					if ($delivery && is_array($delivery) && count($delivery) > 0):
+						$delivery = join(',', $delivery);
+					else:
+						$delivery = "";
+					endif;
+					
+					$playback 					= $request->getPost("Playback");
+					if ($playback && is_array($playback) && count($playback) > 0):
+						$playback = join(',', $playback);
+					else:
+						$playback = "";
+					endif;
+					
+					$start_delay 				= $request->getPost("StartDelay") == null ? "" : $request->getPost("StartDelay");
+					
+					$linearity 					= $request->getPost("Linearity") == null ? "" : $request->getPost("Linearity");
+					
+					$fold_pos 					= $request->getPost("FoldPos") == null ? "" : $request->getPost("FoldPos");
+					
+				endif;
 				
 				$publisher_ad_zone_type_id = AD_TYPE_ANY_REMNANT;
 				$linkedbanners = array();
@@ -252,6 +299,13 @@ class ZoneController extends PublisherAbstractActionController {
                     
                     try {
 	                    $publisher_ad_zone_id = $PublisherAdZoneFactory->save_ads($ad);
+	                    
+	                    // If this publisher zone is for video save the extra table info
+	                    if ($ad->ImpressionType == 'video'):
+	                    
+	                    
+	                    endif;
+	                    
 	                    
 	                    // only the admin can create direct contracts between publishers and demand customers
 	                    if ($this->is_admin):
@@ -310,6 +364,15 @@ class ZoneController extends PublisherAbstractActionController {
              // If first coming to this form, set the Ad Owner ID.
         endif;
         
+        $current_fold_pos = array();
+        $current_linearity = array();
+        $current_start_delay = array();
+        $current_playback_methods = array();
+        $current_delivery_methods = array();
+        $current_apis_supported = array();
+        $current_protocols = array();
+        $current_mimes = array();
+        
         return array(
         		'error_message' => $error_message,
         		'is_admin' => $this->is_admin,
@@ -323,7 +386,26 @@ class ZoneController extends PublisherAbstractActionController {
         		'AdOwnerID' => $this->PublisherInfoID,
         		'AdTemplateList' => $this->get_ad_templates(),
 	    		'user_identity' => $this->identity(),
-        		'header_title' => 'Create New Ad Zone'
+        		'header_title' => 'Create New Ad Zone',
+        		
+        		'fold_pos' => \util\BannerOptions::$fold_pos,
+        		'linearity' => \util\BannerOptions::$linearity,
+        		'start_delay' => \util\BannerOptions::$start_delay,
+        		'playback_methods' => \util\BannerOptions::$playback_methods,
+        		'delivery_methods' => \util\BannerOptions::$delivery_methods,
+        		'apis_supported' => \util\BannerOptions::$apis_supported,
+        		'protocols' => \util\BannerOptions::$protocols,
+        		'mimes' => \util\BannerOptions::$mimes,
+        		
+        		'current_fold_pos' => $current_fold_pos,
+        		'current_linearity' => $current_linearity,
+        		'current_start_delay' => $current_start_delay,
+        		'current_playback_methods' => $current_playback_methods,
+        		'current_delivery_methods' => $current_delivery_methods,
+        		'current_apis_supported' => $current_apis_supported,
+        		'current_protocols' => $current_protocols,
+        		'current_mimes' => $current_mimes
+        		
         );
     }
     
