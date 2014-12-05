@@ -102,16 +102,25 @@ $(function() {
     <input type="text" value="" class="input-mini" size="5" maxlength="10" id="Height" name="Height">   </div>
     </div> 
                
+    <div class="control-group">
+    <label for="MinDuration" class="control-label">Minimum Ad Duration</label>
+    <div class="controls">
+    <input type="text" value="0" class="input-mini" size="5" maxlength="10" id="MinDuration" name="MinDuration">
+    </div> 
+    </div>  
+    
+    <div class="control-group">
+    <label for="MaxDuration" class="control-label">Maximum Ad Duration</label>
+    <div class="controls">
+    <input type="text" value="1000" class="input-mini" size="5" maxlength="10" id="MaxDuration" name="MaxDuration">   </div>
+    </div>
+               
    <div class="control-group nobanner" style="display: none;">
 		<label for="Mimes" class="control-label">Mimes : <span class="hlp"><small><i>(ctrl+shift to select mutliple)</i></small></span></label>
 		<div class="controls">
 <select id="Mimes" name="Mimes[]" multiple class="zone-txtarea" style="min-height: 170px">
     <?php foreach ($mimes as $name): ?>
-        <?php if (in_array((string)$name, $current_mimes)): ?>
-            <option value="<?php echo $name;?>" selected="selected"><?php echo $name;?></option>
-        <?php else: ?>
-            <option value="<?php echo $name;?>"><?php echo $name;?></option>
-        <?php endif; ?>
+    	<option value="<?php echo $name;?>" selected="selected"><?php echo $name;?></option>
     <?php endforeach; ?>
 </select>
 	</div>

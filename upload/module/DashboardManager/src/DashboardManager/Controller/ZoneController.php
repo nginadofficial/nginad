@@ -229,6 +229,10 @@ class ZoneController extends PublisherAbstractActionController {
 				
 				if ($ad->ImpressionType == 'video'):
 				
+					$min_duration 				= $request->getPost("MinDuration") == null ? "" : $request->getPost("MinDuration");
+						
+					$max_duration 				= $request->getPost("MaxDuration") == null ? "" : $request->getPost("MaxDuration");
+					
 					$mimes 						= $request->getPost("Mimes");
 					if ($mimes && is_array($mimes) && count($mimes) > 0):
 						$mimes = join(',', $mimes);
@@ -298,15 +302,32 @@ class ZoneController extends PublisherAbstractActionController {
                     
                     
                     try {
+                    	
 	                    $publisher_ad_zone_id = $PublisherAdZoneFactory->save_ads($ad);
 	                    
 	                    // If this publisher zone is for video save the extra table info
 	                    if ($ad->ImpressionType == 'video'):
 	                    
+	                   	 	$PublisherAdZoneVideoFactory = \_factory\PublisherAdZoneVideo::get_instance();
 	                    
+	                    	$PublisherAdZoneVideo = new \model\PublisherAdZoneVideo();
+	                    	$PublisherAdZoneVideo->PublisherAdZoneID 					= $publisher_ad_zone_id;
+	                    	$PublisherAdZoneVideo->MimesCommaSeparated 					= $mimes;
+	                    	$PublisherAdZoneVideo->MinDuration							= $min_duration;
+	                    	$PublisherAdZoneVideo->MaxDuration							= $max_duration;
+	                    	$PublisherAdZoneVideo->ProtocolsCommaSeparated				= $protocols;
+	                    	$PublisherAdZoneVideo->ApisSupportedCommaSeparated			= $apis_supported;
+	                    	$PublisherAdZoneVideo->DeliveryCommaSeparated				= $delivery;
+	                    	$PublisherAdZoneVideo->PlaybackCommaSeparated				= $playback;
+	                    	$PublisherAdZoneVideo->StartDelay							= $start_delay;
+	                    	$PublisherAdZoneVideo->Linearity							= $linearity;
+	                    	$PublisherAdZoneVideo->FoldPos								= $fold_pos;
+	                    	$PublisherAdZoneVideo->DateCreated							= date("Y-m-d H:i:s");
+
+	                    	$PublisherAdZoneVideoFactory->savePublisherAdZoneVideo($PublisherAdZoneVideo);
+	                    	
 	                    endif;
-	                    
-	                    
+
 	                    // only the admin can create direct contracts between publishers and demand customers
 	                    if ($this->is_admin):
 	                    
@@ -364,9 +385,9 @@ class ZoneController extends PublisherAbstractActionController {
              // If first coming to this form, set the Ad Owner ID.
         endif;
         
-        $current_fold_pos = array();
-        $current_linearity = array();
-        $current_start_delay = array();
+        $current_fold_pos = "";
+        $current_linearity = "";
+        $current_start_delay = "0";
         $current_playback_methods = array();
         $current_delivery_methods = array();
         $current_apis_supported = array();
@@ -422,7 +443,8 @@ class ZoneController extends PublisherAbstractActionController {
         $DomainID = intval($this->params()->fromRoute('param1', 0));
         $PublisherAdZoneFactory = \_factory\PublisherAdZone::get_instance();
         $AdCampaignBannerFactory = \_factory\AdCampaignBanner::get_instance();
-		
+        $PublisherAdZoneVideoFactory = \_factory\PublisherAdZoneVideo::get_instance();
+        
         $current_publisheradzonetype = AD_TYPE_ANY_REMNANT;
 
         $editResultObj = new \model\PublisherAdZone();
@@ -452,6 +474,20 @@ class ZoneController extends PublisherAbstractActionController {
             $AdTemplateList = $this->get_ad_templates();
             $request = $this->getRequest();
             
+            $current_mimes 					= array();
+            
+            $current_min_duration 			= "";
+            $current_max_duration 			= "";
+            
+            $current_apis_supported 		= array();
+            $current_protocols 				= array();
+            $current_delivery_methods 		= array();
+            $current_playback_methods 		= array();
+            
+            $current_start_delay 			= "";
+            $current_linearity 				= "";
+            $current_fold_pos 				= "";
+
             // Make sure the value provided is valid.
             $AdSpaceID = intval($this->params()->fromRoute('id', 0));
 
@@ -464,6 +500,30 @@ class ZoneController extends PublisherAbstractActionController {
                      
                 	$current_publisheradzonetype   = $editResultObj->PublisherAdZoneTypeID;
                 
+
+	                $params = array();
+	                $params['PublisherAdZoneID'] 	= $editResultObj->PublisherAdZoneID;
+	                
+	                $PublisherAdZoneVideo 			= $PublisherAdZoneVideoFactory->get_row($params);
+
+	                if ($PublisherAdZoneVideo != null):
+	                
+		                $current_mimes 					= explode(',', $PublisherAdZoneVideo->MimesCommaSeparated);
+		                
+		                $current_min_duration 			= $PublisherAdZoneVideo->MinDuration;
+		                $current_max_duration 			= $PublisherAdZoneVideo->MaxDuration;
+		                
+		                $current_apis_supported 		= explode(',', $PublisherAdZoneVideo->ApisSupportedCommaSeparated);
+		                $current_protocols 				= explode(',', $PublisherAdZoneVideo->ProtocolsCommaSeparated);
+		                $current_delivery_methods 		= explode(',', $PublisherAdZoneVideo->DeliveryCommaSeparated);
+		                $current_playback_methods 		= explode(',', $PublisherAdZoneVideo->PlaybackCommaSeparated);
+		                
+		                $current_start_delay 			= $PublisherAdZoneVideo->StartDelay;
+		                $current_linearity 				= $PublisherAdZoneVideo->Linearity;
+		                $current_fold_pos 				= $PublisherAdZoneVideo->FoldPos;
+
+		            endif;
+		                
                     if ($request->isPost()):
                 
                     	$validate = $this->validateInput($needed_input, false);
@@ -505,9 +565,85 @@ class ZoneController extends PublisherAbstractActionController {
 								$editResultObj->Height = $AdTemplatesObj->Height;
 							}
                 			
+							$editResultObj->ImpressionType				= $request->getPost("ImpressionType") == 'video' ? 'video' : 'banner';
+							
+							if ($editResultObj->ImpressionType == 'video'):
+							
+								$min_duration 				= $request->getPost("MinDuration") == null ? "" : $request->getPost("MinDuration");
+								
+								$max_duration 				= $request->getPost("MaxDuration") == null ? "" : $request->getPost("MaxDuration");
+									
+								$mimes 						= $request->getPost("Mimes");
+								if ($mimes && is_array($mimes) && count($mimes) > 0):
+									$mimes = join(',', $mimes);
+								else:
+									$mimes = "";
+								endif;
+									
+								$protocols 					= $request->getPost("Protocols");
+								if ($protocols && is_array($protocols) && count($protocols) > 0):
+									$protocols = join(',', $protocols);
+								else:
+									$protocols = "";
+								endif;
+									
+								$apis_supported 			= $request->getPost("ApisSupported");
+								if ($apis_supported && is_array($apis_supported) && count($apis_supported) > 0):
+									$apis_supported = join(',', $apis_supported);
+								else:
+									$apis_supported = "";
+								endif;
+									
+								$delivery 					= $request->getPost("Delivery");
+								if ($delivery && is_array($delivery) && count($delivery) > 0):
+									$delivery = join(',', $delivery);
+								else:
+									$delivery = "";
+								endif;
+									
+								$playback 					= $request->getPost("Playback");
+								if ($playback && is_array($playback) && count($playback) > 0):
+									$playback = join(',', $playback);
+								else:
+									$playback = "";
+								endif;
+									
+								$start_delay 				= $request->getPost("StartDelay") == null ? "" : $request->getPost("StartDelay");
+									
+								$linearity 					= $request->getPost("Linearity") == null ? "" : $request->getPost("Linearity");
+									
+								$fold_pos 					= $request->getPost("FoldPos") == null ? "" : $request->getPost("FoldPos");
+									
+							endif;
+							
                 			
                 			try {
+                				
                 				$PublisherAdZoneFactory->save_ads($editResultObj);
+
+                				// If this publisher zone is for video save the extra table info
+                				if ($editResultObj->ImpressionType == 'video'):
+	                				 
+	                				$PublisherAdZoneVideo = new \model\PublisherAdZoneVideo();
+	                				$PublisherAdZoneVideo->PublisherAdZoneID 			= $editResultObj->PublisherAdZoneID;
+	                				$PublisherAdZoneVideo->MimesCommaSeparated 			= $mimes;
+	                				$PublisherAdZoneVideo->MinDuration					= $min_duration;
+	                				$PublisherAdZoneVideo->MaxDuration					= $max_duration;
+	                				$PublisherAdZoneVideo->ApisSupportedCommaSeparated	= $apis_supported;
+	                				$PublisherAdZoneVideo->ProtocolsCommaSeparated		= $protocols;
+	                				$PublisherAdZoneVideo->DeliveryCommaSeparated		= $delivery;
+	                				$PublisherAdZoneVideo->PlaybackCommaSeparated		= $playback;
+	                				$PublisherAdZoneVideo->StartDelay					= $start_delay;
+	                				$PublisherAdZoneVideo->Linearity					= $linearity;
+	                				$PublisherAdZoneVideo->FoldPos						= $fold_pos;
+	                				$PublisherAdZoneVideo->DateCreated					= date("Y-m-d H:i:s");
+	                				
+	                				/*
+	                				 * Create a new entry each time since video is optional
+	                				 */
+	                				$PublisherAdZoneVideoFactory->savePublisherAdZoneVideo($PublisherAdZoneVideo);
+	                				
+                				endif;
                 				
                 				if ($this->is_admin):
 	                				$LinkedBannerToAdZoneFactory = \_factory\LinkedBannerToAdZone::get_instance();
@@ -571,6 +707,7 @@ class ZoneController extends PublisherAbstractActionController {
                 $error_message = "An invalid Ad Zone ID was provided.";
             endif;
         endif;
+        
         return array(
         		'error_message' => $error_message,
         		'is_admin' => $this->is_admin,
@@ -585,7 +722,30 @@ class ZoneController extends PublisherAbstractActionController {
         		'true_user_name' => $this->true_user_name,
         		'dashboard_view' => 'publisher',
 	    		'user_identity' => $this->identity(),
-        		'header_title' => 'Edit Ad Zone'
+        		'header_title' => 'Edit Ad Zone',
+        		
+        		'fold_pos' => \util\BannerOptions::$fold_pos,
+        		'linearity' => \util\BannerOptions::$linearity,
+        		'start_delay' => \util\BannerOptions::$start_delay,
+        		'playback_methods' => \util\BannerOptions::$playback_methods,
+        		'delivery_methods' => \util\BannerOptions::$delivery_methods,
+        		'apis_supported' => \util\BannerOptions::$apis_supported,
+        		'protocols' => \util\BannerOptions::$protocols,
+        		'mimes' => \util\BannerOptions::$mimes,
+        		
+        		'current_mimes' => $current_mimes,
+        		
+        		'current_min_duration' => $current_min_duration,
+        		'current_max_duration' => $current_max_duration,
+        		
+        		'current_apis_supported' => $current_apis_supported,
+        		'current_protocols' => $current_protocols,
+        		'current_delivery_methods' => $current_delivery_methods,
+        		'current_playback_methods' => $current_playback_methods,
+        		'current_start_delay' => $current_start_delay,
+        		'current_linearity' => $current_linearity,
+        		'current_fold_pos' => $current_fold_pos
+        		
         );
     }
     

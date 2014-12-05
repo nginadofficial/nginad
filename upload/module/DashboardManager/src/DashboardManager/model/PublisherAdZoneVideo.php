@@ -23,9 +23,6 @@ class PublisherAdZoneVideo
     public $StartDelay;
     public $Linearity;
     public $FoldPos;
-    public $VastPassbackXml;
-    public $Width;
-    public $Height;
     public $DateCreated;
     public $DateUpdated;
 }

@@ -201,6 +201,13 @@ class PublisherAdZone extends \_factory\CachedTableRead
    	$data['AdOwnerID'] = intval(abs($rawData->AdOwnerID));
    	$data['AdName'] = substr($rawData->AdName,0,100);
    	$data['Description'] = $rawData->Description;
+   	
+   	if ($rawData->ImpressionType == 'banner'):
+   		$data['ImpressionType'] = 'banner';
+   	else:
+   		$data['ImpressionType'] = 'video';
+   	endif;
+
    	$data['PassbackAdTag'] = $rawData->PassbackAdTag;
    	if (intval($rawData->AdStatus) >= 0 || intval($rawData->AdStatus) <= 2):
    	

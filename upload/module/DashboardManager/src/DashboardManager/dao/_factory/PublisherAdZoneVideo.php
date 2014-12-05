@@ -52,7 +52,7 @@ class PublisherAdZoneVideo extends \_factory\CachedTableRead
         	);
         	endforeach;
         	$select->limit(1, 0);
-        	$select->order(array('PublisherWebsiteID', 'AdName'));
+        	$select->order(array('PublisherAdZoneID'));
 
         }
         	);
@@ -82,7 +82,7 @@ class PublisherAdZoneVideo extends \_factory\CachedTableRead
     		);
     		endforeach;
     		//$select->limit(10, 0);
-    		$select->order(array('PublisherWebsiteID', 'AdName'));
+    		$select->order(array('PublisherAdZoneID'));
     	}
     		);
     
@@ -93,52 +93,6 @@ class PublisherAdZoneVideo extends \_factory\CachedTableRead
     		return $obj_list;
     }
     
-    /**
-     * Query database and return joined table results. This query has a potential to result in high load.
-     * 
-     * @param string $params
-     * @return multitype:Ambigous <\Zend\Db\ResultSet\ResultSet, NULL, \Zend\Db\ResultSet\ResultSetInterface>
-     */
-    public function get_joined($params = null) {
-        	// http://files.zend.com/help/Zend-Framework/zend.db.select.html
-
-        $obj_list = array();
-
-    	$resultSet = $this->select(function (\Zend\Db\Sql\Select $select) use ($params) {
-    	        $select->join("AdTemplates",
-    	            "PublisherAdZone.AdTemplateID = AdTemplates.AdTemplateID",
-    	            array(
-    	        	    "TemplateName" => "TemplateName",
-    	                "TemplateX" => "Width",
-    	                "TemplateY" => "Height",
-    	               ),
-    	            $select::JOIN_LEFT);
-    	        $select->join("PublisherWebsite",
-    	            "PublisherWebsite.PublisherWebsiteID = PublisherAdZone.PublisherWebsiteID",
-    	            array(
-    	                "WebDomain" => "WebDomain",
-    	                "DomainOwnerID" => "DomainOwnerID",
-    	                "DomainDescription" => "Description",
-    	                "DomainID" => "PublisherWebsiteID",
-    	                ),
-    	            $select::JOIN_INNER);
-        		foreach ($params as $name => $value):
-        		$select->where(
-        				$select->where->equalTo($name, $value)
-        		);
-        		endforeach;
-        		//$select->limit(10, 0);
-        		$select->order(array('PublisherAdZone.PublisherWebsiteID', 'PublisherAdZone.AdName'));
-        	}
-    	);
-
-    	    foreach ($resultSet as $obj):
-    	        $obj_list[] = $obj;
-    	    endforeach;
-
-    		return $obj_list;
-    }
-   
     /**
      * Query database for a row and return results as an object.
      * 
@@ -186,155 +140,41 @@ class PublisherAdZoneVideo extends \_factory\CachedTableRead
        return $DataObj;
    }
    
-   /**
-    * Save Ads data, insert or update.
-    * @param \DashboardManager\dao\PublisherAdZone $rawData
-    * @return int Number of Rows affected by the save.
-    */
-   public function save_ads(\model\PublisherAdZone $rawData)
-   {
-       
-    // We must enforce data integrity!
-    $data['PublisherAdZoneID'] = intval(abs($rawData->PublisherAdZoneID));
-    $data['PublisherWebsiteID'] = intval(abs($rawData->PublisherWebsiteID));
-    $data['PublisherAdZoneTypeID'] = intval(abs($rawData->PublisherAdZoneTypeID));
-   	$data['AdOwnerID'] = intval(abs($rawData->AdOwnerID));
-   	$data['AdName'] = substr($rawData->AdName,0,100);
-   	$data['Description'] = $rawData->Description;
-   	$data['PassbackAdTag'] = $rawData->PassbackAdTag;
-   	if (intval($rawData->AdStatus) >= 0 || intval($rawData->AdStatus) <= 2):
-   	
-   		$data['AdStatus'] = intval($rawData->AdStatus);
-   		$data['AutoApprove'] = intval($rawData->AutoApprove);
-   	else:
-   	
-   		$data['AdStatus'] = 0;
-   		$data['AutoApprove'] = 0;
-   	endif;
-   	
-   	if ($rawData->AdTemplateID === null):
-   	
-   	    $data['AdTemplateID'] = null;
-   	    $data['Width'] = intval($rawData->Width);
-   	    $data['Height'] = intval($rawData->Height);
-   	
-   	else: 
-   	
-   	    $data['AdTemplateID'] = intval(abs($rawData->AdTemplateID));
-   	    $data['Width'] = intval($rawData->Width);
-   	    $data['Height'] = intval($rawData->Height);
-
-   	endif;
-   	
-   	if (intval($rawData->IsMobileFlag) == 0 || intval($rawData->IsMobileFlag) == 1):
-   	
-   		$data['IsMobileFlag'] = intval($rawData->IsMobileFlag);
-   	
-   	else:
-   	
-   		$data['IsMobileFlag'] = 0;
-   	endif;
-   	
-   	
-   	if (is_numeric($rawData->FloorPrice) && $rawData->FloorPrice !== null):
-   	
-   	    $data['FloorPrice'] = $rawData->FloorPrice;
-   	endif;
-   	if ($rawData->TotalAsk !== null):
-   	
-   	    $data['TotalAsk'] = intval(abs($rawData->TotalAsk));
-   	endif;
-   	if ($rawData->TotalImpressions !== null):
-   	
-   	    $data['TotalImpressions'] = intval(abs($rawData->TotalImpressions));
-   	endif;
-   	if (is_numeric($rawData->TotalAmount) && $rawData->TotalAmount !== null):
-   	
-   		$data['TotalAmount'] = $rawData->TotalAmount;
-   	endif;
-   	
-   	$data['DateUpdated'] = date('Y-m-d H:i:s');
-   	if (intval($rawData->PublisherAdZoneID) > 0):
-   	
-   		return $this->update($data,array('PublisherAdZoneID' => intval(abs($rawData->PublisherAdZoneID))));
-   	
-   	else:
-   	
-   	    $data['DateCreated'] = date('Y-m-d H:i:s');
-   		$this->insert($data);
-   		return $this->lastInsertValue;
-   	endif;
    
+   public function savePublisherAdZoneVideo(\model\PublisherAdZoneVideo $PublisherAdZoneVideo) {
+   	
+   		$this->delete_zone($PublisherAdZoneVideo->PublisherAdZoneID);
+   		
+	   	$data = array(
+	   			'PublisherAdZoneID'         	=> $PublisherAdZoneVideo->PublisherAdZoneID,
+	   			'MimesCommaSeparated'       	=> $PublisherAdZoneVideo->MimesCommaSeparated,
+	   			'MinDuration'         			=> $PublisherAdZoneVideo->MinDuration,
+	   			'MaxDuration'         			=> $PublisherAdZoneVideo->MaxDuration,
+	   			'ApisSupportedCommaSeparated'	=> $PublisherAdZoneVideo->ApisSupportedCommaSeparated,
+	   			'ProtocolsCommaSeparated'     	=> $PublisherAdZoneVideo->ProtocolsCommaSeparated,
+	   			'DeliveryCommaSeparated'      	=> $PublisherAdZoneVideo->DeliveryCommaSeparated,
+	   			'PlaybackCommaSeparated'     	=> $PublisherAdZoneVideo->PlaybackCommaSeparated,
+	   			'StartDelay'         			=> $PublisherAdZoneVideo->StartDelay,
+	   			'Linearity'         			=> $PublisherAdZoneVideo->Linearity,
+	   			'FoldPos'         				=> $PublisherAdZoneVideo->FoldPos,
+	   			'DateCreated'         			=> $PublisherAdZoneVideo->DateCreated
+	   	);
+
+		$this->insert($data);
+		return $this->getLastInsertValue();
    }
    
    /**
     * Delete the Ad specified.
     * 
-    * @param int $PublisherAdZoneID The integer ID of the Ad to delete.
+    * @param int $PublisherAdZoneVideoID The integer ID of the Ad to delete.
     * @throws \InvalidArgumentException is thrown when an invalid integer is provided.
     * @return boolean|int Returns the rows affected, or FALSE if failure.
     */
    public function delete_zone($PublisherAdZoneID)
    {
-       $result = 0;
-        
-       if (is_int($PublisherAdZoneID) && intval($PublisherAdZoneID) > 0 && $PublisherAdZoneID !== null):
-       
-       	try {
-       		$result = $this->delete(array("PublisherAdZoneID" => intval($PublisherAdZoneID)));
-       	}
-       	catch (\Exception $e) {
-       		 
-       		return FALSE; // DB Error.
-       	}
-       	 
-       	return $result;
-       
-       elseif (!is_int($PublisherAdZoneID) && $PublisherAdZoneID !== null ): // Not a number, but not null (EX: string). Throw exception.
-       
-       	$message = "delete_zone() requires a positive integer as its first and only parameter. A value of type \"" .
-       			gettype($PublisherAdZoneID) . "\" was provided instead.";
-       	throw new \InvalidArgumentException($message);
-       endif;
-        
-       return FALSE; // Invalid ID.
-       
+       $result = $this->delete(array("PublisherAdZoneID" => intval($PublisherAdZoneID)));
    }
    
-   public function updatePublisherAdZonePublisherAdZoneType($publisher_ad_zone_id, $type_id) {
-    
-    	$params = array();
-    	$params["PublisherAdZoneID"] = $publisher_ad_zone_id;
-    	$PublisherAdZone = $this->get_row($params);
-    
-    	if ($PublisherAdZone != null):
-	    	 
-    		$PublisherAdZone->PublisherAdZoneTypeID = $type_id;
-	    	// get array of data
-	    	$data = $PublisherAdZone->getArrayCopy();
-	    	 
-	    	$this->update($data, array('PublisherAdZoneID' => $publisher_ad_zone_id));
-    	endif;
-    
-    }
-    
-    public function updatePublisherAdZonePublisherAdZoneStatus($publisher_ad_zone_id, $approval_flag) {
-    
-    	$params = array();
-    	$params["PublisherAdZoneID"] = $publisher_ad_zone_id;
-    	$PublisherAdZone = $this->get_row($params);
-    
-    	if ($PublisherAdZone != null):
-    	 
-    	$PublisherAdZone->AutoApprove 	= 0;
-    	$PublisherAdZone->AdStatus 		= $approval_flag;
-    	// get array of data
-    	$data = $PublisherAdZone->getArrayCopy();
-    	 
-    	$this->update($data, array('PublisherAdZoneID' => $publisher_ad_zone_id));
-    	endif;
-    
-    }
-
 };
 ?>

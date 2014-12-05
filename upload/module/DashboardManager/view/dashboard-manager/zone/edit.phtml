@@ -36,8 +36,11 @@ $(function() {
     <label for="adname" class="control-label">Ad Delivery Type</label>
     <div class="controls error">
 		<select id="ImpressionType" name="ImpressionType" class="zone-txtarea" onchange="switchImpressionType();">
-			<option value="banner">Banner Ad</option>
-			<option value="video">Video Ad</option>
+			<?php if ($editResultObj->ImpressionType == 'banner'): ?>
+				<option value="banner">Banner Ad</option>
+			<?php else: ?>
+				<option value="video">Video Ad</option>
+			<?php endif; ?>
 		</select>
 		</div>
     </div>
@@ -111,6 +114,19 @@ $(function() {
     <label for="Height" class="control-label">Ad Height</label>
     <div class="controls">
     <input type="text" value="<?php echo $editResultObj->Height;?>" class="input-mini" size="5" maxlength="10" id="Height" name="Height">    </div>
+    </div>
+    
+    <div class="control-group">
+    <label for="MinDuration" class="control-label">Minimum Ad Duration</label>
+    <div class="controls">
+    <input type="text" value="0" class="input-mini" size="5" maxlength="10" id="MinDuration" name="MinDuration">
+    </div> 
+    </div>  
+    
+    <div class="control-group">
+    <label for="MaxDuration" class="control-label">Maximum Ad Duration</label>
+    <div class="controls">
+    <input type="text" value="1000" class="input-mini" size="5" maxlength="10" id="MaxDuration" name="MaxDuration">   </div>
     </div>
     
       <div class="control-group nobanner" style="display: none;">
