@@ -1,0 +1,264 @@
+<?php
+
+$this->headScript()->appendFile($this->basePath() . '/js/filter.js');
+
+$preview_query = $ispreview == true ? "?ispreview=true" : "";
+if ($ispreview == true):
+	$rtb_banner_id = $bannerpreviewid;
+	$ad_campaign_id = $campaignpreviewid;
+else:
+	$rtb_banner_id = $bannerid;
+	$ad_campaign_id = $campaignid;
+endif;
+
+$this->headScript()->captureStart(); ?>
+var currentStates = "<?php echo $current_states; ?>";
+<?php $this->headScript()->captureEnd();  ?>
+
+  <ul class="breadcrumb">
+    <li><a href="/demand/<?php echo $preview_query; ?>">Ad Campaigns</a><span class="divider">/</span></li>
+    <li><?php echo $bread_crumb_info["BCAdCampaign"]; ?><span class="divider">/</span></li>
+    <li><a href="/demand/viewbanner/<?php echo $ad_campaign_id; ?><?php echo $preview_query; ?>">VAST Video</a><span class="divider">/</span></li>
+    <li><?php echo $bread_crumb_info["BCBanner"]; ?><span class="divider">/</span></li>
+    <li>Edit Delivery Filter for VAST Video</li>
+    </ul>
+<div class="formbox">
+<form method="POST" action="/demand/editdeliveryfiltervideo">
+<fieldset>
+<div class="span7">
+    <input type="hidden" name="bannerid" value="<?php echo $bannerid; ?>">
+	<input type="hidden" name="bannerpreviewid" value="<?php echo $bannerpreviewid; ?>">
+	<input type="hidden" name="ispreview" value="<?php echo (string)$ispreview; ?>">
+   <div class="control-group">
+		<label for="vertical">Vertical : <span class="hlp"><small><i>(ctrl+shift to select mutliple verticals)</i></small></span></label>
+<select id="vertical" name="vertical[]" multiple class="zone-txtarea" style="min-height: 200px">
+    <?php foreach ($vertical_options as $code => $name): ?>
+        <?php if (in_array((string)$code, $current_verticals)): ?>
+            <option value="<?php echo $code;?>" selected="selected"><?php echo $name;?></option>
+        <?php else: ?>
+            <option value="<?php echo $code;?>"><?php echo $name;?></option>
+        <?php endif; ?>
+    <?php endforeach; ?>
+</select>
+
+	</div>
+
+<div class="control-group">
+		<label for="geocountry">Geo Country : <span class="hlp"><small><i>(ctrl+shift to select mutliple countries)</i></small></span></label>
+<select id="geocountry" name="geocountry[]" class="zone-txtarea" multiple style="min-height: 200px" onchange="populateStates();">
+    <option value="">[ SELECT A COUNTRY ]</option>
+    <?php foreach ($countrylist as $shortcode => $name): ?>
+        <?php if (in_array((string)$shortcode, $current_countries)): ?>
+            <option value="<?php echo $shortcode?>" selected="selected"><?php echo $name;?></option>
+        <?php else: ?>
+            <option value="<?php echo $shortcode?>"><?php echo $name;?></option>
+        <?php endif; ?>
+    <?php endforeach; ?>
+</select>
+	</div>
+<div class="control-group">
+		<label for="geostate">Geo State : <span class="hlp"><small><i>(ctrl+shift to select mutliple states)</i></small></span></label>
+		<div id="state-select" style="margin-bottom: 30px;">
+
+  </div>
+	</div>
+	<div class="control-group">
+		<label for="geocity">Geo City : <span class="hlp"><small><i>(comma separate multiple cities)</i></small></span></label>
+		<input type="text" id="geocity" name="geocity" value="<?php echo $geocity_option;?>" class="zone-txtbox">
+	</div>
+	 
+    <div class="control-group">
+    <label for="MinDuration" class="control-label">Minimum Ad Duration</label>
+    <div class="controls">
+    <input type="text" value="<?php echo $MinDuration;?>" class="input-mini" size="5" maxlength="10" id="MinDuration" name="MinDuration">
+    </div> 
+    </div>  
+    
+    <div class="control-group">
+    <label for="MaxDuration" class="control-label">Maximum Ad Duration</label>
+    <div class="controls">
+    <input type="text" value="<?php echo $MaxDuration;?>" class="input-mini" size="5" maxlength="10" id="MaxDuration" name="MaxDuration">
+    </div> 
+    </div>  
+	
+	<div class="control-group">
+		<label for="MinHeight">Minimum Video Height : <span class="hlp"><small><i>(eg. 100 [in px])</i></small></span></label>
+		<input type="text" name="MinHeight" value="<?php echo $MinHeight;?>" class="input-mini">
+	</div>
+	<div class="control-group">
+		<label for="MinWidth">Minimum Video Width : <span class="hlp"><small><i>(eg. 100 [in px])</i></small></span></label>
+		<input type="text" name="MinWidth" value="<?php echo $MinWidth;?>" class="input-mini">
+	</div>
+	<div class="control-group">
+		<label for="FoldPos">Fold Position</label>
+<select id="FoldPos" name="FoldPos" class="zone-txtarea">
+    <?php foreach ($fold_pos as $code => $name): ?>
+        <?php if ((string)$code === $current_fold_pos): ?>
+            <option value="<?php echo $code;?>" selected="selected"><?php echo $name;?></option>
+        <?php else: ?>
+            <option value="<?php echo $code;?>"><?php echo $name;?></option>
+        <?php endif; ?>
+    <?php endforeach; ?>
+</select>
+
+	</div>
+	
+
+   <div class="control-group">
+		<label for="secure">Secure</label>
+<select id="secure" name="secure"  class="zone-txtarea">
+    <?php foreach ($secure_options as $code => $name): ?>
+        <?php if ((string)$code === $current_secure): ?>
+            <option value="<?php echo $code;?>" selected="selected"><?php echo $name;?></option>
+        <?php else: ?>
+            <option value="<?php echo $code;?>"><?php echo $name;?></option>
+        <?php endif; ?>
+    <?php endforeach; ?>
+</select>
+
+	</div>
+	
+	</div>
+	<div class="span7">
+	
+	
+	   <div class="control-group nobanner">
+		<label for="Mimes" class="control-label">Mimes : <span class="hlp"><small><i>(ctrl+shift to select mutliple)</i></small></span></label>
+		<div class="controls">
+<select id="Mimes" name="Mimes[]" multiple class="zone-txtarea" style="min-height: 170px">
+    <?php foreach ($mimes as $name): ?>
+        <?php if (in_array((string)$name, $current_mimes)): ?>
+            <option value="<?php echo $name;?>" selected="selected"><?php echo $name;?></option>
+        <?php else: ?>
+            <option value="<?php echo $name;?>"><?php echo $name;?></option>
+        <?php endif; ?>
+    <?php endforeach; ?>
+</select>
+	</div>
+	</div> 
+	
+	   <div class="control-group nobanner">
+		<label for="Protocols" class="control-label">Protocols : <span class="hlp"><small><i>(ctrl+shift to select mutliple)</i></small></span></label>
+		<div class="controls">
+<select id="Protocols" name="Protocols[]" multiple class="zone-txtarea" style="min-height: 120px">
+    <?php foreach ($protocols as $code => $name): ?>
+        <?php if (in_array((string)$code, $current_protocols)): ?>
+            <option value="<?php echo $code;?>" selected="selected"><?php echo $name;?></option>
+        <?php else: ?>
+            <option value="<?php echo $code;?>"><?php echo $name;?></option>
+        <?php endif; ?>
+    <?php endforeach; ?>
+</select>
+	</div>
+	</div> 
+	
+	   <div class="control-group nobanner">
+		<label for="ApisSupported" class="control-label">Apis Supported : <span class="hlp"><small><i>(ctrl+shift to select mutliple)</i></small></span></label>
+		<div class="controls">
+<select id="ApisSupported" name="ApisSupported[]" multiple class="zone-txtarea" style="min-height: 120px">
+    <?php foreach ($apis_supported as $code => $name): ?>
+        <?php if (in_array((string)$code, $current_apis_supported)): ?>
+            <option value="<?php echo $code;?>" selected="selected"><?php echo $name;?></option>
+        <?php else: ?>
+            <option value="<?php echo $code;?>"><?php echo $name;?></option>
+        <?php endif; ?>
+    <?php endforeach; ?>
+</select>
+	</div>
+	</div> 
+	
+	   <div class="control-group nobanner">
+		<label for="Delivery" class="control-label">Delivery : <span class="hlp"><small><i>(ctrl+shift to select mutliple)</i></small></span></label>
+		<div class="controls">
+<select id="Delivery" name="Delivery[]" multiple class="zone-txtarea" style="min-height: 50px">
+    <?php foreach ($delivery_methods as $code => $name): ?>
+        <?php if (in_array((string)$code, $current_delivery_methods)): ?>
+            <option value="<?php echo $code;?>" selected="selected"><?php echo $name;?></option>
+        <?php else: ?>
+            <option value="<?php echo $code;?>"><?php echo $name;?></option>
+        <?php endif; ?>
+    <?php endforeach; ?>
+</select>
+	</div>
+	</div> 
+	
+	   <div class="control-group nobanner">
+		<label for="Playback" class="control-label">Playback : <span class="hlp"><small><i>(ctrl+shift to select mutliple)</i></small></span></label>
+		<div class="controls">
+<select id="Playback" name="Playback[]" multiple class="zone-txtarea" style="min-height: 100px">
+    <?php foreach ($playback_methods as $code => $name): ?>
+        <?php if (in_array((string)$code, $current_playback_methods)): ?>
+            <option value="<?php echo $code;?>" selected="selected"><?php echo $name;?></option>
+        <?php else: ?>
+            <option value="<?php echo $code;?>"><?php echo $name;?></option>
+        <?php endif; ?>
+    <?php endforeach; ?>
+</select>
+	</div>
+	</div> 
+	
+	<div class="control-group">
+		<label for="StartDelay">Start Delay : </label>
+<select id="StartDelay" name="StartDelay" class="zone-txtarea">
+    <?php foreach ($start_delay as $code => $name): ?>
+        <?php if ((string)$code === $current_start_delay): ?>
+            <option value="<?php echo $code;?>" selected="selected"><?php echo $name;?></option>
+        <?php else: ?>
+            <option value="<?php echo $code;?>"><?php echo $name;?></option>
+        <?php endif; ?>
+    <?php endforeach; ?>
+</select>
+
+	</div>
+	
+
+	<div class="control-group">
+		<label for="Linearity">Linearity : </label>
+<select id="Linearity" name="Linearity" class="zone-txtarea">
+    <?php foreach ($linearity as $code => $name): ?>
+        <?php if ((string)$code === $current_linearity): ?>
+            <option value="<?php echo $code;?>" selected="selected"><?php echo $name;?></option>
+        <?php else: ?>
+            <option value="<?php echo $code;?>"><?php echo $name;?></option>
+        <?php endif; ?>
+    <?php endforeach; ?>
+</select>
+
+	</div>
+	
+<div class="control-group">
+		<label for="pmpenable">Pmp Enable</label>
+<select id="pmpenable" name="pmpenable" class="zone-txtarea"> 
+    <?php foreach ($pmpenable_options as $code => $name): ?>
+        <?php if ((string)$code === $current_pmpenable): ?>
+            <option value="<?php echo $code;?>" selected="selected"><?php echo $name;?></option>
+        <?php else: ?>
+            <option value="<?php echo $code;?>"><?php echo $name;?></option>
+        <?php endif; ?>
+    <?php endforeach; ?>
+</select>
+
+	</div>
+	
+    <div class="control-group">
+		<label for="optout">Optout</label>
+<select id="optout" name="optout" class="zone-txtarea">
+    <?php foreach ($optout_options as $code => $name): ?>
+        <?php if ((string)$code === $current_optout): ?>
+            <option value="<?php echo $code;?>" selected="selected"><?php echo $name;?></option>
+        <?php else: ?>
+            <option value="<?php echo $code;?>"><?php echo $name;?></option>
+        <?php endif; ?>
+    <?php endforeach; ?>
+</select>
+
+	</div>
+	</div>
+	<div class="span12">
+<div class="control-group">
+	   <input type="submit" class="btn btn-primary" name="B1" value="Edit Video Filter Settings" />
+	</div>
+	</div>
+</fieldset>
+</form>
+</div>

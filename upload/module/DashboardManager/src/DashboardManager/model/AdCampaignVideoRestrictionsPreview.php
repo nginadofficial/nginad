@@ -19,6 +19,8 @@ class AdCampaignVideoRestrictionsPreview {
     public $MimesCommaSeparated;
     public $MinDuration;
     public $MaxDuration;
+    public $MinHeight;
+    public $MinWidth;
     public $ApisSupportedCommaSeparated;
     public $ProtocolsCommaSeparated;
     public $DeliveryCommaSeparated;

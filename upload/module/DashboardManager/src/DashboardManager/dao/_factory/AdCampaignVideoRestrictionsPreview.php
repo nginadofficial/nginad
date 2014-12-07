@@ -85,41 +85,43 @@ class AdCampaignVideoRestrictionsPreview extends AbstractTableGateway
     public function saveAdCampaignVideoRestrictionsPreview(\model\AdCampaignVideoRestrictionsPreview $VideoRestrictionsPreview) {
     	$data = array(
     	        'AdCampaignBannerPreviewID'        => $VideoRestrictionsPreview->AdCampaignBannerPreviewID,
-    	        'GeoCountry'                       => $VideoRestrictionsPreview->GeoCountry === "" ? null : $VideoRestrictionsPreview->GeoCountry,
-    	        'GeoState'                         => $VideoRestrictionsPreview->GeoState === "" ? null : $VideoRestrictionsPreview->GeoState,
-    	        'GeoCity'                          => $VideoRestrictionsPreview->GeoCity === "" ? null : $VideoRestrictionsPreview->GeoCity,
-    	        'MimesCommaSeparated'              => $VideoRestrictionsPreview->MimesCommaSeparated === "" ? null : $VideoRestrictionsPreview->MimesCommaSeparated,
-    			'MinDuration'              		   => $VideoRestrictionsPreview->MinDuration === "" ? null : $VideoRestrictionsPreview->MinDuration,
-    			'MaxDuration'              		   => $VideoRestrictionsPreview->MaxDuration === "" ? null : $VideoRestrictionsPreview->MaxDuration,
-    			'ApisSupportedCommaSeparated'  	   => $VideoRestrictionsPreview->ApisSupportedCommaSeparated === "" ? null : $VideoRestrictionsPreview->ApisSupportedCommaSeparated,
-    			'ProtocolsCommaSeparated'          => $VideoRestrictionsPreview->ProtocolsCommaSeparated === "" ? null : $VideoRestrictionsPreview->ProtocolsCommaSeparated,
-    			'DeliveryCommaSeparated'           => $VideoRestrictionsPreview->DeliveryCommaSeparated === "" ? null : $VideoRestrictionsPreview->DeliveryCommaSeparated,
-    			'PlaybackCommaSeparated'           => $VideoRestrictionsPreview->PlaybackCommaSeparated === "" ? null : $VideoRestrictionsPreview->PlaybackCommaSeparated,
-    			'StartDelay'              		   => $VideoRestrictionsPreview->StartDelay === "" ? null : $VideoRestrictionsPreview->StartDelay,
-    			'Linearity'              		   => $VideoRestrictionsPreview->Linearity === "" ? null : $VideoRestrictionsPreview->Linearity,
-    			'FoldPos'              		   	   => $VideoRestrictionsPreview->FoldPos === "" ? null : $VideoRestrictionsPreview->FoldPos,
-    			'PmpEnable'              		   => $VideoRestrictionsPreview->PmpEnable === "" ? null : $VideoRestrictionsPreview->PmpEnable,
-    			'Secure'              		   	   => $VideoRestrictionsPreview->Secure === "" ? null : $VideoRestrictionsPreview->Secure,
-    			'Optout'              		   	   => $VideoRestrictionsPreview->Optout === "" ? null : $VideoRestrictionsPreview->Optout,
-    	        'Vertical'                         => $VideoRestrictionsPreview->Vertical === "" ? null : $VideoRestrictionsPreview->Vertical,
+    	        'GeoCountry'                       => $VideoRestrictionsPreview->GeoCountry,
+    	        'GeoState'                         => $VideoRestrictionsPreview->GeoState,
+    	        'GeoCity'                          => $VideoRestrictionsPreview->GeoCity,
+    	        'MimesCommaSeparated'              => $VideoRestrictionsPreview->MimesCommaSeparated,
+    			'MinDuration'              		   => $VideoRestrictionsPreview->MinDuration,
+    			'MaxDuration'              		   => $VideoRestrictionsPreview->MaxDuration,
+    			'ApisSupportedCommaSeparated'  	   => $VideoRestrictionsPreview->ApisSupportedCommaSeparated,
+    			'ProtocolsCommaSeparated'          => $VideoRestrictionsPreview->ProtocolsCommaSeparated,
+    			'DeliveryCommaSeparated'           => $VideoRestrictionsPreview->DeliveryCommaSeparated,
+    			'PlaybackCommaSeparated'           => $VideoRestrictionsPreview->PlaybackCommaSeparated,
+    			'StartDelay'              		   => $VideoRestrictionsPreview->StartDelay,
+    			'Linearity'              		   => $VideoRestrictionsPreview->Linearity,
+    			'FoldPos'              		   	   => $VideoRestrictionsPreview->FoldPos,
+    			'MinHeight'              		   => $VideoRestrictionsPreview->MinHeight,
+    			'MinWidth'              		   => $VideoRestrictionsPreview->MinWidth,
+    			'PmpEnable'              		   => $VideoRestrictionsPreview->PmpEnable,
+    			'Secure'              		   	   => $VideoRestrictionsPreview->Secure,
+    			'Optout'              		   	   => $VideoRestrictionsPreview->Optout,
+    	        'Vertical'                         => $VideoRestrictionsPreview->Vertical,
     			'DateCreated'                      => $VideoRestrictionsPreview->DateCreated
     	);
 
-    	$video_preview_id = $VideoRestrictionsPreview->AdCampaignVideoPreviewID;
+    	$video_preview_id = $VideoRestrictionsPreview->AdCampaignBannerPreviewID;
     	$params = array();
-    	$params["AdCampaignVideoPreviewID"] = $video_preview_id;
+    	$params["AdCampaignBannerPreviewID"] = $video_preview_id;
     	$_video_restrictions_preview = $this->get_row($params);
 
-    	$video_restrictions_preview_id = (int)$VideoRestrictionsPreview->AdCampaignBannerRestrictionsPreviewID;
-
+    	$video_restrictions_preview_id = (int)$VideoRestrictionsPreview->AdCampaignVideoRestrictionsPreviewID;
+    	 
     	if ($video_restrictions_preview_id === 0 && $_video_restrictions_preview === null): 
     		$this->insert($data);
     		return $this->getLastInsertValue();
     	else: 
     		if ($video_restrictions_preview_id === 0):
-    			$video_restrictions_preview_id = $_video_restrictions_preview->AdCampaignBannerRestrictionsID;
+    			$video_restrictions_preview_id = $_video_restrictions_preview->AdCampaignVideoRestrictionsID;
     		endif;
-    		$this->update($data, array('AdCampaignBannerRestrictionsPreviewID' => $video_restrictions_preview_id));
+    		$this->update($data, array('AdCampaignVideoRestrictionsPreviewID' => $video_restrictions_preview_id));
     		return null;
     	endif;
     }

@@ -413,6 +413,189 @@ class DemandController extends DemandAbstractActionController {
 
 	}
 
+	public function editdeliveryfiltervideoAction() {
+	
+		$initialized = $this->initialize();
+		if ($initialized !== true) return $initialized;
+	
+		$needed_input = array(
+				'ispreview'
+		);
+	
+		$this->validateInput($needed_input);
+	
+		$bannerid 				= $this->getRequest()->getPost('bannerid');
+		$banner_preview_id 		= $this->getRequest()->getPost('bannerpreviewid');
+		$ispreview 				= $this->getRequest()->getPost('ispreview');
+	
+		if ($ispreview != true):
+			/*
+			 * THIS METHOD CHECKS IF THERE IS AN EXISTING PREVIEW MODE CAMPAIGN
+			* IF NOT, IT CHECKS THE ACL PERMISSIONS ON THE PRODUCTION BANNER/CAMPAIGN REFERENCED
+			* THEN IT CREATES A PREVIEW VERSION OF THE AD CAMPAIGN
+			*/
+			$update_data = array('type'=>'AdCampaignBannerID', 'id'=>$bannerid);
+			$return_val = \transformation\TransformPreview::previewCheckBannerID($bannerid, $this->auth, $update_data);
+		
+			if ($return_val !== null):
+				$banner_preview_id = $return_val["AdCampaignBannerPreviewID"];
+			endif;
+		
+		endif;
+	
+		// ACL PREVIEW PERMISSIONS CHECK
+		transformation\CheckPermissions::checkEditPermissionAdCampaignBannerPreview($banner_preview_id, $this->auth, $this->config_handle);
+
+		$start_delay 				= $this->getRequest()->getPost("StartDelay") == null ? "" : $this->getRequest()->getPost("StartDelay");
+			
+		$fold_pos 					= $this->getRequest()->getPost("FoldPos") == null ? "" : $this->getRequest()->getPost("FoldPos");
+
+		$vertical 					= $this->getRequest()->getPost("vertical") == null ? "" : $this->getRequest()->getPost("vertical");
+		
+		$geocountry 				= $this->getRequest()->getPost("geocountry") == null ? "" : $this->getRequest()->getPost("geocountry");
+		
+		$geostate 					= $this->getRequest()->getPost("geostate") == null ? "" : $this->getRequest()->getPost("geostate");
+		
+		$geocity 					= $this->getRequest()->getPost("geocity") == null ? "" : $this->getRequest()->getPost("geocity");
+		
+		$pmpenable 					= $this->getRequest()->getPost("pmpenable") == null ? "" : $this->getRequest()->getPost("pmpenable");
+		
+		$secure 					= $this->getRequest()->getPost("secure") == null ? "" : $this->getRequest()->getPost("secure");
+			
+		$optout 					= $this->getRequest()->getPost("optout") == null ? "" : $this->getRequest()->getPost("optout");
+		
+		$min_duration 				= $this->getRequest()->getPost("MinDuration") == null ? "" : $this->getRequest()->getPost("MinDuration");
+		
+		$max_duration 				= $this->getRequest()->getPost("MaxDuration") == null ? "" : $this->getRequest()->getPost("MaxDuration");
+			
+		$min_height 				= $this->getRequest()->getPost("MinHeight") == null ? "" : $this->getRequest()->getPost("MinHeight");
+		
+		$min_width 					= $this->getRequest()->getPost("MinWidth") == null ? "" : $this->getRequest()->getPost("MinWidth");
+
+		$linearity 					= $this->getRequest()->getPost("Linearity") == null ? "" : $this->getRequest()->getPost("Linearity");
+		
+		
+		$mimes 						= $this->getRequest()->getPost("Mimes");
+		if ($mimes && is_array($mimes) && count($mimes) > 0):
+			$mimes = join(',', $mimes);
+		else:
+			$mimes = "";
+		endif;
+			
+		$protocols 					= $this->getRequest()->getPost("Protocols");
+		if ($protocols && is_array($protocols) && count($protocols) > 0):
+			$protocols = join(',', $protocols);
+		else:
+			$protocols = "";
+		endif;
+
+		$apis_supported 			= $this->getRequest()->getPost("ApisSupported");
+		if ($apis_supported && is_array($apis_supported) && count($apis_supported) > 0):
+			$apis_supported = join(',', $apis_supported);
+		else:
+			$apis_supported = "";
+		endif;
+			
+		$delivery 					= $this->getRequest()->getPost("Delivery");
+		if ($delivery && is_array($delivery) && count($delivery) > 0):
+			$delivery = join(',', $delivery);
+		else:
+			$delivery = "";
+		endif;
+			
+		$playback 					= $this->getRequest()->getPost("Playback");
+		if ($playback && is_array($playback) && count($playback) > 0):
+			$playback = join(',', $playback);
+		else:
+			$playback = "";
+		endif;
+			
+		if ($vertical && is_array($vertical) && count($vertical) > 0):
+	
+			$vertical = join(',', $vertical);
+	
+		endif;
+	
+		if ($geocountry && is_array($geocountry) && count($geocountry) > 0):
+	
+			$geocountry = join(',', $geocountry);
+	
+		endif;
+	
+		if ($geostate && is_array($geostate) && count($geostate) > 0):
+	
+			$geostate = join(',', $geostate);
+	
+		endif;
+	
+		if (strpos($geocity, ",") !== false):
+		
+			$geocities = explode(",", $geocity);
+		
+			$geocity_list_trimmed = array();
+		
+			foreach ($geocities as $geocityitem):
+		
+				$geocity_list_trimmed[] = trim($geocityitem);
+		
+			endforeach;
+		
+			$geocity = join(',', $geocity_list_trimmed);
+		
+		endif;
+	
+		$AdCampaignVideoRestrictionsPreviewFactory = \_factory\AdCampaignVideoRestrictionsPreview::get_instance();
+		$params = array();
+		$params["AdCampaignBannerPreviewID"] = $banner_preview_id;
+	
+		$AdCampaignVideoRestrictionsPreview = $AdCampaignVideoRestrictionsPreviewFactory->get_row($params);
+	
+		$VideoRestrictionsPreview = new \model\AdCampaignVideoRestrictionsPreview();
+	
+		if ($AdCampaignVideoRestrictionsPreview != null):
+	
+			$VideoRestrictionsPreview->AdCampaignVideoRestrictionsPreviewID            = $AdCampaignVideoRestrictionsPreview->AdCampaignVideoRestrictionsPreviewID;
+	
+		endif;
+	
+		$VideoRestrictionsPreview->AdCampaignBannerPreviewID                = $banner_preview_id;
+		$VideoRestrictionsPreview->Vertical                                 = trim($vertical);
+		$VideoRestrictionsPreview->GeoCountry                               = trim($geocountry);
+		$VideoRestrictionsPreview->GeoState                                 = trim($geostate);
+		$VideoRestrictionsPreview->GeoCity                                  = trim($geocity);
+		$VideoRestrictionsPreview->PmpEnable                                = trim($pmpenable);
+		$VideoRestrictionsPreview->Secure                                   = trim($secure);
+		$VideoRestrictionsPreview->Optout                                   = trim($optout);
+		$VideoRestrictionsPreview->MinDuration                              = trim($min_duration);
+		$VideoRestrictionsPreview->MaxDuration                              = trim($max_duration);
+		$VideoRestrictionsPreview->MinHeight                              	= trim($min_height);
+		$VideoRestrictionsPreview->MinWidth                              	= trim($min_width);
+		$VideoRestrictionsPreview->MimesCommaSeparated                      = trim($mimes);
+		$VideoRestrictionsPreview->ProtocolsCommaSeparated                 	= trim($protocols);
+		$VideoRestrictionsPreview->ApisSupportedCommaSeparated            	= trim($apis_supported);
+		$VideoRestrictionsPreview->DeliveryCommaSeparated                 	= trim($delivery);
+		$VideoRestrictionsPreview->PlaybackCommaSeparated              		= trim($playback);
+		$VideoRestrictionsPreview->StartDelay                              	= trim($start_delay);
+		$VideoRestrictionsPreview->Linearity                              	= trim($linearity);
+		$VideoRestrictionsPreview->FoldPos                              	= trim($fold_pos);
+		$VideoRestrictionsPreview->DateCreated                              = date("Y-m-d H:i:s");
+		$VideoRestrictionsPreview->DateUpdated                              = date("Y-m-d H:i:s");
+
+		$AdCampaignVideoRestrictionsPreviewFactory = \_factory\AdCampaignVideoRestrictionsPreview::get_instance();
+		$AdCampaignVideoRestrictionsPreviewFactory->saveAdCampaignVideoRestrictionsPreview($VideoRestrictionsPreview);
+	
+		$AdCampaignBannerPreviewFactory = \_factory\AdCampaignBannerPreview::get_instance();
+		$params = array();
+		$params["AdCampaignBannerPreviewID"] = $banner_preview_id;
+	
+		$AdCampaignBannerPreview = $AdCampaignBannerPreviewFactory->get_row($params);
+	
+		$refresh_url = "/demand/viewbanner/" . $AdCampaignBannerPreview->AdCampaignPreviewID . "?ispreview=true";
+		$viewModel = new ViewModel(array('refresh_url' => $refresh_url));
+	
+		return $viewModel->setTemplate('dashboard-manager/demand/interstitial.phtml');
+	}
+	
 	/**
 	 * 
 	 * @return Ambigous <\Zend\View\Model\ViewModel, \Zend\View\Model\ViewModel>
@@ -573,6 +756,233 @@ class DemandController extends DemandAbstractActionController {
 		return $viewModel->setTemplate('dashboard-manager/demand/interstitial.phtml');
 	}
 
+	public function deliveryfiltervideoAction() {
+		$id = $this->getEvent()->getRouteMatch()->getParam('param1');
+		if ($id == null):
+			die("Invalid Banner ID");
+		endif;
+	
+		$initialized = $this->initialize();
+		if ($initialized !== true) return $initialized;
+	
+		$is_preview = $this->getRequest()->getQuery('ispreview');
+	
+		// verify
+		if ($is_preview == "true"):
+			$is_preview = \transformation\TransformPreview::doesPreviewBannerExist($id, $this->auth);
+		endif;
+	
+		$banner_preview_id = "";
+		$campaign_id = "";
+		$campaign_preview_id = "";
+	
+		if ($is_preview == true):
+			// ACL PREVIEW PERMISSIONS CHECK
+			transformation\CheckPermissions::checkEditPermissionAdCampaignBannerPreview($id, $this->auth, $this->config_handle);
+		
+			$AdCampaignVideoRestrictionsPreviewFactory = \_factory\AdCampaignVideoRestrictionsPreview::get_instance();
+			$params = array();
+			$params["AdCampaignBannerPreviewID"] = $id;
+			$banner_preview_id = $id;
+			$id = "";
+			$AdCampaignVideoRestrictions = $AdCampaignVideoRestrictionsPreviewFactory->get_row($params);
+		
+			$AdCampaignBannerPreviewFactory = \_factory\AdCampaignBannerPreview::get_instance();
+			$params = array();
+			$params["AdCampaignBannerPreviewID"] = $banner_preview_id;
+			$AdCampaignBannerPreview = $AdCampaignBannerPreviewFactory->get_row($params);
+			$campaign_preview_id = $AdCampaignBannerPreview->AdCampaignPreviewID;
+		
+		else:
+			// ACL PERMISSIONS CHECK
+			transformation\CheckPermissions::checkEditPermissionAdCampaignBanner($id, $this->auth, $this->config_handle);
+		
+			$AdCampaignVideoRestrictionsFactory = \_factory\AdCampaignVideoRestrictions::get_instance();
+			$params = array();
+			$params["AdCampaignBannerID"] = $id;
+		
+			$AdCampaignVideoRestrictions = $AdCampaignVideoRestrictionsFactory->get_row($params);
+		
+			$AdCampaignBannerFactory = \_factory\AdCampaignBanner::get_instance();
+			$params = array();
+			$params["AdCampaignBannerID"] = $id;
+			$AdCampaignBanner = $AdCampaignBannerFactory->get_row($params);
+			$campaign_id = $AdCampaignBanner->AdCampaignID;
+		endif;
+	
+		$current_states 				= "";
+		$current_country 				= "";
+		$geocity_option 				= "";
+
+		$current_min_duration 			= "";
+		$current_max_duration 			= "";
+		
+		$current_min_height 			= "";
+		$current_min_width	 			= "";
+		
+		$current_mimes 					= array();
+		$current_apis_supported 		= array();
+		$current_protocols 				= array();
+		$current_delivery_methods 		= array();
+		$current_playback_methods 		= array();
+		
+		$current_start_delay 			= "";
+		$current_linearity 				= array();
+		$current_fold_pos 				= "";
+		
+		$current_pmpenable 				= "";
+		$current_secure 				= "";
+		$current_optout 				= "";
+		$current_vertical 				= array();
+	
+	
+		if ($AdCampaignVideoRestrictions != null):
+		
+			$current_foldpos = $AdCampaignVideoRestrictions->Vertical == null ? "" : $AdCampaignVideoRestrictions->Vertical;
+			$current_states = $AdCampaignVideoRestrictions->GeoState == null ? "" : $AdCampaignVideoRestrictions->GeoState;
+			$current_country = $AdCampaignVideoRestrictions->GeoCountry == null ? "" : $AdCampaignVideoRestrictions->GeoCountry;
+			$geocity_option = $AdCampaignVideoRestrictions->GeoCity == null ? "" : $AdCampaignVideoRestrictions->GeoCity;
+			
+			$current_mimes_raw = $AdCampaignVideoRestrictions->MimesCommaSeparated == null ? "" : $AdCampaignVideoRestrictions->MimesCommaSeparated;
+			$current_apis_supported_raw = $AdCampaignVideoRestrictions->ApisSupportedCommaSeparated == null ? "" : $AdCampaignVideoRestrictions->ApisSupportedCommaSeparated;
+			$current_protocols_raw = $AdCampaignVideoRestrictions->ProtocolsCommaSeparated == null ? "" : $AdCampaignVideoRestrictions->ProtocolsCommaSeparated;
+			$current_delivery_methods_raw = $AdCampaignVideoRestrictions->DeliveryCommaSeparated == null ? "" : $AdCampaignVideoRestrictions->DeliveryCommaSeparated;
+			$current_playback_methods_raw = $AdCampaignVideoRestrictions->PlaybackCommaSeparated == null ? "" : $AdCampaignVideoRestrictions->PlaybackCommaSeparated;
+			
+			$current_start_delay = $AdCampaignVideoRestrictions->StartDelay == null ? "" : $AdCampaignVideoRestrictions->StartDelay;
+			$current_linearity = $AdCampaignVideoRestrictions->Linearity == null ? "" : $AdCampaignVideoRestrictions->Linearity;
+			$current_fold_pos = $AdCampaignVideoRestrictions->FoldPos == null ? "" : $AdCampaignVideoRestrictions->FoldPos;
+
+			$current_min_duration = $AdCampaignVideoRestrictions->MinDuration == null ? "" : $AdCampaignVideoRestrictions->MinDuration;
+			$current_max_duration = $AdCampaignVideoRestrictions->MaxDuration == null ? "" : $AdCampaignVideoRestrictions->MaxDuration;
+			
+			$current_min_height = $AdCampaignVideoRestrictions->MinHeight == null ? "" : $AdCampaignVideoRestrictions->MinHeight;
+			$current_min_width = $AdCampaignVideoRestrictions->MinWidth == null ? "" : $AdCampaignVideoRestrictions->MinWidth;
+
+			$current_pmpenable = $AdCampaignVideoRestrictions->PmpEnable == null ? "" : $AdCampaignVideoRestrictions->PmpEnable;
+			$current_secure = $AdCampaignVideoRestrictions->Secure == null ? "" : $AdCampaignVideoRestrictions->Secure;
+			$current_optout = $AdCampaignVideoRestrictions->Optout == null ? "" : $AdCampaignVideoRestrictions->Optout;
+			$current_vertical_raw = $AdCampaignVideoRestrictions->Vertical == null ? "" : $AdCampaignVideoRestrictions->Vertical;
+			
+		endif;
+	
+		$current_mimes = array();
+		
+		if ($current_mimes_raw):
+		
+			$current_mimes = explode(',', $current_mimes_raw);
+		
+		endif;
+		
+		$current_apis_supported = array();
+		
+		if ($current_apis_supported_raw):
+		
+			$current_apis_supported = explode(',', $current_apis_supported_raw);
+		
+		endif;
+		
+		$current_protocols = array();
+		
+		if ($current_protocols_raw):
+		
+			$current_protocols = explode(',', $current_protocols_raw);
+		
+		endif;
+		
+		$current_delivery_methods = array();
+		
+		if ($current_delivery_methods_raw):
+		
+			$current_delivery_methods = explode(',', $current_delivery_methods_raw);
+		
+		endif;
+		
+		$current_playback_methods = array();
+		
+		if ($current_playback_methods_raw):
+		
+			$current_playback_methods = explode(',', $current_playback_methods_raw);
+		
+		endif;
+		
+		$current_verticals = array();
+	
+		if ($current_vertical_raw):
+	
+			$current_verticals = explode(',', $current_vertical_raw);
+	
+		endif;
+	
+		$current_countries = array();
+	
+		if ($current_country):
+	
+			$current_countries = explode(',', $current_country);
+	
+		endif;
+		
+		return new ViewModel(array(
+				'bannerid' => $id,
+				'bannerpreviewid' => $banner_preview_id,
+				'campaignid' => $campaign_id,
+				'campaignpreviewid' => $campaign_preview_id,
+				'ispreview' => $is_preview == true ? '1' : '0',
+				'countrylist' => \util\Countries::$allcountries,
+				'current_states' => $current_states,
+				'current_countries' => $current_countries,
+				'foldpos_options' => \util\DeliveryFilterOptions::$foldpos_options,
+				'current_foldpos' => $current_foldpos,
+				'geocity_option' => $geocity_option,
+				'pmpenable_options' => \util\DeliveryFilterOptions::$pmpenable_options,
+				'current_pmpenable' => $current_pmpenable,
+				'secure_options' => \util\DeliveryFilterOptions::$secure_options,
+				'current_secure' => $current_secure,
+				'optout_options' => \util\DeliveryFilterOptions::$optout_options,
+				'current_optout' => $current_optout,
+				'vertical_options' => \util\DeliveryFilterOptions::$vertical_options,
+				'current_verticals' => $current_verticals,
+				'bread_crumb_info' => $this->getBreadCrumbInfoFromBanner($id, $banner_preview_id, $is_preview),
+				'user_id_list' => $this->user_id_list_demand_customer,
+				'center_class' => 'centerj',
+				'user_identity' => $this->identity(),
+				'true_user_name' => $this->auth->getUserName(),
+				'header_title' => 'Edit Delivery Filter',
+				'is_admin' => $this->is_admin,
+				'effective_id' => $this->auth->getEffectiveIdentityID(),
+				'impersonate_id' => $this->ImpersonateID,
+				
+				'fold_pos' => \util\BannerOptions::$fold_pos,
+				'linearity' => \util\BannerOptions::$linearity,
+				'start_delay' => \util\BannerOptions::$start_delay,
+				'playback_methods' => \util\BannerOptions::$playback_methods,
+				'delivery_methods' => \util\BannerOptions::$delivery_methods,
+				'apis_supported' => \util\BannerOptions::$apis_supported,
+				'protocols' => \util\BannerOptions::$protocols,
+				'mimes' => \util\BannerOptions::$mimes,
+				
+				'MinHeight' => '',
+				'MinWidth' => '',
+				
+				'current_mimes' => $current_mimes,
+				
+				'MinDuration' => $current_min_duration,
+				'MaxDuration' => $current_max_duration,
+				
+				'current_apis_supported' => $current_apis_supported,
+				'current_protocols' => $current_protocols,
+				'current_delivery_methods' => $current_delivery_methods,
+				'current_playback_methods' => $current_playback_methods,
+				'current_start_delay' => $current_start_delay,
+				'current_linearity' => $current_linearity,
+				'current_fold_pos' => $current_fold_pos,
+				
+				'MinHeight' => $current_min_height,
+				'MinWidth' => $current_min_width,
+				
+		));
+	}
+	
 	/**
 	 * 
 	 * @return \Zend\View\Model\ViewModel

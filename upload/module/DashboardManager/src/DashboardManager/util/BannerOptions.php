@@ -73,19 +73,23 @@ class BannerOptions {
 
     public static $protocols = array(
     
-    		"1" => "Linear/In-stream",
-    		"2" => "Non-Linear/Overlay",
-    
-    );
-
-    public static $apis_supported = array(
-    
     		"1" => "VAST 1.0",
     		"2" => "VAST 2.0",
     		"3" => "VAST 3.0",
     		"4" => "VAST 1.0 Wrapper",
     		"5" => "VAST 2.0 Wrapper",
     		"6" => "VAST 3.0 Wrapper"
+    
+    );
+    
+    public static $apis_supported = array(
+	    
+		    "1" => "VPAID 1.0",
+		    "2" => "VPAID 2.0",
+		    "3" => "MRAID-1",
+		    "4" => "ORMMA",
+		    "5" => "MRAID-2"
+
     );
 
     public static $delivery_methods = array(
