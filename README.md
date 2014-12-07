@@ -1,6 +1,14 @@
 nginad
 =======
 
+December 6, 2014
+------------------
+Sadly the NginAd 1.4 release with VAST is not yet complete. The video tables are there and the persistence to the DB is there but 
+the workflow and preview to prod table conversions are not yet complete. Also the OpenRTB 2.2 options like top level frame, referrer
+and others are not yet mapped. Also the publisher and demand user approval lists are not showing all the rows. 
+We will need to fix these bugs quickly and release NginAd 1.4 in the coming day or two. 
+I don't think we can put pagination in for approvals because it will take too long and this release is a week behind already.
+
 November 23, 2014
 ------------------
 As a last task before the release of NginAd 1.4 we must add some micro-second timing to the logs for all Workflow processes
