@@ -82,26 +82,27 @@ class AdCampaignVideoRestrictions extends \_factory\CachedTableRead
     }
     
     public function saveAdCampaignVideoRestrictions(\model\AdCampaignVideoRestrictions $VideoRestrictions) {
-    	$data = array(
-
-    	        'AdCampaignBannerID'               => $VideoRestrictions->AdCampaignBannerID,
-    	        'GeoCountry'                       => $VideoRestrictions->GeoCountry === "" ? null : $VideoRestrictions->GeoCountry,
-    	        'GeoState'                         => $VideoRestrictions->GeoState === "" ? null : $VideoRestrictions->GeoState,
-    	        'GeoCity'                          => $VideoRestrictions->GeoCity === "" ? null : $VideoRestrictions->GeoCity,
-    	        'MimesCommaSeparated'              => $VideoRestrictions->MimesCommaSeparated === "" ? null : $VideoRestrictions->MimesCommaSeparated,
-    			'MinDuration'              		   => $VideoRestrictions->MinDuration === "" ? null : $VideoRestrictions->MinDuration,
-    			'MaxDuration'              		   => $VideoRestrictions->MaxDuration === "" ? null : $VideoRestrictions->MaxDuration,
-    			'ApisSupportedCommaSeparated'  	   => $VideoRestrictions->ApisSupportedCommaSeparated === "" ? null : $VideoRestrictions->ApisSupportedCommaSeparated,
-    			'ProtocolsCommaSeparated'          => $VideoRestrictions->ProtocolsCommaSeparated === "" ? null : $VideoRestrictions->ProtocolsCommaSeparated,
-    			'DeliveryCommaSeparated'           => $VideoRestrictions->DeliveryCommaSeparated === "" ? null : $VideoRestrictions->DeliveryCommaSeparated,
-    			'PlaybackCommaSeparated'           => $VideoRestrictions->PlaybackCommaSeparated === "" ? null : $VideoRestrictions->PlaybackCommaSeparated,
-    			'StartDelay'              		   => $VideoRestrictions->StartDelay === "" ? null : $VideoRestrictions->StartDelay,
-    			'Linearity'              		   => $VideoRestrictions->Linearity === "" ? null : $VideoRestrictions->Linearity,
-    			'FoldPos'              		   	   => $VideoRestrictions->FoldPos === "" ? null : $VideoRestrictions->FoldPos,
-    			'PmpEnable'              		   => $VideoRestrictions->PmpEnable === "" ? null : $VideoRestrictions->PmpEnable,
-    			'Secure'              		   	   => $VideoRestrictions->Secure === "" ? null : $VideoRestrictions->Secure,
-    			'Optout'              		   	   => $VideoRestrictions->Optout === "" ? null : $VideoRestrictions->Optout,
-    	        'Vertical'                         => $VideoRestrictions->Vertical === "" ? null : $VideoRestrictions->Vertical,
+    	$data = array( 
+    			'AdCampaignBannerID'               => $VideoRestrictions->AdCampaignBannerID,
+    	        'GeoCountry'                       => $VideoRestrictions->GeoCountry,
+    	        'GeoState'                         => $VideoRestrictions->GeoState,
+    	        'GeoCity'                          => $VideoRestrictions->GeoCity,
+    	        'MimesCommaSeparated'              => $VideoRestrictions->MimesCommaSeparated,
+    			'MinDuration'              		   => $VideoRestrictions->MinDuration,
+    			'MaxDuration'              		   => $VideoRestrictions->MaxDuration,
+    			'ApisSupportedCommaSeparated'  	   => $VideoRestrictions->ApisSupportedCommaSeparated,
+    			'ProtocolsCommaSeparated'          => $VideoRestrictions->ProtocolsCommaSeparated,
+    			'DeliveryCommaSeparated'           => $VideoRestrictions->DeliveryCommaSeparated,
+    			'PlaybackCommaSeparated'           => $VideoRestrictions->PlaybackCommaSeparated,
+    			'StartDelay'              		   => $VideoRestrictions->StartDelay,
+    			'Linearity'              		   => $VideoRestrictions->Linearity,
+    			'FoldPos'              		   	   => $VideoRestrictions->FoldPos,
+    			'MinHeight'              		   => $VideoRestrictions->MinHeight,
+    			'MinWidth'              		   => $VideoRestrictions->MinWidth,
+    			'PmpEnable'              		   => $VideoRestrictions->PmpEnable,
+    			'Secure'              		   	   => $VideoRestrictions->Secure,
+    			'Optout'              		   	   => $VideoRestrictions->Optout,
+    	        'Vertical'                         => $VideoRestrictions->Vertical,
     			'DateCreated'                      => $VideoRestrictions->DateCreated
     	);
 

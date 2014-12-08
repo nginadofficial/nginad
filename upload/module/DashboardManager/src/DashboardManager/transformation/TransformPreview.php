@@ -138,6 +138,7 @@ class TransformPreview {
 			$banner_preview->AdCampaignBannerPreviewID 	= $AdCampaignBannerPreview->AdCampaignBannerPreviewID;
 			$banner_preview->AdCampaignPreviewID 		= $AdCampaignBannerPreview->AdCampaignPreviewID;
 			$banner_preview->AdCampaignBannerID 		= $AdCampaignBannerPreview->AdCampaignBannerID;
+			$banner_preview->ImpressionType 			= $AdCampaignBannerPreview->ImpressionType;
 			$banner_preview->UserID 					= $AdCampaignBannerPreview->UserID;
 			$banner_preview->Name 						= $AdCampaignBannerPreview->Name;
 			$banner_preview->StartDate					= $AdCampaignBannerPreview->StartDate;
@@ -274,6 +275,10 @@ class TransformPreview {
 		$AdCampaignBannerPreviewFactory = \_factory\AdCampaignBannerPreview::get_instance();
 		$AdCampaignBannerRestrictionsFactory = \_factory\AdCampaignBannerRestrictions::get_instance();
 		$AdCampaignBannerRestrictionsPreviewFactory = \_factory\AdCampaignBannerRestrictionsPreview::get_instance();
+		
+		$AdCampaignVideoRestrictionsFactory = \_factory\AdCampaignVideoRestrictions::get_instance();
+		$AdCampaignVideoRestrictionsPreviewFactory = \_factory\AdCampaignVideoRestrictionsPreview::get_instance();
+		
 		$PublisherAdZoneFactory = \_factory\PublisherAdZone::get_instance();
 		$LinkedBannerToAdZoneFactory = \_factory\LinkedBannerToAdZone::get_instance();
 		$LinkedBannerToAdZonePreviewFactory = \_factory\LinkedBannerToAdZonePreview::get_instance();		
@@ -302,6 +307,7 @@ class TransformPreview {
 
 			$Banner->UserID 					= $AdCampaignBannerPreview->UserID;
 			$Banner->Name 						= $AdCampaignBannerPreview->Name;
+			$Banner->ImpressionType 			= $AdCampaignBannerPreview->ImpressionType;
 			$Banner->StartDate 					= $AdCampaignBannerPreview->StartDate;
 			$Banner->EndDate 					= $AdCampaignBannerPreview->EndDate;
 			$Banner->AdCampaignTypeID 			= $AdCampaignBannerPreview->AdCampaignTypeID;
@@ -331,50 +337,94 @@ class TransformPreview {
 			if ($banner_active == 0):
 				continue;
 			endif;
+			
+			if ($Banner->ImpressionType == 'video'):
 
-			/*
-			 * BANNER RESTRICTIONS
-			*/
-
-			$params = array();
-			$params["AdCampaignBannerPreviewID"] = $banner_preview_id;
-			$AdCampaignBannerRestrictionsPreview = $AdCampaignBannerRestrictionsPreviewFactory->get_row($params);
-
-			if ($AdCampaignBannerRestrictionsPreview != null):
-
-				$BannerRestrictions = new \model\AdCampaignBannerRestrictions();
-				$BannerRestrictions->AdCampaignBannerID 				= $banner_id;
-				$BannerRestrictions->GeoCountry 						= $AdCampaignBannerRestrictionsPreview->GeoCountry;
-				$BannerRestrictions->GeoState 							= $AdCampaignBannerRestrictionsPreview->GeoState;
-				$BannerRestrictions->GeoCity 							= $AdCampaignBannerRestrictionsPreview->GeoCity;
-				$BannerRestrictions->AdTagType 							= $AdCampaignBannerRestrictionsPreview->AdTagType;
-				$BannerRestrictions->AdPositionMinLeft 					= $AdCampaignBannerRestrictionsPreview->AdPositionMinLeft;
-				$BannerRestrictions->AdPositionMaxLeft 					= $AdCampaignBannerRestrictionsPreview->AdPositionMaxLeft;
-				$BannerRestrictions->AdPositionMinTop 					= $AdCampaignBannerRestrictionsPreview->AdPositionMinTop;
-				$BannerRestrictions->AdPositionMaxTop 					= $AdCampaignBannerRestrictionsPreview->AdPositionMaxTop;
-				$BannerRestrictions->FoldPos 							= $AdCampaignBannerRestrictionsPreview->FoldPos;
-				$BannerRestrictions->Freq 								= $AdCampaignBannerRestrictionsPreview->Freq;
-				$BannerRestrictions->Timezone 							= $AdCampaignBannerRestrictionsPreview->Timezone;
-				$BannerRestrictions->InIframe 							= $AdCampaignBannerRestrictionsPreview->InIframe;
-				$BannerRestrictions->InMultipleNestedIframes 			= $AdCampaignBannerRestrictionsPreview->InMultipleNestedIframes;
-				$BannerRestrictions->MinScreenResolutionWidth 			= $AdCampaignBannerRestrictionsPreview->MinScreenResolutionWidth;
-				$BannerRestrictions->MaxScreenResolutionWidth 			= $AdCampaignBannerRestrictionsPreview->MaxScreenResolutionWidth;
-				$BannerRestrictions->MinScreenResolutionHeight 			= $AdCampaignBannerRestrictionsPreview->MinScreenResolutionHeight;
-				$BannerRestrictions->MaxScreenResolutionHeight 			= $AdCampaignBannerRestrictionsPreview->MaxScreenResolutionHeight;
-				$BannerRestrictions->HttpLanguage 						= $AdCampaignBannerRestrictionsPreview->HttpLanguage;
-				$BannerRestrictions->BrowserUserAgentGrep 				= $AdCampaignBannerRestrictionsPreview->BrowserUserAgentGrep;
-				$BannerRestrictions->CookieGrep 						= $AdCampaignBannerRestrictionsPreview->CookieGrep;
-				$BannerRestrictions->PmpEnable 							= $AdCampaignBannerRestrictionsPreview->PmpEnable;
-				$BannerRestrictions->Secure 							= $AdCampaignBannerRestrictionsPreview->Secure;
-				$BannerRestrictions->Optout 							= $AdCampaignBannerRestrictionsPreview->Optout;
-				$BannerRestrictions->Vertical 							= $AdCampaignBannerRestrictionsPreview->Vertical;
-				$BannerRestrictions->DateCreated 						= date("Y-m-d H:i:s");
-				$BannerRestrictions->DateUpdated 						= date("Y-m-d H:i:s");
-
-				$AdCampaignBannerRestrictionsFactory->saveAdCampaignBannerRestrictions($BannerRestrictions);
-
+				/*
+				 * VIDEO RESTRICTIONS
+				*/
+	
+				$params = array();
+				$params["AdCampaignBannerPreviewID"] = $banner_preview_id;
+				$AdCampaignVideoRestrictionsPreview = $AdCampaignVideoRestrictionsPreviewFactory->get_row($params);
+	
+				if ($AdCampaignVideoRestrictionsPreview != null):
+	
+					$VideoRestrictions = new \model\AdCampaignVideoRestrictions();
+					$VideoRestrictions->AdCampaignBannerID 					= $banner_id;
+					$VideoRestrictions->GeoCountry 							= $AdCampaignVideoRestrictionsPreview->GeoCountry;
+					$VideoRestrictions->GeoState 							= $AdCampaignVideoRestrictionsPreview->GeoState;
+					$VideoRestrictions->GeoCity 							= $AdCampaignVideoRestrictionsPreview->GeoCity;
+					$VideoRestrictions->MimesCommaSeparated 				= $AdCampaignVideoRestrictionsPreview->MimesCommaSeparated;
+					$VideoRestrictions->MinDuration 						= $AdCampaignVideoRestrictionsPreview->MinDuration;
+					$VideoRestrictions->MaxDuration 						= $AdCampaignVideoRestrictionsPreview->MaxDuration;
+					$VideoRestrictions->ApisSupportedCommaSeparated 		= $AdCampaignVideoRestrictionsPreview->ApisSupportedCommaSeparated;
+					$VideoRestrictions->ProtocolsCommaSeparated 			= $AdCampaignVideoRestrictionsPreview->ProtocolsCommaSeparated;
+					$VideoRestrictions->DeliveryCommaSeparated 				= $AdCampaignVideoRestrictionsPreview->DeliveryCommaSeparated;
+					$VideoRestrictions->PlaybackCommaSeparated 				= $AdCampaignVideoRestrictionsPreview->PlaybackCommaSeparated;
+					$VideoRestrictions->StartDelay			 				= $AdCampaignVideoRestrictionsPreview->StartDelay;
+					$VideoRestrictions->Linearity			 				= $AdCampaignVideoRestrictionsPreview->Linearity;
+					$VideoRestrictions->FoldPos			 					= $AdCampaignVideoRestrictionsPreview->FoldPos;
+					$VideoRestrictions->MinHeight 							= $AdCampaignVideoRestrictionsPreview->MinHeight;
+					$VideoRestrictions->MinWidth 							= $AdCampaignVideoRestrictionsPreview->MinWidth;
+					$VideoRestrictions->PmpEnable 							= $AdCampaignVideoRestrictionsPreview->PmpEnable;
+					$VideoRestrictions->Secure 								= $AdCampaignVideoRestrictionsPreview->Secure;
+					$VideoRestrictions->Optout 								= $AdCampaignVideoRestrictionsPreview->Optout;
+					$VideoRestrictions->Vertical 							= $AdCampaignVideoRestrictionsPreview->Vertical;
+					$VideoRestrictions->DateCreated 						= date("Y-m-d H:i:s");
+					$VideoRestrictions->DateUpdated 						= date("Y-m-d H:i:s");
+	
+					$AdCampaignVideoRestrictionsFactory->saveAdCampaignVideoRestrictions($VideoRestrictions);
+					$AdCampaignBannerRestrictionsFactory->deleteAdCampaignBannerRestrictions($banner_id);
+				endif;
+				
+			else:
+			
+				/*
+				 * BANNER RESTRICTIONS
+				*/
+				
+				$params = array();
+				$params["AdCampaignBannerPreviewID"] = $banner_preview_id;
+				$AdCampaignBannerRestrictionsPreview = $AdCampaignBannerRestrictionsPreviewFactory->get_row($params);
+				
+				if ($AdCampaignBannerRestrictionsPreview != null):
+					
+					$BannerRestrictions = new \model\AdCampaignBannerRestrictions();
+					$BannerRestrictions->AdCampaignBannerID 				= $banner_id;
+					$BannerRestrictions->GeoCountry 						= $AdCampaignBannerRestrictionsPreview->GeoCountry;
+					$BannerRestrictions->GeoState 							= $AdCampaignBannerRestrictionsPreview->GeoState;
+					$BannerRestrictions->GeoCity 							= $AdCampaignBannerRestrictionsPreview->GeoCity;
+					$BannerRestrictions->AdTagType 							= $AdCampaignBannerRestrictionsPreview->AdTagType;
+					$BannerRestrictions->AdPositionMinLeft 					= $AdCampaignBannerRestrictionsPreview->AdPositionMinLeft;
+					$BannerRestrictions->AdPositionMaxLeft 					= $AdCampaignBannerRestrictionsPreview->AdPositionMaxLeft;
+					$BannerRestrictions->AdPositionMinTop 					= $AdCampaignBannerRestrictionsPreview->AdPositionMinTop;
+					$BannerRestrictions->AdPositionMaxTop 					= $AdCampaignBannerRestrictionsPreview->AdPositionMaxTop;
+					$BannerRestrictions->FoldPos 							= $AdCampaignBannerRestrictionsPreview->FoldPos;
+					$BannerRestrictions->Freq 								= $AdCampaignBannerRestrictionsPreview->Freq;
+					$BannerRestrictions->Timezone 							= $AdCampaignBannerRestrictionsPreview->Timezone;
+					$BannerRestrictions->InIframe 							= $AdCampaignBannerRestrictionsPreview->InIframe;
+					$BannerRestrictions->InMultipleNestedIframes 			= $AdCampaignBannerRestrictionsPreview->InMultipleNestedIframes;
+					$BannerRestrictions->MinScreenResolutionWidth 			= $AdCampaignBannerRestrictionsPreview->MinScreenResolutionWidth;
+					$BannerRestrictions->MaxScreenResolutionWidth 			= $AdCampaignBannerRestrictionsPreview->MaxScreenResolutionWidth;
+					$BannerRestrictions->MinScreenResolutionHeight 			= $AdCampaignBannerRestrictionsPreview->MinScreenResolutionHeight;
+					$BannerRestrictions->MaxScreenResolutionHeight 			= $AdCampaignBannerRestrictionsPreview->MaxScreenResolutionHeight;
+					$BannerRestrictions->HttpLanguage 						= $AdCampaignBannerRestrictionsPreview->HttpLanguage;
+					$BannerRestrictions->BrowserUserAgentGrep 				= $AdCampaignBannerRestrictionsPreview->BrowserUserAgentGrep;
+					$BannerRestrictions->CookieGrep 						= $AdCampaignBannerRestrictionsPreview->CookieGrep;
+					$BannerRestrictions->PmpEnable 							= $AdCampaignBannerRestrictionsPreview->PmpEnable;
+					$BannerRestrictions->Secure 							= $AdCampaignBannerRestrictionsPreview->Secure;
+					$BannerRestrictions->Optout 							= $AdCampaignBannerRestrictionsPreview->Optout;
+					$BannerRestrictions->Vertical 							= $AdCampaignBannerRestrictionsPreview->Vertical;
+					$BannerRestrictions->DateCreated 						= date("Y-m-d H:i:s");
+					$BannerRestrictions->DateUpdated 						= date("Y-m-d H:i:s");
+					
+					$AdCampaignBannerRestrictionsFactory->saveAdCampaignBannerRestrictions($BannerRestrictions);
+					$AdCampaignVideoRestrictionsFactory->deleteAdCampaignVideoRestrictions($banner_id);
+				endif;
+					
 			endif;
-
+			
 			/*
 			 * LINKED BANNER TO AD ZONE
 			*/
@@ -517,6 +567,10 @@ class TransformPreview {
 		$AdCampaignBannerPreviewFactory = \_factory\AdCampaignBannerPreview::get_instance();
 		$AdCampaignBannerRestrictionsFactory = \_factory\AdCampaignBannerRestrictions::get_instance();
 		$AdCampaignBannerRestrictionsPreviewFactory = \_factory\AdCampaignBannerRestrictionsPreview::get_instance();
+		
+		$AdCampaignVideoRestrictionsFactory = \_factory\AdCampaignVideoRestrictions::get_instance();
+		$AdCampaignVideoRestrictionsPreviewFactory = \_factory\AdCampaignVideoRestrictionsPreview::get_instance();
+		
 		$LinkedBannerToAdZoneFactory = \_factory\LinkedBannerToAdZone::get_instance();
 		$LinkedBannerToAdZonePreviewFactory = \_factory\LinkedBannerToAdZonePreview::get_instance();
 		$AdCampaignBannerDomainExclusionFactory = \_factory\AdCampaignBannerDomainExclusion::get_instance();
@@ -535,6 +589,7 @@ class TransformPreview {
 			$BannerPreview->AdCampaignBannerID 			= $AdCampaignBanner->AdCampaignBannerID;
 			$BannerPreview->UserID 						= $AdCampaignBanner->UserID;
 			$BannerPreview->Name 						= $AdCampaignBanner->Name;
+			$BannerPreview->ImpressionType 				= $AdCampaignBanner->ImpressionType;
 			$BannerPreview->StartDate 					= $AdCampaignBanner->StartDate;
 			$BannerPreview->EndDate 					= $AdCampaignBanner->EndDate;
 			$BannerPreview->AdCampaignTypeID 			= $AdCampaignBanner->AdCampaignTypeID;
@@ -563,52 +618,102 @@ class TransformPreview {
 
 			endif;
 
-			/*
-			 * BANNER RESTRICTIONS
-			 */
+			
+			if ($BannerPreview->ImpressionType == 'video'):
+			
+				/*
+				 * VIDEO RESTRICTIONS
+				*/
+			
+				$params = array();
+				$params["AdCampaignBannerID"] = $banner_id;
+				$AdCampaignVideoRestrictions = $AdCampaignVideoRestrictionsFactory->get_row($params);
 
-			$params = array();
-			$params["AdCampaignBannerID"] = $banner_id;
-			$AdCampaignBannerRestrictions = $AdCampaignBannerRestrictionsFactory->get_row($params);
-
-			// may not be present
-			if ($AdCampaignBannerRestrictions != null):
-				$BannerRestrictionsPreview = new \model\AdCampaignBannerRestrictionsPreview();
-
-			    $BannerRestrictionsPreview->AdCampaignBannerPreviewID 			= $AdCampaignBannerPreviewID;
-			    $BannerRestrictionsPreview->GeoCountry 							= $AdCampaignBannerRestrictions->GeoCountry;
-			    $BannerRestrictionsPreview->GeoState 							= $AdCampaignBannerRestrictions->GeoState;
-			    $BannerRestrictionsPreview->GeoCity 							= $AdCampaignBannerRestrictions->GeoCity;
-			    $BannerRestrictionsPreview->AdTagType 							= $AdCampaignBannerRestrictions->AdTagType;
-			    $BannerRestrictionsPreview->AdPositionMinLeft 					= $AdCampaignBannerRestrictions->AdPositionMinLeft;
-			    $BannerRestrictionsPreview->AdPositionMaxLeft 					= $AdCampaignBannerRestrictions->AdPositionMaxLeft;
-			    $BannerRestrictionsPreview->AdPositionMinTop 					= $AdCampaignBannerRestrictions->AdPositionMinTop;
-			    $BannerRestrictionsPreview->AdPositionMaxTop 					= $AdCampaignBannerRestrictions->AdPositionMaxTop;
-			    $BannerRestrictionsPreview->FoldPos 							= $AdCampaignBannerRestrictions->FoldPos;
-			    $BannerRestrictionsPreview->Freq 								= $AdCampaignBannerRestrictions->Freq;
-			    $BannerRestrictionsPreview->Timezone 							= $AdCampaignBannerRestrictions->Timezone;
-			    $BannerRestrictionsPreview->InIframe 							= $AdCampaignBannerRestrictions->InIframe;
-			    $BannerRestrictionsPreview->InMultipleNestedIframes 			= $AdCampaignBannerRestrictions->InMultipleNestedIframes;
-			    $BannerRestrictionsPreview->MinScreenResolutionWidth 			= $AdCampaignBannerRestrictions->MinScreenResolutionWidth;
-			    $BannerRestrictionsPreview->MaxScreenResolutionWidth 			= $AdCampaignBannerRestrictions->MaxScreenResolutionWidth;
-			    $BannerRestrictionsPreview->MinScreenResolutionHeight 			= $AdCampaignBannerRestrictions->MinScreenResolutionHeight;
-			    $BannerRestrictionsPreview->MaxScreenResolutionHeight 			= $AdCampaignBannerRestrictions->MaxScreenResolutionHeight;
-			    $BannerRestrictionsPreview->HttpLanguage 						= $AdCampaignBannerRestrictions->HttpLanguage;
-			    $BannerRestrictionsPreview->BrowserUserAgentGrep 				= $AdCampaignBannerRestrictions->BrowserUserAgentGrep;
-			    $BannerRestrictionsPreview->CookieGrep 							= $AdCampaignBannerRestrictions->CookieGrep;
-			    $BannerRestrictionsPreview->PmpEnable 							= $AdCampaignBannerRestrictions->PmpEnable;
-			    $BannerRestrictionsPreview->Secure 								= $AdCampaignBannerRestrictions->Secure;
-			    $BannerRestrictionsPreview->Optout 								= $AdCampaignBannerRestrictions->Optout;
-			    $BannerRestrictionsPreview->Vertical 							= $AdCampaignBannerRestrictions->Vertical;
-			    $BannerRestrictionsPreview->DateCreated 						= date("Y-m-d H:i:s");
-			    $BannerRestrictionsPreview->DateUpdated 						= date("Y-m-d H:i:s");
-
-			    $AdCampaignBannerRestrictionsPreviewID = $AdCampaignBannerRestrictionsPreviewFactory->saveAdCampaignBannerRestrictionsPreview($BannerRestrictionsPreview);
-
-			    if ($update_data['type'] == 'AdCampaignBannerRestrictionsID' && $update_data['id'] == $AdCampaignBannerRestrictions->AdCampaignBannerRestrictionsID):
-			    	$return_val = array('AdCampaignBannerRestrictionsPreviewID'=>$AdCampaignBannerRestrictionsPreviewID,
-			    						'AdCampaignBannerPreviewID'=>$AdCampaignBannerPreviewID,
-										'AdCampaignPreviewID'=>$AdCampaignPreviewID);
+				if ($AdCampaignVideoRestrictions != null):
+				
+					$VideoRestrictionsPreview = new \model\AdCampaignVideoRestrictionsPreview();
+					$VideoRestrictionsPreview->AdCampaignBannerPreviewID 				= $AdCampaignBannerPreviewID;
+					$VideoRestrictionsPreview->GeoCountry 						= $AdCampaignVideoRestrictions->GeoCountry;
+					$VideoRestrictionsPreview->GeoState 						= $AdCampaignVideoRestrictions->GeoState;
+					$VideoRestrictionsPreview->GeoCity 							= $AdCampaignVideoRestrictions->GeoCity;
+					$VideoRestrictionsPreview->MimesCommaSeparated 				= $AdCampaignVideoRestrictions->MimesCommaSeparated;
+					$VideoRestrictionsPreview->MinDuration 						= $AdCampaignVideoRestrictions->MinDuration;
+					$VideoRestrictionsPreview->MaxDuration 						= $AdCampaignVideoRestrictions->MaxDuration;
+					$VideoRestrictionsPreview->ApisSupportedCommaSeparated 		= $AdCampaignVideoRestrictions->ApisSupportedCommaSeparated;
+					$VideoRestrictionsPreview->ProtocolsCommaSeparated 			= $AdCampaignVideoRestrictions->ProtocolsCommaSeparated;
+					$VideoRestrictionsPreview->DeliveryCommaSeparated 			= $AdCampaignVideoRestrictions->DeliveryCommaSeparated;
+					$VideoRestrictionsPreview->PlaybackCommaSeparated 			= $AdCampaignVideoRestrictions->PlaybackCommaSeparated;
+					$VideoRestrictionsPreview->StartDelay			 			= $AdCampaignVideoRestrictions->StartDelay;
+					$VideoRestrictionsPreview->Linearity			 			= $AdCampaignVideoRestrictions->Linearity;
+					$VideoRestrictionsPreview->FoldPos			 				= $AdCampaignVideoRestrictions->FoldPos;
+					$VideoRestrictionsPreview->MinHeight 						= $AdCampaignVideoRestrictions->MinHeight;
+					$VideoRestrictionsPreview->MinWidth 						= $AdCampaignVideoRestrictions->MinWidth;
+					$VideoRestrictionsPreview->PmpEnable 						= $AdCampaignVideoRestrictions->PmpEnable;
+					$VideoRestrictionsPreview->Secure 							= $AdCampaignVideoRestrictions->Secure;
+					$VideoRestrictionsPreview->Optout 							= $AdCampaignVideoRestrictions->Optout;
+					$VideoRestrictionsPreview->Vertical 						= $AdCampaignVideoRestrictions->Vertical;
+					$VideoRestrictionsPreview->DateCreated 						= date("Y-m-d H:i:s");
+					$VideoRestrictionsPreview->DateUpdated 						= date("Y-m-d H:i:s");
+					
+			    	$AdCampaignVideoRestrictionsPreviewID = $AdCampaignVideoRestrictionsPreviewFactory->saveAdCampaignVideoRestrictionsPreview($VideoRestrictionsPreview);
+	
+					if ($update_data['type'] == 'AdCampaignVideoRestrictionsID' && $update_data['id'] == $AdCampaignVideoRestrictions->AdCampaignVideoRestrictionsID):
+					$return_val = array('AdCampaignVideoRestrictionsPreviewID'=>$AdCampaignVideoRestrictionsPreviewID,
+							'AdCampaignBannerPreviewID'=>$AdCampaignBannerPreviewID,
+							'AdCampaignPreviewID'=>$AdCampaignPreviewID);
+					endif;
+				endif;
+				
+			else:
+			
+				/*
+				 * BANNER RESTRICTIONS
+				 */
+	
+				$params = array();
+				$params["AdCampaignBannerID"] = $banner_id;
+				$AdCampaignBannerRestrictions = $AdCampaignBannerRestrictionsFactory->get_row($params);
+	
+				// may not be present
+				if ($AdCampaignBannerRestrictions != null):
+					$BannerRestrictionsPreview = new \model\AdCampaignBannerRestrictionsPreview();
+	
+				    $BannerRestrictionsPreview->AdCampaignBannerPreviewID 			= $AdCampaignBannerPreviewID;
+				    $BannerRestrictionsPreview->GeoCountry 							= $AdCampaignBannerRestrictions->GeoCountry;
+				    $BannerRestrictionsPreview->GeoState 							= $AdCampaignBannerRestrictions->GeoState;
+				    $BannerRestrictionsPreview->GeoCity 							= $AdCampaignBannerRestrictions->GeoCity;
+				    $BannerRestrictionsPreview->AdTagType 							= $AdCampaignBannerRestrictions->AdTagType;
+				    $BannerRestrictionsPreview->AdPositionMinLeft 					= $AdCampaignBannerRestrictions->AdPositionMinLeft;
+				    $BannerRestrictionsPreview->AdPositionMaxLeft 					= $AdCampaignBannerRestrictions->AdPositionMaxLeft;
+				    $BannerRestrictionsPreview->AdPositionMinTop 					= $AdCampaignBannerRestrictions->AdPositionMinTop;
+				    $BannerRestrictionsPreview->AdPositionMaxTop 					= $AdCampaignBannerRestrictions->AdPositionMaxTop;
+				    $BannerRestrictionsPreview->FoldPos 							= $AdCampaignBannerRestrictions->FoldPos;
+				    $BannerRestrictionsPreview->Freq 								= $AdCampaignBannerRestrictions->Freq;
+				    $BannerRestrictionsPreview->Timezone 							= $AdCampaignBannerRestrictions->Timezone;
+				    $BannerRestrictionsPreview->InIframe 							= $AdCampaignBannerRestrictions->InIframe;
+				    $BannerRestrictionsPreview->InMultipleNestedIframes 			= $AdCampaignBannerRestrictions->InMultipleNestedIframes;
+				    $BannerRestrictionsPreview->MinScreenResolutionWidth 			= $AdCampaignBannerRestrictions->MinScreenResolutionWidth;
+				    $BannerRestrictionsPreview->MaxScreenResolutionWidth 			= $AdCampaignBannerRestrictions->MaxScreenResolutionWidth;
+				    $BannerRestrictionsPreview->MinScreenResolutionHeight 			= $AdCampaignBannerRestrictions->MinScreenResolutionHeight;
+				    $BannerRestrictionsPreview->MaxScreenResolutionHeight 			= $AdCampaignBannerRestrictions->MaxScreenResolutionHeight;
+				    $BannerRestrictionsPreview->HttpLanguage 						= $AdCampaignBannerRestrictions->HttpLanguage;
+				    $BannerRestrictionsPreview->BrowserUserAgentGrep 				= $AdCampaignBannerRestrictions->BrowserUserAgentGrep;
+				    $BannerRestrictionsPreview->CookieGrep 							= $AdCampaignBannerRestrictions->CookieGrep;
+				    $BannerRestrictionsPreview->PmpEnable 							= $AdCampaignBannerRestrictions->PmpEnable;
+				    $BannerRestrictionsPreview->Secure 								= $AdCampaignBannerRestrictions->Secure;
+				    $BannerRestrictionsPreview->Optout 								= $AdCampaignBannerRestrictions->Optout;
+				    $BannerRestrictionsPreview->Vertical 							= $AdCampaignBannerRestrictions->Vertical;
+				    $BannerRestrictionsPreview->DateCreated 						= date("Y-m-d H:i:s");
+				    $BannerRestrictionsPreview->DateUpdated 						= date("Y-m-d H:i:s");
+	
+				    $AdCampaignBannerRestrictionsPreviewID = $AdCampaignBannerRestrictionsPreviewFactory->saveAdCampaignBannerRestrictionsPreview($BannerRestrictionsPreview);
+	
+				    if ($update_data['type'] == 'AdCampaignBannerRestrictionsID' && $update_data['id'] == $AdCampaignBannerRestrictions->AdCampaignBannerRestrictionsID):
+				    	$return_val = array('AdCampaignBannerRestrictionsPreviewID'=>$AdCampaignBannerRestrictionsPreviewID,
+				    						'AdCampaignBannerPreviewID'=>$AdCampaignBannerPreviewID,
+											'AdCampaignPreviewID'=>$AdCampaignPreviewID);
+				    endif;
+				    
 			    endif;
 			endif;
 			
