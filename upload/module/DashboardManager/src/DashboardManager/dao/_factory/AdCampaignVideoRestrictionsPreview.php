@@ -127,7 +127,7 @@ class AdCampaignVideoRestrictionsPreview extends AbstractTableGateway
     }
 
     public function deleteAdCampaignVideoRestrictionsPreview($video_restrictions_preview_id) {
-    	$this->delete(array('AdCampaignVideoRestrictionsPreview' => $video_restrictions_preview_id));
+    	$this->delete(array('AdCampaignBannerPreviewID' => $video_restrictions_preview_id));
     }
 
 };

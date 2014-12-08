@@ -360,8 +360,8 @@ class DemandController extends DemandAbstractActionController {
 		// ACL PERMISSIONS CHECK
 		//transformation\CheckPermissions::checkEditPermissionAdCampaignBanner($id, $auth, $config);
 		
-		$response = transformation\CheckPermissions::checkEditPermissionAdCampaignBanner($id, $this->auth, $this->config_handle);
-
+		$response = transformation\CheckPermissions::checkEditPermissionAdCampaignBannerPreview($id, $this->auth, $this->config_handle);
+		
 		if(array_key_exists("error", $response) > 0):
 			$success = false;
 			$data = array(
@@ -372,38 +372,13 @@ class DemandController extends DemandAbstractActionController {
 	   	   return $this->getResponse()->setContent(json_encode($data));
 		endif;
 		
-
-		$AdCampaignBannerRestrictionsFactory = \_factory\AdCampaignBannerRestrictions::get_instance();
-		$params = array();
-		$params["AdCampaignBannerID"] = $id;
-		$rtb_banner_restriction = $AdCampaignBannerRestrictionsFactory->get_row($params);
-
-			if ($rtb_banner_restriction == null):
-	
-			  //die("No such AdCampaignBannerID associated with a delivery filter: " . $id);
-			  
-			  $error_msg = "No such AdCampaignBannerID associated with a delivery filter: " . $id;
-		   		$success = false;
-		   		$data = array(
-		         'success' => $success,
-		         'data' => array('error_msg' => $error_msg)
-	   		    );
-   		 
-          		return $this->getResponse()->setContent(json_encode($data));
-	
-			endif;
-
-		$banner_id = $rtb_banner_restriction->AdCampaignBannerID;
-
-		$AdCampaignBannerRestrictionsFactory->deleteAdCampaignBannerRestrictions($id);
-
-		$AdCampaignBannerFactory = \_factory\AdCampaignBanner::get_instance();
-		$params = array();
-		$params["AdCampaignBannerID"] = $banner_id;
-
-		$AdCampaignBanner = $AdCampaignBannerFactory->get_row($params);
+		$AdCampaignVideoRestrictionsPreviewFactory = \_factory\AdCampaignVideoRestrictionsPreview::get_instance();
+		$AdCampaignBannerRestrictionsPreviewFactory = \_factory\AdCampaignBannerRestrictionsPreview::get_instance();
 		
-		$success = false;
+		$AdCampaignBannerRestrictionsPreviewFactory->deleteAdCampaignBannerRestrictionsPreview($id);
+		$AdCampaignVideoRestrictionsPreviewFactory->deleteAdCampaignVideoRestrictionsPreview($id);
+		
+		$success = true;
 		$data = array(
 		     'success' => $success,
 		     'data' => array('error_msg' => $error_msg)
@@ -828,14 +803,20 @@ class DemandController extends DemandAbstractActionController {
 		
 		$current_start_delay 			= "";
 		$current_linearity 				= array();
-		$current_fold_pos 				= "";
+		$current_foldpos 				= "";
 		
 		$current_pmpenable 				= "";
 		$current_secure 				= "";
 		$current_optout 				= "";
 		$current_vertical 				= array();
 	
-	
+		$current_mimes_raw 				= "";
+		$current_apis_supported_raw 	= "";
+		$current_protocols_raw 			= "";
+		$current_delivery_methods_raw 	= "";
+		$current_playback_methods_raw 	= "";
+		$current_vertical_raw 			= "";
+		
 		if ($AdCampaignVideoRestrictions != null):
 		
 			$current_foldpos = $AdCampaignVideoRestrictions->Vertical == null ? "" : $AdCampaignVideoRestrictions->Vertical;
@@ -975,7 +956,7 @@ class DemandController extends DemandAbstractActionController {
 				'current_playback_methods' => $current_playback_methods,
 				'current_start_delay' => $current_start_delay,
 				'current_linearity' => $current_linearity,
-				'current_fold_pos' => $current_fold_pos,
+				'current_fold_pos' => $current_foldpos,
 				
 				'MinHeight' => $current_min_height,
 				'MinWidth' => $current_min_width,
@@ -2352,9 +2333,11 @@ class DemandController extends DemandAbstractActionController {
 			$BannerPreview->AdCampaignBannerPreviewID = $banner_preview_id;
 		endif;
 		
+		$AdCampaignVideoRestrictionsPreviewFactory = \_factory\AdCampaignVideoRestrictionsPreview::get_instance();
+		$AdCampaignBannerRestrictionsPreviewFactory = \_factory\AdCampaignBannerRestrictionsPreview::get_instance();
+		
 		if ($ImpressionType == 'video'):
 
-			$AdCampaignVideoRestrictionsPreviewFactory = \_factory\AdCampaignVideoRestrictionsPreview::get_instance();
 			$params = array();
 			$params["AdCampaignBannerPreviewID"] = $banner_preview_id;
 			$AdCampaignVideoRestrictionsPreview = $AdCampaignVideoRestrictionsPreviewFactory->get_row($params);
@@ -2392,8 +2375,14 @@ class DemandController extends DemandAbstractActionController {
 			$AdCampaignVideoRestrictionsPreview->StartDelay 						= trim($start_delay);
 			$AdCampaignVideoRestrictionsPreview->Linearity 							= trim($linearity);
 
-			$AdCampaignVideoRestrictionsPreviewFactory = \_factory\AdCampaignVideoRestrictionsPreview::get_instance();
+			
 			$AdCampaignVideoRestrictionsPreviewFactory->saveAdCampaignVideoRestrictionsPreview($AdCampaignVideoRestrictionsPreview);
+			
+			$AdCampaignBannerRestrictionsPreviewFactory->deleteAdCampaignBannerRestrictionsPreview($banner_preview_id);
+			
+		else:
+		
+			$AdCampaignVideoRestrictionsPreviewFactory->deleteAdCampaignVideoRestrictionsPreview($banner_preview_id);
 			
 		endif;
 		

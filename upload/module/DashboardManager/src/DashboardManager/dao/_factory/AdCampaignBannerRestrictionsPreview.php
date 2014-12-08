@@ -132,7 +132,7 @@ class AdCampaignBannerRestrictionsPreview extends AbstractTableGateway
     }
 
     public function deleteAdCampaignBannerRestrictionsPreview($banner_restrictions_preview_id) {
-    	$this->delete(array('AdCampaignBannerRestrictionsPreview' => $banner_restrictions_preview_id));
+    	$this->delete(array('AdCampaignBannerPreviewID' => $banner_restrictions_preview_id));
     }
 
 };
