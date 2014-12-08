@@ -2109,6 +2109,15 @@ class DemandController extends DemandAbstractActionController {
 	        transformation\CheckPermissions::checkEditPermissionAdCampaign($id, $this->auth, $this->config_handle);
         endif;
 
+        $current_mimes 					= array();
+        $current_apis_supported 		= array();
+        $current_protocols 				= array();
+        $current_delivery_methods 		= array();
+        $current_playback_methods 		= array();
+        
+        $current_start_delay 			= "";
+        $current_linearity 				= "";
+        
         return new ViewModel(array(
         		'ispreview'	  				=> $is_preview == true ? '1' : '0',
         		'campaignid'       			=> $id,
@@ -2124,7 +2133,23 @@ class DemandController extends DemandAbstractActionController {
 				'header_title' => 'Create Ad Campaign Banner',
 				'is_admin' => $this->is_admin,
 				'effective_id' => $this->auth->getEffectiveIdentityID(),
-				'impersonate_id' => $this->ImpersonateID
+				'impersonate_id' => $this->ImpersonateID,
+        		
+        		'linearity' => \util\BannerOptions::$linearity,
+        		'start_delay' => \util\BannerOptions::$start_delay,
+        		'playback_methods' => \util\BannerOptions::$playback_methods,
+        		'delivery_methods' => \util\BannerOptions::$delivery_methods,
+        		'apis_supported' => \util\BannerOptions::$apis_supported,
+        		'protocols' => \util\BannerOptions::$protocols,
+        		'mimes' => \util\BannerOptions::$mimes,
+        		
+        		'current_mimes' => $current_mimes,
+        		'current_apis_supported' => $current_apis_supported,
+        		'current_protocols' => $current_protocols,
+        		'current_delivery_methods' => $current_delivery_methods,
+        		'current_playback_methods' => $current_playback_methods,
+        		'current_start_delay' => $current_start_delay,
+        		'current_linearity' => $current_linearity,
         ));
 	}
 
@@ -2367,6 +2392,17 @@ class DemandController extends DemandAbstractActionController {
 		$landingpagetld           = $AdCampaignBanner->LandingPageTLD;
 		$current_iabsize          = $AdCampaignBanner->IABSize;
 
+		$current_mimes 					= array();
+		$current_apis_supported 		= array();
+		$current_protocols 				= array();
+		$current_delivery_methods 		= array();
+		$current_playback_methods 		= array();
+		
+		$current_start_delay 			= "";
+		$current_linearity 				= "";
+		
+		$impression_type				= "banner";
+		
 		return new ViewModel(array(
 				'campaignid'              => $campaignid,
 		        'bannerid'                => $bannerid,
@@ -2396,7 +2432,25 @@ class DemandController extends DemandAbstractActionController {
 				'header_title' => 'Edit Ad Campaign Banner',
 				'is_admin' => $this->is_admin,
 				'effective_id' => $this->auth->getEffectiveIdentityID(),
-				'impersonate_id' => $this->ImpersonateID
+				'impersonate_id' => $this->ImpersonateID,
+				
+				'linearity' => \util\BannerOptions::$linearity,
+				'start_delay' => \util\BannerOptions::$start_delay,
+				'playback_methods' => \util\BannerOptions::$playback_methods,
+				'delivery_methods' => \util\BannerOptions::$delivery_methods,
+				'apis_supported' => \util\BannerOptions::$apis_supported,
+				'protocols' => \util\BannerOptions::$protocols,
+				'mimes' => \util\BannerOptions::$mimes,
+				
+				'current_mimes' => $current_mimes,
+				'current_apis_supported' => $current_apis_supported,
+				'current_protocols' => $current_protocols,
+				'current_delivery_methods' => $current_delivery_methods,
+				'current_playback_methods' => $current_playback_methods,
+				'current_start_delay' => $current_start_delay,
+				'current_linearity' => $current_linearity,
+				
+				'impression_type' => $impression_type
 		));
 	}
 

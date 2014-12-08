@@ -37,9 +37,11 @@ $(function() {
     <div class="controls error">
 		<select id="ImpressionType" name="ImpressionType" class="zone-txtarea" onchange="switchImpressionType();">
 			<?php if ($editResultObj->ImpressionType == 'banner'): ?>
-				<option value="banner">Banner Ad</option>
-			<?php else: ?>
+				<option value="banner" selected="selected">Banner Ad</option>
 				<option value="video">Video Ad</option>
+			<?php else: ?>
+				<option value="banner">Banner Ad</option>
+				<option value="video" selected="selected">Video Ad</option>
 			<?php endif; ?>
 		</select>
 		</div>

@@ -209,6 +209,33 @@ function populateZonesSelect(complete_zone_list) {
 	$("#zone-picker").show();
 }
 
+function switchImpressionType() {
+	
+	var impType = $("#ImpressionType").val();
+	
+	if (impType == 'video') {
+		
+		var tag = 'Video VAST XML <br/> <span class="hlp"><small><i>You can use VPAID SWF if you have one in the VAST - <a style="color: blue; text-decoration: underline;" target="_blank" href="http://support.brightcove.com/en/video-cloud/docs/developing-vpaid-swfs#vast">FAQ on VPAID</a></i></small></span>';
+		
+		$(".novideo").hide();
+		$(".nobanner").show();
+		$("label[for=bannername]").html("Video Ad Name");
+		$("label[for=adtag]").html(tag);
+		
+		$("#adtag").css("height", "350px").css("width", "500px"); 
+		
+	} else {
+		
+		$(".novideo").show();
+		$(".nobanner").hide();
+		$("label[for=bannername]").html("Banner Ad Name");
+		$("label[for=adtag]").html("Ad Tag");
+		
+		$("#adtag").css("height", "200px").css("width", "500px"); 
+		
+	}
+}
+
 $().ready(function() {
 
 	switchAdCampaignType();

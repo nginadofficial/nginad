@@ -69,10 +69,16 @@ $(function() {
 	<input type="hidden" name="campaignpreviewid" value="<?php echo $campaignpreviewid; ?>">
 	<input type="hidden" name="ispreview" value="<?php echo $ispreview; ?>">
 	   <div class="form-group">
-		<label for="bannername">Banner Name</label>
+		<label for="bannername">Banner Ad Name</label>
 		<input type="text" class="txtbox-width" name="bannername">
 	</div>
-
+	  <div class="form-group">
+		<label for="adname">Ad Delivery Type</label>
+		<select id="ImpressionType" name="ImpressionType" class="selbox-width" onchange="switchImpressionType();">
+			<option value="banner">Banner Ad</option>
+			<option value="video">Video Ad</option>
+		</select>
+	</div>
 	<div class="form-group">
 	    <label for="startdate">Start Date</label>
         <div class="input-append date">
@@ -88,15 +94,68 @@ $(function() {
 		  <span class="add-on" id="enddateicon"><i class="icon-calendar"></i></span>
 	   </div>
 	</div>
+	 <div class="control-group nobanner" style="display: none">
+		<label for="Mimes">Mimes : <span class="hlp"><small><i>(ctrl+shift to select mutliple)</i></small></span></label>
+		<select id="Mimes" name="Mimes[]" multiple class="zone-txtarea" style="min-height: 170px">
+    <?php foreach ($mimes as $name): ?>
+        <?php if (in_array((string)$name, $current_mimes)): ?>
+            <option value="<?php echo $name;?>" selected="selected"><?php echo $name;?></option>
+        <?php else: ?>
+            <option value="<?php echo $name;?>"><?php echo $name;?></option>
+        <?php endif; ?>
+    <?php endforeach; ?>
+</select>
+	</div>
+	
+	 <div class="control-group nobanner" style="display: none">
+		<label for="Protocols">Protocols : <span class="hlp"><small><i>(ctrl+shift to select mutliple)</i></small></span></label>
+<select id="Protocols" name="Protocols[]" multiple class="zone-txtarea" style="min-height: 120px">
+    <?php foreach ($protocols as $code => $name): ?>
+        <?php if (in_array((string)$code, $current_protocols)): ?>
+            <option value="<?php echo $code;?>" selected="selected"><?php echo $name;?></option>
+        <?php else: ?>
+            <option value="<?php echo $code;?>"><?php echo $name;?></option>
+        <?php endif; ?>
+    <?php endforeach; ?>
+</select>
+	</div>
+	
+	 <div class="control-group nobanner" style="display: none">
+		<label for="ApisSupported">Apis Supported : <span class="hlp"><small><i>(ctrl+shift to select mutliple)</i></small></span></label>
+<select id="ApisSupported" name="ApisSupported[]" multiple class="zone-txtarea" style="min-height: 120px">
+    <?php foreach ($apis_supported as $code => $name): ?>
+        <?php if (in_array((string)$code, $current_apis_supported)): ?>
+            <option value="<?php echo $code;?>" selected="selected"><?php echo $name;?></option>
+        <?php else: ?>
+            <option value="<?php echo $code;?>"><?php echo $name;?></option>
+        <?php endif; ?>
+    <?php endforeach; ?>
+</select>
+	</div>
+	
+	<div class="control-group nobanner" style="display: none">
+		<label for="StartDelay">Start Delay : </label>
+<select id="StartDelay" name="StartDelay" class="zone-txtarea">
+    <?php foreach ($start_delay as $code => $name): ?>
+        <?php if ((string)$code === $current_start_delay): ?>
+            <option value="<?php echo $code;?>" selected="selected"><?php echo $name;?></option>
+        <?php else: ?>
+            <option value="<?php echo $code;?>"><?php echo $name;?></option>
+        <?php endif; ?>
+    <?php endforeach; ?>
+</select>
+
+	</div>
+	
 	<?php if ($is_admin): ?>
-	<div class="form-group">
+	<div class="form-group novideo">
 		<label for="adcampaigntype">What type of ad campaign banner is this?</label>
         <select id="adcampaigntype"  class="selbox-width" name="adcampaigntype" onchange="switchAdCampaignType();">
             <?php foreach ($adcampaigntype_options as $code => $name): ?>
                 <option value="<?php echo $code;?>"><?php echo $name;?></option>
             <?php endforeach; ?>
         </select>
-        <div id="weight-box">
+        <div id="weight-box" class="novideo">
 		    <label for="weight" class="control-label">Ad Display Priority</label>
 		    <div class="controls">
 		    <input type="text" value="5" size="5" maxlength="10" id="weight" name="weight" class="input-mini">    </div> 
@@ -104,7 +163,7 @@ $(function() {
         <div id="zone-picker"></div>
 	</div>
 	<?php endif; ?>
-	<div class="form-group">
+	<div class="form-group novideo">
 		<label for="ismobile">Is this a mobile ad?</label>
         <select id="ismobile"  class="selbox-width" name="ismobile" onchange="switchMobile(this);">
             <?php foreach ($mobile_options as $code => $name): ?>
@@ -112,7 +171,7 @@ $(function() {
             <?php endforeach; ?>
         </select>
 	</div>
-	<div class="form-group">
+	<div class="form-group novideo">
 		<label for="iabsize">IAB Size</label>
 		<div id="size-select">
 <select id="iabsize"  class="selbox-width"  name="iabsize" onchange="formSelectSize(this);">
@@ -126,11 +185,11 @@ $(function() {
 
 	</div>
 	<div class="span7">
-		<div class="form-group">
+		<div class="form-group novideo">
 		<label for="height">Height</label>
 		<input type="text" id="height" name="height" class="input-mini">
 	</div>
-<div class="form-group">
+<div class="form-group novideo">
 		<label for="width">Width</label>
 		<input type="text" id="width" name="width" class="input-mini">
 	</div>
@@ -144,8 +203,49 @@ $(function() {
 	</div>
 	<div class="form-group">
 		<label for="adtag">Ad Tag</label>
-		<textarea class="txtbox-width" name="adtag" rows="6"></textarea>
+		<textarea class="txtbox-width" style="height: 200px; width: 500px;" id="adtag" name="adtag" rows="6"></textarea>
 	</div>
+	
+	 <div class="control-group nobanner" style="display: none">
+		<label for="Delivery">Delivery : <span class="hlp"><small><i>(ctrl+shift to select mutliple)</i></small></span></label>
+<select id="Delivery" name="Delivery[]" multiple class="zone-txtarea" style="min-height: 50px">
+    <?php foreach ($delivery_methods as $code => $name): ?>
+        <?php if (in_array((string)$code, $current_delivery_methods)): ?>
+            <option value="<?php echo $code;?>" selected="selected"><?php echo $name;?></option>
+        <?php else: ?>
+            <option value="<?php echo $code;?>"><?php echo $name;?></option>
+        <?php endif; ?>
+    <?php endforeach; ?>
+</select>
+	</div>
+	
+	 <div class="control-group nobanner" style="display: none">
+		<label for="Playback">Playback : <span class="hlp"><small><i>(ctrl+shift to select mutliple)</i></small></span></label>
+<select id="Playback" name="Playback[]" multiple class="zone-txtarea" style="min-height: 100px">
+    <?php foreach ($playback_methods as $code => $name): ?>
+        <?php if (in_array((string)$code, $current_playback_methods)): ?>
+            <option value="<?php echo $code;?>" selected="selected"><?php echo $name;?></option>
+        <?php else: ?>
+            <option value="<?php echo $code;?>"><?php echo $name;?></option>
+        <?php endif; ?>
+    <?php endforeach; ?>
+</select>
+	</div>
+	
+	<div class="control-group nobanner" style="display: none">
+		<label for="Linearity">Linearity : </label>
+<select id="Linearity" name="Linearity" class="zone-txtarea">
+    <?php foreach ($linearity as $code => $name): ?>
+        <?php if ((string)$code === $current_linearity): ?>
+            <option value="<?php echo $code;?>" selected="selected"><?php echo $name;?></option>
+        <?php else: ?>
+            <option value="<?php echo $code;?>"><?php echo $name;?></option>
+        <?php endif; ?>
+    <?php endforeach; ?>
+</select>
+
+	</div>
+	
 <div class="form-group">
 		<label for="landingpagetld" class="input">LandingPage TLD [top level domain] <br/>
 		<span class="hlp">

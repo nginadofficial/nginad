@@ -72,6 +72,12 @@ endif;
             	$banner_id = $rtb_banner->AdCampaignBannerID;
             	$campaign_id = $rtb_banner->AdCampaignID;
             endif;
+
+            if ($rtb_banner->ImpressionType == 'video'):
+	            $video = "video";
+            else:
+	            $video = "";
+            endif;
     ?>
 
             <tr>
@@ -85,7 +91,7 @@ endif;
             <a href="javascript:void(0);" onclick="deleteBannerModal('/demand/deletebanner/<?php echo $banner_id;?><?php echo $preview_query;?>','<?php echo $rtb_banner->Name;?>');">Delete Banner</a>
            </td>
            <td>
-            <a href="/demand/deliveryfilter/<?php echo $banner_id;?><?php echo $preview_query;?>">Edit Delivery Filter</a>
+            <a href="/demand/deliveryfilter<?php echo $video; ?>/<?php echo $banner_id;?><?php echo $preview_query;?>">Edit Delivery Filter</a>
             <hr />
             
             <a href="javascript:void(0);" onclick="deleteDeliveryFilterModal('/demand/deletedeliveryfilter/<?php echo $banner_id;?><?php echo $preview_query;?>','<?php echo $rtb_banner->Name;?>');">Delete Delivery Filter</a>
