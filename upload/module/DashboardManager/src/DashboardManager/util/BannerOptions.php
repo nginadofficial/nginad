@@ -58,7 +58,6 @@ class BannerOptions {
     );
 
     public static $mimes = array(
-    
     		"video/x-flv",
     		"video/mp4",
     		"application/x-shockwave-flash",
@@ -72,7 +71,6 @@ class BannerOptions {
     );
 
     public static $protocols = array(
-    
     		"1" => "VAST 1.0",
     		"2" => "VAST 2.0",
     		"3" => "VAST 3.0",
@@ -83,7 +81,6 @@ class BannerOptions {
     );
     
     public static $apis_supported = array(
-	    
 		    "1" => "VPAID 1.0",
 		    "2" => "VPAID 2.0",
 		    "3" => "MRAID-1",
@@ -93,13 +90,11 @@ class BannerOptions {
     );
 
     public static $delivery_methods = array(
-    
     		"1" => "Streaming",
     		"2" => "Progressive"
     );
     
     public static $playback_methods = array(
-    
     		"1" => "Auto-play sound on",
     		"2" => "Auto-play sound off",
     		"3" => "Click-to-play",
@@ -107,7 +102,7 @@ class BannerOptions {
     );
     
     public static $start_delay = array(
-    
+    		"" => "[ CHOOSE ONE ]",
     		"0" => "Pre-roll",
     		"-1" => "Generic mid-roll",
     		"-2" => "Generic Post-roll"
@@ -115,13 +110,13 @@ class BannerOptions {
     
     
     public static $linearity = array(
-    
+    		"" => "[ CHOOSE ONE ]",
     		"1" => "Linear/In-stream",
     		"2" => "Non-Linear/Overlay"
     );
     
     public static $fold_pos = array(
-    
+    		"" => "[ CHOOSE ONE ]",
     		"0" => "Unknown",
     		"1" => "Above the fold",
     		"3" => "Below the fold",

@@ -82,7 +82,7 @@ class AdCampaignVideoRestrictionsPreview extends AbstractTableGateway
     		return $obj_list;
     }
 
-    public function saveAdCampaignVideoRestrictionsPreview(\model\AdCampaignVideoRestrictionsPreview $VideoRestrictionsPreview) {
+    public function saveAdCampaignVideoRestrictionsPreview($VideoRestrictionsPreview) {
     	$data = array(
     	        'AdCampaignBannerPreviewID'        => $VideoRestrictionsPreview->AdCampaignBannerPreviewID,
     	        'GeoCountry'                       => $VideoRestrictionsPreview->GeoCountry,

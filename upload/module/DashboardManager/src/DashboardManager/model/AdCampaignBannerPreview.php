@@ -15,6 +15,7 @@ class AdCampaignBannerPreview {
     public $AdCampaignPreviewID;
     public $AdCampaignBannerID;  // nullable
     public $AdCampaignTypeID;
+    public $ImpressionType;
     public $UserID;
     public $Name;
     public $StartDate;

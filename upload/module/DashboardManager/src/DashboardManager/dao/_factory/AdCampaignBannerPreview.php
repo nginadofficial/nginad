@@ -86,6 +86,7 @@ class AdCampaignBannerPreview extends AbstractTableGateway
     	$data = array(
     			'AdCampaignPreviewID'         	=> $BannerPreview->AdCampaignPreviewID,
     			'Name'                 			=> $BannerPreview->Name,
+    			'ImpressionType'       			=> $BannerPreview->ImpressionType,
     			// convert to MySQL DateTime
     			'StartDate'            			=> $BannerPreview->StartDate,
     			'EndDate'              			=> $BannerPreview->EndDate,

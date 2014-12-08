@@ -86,6 +86,7 @@ class AdCampaignBanner extends \_factory\CachedTableRead
     			'AdCampaignID'         => $Banner->AdCampaignID,
     			'AdCampaignTypeID'	   => $Banner->AdCampaignTypeID,
     			'Name'                 => $Banner->Name,
+    			'ImpressionType'       => $Banner->ImpressionType,
     			// convert to MySQL DateTime
     			'StartDate'            => $Banner->StartDate,
     			'EndDate'              => $Banner->EndDate,

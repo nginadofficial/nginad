@@ -2176,24 +2176,43 @@ class DemandController extends DemandAbstractActionController {
 	 */
 	public function newbannerAction() {
 
-		$needed_input = array(
+		$initialized = $this->initialize();
+		if ($initialized !== true) return $initialized;
+
+		$ImpressionType = $this->getRequest()->getPost('ImpressionType');
+		
+		if ($ImpressionType != 'banner' && $ImpressionType != 'video'):
+			die("Required Field: ImpressionType was missing");
+		endif;
+		
+		$needed_input_banner = array(
 				'bannername',
 				'startdate',
 				'enddate',
-		        'ismobile',
+				'ismobile',
 				'iabsize',
 				'height',
 				'width',
 				'bidamount',
-		        'adtag',
-		        'landingpagetld'
+				'adtag',
+				'landingpagetld'
 		);
-
-		$initialized = $this->initialize();
-		if ($initialized !== true) return $initialized;
-
-		$this->validateInput($needed_input);
-
+		
+		$needed_input_video = array(
+				'bannername',
+				'startdate',
+				'enddate',
+				'bidamount',
+				'adtag',
+				'landingpagetld'
+		);
+		
+		if ($ImpressionType == 'video'):
+			$this->validateInput($needed_input_video);
+		else:
+			$this->validateInput($needed_input_banner);
+		endif;
+		
 		$adcampaigntype 		= AD_TYPE_ANY_REMNANT;
 		$linkedzones 			= array();
 		
@@ -2248,6 +2267,49 @@ class DemandController extends DemandAbstractActionController {
 		$landingpagetld = $this->getRequest()->getPost('landingpagetld');
 		$bannerid = $this->getRequest()->getPost('bannerid');
 
+		if ($ImpressionType == 'video'):
+
+			$mimes 						= $this->getRequest()->getPost("Mimes");
+			if ($mimes && is_array($mimes) && count($mimes) > 0):
+				$mimes = join(',', $mimes);
+			else:
+				$mimes = "";
+			endif;
+					
+			$protocols 					= $this->getRequest()->getPost("Protocols");
+			if ($protocols && is_array($protocols) && count($protocols) > 0):
+				$protocols = join(',', $protocols);
+			else:
+				$protocols = "";
+			endif;
+					
+			$apis_supported 			= $this->getRequest()->getPost("ApisSupported");
+			if ($apis_supported && is_array($apis_supported) && count($apis_supported) > 0):
+				$apis_supported = join(',', $apis_supported);
+			else:
+				$apis_supported = "";
+			endif;
+					
+			$delivery 					= $this->getRequest()->getPost("Delivery");
+			if ($delivery && is_array($delivery) && count($delivery) > 0):
+				$delivery = join(',', $delivery);
+			else:
+				$delivery = "";
+			endif;
+					
+			$playback 					= $this->getRequest()->getPost("Playback");
+			if ($playback && is_array($playback) && count($playback) > 0):
+				$playback = join(',', $playback);
+			else:
+				$playback = "";
+			endif;
+					
+			$start_delay 				= $this->getRequest()->getPost("StartDelay") == null ? "" : $this->getRequest()->getPost("StartDelay");
+					
+			$linearity 					= $this->getRequest()->getPost("Linearity") == null ? "" : $this->getRequest()->getPost("Linearity");
+
+		endif;
+		
 		$BannerPreview = new \model\AdCampaignBannerPreview();
 		if ($banner_preview_id != null):
 		  $BannerPreview->AdCampaignBannerPreviewID             = $banner_preview_id;
@@ -2262,6 +2324,8 @@ class DemandController extends DemandAbstractActionController {
 		if ($this->is_admin || $banner_preview_id == null):
 			$BannerPreview->AdCampaignTypeID      = $adcampaigntype;
 		endif;
+		
+		$BannerPreview->ImpressionType			  = $ImpressionType;
 		$BannerPreview->IsMobile                  = $ismobile;
 		$BannerPreview->IABSize                   = $iabsize;
 		$BannerPreview->Height                    = $height;
@@ -2280,10 +2344,57 @@ class DemandController extends DemandAbstractActionController {
 		$BannerPreview->ChangeWentLive       	  = 0;
 
 		$AdCampaignBannerPreviewFactory = \_factory\AdCampaignBannerPreview::get_instance();
-		$banner_preview_id = $AdCampaignBannerPreviewFactory->saveAdCampaignBannerPreview($BannerPreview);
+		$banner_preview_id_new = $AdCampaignBannerPreviewFactory->saveAdCampaignBannerPreview($BannerPreview);
 
-		if ($BannerPreview->AdCampaignBannerPreviewID == null):
+		if ($banner_preview_id_new != null):
+			$banner_preview_id = $banner_preview_id_new;
+		elseif ($BannerPreview->AdCampaignBannerPreviewID == null):
 			$BannerPreview->AdCampaignBannerPreviewID = $banner_preview_id;
+		endif;
+		
+		if ($ImpressionType == 'video'):
+
+			$AdCampaignVideoRestrictionsPreviewFactory = \_factory\AdCampaignVideoRestrictionsPreview::get_instance();
+			$params = array();
+			$params["AdCampaignBannerPreviewID"] = $banner_preview_id;
+			$AdCampaignVideoRestrictionsPreview = $AdCampaignVideoRestrictionsPreviewFactory->get_row($params);
+			
+			if ($AdCampaignVideoRestrictionsPreview == null):
+			
+				$AdCampaignVideoRestrictionsPreview = new \model\AdCampaignVideoRestrictionsPreview();
+				$AdCampaignVideoRestrictionsPreview->GeoCountry 						= "";
+				$AdCampaignVideoRestrictionsPreview->GeoState 							= "";
+				$AdCampaignVideoRestrictionsPreview->GeoCity 							= "";
+					
+				$AdCampaignVideoRestrictionsPreview->MinDuration 						= "";
+				$AdCampaignVideoRestrictionsPreview->MaxDuration 						= "";
+				$AdCampaignVideoRestrictionsPreview->MinHeight 							= "";
+				$AdCampaignVideoRestrictionsPreview->MinWidth 							= "";
+				$AdCampaignVideoRestrictionsPreview->FoldPos 							= "";
+				$AdCampaignVideoRestrictionsPreview->PmpEnable 							= "";
+				$AdCampaignVideoRestrictionsPreview->Secure 							= "";
+				$AdCampaignVideoRestrictionsPreview->Optout 							= "";
+				$AdCampaignVideoRestrictionsPreview->Vertical 							= "";
+				$AdCampaignVideoRestrictionsPreview->MinWidth 							= "";
+				
+			endif;
+			
+			$AdCampaignVideoRestrictionsPreview->AdCampaignBannerPreviewID 			= $banner_preview_id;
+
+			$AdCampaignVideoRestrictionsPreview->DateCreated               			= date("Y-m-d H:i:s");
+			
+			$AdCampaignVideoRestrictionsPreview->MimesCommaSeparated 				= trim($mimes);
+			$AdCampaignVideoRestrictionsPreview->ProtocolsCommaSeparated 			= trim($protocols);
+			$AdCampaignVideoRestrictionsPreview->ApisSupportedCommaSeparated 		= trim($apis_supported);
+			$AdCampaignVideoRestrictionsPreview->DeliveryCommaSeparated 			= trim($delivery);
+			$AdCampaignVideoRestrictionsPreview->PlaybackCommaSeparated 			= trim($playback);
+			
+			$AdCampaignVideoRestrictionsPreview->StartDelay 						= trim($start_delay);
+			$AdCampaignVideoRestrictionsPreview->Linearity 							= trim($linearity);
+
+			$AdCampaignVideoRestrictionsPreviewFactory = \_factory\AdCampaignVideoRestrictionsPreview::get_instance();
+			$AdCampaignVideoRestrictionsPreviewFactory->saveAdCampaignVideoRestrictionsPreview($AdCampaignVideoRestrictionsPreview);
+			
 		endif;
 		
 		if ($this->is_admin):
@@ -2343,6 +2454,11 @@ class DemandController extends DemandAbstractActionController {
 			// ACL PREVIEW PERMISSIONS CHECK
 			transformation\CheckPermissions::checkEditPermissionAdCampaignBannerPreview($id, $this->auth, $this->config_handle);
 
+			$AdCampaignVideoRestrictionsPreviewFactory = \_factory\AdCampaignVideoRestrictionsPreview::get_instance();
+			$params = array();
+			$params["AdCampaignBannerPreviewID"] = $id;
+			$AdCampaignVideoRestrictions = $AdCampaignVideoRestrictionsPreviewFactory->get_row($params);
+			
 			$AdCampaignBannerPreviewFactory = \_factory\AdCampaignBannerPreview::get_instance();
 			$params = array();
 			$params["Active"] = 1;
@@ -2354,6 +2470,12 @@ class DemandController extends DemandAbstractActionController {
 		else:
 			// ACL PERMISSIONS CHECK
 			transformation\CheckPermissions::checkEditPermissionAdCampaignBanner($id, $this->auth, $this->config_handle);
+
+			$AdCampaignVideoRestrictionsFactory = \_factory\AdCampaignVideoRestrictions::get_instance();
+			$params = array();
+			$params["AdCampaignBannerID"] = $id;
+			
+			$AdCampaignVideoRestrictions = $AdCampaignVideoRestrictionsFactory->get_row($params);
 
 			$AdCampaignBannerFactory = \_factory\AdCampaignBanner::get_instance();
 			$params = array();
@@ -2391,6 +2513,8 @@ class DemandController extends DemandAbstractActionController {
 		$adtag                    = $AdCampaignBanner->AdTag;
 		$landingpagetld           = $AdCampaignBanner->LandingPageTLD;
 		$current_iabsize          = $AdCampaignBanner->IABSize;
+		
+		$ImpressionType           = $AdCampaignBanner->ImpressionType;
 
 		$current_mimes 					= array();
 		$current_apis_supported 		= array();
@@ -2403,6 +2527,59 @@ class DemandController extends DemandAbstractActionController {
 		
 		$impression_type				= "banner";
 		
+		if ($AdCampaignVideoRestrictions != null):
+		
+			$current_mimes_raw = $AdCampaignVideoRestrictions->MimesCommaSeparated == null ? "" : $AdCampaignVideoRestrictions->MimesCommaSeparated;
+			$current_apis_supported_raw = $AdCampaignVideoRestrictions->ApisSupportedCommaSeparated == null ? "" : $AdCampaignVideoRestrictions->ApisSupportedCommaSeparated;
+			$current_protocols_raw = $AdCampaignVideoRestrictions->ProtocolsCommaSeparated == null ? "" : $AdCampaignVideoRestrictions->ProtocolsCommaSeparated;
+			$current_delivery_methods_raw = $AdCampaignVideoRestrictions->DeliveryCommaSeparated == null ? "" : $AdCampaignVideoRestrictions->DeliveryCommaSeparated;
+			$current_playback_methods_raw = $AdCampaignVideoRestrictions->PlaybackCommaSeparated == null ? "" : $AdCampaignVideoRestrictions->PlaybackCommaSeparated;
+			
+			$current_start_delay = $AdCampaignVideoRestrictions->StartDelay == null ? "" : $AdCampaignVideoRestrictions->StartDelay;
+			$current_linearity = $AdCampaignVideoRestrictions->Linearity == null ? "" : $AdCampaignVideoRestrictions->Linearity;
+
+			$current_mimes = array();
+			
+			if ($current_mimes_raw):
+			
+				$current_mimes = explode(',', $current_mimes_raw);
+			
+			endif;
+			
+			$current_apis_supported = array();
+			
+			if ($current_apis_supported_raw):
+			
+				$current_apis_supported = explode(',', $current_apis_supported_raw);
+			
+			endif;
+			
+			$current_protocols = array();
+			
+			if ($current_protocols_raw):
+			
+				$current_protocols = explode(',', $current_protocols_raw);
+			
+			endif;
+			
+			$current_delivery_methods = array();
+			
+			if ($current_delivery_methods_raw):
+			
+				$current_delivery_methods = explode(',', $current_delivery_methods_raw);
+			
+			endif;
+			
+			$current_playback_methods = array();
+			
+			if ($current_playback_methods_raw):
+			
+				$current_playback_methods = explode(',', $current_playback_methods_raw);
+			
+			endif;
+			
+		endif;
+
 		return new ViewModel(array(
 				'campaignid'              => $campaignid,
 		        'bannerid'                => $bannerid,
@@ -2433,6 +2610,7 @@ class DemandController extends DemandAbstractActionController {
 				'is_admin' => $this->is_admin,
 				'effective_id' => $this->auth->getEffectiveIdentityID(),
 				'impersonate_id' => $this->ImpersonateID,
+				'ImpressionType' => $ImpressionType,
 				
 				'linearity' => \util\BannerOptions::$linearity,
 				'start_delay' => \util\BannerOptions::$start_delay,
@@ -2459,10 +2637,7 @@ class DemandController extends DemandAbstractActionController {
 	 * @return JSON encoded data for AJAX call
 	 */
 	public function editlinkedzoneAction() {
-	
-		
-		
-		
+
 		$id 		= $this->getEvent()->getRouteMatch()->getParam('param1');
 		$height 	= $this->getRequest()->getQuery('height');
 		$width 		= $this->getRequest()->getQuery('width');

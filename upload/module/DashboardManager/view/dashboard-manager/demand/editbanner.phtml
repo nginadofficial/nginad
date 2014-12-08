@@ -54,6 +54,8 @@ $(function() {
 	$( '#enddateicon' ).click(function() {
           $('#enddate').datepicker('show');
     });
+    
+    switchImpressionType();
 });
 <?php $this->headScript()->captureEnd();  ?>
 
@@ -83,7 +85,7 @@ $(function() {
 	  <div class="control-group">
 		<label for="adname">Ad Delivery Type</label>
 		<select id="ImpressionType" name="ImpressionType" class="zone-txtarea" onchange="switchImpressionType();">
-			<?php if ($impression_type == 'banner'): ?>
+			<?php if ($ImpressionType == 'banner'): ?>
 				<option value="banner" selected="selected">Banner Ad</option>
 				<option value="video">Video Ad</option>
 			<?php else: ?>

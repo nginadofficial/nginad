@@ -14,6 +14,7 @@ class AdCampaignBanner {
     public $AdCampaignBannerID;
     public $AdCampaignID;
     public $AdCampaignTypeID;
+    public $ImpressionType;
     public $UserID;
     public $Name;
     public $StartDate;

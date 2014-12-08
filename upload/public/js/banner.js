@@ -222,6 +222,8 @@ function switchImpressionType() {
 		$("label[for=bannername]").html("Video Ad Name");
 		$("label[for=adtag]").html(tag);
 		
+		$(".btn-primary").val("Update Video");
+		
 		$("#adtag").css("height", "350px").css("width", "500px"); 
 		
 	} else {
@@ -230,6 +232,8 @@ function switchImpressionType() {
 		$(".nobanner").hide();
 		$("label[for=bannername]").html("Banner Ad Name");
 		$("label[for=adtag]").html("Ad Tag");
+		
+		$(".btn-primary").val("Update Banner");
 		
 		$("#adtag").css("height", "200px").css("width", "500px"); 
 		
