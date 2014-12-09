@@ -79,8 +79,6 @@ class RtbBidRequestJsonEncoder {
 			
 			elseif 	($RtbBidRequestImp->media_type == "video"):
 
-				self::getRtbBidRequestVideo($RtbBidRequestImp->RtbBidRequestBanner);
-			
 				$impression['video'] =		self::getRtbBidRequestVideo($RtbBidRequestImp->RtbBidRequestVideo);
 			
 			endif;

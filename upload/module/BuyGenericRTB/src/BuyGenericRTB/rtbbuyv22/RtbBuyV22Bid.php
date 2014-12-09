@@ -168,6 +168,7 @@ abstract class RtbBuyV22Bid extends RtbBuyBid {
 		
 		$RtbBidResponse	= new \model\openrtb\RtbBidResponse();
 		$RtbBidResponse->id = $this->RtbBidRequest->id;
+		$RtbBidResponse->RtbBidResponseSeatBidList = array();
 		
 		$currency = null;
 		
@@ -209,6 +210,13 @@ abstract class RtbBuyV22Bid extends RtbBuyBid {
 			$RtbBidResponse->cur				= $currency;
 		else: 
 			$RtbBidResponse->cur				= $this->config['settings']['rtb']['auction_currency'];
+		endif;
+		
+		if (!count($RtbBidResponse->RtbBidResponseSeatBidList)):
+				
+			// implement Rubicon Project's empty bid with $0.00 CPM here
+			// also add the rejection code
+			
 		endif;
 		
 		$this->RtbBidResponse = $RtbBidResponse;

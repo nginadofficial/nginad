@@ -84,6 +84,49 @@ use rtbsell\RtbSellBid;
 		endif;
 	}	
 	
+	private function create_rtb_request_video($config, $banner_request) {
+	
+		$RtbBidRequestVideo						= new \model\openrtb\RtbBidRequestVideo();
+		$RtbBidRequestVideo->id					= $this->generate_transaction_id();
+	
+		$this->setObjParam($RtbBidRequestVideo, $banner_request, "video_mimes", "mimes");
+		
+		$this->setObjParam($RtbBidRequestVideo, $banner_request, "video_min_duration", "minduration");
+		
+		$this->setObjParam($RtbBidRequestVideo, $banner_request, "video_max_duration", "maxduration");
+		
+		$this->setObjParam($RtbBidRequestVideo, $banner_request, "video_protocols", "protocols");
+
+		$this->setObjParam($RtbBidRequestVideo, $banner_request, "video_width", "w");
+		
+		$this->setObjParam($RtbBidRequestVideo, $banner_request, "video_height", "h");
+		
+		$this->setObjParam($RtbBidRequestVideo, $banner_request, "video_start_delay", "startdelay");
+		
+		$this->setObjParam($RtbBidRequestVideo, $banner_request, "video_linearity", "linearity");
+		
+		$this->setObjParam($RtbBidRequestVideo, $banner_request, "video_delivery", "delivery");
+		
+		$this->setObjParam($RtbBidRequestVideo, $banner_request, "video_foldpos", "pos");
+	
+		$this->setObjParam($RtbBidRequestVideo, $banner_request, "video_apis_supported", "api");
+		
+		return $RtbBidRequestVideo;
+	}
+	
+	private function create_rtb_request_banner($config, $banner_request) {
+		
+		$RtbBidRequestBanner						= new \model\openrtb\RtbBidRequestBanner();
+		$RtbBidRequestBanner->id					= $this->generate_transaction_id();
+		
+		$this->setObjParam($RtbBidRequestBanner, $banner_request, "banner_height", "h");
+		$this->setObjParam($RtbBidRequestBanner, $banner_request, "banner_width", "w");
+		
+		$RtbBidRequestBanner->pos 					= $banner_request["atf"] == 1 ? 1 : 0;
+		
+		return $RtbBidRequestBanner;
+	}
+	
 	public function create_rtb_request_from_publisher_display_impression($config, $banner_request) {
 		
 		$this->org_request							= $banner_request;
@@ -95,16 +138,17 @@ use rtbsell\RtbSellBid;
 		$RtbBidRequestImp->media_type 				= "banner";
 		$RtbBidRequestImp->id						= $this->generate_transaction_id();
 		
+		$RtbBidRequestImp->media_type 				= $banner_request["ImpressionType"];
 		
-		$RtbBidRequestBanner						= new \model\openrtb\RtbBidRequestBanner();
-		$RtbBidRequestBanner->id					= $this->generate_transaction_id();
+		if ($banner_request["ImpressionType"] == 'video'):
 		
-		$this->setObjParam($RtbBidRequestBanner, $banner_request, "height", "h");
-		$this->setObjParam($RtbBidRequestBanner, $banner_request, "width", "w");
+			$RtbBidRequestVideo = $this->create_rtb_request_video($config, $banner_request);
+			$RtbBidRequestImp->RtbBidRequestVideo	= $RtbBidRequestVideo;
+		else:
 		
-		$RtbBidRequestBanner->pos 					= $banner_request["atf"] == 1 ? 1 : 0;
-		
-		$RtbBidRequestImp->RtbBidRequestBanner		= $RtbBidRequestBanner;
+			$RtbBidRequestBanner = $this->create_rtb_request_banner($config, $banner_request);
+			$RtbBidRequestImp->RtbBidRequestBanner	= $RtbBidRequestBanner;
+		endif;
 		
 		$this->setObjParam($RtbBidRequestImp, $banner_request, "bidfloor");
 		

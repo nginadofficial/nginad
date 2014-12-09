@@ -34,7 +34,7 @@ class RtbBidResponseJsonEncoder {
 	private static function getRtbBidResponseSeatBidList(\model\openrtb\RtbBidResponse &$RtbBidResponse) {
 	
 		$seatbid_list = array();
-	
+		
 		foreach ($RtbBidResponse->RtbBidResponseSeatBidList as $RtbBidResponseSeatBid):
 
 			$seatbid = array();

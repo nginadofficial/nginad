@@ -159,7 +159,7 @@ class IndexController extends AbstractActionController
     		
     	else:
 
-	 		$banner_request = $this->build_banner_request($config, $banner_request);   	
+	 		$banner_request = $this->build_request_array($config, $banner_request);   	
 	
 	 		$RtbSellV22Bid = new \rtbsellv22\RtbSellV22Bid();
 	 		
@@ -244,10 +244,105 @@ class IndexController extends AbstractActionController
  		exit;
     }
     
-    private function build_banner_request($config, $banner_request) {
+    private function build_request_array($config, $banner_request) {
     	
+    	/*
+    	 * Produce the banner request params for our demand partners
+    	*/
+    	 
     	$banner_request_id = intval($banner_request["publisher_banner_id"]);
+    	 
+    	$PublisherAdZone = $this->add_ad_zone_request_params($config, $banner_request, $banner_request_id);
     	
+    	if ($PublisherAdZone == null):
+    		return null;
+    	endif;
+
+    	if ($PublisherAdZone->ImpressionType == 'video'):
+    	
+    		$banner_request["ImpressionType"] = 'video';
+    		$this->build_video_request($config, $banner_request, $PublisherAdZone);
+    	
+    	else:
+    	
+    		$banner_request["ImpressionType"] = 'banner';
+    		$this->build_banner_request($config, $banner_request, $PublisherAdZone);
+    	
+    	endif;
+    	
+    	return $banner_request;
+    	
+    }
+    
+    private function build_video_request($config, &$banner_request, &$PublisherAdZone) {
+    
+    	$this->add_ad_zone_video_request_params($config, $banner_request, $PublisherAdZone);
+    	
+    	$this->add_publisher_request_params($config, $banner_request, $PublisherAdZone);
+    	 
+    	$this->add_publisher_website_request_params($config, $banner_request, $PublisherAdZone);
+    	
+    	$this->add_user_request_params($config, $banner_request);
+    
+    	$this->add_mobile_request_params($config, $banner_request);
+    
+    	return $banner_request;
+    
+    }
+    
+    private function build_banner_request($config, &$banner_request, &$PublisherAdZone) {
+
+    	$this->add_ad_zone_banner_request_params($config, $banner_request, $PublisherAdZone);
+    	
+    	$this->add_publisher_request_params($config, $banner_request, $PublisherAdZone);
+    	
+    	$this->add_publisher_website_request_params($config, $banner_request, $PublisherAdZone);
+    	
+    	$this->add_user_request_params($config, $banner_request);
+
+		$this->add_mobile_request_params($config, $banner_request);
+    	 
+    	return $banner_request;
+	   
+    }
+    
+    private function add_ad_zone_video_request_params($config, &$banner_request, &$PublisherAdZone) {
+    
+    	$PublisherAdZoneVideoFactory = \_factory\PublisherAdZoneVideo::get_instance();
+    	
+    	$params = array();
+    	$params["PublisherAdZoneID"] = $PublisherAdZone->PublisherAdZoneID;
+    	$PublisherAdZoneVideo = $PublisherAdZoneVideoFactory->get_row_cached($config, $params);
+		
+    	if ($PublisherAdZoneVideo == null):
+    		return;
+    	endif;
+    	
+    	$banner_request["video_mimes"] 				= explode(',', $PublisherAdZoneVideo->MimesCommaSeparated);
+    	$banner_request["video_apis_supported"] 	= explode(',', $PublisherAdZoneVideo->ApisSupportedCommaSeparated);
+    	$banner_request["video_protocols"] 			= explode(',', $PublisherAdZoneVideo->ProtocolsCommaSeparated);
+    	$banner_request["video_delivery"] 			= explode(',', $PublisherAdZoneVideo->DeliveryCommaSeparated);
+    	$banner_request["video_playback"]			= explode(',', $PublisherAdZoneVideo->PlaybackCommaSeparated);
+    	
+    	$banner_request["video_min_duration"] 		= $PublisherAdZoneVideo->MinDuration;
+    	$banner_request["video_max_duration"] 		= $PublisherAdZoneVideo->MaxDuration;
+    	$banner_request["video_start_delay"] 		= $PublisherAdZoneVideo->StartDelay;
+    	$banner_request["video_linearity"] 			= $PublisherAdZoneVideo->Linearity;
+    	$banner_request["video_foldpos"] 			= $PublisherAdZoneVideo->FoldPos;
+    	
+    	$banner_request["video_height"] 			= $PublisherAdZone->Height;
+    	$banner_request["video_width"] 				= $PublisherAdZone->Width;
+    }
+    
+    private function add_ad_zone_banner_request_params($config, &$banner_request, &$PublisherAdZone) {
+    
+    	$banner_request["banner_height"] 			= $PublisherAdZone->Height;
+    	$banner_request["banner_width"] 			= $PublisherAdZone->Width;
+    	 
+    }
+    
+    private function add_ad_zone_request_params($config, &$banner_request, $banner_request_id) {
+    	 
     	$PublisherAdZoneFactory = \_factory\PublisherAdZone::get_instance();
     	
     	$params = array();
@@ -255,77 +350,91 @@ class IndexController extends AbstractActionController
     	$params["AdStatus"] = 1;
     	$PublisherAdZone = $PublisherAdZoneFactory->get_row_cached($config, $params);
 
-    	$PublisherWebsite = null;
+    	$banner_request["PublisherAdZoneID"] 		= $PublisherAdZone->PublisherAdZoneID;
+    	$banner_request["AdName"] 					= $PublisherAdZone->AdName;
     	
-    	if ($PublisherAdZone == null):
-    		return null;
-    	endif;
+    	$banner_request["bidfloor"] 				= sprintf("%1.4f", $PublisherAdZone->FloorPrice);
+    	$banner_request["website_id"] 				= $PublisherAdZone->PublisherWebsiteID;
+    	
+    	return $PublisherAdZone;
+    	
+    }
+    
+    private function add_publisher_website_request_params($config, &$banner_request, &$PublisherAdZone) {
     	
     	$PublisherWebsiteFactory = \_factory\PublisherWebsite::get_instance();
     	$params = array();
     	$params["PublisherWebsiteID"] = $PublisherAdZone->PublisherWebsiteID;
     	$PublisherWebsite = $PublisherWebsiteFactory->get_row_cached($config, $params);
-    	
+    	 
     	if ($PublisherWebsite == null):
-    		return null;
+    		return;
     	endif;
     	
-    	/*
-    	 * Produce the RTB request to our demand partners
-    	 */
-    	
-    	$banner_request["PublisherAdZoneID"] 		= $PublisherAdZone->PublisherAdZoneID;
-    	$banner_request["AdName"] 					= $PublisherAdZone->AdName;
     	$banner_request["WebDomain"] 				= $PublisherWebsite->WebDomain;
-    	
-    	if (!isset($banner_request["org_tld"]) || $banner_request["org_tld"] == null):
-	    	
-	    	$banner_request["org_tld"] = $PublisherWebsite->WebDomain;
-	    	
-    	endif;
-    	
-    	$banner_request["height"] 					= $PublisherAdZone->Height;
-    	$banner_request["width"] 					= $PublisherAdZone->Width;
-    	$banner_request["bidfloor"] 				= sprintf("%1.4f", $PublisherAdZone->FloorPrice);
     	$banner_request["iab_category"] 			= $PublisherWebsite->IABCategory;
     	$banner_request["iab_sub_category"] 		= $PublisherWebsite->IABSubCategory;
-    	$banner_request["website_id"] 				= $PublisherAdZone->PublisherWebsiteID;
     	
-    	$banner_request["publisher_info_website"] 	= "example.com"; 		// will be populated from the initial publisher signup.
-    	$banner_request["publisher_id"] 			= 1; 					// will be populated from the initial publisher signup.
-    	$banner_request["publisher_name"] 			= "Demo Publisher"; 	// will be populated from the initial publisher signup.
-    	$banner_request["publisher_iab_category"] 	= null;
+    	if (!isset($banner_request["org_tld"]) || $banner_request["org_tld"] == null):
+    	
+    		$banner_request["org_tld"] = $PublisherWebsite->WebDomain;
+    	
+    	endif;
+    }
+    
+    private function add_publisher_request_params($config, &$banner_request, &$PublisherAdZone) {
+    	
+    	$PublisherInfoFactory = \_factory\PublisherInfo::get_instance();
+    	$params = array();
+    	$params["PublisherInfoID"] = $PublisherAdZone->AdOwnerID;
+    	$PublisherInfo = $PublisherInfoFactory->get_row_cached($config, $params);
+    	 
+    	if ($PublisherInfo == null):
+    		return;
+    	endif;
+    	
+    	$banner_request["publisher_info_website"] 	= $PublisherInfo->Domain;
+    	$banner_request["publisher_id"] 			= $PublisherInfo->PublisherInfoID;
+    	$banner_request["publisher_name"] 			= $PublisherInfo->Name;
+    	$banner_request["publisher_iab_category"] 	= $PublisherInfo->IABCategory;
+    	
+    }
+    
+    private function add_user_request_params($config, &$banner_request) {
     	
     	$ip_address = isset($_SERVER['HTTP_X_REAL_IP']) && !empty($_SERVER['HTTP_X_REAL_IP']) ? $_SERVER['HTTP_X_REAL_IP'] : $_SERVER["REMOTE_ADDR"];
-    	
+    	 
     	// to debug on dev
     	if (empty($ip_address)):
     		$ip_address = "127.0.0.1";
     	endif;
-    	
+    	 
     	$banner_request["ip_address"] 				= $ip_address;
     	$banner_request["user_id"] 					= md5($banner_request["ip_address"]);
-    	
+    	 
     	$user_agent = (isset($_SERVER["HTTP_USER_AGENT"])) ? $_SERVER["HTTP_USER_AGENT"] : "";
-    	
+    	 
     	$banner_request["user_agent"] 				= $user_agent;
-    	
+    	 
     	$banner_request["language"] 				= isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) ? substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2) : null;
+    	 
+    }
+    
+    private function add_mobile_request_params($config, &$banner_request) {
     	
     	/*
     	 * Device Type
-    	 *
-    	 * 1	 Mobile/Tablet
-    	 * 2	 Personal	Computer
-    	 */
-    	
+    	*
+    	* 1	 Mobile/Tablet
+    	* 2	 Personal	Computer
+    	*/
+    	 
     	$detect = new \mobileutil\MobileDetect(null, $banner_request["user_agent"]);
     	if ($detect->isMobile()):
-	    	$banner_request["devicetype"] = 1;
-	    	
+	    	$banner_request["devicetype"] = DEVICE_MOBILE;
 	    	if ($detect->is('iOS')):
-	    		$banner_request["mobile_os"] = "iOS";
-	    		$banner_request["mobile_make"] = "Apple";
+		    	$banner_request["mobile_os"] = "iOS";
+		    	$banner_request["mobile_make"] = "Apple";
 		    	if ($detect->isTablet()):
 		    		$banner_request["mobile_model"] = "iPad";
 		    	else:
@@ -335,11 +444,9 @@ class IndexController extends AbstractActionController
 	    		$banner_request["mobile_os"] = "Android";
 	    	endif;
     	else:
-    		$banner_request["devicetype"] = 2;
+    		$banner_request["devicetype"] = DEVICE_DESKTOP;
     	endif;
-    	 
-    	return $banner_request;
-	   
+    	
     }
     
     
