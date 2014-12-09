@@ -51,6 +51,8 @@ function submitForm() {
 	                    $auto_approved = $zone_list_raw[$row_number]["AutoApprove"];
 	                    $domain_id = $zone_list_raw[$row_number]["PublisherWebsiteID"];
 	                    $ad_id = $zone_list_raw[$row_number]["PublisherAdZoneID"];
+	                    
+	                    $impression_type = $zone_list_raw[$row_number]["ImpressionType"];
                         ?>
                         <td>
                             <?php 
@@ -87,7 +89,10 @@ function submitForm() {
                                 	        echo $approval[intval($data)];
                                         break;
                                 	case "AdTemplateID":
-                                	    if($data == 0):
+                                		
+                                		if ($impression_type == 'video'):
+                                			echo "VAST Video";
+                                	    elseif($data == 0):
                                 	        echo "Custom:<br />" . 
                                 	           $zone_list_raw[$row_number]["Width"] . " x " .
                                 	           $zone_list_raw[$row_number]["Height"];
@@ -109,9 +114,13 @@ function submitForm() {
                     	<a href="/publisher/zone/<?php echo $domain_id;?>/edit/<?php echo $ad_id;?>">Edit 
 
 Zone</a>&nbsp;&nbsp;&nbsp;
+<?php if ($impression_type == 'video'): ?>
+                    	<a href="javascript:void(0);" onclick="VastInvocationShow(<?php echo 
+$domain_id;?>, <?php echo $zone_list_raw[$row_number]["PublisherAdZoneID"];?>)">Get VAST URL</a>
+<?php else: ?>
                     	<a href="javascript:void(0);" onclick="InvocationShow(<?php echo 
-
 $domain_id;?>, <?php echo $zone_list_raw[$row_number]["PublisherAdZoneID"];?>)">Invocation Code</a>
+<?php endif; ?>
                         <hr width="100%" />
                         <!--<a href="/publisher/zone/<?php echo $domain_id; ?>/delete/<?php echo $ad_id; ?>">Delete Zone</a>-->
                         <a href="javascript:void(0);" onclick="deleteZoneModal(<?php echo $domain_id;?>,<?php echo $ad_id;?>,'<?php echo $zone_list_raw[$row_number]["AdName"];?>');">Delete Zone</a>
@@ -157,6 +166,33 @@ $domain_id;?>, <?php echo $zone_list_raw[$row_number]["PublisherAdZoneID"];?>)">
   </div>
 </div>
 <!-- Invocation Code Modal -->
+
+<!-- Invocation Code Modal VAST -->
+<div class="modal fade" id="InvocationCodeModalVast" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="myModalLabelVast">Embed VAST Video URL in Flash Movie Player</h4>
+      </div>
+      <div class="modal-body">
+        <div>
+		<p>Use this VAST URL where you would normally copy paste a <a target="_blank" href="http://ad3.liverail.com/?LR_PUBLISHER_ID=1331&LR_CAMPAIGN_ID=229&LR_SCHEMA=vast2">LiveRail URL</a></p>
+		<label for="adtag">&nbsp;</label>
+		<div id="adtag_progress_bar_vast" class="progress progress-striped active">
+             <div class="bar" style="width: 100%;"></div>
+         </div>
+		<textarea rows="1" name="adtagvast" id="adtagvast" style="min-width: 516px;display: none;"></textarea>
+		<br />
+		<img src="/images/vast.tag.jpg" />
+	</div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Invocation Code Modal VAST -->
 
 <!-- Zone Delete Modal -->
 <input  type="hidden" name="modal_domain_id" id="modal_domain_id" value="0" />

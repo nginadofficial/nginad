@@ -37,6 +37,23 @@ function validateUser(username) {
 
 }
 
+// VAST Invocation code  (Publisher/website/zone)
+function VastInvocationShow ( domain_id, ad_id ) {
+
+	$('#adtagvast').html("");
+	$('#adtagvast').css("display","none");
+	$('#adtag_progress_bar_vast').css("display","block");
+	
+	$('#InvocationCodeModalVast').modal('show');
+	
+	$.post("/publisher/zone/" + domain_id + "/generatevasttag", { ad_id: ad_id }, function( data ) {
+		$('#adtag_progress_bar_vast').css("display","none");
+		$('#adtagvast').html(data.data.tag);
+		$('#adtagvast').css("display","block");
+	},'json');
+
+}
+
 // Invocation code  (Publisher/website/zone)
 function InvocationShow ( domain_id, ad_id ) {
 

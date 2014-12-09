@@ -909,6 +909,45 @@ class ZoneController extends PublisherAbstractActionController {
     }
     
     /**
+     * VAST Ad Tag generation for zone.
+     *
+     * @return VAST Ad Tag
+     */
+    public function generateVastTagAction()
+    {
+    
+    	$initialized = $this->initialize();
+    	if ($initialized !== true) return $initialized;
+	    	$request = $this->getRequest();
+	    
+	    if ($request->isPost()):
+	    	 
+	    	$PublisherAdZoneID = $this->getRequest()->getPost('ad_id');
+	    	$PublisherWebsiteID = intval($this->params()->fromRoute('param1', 0));
+	    	
+	    	$PublisherAdZoneFactory = \_factory\PublisherAdZone::get_instance();
+	    	$PublisherAdZoneVideoFactory = \_factory\PublisherAdZoneVideo::get_instance();
+	    	$PublisherWebsiteFactory = \_factory\PublisherWebsite::get_instance();
+	    	
+	    	$params = array();
+	    	$params["PublisherAdZoneID"] = $PublisherAdZoneID;
+	    	$AdObject = $PublisherAdZoneFactory->get_row_object($params);
+
+	    	$delivery_adtag = $this->config_handle['delivery']['adtag'];
+	    	
+	    	$effective_tag = $delivery_adtag . "?video=vast&pzoneid=" . $PublisherAdZoneID;
+	    	
+	    	$data = array(
+	    			'result' => true,
+	    			'data' => array('tag' => htmlentities($effective_tag))
+	    	);
+	    	
+	    	return $this->getResponse()->setContent(json_encode($data));
+	    	
+	    endif;
+    }
+    
+    /**
      * Ad Tag generation for zone.
      *
      * @return Ad Tag
