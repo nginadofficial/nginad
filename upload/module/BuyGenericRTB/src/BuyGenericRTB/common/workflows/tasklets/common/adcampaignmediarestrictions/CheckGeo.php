@@ -7,11 +7,11 @@
  * @license GPLv3
  */
 
-namespace buyrtb\workflows\tasklets\common\adcampaignbannerrestrictions;
+namespace buyrtb\workflows\tasklets\common\adcampaignmediarestrictions;
 
 class CheckGeo {
 
-	public static function execute(&$Logger, &$Workflow, \model\openrtb\RtbBidRequest &$RtbBidRequest, \model\openrtb\RtbBidRequestImp &$RtbBidRequestImp, &$AdCampaignBanner, &$AdCampaignBannerRestrictions) {
+	public static function execute(&$Logger, &$Workflow, \model\openrtb\RtbBidRequest &$RtbBidRequest, \model\openrtb\RtbBidRequestImp &$RtbBidRequestImp, &$AdCampaignBanner, &$AdCampaignMediaRestrictions) {
 	
 		/*
 		 * Check banner geography
@@ -23,14 +23,14 @@ class CheckGeo {
 		endif;
 			
 		// no geo info to base rejection on	
-		if ($AdCampaignBannerRestrictions->GeoCountry === null || !isset($RtbBidRequest->RtbBidRequestDevice->RtbBidRequestGeo->bid_request_geo_country)):
+		if ($AdCampaignMediaRestrictions->GeoCountry === null || !isset($RtbBidRequest->RtbBidRequestDevice->RtbBidRequestGeo->bid_request_geo_country)):
 			return true;
 		endif;
 			
 		$has_country = false;
 			
 		$country = strtolower($RtbBidRequest->RtbBidRequestDevice->RtbBidRequestGeo->bid_request_geo_country);
-		$geo_country_list = explode(",", $AdCampaignBannerRestrictions->GeoCountry);
+		$geo_country_list = explode(",", $AdCampaignMediaRestrictions->GeoCountry);
 			
 		foreach ($geo_country_list as $geo_country):
 			
@@ -45,7 +45,7 @@ class CheckGeo {
 			
 		if ($has_country === false):
 			if ($Logger->setting_log === true):
-				$Logger->log[] = "Failed: " . "Check banner geography : Country :: EXPECTED: " . strtolower($AdCampaignBannerRestrictions->GeoCountry) . " GOT: " . $country;
+				$Logger->log[] = "Failed: " . "Check banner geography : Country :: EXPECTED: " . strtolower($AdCampaignMediaRestrictions->GeoCountry) . " GOT: " . $country;
 			endif;
 			return false;
 		else:
@@ -54,7 +54,7 @@ class CheckGeo {
 			 * STATE CHECK
 			*/
 				
-			if ($Workflow->geo_info === null && $AdCampaignBannerRestrictions->GeoState !== null && !isset($RtbBidRequest->RtbBidRequestDevice->RtbBidRequestGeo->region)):
+			if ($Workflow->geo_info === null && $AdCampaignMediaRestrictions->GeoState !== null && !isset($RtbBidRequest->RtbBidRequestDevice->RtbBidRequestGeo->region)):
 				
 				if ($Workflow->maxmind === null):
 					$Workflow->maxmind = new \geoip\maxmind();
@@ -69,7 +69,7 @@ class CheckGeo {
 					
 			endif;
 				
-			if ($AdCampaignBannerRestrictions->GeoState !== null && isset($RtbBidRequest->RtbBidRequestDevice->RtbBidRequestGeo->region)):
+			if ($AdCampaignMediaRestrictions->GeoState !== null && isset($RtbBidRequest->RtbBidRequestDevice->RtbBidRequestGeo->region)):
 				
 				if (!isset($RtbBidRequest->RtbBidRequestDevice->RtbBidRequestGeo->region) && $Workflow->geo_info === null):
 					$Workflow->geo_info = $Workflow->maxmind->get_geo_code($RtbBidRequest->RtbBidRequestDevice->ip);
@@ -79,7 +79,7 @@ class CheckGeo {
 				$has_state = false;
 					
 				$state = strtolower($RtbBidRequest->RtbBidRequestDevice->RtbBidRequestGeo->region);
-				$geo_state_list = explode(",", $AdCampaignBannerRestrictions->GeoState);
+				$geo_state_list = explode(",", $AdCampaignMediaRestrictions->GeoState);
 				foreach ($geo_state_list as $geo_state):
 						
 					if (strtolower($geo_state) == $state):
@@ -93,7 +93,7 @@ class CheckGeo {
 					
 				if ($has_state === false):
 					if ($Logger->setting_log === true):
-						$Logger->log[] = "Failed: " . "Check banner geography : State :: EXPECTED: " . strtolower($AdCampaignBannerRestrictions->GeoState) . " GOT: " . $state;
+						$Logger->log[] = "Failed: " . "Check banner geography : State :: EXPECTED: " . strtolower($AdCampaignMediaRestrictions->GeoState) . " GOT: " . $state;
 					endif;
 					return false;
 				else:
@@ -103,7 +103,7 @@ class CheckGeo {
 					 * CITY CHECK
 					*/
 						
-					if($Workflow->geo_info === null && $AdCampaignBannerRestrictions->GeoCity !== null && !isset($RtbBidRequest->RtbBidRequestDevice->RtbBidRequestGeo->city)):
+					if($Workflow->geo_info === null && $AdCampaignMediaRestrictions->GeoCity !== null && !isset($RtbBidRequest->RtbBidRequestDevice->RtbBidRequestGeo->city)):
 						
 						if ($Workflow->maxmind === null):
 							$Workflow->maxmind = new \geoip\maxmind();
@@ -115,12 +115,12 @@ class CheckGeo {
 							
 					endif;
 						
-					if ($AdCampaignBannerRestrictions->GeoCity !== null && isset($RtbBidRequest->RtbBidRequestDevice->RtbBidRequestGeo->city)):
+					if ($AdCampaignMediaRestrictions->GeoCity !== null && isset($RtbBidRequest->RtbBidRequestDevice->RtbBidRequestGeo->city)):
 						
 						$has_city = false;
 							
 						$city = strtolower($RtbBidRequest->RtbBidRequestDevice->RtbBidRequestGeo->city);
-						$geo_city_list = explode(",", $AdCampaignBannerRestrictions->GeoCity);
+						$geo_city_list = explode(",", $AdCampaignMediaRestrictions->GeoCity);
 						foreach ($geo_city_list as $geo_city):
 							
 							if (strtolower($geo_city) == $city):
@@ -134,7 +134,7 @@ class CheckGeo {
 							
 						if ($has_city === false):
 							if ($Logger->setting_log === true):
-								$Logger->log[] = "Failed: " . "Check banner geography : City :: EXPECTED: " . strtolower($AdCampaignBannerRestrictions->GeoCity) . " GOT: " . $city;
+								$Logger->log[] = "Failed: " . "Check banner geography : City :: EXPECTED: " . strtolower($AdCampaignMediaRestrictions->GeoCity) . " GOT: " . $city;
 							endif;
 							return false;
 						endif;

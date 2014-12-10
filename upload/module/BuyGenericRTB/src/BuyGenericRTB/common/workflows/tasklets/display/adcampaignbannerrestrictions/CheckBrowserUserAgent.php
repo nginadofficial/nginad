@@ -7,7 +7,7 @@
  * @license GPLv3
  */
 
-namespace buyrtb\workflows\tasklets\common\adcampaignbannerrestrictions;
+namespace buyrtb\workflows\tasklets\display\adcampaignbannerrestrictions;
 
 class CheckBrowserUserAgent {
 	

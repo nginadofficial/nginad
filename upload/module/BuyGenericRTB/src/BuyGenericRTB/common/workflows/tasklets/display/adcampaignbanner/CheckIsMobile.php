@@ -7,7 +7,7 @@
  * @license GPLv3
  */
 
-namespace buyrtb\workflows\tasklets\common\adcampaignbanner;
+namespace buyrtb\workflows\tasklets\display\adcampaignbanner;
 
 class CheckIsMobile {
 	

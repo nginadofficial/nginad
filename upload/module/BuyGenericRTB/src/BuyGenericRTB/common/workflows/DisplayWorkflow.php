@@ -19,12 +19,12 @@ class DisplayWorkflow
     	endif;
     	 
     	// Check is mobile web, phone, tablet, native iOS or native Android
-    	if (\buyrtb\workflows\tasklets\common\adcampaignbanner\CheckIsMobile::execute($Logger, $ParentWorkflow, $RtbBidRequest, $RtbBidRequestImp, $AdCampaignBanner) === false):
+    	if (\buyrtb\workflows\tasklets\display\adcampaignbanner\CheckIsMobile::execute($Logger, $ParentWorkflow, $RtbBidRequest, $RtbBidRequestImp, $AdCampaignBanner) === false):
     		return false;
     	endif;
     	 
     	// Check banner restrictions
-    	if (\buyrtb\workflows\BannerRestrictionsWorkflow::execute($Logger, $ParentWorkflow, $RtbBidRequest, $RtbBidRequestImp, $AdCampaignBanner, $AdCampaignBannerRestrictionsFactory) === false):
+    	if (\buyrtb\workflows\tasklets\display\adcampaignbanner\BannerRestrictionsWorkflow::execute($Logger, $ParentWorkflow, $RtbBidRequest, $RtbBidRequestImp, $AdCampaignBanner, $AdCampaignBannerRestrictionsFactory) === false):
     		return false;
     	endif;
     	

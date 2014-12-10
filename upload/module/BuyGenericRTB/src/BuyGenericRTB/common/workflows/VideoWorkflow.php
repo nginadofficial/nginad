@@ -11,16 +11,19 @@ namespace buyrtb\workflows;
 
 class VideoWorkflow
 {
-	public $current_time;
 	
-	// geocity light
-	public $geo_info = null;
-	public $maxmind = null;
-	
-	public $config;
-	
-    public function process_business_rules_workflow(&$Logger, &$ParentWorkflow, \model\openrtb\RtbBidRequest &$RtbBidRequest) {
-
+	public function process_business_rules_workflow(&$Logger, &$ParentWorkflow, \model\openrtb\RtbBidRequest &$RtbBidRequest, &$RtbBidRequestImp, &$AdCampaignBanner, &$AdCampaignVideoRestrictionsFactory) {
+    	
+    	// Check video height and width match
+    	if (\buyrtb\workflows\tasklets\video\adcampaignbanner\CheckVideoDimensions::execute($Logger, $ParentWorkflow, $RtbBidRequest, $RtbBidRequestImp, $AdCampaignBanner) === false):
+    		return false;
+    	endif;
+    	
+    	// Check video restrictions
+    	if (\buyrtb\workflows\tasklets\video\adcampaignbanner\VideoRestrictionsWorkflow::execute($Logger, $ParentWorkflow, $RtbBidRequest, $RtbBidRequestImp, $AdCampaignBanner, $AdCampaignVideoRestrictionsFactory) === false):
+    		return false;
+    	endif;
+    	
     	return true;
     }
 
