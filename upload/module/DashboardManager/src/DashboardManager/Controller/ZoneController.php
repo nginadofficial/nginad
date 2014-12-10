@@ -933,7 +933,7 @@ class ZoneController extends PublisherAbstractActionController {
 	    	$params["PublisherAdZoneID"] = $PublisherAdZoneID;
 	    	$AdObject = $PublisherAdZoneFactory->get_row_object($params);
 
-	    	$delivery_adtag = $this->config_handle['delivery']['adtag'];
+	    	$delivery_adtag = $this->config_handle['delivery']['url'];
 	    	
 	    	$effective_tag = $delivery_adtag . "?video=vast&pzoneid=" . $PublisherAdZoneID;
 	    	

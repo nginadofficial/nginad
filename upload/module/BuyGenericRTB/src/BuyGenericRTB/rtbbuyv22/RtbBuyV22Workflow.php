@@ -17,9 +17,9 @@ abstract class RtbBuyV22Workflow extends RtbBuyWorkflow
     public function process_business_rules_workflow($config, $rtb_seat_id, \model\openrtb\RtbBidRequest &$RtbBidRequest) {
 
     	$logger = \rtbbuyv22\RtbBuyV22Logger::get_instance();
-    	$DisplayWorkflow = new \buyrtb\workflows\DisplayWorkflow();
+    	$OpenRTBWorkflow = new \buyrtb\workflows\OpenRTBWorkflow();
     	
-    	return $DisplayWorkflow->process_business_rules_workflow($logger, $config, $rtb_seat_id, $RtbBidRequest);
+    	return $OpenRTBWorkflow->process_business_rules_workflow($logger, $config, $rtb_seat_id, $RtbBidRequest);
     
     }
 

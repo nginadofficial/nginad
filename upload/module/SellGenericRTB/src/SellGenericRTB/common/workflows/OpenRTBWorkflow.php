@@ -80,7 +80,8 @@ class OpenRTBWorkflow {
     	$WinningRTBPinger->winning_bid 			= $bid_price;
     	$AuctionPopo->winning_ad_tag			= $WinningRtbResponseBid->adm;
     	$AuctionPopo->winning_bid_price			= sprintf("%1.4f", $this->encrypt_bid($bid_price));
-    	
+    	$AuctionPopo->winning_partner_id		= $WinningRTBPinger->partner_id;
+    	$AuctionPopo->winning_seat				= $WinningRTBPinger->RtbBidResponse->RtbBidResponseSeatBidList[0]->seat;
     	/*
     	 * Was this a second price auction?
     	 * If so record the winning bid

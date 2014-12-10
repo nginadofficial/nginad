@@ -16,6 +16,9 @@ class AuctionPopo {
 	public $winning_bid_price;
 	public $winning_adjusted_bid_price;
 	
+	public $winning_partner_id;
+	public $winning_seat;
+	
 	// second price
 	public $is_second_price_auction;
 	
@@ -26,6 +29,7 @@ class AuctionPopo {
 	public $highest_partner_score;
 	
 	public $auction_was_won;
+	public $loopback_buyer_id;
 	public $loopback_demand_partner_ad_campaign_banner_id;
 	public $loopback_demand_partner_won;
 	public $FloorPrice;

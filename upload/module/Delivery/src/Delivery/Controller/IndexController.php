@@ -138,6 +138,8 @@ class IndexController extends AbstractActionController
 	    	return;
 	    endif;
     	
+	    $banner_request["ImpressionType"] = $PublisherAdZone->ImpressionType;
+	    
     	/*
     	 * Is this ad zone linked to one or more contract banners?
     	 * If so forward the request to the contract banner
@@ -228,14 +230,24 @@ class IndexController extends AbstractActionController
 	 		if ($AuctionPopo->loopback_demand_partner_won === true):
 	 			
 	 			$banner_request["demand_banner_id"] = $AuctionPopo->loopback_demand_partner_ad_campaign_banner_id;
+	 			$banner_request["winning_partner_id"] = $AuctionPopo->winning_partner_id;
+	 			$banner_request["winning_seat"] = $AuctionPopo->winning_seat;
 	 			$this->process_demand_tag($config, $banner_request);
 	 			
 	 		else:
 		 		
-	 			header("Content-type: application/javascript");
-		 		$output = "document.write(" . json_encode($winning_ad_tag) . ");";
-		 		echo $output;
-	 		
+	 			if ($banner_request["ImpressionType"] == 'video'):
+
+		 			header("Content-type: text/xml");
+		 			echo $winning_ad_tag;
+		 			
+	 			else:
+		 		
+		 			header("Content-type: application/javascript");
+			 		$output = "document.write(" . json_encode($winning_ad_tag) . ");";
+			 		echo $output;
+	 			endif;
+			 		
 		 	endif;
 
 	 		
@@ -454,7 +466,11 @@ class IndexController extends AbstractActionController
     	
     	$banner_request_id = intval($banner_request["demand_banner_id"]);
     	 
-    	$buyer_id = $this->getRequest()->getQuery('buyerid');
+    	if (isset($banner_request["winning_seat"]) && $banner_request["winning_partner_id"]):
+    		$buyer_id = 'local:' . $banner_request["winning_partner_id"] . ':' . $banner_request["winning_seat"];
+    	else:
+    		$buyer_id = $this->getRequest()->getQuery('buyerid');
+    	endif;
     	
     	$cache_file_dir =  $config['delivery']['cache_file_location'] . 'demand/' . date('m.d.Y') . '/' . date('H') . '/' . date('i') . '/';
     	
@@ -525,7 +541,9 @@ class IndexController extends AbstractActionController
 	    	if (file_exists($cache_file)):
 	    	
 	    		$cached_tag = file_get_contents($cache_file);
-	    		if ($banner_request["dt"] == "in"):
+	    		if (isset($banner_request["ImpressionType"]) && $banner_request["ImpressionType"] == 'video'):
+	    			header("Content-type: text/xml");
+	    		elseif ($banner_request["dt"] == "in"):
 	    			header("Content-type: application/javascript");
 	    		endif;
 	    	
@@ -534,14 +552,21 @@ class IndexController extends AbstractActionController
 	    		
 	    	endif;
     	
-	    	if ($banner_request["dt"] == "in"):
+	    	if (isset($banner_request["ImpressionType"]) && $banner_request["ImpressionType"] == 'video'):
+    		
+	    		header("Content-type: text/xml");
+	    		$output = $AdCampaignBanner->AdTag;
+	    	
+	    	elseif ($banner_request["dt"] == "in"):
 	    	
 		    	header("Content-type: application/javascript");
 		    	$output = "document.write(" . json_encode($AdCampaignBanner->AdTag) . ");";
 		    	 
     		else:
+    		
 		    	$output = "<!DOCTYPE html>\n<html><head></head><body style=\"margin: 0px; padding: 0px;\">" . $AdCampaignBanner->AdTag
 		    	. "\r\n\r\n</body></html>";
+    		
 	    	endif;
 
 	    	

@@ -19,9 +19,9 @@ class VideoWorkflow
 	
 	public $config;
 	
-    public function process_business_rules_workflow($logger, $config, $rtb_seat_id, \model\openrtb\RtbBidRequest &$RtbBidRequest) {
+    public function process_business_rules_workflow(&$Logger, &$ParentWorkflow, \model\openrtb\RtbBidRequest &$RtbBidRequest) {
 
-    
+    	return true;
     }
 
 
