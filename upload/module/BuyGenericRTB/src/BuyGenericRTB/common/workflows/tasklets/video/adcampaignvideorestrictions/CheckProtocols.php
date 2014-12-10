@@ -19,6 +19,12 @@ class CheckProtocols {
 			return true;
 		endif;
 		
+		$protocols_code_list = explode(',', $AdCampaignVideoRestrictions->ProtocolsCommaSeparated);
+		
+		if (!count($protocols_code_list)):
+			return true;
+		endif;
+		
 		// Validate that the value is an array
 		if (!is_array($RtbBidRequestVideo->protocols)):
 			if ($Logger->setting_log === true):
@@ -29,26 +35,28 @@ class CheckProtocols {
 			return false;
 		endif;
 		
-		$protocols_code_list = explode(',', $AdCampaignVideoRestrictions->ProtocolsCommaSeparated);
+		$result = false;
 		
-		foreach($protocols_code_list as $protocols_code):
-		
-			foreach($RtbBidRequestVideo->protocols as $protocols_code_to_match):
+		/*
+		 * All codes in the publisher ad zone
+		* for the publisher's video player settings
+		* have to be included in the VAST video demand
+		*/
+		foreach($RtbBidRequestVideo->protocols as $protocols_code_to_match):
 			
-				if ($protocols_code_to_match == $protocols_code):
-					
-					return true;
-					
-				endif;
-				
-			endforeach;
+			if (!in_array($protocols_code_to_match, $protocols_code_list)):
+			
+				$result = false;
+				break;
+			
+			endif;
 		
 		endforeach;
 		
-		if ($Logger->setting_log === true):
+		if ($result === false && $Logger->setting_log === true):
 			$Logger->log[] = "Failed: " . "Check video protocols code :: EXPECTED: "
 				. $AdCampaignVideoRestrictions->ProtocolsCommaSeparated
-				. " GOT: " . $RtbBidRequestVideo->protocols;
+				. " GOT: " . join(',', $RtbBidRequestVideo->protocols);
 		endif;
 		
 		return false;

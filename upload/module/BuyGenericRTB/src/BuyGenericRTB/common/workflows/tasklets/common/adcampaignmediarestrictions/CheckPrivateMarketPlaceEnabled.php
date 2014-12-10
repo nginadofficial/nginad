@@ -16,11 +16,12 @@ class CheckPrivateMarketPlaceEnabled {
 		/*
 		 * Check banner for PMP Enable
 		 */
-		if ($AdCampaignMediaRestrictions->PmpEnable !== null && $RtbBidRequestImp->pmp !== null && $RtbBidRequestImp->pmp != $AdCampaignMediaRestrictions->PmpEnable):
-			if ($Logger->setting_log === true):
-				$Logger->log[] = "Failed: " . "Check banner for PMP Enable :: EXPECTED: " . $AdCampaignMediaRestrictions->PmpEnable . " GOT: " . $RtbBidRequestImp->pmp;
-			endif;
-			return false;
+		if ($AdCampaignMediaRestrictions->PmpEnable !== null && $RtbBidRequestImp->RtbBidRequestPmp !== null && $AdCampaignMediaRestrictions->PmpEnable == 1):
+			
+			/*
+			 * PMP is enabled and this campaign is eligible, handle this case
+			 */
+			
 		endif;
 		
 		return true;

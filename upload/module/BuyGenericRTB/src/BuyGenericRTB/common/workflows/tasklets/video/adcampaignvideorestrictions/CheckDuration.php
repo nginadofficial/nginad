@@ -15,8 +15,8 @@ class CheckDuration {
 		
 		$RtbBidRequestVideo = $RtbBidRequestImp->RtbBidRequestVideo;
 		
-		$result1 = false;
-		$result2 = false;
+		$result1 = true;
+		$result2 = true;
 		
 		if (is_numeric($AdCampaignVideoRestrictions->MinDuration) && $AdCampaignVideoRestrictions->MinDuration != 0):
 			
@@ -27,15 +27,17 @@ class CheckDuration {
 							. 'Numeric Value,'
 							. " GOT: " . $RtbBidRequestVideo->minduration;
 				endif;
-				return false;
-			endif;
+				$result1 = false;
+				
+			else:
 			
-			$result1 = $RtbBidRequestVideo->minduration >= $AdCampaignVideoRestrictions->MinDuration;
-			
-			if ($result1 === false && $Logger->setting_log === true):
-				$Logger->log[] = "Failed: " . "Check video minimum duration :: EXPECTED: "
-						. $AdCampaignVideoRestrictions->MinDuration
-						. " GOT: " . $RtbBidRequestVideo->minduration;
+				$result1 = $RtbBidRequestVideo->minduration >= $AdCampaignVideoRestrictions->MinDuration;
+				
+				if ($result1 === false && $Logger->setting_log === true):
+					$Logger->log[] = "Failed: " . "Check video minimum duration :: EXPECTED: "
+							. $AdCampaignVideoRestrictions->MinDuration
+							. " GOT: " . $RtbBidRequestVideo->minduration;
+				endif;
 			endif;
 			
 		endif;
@@ -49,15 +51,18 @@ class CheckDuration {
 							. 'Numeric Value,'
 							. " GOT: " . $RtbBidRequestVideo->maxduration;
 				endif;
-				return false;
-			endif;
+				$result2 = false;
 			
-			$result2 = $RtbBidRequestVideo->maxduration >= $AdCampaignVideoRestrictions->MaxDuration;
+			else:
+				
+				$result2 = $RtbBidRequestVideo->maxduration >= $AdCampaignVideoRestrictions->MaxDuration;
+				
+				if ($result2 === false && $Logger->setting_log === true):
+					$Logger->log[] = "Failed: " . "Check video maximum duration :: EXPECTED: "
+							. $AdCampaignVideoRestrictions->MaxDuration
+							. " GOT: " . $RtbBidRequestVideo->maxduration;
+				endif;
 			
-			if ($result2 === false && $Logger->setting_log === true):
-				$Logger->log[] = "Failed: " . "Check video maximum duration :: EXPECTED: "
-						. $AdCampaignVideoRestrictions->MaxDuration
-						. " GOT: " . $RtbBidRequestVideo->maxduration;
 			endif;
 			
 		endif;

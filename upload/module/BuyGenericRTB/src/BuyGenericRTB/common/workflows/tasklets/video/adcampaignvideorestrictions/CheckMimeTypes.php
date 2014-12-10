@@ -19,6 +19,12 @@ class CheckMimeTypes {
 			return true;
 		endif;
 		
+		$mime_code_list = explode(',', $AdCampaignVideoRestrictions->MimesCommaSeparated);
+		
+		if (!count($mime_code_list)):
+			return true;
+		endif;
+		
 		// Validate that the value is an array
 		if (!is_array($RtbBidRequestVideo->mimes)):
 			if ($Logger->setting_log === true):
@@ -28,27 +34,31 @@ class CheckMimeTypes {
 			endif;
 			return false;
 		endif;
+
+		$result = false;
 		
-		$mime_code_list = explode(',', $AdCampaignVideoRestrictions->MimesCommaSeparated);
+
 		
-		foreach($mime_code_list as $mime_code):
+		/*
+		 * All codes in the publisher ad zone
+		* for the publisher's video player settings
+		* have to be included in the VAST video demand
+		*/
+		foreach($RtbBidRequestVideo->mimes as $mime_code_to_match):
 		
-			foreach($RtbBidRequestVideo->mimes as $mime_code_to_match):
+			if (!in_array($mime_code_to_match, $mime_code_list)):
 			
-				if ($mime_code_to_match == $mime_code):
+				$result = false;
+				break;
 					
-					return true;
-					
-				endif;
-				
-			endforeach;
-		
+			endif;
+			
 		endforeach;
 		
-		if ($Logger->setting_log === true):
+		if ($result === false && $Logger->setting_log === true):
 			$Logger->log[] = "Failed: " . "Check video mime type code :: EXPECTED: "
 				. $AdCampaignVideoRestrictions->MimesCommaSeparated
-				. " GOT: " . $RtbBidRequestVideo->mimes;
+				. " GOT: " . join(',', $RtbBidRequestVideo->mimes);
 		endif;
 		
 		return false;

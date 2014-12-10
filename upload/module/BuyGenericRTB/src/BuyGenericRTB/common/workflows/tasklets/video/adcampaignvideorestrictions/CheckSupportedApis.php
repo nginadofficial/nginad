@@ -19,6 +19,12 @@ class CheckSupportedApis {
 			return true;
 		endif;
 		
+		$api_code_list = explode(',', $AdCampaignVideoRestrictions->ApisSupportedCommaSeparated);
+		
+		if (!count($api_code_list)):
+			return true;
+		endif;
+		
 		// Validate that the value is an array
 		if (!is_array($RtbBidRequestVideo->api)):
 			if ($Logger->setting_log === true):
@@ -29,26 +35,28 @@ class CheckSupportedApis {
 			return false;
 		endif;
 		
-		$api_code_list = explode(',', $AdCampaignVideoRestrictions->ApisSupportedCommaSeparated);
+		$result = false;
 		
-		foreach($api_code_list as $api_code):
-		
-			foreach($RtbBidRequestVideo->api as $api_code_to_match):
+		/*
+		 * All codes in the publisher ad zone
+		* for the publisher's video player settings
+		* have to be included in the VAST video demand
+		*/
+		foreach($RtbBidRequestVideo->api as $api_code_to_match):
 			
-				if ($api_code_to_match == $api_code):
-					
-					return true;
-					
-				endif;
+			if (!in_array($api_code_to_match, $api_code_list)):
 				
-			endforeach;
-		
+				$result = false;
+				break;
+					
+			endif;
+			
 		endforeach;
 		
-		if ($Logger->setting_log === true):
+		if ($result === false && $Logger->setting_log === true):
 			$Logger->log[] = "Failed: " . "Check video APIs code :: EXPECTED: "
 				. $AdCampaignVideoRestrictions->ApisSupportedCommaSeparated
-				. " GOT: " . $RtbBidRequestVideo->api;
+				. " GOT: " . join(',', $RtbBidRequestVideo->api);
 		endif;
 		
 		return false;

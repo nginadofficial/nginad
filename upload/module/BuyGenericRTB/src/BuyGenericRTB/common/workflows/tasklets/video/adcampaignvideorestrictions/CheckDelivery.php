@@ -19,6 +19,12 @@ class CheckDelivery {
 			return true;
 		endif;
 		
+		$delivery_code_list = explode(',', $AdCampaignVideoRestrictions->DeliveryCommaSeparated);
+
+		if (!count($delivery_code_list)):
+			return true;
+		endif;
+		
 		// Validate that the value is an array
 		if (!is_array($RtbBidRequestVideo->delivery)):
 			if ($Logger->setting_log === true):
@@ -29,26 +35,29 @@ class CheckDelivery {
 			return false;
 		endif;
 		
-		$delivery_code_list = explode(',', $AdCampaignVideoRestrictions->DeliveryCommaSeparated);
+
+		$result = false;
 		
-		foreach($delivery_code_list as $delivery_code):
+		/*
+		 * All codes in the publisher ad zone
+		 * for the publisher's video player settings
+		 * have to be included in the VAST video demand
+		 */
+		foreach($RtbBidRequestVideo->delivery as $delivery_code_to_match):
 		
-			foreach($RtbBidRequestVideo->delivery as $delivery_code_to_match):
-			
-				if ($delivery_code_to_match == $delivery_code):
-					
-					return true;
-					
-				endif;
+			if (!in_array($delivery_code_to_match, $delivery_code_list)):
 				
-			endforeach;
-		
+				$result = false;
+				break;
+			
+			endif;
+			
 		endforeach;
 		
-		if ($Logger->setting_log === true):
+		if ($result === false && $Logger->setting_log === true):
 			$Logger->log[] = "Failed: " . "Check video delivery code :: EXPECTED: "
 				. $AdCampaignVideoRestrictions->DeliveryCommaSeparated
-				. " GOT: " . $RtbBidRequestVideo->delivery;
+				. " GOT: " . join(',', $RtbBidRequestVideo->delivery);
 		endif;
 		
 		return false;

@@ -15,8 +15,8 @@ class CheckVideoDimensions {
 		
 		$RtbBidRequestVideo = $RtbBidRequestImp->RtbBidRequestVideo;
 		
-		$result1 = false;
-		$result2 = false;
+		$result1 = true;
+		$result2 = true;
 		
 		if (is_numeric($AdCampaignVideoRestrictions->MinHeight) && $AdCampaignVideoRestrictions->MinHeight != 0):
 			
@@ -27,17 +27,17 @@ class CheckVideoDimensions {
 							. 'Numeric Value,'
 							. " GOT: " . $RtbBidRequestVideo->h;
 				endif;
-				return false;
+				$result1 = false;
+			else:
+			
+				$result1 = $RtbBidRequestVideo->h >= $AdCampaignVideoRestrictions->MinHeight;
+				
+				if ($result1 === false && $Logger->setting_log === true):
+					$Logger->log[] = "Failed: " . "Check video minimum height :: EXPECTED: "
+							. $AdCampaignVideoRestrictions->MinHeight
+							. " GOT: " . $RtbBidRequestVideo->h;
+				endif;
 			endif;
-			
-			$result1 = $RtbBidRequestVideo->h >= $AdCampaignVideoRestrictions->MinHeight;
-			
-			if ($result1 === false && $Logger->setting_log === true):
-				$Logger->log[] = "Failed: " . "Check video minimum height :: EXPECTED: "
-						. $AdCampaignVideoRestrictions->MinHeight
-						. " GOT: " . $RtbBidRequestVideo->h;
-			endif;
-			
 		endif;
 		
 		if (is_numeric($AdCampaignVideoRestrictions->MinWidth) && $AdCampaignVideoRestrictions->MinWidth != 0):
@@ -49,19 +49,20 @@ class CheckVideoDimensions {
 							. 'Numeric Value,'
 							. " GOT: " . $RtbBidRequestVideo->w;
 				endif;
-				return false;
-			endif;
+				$result2 = false;
+			else:
 			
-			$result2 = $RtbBidRequestVideo->w >= $AdCampaignVideoRestrictions->MinWidth;
-			
-			if ($result2 === false && $Logger->setting_log === true):
-				$Logger->log[] = "Failed: " . "Check video minimum width :: EXPECTED: "
-						. $AdCampaignVideoRestrictions->MinWidth
-						. " GOT: " . $RtbBidRequestVideo->w;
+				$result2 = $RtbBidRequestVideo->w >= $AdCampaignVideoRestrictions->MinWidth;
+				
+				if ($result2 === false && $Logger->setting_log === true):
+					$Logger->log[] = "Failed: " . "Check video minimum width :: EXPECTED: "
+							. $AdCampaignVideoRestrictions->MinWidth
+							. " GOT: " . $RtbBidRequestVideo->w;
+				endif;
 			endif;
 			
 		endif;
-		
+
 		return $result1 && $result2;
 	}
 	
