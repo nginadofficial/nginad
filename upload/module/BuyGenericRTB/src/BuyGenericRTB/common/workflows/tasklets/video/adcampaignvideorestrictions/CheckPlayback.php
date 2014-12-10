@@ -15,7 +15,42 @@ class CheckPlayback {
 		
 		$RtbBidRequestVideo = $RtbBidRequestImp->RtbBidRequestVideo;
 		
+		if (empty($AdCampaignVideoRestrictions->PlaybackCommaSeparated)):
+			return true;
+		endif;
 		
-		return true;
+		// Validate that the value is an array
+		if (!is_array($RtbBidRequestVideo->playbackmethod)):
+			if ($Logger->setting_log === true):
+			$Logger->log[] = "Failed: " . "Check video playback code :: EXPECTED: "
+					. 'Array(),'
+					. " GOT: " . $RtbBidRequestVideo->playbackmethod;
+			endif;
+			return false;
+		endif;
+		
+		$playbackmethod_code_list = explode(',', $AdCampaignVideoRestrictions->PlaybackCommaSeparated);
+		
+		foreach($playbackmethod_code_list as $playbackmethod_code):
+		
+			foreach($RtbBidRequestVideo->playbackmethod as $playbackmethod_code_to_match):
+			
+				if ($playbackmethod_code_to_match == $playbackmethod_code):
+					
+					return true;
+					
+				endif;
+				
+			endforeach;
+		
+		endforeach;
+		
+		if ($Logger->setting_log === true):
+			$Logger->log[] = "Failed: " . "Check video playback code :: EXPECTED: "
+				. $AdCampaignVideoRestrictions->PlaybackCommaSeparated
+				. " GOT: " . $RtbBidRequestVideo->playbackmethod;
+		endif;
+		
+		return false;
 	}
 }

@@ -15,7 +15,42 @@ class CheckDelivery {
 		
 		$RtbBidRequestVideo = $RtbBidRequestImp->RtbBidRequestVideo;
 		
+		if (empty($AdCampaignVideoRestrictions->DeliveryCommaSeparated)):
+			return true;
+		endif;
 		
-		return true;
+		// Validate that the value is an array
+		if (!is_array($RtbBidRequestVideo->delivery)):
+			if ($Logger->setting_log === true):
+			$Logger->log[] = "Failed: " . "Check video delivery code :: EXPECTED: "
+					. 'Array(),'
+					. " GOT: " . $RtbBidRequestVideo->delivery;
+			endif;
+			return false;
+		endif;
+		
+		$delivery_code_list = explode(',', $AdCampaignVideoRestrictions->DeliveryCommaSeparated);
+		
+		foreach($delivery_code_list as $delivery_code):
+		
+			foreach($RtbBidRequestVideo->delivery as $delivery_code_to_match):
+			
+				if ($delivery_code_to_match == $delivery_code):
+					
+					return true;
+					
+				endif;
+				
+			endforeach;
+		
+		endforeach;
+		
+		if ($Logger->setting_log === true):
+			$Logger->log[] = "Failed: " . "Check video delivery code :: EXPECTED: "
+				. $AdCampaignVideoRestrictions->DeliveryCommaSeparated
+				. " GOT: " . $RtbBidRequestVideo->delivery;
+		endif;
+		
+		return false;
 	}
 }

@@ -26,6 +26,11 @@ class VideoRestrictionsWorkflow {
 			return true;
 		endif;
 		
+		// Check video height and width match
+		if (\buyrtb\workflows\tasklets\video\adcampaignvideorestrictions\CheckVideoDimensions::execute($Logger, $ParentWorkflow, $RtbBidRequest, $RtbBidRequestImp, $AdCampaignBanner, $AdCampaignVideoRestrictions) === false):
+			return false;
+		endif;
+		
 		// Check video fold position
 		if (\buyrtb\workflows\tasklets\video\adcampaignvideorestrictions\CheckFoldPosition::execute($Logger, $ParentWorkflow, $RtbBidRequest, $RtbBidRequestImp, $AdCampaignBanner, $AdCampaignVideoRestrictions) === false):
 			return false;

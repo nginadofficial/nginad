@@ -15,19 +15,28 @@ class CheckFoldPosition {
 		
 		$RtbBidRequestVideo = $RtbBidRequestImp->RtbBidRequestVideo;
 		
-		/*
-		 * Check video fold position
-		*/
-		if ($AdCampaignVideoRestrictions->FoldPos !== null && $RtbBidRequestVideo->pos !== null 
-			&& $AdCampaignVideoRestrictions->FoldPos != $RtbBidRequestVideo->pos):
+		if (!is_numeric($AdCampaignVideoRestrictions->FoldPos)):
+			return true;
+		endif;
+		
+		// Validate that the value is a number
+		if (!is_numeric($RtbBidRequestVideo->pos)):
 			if ($Logger->setting_log === true):
-				$Logger->log[] = "Failed: " . "Check video fold position :: EXPECTED: " 
-					. $AdCampaignVideoRestrictions->FoldPos
-					. " GOT: " . $RtbBidRequestVideo->pos;
+				$Logger->log[] = "Failed: " . "Check video fold position :: EXPECTED: "
+						. 'Numeric Value,'
+						. " GOT: " . $RtbBidRequestVideo->pos;
 			endif;
 			return false;
 		endif;
 		
-		return true;
+		$result = $AdCampaignVideoRestrictions->FoldPos == $RtbBidRequestVideo->pos;
+		
+		if ($result === false && $Logger->setting_log === true):
+			$Logger->log[] = "Failed: " . "Check video fold position :: EXPECTED: "
+					. $AdCampaignVideoRestrictions->FoldPos
+					. " GOT: " . $RtbBidRequestVideo->pos;
+		endif;
+		
+		return $result;
 	}
 }

@@ -15,7 +15,29 @@ class CheckStartDelay {
 		
 		$RtbBidRequestVideo = $RtbBidRequestImp->RtbBidRequestVideo;
 		
+		if (!is_numeric($AdCampaignVideoRestrictions->StartDelay)):
+			return true;
+		endif;
 		
-		return true;
+		// Validate that the value is a number
+		if (!is_numeric($RtbBidRequestVideo->startdelay)):
+			if ($Logger->setting_log === true):
+				$Logger->log[] = "Failed: " . "Check video start delay code :: EXPECTED: "
+						. 'Numeric Value,'
+						. " GOT: " . $RtbBidRequestVideo->startdelay;
+			endif;
+			return false;
+		endif;
+		
+		$result = $AdCampaignVideoRestrictions->StartDelay == $RtbBidRequestVideo->startdelay;
+		
+		if ($result === false && $Logger->setting_log === true):
+			$Logger->log[] = "Failed: " . "Check video start delay code :: EXPECTED: "
+				. $AdCampaignVideoRestrictions->StartDelay
+				. " GOT: " . $RtbBidRequestVideo->startdelay;
+		endif;
+		
+		return $result;
+		
 	}
 }

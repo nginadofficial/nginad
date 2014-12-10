@@ -15,7 +15,42 @@ class CheckMimeTypes {
 		
 		$RtbBidRequestVideo = $RtbBidRequestImp->RtbBidRequestVideo;
 		
-
-		return true;
+		if (empty($AdCampaignVideoRestrictions->MimesCommaSeparated)):
+			return true;
+		endif;
+		
+		// Validate that the value is an array
+		if (!is_array($RtbBidRequestVideo->mimes)):
+			if ($Logger->setting_log === true):
+			$Logger->log[] = "Failed: " . "Check video mime type code :: EXPECTED: "
+					. 'Array(),'
+					. " GOT: " . $RtbBidRequestVideo->mimes;
+			endif;
+			return false;
+		endif;
+		
+		$mime_code_list = explode(',', $AdCampaignVideoRestrictions->MimesCommaSeparated);
+		
+		foreach($mime_code_list as $mime_code):
+		
+			foreach($RtbBidRequestVideo->mimes as $mime_code_to_match):
+			
+				if ($mime_code_to_match == $mime_code):
+					
+					return true;
+					
+				endif;
+				
+			endforeach;
+		
+		endforeach;
+		
+		if ($Logger->setting_log === true):
+			$Logger->log[] = "Failed: " . "Check video mime type code :: EXPECTED: "
+				. $AdCampaignVideoRestrictions->MimesCommaSeparated
+				. " GOT: " . $RtbBidRequestVideo->mimes;
+		endif;
+		
+		return false;
 	}
 }

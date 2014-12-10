@@ -15,8 +15,42 @@ class CheckSupportedApis {
 		
 		$RtbBidRequestVideo = $RtbBidRequestImp->RtbBidRequestVideo;
 		
-
+		if (empty($AdCampaignVideoRestrictions->ApisSupportedCommaSeparated)):
+			return true;
+		endif;
 		
-		return true;
+		// Validate that the value is an array
+		if (!is_array($RtbBidRequestVideo->api)):
+			if ($Logger->setting_log === true):
+			$Logger->log[] = "Failed: " . "Check video APIs code :: EXPECTED: "
+					. 'Array(),'
+					. " GOT: " . $RtbBidRequestVideo->api;
+			endif;
+			return false;
+		endif;
+		
+		$api_code_list = explode(',', $AdCampaignVideoRestrictions->ApisSupportedCommaSeparated);
+		
+		foreach($api_code_list as $api_code):
+		
+			foreach($RtbBidRequestVideo->api as $api_code_to_match):
+			
+				if ($api_code_to_match == $api_code):
+					
+					return true;
+					
+				endif;
+				
+			endforeach;
+		
+		endforeach;
+		
+		if ($Logger->setting_log === true):
+			$Logger->log[] = "Failed: " . "Check video APIs code :: EXPECTED: "
+				. $AdCampaignVideoRestrictions->ApisSupportedCommaSeparated
+				. " GOT: " . $RtbBidRequestVideo->api;
+		endif;
+		
+		return false;
 	}
 }

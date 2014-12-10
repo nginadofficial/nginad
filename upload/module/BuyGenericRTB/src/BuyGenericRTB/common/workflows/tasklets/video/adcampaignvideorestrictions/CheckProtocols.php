@@ -15,19 +15,42 @@ class CheckProtocols {
 		
 		$RtbBidRequestVideo = $RtbBidRequestImp->RtbBidRequestVideo;
 		
-		/*
-		 * Check video fold position
-		*/
-		if ($AdCampaignVideoRestrictions->FoldPos !== null && $RtbBidRequestVideo->pos !== null 
-			&& $AdCampaignVideoRestrictions->FoldPos != $RtbBidRequestVideo->pos):
+		if (empty($AdCampaignVideoRestrictions->ProtocolsCommaSeparated)):
+			return true;
+		endif;
+		
+		// Validate that the value is an array
+		if (!is_array($RtbBidRequestVideo->protocols)):
 			if ($Logger->setting_log === true):
-				$Logger->log[] = "Failed: " . "Check video fold position :: EXPECTED: " 
-					. $AdCampaignVideoRestrictions->FoldPos
-					. " GOT: " . $RtbBidRequestVideo->pos;
+			$Logger->log[] = "Failed: " . "Check video protocols code :: EXPECTED: "
+					. 'Array(),'
+					. " GOT: " . $RtbBidRequestVideo->protocols;
 			endif;
 			return false;
 		endif;
 		
-		return true;
+		$protocols_code_list = explode(',', $AdCampaignVideoRestrictions->ProtocolsCommaSeparated);
+		
+		foreach($protocols_code_list as $protocols_code):
+		
+			foreach($RtbBidRequestVideo->protocols as $protocols_code_to_match):
+			
+				if ($protocols_code_to_match == $protocols_code):
+					
+					return true;
+					
+				endif;
+				
+			endforeach;
+		
+		endforeach;
+		
+		if ($Logger->setting_log === true):
+			$Logger->log[] = "Failed: " . "Check video protocols code :: EXPECTED: "
+				. $AdCampaignVideoRestrictions->ProtocolsCommaSeparated
+				. " GOT: " . $RtbBidRequestVideo->protocols;
+		endif;
+		
+		return false;
 	}
 }
