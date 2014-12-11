@@ -21,7 +21,7 @@ class CheckDelivery {
 			return $result;
 		endif;
 		
-		$delivery_code_list = explode(',', strtolower($AdCampaignVideoRestrictions->DeliveryCommaSeparated));
+		$delivery_code_list = explode(',', $AdCampaignVideoRestrictions->DeliveryCommaSeparated);
 
 		if (!count($delivery_code_list)):
 			return $result;
@@ -44,7 +44,7 @@ class CheckDelivery {
 		 */
 		foreach($RtbBidRequestVideo->delivery as $delivery_code_to_match):
 		
-			if (!in_array(strtolower($delivery_code_to_match), $delivery_code_list)):
+			if (!in_array($delivery_code_to_match, $delivery_code_list)):
 				
 				$result = false;
 				break;

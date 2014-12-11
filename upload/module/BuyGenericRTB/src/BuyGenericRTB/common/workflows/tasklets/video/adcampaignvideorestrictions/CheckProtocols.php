@@ -21,7 +21,7 @@ class CheckProtocols {
 			return $result;
 		endif;
 
-		$protocols_code_list = explode(',', strtolower($AdCampaignVideoRestrictions->ProtocolsCommaSeparated));
+		$protocols_code_list = explode(',', $AdCampaignVideoRestrictions->ProtocolsCommaSeparated);
 		
 		if (!count($protocols_code_list)):
 			return $result;
@@ -44,7 +44,7 @@ class CheckProtocols {
 		*/
 		foreach($RtbBidRequestVideo->protocols as $protocols_code_to_match):
 			
-			if (!in_array(strtolower($protocols_code_to_match), $protocols_code_list)):
+			if (!in_array($protocols_code_to_match, $protocols_code_list)):
 			
 				$result = false;
 				break;

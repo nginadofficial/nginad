@@ -21,7 +21,7 @@ class CheckPlayback {
 			return $result;
 		endif;
 		
-		$playbackmethod_code_list = explode(',', strtolower($AdCampaignVideoRestrictions->PlaybackCommaSeparated));
+		$playbackmethod_code_list = explode(',', $AdCampaignVideoRestrictions->PlaybackCommaSeparated);
 		
 		if (!count($playbackmethod_code_list)):
 			return $result;
@@ -44,7 +44,7 @@ class CheckPlayback {
 		*/
 		foreach($RtbBidRequestVideo->playbackmethod as $playbackmethod_code_to_match):
 		
-			if (!in_array(strtolower($playbackmethod_code_to_match), $playbackmethod_code_list)):
+			if (!in_array($playbackmethod_code_to_match, $playbackmethod_code_list)):
 				
 				$result = false;
 				break;

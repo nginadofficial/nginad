@@ -21,7 +21,7 @@ class CheckSupportedApis {
 			return $result;
 		endif;
 		
-		$api_code_list = explode(',', strtolower($AdCampaignVideoRestrictions->ApisSupportedCommaSeparated));
+		$api_code_list = explode(',', $AdCampaignVideoRestrictions->ApisSupportedCommaSeparated);
 		
 		if (!count($api_code_list)):
 			return $result;
@@ -44,7 +44,7 @@ class CheckSupportedApis {
 		*/
 		foreach($RtbBidRequestVideo->api as $api_code_to_match):
 			
-			if (!in_array(strtolower($api_code_to_match), $api_code_list)):
+			if (!in_array($api_code_to_match, $api_code_list)):
 				
 				$result = false;
 				break;
