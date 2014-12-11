@@ -15,28 +15,27 @@ class CheckDelivery {
 		
 		$RtbBidRequestVideo = $RtbBidRequestImp->RtbBidRequestVideo;
 		
+		$result = true;
+		
 		if (empty($AdCampaignVideoRestrictions->DeliveryCommaSeparated)):
-			return true;
+			return $result;
 		endif;
 		
-		$delivery_code_list = explode(',', $AdCampaignVideoRestrictions->DeliveryCommaSeparated);
+		$delivery_code_list = explode(',', strtolower($AdCampaignVideoRestrictions->DeliveryCommaSeparated));
 
 		if (!count($delivery_code_list)):
-			return true;
+			return $result;
 		endif;
 		
 		// Validate that the value is an array
 		if (!is_array($RtbBidRequestVideo->delivery)):
 			if ($Logger->setting_log === true):
-			$Logger->log[] = "Failed: " . "Check video delivery code :: EXPECTED: "
+			$Logger->log[] = "Param Not Required: No Values to Match: " . "Check video delivery code :: EXPECTED: "
 					. 'Array(),'
 					. " GOT: " . $RtbBidRequestVideo->delivery;
 			endif;
-			return false;
+			return $result;
 		endif;
-		
-
-		$result = false;
 		
 		/*
 		 * All codes in the publisher ad zone
@@ -45,7 +44,7 @@ class CheckDelivery {
 		 */
 		foreach($RtbBidRequestVideo->delivery as $delivery_code_to_match):
 		
-			if (!in_array($delivery_code_to_match, $delivery_code_list)):
+			if (!in_array(strtolower($delivery_code_to_match), $delivery_code_list)):
 				
 				$result = false;
 				break;
@@ -60,6 +59,6 @@ class CheckDelivery {
 				. " GOT: " . join(',', $RtbBidRequestVideo->delivery);
 		endif;
 		
-		return false;
+		return $result;
 	}
 }

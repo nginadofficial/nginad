@@ -342,8 +342,13 @@ class IndexController extends AbstractActionController
     	$banner_request["video_linearity"] 			= $PublisherAdZoneVideo->Linearity;
     	$banner_request["video_foldpos"] 			= $PublisherAdZoneVideo->FoldPos;
     	
-    	$banner_request["video_height"] 			= $PublisherAdZone->Height;
-    	$banner_request["video_width"] 				= $PublisherAdZone->Width;
+    	if ($PublisherAdZone->Height != 0):
+    		$banner_request["video_height"] 			= $PublisherAdZone->Height;
+    	endif;
+    	
+    	if ($PublisherAdZone->Width != 0):
+    		$banner_request["video_width"] 				= $PublisherAdZone->Width;
+    	endif;
     }
     
     private function add_ad_zone_banner_request_params($config, &$banner_request, &$PublisherAdZone) {

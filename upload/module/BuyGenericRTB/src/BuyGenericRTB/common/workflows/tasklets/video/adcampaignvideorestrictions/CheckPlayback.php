@@ -15,27 +15,27 @@ class CheckPlayback {
 		
 		$RtbBidRequestVideo = $RtbBidRequestImp->RtbBidRequestVideo;
 		
+		$result = true;
+		
 		if (empty($AdCampaignVideoRestrictions->PlaybackCommaSeparated)):
-			return true;
+			return $result;
 		endif;
 		
-		$playbackmethod_code_list = explode(',', $AdCampaignVideoRestrictions->PlaybackCommaSeparated);
+		$playbackmethod_code_list = explode(',', strtolower($AdCampaignVideoRestrictions->PlaybackCommaSeparated));
 		
 		if (!count($playbackmethod_code_list)):
-			return true;
+			return $result;
 		endif;
 		
 		// Validate that the value is an array
 		if (!is_array($RtbBidRequestVideo->playbackmethod)):
 			if ($Logger->setting_log === true):
-			$Logger->log[] = "Failed: " . "Check video playback code :: EXPECTED: "
+			$Logger->log[] = "Param Not Required: No Values to Match: " . "Check video playback code :: EXPECTED: "
 					. 'Array(),'
 					. " GOT: " . $RtbBidRequestVideo->playbackmethod;
 			endif;
-			return false;
+			return $result;
 		endif;
-		
-		$result = false;
 		
 		/*
 		 * All codes in the publisher ad zone
@@ -44,7 +44,7 @@ class CheckPlayback {
 		*/
 		foreach($RtbBidRequestVideo->playbackmethod as $playbackmethod_code_to_match):
 		
-			if (!in_array($playbackmethod_code_to_match, $playbackmethod_code_list)):
+			if (!in_array(strtolower($playbackmethod_code_to_match), $playbackmethod_code_list)):
 				
 				$result = false;
 				break;
@@ -59,6 +59,6 @@ class CheckPlayback {
 				. " GOT: " . join(',', $RtbBidRequestVideo->playbackmethod);
 		endif;
 		
-		return false;
+		return $result;
 	}
 }

@@ -15,30 +15,29 @@ class CheckMimeTypes {
 		
 		$RtbBidRequestVideo = $RtbBidRequestImp->RtbBidRequestVideo;
 		
+		$result = true;
+		
 		if (empty($AdCampaignVideoRestrictions->MimesCommaSeparated)):
-			return true;
+			return $result;
 		endif;
 		
-		$mime_code_list = explode(',', $AdCampaignVideoRestrictions->MimesCommaSeparated);
+		$mime_code_list = explode(',', strtolower($AdCampaignVideoRestrictions->MimesCommaSeparated));
 		
 		if (!count($mime_code_list)):
-			return true;
+			return $result;
 		endif;
 		
+
 		// Validate that the value is an array
 		if (!is_array($RtbBidRequestVideo->mimes)):
 			if ($Logger->setting_log === true):
-			$Logger->log[] = "Failed: " . "Check video mime type code :: EXPECTED: "
+			$Logger->log[] = "Failed: Required Param: " . "Check video mime type code :: EXPECTED: "
 					. 'Array(),'
 					. " GOT: " . $RtbBidRequestVideo->mimes;
 			endif;
 			return false;
 		endif;
 
-		$result = false;
-		
-
-		
 		/*
 		 * All codes in the publisher ad zone
 		* for the publisher's video player settings
@@ -46,8 +45,8 @@ class CheckMimeTypes {
 		*/
 		foreach($RtbBidRequestVideo->mimes as $mime_code_to_match):
 		
-			if (!in_array($mime_code_to_match, $mime_code_list)):
-			
+			if (!in_array(strtolower($mime_code_to_match), $mime_code_list)):
+
 				$result = false;
 				break;
 					
@@ -61,6 +60,6 @@ class CheckMimeTypes {
 				. " GOT: " . join(',', $RtbBidRequestVideo->mimes);
 		endif;
 		
-		return false;
+		return $result;
 	}
 }

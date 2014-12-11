@@ -15,28 +15,28 @@ class CheckSupportedApis {
 		
 		$RtbBidRequestVideo = $RtbBidRequestImp->RtbBidRequestVideo;
 		
+		$result = true;
+		
 		if (empty($AdCampaignVideoRestrictions->ApisSupportedCommaSeparated)):
-			return true;
+			return $result;
 		endif;
 		
-		$api_code_list = explode(',', $AdCampaignVideoRestrictions->ApisSupportedCommaSeparated);
+		$api_code_list = explode(',', strtolower($AdCampaignVideoRestrictions->ApisSupportedCommaSeparated));
 		
 		if (!count($api_code_list)):
-			return true;
+			return $result;
 		endif;
 		
 		// Validate that the value is an array
 		if (!is_array($RtbBidRequestVideo->api)):
 			if ($Logger->setting_log === true):
-			$Logger->log[] = "Failed: " . "Check video APIs code :: EXPECTED: "
+			$Logger->log[] = "Param Not Required: No Values to Match: " . "Check video APIs code :: EXPECTED: "
 					. 'Array(),'
 					. " GOT: " . $RtbBidRequestVideo->api;
 			endif;
-			return false;
+			return $result;
 		endif;
-		
-		$result = false;
-		
+
 		/*
 		 * All codes in the publisher ad zone
 		* for the publisher's video player settings
@@ -44,7 +44,7 @@ class CheckSupportedApis {
 		*/
 		foreach($RtbBidRequestVideo->api as $api_code_to_match):
 			
-			if (!in_array($api_code_to_match, $api_code_list)):
+			if (!in_array(strtolower($api_code_to_match), $api_code_list)):
 				
 				$result = false;
 				break;
@@ -59,6 +59,6 @@ class CheckSupportedApis {
 				. " GOT: " . join(',', $RtbBidRequestVideo->api);
 		endif;
 		
-		return false;
+		return $result;
 	}
 }

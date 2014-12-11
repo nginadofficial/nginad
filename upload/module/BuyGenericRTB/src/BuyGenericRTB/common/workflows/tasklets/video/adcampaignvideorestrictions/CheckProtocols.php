@@ -14,29 +14,29 @@ class CheckProtocols {
 	public static function execute(&$Logger, &$Workflow, \model\openrtb\RtbBidRequest &$RtbBidRequest, \model\openrtb\RtbBidRequestImp &$RtbBidRequestImp, &$AdCampaignBanner, &$AdCampaignVideoRestrictions) {
 		
 		$RtbBidRequestVideo = $RtbBidRequestImp->RtbBidRequestVideo;
+
+		$result = true;
 		
 		if (empty($AdCampaignVideoRestrictions->ProtocolsCommaSeparated)):
-			return true;
+			return $result;
 		endif;
-		
-		$protocols_code_list = explode(',', $AdCampaignVideoRestrictions->ProtocolsCommaSeparated);
+
+		$protocols_code_list = explode(',', strtolower($AdCampaignVideoRestrictions->ProtocolsCommaSeparated));
 		
 		if (!count($protocols_code_list)):
-			return true;
+			return $result;
 		endif;
 		
 		// Validate that the value is an array
 		if (!is_array($RtbBidRequestVideo->protocols)):
 			if ($Logger->setting_log === true):
-			$Logger->log[] = "Failed: " . "Check video protocols code :: EXPECTED: "
+			$Logger->log[] = "Param Not Required: No Values to Match: " . "Check video protocols code :: EXPECTED: "
 					. 'Array(),'
 					. " GOT: " . $RtbBidRequestVideo->protocols;
 			endif;
-			return false;
+			return $result;
 		endif;
-		
-		$result = false;
-		
+
 		/*
 		 * All codes in the publisher ad zone
 		* for the publisher's video player settings
@@ -44,7 +44,7 @@ class CheckProtocols {
 		*/
 		foreach($RtbBidRequestVideo->protocols as $protocols_code_to_match):
 			
-			if (!in_array($protocols_code_to_match, $protocols_code_list)):
+			if (!in_array(strtolower($protocols_code_to_match), $protocols_code_list)):
 			
 				$result = false;
 				break;
@@ -59,6 +59,6 @@ class CheckProtocols {
 				. " GOT: " . join(',', $RtbBidRequestVideo->protocols);
 		endif;
 		
-		return false;
+		return $result;
 	}
 }
