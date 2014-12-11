@@ -113,7 +113,13 @@ endif;
             <?php echo $rtb_banner->StartDate; ?><hr /><?php echo $rtb_banner->EndDate; ?>
            </td>
            <td>
-            <?php echo $rtb_banner->Width; ?>x<?php echo $rtb_banner->Height; ?>
+            <?php 
+            if ($rtb_banner->ImpressionType == 'video'): ?>
+            	VAST Video
+            <?php else:
+            	echo $rtb_banner->Width; ?>x<?php echo $rtb_banner->Height;
+            endif;
+            ?>
            </td>
            <td>
            <?php echo $rtb_banner->BidAmount; ?>

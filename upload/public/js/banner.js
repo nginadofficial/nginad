@@ -215,7 +215,10 @@ function switchImpressionType() {
 	
 	if (impType == 'video') {
 		
-		var tag = 'Video VAST XML <br/> <span class="hlp"><small><i>You can use VPAID SWF if you have one in the VAST - <a style="color: blue; text-decoration: underline;" target="_blank" href="http://support.brightcove.com/en/video-cloud/docs/developing-vpaid-swfs#vast">FAQ on VPAID</a></i></small></span>';
+		var tag = 'Video VAST XML <br/> <span class="hlp">'
+			+ '<small><i>If you have a VAST <a target="_blank" style="color: blue; text-decoration: underline;"  href="http://ad3.liverail.com/?LR_PUBLISHER_ID=1331&LR_CAMPAIGN_ID=229&LR_SCHEMA=vast2">tag URL</a> from LiveRail or another exchange (<a target="_blank" style="color: blue; text-decoration: underline;"  href="http://www.iab.net/iab_products_and_industry_services/508676/digitalvideo/vast/vast_xml_samples">IAB Examples</a>),<br />just copy/paste the XML into the text area below</small>'
+			+ '<br /><small><i>You can use a VPAID SWF if you have one in the VAST - <a style="color: blue; text-decoration: underline;" target="_blank" href="http://support.brightcove.com/en/video-cloud/docs/developing-vpaid-swfs#vast">FAQ on VPAID</a></i></small>'
+			+ '</span>';
 		
 		$(".novideo").hide();
 		$(".nobanner").show();
