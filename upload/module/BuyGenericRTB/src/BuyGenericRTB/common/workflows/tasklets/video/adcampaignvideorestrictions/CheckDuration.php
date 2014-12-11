@@ -55,7 +55,7 @@ class CheckDuration {
 			
 			else:
 				
-				$result2 = $RtbBidRequestVideo->maxduration >= $AdCampaignVideoRestrictions->MaxDuration;
+				$result2 = $RtbBidRequestVideo->maxduration <= $AdCampaignVideoRestrictions->MaxDuration;
 				
 				if ($result2 === false && $Logger->setting_log === true):
 					$Logger->log[] = "Failed: " . "Check video maximum duration :: EXPECTED: "
