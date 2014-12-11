@@ -38,6 +38,21 @@ define('AD_TYPE_CONTRACT', 			4);
 define('DEVICE_DESKTOP', 			2);
 define('DEVICE_MOBILE', 			1);
 define('DEVICE_TABLET', 			5);
+
+/*
+ * No Bid Reasons
+*/
+
+define('NOBID_UNKNOWN_ERROR', 			0);
+define('NOBID_TECHNICAL_ERROR', 		1);
+define('NOBID_INVALID_REQUEST', 		2);
+define('KNOWN_WEB_SPIDER', 				3);
+define('NOBID_AD_FRAUD', 				4);
+define('NOBID_PROXY_IP', 				5);
+define('NOBID_BAD_DEVICE', 				6);
+define('NOBID_BAD_PUBLISHER', 			7);
+define('NOBID_UNMATCHED_USER', 			8);
+
 /*
  * We do not want autoloading. It does not work 
  * according to the documentation.

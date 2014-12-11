@@ -73,10 +73,12 @@ class PingManager {
 			
 			$LoopbackPartnerBid = new \buyloopbackpartner\LoopbackPartnerBid($this->config, $this->config['buyside_rtb']['supply_partners']['BuyLoopbackPartner']['buyer_id']);
 			$LoopbackPartnerBid->is_local_request = true;
-			$LoopbackPartnerBid->parse_incoming_request(json_encode($this->ping_request));
-			$request_id = $LoopbackPartnerBid->RtbBidRequest->id;
-			$LoopbackPartnerBid->process_business_logic();
-			$LoopbackPartnerBid->convert_ads_to_bid_response();
+			$validated = $LoopbackPartnerBid->parse_incoming_request(json_encode($this->ping_request));
+			if ($validated === true):
+				$request_id = $LoopbackPartnerBid->RtbBidRequest->id;
+				$LoopbackPartnerBid->process_business_logic();
+				$LoopbackPartnerBid->convert_ads_to_bid_response();
+			endif;
 			$LoopbackPartnerBid->build_outgoing_bid_response();
 
 			if ($LoopbackPartnerBid->had_bid_response == true):

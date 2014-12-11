@@ -44,6 +44,7 @@ abstract class RtbBuyV22Bid extends RtbBuyBid {
 	*/
 	private $AdCampaignBanner_Match_List = array();
 
+	private $no_bid_reason;
 	
 	// CONFIG
 
@@ -132,42 +133,52 @@ abstract class RtbBuyV22Bid extends RtbBuyBid {
 
 	public function process_business_logic() {
 
-	    $this->AdCampaignBanner_Match_List = \rtbbuyv22\RtbBuyV22Workflow::get_instance()->process_business_rules_workflow($this->config, $this->rtb_seat_id, $this->RtbBidRequest);
+	    $this->AdCampaignBanner_Match_List = \rtbbuyv22\RtbBuyV22Workflow::get_instance()->process_business_rules_workflow($this->config, $this->rtb_seat_id, $this->no_bid_reason, $this->RtbBidRequest);
 	}
 
 	public function parse_incoming_request($raw_post = null) {
 
 		$OpenRTBParser = new \buyrtb\parsers\openrtb\OpenRTBParser();
-		$this->RtbBidRequest = $OpenRTBParser->parse_request($this->config, $this->is_local_request, $raw_post);
-		
-		// transform to JSON
-		//\buyrtb\encoders\openrtb\RtbBidRequestJsonEncoder::execute($this->RtbBidRequest);
-
+		try {
+			$this->RtbBidRequest = $OpenRTBParser->parse_request($this->config, $this->is_local_request, $raw_post);
+		} catch (Exception $e) {
+			$this->no_bid_reason = NOBID_INVALID_REQUEST;
+			return false;
+		}
+		return true;
 	}
 
 	public function convert_ads_to_bid_response() {
+		
+		// init the bid response object
+		$RtbBidResponse	= new \model\openrtb\RtbBidResponse();
+		
 		/*
 		 * get TLD of the site url or page url for the
 		* ad tag in case it's needed for the delivery module
 		*/
 		
 		$tld = "not_available";
-		// bid // site
+
+		if ($this->RtbBidRequest != null):
 		
-		$parse = parse_url($this->RtbBidRequest->RtbBidRequestSite->domain);
-		if (isset($parse['host'])):
-			$tld = $parse['host'];
-		else:
-			$parse = parse_url($this->RtbBidRequest->RtbBidRequestSite->page);
+			$parse = parse_url($this->RtbBidRequest->RtbBidRequestSite->domain);
 			if (isset($parse['host'])):
 				$tld = $parse['host'];
+			else:
+				$parse = parse_url($this->RtbBidRequest->RtbBidRequestSite->page);
+				if (isset($parse['host'])):
+					$tld = $parse['host'];
+				endif;
 			endif;
-		endif;
 
-		$this->user_ip_hash = md5($this->RtbBidRequest->RtbBidRequestDevice->ip);
+
+			$this->user_ip_hash = md5($this->RtbBidRequest->RtbBidRequestDevice->ip);
+			
+			$RtbBidResponse->id = $this->RtbBidRequest->id;
+			
+		endif;
 		
-		$RtbBidResponse	= new \model\openrtb\RtbBidResponse();
-		$RtbBidResponse->id = $this->RtbBidRequest->id;
 		$RtbBidResponse->RtbBidResponseSeatBidList = array();
 		
 		$currency = null;
@@ -216,6 +227,16 @@ abstract class RtbBuyV22Bid extends RtbBuyBid {
 				
 			// implement Rubicon Project's empty bid with $0.00 CPM here
 			// also add the rejection code
+			$RtbBidResponseSeatBid								= new \model\openrtb\RtbBidResponseSeatBid();
+			$RtbBidResponseBid									= new \model\openrtb\RtbBidResponseBid();
+			$RtbBidResponseBid->price 							= 0;
+			$RtbBidResponseSeatBid->RtbBidResponseBidList[] 	= $RtbBidResponseBid;
+			$RtbBidResponse->RtbBidResponseSeatBidList[] 		= $RtbBidResponseSeatBid;
+			unset($RtbBidResponse->id);
+			unset($RtbBidResponse->cur);
+			if ($this->no_bid_reason != null):
+				$RtbBidResponse->nbr 							= $this->no_bid_reason;
+			endif;
 			
 		endif;
 		

@@ -51,9 +51,11 @@ class IndexController extends AbstractActionController
         try {
         	$GenericBuysidePartnerBid = new \buygenericbuysidepartner\GenericBuysidePartnerBid($config, $rtb_seat_id, $response_seat_id);
         	$GenericBuysidePartnerBid->is_local_request = false;
-        	$GenericBuysidePartnerBid->parse_incoming_request();
-        	$request_id = $GenericBuysidePartnerBid->RtbBidRequest->id;
-        	$GenericBuysidePartnerBid->process_business_logic();
+        	$validated = $GenericBuysidePartnerBid->parse_incoming_request();
+        	if ($validated === true):
+	        	$request_id = $GenericBuysidePartnerBid->RtbBidRequest->id;
+	        	$GenericBuysidePartnerBid->process_business_logic();
+        	endif;
         	$GenericBuysidePartnerBid->convert_ads_to_bid_response();
         	$GenericBuysidePartnerBid->build_outgoing_bid_response();
         	$GenericBuysidePartnerBid->send_bid_response();

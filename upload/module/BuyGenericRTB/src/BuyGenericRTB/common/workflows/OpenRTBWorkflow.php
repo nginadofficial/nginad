@@ -19,7 +19,7 @@ class OpenRTBWorkflow
 	public $rtb_seat_id = null;
 	public $config;
 	
-    public function process_business_rules_workflow($logger, $config, $rtb_seat_id, \model\openrtb\RtbBidRequest &$RtbBidRequest) {
+    public function process_business_rules_workflow($logger, $config, $rtb_seat_id, &$no_bid_reason, \model\openrtb\RtbBidRequest &$RtbBidRequest) {
 
     	$this->config = $config;
     	$this->rtb_seat_id = $rtb_seat_id;
@@ -43,6 +43,42 @@ class OpenRTBWorkflow
     	
     	// match ip against country code
     	\buyrtb\workflows\tasklets\common\adcampaign\GetGeoCodeCountry::execute($logger, $this, $RtbBidRequest);
+    	
+    	/*
+    	 * This is a placeholder for a partner Site Scoring Tasklet
+    	 * 
+    	 * IE. Integral Ad Science, Comscore ect...
+    	 */
+    	
+    	$partner_site_score_threshold_passed = true;
+    	
+    	if ($partner_site_score_threshold_passed === false):
+    		$no_bid_reason = NOBID_BAD_PUBLISHER;
+    	endif;
+    	
+    	/*
+    	 * This is a placeholder for a User Scoring Tasklet
+    	 * 
+    	 * IE. DoubleVerify, Moat, ect...
+    	*/
+    	 
+    	$user_score_threshold_passed = true;
+    	 
+    	if ($user_score_threshold_passed === false):
+    		$no_bid_reason = NOBID_AD_FRAUD;
+    	endif;
+    	
+    	/*
+    	 * This is a placeholder for a User Matching
+    	*
+    	* IE. a Cookie Matching DMP or other user matching service, ect...
+    	*/
+    	
+    	$user_cookie_match_passed = true;
+    	
+    	if ($user_cookie_match_passed === false):
+    		$no_bid_reason = NOBID_UNMATCHED_USER;
+    	endif;
     	
     	foreach ($AdCampaignList as $AdCampaign):
 

@@ -16,8 +16,8 @@ class RtbBidResponseJsonEncoder {
 		
 		$bid_response = array();
 		
-		$bid_response["id"] 		= $RtbBidResponse->id;
-
+		\util\ParseHelper::setArrayParam($RtbBidResponse, $bid_response, 'id');
+		
 		$bid_response["seatbid"] 	= self::getRtbBidResponseSeatBidList($RtbBidResponse);
 		
 		\util\ParseHelper::setArrayParam($RtbBidResponse, $bid_response, 'bidid');
@@ -57,10 +57,10 @@ class RtbBidResponseJsonEncoder {
 		foreach ($RtbBidResponseSeatBid->RtbBidResponseBidList as $RtbBidResponseBid):
 	
 			$bid = array();
-			$bid['id'] 				= $RtbBidResponseBid->id;
-			$bid['impid'] 			= $RtbBidResponseBid->impid;
-			$bid['price'] 			= $RtbBidResponseBid->price;
-			
+
+			\util\ParseHelper::setArrayParam($RtbBidResponseBid, $bid, 'id');
+			\util\ParseHelper::setArrayParam($RtbBidResponseBid, $bid, 'impid');
+			\util\ParseHelper::setArrayParam($RtbBidResponseBid, $bid, 'price');
 			\util\ParseHelper::setArrayParam($RtbBidResponseBid, $bid, 'adid');
 			\util\ParseHelper::setArrayParam($RtbBidResponseBid, $bid, 'nurl');
 			\util\ParseHelper::setArrayParam($RtbBidResponseBid, $bid, 'adm');
