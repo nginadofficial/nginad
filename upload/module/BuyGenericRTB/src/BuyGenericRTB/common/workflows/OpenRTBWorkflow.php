@@ -44,42 +44,25 @@ class OpenRTBWorkflow
     	// match ip against country code
     	\buyrtb\workflows\tasklets\common\adcampaign\GetGeoCodeCountry::execute($logger, $this, $RtbBidRequest);
     	
-    	/*
-    	 * This is a placeholder for a partner Site Scoring Tasklet
-    	 * 
-    	 * IE. Integral Ad Science, Comscore ect...
-    	 */
+
+    	// Check Ad Fraud
+    	if (\buyrtb\workflows\tasklets\common\thirdparty\CheckPublisherScore::execute($logger, $this, $RtbBidRequest) === false):
+	    	$no_bid_reason = NOBID_AD_FRAUD;
+	    	return $AdCampaignBanner_Match_List;
+    	endif;
     	
-    	$partner_site_score_threshold_passed = true;
-    	
-    	if ($partner_site_score_threshold_passed === false):
+    	// Check Publisher Score
+    	if (\buyrtb\workflows\tasklets\common\thirdparty\CheckAdFraud::execute($logger, $this, $RtbBidRequest) === false):
     		$no_bid_reason = NOBID_BAD_PUBLISHER;
+    	 	return $AdCampaignBanner_Match_List;
     	endif;
-    	
-    	/*
-    	 * This is a placeholder for a User Scoring Tasklet
-    	 * 
-    	 * IE. DoubleVerify, Moat, ect...
-    	*/
-    	 
-    	$user_score_threshold_passed = true;
-    	 
-    	if ($user_score_threshold_passed === false):
-    		$no_bid_reason = NOBID_AD_FRAUD;
+
+    	// Check Cookie Match
+    	if (\buyrtb\workflows\tasklets\common\thirdparty\CheckCookieMatch::execute($logger, $this, $RtbBidRequest) === false):
+	    	$no_bid_reason = NOBID_UNMATCHED_USER;
+	    	return $AdCampaignBanner_Match_List;
     	endif;
-    	
-    	/*
-    	 * This is a placeholder for a User Matching
-    	*
-    	* IE. a Cookie Matching DMP or other user matching service, ect...
-    	*/
-    	
-    	$user_cookie_match_passed = true;
-    	
-    	if ($user_cookie_match_passed === false):
-    		$no_bid_reason = NOBID_UNMATCHED_USER;
-    	endif;
-    	
+
     	foreach ($AdCampaignList as $AdCampaign):
 
 	    	// Check campaign date
