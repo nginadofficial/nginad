@@ -229,9 +229,9 @@ class ZoneController extends PublisherAbstractActionController {
 				
 				if ($ad->ImpressionType == 'video'):
 				
-					$min_duration 				= $request->getPost("MinDuration") == null ? "" : $request->getPost("MinDuration");
+					$min_duration 				= $request->getPost("MinDuration");
 						
-					$max_duration 				= $request->getPost("MaxDuration") == null ? "" : $request->getPost("MaxDuration");
+					$max_duration 				= $request->getPost("MaxDuration");
 					
 					$mimes 						= $request->getPost("Mimes");
 					if ($mimes && is_array($mimes) && count($mimes) > 0):
@@ -268,11 +268,11 @@ class ZoneController extends PublisherAbstractActionController {
 						$playback = "";
 					endif;
 					
-					$start_delay 				= $request->getPost("StartDelay") == null ? "" : $request->getPost("StartDelay");
+					$start_delay 				= $request->getPost("StartDelay");
 					
-					$linearity 					= $request->getPost("Linearity") == null ? "" : $request->getPost("Linearity");
+					$linearity 					= $request->getPost("Linearity");
 					
-					$fold_pos 					= $request->getPost("FoldPos") == null ? "" : $request->getPost("FoldPos");
+					$fold_pos 					= $request->getPost("FoldPos");
 					
 				endif;
 				
@@ -461,12 +461,26 @@ class ZoneController extends PublisherAbstractActionController {
         
         else:
         
-            $needed_input = array(
-				'AdName',
-				'Description',
-				'Width',
-				'Height'
-			);
+        	if ($editResultObj->ImpressionType == 'video'):
+        	
+	        	$needed_input = array(
+	        			'AdName',
+	        			'Description',
+	        			'Width',
+	        			'Height'
+	        	);
+	        	
+        	else:
+        
+	            $needed_input = array(
+					'AdName',
+					'Description',
+					'MinDuration',
+					'MaxDuration',
+	            	'Mimes'
+				);
+            
+            endif;
 		
             $publisher_ad_zone_type_id = AD_TYPE_ANY_REMNANT;
             $linkedbanners = array();
@@ -474,10 +488,10 @@ class ZoneController extends PublisherAbstractActionController {
             $AdTemplateList = $this->get_ad_templates();
             $request = $this->getRequest();
             
-            $current_mimes 					= array();
+            $current_mimes 					= \util\BannerOptions::$mimes;
             
-            $current_min_duration 			= "";
-            $current_max_duration 			= "";
+            $current_min_duration 			= "0";
+            $current_max_duration 			= "1000";
             
             $current_apis_supported 		= array();
             $current_protocols 				= array();
@@ -510,6 +524,10 @@ class ZoneController extends PublisherAbstractActionController {
 	                
 		                $current_mimes 					= explode(',', $PublisherAdZoneVideo->MimesCommaSeparated);
 		                
+	                	if (!$PublisherAdZoneVideo->MimesCommaSeparated || !count($current_mimes)):
+	                		$current_mimes = \util\BannerOptions::$mimes;
+	                	endif;
+	                
 		                $current_min_duration 			= $PublisherAdZoneVideo->MinDuration;
 		                $current_max_duration 			= $PublisherAdZoneVideo->MaxDuration;
 		                
@@ -522,6 +540,14 @@ class ZoneController extends PublisherAbstractActionController {
 		                $current_linearity 				= $PublisherAdZoneVideo->Linearity;
 		                $current_fold_pos 				= $PublisherAdZoneVideo->FoldPos;
 
+		                if ($current_min_duration == "" || $current_min_duration == null):
+		                	$current_min_duration = 0;
+		                endif;
+		                
+		                if ($current_max_duration == "" || $current_max_duration == null):
+		                	$current_max_duration = 1000;
+		                endif;
+		                
 		            endif;
 		                
                     if ($request->isPost()):
@@ -569,50 +595,42 @@ class ZoneController extends PublisherAbstractActionController {
 							
 							if ($editResultObj->ImpressionType == 'video'):
 							
-								$min_duration 				= $request->getPost("MinDuration") == null ? "" : $request->getPost("MinDuration");
+								$editResultObj->AdTemplateID = null;
+							
+								$min_duration 				= $request->getPost("MinDuration");
 								
-								$max_duration 				= $request->getPost("MaxDuration") == null ? "" : $request->getPost("MaxDuration");
+								$max_duration 				= $request->getPost("MaxDuration");
 									
 								$mimes 						= $request->getPost("Mimes");
 								if ($mimes && is_array($mimes) && count($mimes) > 0):
 									$mimes = join(',', $mimes);
-								else:
-									$mimes = "";
 								endif;
 									
 								$protocols 					= $request->getPost("Protocols");
 								if ($protocols && is_array($protocols) && count($protocols) > 0):
 									$protocols = join(',', $protocols);
-								else:
-									$protocols = "";
 								endif;
 									
 								$apis_supported 			= $request->getPost("ApisSupported");
 								if ($apis_supported && is_array($apis_supported) && count($apis_supported) > 0):
 									$apis_supported = join(',', $apis_supported);
-								else:
-									$apis_supported = "";
 								endif;
 									
 								$delivery 					= $request->getPost("Delivery");
 								if ($delivery && is_array($delivery) && count($delivery) > 0):
 									$delivery = join(',', $delivery);
-								else:
-									$delivery = "";
 								endif;
 									
 								$playback 					= $request->getPost("Playback");
 								if ($playback && is_array($playback) && count($playback) > 0):
 									$playback = join(',', $playback);
-								else:
-									$playback = "";
 								endif;
 									
-								$start_delay 				= $request->getPost("StartDelay") == null ? "" : $request->getPost("StartDelay");
+								$start_delay 				= $request->getPost("StartDelay");
 									
-								$linearity 					= $request->getPost("Linearity") == null ? "" : $request->getPost("Linearity");
+								$linearity 					= $request->getPost("Linearity");
 									
-								$fold_pos 					= $request->getPost("FoldPos") == null ? "" : $request->getPost("FoldPos");
+								$fold_pos 					= $request->getPost("FoldPos");
 									
 							endif;
 							

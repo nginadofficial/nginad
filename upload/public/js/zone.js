@@ -10,8 +10,8 @@ function switchImpressionType() {
 		$(".novideo").hide();
 		$(".nobanner").show();
 		$("#passbackTag").html("Passback VAST XML");
-		$("label[for=Height]").html('Video Height : <br /><span class="hlp"><small><i>(Use 0 for any)</i></small></span>');
-		$("label[for=Width]").html('Video Width : <br /><span class="hlp"><small><i>(Use 0 for any)</i></small></span>');
+		$("label[for=Height]").html('Video Height');
+		$("label[for=Width]").html('Video Width');
 		
 	} else {
 		

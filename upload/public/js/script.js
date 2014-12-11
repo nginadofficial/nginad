@@ -438,11 +438,19 @@ $().ready(function() {
                validatedomain: true
            },
 			height: {
-				required: true,
+				required:  {
+	                depends:function(){
+	                    return $("#ImpressionType").val() != 'video';
+	                }   
+	            },
 				number: true
 			},
 			width: {
-				required: true,
+				required:  {
+	                depends:function(){
+	                    return $("#ImpressionType").val() != 'video';
+	                }   
+	            },
 				number: true
 			},
 			bidamount: {
@@ -450,7 +458,11 @@ $().ready(function() {
 				number: true
 			},
 			iabsize: {
-				required: true
+				required:  {
+	                depends:function(){
+	                    return $("#ImpressionType").val() != 'video';
+	                }   
+	            },
 			}
 		},
 		errorContainer: $("#cdn_form_msg"),
@@ -570,11 +582,19 @@ $().ready(function() {
 				number: true
 			},
 			Width: {
-				required: true,
+				required:  {
+	                depends:function(){
+	                    return $("#ImpressionType").val() != 'video';
+	                }   
+	            },
 				number: true
 			},
 			Height: {
-				required: true,
+				required:  {
+	                depends:function(){
+	                    return $("#ImpressionType").val() != 'video';
+	                }   
+	            },
 				number: true
 			}
 		},

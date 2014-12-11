@@ -147,16 +147,16 @@ class PublisherAdZoneVideo extends \_factory\CachedTableRead
    		
 	   	$data = array(
 	   			'PublisherAdZoneID'         	=> $PublisherAdZoneVideo->PublisherAdZoneID,
-	   			'MimesCommaSeparated'       	=> $PublisherAdZoneVideo->MimesCommaSeparated,
-	   			'MinDuration'         			=> $PublisherAdZoneVideo->MinDuration,
-	   			'MaxDuration'         			=> $PublisherAdZoneVideo->MaxDuration,
-	   			'ApisSupportedCommaSeparated'	=> $PublisherAdZoneVideo->ApisSupportedCommaSeparated,
-	   			'ProtocolsCommaSeparated'     	=> $PublisherAdZoneVideo->ProtocolsCommaSeparated,
-	   			'DeliveryCommaSeparated'      	=> $PublisherAdZoneVideo->DeliveryCommaSeparated,
-	   			'PlaybackCommaSeparated'     	=> $PublisherAdZoneVideo->PlaybackCommaSeparated,
-	   			'StartDelay'         			=> $PublisherAdZoneVideo->StartDelay,
-	   			'Linearity'         			=> $PublisherAdZoneVideo->Linearity,
-	   			'FoldPos'         				=> $PublisherAdZoneVideo->FoldPos,
+	   			'MimesCommaSeparated'       	=> $PublisherAdZoneVideo->MimesCommaSeparated === "" ? null : $PublisherAdZoneVideo->MimesCommaSeparated,
+	   			'MinDuration'         			=> $PublisherAdZoneVideo->MinDuration === "" ? null : $PublisherAdZoneVideo->MinDuration,
+	   			'MaxDuration'         			=> $PublisherAdZoneVideo->MaxDuration === "" ? null : $PublisherAdZoneVideo->MaxDuration,
+	   			'ApisSupportedCommaSeparated'	=> $PublisherAdZoneVideo->ApisSupportedCommaSeparated === "" ? null : $PublisherAdZoneVideo->ApisSupportedCommaSeparated,
+	   			'ProtocolsCommaSeparated'     	=> $PublisherAdZoneVideo->ProtocolsCommaSeparated === "" ? null : $PublisherAdZoneVideo->ProtocolsCommaSeparated,
+	   			'DeliveryCommaSeparated'      	=> $PublisherAdZoneVideo->DeliveryCommaSeparated === "" ? null : $PublisherAdZoneVideo->DeliveryCommaSeparated,
+	   			'PlaybackCommaSeparated'     	=> $PublisherAdZoneVideo->PlaybackCommaSeparated === "" ? null : $PublisherAdZoneVideo->PlaybackCommaSeparated,
+	   			'StartDelay'         			=> $PublisherAdZoneVideo->StartDelay === "" ? null : $PublisherAdZoneVideo->StartDelay,
+	   			'Linearity'         			=> $PublisherAdZoneVideo->Linearity === "" ? null : $PublisherAdZoneVideo->Linearity,
+	   			'FoldPos'         				=> $PublisherAdZoneVideo->FoldPos === "" ? null : $PublisherAdZoneVideo->FoldPos,
 	   			'DateCreated'         			=> $PublisherAdZoneVideo->DateCreated
 	   	);
 

@@ -421,68 +421,58 @@ class DemandController extends DemandAbstractActionController {
 		// ACL PREVIEW PERMISSIONS CHECK
 		transformation\CheckPermissions::checkEditPermissionAdCampaignBannerPreview($banner_preview_id, $this->auth, $this->config_handle);
 
-		$start_delay 				= $this->getRequest()->getPost("StartDelay") == null ? "" : $this->getRequest()->getPost("StartDelay");
+		$start_delay 				= $this->getRequest()->getPost("StartDelay");
 			
-		$fold_pos 					= $this->getRequest()->getPost("FoldPos") == null ? "" : $this->getRequest()->getPost("FoldPos");
+		$fold_pos 					= $this->getRequest()->getPost("FoldPos");
 
-		$vertical 					= $this->getRequest()->getPost("vertical") == null ? "" : $this->getRequest()->getPost("vertical");
+		$vertical 					= $this->getRequest()->getPost("vertical");
 		
-		$geocountry 				= $this->getRequest()->getPost("geocountry") == null ? "" : $this->getRequest()->getPost("geocountry");
+		$geocountry 				= $this->getRequest()->getPost("geocountry");
 		
-		$geostate 					= $this->getRequest()->getPost("geostate") == null ? "" : $this->getRequest()->getPost("geostate");
+		$geostate 					= $this->getRequest()->getPost("geostate");
 		
-		$geocity 					= $this->getRequest()->getPost("geocity") == null ? "" : $this->getRequest()->getPost("geocity");
+		$geocity 					= $this->getRequest()->getPost("geocity");
 		
-		$pmpenable 					= $this->getRequest()->getPost("pmpenable") == null ? "" : $this->getRequest()->getPost("pmpenable");
+		$pmpenable 					= $this->getRequest()->getPost("pmpenable");
 		
-		$secure 					= $this->getRequest()->getPost("secure") == null ? "" : $this->getRequest()->getPost("secure");
+		$secure 					= $this->getRequest()->getPost("secure");
 			
-		$optout 					= $this->getRequest()->getPost("optout") == null ? "" : $this->getRequest()->getPost("optout");
+		$optout 					= $this->getRequest()->getPost("optout");
 		
-		$min_duration 				= $this->getRequest()->getPost("MinDuration") == null ? "" : $this->getRequest()->getPost("MinDuration");
+		$min_duration 				= $this->getRequest()->getPost("MinDuration");
 		
-		$max_duration 				= $this->getRequest()->getPost("MaxDuration") == null ? "" : $this->getRequest()->getPost("MaxDuration");
+		$max_duration 				= $this->getRequest()->getPost("MaxDuration");
 			
-		$min_height 				= $this->getRequest()->getPost("MinHeight") == null ? "" : $this->getRequest()->getPost("MinHeight");
+		$min_height 				= $this->getRequest()->getPost("MinHeight");
 		
-		$min_width 					= $this->getRequest()->getPost("MinWidth") == null ? "" : $this->getRequest()->getPost("MinWidth");
+		$min_width 					= $this->getRequest()->getPost("MinWidth");
 
-		$linearity 					= $this->getRequest()->getPost("Linearity") == null ? "" : $this->getRequest()->getPost("Linearity");
+		$linearity 					= $this->getRequest()->getPost("Linearity");
 		
 		
 		$mimes 						= $this->getRequest()->getPost("Mimes");
 		if ($mimes && is_array($mimes) && count($mimes) > 0):
 			$mimes = join(',', $mimes);
-		else:
-			$mimes = "";
 		endif;
 			
 		$protocols 					= $this->getRequest()->getPost("Protocols");
 		if ($protocols && is_array($protocols) && count($protocols) > 0):
 			$protocols = join(',', $protocols);
-		else:
-			$protocols = "";
 		endif;
 
 		$apis_supported 			= $this->getRequest()->getPost("ApisSupported");
 		if ($apis_supported && is_array($apis_supported) && count($apis_supported) > 0):
 			$apis_supported = join(',', $apis_supported);
-		else:
-			$apis_supported = "";
 		endif;
 			
 		$delivery 					= $this->getRequest()->getPost("Delivery");
 		if ($delivery && is_array($delivery) && count($delivery) > 0):
 			$delivery = join(',', $delivery);
-		else:
-			$delivery = "";
 		endif;
 			
 		$playback 					= $this->getRequest()->getPost("Playback");
 		if ($playback && is_array($playback) && count($playback) > 0):
 			$playback = join(',', $playback);
-		else:
-			$playback = "";
 		endif;
 			
 		if ($vertical && is_array($vertical) && count($vertical) > 0):
@@ -2285,9 +2275,9 @@ class DemandController extends DemandAbstractActionController {
 				$playback = "";
 			endif;
 					
-			$start_delay 				= $this->getRequest()->getPost("StartDelay") == null ? "" : $this->getRequest()->getPost("StartDelay");
+			$start_delay 				= $this->getRequest()->getPost("StartDelay");
 					
-			$linearity 					= $this->getRequest()->getPost("Linearity") == null ? "" : $this->getRequest()->getPost("Linearity");
+			$linearity 					= $this->getRequest()->getPost("Linearity");
 
 		endif;
 		
@@ -2345,20 +2335,6 @@ class DemandController extends DemandAbstractActionController {
 			if ($AdCampaignVideoRestrictionsPreview == null):
 			
 				$AdCampaignVideoRestrictionsPreview = new \model\AdCampaignVideoRestrictionsPreview();
-				$AdCampaignVideoRestrictionsPreview->GeoCountry 						= "";
-				$AdCampaignVideoRestrictionsPreview->GeoState 							= "";
-				$AdCampaignVideoRestrictionsPreview->GeoCity 							= "";
-					
-				$AdCampaignVideoRestrictionsPreview->MinDuration 						= "";
-				$AdCampaignVideoRestrictionsPreview->MaxDuration 						= "";
-				$AdCampaignVideoRestrictionsPreview->MinHeight 							= "";
-				$AdCampaignVideoRestrictionsPreview->MinWidth 							= "";
-				$AdCampaignVideoRestrictionsPreview->FoldPos 							= "";
-				$AdCampaignVideoRestrictionsPreview->PmpEnable 							= "";
-				$AdCampaignVideoRestrictionsPreview->Secure 							= "";
-				$AdCampaignVideoRestrictionsPreview->Optout 							= "";
-				$AdCampaignVideoRestrictionsPreview->Vertical 							= "";
-				$AdCampaignVideoRestrictionsPreview->MinWidth 							= "";
 				
 			endif;
 			
@@ -2518,14 +2494,14 @@ class DemandController extends DemandAbstractActionController {
 		
 		if ($AdCampaignVideoRestrictions != null):
 		
-			$current_mimes_raw = $AdCampaignVideoRestrictions->MimesCommaSeparated == null ? "" : $AdCampaignVideoRestrictions->MimesCommaSeparated;
-			$current_apis_supported_raw = $AdCampaignVideoRestrictions->ApisSupportedCommaSeparated == null ? "" : $AdCampaignVideoRestrictions->ApisSupportedCommaSeparated;
-			$current_protocols_raw = $AdCampaignVideoRestrictions->ProtocolsCommaSeparated == null ? "" : $AdCampaignVideoRestrictions->ProtocolsCommaSeparated;
-			$current_delivery_methods_raw = $AdCampaignVideoRestrictions->DeliveryCommaSeparated == null ? "" : $AdCampaignVideoRestrictions->DeliveryCommaSeparated;
-			$current_playback_methods_raw = $AdCampaignVideoRestrictions->PlaybackCommaSeparated == null ? "" : $AdCampaignVideoRestrictions->PlaybackCommaSeparated;
+			$current_mimes_raw = $AdCampaignVideoRestrictions->MimesCommaSeparated;
+			$current_apis_supported_raw = $AdCampaignVideoRestrictions->ApisSupportedCommaSeparated;
+			$current_protocols_raw = $AdCampaignVideoRestrictions->ProtocolsCommaSeparated;
+			$current_delivery_methods_raw = $AdCampaignVideoRestrictions->DeliveryCommaSeparated;
+			$current_playback_methods_raw = $AdCampaignVideoRestrictions->PlaybackCommaSeparated;
 			
-			$current_start_delay = $AdCampaignVideoRestrictions->StartDelay == null ? "" : $AdCampaignVideoRestrictions->StartDelay;
-			$current_linearity = $AdCampaignVideoRestrictions->Linearity == null ? "" : $AdCampaignVideoRestrictions->Linearity;
+			$current_start_delay = $AdCampaignVideoRestrictions->StartDelay;
+			$current_linearity = $AdCampaignVideoRestrictions->Linearity;
 
 			$current_mimes = array();
 			
