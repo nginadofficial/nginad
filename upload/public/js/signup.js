@@ -1,25 +1,28 @@
 $().ready(function() {
 
-	$("#signupform").bind("submit", checkDuplicateRegistrationPublisher);
-	$("#customersignupform").bind("submit", checkDuplicateRegistrationCustomer);
+	$("#submitbutton.signupform").bind("click", checkDuplicateRegistrationPublisher);
+	$("#submitbutton.customersignupform").bind("click", checkDuplicateRegistrationCustomer);
 });
 	
 function checkDuplicateRegistrationPublisher() {
 		
+		$("#submitbutton").prop("disabled", true);
+	
 		var email = $("#Email").val();
 		var login = $("#user_login").val();
 		
 		if (!email || !login) {
+			$("#submitbutton").prop("disabled", false);
+			$('#signupform').submit();
 			return false;
 		}
 		
 		  $.getJSON( "/signup/checkpublisherduplicate?email=" + email + "&login=" + login, function( data ) {
 			  if (data.result == 'success') {
-				  $("#signupform").unbind("submit", checkDuplicateRegistrationPublisher);
-				  $("#signupform").submit();
+				  $('#signupform').submit();
 			  } else {
-				  alert(data.message);
-				  return false;
+				  $("#cdn_form_dynamic_msg").html(data.message).show();
+				  $("#submitbutton").prop("disabled", false);
 			  }
 			  
 		  });
@@ -28,20 +31,23 @@ function checkDuplicateRegistrationPublisher() {
 
 function checkDuplicateRegistrationCustomer() {
 	
-	var email = $("#Email").val();
+	$("#submitbutton").prop("disabled", true);
+	
+	var email = $("#email").val();
 	var login = $("#user_login").val();
 	
 	if (!email || !login) {
+		$("#submitbutton").prop("disabled", false);
+		$('#customersignupform').submit();
 		return false;
 	}
-	
+
 	  $.getJSON( "/signup/checkcustomerduplicate?email=" + email + "&login=" + login, function( data ) {
 		  if (data.result == 'success') {
-			  $("#customersignupform").unbind("submit", checkDuplicateRegistrationCustomer);
-			  $("#customersignupform").submit();
+			  $('#customersignupform').submit();
 		  } else {
-			  alert(data.message);
-			  return false;
+			  $("#cdn_form_dynamic_msg").html(data.message).show();
+			  $("#submitbutton").prop("disabled", false);
 		  }
 		  
 	  });

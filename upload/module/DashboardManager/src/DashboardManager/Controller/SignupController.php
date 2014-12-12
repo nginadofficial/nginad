@@ -73,7 +73,7 @@ class SignupController extends PublisherAbstractActionController {
 		else:
 			$data = array(
 					'result' => 'error',
-					'message' => implode(', ', $messages)
+					'message' => implode('<br/>', $messages)
 			);
 		endif;
 		
@@ -112,7 +112,7 @@ class SignupController extends PublisherAbstractActionController {
 		else:
 			$data = array(
 					'result' => 'error',
-					'message' => implode(', ', $messages)
+					'message' => implode('<br/>', $messages)
 			);
 		endif;
 		

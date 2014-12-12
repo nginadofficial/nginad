@@ -15,9 +15,10 @@ $this->headScript()->prependFile($this->basePath() . '/js/signup.js');
 	    echo '<div id="cdn_form_success" class="alert alert-success" style="margin: 5px;">Account created successfully. You will receive a welcome email when your account is approved by our Ad Operations Team</div>';
     endif;
 ?>
+<div id="cdn_form_dynamic_msg" class="alert alert-error" style="margin: 5px; display:none;"></div>
 <div id="cdn_form_msg" class="alert alert-error" style="margin: 5px; display:none;"></div>
 <div class="left">
-	<form id="customersignupform" name="customersignupform" class="form-horizontal form-top-magin" name="signup" method="post" action="/signup/customer">
+	<form id="customersignupform" name="customersignupform" class="form-horizontal form-top-magin" method="post" action="/signup/customer">
 	<div class="control-group">
 	    <label for="Customer Name" class="control-label">Customer Name</label>
 	    <div class="controls">
@@ -68,8 +69,7 @@ $this->headScript()->prependFile($this->basePath() . '/js/signup.js');
 	    <input type="Password" value=""  name="confirm_password" id="confirm_password">    </div>
 		</div> 
 	    <div class="controls">
-	    <button name="submit" type="submit" class="btn btn-primary btn-margin" id="submitbutton" >Create Account</button>
-	    </div>
+	    <button name="b1" type="button" class="btn btn-primary btn-margin customersignupform" id="submitbutton" >Create Account</button>
 	    </div>
 	</form>
 </div>
