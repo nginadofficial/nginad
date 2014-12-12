@@ -22,6 +22,7 @@ class CheckInIFrame {
 		endif;
 		/*
 		 * Check banner IFRAME disposition
+		 * - we are checking for string 0 as well
 		*/
 		if ($AdCampaignBannerRestrictions->InIframe != null && $AdCampaignBannerRestrictions->InIframe == 0 && $in_iframe == true):
 			if ($Logger->setting_log === true):
@@ -34,6 +35,7 @@ class CheckInIFrame {
 		
 		/*
 		 * Check banner multiple nested IFRAMEs disposition
+		 * - we are checking for string 0 as well
 		*/
 		if ($AdCampaignBannerRestrictions->InMultipleNestedIframes != null && $AdCampaignBannerRestrictions->InMultipleNestedIframes == 0 && $in_iframe == true):
 			if ($Logger->setting_log === true):
