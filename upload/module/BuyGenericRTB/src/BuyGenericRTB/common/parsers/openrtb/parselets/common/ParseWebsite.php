@@ -91,16 +91,6 @@ class ParseWebsite {
 					"search");
 
 	        /*
-	         * If declared this would also be in the impression object
-	         */
-	        if (strpos(strtolower($RtbBidRequestSite->domain), "https://") !== false
-	        	|| strpos(strtolower($RtbBidRequestSite->page), "https://") !== false):
-	        
-	        	$RtbBidRequest->secure = 1;
-	         
-	        endif;
-
-	        /*
 	         * Publisher Object
 	         */
 	        

@@ -427,12 +427,14 @@ var cdpnLocTag = "<script type='text/javascript'>var NGIN_Loc={};" + "NGIN_Loc.l
 var domain = getQueryStringArg(qs,'NGIN_domain', adserver_domain);
 
 var abf = 0;
+var ifr = 0;
 var id = getQueryStringArg(qs, 'pzoneid');
 if (!id) {
 	id = getQueryStringArg(qs, 'zoneid');
 }
 
 abf = getNGINAtf(id, getNGINViewport());
+ifr = (isInIframe() == true) ? 1 : 0;
 
 var org_tld = getQueryStringArg(qs, 'tld', "");
 var ct_url = getQueryStringArg(qs, 'ct0', "");
@@ -452,6 +454,7 @@ adQueryString += "&sndprc=" + escape(sndprc);
 adQueryString += "&ui=" + ui;
 adQueryString += "&ct=" + escape(ct_url);
 adQueryString += "&org_tld=" + escape(org_tld);
+adQueryString += "ifr=" + ifr;
 adQueryString += "&cb=" + cb;
 
 var fpTag = '<scr'+'ipt type="text/javascript" src="http://' + domain + delivery_path

@@ -32,6 +32,7 @@ class IndexController extends AbstractActionController
     	$banner_request["adpos_x"] 				= $this->getRequest()->getQuery('adpos_x');
     	$banner_request["adpos_y"] 				= $this->getRequest()->getQuery('adpos_y');
     	$banner_request["atf"] 					= $this->getRequest()->getQuery('atf');
+    	$banner_request["ifr"] 					= $this->getRequest()->getQuery('ifr');
     	$banner_request["ct"] 					= $this->getRequest()->getQuery('ct');
     	$banner_request["dt"] 					= $this->getRequest()->getQuery('dt');
     	$banner_request["ifr"] 					= $this->getRequest()->getQuery('ifr');

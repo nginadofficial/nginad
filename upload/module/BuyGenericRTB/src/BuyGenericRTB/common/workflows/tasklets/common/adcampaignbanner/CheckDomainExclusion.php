@@ -27,26 +27,31 @@ class CheckDomainExclusion {
 			
 			if ($AdCampaignBannerDomainExclusion->ExclusionType == "url"):
 				
-				if (strpos(strtolower($RtbBidRequest->RtbBidRequestSite->page), $domain_to_match) !== false
-					|| strpos(strtolower($RtbBidRequest->RtbBidRequestSite->domain), $domain_to_match) !== false):
+			 	$page_url = $RtbBidRequest->RtbBidRequestSite->page != null ? $RtbBidRequest->RtbBidRequestSite->page : "";
+				$domain = $RtbBidRequest->RtbBidRequestSite->domain != null ? $RtbBidRequest->RtbBidRequestSite->domain : "";
+				
+				if (strpos(strtolower($page_url), $domain_to_match) !== false
+					|| strpos(strtolower($domain), $domain_to_match) !== false):
 					
 					if ($Logger->setting_log === true):
 						$Logger->log[] = "Failed: " . "Check banner page url, site exclusions match :: EXPECTED: "
 								 . $domain_to_match . " GOT: bid_request_site_page: "
-								 . $RtbBidRequest->RtbBidRequestSite->page . ", bid_request_site_domain: " 
-								 . $RtbBidRequest->RtbBidRequestSite->domain;
+								 . $page_url . ", bid_request_site_domain: " 
+								 . $domain;
 					endif;
 					// goto next banner
 					return false;
 					
 				endif;
 				
-			elseif ($RtbBidRequest->refurl && $AdCampaignBannerDomainExclusion->ExclusionType == "referrer"):
-			
-				if (strpos(strtolower($RtbBidRequest->refurl), $domain_to_match) !== false):
+			elseif ($AdCampaignBannerDomainExclusion->ExclusionType == "referrer"):
+
+				$referrer = $RtbBidRequest->RtbBidRequestSite->ref != null ? $RtbBidRequest->RtbBidRequestSite->ref : "";
+
+				if (strpos(strtolower($referrer), $domain_to_match) !== false):
 				
 					if ($Logger->setting_log === true):
-						$Logger->log[] = "Failed: " . "Check banner page referrer url, site exclusions match :: EXPECTED: " . $domain_to_match . " GOT: " . $RtbBidRequest->refurl;
+						$Logger->log[] = "Failed: " . "Check banner page referrer url, site exclusions match :: EXPECTED: " . $domain_to_match . " GOT: " . $RtbBidRequest->RtbBidRequestSite->ref;
 					endif;
 					return false;
 					

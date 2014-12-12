@@ -29,9 +29,12 @@ class CheckExclusiveInclusion {
 			$domain_to_match = strtolower($AdCampaignBannerExclusiveInclusion->DomainName);
 			
 			if ($AdCampaignBannerExclusiveInclusion->InclusionType == "url"):
-				
-				if (strpos(strtolower($RtbBidRequest->RtbBidRequestSite->page), $domain_to_match) === false
-					&& strpos(strtolower($RtbBidRequest->RtbBidRequestSite->domain), $domain_to_match) === false):
+					
+				$page_url = $RtbBidRequest->RtbBidRequestSite->page != null ? $RtbBidRequest->RtbBidRequestSite->page : "";
+				$domain = $RtbBidRequest->RtbBidRequestSite->domain != null ? $RtbBidRequest->RtbBidRequestSite->domain : "";
+
+				if (strpos(strtolower($page_url), $domain_to_match) === false
+					&& strpos(strtolower($domain), $domain_to_match) === false):
 				
 					if ($Logger->setting_log === true):
 						$Logger->log[] = "Failed: " . "Check banner page url, site exclusive inclusions do not match :: EXPECTED: " 
@@ -44,9 +47,11 @@ class CheckExclusiveInclusion {
 					
 				endif;
 			
-			elseif ($RtbBidRequest->refurl && $AdCampaignBannerExclusiveInclusion->InclusionType == "referrer"):
+			elseif ($AdCampaignBannerExclusiveInclusion->InclusionType == "referrer"):
 			
-				if (strpos(strtolower($RtbBidRequest->refurl), $domain_to_match) === false):
+				$referrer = $RtbBidRequest->RtbBidRequestSite->ref != null ? $RtbBidRequest->RtbBidRequestSite->ref : "";
+
+				if (strpos(strtolower($referrer), $domain_to_match) === false):
 				
 					if ($Logger->setting_log === true):
 						$Logger->log[] = "Failed: " . "Check banner page referrer url, site exclusive inclusions do not match :: EXPECTED: " . $domain_to_match . " GOT: " . $RtbBidRequest->refurl;

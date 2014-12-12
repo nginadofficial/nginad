@@ -26,6 +26,11 @@ class BannerRestrictionsWorkflow {
 			return true;
 		endif;
 		
+		// Check if the banner is in an IFRAME
+		if (\buyrtb\workflows\tasklets\display\adcampaignbannerrestrictions\CheckInIFrame::execute($Logger, $ParentWorkflow, $RtbBidRequest, $RtbBidRequestImp, $AdCampaignBanner, $AdCampaignBannerRestrictions) === false):
+			return false;
+		endif;
+		
 		// Check banner system fold position
 		if (\buyrtb\workflows\tasklets\display\adcampaignbannerrestrictions\CheckFoldPosition::execute($Logger, $ParentWorkflow, $RtbBidRequest, $RtbBidRequestImp, $AdCampaignBanner, $AdCampaignBannerRestrictions) === false):
 			return false;

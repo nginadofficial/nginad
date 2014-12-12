@@ -122,8 +122,16 @@ use rtbsell\RtbSellBid;
 		$this->setObjParam($RtbBidRequestBanner, $banner_request, "banner_height", "h");
 		$this->setObjParam($RtbBidRequestBanner, $banner_request, "banner_width", "w");
 		
-		$RtbBidRequestBanner->pos 					= $banner_request["atf"] == 1 ? 1 : 0;
+		// if banner is not above the fold, do not announce it
+		if ($banner_request["atf"] == 1):
+			$RtbBidRequestBanner->pos 				= $banner_request["atf"] == 1 ? 1 : 0;
+		endif;
 		
+		// if banner is not in the top level frame, do not announce it
+		if ($banner_request["ifr"] == 0):
+			$RtbBidRequestBanner->topframe 			= $banner_request["ifr"] == 0 ? 1 : 0;
+		endif;
+
 		return $RtbBidRequestBanner;
 	}
 	
@@ -137,6 +145,23 @@ use rtbsell\RtbSellBid;
 		$RtbBidRequestImp							= new \model\openrtb\RtbBidRequestImp();	
 		$RtbBidRequestImp->media_type 				= "banner";
 		$RtbBidRequestImp->id						= $this->generate_transaction_id();
+		
+		$is_secure = false;
+		
+		if (isset($banner_request["loc"]) && !empty($banner_request["loc"])):
+			$proto = parse_url($banner_request["loc"], PHP_URL_SCHEME);
+			$is_secure = $proto != null && $proto == "https";
+		elseif (isset($banner_request["tld"]) && !empty($banner_request["tld"])):
+			$proto = parse_url($banner_request["tld"], PHP_URL_SCHEME);
+			$is_secure = $proto != null && $proto == "https";
+		endif;
+		
+		/*
+		 * Only set the secure flag if the page is https:// 
+		 */
+		if ($is_secure == true):
+			$RtbBidRequestImp->secure				= 1;
+		endif;
 		
 		$RtbBidRequestImp->media_type 				= $banner_request["ImpressionType"];
 		
@@ -172,6 +197,7 @@ use rtbsell\RtbSellBid;
 		$this->setObjParam($RtbBidRequestSite, $banner_request, "org_tld", "domain");
 		$this->setObjParam($RtbBidRequestSite, $banner_request, "iab_category", "category");
 		$this->setObjParam($RtbBidRequestSite, $banner_request, "loc", "page");
+		$this->setObjParam($RtbBidRequestSite, $banner_request, "ref");
 		
 		$RtbBidRequestSite->RtbBidRequestPublisher 	= $RtbBidRequestPublisher;
 		
@@ -212,25 +238,6 @@ use rtbsell\RtbSellBid;
 		$RtbBidRequestRegulations->coppa			= 1;
 
 		$RtbBidRequest->RtbBidRequestRegulations 	= $RtbBidRequestRegulations;
-
-		
-		
-		// does not exist in openRTB. Here for compatability with proprietary RTB
-		if (isset($banner_request["ref"]) && !empty($banner_request["ref"])):
-			$this->bid_request_refurl 				= $banner_request["ref"];
-		endif;
-		
-		$is_secure = false;
-		
-		if (isset($banner_request["loc"]) && !empty($banner_request["loc"])):
-			$proto = parse_url($banner_request["loc"], PHP_URL_SCHEME);
-			$is_secure = $proto != null && $proto == "https";
-		elseif (isset($banner_request["tld"]) && !empty($banner_request["tld"])):
-			$proto = parse_url($banner_request["tld"], PHP_URL_SCHEME);
-			$is_secure = $proto != null && $proto == "https";
-		endif;
-
-		$this->bid_request_secure 					= $is_secure == true ? 1 : 0;
 
 		// assign response to instance
 		$this->RtbBidRequest						= $RtbBidRequest;

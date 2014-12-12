@@ -48,10 +48,6 @@ class RtbBidRequest {
 	public $RtbBidRequestRegulations;
 	
 	public $ext;
-	
-	// does not exist in openRTB. Here for compatability with proprietary RTB
-	public $refurl = "";
-	public $secure;
 
 	// used only by NginAd internally
 	public $is_local_request;
