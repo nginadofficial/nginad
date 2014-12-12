@@ -1,8 +1,6 @@
 <?php
 $this->headScript()->prependFile($this->basePath() . '/js/script.js');
-
-$this->headScript()->captureStart();
-$this->headScript()->captureEnd();
+$this->headScript()->prependFile($this->basePath() . '/js/signup.js');
 ?>
 <h4 class="headbreadcrumb blue-color" style="float: left;">Create Your Publisher Account.</h4>
 <h4 class="headbreadcrumb blue-color" style="font-size: 14px;text-decoration: underline;text-align: right;"><a href="/signup/customer">Demand Customers Sign-up Here</a></h4>

@@ -40,6 +40,58 @@ class SignupController extends PublisherAbstractActionController {
 	    
 	    return $view;
 	}
+
+	public function checkcustomerduplicateAction()
+	{
+		$Email = $this->getRequest()->getQuery('email');
+		$user_login = $this->getRequest()->getQuery('login');
+		// Check if an entry exists with the same name. A NULL means there is no duplicate.
+		
+		$DemandCustomerInfoFactory 	= \_factory\DemandCustomerInfo::get_instance();
+		$authUsersFactory	 		= \_factory\authUsers::get_instance();
+		
+		$result1 = $DemandCustomerInfoFactory->get_row(array("Email" => $Email)) === null;
+		$result2 = $authUsersFactory->get_row(array("user_login" => $user_login)) === null;
+
+		if ($result1 && $result2):
+			$data = array(
+					'result' => 'success'
+			);
+			else:
+			$data = array(
+					'result' => 'error',
+					'message' => 'That username is already in use. Please select another'
+			);
+		endif;
+		
+		return $this->getResponse()->setContent(json_encode($data));
+	}
+	
+	public function checkpublisherduplicateAction()
+	{
+		$Email = $this->getRequest()->getQuery('email');
+		$user_login = $this->getRequest()->getQuery('login');
+		// Check if an entry exists with the same name. A NULL means there is no duplicate.
+	
+		$PublisherInfoFactory 		= \_factory\PublisherInfo::get_instance();
+		$authUsersFactory	 		= \_factory\authUsers::get_instance();
+	
+		$result1 = $PublisherInfoFactory->get_row(array("Email" => $Email)) === null;
+		$result2 = $authUsersFactory->get_row(array("user_login" => $user_login)) === null;
+
+		if ($result1 && $result2):
+			$data = array(
+					'result' => 'success'
+			);
+			else:
+			$data = array(
+					'result' => 'error',
+					'message' => 'That username is already in use. Please select another'
+			);
+		endif;
+		
+		return $this->getResponse()->setContent(json_encode($data));
+	}
 	
 	public function customerAction()
 	{	    
@@ -75,8 +127,6 @@ class SignupController extends PublisherAbstractActionController {
 			$authUsers = new \model\authUsers();
 			$authUsersFactory = \_factory\authUsers::get_instance();
 
-			
-			
 			// Check if an entry exists with the same name. A NULL means there is no duplicate.
 		    if ($DemandCustomerInfoFactory->get_row(array("Email" => $DemandCustomerInfo->Email)) === null && $authUsersFactory->get_row(array("user_login" => $user_login)) === null):
 
@@ -105,7 +155,7 @@ class SignupController extends PublisherAbstractActionController {
 				$message = $message.'<tr><td><b>Partner Type: </b></td><td>'.$partner_type[$PartnerType].'</td></tr>';
 				$message = $message.'</table>';
 				
-				$subject = "Duplicate Account Attempt";
+				$subject = "New Demand Customer Registered";
 				
 				$transport = $this->getServiceLocator()->get('mail.transport');
 				
