@@ -40,56 +40,16 @@ class SignupController extends PublisherAbstractActionController {
 	    
 	    return $view;
 	}
-
-	public function checkcustomerduplicateAction()
-	{
-		$Email = $this->getRequest()->getQuery('email');
-		$user_login = $this->getRequest()->getQuery('login');
-		// Check if an entry exists with the same name. A NULL means there is no duplicate.
-		
-		$DemandCustomerInfoFactory 	= \_factory\DemandCustomerInfo::get_instance();
-		$authUsersFactory	 		= \_factory\authUsers::get_instance();
-		
-		$result1 = $DemandCustomerInfoFactory->get_row(array("Email" => $Email)) === null;
-		$result2 = $authUsersFactory->get_row(array("user_login" => $user_login)) === null;
-
-		$result = 'success';
-		$messages = array();
-		
-		if (!$result1):
-			$result = 'error';
-			$messages[] = 'That email address is already in use. Please select another';
-		endif;
-		
-		if (!$result2):
-			$result = 'error';
-			$messages[] = 'That username is already in use. Please select another';
-		endif;
-		
-		if ($result == 'success'):
-			$data = array(
-					'result' => 'success'
-			);
-		else:
-			$data = array(
-					'result' => 'error',
-					'message' => implode('<br/>', $messages)
-			);
-		endif;
-		
-		return $this->getResponse()->setContent(json_encode($data));
-	}
 	
-	public function checkpublisherduplicateAction()
+	public function checkduplicateAction()
 	{
-		$Email = $this->getRequest()->getQuery('email');
+		$email = $this->getRequest()->getQuery('email');
 		$user_login = $this->getRequest()->getQuery('login');
 		// Check if an entry exists with the same name. A NULL means there is no duplicate.
 	
-		$PublisherInfoFactory 		= \_factory\PublisherInfo::get_instance();
 		$authUsersFactory	 		= \_factory\authUsers::get_instance();
 	
-		$result1 = $PublisherInfoFactory->get_row(array("Email" => $Email)) === null;
+		$result1 = $authUsersFactory->get_row(array("user_email" => $email)) === null;
 		$result2 = $authUsersFactory->get_row(array("user_login" => $user_login)) === null;
 
 		$result = 'success';
