@@ -255,33 +255,35 @@ class IndexController extends AbstractActionController
 			 		echo $output;
 	 			endif;
 			 		
-	 			/*
-	 			 * If this is a remote RTB auction we do need to worry about
-	 			 * firing off notice urls
-	 			 *
-    			 * If safe_mode is off we can fire off an asynchronous CURL
-    			 * call which will not block. Otherwise we are stuck
-    			 * with curl call with a timeout.
-    			 * 
-    			 * curl must also be on the path
-	 			 */
 	 			
-	 			// clear output buffer
-	 			ob_end_flush();
-	 			
-	 			// check if curl is installed
-	 			$has_curl_on_path = $config['settings']['shell']['has_curl_on_path'];
-	 			
-	 			if(!ini_get('safe_mode') && $has_curl_on_path):
-	 				
-	 				exec("curl " . $AuctionPopo->nurl);
-	 				
-	 			else: 
-	 				
-	 				\util\WorkflowHelper::get_ping_notice_url_curl_request($AuctionPopo->nurl);
-	 				
+	 			if (!empty($AuctionPopo->nurl)):
+		 			/*
+		 			 * If this is a remote RTB auction we do need to worry about
+		 			 * firing off notice urls
+		 			 *
+	    			 * If safe_mode is off we can fire off an asynchronous CURL
+	    			 * call which will not block. Otherwise we are stuck
+	    			 * with curl call with a timeout.
+	    			 * 
+	    			 * curl must also be on the path
+		 			 */
+		 			
+		 			// clear output buffer
+		 			ob_end_flush();
+		 			
+		 			// check if curl is installed
+		 			$has_curl_on_path = $config['settings']['shell']['has_curl_on_path'];
+		 			
+		 			if(!ini_get('safe_mode') && $has_curl_on_path):
+		 				
+		 				exec("curl " . $AuctionPopo->nurl);
+		 				
+		 			else: 
+		 				
+		 				\util\WorkflowHelper::get_ping_notice_url_curl_request($AuctionPopo->nurl);
+		 				
+		 			endif;
 	 			endif;
-	 			
 	 			
 		 	endif;
 
