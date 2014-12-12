@@ -143,7 +143,7 @@ use rtbsell\RtbSellBid;
 		$RtbBidRequest->id 							= $this->generate_transaction_id();
 		
 		$RtbBidRequestImp							= new \model\openrtb\RtbBidRequestImp();	
-		$RtbBidRequestImp->media_type 				= "banner";
+		$RtbBidRequestImp->media_type 				= $banner_request["ImpressionType"];
 		$RtbBidRequestImp->id						= $this->generate_transaction_id();
 		
 		$is_secure = false;

@@ -78,7 +78,65 @@ class OpenRTBWorkflow {
     	
     	$WinningRTBPinger->won_auction 			= true;
     	$WinningRTBPinger->winning_bid 			= $bid_price;
-    	$AuctionPopo->winning_ad_tag			= $WinningRtbResponseBid->adm;
+    	if ($AuctionPopo->ImpressionType == 'video' && empty($WinningRtbResponseBid->adm)
+    			&& !empty($WinningRtbResponseBid->nurl)):
+    			
+    		if ($WinningRTBPinger->is_loopback_pinger):
+    			
+    			/*
+	    		 * This is a VAST video ad zone auction and it was won
+	    		 * by a local bidder and only has the nurl with no adm
+	    		 * Grab the VAST XML from the database or the cache
+    			 */
+	    		if (preg_match("/zoneid=(\\d+)/", $WinningRtbResponseBid->nurl, $matches) && isset($matches[1])):
+	    			
+	    			$ad_campaign_banner_id 			= $matches[1];
+	    		
+	    			$AdCampaignBannerFactory = \_factory\AdCampaignBanner::get_instance();
+	    			
+		    		$params = array();
+		    		$params["AdCampaignBannerID"] 	= $ad_campaign_banner_id;
+	    			$AdCampaignBanner = $AdCampaignBannerFactory->get_row_cached($params);
+	    			
+	    			$AuctionPopo->winning_ad_tag	= $AdCampaignBanner->AdTag;
+	    		endif;
+	    		
+    		else:
+    		
+	    		/*
+	    		 * This is a VAST video ad zone auction and it was won
+	    		 * by a bidder that put a URL to the VAST XML in their
+	    		 * OpenRTB 2.2 nurl param so adm is empty.
+	    		 * 
+	    		 * We must now reverse proxy the VAST XML back to the 
+	    		 * publisher's Flash Video Player in the HTTP
+	    		 * Ad Tag response.
+	    		 * 
+	    		 * Could be a LiveRail Tag or something.
+	    		 */
+	    		
+	    		$reverse_proxy_vast_xml 			= \util\WorkflowHelper::get_ping_notice_url_curl_request($WinningRtbResponseBid->nurl);
+
+	    		$AuctionPopo->winning_ad_tag		= $reverse_proxy_vast_xml;
+    		endif;
+    	elseif (!empty($WinningRtbResponseBid->adm)):
+    	
+    		$AuctionPopo->winning_ad_tag		= rawurldecode($WinningRtbResponseBid->adm);
+    	
+    		if (!empty($WinningRtbResponseBid->nurl)):
+					
+    			/*
+    			 * Was there a notice url here?
+    			 * 
+    			 * Lets fire it off after we have served the output back to the user.
+    			 * 
+    			 * Store it in the POPO for now.
+    			 */	
+    			$AuctionPopo->nurl 				= $WinningRtbResponseBid->nurl;
+    			
+    		endif;
+	    	
+    	endif;
     	$AuctionPopo->winning_bid_price			= sprintf("%1.4f", $this->encrypt_bid($bid_price));
     	$AuctionPopo->winning_partner_id		= $WinningRTBPinger->partner_id;
     	$AuctionPopo->winning_seat				= $WinningRTBPinger->RtbBidResponse->RtbBidResponseSeatBidList[0]->seat;
@@ -119,7 +177,7 @@ class OpenRTBWorkflow {
     	return $WinningRTBPinger;
     	
     }
-    
+
     private function encrypt_bid($unencrypted_bid_price) {
     
     	return $unencrypted_bid_price;

@@ -35,6 +35,9 @@ return array(
 						'auction_currency' 		=> "USD",
 						'second_price_auction' 	=> false
 				),
+				'shell' => array(
+						'has_curl_on_path'		=> true
+				)
 		),
 		'maintenance' => array(
 				'secret_key_crontab' => 'nginadxyz',

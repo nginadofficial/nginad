@@ -38,5 +38,18 @@ class AuctionPopo {
 	public $bid_price_list;
 	public $adjusted_bid_price_list;
 	
+	/*
+	 * NOTICE URL
+	 * 
+	 * In the case of a display ad, this may compliment the adm containing the ad tag code
+	 * 
+	 * In the case of a VAST video pre-roll, this may either complement the VAST XML
+	 * in the adm, or it may be a URL which loads the VAST XML in which case you need to
+	 * call it and reverse proxy the contents
+	 */
+	public $nurl;
+	
+	public $ImpressionType;
+	
 	public $request_impid;
 }

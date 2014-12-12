@@ -171,7 +171,7 @@ class IndexController extends AbstractActionController
 	 		
 	 		$bid_request = $RtbSellV22Bid->build_rtb_bid_request();
 	 		
-	 		$PingManager = new \pinger\PingManager($config, $bid_request, $PublisherAdZone->AdOwnerID, $PublisherAdZone->PublisherWebsiteID, $PublisherAdZone->FloorPrice, $banner_request["PublisherAdZoneID"], $banner_request["AdName"], $banner_request["WebDomain"]);
+	 		$PingManager = new \pinger\PingManager($config, $bid_request, $PublisherAdZone->AdOwnerID, $PublisherAdZone->PublisherWebsiteID, $PublisherAdZone->FloorPrice, $banner_request["PublisherAdZoneID"], $banner_request["AdName"], $banner_request["WebDomain"], $banner_request["ImpressionType"]);
 	 	
 	 		if ($PublisherAdZone->PublisherAdZoneTypeID == AD_TYPE_IN_HOUSE_REMNANT 
 	 				|| $PublisherAdZone->PublisherAdZoneTypeID == AD_TYPE_ANY_REMNANT):
@@ -236,6 +236,11 @@ class IndexController extends AbstractActionController
 	 			$banner_request["winning_seat"] = $AuctionPopo->winning_seat;
 	 			$this->process_demand_tag($config, $banner_request);
 	 			
+	 			/* 
+	 			 * If this is a local auction we don't need to worry about
+	 			 * firing off notice urls
+	 			 */
+	 			
 	 		else:
 		 		
 	 			if ($banner_request["ImpressionType"] == 'video'):
@@ -250,6 +255,34 @@ class IndexController extends AbstractActionController
 			 		echo $output;
 	 			endif;
 			 		
+	 			/*
+	 			 * If this is a remote RTB auction we do need to worry about
+	 			 * firing off notice urls
+	 			 *
+    			 * If safe_mode is off we can fire off an asynchronous CURL
+    			 * call which will not block. Otherwise we are stuck
+    			 * with curl call with a timeout.
+    			 * 
+    			 * curl must also be on the path
+	 			 */
+	 			
+	 			// clear output buffer
+	 			ob_end_flush();
+	 			
+	 			// check if curl is installed
+	 			$has_curl_on_path = $config['settings']['shell']['has_curl_on_path'];
+	 			
+	 			if(!ini_get('safe_mode') && $has_curl_on_path):
+	 				
+	 				exec("curl " . $AuctionPopo->nurl);
+	 				
+	 			else: 
+	 				
+	 				\util\WorkflowHelper::get_ping_notice_url_curl_request($AuctionPopo->nurl);
+	 				
+	 			endif;
+	 			
+	 			
 		 	endif;
 
 	 		

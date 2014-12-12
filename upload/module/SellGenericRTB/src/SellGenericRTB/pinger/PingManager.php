@@ -34,13 +34,15 @@ class PingManager {
 	
 	private $WebDomain;
 	
+	private $ImpressionType;
+	
 	private $is_second_price_auction;
 	
 	private $publisher_markup_rate = 40;
 	
 	private $skipped_partner_list = array();
 	
-	public function __construct($config, $ping_request, $PublisherInfoID, $PublisherWebsiteID, $FloorPrice, $PublisherAdZoneID, $AdName, $WebDomain) {
+	public function __construct($config, $ping_request, $PublisherInfoID, $PublisherWebsiteID, $FloorPrice, $PublisherAdZoneID, $AdName, $WebDomain, $ImpressionType) {
 		
 		$this->config 					= $config;
 		$this->ping_request 			= json_decode($ping_request, true);
@@ -50,6 +52,7 @@ class PingManager {
 		$this->PublisherAdZoneID 		= $PublisherAdZoneID;
 		$this->AdName 					= $AdName;
 		$this->WebDomain 				= $WebDomain;
+		$this->ImpressionType			= $ImpressionType;
 		$this->is_second_price_auction	= $this->config['settings']['rtb']['second_price_auction'];
 		
 		// is this a 1rst price or 2nd price auction?
@@ -248,6 +251,7 @@ class PingManager {
 		$AuctionPopo->publisher_markup_rate 	= $this->publisher_markup_rate;
 		$AuctionPopo->FloorPrice 				= $this->FloorPrice;
 		$AuctionPopo->is_second_price_auction 	= $this->is_second_price_auction;
+		$AuctionPopo->ImpressionType 			= $this->ImpressionType;
 		
 		/*
 		 * Get the single impid. If and when we start sending multiple 
