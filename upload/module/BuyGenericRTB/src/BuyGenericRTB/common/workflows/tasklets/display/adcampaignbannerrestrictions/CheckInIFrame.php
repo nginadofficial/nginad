@@ -23,7 +23,7 @@ class CheckInIFrame {
 		/*
 		 * Check banner IFRAME disposition
 		*/
-		if ($AdCampaignBannerRestrictions->InIframe == 0 && $in_iframe == true):
+		if ($AdCampaignBannerRestrictions->InIframe != null && $AdCampaignBannerRestrictions->InIframe == 0 && $in_iframe == true):
 			if ($Logger->setting_log === true):
 				$Logger->log[] = "Failed: " . "Check banner in IFRAME :: EXPECTED: " 
 					. $AdCampaignBannerRestrictions->InIframe
@@ -35,7 +35,7 @@ class CheckInIFrame {
 		/*
 		 * Check banner multiple nested IFRAMEs disposition
 		*/
-		if ($AdCampaignBannerRestrictions->InMultipleNestedIframes == 0 && $in_iframe == true):
+		if ($AdCampaignBannerRestrictions->InMultipleNestedIframes != null && $AdCampaignBannerRestrictions->InMultipleNestedIframes == 0 && $in_iframe == true):
 			if ($Logger->setting_log === true):
 			$Logger->log[] = "Failed: " . "Check banner in multiple nested IFRAMEs :: EXPECTED: "
 					. $AdCampaignBannerRestrictions->InMultipleNestedIframes
