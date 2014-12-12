@@ -96,8 +96,9 @@ abstract class RtbBuyV22Bid extends RtbBuyBid {
 			 * and count the ad impression.
 			 */
 
-			$delivery_adtag = $this->config['delivery']['adtag'];
-
+			$delivery_adtag_js = $this->config['delivery']['adtag'];
+			$delivery_adtag = $this->config['delivery']['url'];
+			
 			$classname = $this->random_classname();
 
 			$winning_bid_auction_param = "";
@@ -108,7 +109,11 @@ abstract class RtbBuyV22Bid extends RtbBuyBid {
 				$winning_bid_auction_param = "&winbid={NGINWBIDPRC}";
 			endif;
 			
-			$effective_tag = "<script type='text/javascript' src='" . $delivery_adtag . "?zoneid=" . $AdCampaignBanner->AdCampaignBannerID . "&buyerid=" . $this->rtb_seat_id . "&height=" . $AdCampaignBanner->Height . "&width=" . $AdCampaignBanner->Width . "&tld=" . $tld . "&clktrc={NGINCLKTRK}" . $winning_bid_auction_param . "&ui=" . $this->user_ip_hash . "&cb=" . $cache_buster . "'></script>";
+			if ($AdCampaignBanner->ImpressionType == 'video'):
+				$effective_tag = $delivery_adtag . "?video=vast&zoneid=" . $AdCampaignBanner->AdCampaignBannerID . "&buyerid=" . $this->rtb_seat_id . "&tld=" . $tld . "&clktrc={NGINCLKTRK}" . $winning_bid_auction_param . "&ui=" . $this->user_ip_hash . "&cb=" . $cache_buster;
+			else:
+				$effective_tag = "<script type='text/javascript' src='" . $delivery_adtag_js . "?zoneid=" . $AdCampaignBanner->AdCampaignBannerID . "&buyerid=" . $this->rtb_seat_id . "&height=" . $AdCampaignBanner->Height . "&width=" . $AdCampaignBanner->Width . "&tld=" . $tld . "&clktrc={NGINCLKTRK}" . $winning_bid_auction_param . "&ui=" . $this->user_ip_hash . "&cb=" . $cache_buster . "'></script>";
+			endif;
 			
 			return $effective_tag;
 	}
@@ -182,7 +187,7 @@ abstract class RtbBuyV22Bid extends RtbBuyBid {
 		$RtbBidResponse->RtbBidResponseSeatBidList = array();
 		
 		$currency = null;
-		
+
 		foreach ($this->AdCampaignBanner_Match_List as $user_id => $AdCampaignBannerObjList):
 			
 			$RtbBidResponseSeatBid	= new \model\openrtb\RtbBidResponseSeatBid();

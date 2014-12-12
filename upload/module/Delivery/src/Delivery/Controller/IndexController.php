@@ -29,6 +29,7 @@ class IndexController extends AbstractActionController
     	$banner_request["demand_banner_id"] 	= $this->getRequest()->getQuery('zoneid');
     	$banner_request["publisher_banner_id"] 	= $this->getRequest()->getQuery('pzoneid');
 
+    	$banner_request["video"] 				= $this->getRequest()->getQuery('video');
     	$banner_request["adpos_x"] 				= $this->getRequest()->getQuery('adpos_x');
     	$banner_request["adpos_y"] 				= $this->getRequest()->getQuery('adpos_y');
     	$banner_request["atf"] 					= $this->getRequest()->getQuery('atf');
@@ -547,7 +548,10 @@ class IndexController extends AbstractActionController
 	    	if (file_exists($cache_file)):
 	    	
 	    		$cached_tag = file_get_contents($cache_file);
-	    		if (isset($banner_request["ImpressionType"]) && $banner_request["ImpressionType"] == 'video'):
+	    		if ((isset($banner_request["ImpressionType"]) && $banner_request["ImpressionType"] == 'video')
+	    			 || 	
+	    			 (isset($banner_request["video"]) && $banner_request["video"] == 'vast')
+	    			):
 	    			header("Content-type: text/xml");
 	    		elseif ($banner_request["dt"] == "in"):
 	    			header("Content-type: application/javascript");
@@ -558,7 +562,10 @@ class IndexController extends AbstractActionController
 	    		
 	    	endif;
     	
-	    	if (isset($banner_request["ImpressionType"]) && $banner_request["ImpressionType"] == 'video'):
+	    	if ((isset($banner_request["ImpressionType"]) && $banner_request["ImpressionType"] == 'video')
+	    			 || 	
+	    			 (isset($banner_request["video"]) && $banner_request["video"] == 'vast')
+	    		):
     		
 	    		header("Content-type: text/xml");
 	    		$output = $AdCampaignBanner->AdTag;
