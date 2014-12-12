@@ -130,17 +130,26 @@ class PickAWinner {
 					$OriginalRTBPingerList[$y]->won_bids 	= 0;
 				endif;
 			
-				for ($i = 0; $i < count($OriginalRTBPingerList[$y]->RtbBidResponse->RtbBidResponseSeatBidList); $i++):
-				
-					for ($j = 0; $j < count($OriginalRTBPingerList[$y]->RtbBidResponse->RtbBidResponseSeatBidList[$i]->RtbBidResponseBidList); $j++):
-	
-						if ($OriginalRTBPingerList[$y]->RtbBidResponse->RtbBidResponseSeatBidList[$i]->RtbBidResponseBidList[$j]->uid == $winning_bid_uid):
-							$OriginalRTBPingerList[$y]->RtbBidResponse->RtbBidResponseSeatBidList[$i]->RtbBidResponseBidList[$j]->won_auction = true;
-						endif;
-	
+				if (isset($OriginalRTBPingerList[$y]->RtbBidResponse)):
+					
+					/*
+					 * If the RTB Bid Response fails parsing the RtbBidResponse member 
+					 * of the pinger will be null and therefore should be skipped
+					 */
+
+					for ($i = 0; $i < count($OriginalRTBPingerList[$y]->RtbBidResponse->RtbBidResponseSeatBidList); $i++):
+					
+						for ($j = 0; $j < count($OriginalRTBPingerList[$y]->RtbBidResponse->RtbBidResponseSeatBidList[$i]->RtbBidResponseBidList); $j++):
+		
+							if ($OriginalRTBPingerList[$y]->RtbBidResponse->RtbBidResponseSeatBidList[$i]->RtbBidResponseBidList[$j]->uid == $winning_bid_uid):
+								$OriginalRTBPingerList[$y]->RtbBidResponse->RtbBidResponseSeatBidList[$i]->RtbBidResponseBidList[$j]->won_auction = true;
+							endif;
+		
+						endfor;
+					
 					endfor;
 				
-				endfor;
+				endif;
 					
 			endfor;
 			
