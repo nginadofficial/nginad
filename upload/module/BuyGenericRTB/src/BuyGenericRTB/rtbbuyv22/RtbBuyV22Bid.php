@@ -97,7 +97,6 @@ abstract class RtbBuyV22Bid extends RtbBuyBid {
 			 */
 
 			$delivery_adtag_js = $this->config['delivery']['adtag'];
-			$delivery_adtag = $this->config['delivery']['url'];
 			
 			$classname = $this->random_classname();
 
@@ -109,13 +108,28 @@ abstract class RtbBuyV22Bid extends RtbBuyBid {
 				$winning_bid_auction_param = "&winbid={NGINWBIDPRC}";
 			endif;
 			
-			if ($AdCampaignBanner->ImpressionType == 'video'):
-				$effective_tag = $delivery_adtag . "?video=vast&zoneid=" . $AdCampaignBanner->AdCampaignBannerID . "&buyerid=" . $this->rtb_seat_id . "&tld=" . $tld . "&clktrc={NGINCLKTRK}" . $winning_bid_auction_param . "&ui=" . $this->user_ip_hash . "&cb=" . $cache_buster;
-			else:
-				$effective_tag = "<script type='text/javascript' src='" . $delivery_adtag_js . "?zoneid=" . $AdCampaignBanner->AdCampaignBannerID . "&buyerid=" . $this->rtb_seat_id . "&height=" . $AdCampaignBanner->Height . "&width=" . $AdCampaignBanner->Width . "&tld=" . $tld . "&clktrc={NGINCLKTRK}" . $winning_bid_auction_param . "&ui=" . $this->user_ip_hash . "&cb=" . $cache_buster . "'></script>";
-			endif;
+			$effective_tag = "<script type='text/javascript' src='" . $delivery_adtag_js . "?zoneid=" . $AdCampaignBanner->AdCampaignBannerID . "&buyerid=" . $this->rtb_seat_id . "&height=" . $AdCampaignBanner->Height . "&width=" . $AdCampaignBanner->Width . "&tld=" . $tld . "&clktrc={NGINCLKTRK}" . $winning_bid_auction_param . "&ui=" . $this->user_ip_hash . "&cb=" . $cache_buster . "'></script>";
 			
-			return $effective_tag;
+			return rawurlencode($effective_tag);
+	}
+	
+	private function get_video_notice_url(&$AdCampaignBanner, $tld) {
+	
+		$delivery_adtag = $this->config['delivery']['url'];
+			
+		$classname = $this->random_classname();
+	
+		$winning_bid_auction_param = "";
+			
+		$cache_buster = time();
+	
+		if ($this->rtb_provider != "BuyLoopbackPartner"):
+			$winning_bid_auction_param = "&winbid={NGINWBIDPRC}";
+		endif;
+
+		$notice_tag = $delivery_adtag . "?video=vast&zoneid=" . $AdCampaignBanner->AdCampaignBannerID . "&buyerid=" . $this->rtb_seat_id . "&tld=" . $tld . "&clktrc={NGINCLKTRK}" . $winning_bid_auction_param . "&ui=" . $this->user_ip_hash . "&cb=" . $cache_buster;
+	
+		return $notice_tag;
 	}
 
 	private function random_classname()
@@ -207,7 +221,11 @@ abstract class RtbBuyV22Bid extends RtbBuyBid {
 				$RtbBidResponseBid->adid		= $RtbBidResponseBid->id;
 				$RtbBidResponseBid->impid		= $bid_imp_id;
 				$RtbBidResponseBid->price		= $AdCampaignBanner->BidAmount;
-				$RtbBidResponseBid->adm			= $this->get_effective_ad_tag($AdCampaignBanner, $tld);
+				if ($AdCampaignBanner->ImpressionType == 'video'):
+					$RtbBidResponseBid->nurl 	= $this->get_video_notice_url($AdCampaignBanner, $tld);
+				else:
+					$RtbBidResponseBid->adm		= $this->get_effective_ad_tag($AdCampaignBanner, $tld);
+				endif;
 				$RtbBidResponseBid->adomain[] 	= $AdCampaignBanner->LandingPageTLD;
 				$RtbBidResponseBid->cid	 		= "nginad_" . $AdCampaignBanner->AdCampaignID;
 				$RtbBidResponseBid->crid	 	= "nginad_" . $AdCampaignBanner->AdCampaignBannerID;
