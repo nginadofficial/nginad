@@ -130,7 +130,7 @@ class PickAWinner {
 					$OriginalRTBPingerList[$y]->won_bids 	= 0;
 				endif;
 			
-				if (isset($OriginalRTBPingerList[$y]->RtbBidResponse)):
+				if (isset($OriginalRTBPingerList[$y]->RtbBidResponse) && $OriginalRTBPingerList[$y]->RtbBidResponse !== null):
 					
 					/*
 					 * If the RTB Bid Response fails parsing the RtbBidResponse member 
