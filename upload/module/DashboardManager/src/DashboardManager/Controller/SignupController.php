@@ -53,14 +53,27 @@ class SignupController extends PublisherAbstractActionController {
 		$result1 = $DemandCustomerInfoFactory->get_row(array("Email" => $Email)) === null;
 		$result2 = $authUsersFactory->get_row(array("user_login" => $user_login)) === null;
 
-		if ($result1 && $result2):
+		$result = 'success';
+		$messages = array();
+		
+		if (!$result1):
+			$result = 'error';
+			$messages[] = 'That email address is already in use. Please select another';
+		endif;
+		
+		if (!$result2):
+			$result = 'error';
+			$messages[] = 'That username is already in use. Please select another';
+		endif;
+		
+		if ($result == 'success'):
 			$data = array(
 					'result' => 'success'
 			);
-			else:
+		else:
 			$data = array(
 					'result' => 'error',
-					'message' => 'That username is already in use. Please select another'
+					'message' => implode(', ', $messages)
 			);
 		endif;
 		
@@ -79,14 +92,27 @@ class SignupController extends PublisherAbstractActionController {
 		$result1 = $PublisherInfoFactory->get_row(array("Email" => $Email)) === null;
 		$result2 = $authUsersFactory->get_row(array("user_login" => $user_login)) === null;
 
-		if ($result1 && $result2):
+		$result = 'success';
+		$messages = array();
+		
+		if (!$result1):
+			$result = 'error';
+			$messages[] = 'That email address is already in use. Please select another';
+		endif;
+		
+		if (!$result2):
+			$result = 'error';
+			$messages[] = 'That username is already in use. Please select another';
+		endif;
+		
+		if ($result == 'success'):
 			$data = array(
 					'result' => 'success'
 			);
-			else:
+		else:
 			$data = array(
 					'result' => 'error',
-					'message' => 'That username is already in use. Please select another'
+					'message' => implode(', ', $messages)
 			);
 		endif;
 		
