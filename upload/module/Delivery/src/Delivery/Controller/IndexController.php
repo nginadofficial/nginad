@@ -589,7 +589,10 @@ class IndexController extends AbstractActionController
 	    			):
 	    			header("Content-type: text/xml");
 	    		elseif ($banner_request["dt"] == "in"):
+	    			$this->ad_macros_to_adtag($cached_tag, $banner_request);
 	    			header("Content-type: application/javascript");
+	    		else:
+	    			$this->ad_macros_to_adtag($cached_tag, $banner_request);
 	    		endif;
 	    	
 	    		echo $cached_tag;
@@ -597,13 +600,17 @@ class IndexController extends AbstractActionController
 	    		
 	    	endif;
     	
-	    	$tag_cachable = true;
+	    	$tag_cachable 				= true;
+	    	
+	    	$is_video_impression 		= false;
 	    	
 	    	if ((isset($banner_request["ImpressionType"]) && $banner_request["ImpressionType"] == 'video')
 	    			 || 	
 	    			 (isset($banner_request["video"]) && $banner_request["video"] == 'vast')
 	    		):
     		
+	    		$is_video_impression 	= true;
+	    		
 	    		$adtag = $AdCampaignBanner->AdTag;
 	    	
 	    		if(\util\ParseHelper::isVastURL($adtag) === true):
@@ -649,6 +656,10 @@ class IndexController extends AbstractActionController
 		    	
 	    	endif;
     	 
+	    	if ($is_video_impression === false):
+	    		$this->ad_macros_to_adtag($output, $banner_request);
+	    	endif;
+	    	
 	    	echo $output;
 	    	exit;
 	    	
@@ -656,6 +667,14 @@ class IndexController extends AbstractActionController
     	
     	echo "NGINAD";
     	exit;
+    }
+    
+    private function ad_macros_to_adtag(&$adtag, &$banner_request) {
+    	
+    	// AppNexus nefarious REFERER_URL macro
+    	if (!empty($banner_request["ref"])):
+    		$adtag = str_replace('${REFERER_URL}', rawurlencode($banner_request["ref"]), $adtag);
+    	endif;
     }
     
     private function decrypt_second_price($encrypted_price) {
