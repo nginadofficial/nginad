@@ -1,5 +1,7 @@
 var currentZones = {};
 var completeZoneList = {};
+var storedVastTagXML = "";
+var storedVastTagURL = "";
 
 var iabSizes = '<select id="iabsize" name="iabsize" onchange="formSelectSize(this);">'
     			+ '<option selected="selected" value="">[ SELECT A SIZE ]</option>'
@@ -209,27 +211,59 @@ function populateZonesSelect(complete_zone_list) {
 	$("#zone-picker").show();
 }
 
-function switchImpressionType() {
+function switchImpressionType(adtagtype) {
+	
+	if (!adtagtype) adtagtype = "xml";
 	
 	var impType = $("#ImpressionType").val();
 	
+	var defaultAdTagInput = '<textarea  class="banner-txtarea"  style="height: 200px; width: 500px;" id="adtag" name="adtag" rows="6"></textarea>';
+	var variantAdTagInput = '<input class="input-xxlarge" type="text" id="adtag" name="adtag" />';
+
+	var adtagval = $("#adtag").val();
+	
+	if (adtagval.indexOf("http") != 0) {
+		storedVastTagXML = adtagval;
+	} else {
+		storedVastTagURL = adtagval;
+	}
+	
 	if (impType == 'video') {
 		
-		var tag = 'Video VAST XML <br/> <span class="hlp">'
+		var tagTextXML = 'Video VAST XML <br/> <span class="hlp">'
 			+ '<small><i>If you have a VAST <a target="_blank" style="color: blue; text-decoration: underline;"  href="http://ad3.liverail.com/?LR_PUBLISHER_ID=1331&LR_CAMPAIGN_ID=229&LR_SCHEMA=vast2">tag URL</a> from LiveRail or another exchange (<a target="_blank" style="color: blue; text-decoration: underline;"  href="http://www.iab.net/iab_products_and_industry_services/508676/digitalvideo/vast/vast_xml_samples">IAB Examples</a>),<br />just copy/paste the XML into the text area below</small>'
 			+ '<br /><small><i>You can use a VPAID SWF if you have one in the VAST - <a style="color: blue; text-decoration: underline;" target="_blank" href="http://support.brightcove.com/en/video-cloud/docs/developing-vpaid-swfs#vast">FAQ on VPAID</a></i></small>'
 			+ '</span>';
 		
+		var tagTextURL = 'Video VAST URL <br/> <span class="hlp">'
+			+ '<small><i>If you have a VAST tag URL from LiveRail or another exchange (<a target="_blank" style="color: blue; text-decoration: underline;"  href="http://www.iab.net/iab_products_and_industry_services/508676/digitalvideo/vast/vast_xml_samples">IAB Examples</a>),<br />just copy/paste the URL into the text area below</small>'
+			+ '<br /><small style="cursor: text;"><i>eg. <span style="color: blue;">http://ad3.liverail.com/?LR_PUBLISHER_ID=1331&LR_CAMPAIGN_ID=229&LR_SCHEMA=vast2</span></i></small>'
+			+ '</span>';
+
+		if (adtagtype == "url") {
+			
+			$("label[for=adtag]").html(tagTextURL);
+			$("#adtagwrapper").html(variantAdTagInput);
+			$("#adtag").val(storedVastTagURL);
+		} else {
+
+			$("label[for=adtag]").html(tagTextXML);
+			$("#adtagwrapper").html(defaultAdTagInput);
+			$("#adtag").val(storedVastTagXML);
+			$("#adtag").css("height", "350px").css("width", "500px");
+		}
+
 		$(".novideo").hide();
 		$(".nobanner").show();
 		$("label[for=bannername]").html("Video Ad Name");
-		$("label[for=adtag]").html(tag);
-		
 		$(".btn-primary").val("Update Video");
 		
-		$("#adtag").css("height", "350px").css("width", "500px"); 
+		 
 		
 	} else {
+		
+		$("#adtagwrapper").html(defaultAdTagInput);
+		$("#adtag").val(storedVastTagXML);
 		
 		$(".novideo").show();
 		$(".nobanner").hide();

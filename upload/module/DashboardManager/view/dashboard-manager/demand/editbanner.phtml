@@ -55,7 +55,7 @@ $(function() {
           $('#enddate').datepicker('show');
     });
     
-    switchImpressionType();
+    switchImpressionType('<?php echo $vast_type;  ?>');
 });
 <?php $this->headScript()->captureEnd();  ?>
 
@@ -228,9 +228,22 @@ $(function() {
 		<input type="text" name="bidamount"  class="input-small" value="<?php echo $bidamount;?>">
 		</div>
 	</div>
+	 <div class="control-group nobanner" style="display: none">
+		<label for="adtagtype">VAST Tag Type</label>
+		<div class="btn-group" role="group" aria-label="...">
+		  <button type="button" onclick="switchImpressionType('xml');" class="btn btn-default">VAST XML</button>
+		  <button type="button" onclick="switchImpressionType('url');" class="btn btn-default">VAST URL</button>
+		</div>
+	</div>
 	 <div class="control-group">
 		<label for="adtag">Ad Tag</label>
-		<textarea  class="banner-txtarea"  style="height: 200px; width: 500px;" id="adtag" name="adtag" rows="6"><?php echo htmlentities($adtag);?></textarea>
+		<span id="adtagwrapper">
+			<?php if($vast_type == "url"): ?>
+				<input value="<?php echo $adtag;?>" class="input-xxlarge" type="text" id="adtag" name="adtag" />
+			<?php else: ?>
+				<textarea  class="banner-txtarea"  style="height: 200px; width: 500px;" id="adtag" name="adtag" rows="6"><?php echo htmlentities($adtag);?></textarea>
+			<?php endif; ?>
+		</span>
 	</div>
 	
 	 <div class="control-group nobanner" style="display: none">

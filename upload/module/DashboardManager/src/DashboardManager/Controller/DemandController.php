@@ -2303,7 +2303,7 @@ class DemandController extends DemandAbstractActionController {
 		$BannerPreview->Width                     = $width;
 		$BannerPreview->Weight          		  = $weight == null ? 5 : $weight;
 		$BannerPreview->BidAmount                 = $bidamount;
-		$BannerPreview->AdTag                     = $adtag;
+		$BannerPreview->AdTag                     = trim($adtag);
 		$BannerPreview->DeliveryType              = 'js';
 		$BannerPreview->LandingPageTLD            = $landingpagetld;
 		$BannerPreview->ImpressionsCounter        = 0;
@@ -2545,6 +2545,9 @@ class DemandController extends DemandAbstractActionController {
 			
 		endif;
 
+		$is_vast_url = \util\ParseHelper::isVastURL($adtag);
+		$vast_type = $is_vast_url == true ? "url" : "xml";
+		
 		return new ViewModel(array(
 				'campaignid'              => $campaignid,
 		        'bannerid'                => $bannerid,
@@ -2564,6 +2567,7 @@ class DemandController extends DemandAbstractActionController {
 				'weight'                  => $weight,
     		    'bidamount'               => $bidamount,
     		    'adtag'                   => $adtag,
+				'vast_type'			      => $vast_type,
 		        'landingpagetld'          => $landingpagetld,
     		    'current_iabsize'         => $current_iabsize,
 				'bread_crumb_info'		  => $this->getBreadCrumbInfoFromBanner($bannerid, $bannerpreviewid, $is_preview),

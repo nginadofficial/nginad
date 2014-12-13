@@ -83,4 +83,17 @@ class ParseHelper {
 				$arr[$name] = $obj->$name;
 		endif;
 	}
+	
+	// VAST tag methods
+	
+	public static function isVastURL($adtag) {
+		
+		if (strpos($adtag, "<VAST") !== false):
+			return false;
+		elseif (filter_var($adtag, FILTER_VALIDATE_URL)):
+			return true;
+		endif;
+		
+		return false;
+	}
 }

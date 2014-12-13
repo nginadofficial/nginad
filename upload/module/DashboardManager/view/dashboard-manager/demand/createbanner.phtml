@@ -201,9 +201,18 @@ $(function() {
 		<input type="text" name="bidamount"  class="input-small" value="0.25">
 		</div>
 	</div>
+	 <div class="control-group nobanner" style="display: none">
+		<label for="adtagtype">VAST Tag Type</label>
+		<div class="btn-group" role="group" aria-label="...">
+		  <button type="button" onclick="switchImpressionType('xml');" class="btn btn-default">VAST XML</button>
+		  <button type="button" onclick="switchImpressionType('url');" class="btn btn-default">VAST URL</button>
+		</div>
+	</div>
 	<div class="form-group">
 		<label for="adtag">Ad Tag</label>
-		<textarea class="txtbox-width" style="height: 200px; width: 500px;" id="adtag" name="adtag" rows="6"></textarea>
+		<span id="adtagwrapper">
+			<textarea class="txtbox-width" style="height: 200px; width: 500px;" id="adtag" name="adtag" rows="6"></textarea>
+		</span>
 	</div>
 	
 	 <div class="control-group nobanner" style="display: none">
