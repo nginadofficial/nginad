@@ -36,7 +36,7 @@ return array(
 						'second_price_auction' 	=> false
 				),
 				'shell' => array(
-						'has_curl_on_path'		=> true
+						'has_curl_on_path'		=> false
 				)
 		),
 		'maintenance' => array(
