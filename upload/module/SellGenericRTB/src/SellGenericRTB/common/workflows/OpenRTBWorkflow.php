@@ -95,9 +95,16 @@ class OpenRTBWorkflow {
 	    		 * Could be a LiveRail Tag or something.
 	    		 */
 	    		
-	    		$reverse_proxy_vast_xml 			= \util\WorkflowHelper::get_ping_notice_url_curl_request($WinningRtbResponseBid->nurl);
+	    		$WinningRtbResponseBid->adm 		= \util\WorkflowHelper::get_ping_notice_url_curl_request($WinningRtbResponseBid->nurl);
 
-	    		$AuctionPopo->winning_ad_tag		= $reverse_proxy_vast_xml;
+	    		$AuctionPopo->winning_ad_tag		= $WinningRtbResponseBid->adm;
+	    		
+	    		/*
+	    		 * now unset the nurl since we already fired off the impression
+	    		 * and we don't want to fire it off again later.
+	    		 */ 
+	    		unset($WinningRtbResponseBid->nurl);
+	    		
     		endif;
     	elseif (!empty($WinningRtbResponseBid->adm)):
     	
