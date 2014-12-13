@@ -33,7 +33,9 @@ return array(
 				'rtb' => array(
 						// default US dollars
 						'auction_currency' 		=> "USD",
-						'second_price_auction' 	=> false
+						'second_price_auction' 	=> false,
+						// integral traq score 500+
+						'third_party_traq'		=> false
 				),
 				'shell' => array(
 						'has_curl_on_path'		=> false
@@ -63,7 +65,7 @@ return array(
 				// default publisher 40% markup
 				'default_publisher_markup_rate' 		=> 0.40,
 				// our house user ids are exempt from being marked up
-				'markup_exempt_userid_list'				=> array(1, 3),
+				'markup_exempt_userid_list'				=> array(1),
 				// our house publisher ids are exempt from being marked up
 				'markup_exempt_publisher_info_id_list'	=> array(),
 				// version
