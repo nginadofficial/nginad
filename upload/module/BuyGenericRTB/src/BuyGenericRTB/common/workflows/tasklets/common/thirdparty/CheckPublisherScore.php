@@ -23,6 +23,15 @@ class CheckPublisherScore {
 		*/
 		$page_to_check 		= self::get_url_to_check($Logger, $Workflow, $RtbBidRequest);
 		
+		if ($page_to_check == null):
+			/*
+			 * No publisher url or ad source page to check.
+			 * This will never happen for a dashboard publisher
+			 * but could happen for a DSP impression
+			 */ 
+			return true;
+		endif;
+		
 		// global.php settings config
 		
 		if ($Workflow->config['settings']['rtb']['third_party_traq'] == true):
@@ -72,6 +81,8 @@ class CheckPublisherScore {
 	private static function get_url_to_check(&$Logger, &$Workflow, \model\openrtb\RtbBidRequest &$RtbBidRequest) {
 		
 		// try a few OpenRTB params to find one that's present
+		
+		$page_to_check = null;
 		
 		if (!empty($RtbBidRequest->RtbBidRequestSite->page)):
 			$page_to_check = $RtbBidRequest->RtbBidRequestSite->page;
