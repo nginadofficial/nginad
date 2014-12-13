@@ -454,7 +454,7 @@ adQueryString += "&sndprc=" + escape(sndprc);
 adQueryString += "&ui=" + ui;
 adQueryString += "&ct=" + escape(ct_url);
 adQueryString += "&org_tld=" + escape(org_tld);
-adQueryString += "ifr=" + ifr;
+adQueryString += "&ifr=" + ifr;
 adQueryString += "&cb=" + cb;
 
 var fpTag = '<scr'+'ipt type="text/javascript" src="http://' + domain + delivery_path
