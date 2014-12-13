@@ -58,7 +58,7 @@ class CheckPublisherScore {
 			return false;
 		endif;
 		
-		if (!empty($score_codes["bsc"]["adt"]) && intval($score_codes["bsc"]["adt"]) <= 600):
+		if (!empty($score_codes["bsc"]["adt"]) && intval($score_codes["bsc"]["adt"]) < 600):
 			// has too much adult content - b00bz
 			return false;
 		endif;
@@ -70,7 +70,7 @@ class CheckPublisherScore {
 		* In this setting if it's not set it's ignored allowing no-name
 		* un-indexed websites to sell inventory.
 		*/
-		if (!empty($score_codes["bsc"]["sam"]) && intval($score_codes["bsc"]["sam"]) <= 500):
+		if (!empty($score_codes["bsc"]["sam"]) && intval($score_codes["bsc"]["sam"]) < 500):
 			// not safe enough, ad safety score too low
 			return false;
 		endif;
