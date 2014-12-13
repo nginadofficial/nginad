@@ -1,6 +1,26 @@
 nginad
 =======
 
+December 12, 2014
+------------------
+NginAd OpenRTB Ad Server version 1.4 has now been released to the public. 
+
+NginAd 1.4 Features:
+ 
+ * VAST Video capabilities with LiveRail, ect... rev-share as well as raw VAST XML
+ * Full OpenRTB 2.2 Object Architecture parsers and hierarchy according to the IAB spec.
+ * Full Enterprise Java style Business Process Workflows and Activies called "tasklets"
+ * Third party verification activities
+ * Various parameters that were un-usable such as topframe, secure, and referrer were move to the new OpenRTB 2.2 objects
+ * Reverse proxy functionality for VAST URLs to keep impression counts on video ad servers consistent
+ * RTB Bid Notification (nurl) is now implemented with optional asychronous functionality
+ * Descriptive comments highlighting the new features
+ * Optional yearly Paid Support has now begun ( available at http://www.nginad.com/paidsupport/ )
+
+It was lightly tested with limited smoke and regression tests, and developer tested.
+If you find bugs please report them by going to www.nginad.com and filing a support ticket.
+A support team member will review it and file a JIRA if needed.
+
 December 6, 2014
 ------------------
 Sadly the NginAd 1.4 release with VAST is not yet complete. The video tables are there and the persistence to the DB is there but 
