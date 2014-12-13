@@ -81,27 +81,7 @@ class OpenRTBWorkflow {
     	if ($AuctionPopo->ImpressionType == 'video' && empty($WinningRtbResponseBid->adm)
     			&& !empty($WinningRtbResponseBid->nurl)):
     			
-    		if ($WinningRTBPinger->is_loopback_pinger):
-    			
-    			/*
-	    		 * This is a VAST video ad zone auction and it was won
-	    		 * by a local bidder and only has the nurl with no adm
-	    		 * Grab the VAST XML from the database or the cache
-    			 */
-	    		if (preg_match("/zoneid=(\\d+)/", $WinningRtbResponseBid->nurl, $matches) && isset($matches[1])):
-	    			
-	    			$ad_campaign_banner_id 			= $matches[1];
-	    		
-	    			$AdCampaignBannerFactory = \_factory\AdCampaignBanner::get_instance();
-	    			
-		    		$params = array();
-		    		$params["AdCampaignBannerID"] 	= $ad_campaign_banner_id;
-	    			$AdCampaignBanner = $AdCampaignBannerFactory->get_row_cached($params);
-	    			
-	    			$AuctionPopo->winning_ad_tag	= $AdCampaignBanner->AdTag;
-	    		endif;
-	    		
-    		else:
+    		if (!$WinningRTBPinger->is_loopback_pinger):
     		
 	    		/*
 	    		 * This is a VAST video ad zone auction and it was won
@@ -167,11 +147,18 @@ class OpenRTBWorkflow {
 		endif;
 
     	if ($WinningRTBPinger->is_loopback_pinger):
-	    	
-	    	if (preg_match("/zoneid=(\\d+)/", $AuctionPopo->winning_ad_tag, $matches) && isset($matches[1])):
-	    		$AuctionPopo->loopback_demand_partner_ad_campaign_banner_id 	= $matches[1];
-	    		$AuctionPopo->loopback_demand_partner_won 						= true;
-	    	endif;
+    	
+    		if ($AuctionPopo->ImpressionType == 'video' && empty($WinningRtbResponseBid->adm)
+    			&& !empty($WinningRtbResponseBid->nurl)):
+    			$ad_tag_to_compare = $WinningRtbResponseBid->nurl;
+    		else:
+    			$ad_tag_to_compare = $AuctionPopo->winning_ad_tag;
+    		endif;
+    		
+		    if (preg_match("/zoneid=(\\d+)/", $ad_tag_to_compare, $matches) && isset($matches[1])):
+		    	$AuctionPopo->loopback_demand_partner_ad_campaign_banner_id 	= $matches[1];
+		    	$AuctionPopo->loopback_demand_partner_won 						= true;
+		    endif;
     	endif;
     	
     	return $WinningRTBPinger;

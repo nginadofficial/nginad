@@ -597,13 +597,36 @@ class IndexController extends AbstractActionController
 	    		
 	    	endif;
     	
+	    	$tag_cachable = true;
+	    	
 	    	if ((isset($banner_request["ImpressionType"]) && $banner_request["ImpressionType"] == 'video')
 	    			 || 	
 	    			 (isset($banner_request["video"]) && $banner_request["video"] == 'vast')
 	    		):
     		
+	    		$adtag = $AdCampaignBanner->AdTag;
+	    	
+	    		if(\util\ParseHelper::isVastURL($adtag) === true):
+	    			
+		    		/*
+		    		 * This is a VAST video ad tag and the tag is a 
+		    		 * URL to another video ad server like LiveRail
+		    		 *
+		    		 * We must now reverse proxy the VAST XML back to the
+		    		 * publisher's Flash Video Player in the HTTP
+		    		 * Ad Tag response.
+		    		 */
+		    		 
+		    		$output = \util\WorkflowHelper::get_ping_notice_url_curl_request($adtag);
+
+	    			if ($config['delivery']['cache_proxied_vast_xml'] == false):
+	    				$tag_cachable = false;
+	    			endif;
+	    		else:
+	    			$output = $adtag;
+	    		endif;
+
 	    		header("Content-type: text/xml");
-	    		$output = $AdCampaignBanner->AdTag;
 	    	
 	    	elseif ($banner_request["dt"] == "in"):
 	    	
@@ -618,9 +641,13 @@ class IndexController extends AbstractActionController
 	    	endif;
 
 	    	
-	    	$fh = fopen($cache_file, "w");
-	    	fwrite($fh, $output);
-	    	fclose($fh);
+	    	if ($tag_cachable === true):
+	    		
+		    	$fh = fopen($cache_file, "w");
+		    	fwrite($fh, $output);
+		    	fclose($fh);
+		    	
+	    	endif;
     	 
 	    	echo $output;
 	    	exit;
