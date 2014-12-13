@@ -397,7 +397,7 @@ class CachedStatsWrites {
 			 * 60 second write timer, when the apc cache value is gone the
 			* contents are written the DB and the apc value is cleared
 			*/
-			\util\CacheSql::put_cached_read_result_apc($config, $params, $class_name . $timer_name, array("write_timer"=>true), 60);
+			\util\CacheSql::put_cached_read_result_apc($config, $params, $class_name . $timer_name, array($timer_name=>true), 60);
 		endif;
 	
 	}
@@ -454,7 +454,7 @@ class CachedStatsWrites {
 			 * 60 second write timer, when the apc cache value is gone the
 			* contents are written the DB and the apc value is cleared
 			*/
-			\util\CacheSql::put_cached_read_result_apc($config, $params, $class_name . $timer_name, array("write_timer"=>true), 60);
+			\util\CacheSql::put_cached_read_result_apc($config, $params, $class_name . $timer_name, array($timer_name=>true), 60);
 		endif;
 	
 	}
@@ -488,7 +488,7 @@ class CachedStatsWrites {
 			 * 60 second write timer, when the apc cache value is gone the
 			* contents are written the DB and the apc value is cleared
 			*/
-			\util\CacheSql::put_cached_read_result_apc($config, $params, $class_name . $timer_name, array("write_timer"=>true), 60);
+			\util\CacheSql::put_cached_read_result_apc($config, $params, $class_name . $timer_name, array($timer_name=>true), 60);
 		endif;
 	
 	}
@@ -512,7 +512,7 @@ class CachedStatsWrites {
 			 * 60 second write timer, when the apc cache value is gone the
 			* contents are written the DB and the apc value is cleared
 			*/
-			\util\CacheSql::put_cached_read_result_apc($config, $params, $class_name . $timer_name, array("write_timer"=>true), 60);
+			\util\CacheSql::put_cached_read_result_apc($config, $params, $class_name . $timer_name, array($timer_name=>true), 60);
 		endif;
 	
 	}
