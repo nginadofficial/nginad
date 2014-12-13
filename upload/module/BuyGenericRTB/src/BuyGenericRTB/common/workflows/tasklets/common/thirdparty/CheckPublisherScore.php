@@ -13,6 +13,8 @@ class CheckPublisherScore {
 	
 	private static $class_name = 'CheckPublisherScore';
 	
+	protected static $traq_url = "http://api.adsafeprotected.com/db/client/1/absit?adsafe_url=";
+	
 	public static function execute(&$Logger, &$Workflow, \model\openrtb\RtbBidRequest &$RtbBidRequest) {
 		/*
 		 * This is a placeholder for a partner Site Scoring Tasklet
@@ -87,7 +89,7 @@ class CheckPublisherScore {
 		$traq_json_response 		= self::checkScoreCached($config, $page_to_check);
 		
 		if ($traq_json_response == null):
-			$traq_url 				= "http://api.adsafeprotected.com/db/client/1/absit?adsafe_url=" . urlencode($page_to_check);
+			$traq_url 				= self::$traq_url . urlencode($page_to_check);
 			$raw_response 			= \util\WorkflowHelper::get_ping_notice_url_curl_request($traq_url);
 			$traq_json_response 	= json_decode($raw_response, true);
 			
