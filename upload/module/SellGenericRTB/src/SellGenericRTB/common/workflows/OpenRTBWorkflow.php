@@ -95,14 +95,14 @@ class OpenRTBWorkflow {
 	    		 * Could be a LiveRail Tag or something.
 	    		 */
 	    		
+	    		/*
+	    		 * We don't need to rawurlencode() the response here before
+	    		 * putting it in the adm field because it never gets used
+	    		 * again. We are putting it in the field for conceptual
+	    		 * parity reasons only.
+	    		 */
 	    		$WinningRtbResponseBid->adm 		= \util\WorkflowHelper::get_ping_notice_url_curl_request($WinningRtbResponseBid->nurl);
 
-    			/*
-    			 * We don't need to rawurlencode() the response here before
-    			 * putting it in the adm field because it never gets used
-    			 * again. We are putting it in the field for conceptual
-    			 * parity reasons only.
-    			 */
 	    		$AuctionPopo->winning_ad_tag		= $WinningRtbResponseBid->adm;
 	    		
 	    		/*
