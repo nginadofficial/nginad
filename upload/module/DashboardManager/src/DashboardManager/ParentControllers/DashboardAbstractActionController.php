@@ -187,6 +187,9 @@ abstract class DashboardAbstractActionController extends ZendAbstractActionContr
     		$this->dashboard_home = "demand";
     	endif;
     	
+    	natcasesort($this->user_id_list_publisher);
+    	natcasesort($this->user_id_list_demand_customer);
+    	
     	return true;
     	 
     }
