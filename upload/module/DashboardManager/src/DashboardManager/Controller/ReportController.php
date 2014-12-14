@@ -223,11 +223,14 @@ class ReportController extends PublisherAbstractActionController {
                 ->render($view);
 
         $incoming_bid = \_factory\BuySideHourlyBidsCounter::get_instance();
+        $extra_params = array();
+        $stats	= json_decode($this->getPerTime($incoming_bid, $extra_params), TRUE);
 
         $view = new ViewModel(array(
             'action' => 'incomingBids',
             'menu_tpl' => $menu_tpl,
-            'incoming_bids' => (array) json_decode($this->getIncomingBidsPerTimeAction()),
+            'incoming_bids' => $stats['data'],
+        	'totals' => $stats['totals'],
             'incoming_bids_header' => $incoming_bid->getPerTimeHeader($this->is_admin),
             'user_id_list' => $this->user_id_list,
             'user_identity' => $this->identity(),
@@ -272,12 +275,15 @@ class ReportController extends PublisherAbstractActionController {
                 ->render($view);
 
         $outgoing_bid = \_factory\SellSidePartnerHourlyBids::get_instance();
-
+        $extra_params = array();
+        $stats	= json_decode($this->getPerTime($outgoing_bid, $extra_params), TRUE);
+        
         $view = new ViewModel(array(
             'dashboard_view' => 'report',
             'action' => 'outgoingBids',
             'menu_tpl' => $menu_tpl,
-            'outgoing_bids' => (array) json_decode($this->getOutgoingBidsPerTimeAction()),
+            'outgoing_bids' => $stats['data'],
+        	'totals' => $stats['totals'],
             'outgoing_bids_header' => $outgoing_bid->getPerTimeHeader($this->is_admin),
             'user_id_list' => $this->user_id_list,
             'user_identity' => $this->identity(),
@@ -319,14 +325,14 @@ class ReportController extends PublisherAbstractActionController {
                 ->render($view);
 
         $impression = \_factory\ContractPublisherZoneHourlyImpressions::get_instance();
-//        die();
-
+        
         $stats	= json_decode($this->getPerTime($impression), TRUE);
         
         $view = new ViewModel(array(
             'dashboard_view' => 'report',
             'menu_tpl' => $menu_tpl,
             'action' => 'contractImpressions',
+        	'impressions_header' => $impression->getPerTimeHeader($this->is_admin),
             'impressions' => $stats['data'],
         	'totals' 	=> $stats['totals'],
             'user_id_list' => $this->user_id_list,
@@ -442,6 +448,8 @@ class ReportController extends PublisherAbstractActionController {
 
     public function mailerAction() {
 
+    	die("under construction");
+    	
 		$initialized = $this->initialize();
 		if ($initialized !== true) return $initialized;
 
@@ -655,10 +663,9 @@ class ReportController extends PublisherAbstractActionController {
     	foreach ($data as $data_obj):
 	    	foreach ($data_obj as $name => $value):
 	    		if (strpos($value, "%") !== false):
-	    			$counts_holder[$name]++;
+	    			$counts_holder[$name] = empty($counts_holder[$name]) ? 1 : $counts_holder[$name] + 1;
 	    			$is_percent = true;
 	    		else:
-	    			$counts_holder[$name] = 0;
 	    			$is_percent = false;
 	    		endif;
 	    		$value = str_replace(array("$", "%"), array("", ""), $value);
@@ -666,7 +673,7 @@ class ReportController extends PublisherAbstractActionController {
 		    		$totals[$name] = "Totals:";
 		    	elseif (is_numeric($value) && strpos($name, "ID") === false):
 		    		if ($is_percent === false):
-		    			$counts_holder[$name]++;
+		    			$counts_holder[$name] = empty($counts_holder[$name]) ? 1 : $counts_holder[$name] + 1;
 		    		endif;
 			    	if (isset($totals[$name])):
 			    		$totals[$name] += $value;

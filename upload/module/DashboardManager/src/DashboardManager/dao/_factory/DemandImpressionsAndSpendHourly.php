@@ -106,6 +106,7 @@ class DemandImpressionsAndSpendHourly extends \_factory\CachedTableRead {
     			'DemandCustomerName',
     			'DemandCustomerInfoID',
     			'BannerName',
+    			'PublisherTLD' => new \Zend\Db\Sql\Expression("CONCAT('N/','A')"),
     			'Impressions' => new \Zend\Db\Sql\Expression('SUM(Impressions)'),
     			'Cost' => new \Zend\Db\Sql\Expression('SUM(Cost)'),
     			'GrossCost' => new \Zend\Db\Sql\Expression('SUM(GrossCost)'),
@@ -141,18 +142,18 @@ class DemandImpressionsAndSpendHourly extends \_factory\CachedTableRead {
     	$results = $statement->execute();
     
     	foreach ($results as $obj):
-    	if (!$is_admin) {
-    		array_walk($obj, function($item, $key) use (&$obj) {
-    			if (array_search($key, $this->adminFields) !== FALSE) {
-    				$obj[$key] = FALSE;
-    			}
-    		});
-    		$obj = array_filter($obj, function($value) {
-    			return $value !== FALSE;
-    		});
-    	}
-    	$obj['MDYH'] = $this->re_normalize_time($obj['MDYH']);
-    	$obj_list[] = $obj;
+	    	if (!$is_admin):
+	    		array_walk($obj, function($item, $key) use (&$obj) {
+	    			if (array_search($key, $this->adminFields) !== FALSE):
+	    				$obj[$key] = FALSE;
+	    			endif;
+	    		});
+	    		$obj = array_filter($obj, function($value) {
+	    			return $value !== FALSE;
+	    		});
+	    	endif;
+	    	$obj['MDYH'] = 'DATE SPAN';
+	    	$obj_list[] = $obj;
     	endforeach;
     
     	return $obj_list;

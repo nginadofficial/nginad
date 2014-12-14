@@ -34,41 +34,19 @@
     <table>
         <thead>
             <tr>
-                <?php foreach ($outgoing_bids_header as $one): ?>
-                    <th><?php echo $one; ?></th>
+                <?php foreach ($outgoing_bids_header as $key=>$one): ?>
+                    <th><?php echo (!empty($one)) ? $one : $key; ?></th>
                 <?php endforeach; ?>
-<!--                <th>SellSidePartnerID</th>
-                <th>MDYH</th>
-                <th>BidsWonCounter</th>
-                <th>BidsLostCounter</th>
-                <th>BidsErrorCounter</th>
-                <th>SpendTotal</th>
-                <th>DateCreated</th>
-                <th>DateUpdated</th>
-                <th>PublisherAdZone</th>-->
             </tr>
         </thead>
         <tbody>
-<?php foreach ($outgoing_bids as $one): ?>
-                
-                    <?php 
-                    if (is_array($one)):
-                    foreach ($one as $two): ?>
-                    <tr>
-	                    <td><?php echo $two->SellSidePartnerID; ?></td>
-	                    <td><?php echo $two->MDYH; ?></td>
-	                    <td><?php echo $two->BidsWonCounter; ?></td>
-	                    <td><?php echo $two->BidsLostCounter; ?></td>
-	                    <td><?php echo $two->BidsErrorCounter; ?></td>
-	                    <td><?php echo $two->SpendTotalNet; ?></td>
-	                    <td><?php echo $two->DateCreated; ?></td>
-	                    <td><?php echo $two->DateUpdated; ?></td>
-	                    <td><?php echo $two->AdName; ?></td>
-                    </tr>
-                    <?php endforeach;
-                    endif; ?>
-                
-<?php endforeach; ?>
+            <?php foreach ($outgoing_bids as $one): ?>
+                <tr>
+                    <?php foreach ($one as $two): ?>
+                        <td><?php echo $two; ?></td>
+                    <?php endforeach; ?>
+                </tr>
+            <?php endforeach; ?>
         	<tr>
             <?php foreach ($totals as $name => $value): ?>
             	<td><?php echo $value; ?></td>

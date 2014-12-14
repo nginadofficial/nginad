@@ -86,6 +86,27 @@ class ContractPublisherZoneHourlyImpressions extends \_factory\CachedTableRead
             
         $obj_list = array();
 
+        $low_range = $high_range = time();
+        
+        if (!empty($where_params['DateCreatedGreater'])):
+        	$low_range = strtotime($where_params['DateCreatedGreater']);
+        endif;
+        
+        if (!empty($where_params['DateCreatedLower'])):
+        	$high_range = strtotime($where_params['DateCreatedLower']);
+        endif;
+        
+        $date_span = $high_range - $low_range;
+        
+        // if span is greater than 2 days switch to custom reporting format
+        $switch_to_custom_threshold = 2 * 86400;
+        
+        $list_date_span = false;
+        
+        if ($date_span > $switch_to_custom_threshold):
+        	$list_date_span = true;
+        endif;
+        
         $resultSet = $this->select(function (\Zend\Db\Sql\Select $select) use ($where_params) {
                 $select->columns(array('MDYH', 'Impressions', 'SpendTotalNet', 'DateCreated', 'DateUpdated'));
                 if(!empty($where_params['DateCreatedGreater'])):
@@ -113,7 +134,11 @@ class ContractPublisherZoneHourlyImpressions extends \_factory\CachedTableRead
 
             foreach ($resultSet as $obj):
                 $obj['MDYH'] = $this->re_normalize_time($obj['MDYH']);
-                $obj_list[] = $obj;
+	            if($list_date_span === true):
+	           		$obj['MDYH'] = 'DATE SPAN';
+	            else:
+	           		$obj['MDYH'] = $this->re_normalize_time($obj['MDYH']);
+	            endif;
             endforeach;
 
             return $obj_list;

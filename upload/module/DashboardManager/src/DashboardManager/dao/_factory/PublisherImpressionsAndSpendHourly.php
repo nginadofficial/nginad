@@ -102,15 +102,16 @@ class PublisherImpressionsAndSpendHourly extends \_factory\CachedTableRead {
     			'MDYH' => new \Zend\Db\Sql\Expression('MAX(MDYH)'),
     			'PublisherAdZoneID',
     			'PublisherName',
-    			'AdName',
-    			'Impressions' => new \Zend\Db\Sql\Expression('SUM(Impressions)'),
-    			'Revenue' => new \Zend\Db\Sql\Expression('SUM(Revenue)'),
-    			'eCPM' => new \Zend\Db\Sql\Expression('SUM(eCPM)'),
-    			'GrossRevenue' => new \Zend\Db\Sql\Expression('SUM(GrossRevenue)'),
-    			'GrossECPM' => new \Zend\Db\Sql\Expression('SUM(GrossECPM)'),
     			'PublisherInfoID',
+    			'AdName',
+    			'Requests' => new \Zend\Db\Sql\Expression('SUM(Requests)'),
+    			'Impressions' => new \Zend\Db\Sql\Expression('SUM(Impressions)'),
+    			'eCPM' => new \Zend\Db\Sql\Expression('SUM(eCPM)'),
+    			'GrossECPM' => new \Zend\Db\Sql\Expression('SUM(GrossECPM)'),
+    			'FillRate' => new \Zend\Db\Sql\Expression("CONCAT(ROUND(AVG(REPLACE(FillRate, '%', '')), 2), '%')"),
+    			'Revenue' => new \Zend\Db\Sql\Expression('SUM(Revenue)'),
+    			'GrossRevenue' => new \Zend\Db\Sql\Expression('SUM(GrossRevenue)'),
     			'DateCreated' => new \Zend\Db\Sql\Expression('MAX(DateCreated)')
-    			 
     	));
     	$select->from('PublisherImpressionsAndSpendHourly');
     	if (!empty($where_params['DateCreatedGreater'])):
@@ -139,20 +140,20 @@ class PublisherImpressionsAndSpendHourly extends \_factory\CachedTableRead {
     	$results = $statement->execute();
     
     	foreach ($results as $obj):
-    	if (!$is_admin) {
-    		array_walk($obj, function($item, $key) use (&$obj) {
-    			if (array_search($key, $this->adminFields) !== FALSE) {
-    				$obj[$key] = FALSE;
-    			}
-    		});
-    		$obj = array_filter($obj, function($value) {
-    			return $value !== FALSE;
-    		});
-    	}
-    	$obj['MDYH'] = $this->re_normalize_time($obj['MDYH']);
-    	$obj_list[] = $obj;
+	    	if (!$is_admin):
+	    		array_walk($obj, function($item, $key) use (&$obj) {
+	    			if (array_search($key, $this->adminFields) !== FALSE):
+	    				$obj[$key] = FALSE;
+	    			endif;
+	    		});
+	    		$obj = array_filter($obj, function($value) {
+	    			return $value !== FALSE;
+	    		});
+	    	endif;
+	    	$obj['MDYH'] = 'DATE SPAN';
+	    	$obj_list[] = $obj;
     	endforeach;
-    
+
     	return $obj_list;
     }
     

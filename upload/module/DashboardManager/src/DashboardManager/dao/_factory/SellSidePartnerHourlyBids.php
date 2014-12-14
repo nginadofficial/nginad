@@ -92,6 +92,27 @@ class SellSidePartnerHourlyBids extends \_factory\CachedTableRead {
 
         $obj_list = array();
 
+        $low_range = $high_range = time();
+        
+        if (!empty($where_params['DateCreatedGreater'])):
+        	$low_range = strtotime($where_params['DateCreatedGreater']);
+        endif;
+        
+        if (!empty($where_params['DateCreatedLower'])):
+        	$high_range = strtotime($where_params['DateCreatedLower']);
+        endif;
+        
+        $date_span = $high_range - $low_range;
+        
+        // if span is greater than 2 days switch to custom reporting format
+        $switch_to_custom_threshold = 2 * 86400;
+        
+        $list_date_span = false;
+        
+        if ($date_span > $switch_to_custom_threshold):
+        	$list_date_span = true;
+        endif;
+        
         $sql = new Sql($this->adapter);
         $select = $sql->select();
         $select->from('sellSidePartnerHourlyBidsPerTime');
@@ -121,7 +142,11 @@ class SellSidePartnerHourlyBids extends \_factory\CachedTableRead {
                     return $value !== FALSE;
                 });
             }
-            $obj['MDYH'] = $this->re_normalize_time($obj['MDYH']);
+            if($list_date_span === true):
+           		$obj['MDYH'] = 'DATE SPAN';
+            else:
+           		$obj['MDYH'] = $this->re_normalize_time($obj['MDYH']);
+            endif;
             $obj_list[] = $obj;
         endforeach;
 

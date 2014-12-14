@@ -34,35 +34,19 @@
     <table>
         <thead>
             <tr>
-                <?php foreach ($incoming_bids_header as $one): ?>
-                    <th><?php echo $one; ?></th>
+                <?php foreach ($incoming_bids_header as $key=>$one): ?>
+                    <th><?php echo (!empty($one)) ? $one : $key; ?></th>
                 <?php endforeach; ?>
-<!--                <th>Buy Side Partner </th>
-                <th>MDYH</th>
-                <th>BidsCounter</th>
-                <th>DateCreated</th>
-                <th>DateUpdated</th>
-                <th>AdCampaign</th>-->
             </tr>
         </thead>
         <tbody>
-<?php foreach ($incoming_bids as $one): ?>
-
-                    <?php
-					if (is_array($one)):                  
-                    foreach ($one as $two): ?>
-                        <tr>
-	                    <?php echo isset($two->BuySidePartnerID) ? '<td>' . $two->BuySidePartnerID . '</td>' : ""; ?>
-	                    <td><?php echo $two->MDYH; ?></td>
-	                    <td><?php echo $two->BidsCounter; ?></td>
-	                    <td><?php echo $two->DateCreated; ?></td>
-	                    <td><?php echo $two->DateUpdated; ?></td>
-	                    <td><?php echo $two->Name; ?></td>
-	                    </tr>
-                    <?php endforeach; 
-                    endif; ?>
-                
-<?php endforeach; ?>
+            <?php foreach ($incoming_bids as $one): ?>
+                <tr>
+                    <?php foreach ($one as $two): ?>
+                        <td><?php echo $two; ?></td>
+                    <?php endforeach; ?>
+                </tr>
+            <?php endforeach; ?>
         	<tr>
             <?php foreach ($totals as $name => $value): ?>
             	<td><?php echo $value; ?></td>

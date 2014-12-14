@@ -35,28 +35,19 @@
     <table>
         <thead>
             <tr>
-                <th>MDYH</th>
-                <th>Impressions</th>
-                <th>Spend</th>
-                <th>DateCreated</th>
-                <th>DateUpdated</th>
-                <th>PublisherAdZone</th>
+                <?php foreach ($impressions_header as $key=>$one): ?>
+                    <th><?php echo (!empty($one)) ? $one : $key; ?></th>
+                <?php endforeach; ?>
             </tr>
         </thead>
         <tbody>
-<?php foreach ($impressions as $one): 
-			if (is_object($one)):
-?>
+            <?php foreach ($impressions as $one): ?>
                 <tr>
-                    <td><?php echo $one->MDYH; ?></td>
-                    <td><?php echo $one->Impressions; ?></td>
-                    <td><?php echo $one->SpendTotalNet; ?></td>
-                    <td><?php echo $one->DateCreated; ?></td>
-                    <td><?php echo $one->DateUpdated; ?></td>
-                    <td><?php echo $one->AdName; ?></td>
+                    <?php foreach ($one as $two): ?>
+                        <td><?php echo $two; ?></td>
+                    <?php endforeach; ?>
                 </tr>
-<?php	endif;
-	 endforeach; ?>
+            <?php endforeach; ?>
         	<tr>
             <?php foreach ($totals as $name => $value): ?>
             	<td><?php echo $value; ?></td>
