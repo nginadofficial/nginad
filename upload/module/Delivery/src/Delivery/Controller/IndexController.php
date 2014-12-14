@@ -276,7 +276,7 @@ class IndexController extends AbstractActionController
 		 			
 		 			if(!ini_get('safe_mode') && $has_curl_on_path):
 		 				
-		 				exec("curl " . $AuctionPopo->nurl);
+		 				exec('bash -c "exec nohup setsid curl ' . $AuctionPopo->nurl . ' > /dev/null 2>&1 &"');
 		 				
 		 			else: 
 		 				
