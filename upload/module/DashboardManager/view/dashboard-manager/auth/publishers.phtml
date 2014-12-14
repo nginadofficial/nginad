@@ -33,7 +33,7 @@ $this->headScript()->prependFile($this->basePath() . '/js/script.js');
     	   foreach ($user_detail as $user_data) :  
     	   		$userData = $authUsersFactory->get_row(array("PublisherInfoID" => $user_data->PublisherInfoID));
     	   		$approval = false;
-    	   		// fixes bad auth_User data from previous signup bug which was fix in 1.4
+    	   		// fixes bad auth_User data from previous signup bug which was fixed in 1.4
     	   		if (!is_object($userData)):
     	   			continue;
     	   		endif;
