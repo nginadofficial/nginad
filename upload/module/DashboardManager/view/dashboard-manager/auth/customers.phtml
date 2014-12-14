@@ -14,6 +14,9 @@ $this->headScript()->prependFile($this->basePath() . '/js/script.js');
                 Customer Name
            </th>
            <th>
+                Customer Username
+           </th>
+           <th>
             	Email	
            </th>
            <th>
@@ -30,6 +33,10 @@ $this->headScript()->prependFile($this->basePath() . '/js/script.js');
     	   <?php foreach ($user_detail as $user_data) :  
     	   		$userData = $authUsersFactory->get_row(array("DemandCustomerInfoID" => $user_data->DemandCustomerInfoID));
     	   		$approval = false;
+    	   		// fixes bad auth_User data from previous signup bug which was fix in 1.4
+    	   		if (!is_object($userData)):
+    	   			continue;
+    	   		endif;
     	   		if(isset($userData) && $userData->user_enabled == 1 && $userData->user_verified == 1):
     	   			$approval = true;
     	   		endif;
@@ -42,6 +49,9 @@ $this->headScript()->prependFile($this->basePath() . '/js/script.js');
            <td>
             <?php echo $user_data->Name; ?>
             </td>
+           <td>
+            <?php echo $userData->user_login; ?>
+           </td>
            <td>
             <?php echo $user_data->Email; ?>
            </td>
