@@ -39,8 +39,8 @@ class CheckExclusiveInclusion {
 					if ($Logger->setting_log === true):
 						$Logger->log[] = "Failed: " . "Check banner page url, site exclusive inclusions do not match :: EXPECTED: " 
 								. $domain_to_match . " GOT: bid_request_site_page: " 
-								. $RtbBidRequest->RtbBidRequestSite->page . ", bid_request_site_domain: " 
-								. $RtbBidRequest->RtbBidRequestSite->domain;
+								. $page_url . ", bid_request_site_domain: " 
+								. $domain;
 					endif;
 					// goto next banner
 					return false;

@@ -118,7 +118,7 @@ class OpenRTBWorkflow
 		        	endif;
 	
 	            	// Check banner domain exclusions match
-		        	if (\buyrtb\workflows\tasklets\common\adcampaignbanner\CheckDomainExclusion::execute($logger, $this, $RtbBidRequest, $RtbBidRequestImp, $AdCampaignBanner, $AdCampaignBannerExclusiveInclusionFactory) === false):
+		        	if (\buyrtb\workflows\tasklets\common\adcampaignbanner\CheckDomainExclusion::execute($logger, $this, $RtbBidRequest, $RtbBidRequestImp, $AdCampaignBanner, $AdCampaignBannerDomainExclusionFactory) === false):
 		        		continue;
 		        	endif;
 		        	
