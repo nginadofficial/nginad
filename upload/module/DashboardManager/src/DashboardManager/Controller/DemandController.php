@@ -1999,7 +1999,7 @@ class DemandController extends DemandAbstractActionController {
 
 		$data = array(
 	        'success' => $success,
-			'location' => '/demand/editbanner/',
+			'location' => '/demand/viewbanner/',
 			'previewid' => $campaign_preview_id,
 	        'data' => array('error_msg' => $error_msg)
    		 );
