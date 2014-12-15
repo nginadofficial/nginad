@@ -359,9 +359,9 @@ class DemandController extends DemandAbstractActionController {
 
 		// ACL PERMISSIONS CHECK
 		//transformation\CheckPermissions::checkEditPermissionAdCampaignBanner($id, $auth, $config);
-		$ispreview 				= $this->getRequest()->getPost('ispreview');
+		$ispreview 				= $this->getRequest()->getQuery('ispreview');
 		
-		if ($ispreview != true):
+		if ($ispreview != "true"):
 			/*
 			 * THIS METHOD CHECKS IF THERE IS AN EXISTING PREVIEW MODE CAMPAIGN
 			* IF NOT, IT CHECKS THE ACL PERMISSIONS ON THE PRODUCTION BANNER/CAMPAIGN REFERENCED
