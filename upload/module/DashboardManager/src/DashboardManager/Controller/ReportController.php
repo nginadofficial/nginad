@@ -671,14 +671,12 @@ class ReportController extends PublisherAbstractActionController {
 	    		$value = str_replace(array("$", "%"), array("", ""), $value);
 		    	if ($name == "MDYH"):
 		    		$totals[$name] = "Totals:";
-		    	elseif (is_numeric($value) && strpos($name, "ID") === false):
+		    	elseif ((is_numeric($value) || $this->isCpmWord($name)) && strpos($name, "ID") === false):
 		    		if ($is_percent === false):
 		    			$counts_holder[$name] = empty($counts_holder[$name]) ? 1 : $counts_holder[$name] + 1;
 		    		endif;
-			    	if (isset($totals[$name])):
-			    		$totals[$name] += $value;
-			    	else:
-			    		$totals[$name] = $value;
+			    	if (!empty($value)):
+			    		$totals[$name]  = empty($totals[$name]) ? $value : $totals[$name] + $value;
 			    	endif;
 		    	else:
 		    		$totals[$name] = "";
@@ -695,7 +693,7 @@ class ReportController extends PublisherAbstractActionController {
 		    	elseif ($this->isPercentWord($name) && isset($counts_holder[$name])):
 		    		$totals[$name] =  sprintf("%1.2f", $totals[$name] / $counts_holder[$name]) . '%';
 		    	elseif ($this->isCpmWord($name) && isset($counts_holder[$name])):
-		    		$totals[$name] =  "$" . sprintf("%1.7f", $totals[$name] / $counts_holder[$name]);
+		    		$totals[$name] = sprintf("%1.7f", $totals[$name] / $counts_holder[$name]);
 		    	elseif ($this->isPercentWord($name)):
 		    		$totals[$name] = number_format(sprintf("%1.2f", $totals[$name]), 2) . "%";
 		    	else:

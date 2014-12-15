@@ -110,8 +110,8 @@ class DemandImpressionsAndSpendHourly extends \_factory\CachedTableRead {
     			'Impressions' => new \Zend\Db\Sql\Expression('SUM(Impressions)'),
     			'Cost' => new \Zend\Db\Sql\Expression('SUM(Cost)'),
     			'GrossCost' => new \Zend\Db\Sql\Expression('SUM(GrossCost)'),
-    			'CPM' => new \Zend\Db\Sql\Expression('SUM(CPM)'),
-    			'GrossCPM' => new \Zend\Db\Sql\Expression('SUM(GrossCPM)'),
+    			'CPM' => new \Zend\Db\Sql\Expression("IFNULL(AVG(CPM), '')"),
+    			'GrossCPM' => new \Zend\Db\Sql\Expression("IFNULL(AVG(GrossCPM), '')"),
     			'DateCreated' => new \Zend\Db\Sql\Expression('MAX(DateCreated)')
     			
     	));
