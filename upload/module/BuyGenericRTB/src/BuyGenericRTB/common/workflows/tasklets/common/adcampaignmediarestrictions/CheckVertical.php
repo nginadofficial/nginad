@@ -37,7 +37,7 @@ class CheckVertical {
 					if ($vertical_to_check == $vertical_id):
 					
 						$has_vertical = true;
-						break;
+						break 2;
 						
 					endif;
 
