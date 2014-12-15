@@ -16,7 +16,7 @@ class CheckVertical {
 		/*
 		 * Check banner for it being in the right vertical
 		 */
-		if ($AdCampaignMediaRestrictions->Vertical !== null && $RtbBidRequest->RtbBidRequestSite->RtbBidRequestPublisher->cat !== null):
+		if ($AdCampaignMediaRestrictions->Vertical !== null && !empty($RtbBidRequest->RtbBidRequestSite->RtbBidRequestPublisher->cat)):
 		
 			$has_vertical = false;
 			
