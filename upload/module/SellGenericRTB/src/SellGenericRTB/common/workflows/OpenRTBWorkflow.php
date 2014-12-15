@@ -72,7 +72,9 @@ class OpenRTBWorkflow {
     	$AuctionPopo->auction_was_won = true;
     	
     	$WinningRTBPinger 						= $AuctionPopo->SelectedPingerList[0];
-    	$WinningRtbResponseBid 					= $WinningRTBPinger->RtbBidResponse->RtbBidResponseSeatBidList[0]->RtbBidResponseBidList[0];
+    	$seat_bid_list_key 						= \util\WorkflowHelper::get_first_key($WinningRTBPinger->RtbBidResponse->RtbBidResponseSeatBidList);
+    	$bid_list_key							= \util\WorkflowHelper::get_first_key($WinningRTBPinger->RtbBidResponse->RtbBidResponseSeatBidList[$seat_bid_list_key]->RtbBidResponseBidList);
+    	$WinningRtbResponseBid 					= $WinningRTBPinger->RtbBidResponse->RtbBidResponseSeatBidList[$seat_bid_list_key]->RtbBidResponseBidList[$bid_list_key];
     	 
     	$bid_price 								= floatval($WinningRtbResponseBid->price);
     	
@@ -132,7 +134,8 @@ class OpenRTBWorkflow {
     	endif;
     	$AuctionPopo->winning_bid_price			= sprintf("%1.4f", $this->encrypt_bid($bid_price));
     	$AuctionPopo->winning_partner_id		= $WinningRTBPinger->partner_id;
-    	$AuctionPopo->winning_seat				= $WinningRTBPinger->RtbBidResponse->RtbBidResponseSeatBidList[0]->seat;
+    	$popo_seat_bid_key						= \util\WorkflowHelper::get_first_key($WinningRTBPinger->RtbBidResponse->RtbBidResponseSeatBidList);
+    	$AuctionPopo->winning_seat				= $WinningRTBPinger->RtbBidResponse->RtbBidResponseSeatBidList[$popo_seat_bid_key]->seat;
     	/*
     	 * Was this a second price auction?
     	 * If so record the winning bid

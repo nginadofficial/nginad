@@ -35,5 +35,15 @@ class WorkflowHelper {
 		return $content;
 	}
 	
+	public static function get_first_key($input) {
+		
+		foreach ($input as $key => $value):
+		
+			return $key;
+		
+		endforeach;		
+		
+		return null;
+	}
 	
 }

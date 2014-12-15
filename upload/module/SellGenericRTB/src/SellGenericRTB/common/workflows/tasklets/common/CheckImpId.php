@@ -21,38 +21,38 @@ class CheckImpId {
 		
 		$AuctionPopo->SelectedPingerList = array();
 		
-		for ($y = 0; $y < count($AuctionPopo->PingerList); $y++):
-		
-			for ($i = 0; $i < count($AuctionPopo->PingerList[$y]->RtbBidResponse->RtbBidResponseSeatBidList); $i++):
+		foreach ($AuctionPopo->PingerList as $method_outer_key => $RTBPinger):
+
+			foreach ($AuctionPopo->PingerList[$method_outer_key]->RtbBidResponse->RtbBidResponseSeatBidList as $outer_key => $RtbBidResponseSeatBid):
 			
-				for ($j = 0; $j < count($AuctionPopo->PingerList[$y]->RtbBidResponse->RtbBidResponseSeatBidList[$i]->RtbBidResponseBidList); $j++):
+				foreach ($AuctionPopo->PingerList[$method_outer_key]->RtbBidResponse->RtbBidResponseSeatBidList[$outer_key]->RtbBidResponseBidList as $key => $RtbBidResponseBid):
 			
-					$impid_match = self::isSameImpId($Logger, $AuctionPopo, $AuctionPopo->PingerList[$y]->RtbBidResponse->RtbBidResponseSeatBidList[$i]->RtbBidResponseBidList[$j]);
+					$impid_match = self::isSameImpId($Logger, $AuctionPopo, $AuctionPopo->PingerList[$method_outer_key]->RtbBidResponse->RtbBidResponseSeatBidList[$outer_key]->RtbBidResponseBidList[$key]);
 						
 					if ($impid_match == false):
 					
-						unset($AuctionPopo->PingerList[$y]->RtbBidResponse->RtbBidResponseSeatBidList[$i]->RtbBidResponseBidList[$j]);
+						unset($AuctionPopo->PingerList[$method_outer_key]->RtbBidResponse->RtbBidResponseSeatBidList[$outer_key]->RtbBidResponseBidList[$key]);
 						
 					endif;
 
-				endfor;
+				endforeach;
 		
-				if (count($AuctionPopo->PingerList[$y]->RtbBidResponse->RtbBidResponseSeatBidList) 
-					&& count($AuctionPopo->PingerList[$y]->RtbBidResponse->RtbBidResponseSeatBidList[0]->RtbBidResponseBidList)):
+				if (count($AuctionPopo->PingerList[$method_outer_key]->RtbBidResponse->RtbBidResponseSeatBidList) 
+					&& count($AuctionPopo->PingerList[$method_outer_key]->RtbBidResponse->RtbBidResponseSeatBidList[\util\WorkflowHelper::get_first_key($AuctionPopo->PingerList[$method_outer_key]->RtbBidResponse->RtbBidResponseSeatBidList)]->RtbBidResponseBidList)):
 				
 					/*
 					 * Those RTBPingers that still have at least 1 bid get added
 					* to the selected pingers list in the POPO
 					*/
-					$AuctionPopo->SelectedPingerList[] = $AuctionPopo->PingerList[$y];
+					$AuctionPopo->SelectedPingerList[] = $AuctionPopo->PingerList[$method_outer_key];
 						
 					$result = true;
 					
 				endif;
 				
-			endfor;
+			endforeach;
 
-		endfor;
+		endforeach;
 		
 		return $result;
 		

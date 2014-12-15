@@ -25,20 +25,20 @@ class LogBidPrices {
 		
 		$result = false;
 	
-		for ($y = 0; $y < count($RTBPingerList); $y++):
+		foreach ($RTBPingerList as $method_outer_key => $RTBPinger):
 	
-			for ($i = 0; $i < count($RTBPingerList[$y]->RtbBidResponse->RtbBidResponseSeatBidList); $i++):
+			foreach ($RTBPingerList[$method_outer_key]->RtbBidResponse->RtbBidResponseSeatBidList as $outer_key => $RtbBidResponseSeatBid):
 				
-				for ($j = 0; $j < count($RTBPingerList[$y]->RtbBidResponse->RtbBidResponseSeatBidList[$i]->RtbBidResponseBidList); $j++):
+				foreach ($RTBPingerList[$method_outer_key]->RtbBidResponse->RtbBidResponseSeatBidList[$outer_key]->RtbBidResponseBidList as $key => $RtbBidResponseBid):
 					
-					self::logBidPrice($Logger, $AuctionPopo, $RTBPingerList[$y]->RtbBidResponse->RtbBidResponseSeatBidList[$i]->RtbBidResponseBidList[$j]);
+					self::logBidPrice($Logger, $AuctionPopo, $RTBPingerList[$method_outer_key]->RtbBidResponse->RtbBidResponseSeatBidList[$outer_key]->RtbBidResponseBidList[$key]);
 					$result = true;
 						
-				endfor;
+				endforeach;
 			
-			endfor;
+			endforeach;
 		
-		endfor;
+		endforeach;
 	
 		// grab hashed keys of bid prices
 		$AuctionPopo->bid_price_list 			= array_keys($AuctionPopo->bid_price_list);

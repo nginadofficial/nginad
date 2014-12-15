@@ -15,20 +15,20 @@ class AdjustBidAmountWithMarkup {
 	
 		$result = false;
 		
-		for ($y = 0; $y < count($AuctionPopo->SelectedPingerList); $y++):
+		foreach ($AuctionPopo->SelectedPingerList as $method_outer_key => $RTBPinger):
 		
-			for ($i = 0; $i < count($AuctionPopo->SelectedPingerList[$y]->RtbBidResponse->RtbBidResponseSeatBidList); $i++):
+			foreach ($AuctionPopo->SelectedPingerList[$method_outer_key]->RtbBidResponse->RtbBidResponseSeatBidList as $outer_key => $RtbBidResponseSeatBid):
 			
-				for ($j = 0; $j < count($AuctionPopo->SelectedPingerList[$y]->RtbBidResponse->RtbBidResponseSeatBidList[$i]->RtbBidResponseBidList); $j++):
+				foreach ($AuctionPopo->SelectedPingerList[$method_outer_key]->RtbBidResponse->RtbBidResponseSeatBidList[$outer_key]->RtbBidResponseBidList as $key => $RtbBidResponseBid):
 			
-					self::setAdjustedMarkup($Logger, $AuctionPopo, $AuctionPopo->SelectedPingerList[$y]->RtbBidResponse->RtbBidResponseSeatBidList[$i]->RtbBidResponseBidList[$j]);
+					self::setAdjustedMarkup($Logger, $AuctionPopo, $AuctionPopo->SelectedPingerList[$method_outer_key]->RtbBidResponse->RtbBidResponseSeatBidList[$outer_key]->RtbBidResponseBidList[$key]);
 					$result = true;
 					
-				endfor;
+				endforeach;
 		
-			endfor;
+			endforeach;
 		
-		endfor;
+		endforeach;
 		
 		return $result;
 		

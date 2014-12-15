@@ -17,41 +17,43 @@ class CheckBidFloor {
 		
 		$RTBPingerList = $AuctionPopo->SelectedPingerList;
 		
+		
+		
 		$AuctionPopo->SelectedPingerList = array();
 		
-		for ($y = 0; $y < count($RTBPingerList); $y++):
+		foreach ($RTBPingerList as $method_outer_key => $RTBPinger):
 		
-			for ($i = 0; $i < count($RTBPingerList[$y]->RtbBidResponse->RtbBidResponseSeatBidList); $i++):
+			foreach ($RTBPingerList[$method_outer_key]->RtbBidResponse->RtbBidResponseSeatBidList as $outer_key => $RtbBidResponseSeatBid):
 			
-				for ($j = 0; $j < count($RTBPingerList[$y]->RtbBidResponse->RtbBidResponseSeatBidList[$i]->RtbBidResponseBidList); $j++):
+				foreach ($RTBPingerList[$method_outer_key]->RtbBidResponse->RtbBidResponseSeatBidList[$outer_key]->RtbBidResponseBidList as $key => $RtbBidResponseBid):
 			
-					$is_over_floor = self::isOverBidFloor($Logger, $AuctionPopo, $RTBPingerList[$y]->RtbBidResponse->RtbBidResponseSeatBidList[$i]->RtbBidResponseBidList[$j]);
+					$is_over_floor = self::isOverBidFloor($Logger, $AuctionPopo, $RTBPingerList[$method_outer_key]->RtbBidResponse->RtbBidResponseSeatBidList[$outer_key]->RtbBidResponseBidList[$key]);
 						
 					if ($is_over_floor == false):
+
+						unset($RTBPingerList[$method_outer_key]->RtbBidResponse->RtbBidResponseSeatBidList[$outer_key]->RtbBidResponseBidList[$key]);
 					
-						unset($RTBPingerList[$y]->RtbBidResponse->RtbBidResponseSeatBidList[$i]->RtbBidResponseBidList[$j]);
-						
 					endif;
 
-				endfor;
+				endforeach;
 		
-				if (count($RTBPingerList[$y]->RtbBidResponse->RtbBidResponseSeatBidList) 
-					&& count($RTBPingerList[$y]->RtbBidResponse->RtbBidResponseSeatBidList[0]->RtbBidResponseBidList)):
+				if (count($RTBPingerList[$method_outer_key]->RtbBidResponse->RtbBidResponseSeatBidList) 
+					&& count($RTBPingerList[$method_outer_key]->RtbBidResponse->RtbBidResponseSeatBidList[\util\WorkflowHelper::get_first_key($RTBPingerList[$method_outer_key]->RtbBidResponse->RtbBidResponseSeatBidList)]->RtbBidResponseBidList)):
 				
 					/*
 					 * Those RTBPingers that still have at least 1 bid get added
 					* to the selected pingers list in the POPO
 					*/
-					$AuctionPopo->SelectedPingerList[] = $RTBPingerList[$y];
+					$AuctionPopo->SelectedPingerList[] = $RTBPingerList[$method_outer_key];
 						
 					$result = true;
 					
 				endif;
 				
-			endfor;
+			endforeach;
 
-		endfor;
-		
+		endforeach;
+
 		return $result;
 		
 	}

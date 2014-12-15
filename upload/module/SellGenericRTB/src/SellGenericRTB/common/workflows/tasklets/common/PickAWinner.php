@@ -38,62 +38,58 @@ class PickAWinner {
 		
 		$total_bids = 0;
 		
-		for ($y = 0; $y < count($RTBPingerList); $y++):
+		foreach ($RTBPingerList as $method_outer_key => $RTBPinger):
 	
-			for ($i = 0; $i < count($RTBPingerList[$y]->RtbBidResponse->RtbBidResponseSeatBidList); $i++):
+			foreach ($RTBPingerList[$method_outer_key]->RtbBidResponse->RtbBidResponseSeatBidList as $outer_key => $RtbBidResponseSeatBid):
 		
-				for ($j = 0; $j < count($RTBPingerList[$y]->RtbBidResponse->RtbBidResponseSeatBidList[$i]->RtbBidResponseBidList); $j++):
+				$total_bids += count($RTBPingerList[$method_outer_key]->RtbBidResponse->RtbBidResponseSeatBidList[$outer_key]->RtbBidResponseBidList);
 			
-					$total_bids += count($RTBPingerList[$y]->RtbBidResponse->RtbBidResponseSeatBidList[$i]->RtbBidResponseBidList);
+			endforeach;
 			
-				endfor;
-		
-			endfor;
-			
-		endfor;
+		endforeach;
 	
 		$random_winner_idx = rand(0, $total_bids - 1);
 	
 		$bid_count = 0;
 		
-		for ($y = 0; $y < count($RTBPingerList); $y++):
+		foreach ($RTBPingerList as $method_outer_key => $RTBPinger):
 			
 			$winner = false;
 			
-			for ($i = 0; $i < count($RTBPingerList[$y]->RtbBidResponse->RtbBidResponseSeatBidList); $i++):
+			foreach ($RTBPingerList[$method_outer_key]->RtbBidResponse->RtbBidResponseSeatBidList as $outer_key => $RtbBidResponseSeatBid):
 					
-				$RTBPingerList[$y]->lost_bids = count($RTBPingerList[$y]->RtbBidResponse->RtbBidResponseSeatBidList[$i]->RtbBidResponseBidList);
+				$RTBPingerList[$method_outer_key]->lost_bids = count($RTBPingerList[$method_outer_key]->RtbBidResponse->RtbBidResponseSeatBidList[$outer_key]->RtbBidResponseBidList);
 			
-				for ($j = 0; $j < count($RTBPingerList[$y]->RtbBidResponse->RtbBidResponseSeatBidList[$i]->RtbBidResponseBidList); $j++):
+				foreach ($RTBPingerList[$method_outer_key]->RtbBidResponse->RtbBidResponseSeatBidList[$outer_key]->RtbBidResponseBidList as $key => $RtbBidResponseBid):
 			
 					if ($bid_count++ == $random_winner_idx):
 						
 						$winner = true;
-						$winning_bid_price 	= floatval($RTBPingerList[$y]->RtbBidResponse->RtbBidResponseSeatBidList[$i]->RtbBidResponseBidList[$j]->price);
-						$RTBPingerList[$y]->won_auction = true;
-						$RTBPingerList[$y]->RtbBidResponse->RtbBidResponseSeatBidList[$i]->RtbBidResponseBidList[$j]->won_auction = true;
-						$winning_pinger_uid = $RTBPingerList[$y]->uid;
-						$winning_bid_uid 	= $RTBPingerList[$y]->RtbBidResponse->RtbBidResponseSeatBidList[$i]->RtbBidResponseBidList[$j]->uid;
+						$winning_bid_price 	= floatval($RTBPingerList[$method_outer_key]->RtbBidResponse->RtbBidResponseSeatBidList[$outer_key]->RtbBidResponseBidList[$key]->price);
+						$RTBPingerList[$method_outer_key]->won_auction = true;
+						$RTBPingerList[$method_outer_key]->RtbBidResponse->RtbBidResponseSeatBidList[$outer_key]->RtbBidResponseBidList[$key]->won_auction = true;
+						$winning_pinger_uid = $RTBPingerList[$method_outer_key]->uid;
+						$winning_bid_uid 	= $RTBPingerList[$method_outer_key]->RtbBidResponse->RtbBidResponseSeatBidList[$outer_key]->RtbBidResponseBidList[$key]->uid;
 					
 					else:
 					
-						unset($RTBPingerList[$y]->RtbBidResponse->RtbBidResponseSeatBidList[$i]->RtbBidResponseBidList[$j]);
+						unset($RTBPingerList[$method_outer_key]->RtbBidResponse->RtbBidResponseSeatBidList[$outer_key]->RtbBidResponseBidList[$key]);
 					
 						continue;
 					
 					endif;
 					
-				endfor;
+				endforeach;
 				
 				// if the winning bid is not in this seatbid remove it
 				
 				if ($winner == false):
 					
-					unset($RTBPingerList[$y]->RtbBidResponse->RtbBidResponseSeatBidList[$i]);
+					unset($RTBPingerList[$method_outer_key]->RtbBidResponse->RtbBidResponseSeatBidList[$outer_key]);
 					
 				endif;
 				
-			endfor;
+			endforeach;
 			
 			if ($winner == true):
 					
@@ -102,7 +98,7 @@ class PickAWinner {
 				* and all other bids in that RTB response are
 				* now removed
 				*/
-				$AuctionPopo->SelectedPingerList[] = $RTBPingerList[$y];
+				$AuctionPopo->SelectedPingerList[] = $RTBPingerList[$method_outer_key];
 				
 				$result = true;
 				
@@ -110,7 +106,7 @@ class PickAWinner {
 					
 			endif;
 	
-		endfor;
+		endforeach;
 		
 		/*
 		 * Now flag the reference to the winning pinger and update totals
@@ -118,40 +114,40 @@ class PickAWinner {
 		
 		if ($result == true):
 		
-			for ($y = 0; $y < count($OriginalRTBPingerList); $y++):
+			foreach ($OriginalRTBPingerList as $method_outer_key => $RTBPinger):
 			
-				if ($OriginalRTBPingerList[$y]->uid == $winning_pinger_uid):
-					$OriginalRTBPingerList[$y]->won_auction = true;
-					$OriginalRTBPingerList[$y]->lost_bids 	= $OriginalRTBPingerList[$y]->total_bids - 1;
-					$OriginalRTBPingerList[$y]->won_bids 	= 1;
-					$OriginalRTBPingerList[$y]->winning_bid = floatval($winning_bid_price);
+				if ($OriginalRTBPingerList[$method_outer_key]->uid == $winning_pinger_uid):
+					$OriginalRTBPingerList[$method_outer_key]->won_auction = true;
+					$OriginalRTBPingerList[$method_outer_key]->lost_bids 	= $OriginalRTBPingerList[$method_outer_key]->total_bids - 1;
+					$OriginalRTBPingerList[$method_outer_key]->won_bids 	= 1;
+					$OriginalRTBPingerList[$method_outer_key]->winning_bid = floatval($winning_bid_price);
 				else:
-					$OriginalRTBPingerList[$y]->lost_bids 	= $OriginalRTBPingerList[$y]->total_bids;
-					$OriginalRTBPingerList[$y]->won_bids 	= 0;
+					$OriginalRTBPingerList[$method_outer_key]->lost_bids 	= $OriginalRTBPingerList[$method_outer_key]->total_bids;
+					$OriginalRTBPingerList[$method_outer_key]->won_bids 	= 0;
 				endif;
 			
-				if (isset($OriginalRTBPingerList[$y]->RtbBidResponse) && $OriginalRTBPingerList[$y]->RtbBidResponse !== null):
+				if (isset($OriginalRTBPingerList[$method_outer_key]->RtbBidResponse) && $OriginalRTBPingerList[$method_outer_key]->RtbBidResponse !== null):
 					
 					/*
 					 * If the RTB Bid Response fails parsing the RtbBidResponse member 
 					 * of the pinger will be null and therefore should be skipped
 					 */
 
-					for ($i = 0; $i < count($OriginalRTBPingerList[$y]->RtbBidResponse->RtbBidResponseSeatBidList); $i++):
+					foreach ($OriginalRTBPingerList[$method_outer_key]->RtbBidResponse->RtbBidResponseSeatBidList as $outer_key => $RtbBidResponseSeatBid):
 					
-						for ($j = 0; $j < count($OriginalRTBPingerList[$y]->RtbBidResponse->RtbBidResponseSeatBidList[$i]->RtbBidResponseBidList); $j++):
+						foreach ($OriginalRTBPingerList[$method_outer_key]->RtbBidResponse->RtbBidResponseSeatBidList[$outer_key]->RtbBidResponseBidList as $key => $RtbBidResponseBid):
 		
-							if ($OriginalRTBPingerList[$y]->RtbBidResponse->RtbBidResponseSeatBidList[$i]->RtbBidResponseBidList[$j]->uid == $winning_bid_uid):
-								$OriginalRTBPingerList[$y]->RtbBidResponse->RtbBidResponseSeatBidList[$i]->RtbBidResponseBidList[$j]->won_auction = true;
+							if ($OriginalRTBPingerList[$method_outer_key]->RtbBidResponse->RtbBidResponseSeatBidList[$outer_key]->RtbBidResponseBidList[$key]->uid == $winning_bid_uid):
+								$OriginalRTBPingerList[$method_outer_key]->RtbBidResponse->RtbBidResponseSeatBidList[$outer_key]->RtbBidResponseBidList[$key]->won_auction = true;
 							endif;
 		
-						endfor;
+						endforeach;
 					
-					endfor;
+					endforeach;
 				
 				endif;
 					
-			endfor;
+			endforeach;
 			
 		endif;
 		

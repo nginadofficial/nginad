@@ -20,32 +20,32 @@ class AddBids {
 		
 		$bid_uid = 0;
 		
-		for ($y = 0; $y < count($RTBPingerList); $y++):
+		foreach ($RTBPingerList as $method_outer_key => $RTBPinger):
 			
-			$RTBPingerList[$y]->uid = ++$uid;
+			$RTBPingerList[$method_outer_key]->uid = ++$uid;
 		
-			if ($RTBPingerList[$y]->ping_success == true):
+			if ($RTBPingerList[$method_outer_key]->ping_success == true):
 				
-				$json_response_data = $RTBPingerList[$y]->ping_response;
+				$json_response_data = $RTBPingerList[$method_outer_key]->ping_response;
 				
 				try {
 				
 					$OpenRTBParser = new \sellrtb\parsers\openrtb\OpenRTBParser();
-					$RTBPingerList[$y]->RtbBidResponse = $OpenRTBParser->parse_request($json_response_data);
+					$RTBPingerList[$method_outer_key]->RtbBidResponse = $OpenRTBParser->parse_request($json_response_data);
 
 					self::addBidUids($RTBPingerList, $bid_uid);
 										
-					$AuctionPopo->PingerList[] = $RTBPingerList[$y];
+					$AuctionPopo->PingerList[] = $RTBPingerList[$method_outer_key];
 					
 				} catch (Exception $e) {
 				
-					$RTBPingerList[$y]->total_bids				= 0;
-					$RTBPingerList[$y]->won_bids				= 0;
-					$RTBPingerList[$y]->lost_bids				= 0;
-					$RTBPingerList[$y]->ping_success 			= false;
-					$RTBPingerList[$y]->ping_error_message 		= "OpenRTB Ping Response Base Validation Error: " . $e->getMessage() 
-														. " Partner Name: " . $RTBPingerList[$y]->partner_name . " Partner ID: " 
-														. $RTBPingerList[$y]->partner_id;
+					$RTBPingerList[$method_outer_key]->total_bids				= 0;
+					$RTBPingerList[$method_outer_key]->won_bids					= 0;
+					$RTBPingerList[$method_outer_key]->lost_bids				= 0;
+					$RTBPingerList[$method_outer_key]->ping_success 			= false;
+					$RTBPingerList[$method_outer_key]->ping_error_message 		= "OpenRTB Ping Response Base Validation Error: " . $e->getMessage() 
+														. " Partner Name: " . $RTBPingerList[$method_outer_key]->partner_name . " Partner ID: " 
+														. $RTBPingerList[$method_outer_key]->partner_id;
 					
 					continue;
 						
@@ -54,11 +54,11 @@ class AddBids {
 				$result = true;
 			else:
 			
-				$Logger->log[] = $RTBPingerList[$y]->ping_error_message;
+				$Logger->log[] = $RTBPingerList[$method_outer_key]->ping_error_message;
 
 			endif;
 			
-		endfor;
+		endforeach;
 
 		return $result;
 	
@@ -66,31 +66,31 @@ class AddBids {
 	
 	private static function addBidUids(&$RTBPingerList, $uid) {
 		
-		for ($y = 0; $y < count($RTBPingerList); $y++):
+		foreach ($RTBPingerList as $method_outer_key => $RTBPinger):
 			
-			$RTBPingerList[$y]->total_bids = 0;
+			$RTBPingerList[$method_outer_key]->total_bids = 0;
 		
-			if (isset($RTBPingerList[$y]->RtbBidResponse->RtbBidResponseSeatBidList)):
+			if (isset($RTBPingerList[$method_outer_key]->RtbBidResponse->RtbBidResponseSeatBidList)):
 		
-				for ($i = 0; $i < count($RTBPingerList[$y]->RtbBidResponse->RtbBidResponseSeatBidList); $i++):
+				foreach ($RTBPingerList[$method_outer_key]->RtbBidResponse->RtbBidResponseSeatBidList as $outer_key => $RtbBidResponseSeatBid):
 				
-					$RTBPingerList[$y]->total_bids = count($RTBPingerList[$y]->RtbBidResponse->RtbBidResponseSeatBidList[$i]->RtbBidResponseBidList);
+					$RTBPingerList[$method_outer_key]->total_bids = count($RTBPingerList[$method_outer_key]->RtbBidResponse->RtbBidResponseSeatBidList[$outer_key]->RtbBidResponseBidList);
 						
-					if (isset($RTBPingerList[$y]->RtbBidResponse->RtbBidResponseSeatBidList[$i]->RtbBidResponseBidList)):
+					if (isset($RTBPingerList[$method_outer_key]->RtbBidResponse->RtbBidResponseSeatBidList[$outer_key]->RtbBidResponseBidList)):
 				
-						for ($j = 0; $j < count($RTBPingerList[$y]->RtbBidResponse->RtbBidResponseSeatBidList[$i]->RtbBidResponseBidList); $j++):
+						foreach ($RTBPingerList[$method_outer_key]->RtbBidResponse->RtbBidResponseSeatBidList[$outer_key]->RtbBidResponseBidList as $key => $RtbBidResponseBid):
 							
-							$RTBPingerList[$y]->RtbBidResponse->RtbBidResponseSeatBidList[$i]->RtbBidResponseBidList[$j]->uid = ++$uid;
+							$RTBPingerList[$method_outer_key]->RtbBidResponse->RtbBidResponseSeatBidList[$outer_key]->RtbBidResponseBidList[$key]->uid = ++$uid;
 							
-						endfor;
+						endforeach;
 					
 					endif;
 					
-				endfor;
+				endforeach;
 				
 			endif;
 		
-		endfor;
+		endforeach;
 	}
 	
 }

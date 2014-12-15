@@ -32,19 +32,19 @@ class CheckHighBid {
 		* Determine the high bid price
 		*/
 		
-		for ($y = 0; $y < count($RTBPingerList); $y++):
+		foreach ($RTBPingerList as $method_outer_key => $RTBPinger):
 	
-			for ($i = 0; $i < count($RTBPingerList[$y]->RtbBidResponse->RtbBidResponseSeatBidList); $i++):
+			foreach ($RTBPingerList[$method_outer_key]->RtbBidResponse->RtbBidResponseSeatBidList as $outer_key => $RtbBidResponseSeatBid):
 				
-				for ($j = 0; $j < count($RTBPingerList[$y]->RtbBidResponse->RtbBidResponseSeatBidList[$i]->RtbBidResponseBidList); $j++):
+				foreach ($RTBPingerList[$method_outer_key]->RtbBidResponse->RtbBidResponseSeatBidList[$outer_key]->RtbBidResponseBidList as $key => $RtbBidResponseBid):
 						
-					self::getHighBidPrice($Logger, $AuctionPopo, $RTBPingerList[$y]->RtbBidResponse->RtbBidResponseSeatBidList[$i]->RtbBidResponseBidList[$j]);
+					self::getHighBidPrice($Logger, $AuctionPopo, $RTBPingerList[$method_outer_key]->RtbBidResponse->RtbBidResponseSeatBidList[$outer_key]->RtbBidResponseBidList[$key]);
 				
-				endfor;
+				endforeach;
 		
-			endfor;
+			endforeach;
 			
-		endfor;
+		endforeach;
 	
 		if ($AuctionPopo->highest_bid_price === null):
 		
@@ -52,35 +52,35 @@ class CheckHighBid {
 		
 		endif;
 		
-		for ($y = 0; $y < count($RTBPingerList); $y++):
+		foreach ($RTBPingerList as $method_outer_key => $RTBPinger):
 			
 			$bids_remain = false;
 		
-			for ($i = 0; $i < count($RTBPingerList[$y]->RtbBidResponse->RtbBidResponseSeatBidList); $i++):
+			foreach ($RTBPingerList[$method_outer_key]->RtbBidResponse->RtbBidResponseSeatBidList as $outer_key => $RtbBidResponseSeatBid):
 			
-				for ($j = 0; $j < count($RTBPingerList[$y]->RtbBidResponse->RtbBidResponseSeatBidList[$i]->RtbBidResponseBidList); $j++):
-				
-					$is_auction_winner_candidate = self::isAuctionWinnerCandidate($Logger, $AuctionPopo, $RTBPingerList[$y]->RtbBidResponse->RtbBidResponseSeatBidList[$i]->RtbBidResponseBidList[$j]);
+				foreach ($RTBPingerList[$method_outer_key]->RtbBidResponse->RtbBidResponseSeatBidList[$outer_key]->RtbBidResponseBidList as $key => $RtbBidResponseBid):
+					
+					$is_auction_winner_candidate = self::isAuctionWinnerCandidate($Logger, $AuctionPopo, $RTBPingerList[$method_outer_key]->RtbBidResponse->RtbBidResponseSeatBidList[$outer_key]->RtbBidResponseBidList[$key]);
 					
 					if ($is_auction_winner_candidate == false):
 					
-						unset($RTBPingerList[$y]->RtbBidResponse->RtbBidResponseSeatBidList[$i]->RtbBidResponseBidList[$j]);
+						unset($RTBPingerList[$method_outer_key]->RtbBidResponse->RtbBidResponseSeatBidList[$outer_key]->RtbBidResponseBidList[$key]);
 						
 					endif;
 				
-				endfor;
+				endforeach;
 				
-				if (count($RTBPingerList[$y]->RtbBidResponse->RtbBidResponseSeatBidList[$i]->RtbBidResponseBidList)):
+				if (count($RTBPingerList[$method_outer_key]->RtbBidResponse->RtbBidResponseSeatBidList[$outer_key]->RtbBidResponseBidList)):
 				
 					$bids_remain = true;
 				
 				else: 
 				
-					unset($RTBPingerList[$y]->RtbBidResponse->RtbBidResponseSeatBidList[$i]);
+					unset($RTBPingerList[$method_outer_key]->RtbBidResponse->RtbBidResponseSeatBidList[$outer_key]);
 				
 				endif;
 			
-			endfor;
+			endforeach;
 			
 			if ($bids_remain == true):
 			
@@ -88,13 +88,13 @@ class CheckHighBid {
 				 * Those RTBPingers that still have at least 1 bid get added
 				* to the selected pingers list in the POPO
 				*/
-				$AuctionPopo->SelectedPingerList[] = $RTBPingerList[$y];
+				$AuctionPopo->SelectedPingerList[] = $RTBPingerList[$method_outer_key];
 					
 				$result = true;
 					
 			endif;
 				
-		endfor;
+		endforeach;
 		
 		return $result;
 	
