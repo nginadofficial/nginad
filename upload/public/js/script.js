@@ -191,8 +191,7 @@ function deleteCampaignConfirm() {
 			return false;
 		}
 		if(data.success == true) {
-			//alert(data.success+" "+data.data.error_msg);	
-			window.location.reload();
+			reloadDemandWindow();
 		}
 	},'json');
 }
@@ -228,8 +227,7 @@ function deleteBannerConfirm() {
 			return false;
 		}
 		if(data.success == true) {
-			//alert(data.success+" "+data.data.error_msg);	
-			window.location.reload();
+			reloadDemandWindow(data);
 		}
 	},'json');
 }
@@ -264,8 +262,7 @@ function deleteExclusiveInclusionConfirm() {
 			return false;
 		}
 		if(data.success == true) {
-			//alert(data.success+" "+data.data.error_msg);	
-			window.location.reload();
+			reloadDemandWindow(data);
 		}
 	},'json');
 }
@@ -301,8 +298,7 @@ function deleteDomainExclusionConfirm() {
 			return false;
 		}
 		if(data.success == true) {
-			//alert(data.success+" "+data.data.error_msg);	
-			window.location.reload();
+			reloadDemandWindow(data);
 		}
 	},'json');
 }
@@ -339,10 +335,25 @@ function deleteDeliveryFilterConfirm() {
 			return false;
 		}
 		if(data.success == true) {
-			//alert(data.success+" "+data.data.error_msg);	
-			window.location.reload();
+			reloadDemandWindow(data);
 		}
 	},'json');
+}
+
+function reloadDemandWindow(data) {
+	
+	var loc = document.location.href;
+	if (loc.indexOf("ispreview") == -1) {
+		// is currently not in preview mode, however the user made preview changes
+		if (data && data.location && data.previewid) {
+			window.location = data.location + data.previewid + '?ispreview=true'
+		} else {
+			window.location = '/demand/'
+		}
+	} else {
+		window.location.reload();
+	}
+	
 }
 
 //Get template sizes on change

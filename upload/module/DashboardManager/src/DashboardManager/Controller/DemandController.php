@@ -359,6 +359,30 @@ class DemandController extends DemandAbstractActionController {
 
 		// ACL PERMISSIONS CHECK
 		//transformation\CheckPermissions::checkEditPermissionAdCampaignBanner($id, $auth, $config);
+		$ispreview 				= $this->getRequest()->getPost('ispreview');
+		
+		if ($ispreview != true):
+			/*
+			 * THIS METHOD CHECKS IF THERE IS AN EXISTING PREVIEW MODE CAMPAIGN
+			* IF NOT, IT CHECKS THE ACL PERMISSIONS ON THE PRODUCTION BANNER/CAMPAIGN REFERENCED
+			* THEN IT CREATES A PREVIEW VERSION OF THE AD CAMPAIGN
+			*/
+			$update_data = array('type'=>'AdCampaignBannerID', 'id'=>$id);
+			$return_val = \transformation\TransformPreview::previewCheckBannerID($id, $this->auth, $update_data);
+			
+			if ($return_val !== null):
+				$id = $return_val["AdCampaignBannerPreviewID"];
+			else:
+				$success = false;
+				$data = array(
+						'success' => $success,
+						'data' => array('error_msg' => 'id not found')
+				);
+				
+				return $this->getResponse()->setContent(json_encode($data));
+			endif;
+		
+		endif;
 		
 		$response = transformation\CheckPermissions::checkEditPermissionAdCampaignBannerPreview($id, $this->auth, $this->config_handle);
 		
@@ -372,15 +396,22 @@ class DemandController extends DemandAbstractActionController {
 	   	   return $this->getResponse()->setContent(json_encode($data));
 		endif;
 		
+		$AdCampaignBannerPreviewFactory = \_factory\AdCampaignBannerPreview::get_instance();
 		$AdCampaignVideoRestrictionsPreviewFactory = \_factory\AdCampaignVideoRestrictionsPreview::get_instance();
 		$AdCampaignBannerRestrictionsPreviewFactory = \_factory\AdCampaignBannerRestrictionsPreview::get_instance();
 		
 		$AdCampaignBannerRestrictionsPreviewFactory->deleteAdCampaignBannerRestrictionsPreview($id);
 		$AdCampaignVideoRestrictionsPreviewFactory->deleteAdCampaignVideoRestrictionsPreview($id);
 		
+		$params = array();
+		$params["AdCampaignBannerPreviewID"] = $id;
+		$AdCampaignBannerPreview = $AdCampaignBannerPreviewFactory->get_row($params);
+		
 		$success = true;
 		$data = array(
 		     'success' => $success,
+			 'location' => '/demand/viewbanner/',
+			 'previewid' => $AdCampaignBannerPreview->AdCampaignPreviewID,
 		     'data' => array('error_msg' => $error_msg)
 	   	);
    		 
@@ -1374,6 +1405,8 @@ class DemandController extends DemandAbstractActionController {
 
 		  $data = array(
 		     'success' => $success,
+		  	 'location' => '/demand/viewexclusiveinclusion/',
+		  	 'previewid' => $banner_preview_id,
 		     'data' => array('error_msg' => $error_msg)
 	   	  );
    		 
@@ -1735,6 +1768,8 @@ class DemandController extends DemandAbstractActionController {
 
 		$data = array(
 		         'success' => $success,
+				 'location' => '/demand/viewdomainexclusion/',
+				 'previewid' => $banner_preview_id,
 		         'data' => array('error_msg' => $error_msg)
 	   		   );
 	   		 
@@ -1964,6 +1999,8 @@ class DemandController extends DemandAbstractActionController {
 
 		$data = array(
 	        'success' => $success,
+			'location' => '/demand/editbanner/',
+			'previewid' => $campaign_preview_id,
 	        'data' => array('error_msg' => $error_msg)
    		 );
    		 
