@@ -303,6 +303,7 @@ class PingManager {
 				if ($RTBPinger->won_auction === true):
 				
 					$bids_won									+= $RTBPinger->won_bids;
+					$bids_lost									+= $RTBPinger->lost_bids;
 					$SellSidePartnerHourlyBids->BidsWonCounter 	= $RTBPinger->won_bids;
 					
 					if ($AuctionPopo->is_second_price_auction === true):
