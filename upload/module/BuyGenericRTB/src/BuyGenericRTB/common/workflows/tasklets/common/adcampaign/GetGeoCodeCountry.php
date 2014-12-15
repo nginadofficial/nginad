@@ -20,7 +20,10 @@ class GetGeoCodeCountry {
 		
 		$RtbBidRequestGeo = new \model\openrtb\RtbBidRequestGeo();
 		$RtbBidRequest->RtbBidRequestDevice->RtbBidRequestGeo = $RtbBidRequestGeo;
-		if ($RtbBidRequest->RtbBidRequestDevice->ip !== null && $RtbBidRequest->RtbBidRequestDevice->RtbBidRequestGeo === null):
+
+		// Trust country from partner Geo object?
+		//if (!empty($RtbBidRequest->RtbBidRequestDevice->ip) && filter_var($RtbBidRequest->RtbBidRequestDevice->ip, FILTER_VALIDATE_IP) && empty($RtbBidRequest->RtbBidRequestDevice->RtbBidRequestGeo->country)):
+		if (!empty($RtbBidRequest->RtbBidRequestDevice->ip) && filter_var($RtbBidRequest->RtbBidRequestDevice->ip, FILTER_VALIDATE_IP)):
 			$Workflow->maxmind = new \geoip\maxmind();
 			$RtbBidRequest->RtbBidRequestDevice->RtbBidRequestGeo->country = $Workflow->maxmind->get_geo_code_country($RtbBidRequest->RtbBidRequestDevice->ip);
 		endif;

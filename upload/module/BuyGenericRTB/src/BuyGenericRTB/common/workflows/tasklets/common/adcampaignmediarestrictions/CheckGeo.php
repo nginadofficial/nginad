@@ -23,13 +23,13 @@ class CheckGeo {
 		endif;
 			
 		// no geo info to base rejection on	
-		if ($AdCampaignMediaRestrictions->GeoCountry === null || !isset($RtbBidRequest->RtbBidRequestDevice->RtbBidRequestGeo->bid_request_geo_country)):
+		if ($AdCampaignMediaRestrictions->GeoCountry === null || empty($RtbBidRequest->RtbBidRequestDevice->RtbBidRequestGeo->country)):
 			return true;
 		endif;
-			
+		
 		$has_country = false;
 			
-		$country = strtolower($RtbBidRequest->RtbBidRequestDevice->RtbBidRequestGeo->bid_request_geo_country);
+		$country = strtolower($RtbBidRequest->RtbBidRequestDevice->RtbBidRequestGeo->country);
 		$geo_country_list = explode(",", $AdCampaignMediaRestrictions->GeoCountry);
 			
 		foreach ($geo_country_list as $geo_country):
@@ -53,7 +53,7 @@ class CheckGeo {
 			/*
 			 * STATE CHECK
 			*/
-				
+		
 			if ($Workflow->geo_info === null && $AdCampaignMediaRestrictions->GeoState !== null && !isset($RtbBidRequest->RtbBidRequestDevice->RtbBidRequestGeo->region)):
 				
 				if ($Workflow->maxmind === null):
@@ -103,8 +103,8 @@ class CheckGeo {
 					 * CITY CHECK
 					*/
 						
-					if($Workflow->geo_info === null && $AdCampaignMediaRestrictions->GeoCity !== null && !isset($RtbBidRequest->RtbBidRequestDevice->RtbBidRequestGeo->city)):
-						
+					if($Workflow->geo_info === null && $AdCampaignMediaRestrictions->GeoCity !== null && empty($RtbBidRequest->RtbBidRequestDevice->RtbBidRequestGeo->city)):
+					
 						if ($Workflow->maxmind === null):
 							$Workflow->maxmind = new \geoip\maxmind();
 						endif;
@@ -115,7 +115,7 @@ class CheckGeo {
 							
 					endif;
 						
-					if ($AdCampaignMediaRestrictions->GeoCity !== null && isset($RtbBidRequest->RtbBidRequestDevice->RtbBidRequestGeo->city)):
+					if ($AdCampaignMediaRestrictions->GeoCity !== null && !empty($RtbBidRequest->RtbBidRequestDevice->RtbBidRequestGeo->city)):
 						
 						$has_city = false;
 							
