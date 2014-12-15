@@ -248,15 +248,9 @@ class RtbBidRequestJsonEncoder {
 		
 		\util\ParseHelper::setArrayParam($RtbBidRequestSite, $site, 'cat');
 		
-		self::convertToIabCategory($site, 'cat');
-		
 		\util\ParseHelper::setArrayParam($RtbBidRequestSite, $site, 'sectioncat');
 		
-		self::convertToIabCategory($site, 'sectioncat');
-		
 		\util\ParseHelper::setArrayParam($RtbBidRequestSite, $site, 'pagecat');
-		
-		self::convertToIabCategory($site, 'pagecat');
 		
 		\util\ParseHelper::setArrayParam($RtbBidRequestSite, $site, 'page');
 		
@@ -449,9 +443,7 @@ class RtbBidRequestJsonEncoder {
 		\util\ParseHelper::setArrayParam($RtbBidRequestProducer, $producer, 'name');
 		
 		\util\ParseHelper::setArrayParam($RtbBidRequestProducer, $producer, 'cat');
-		
-		self::convertToIabCategory($producer, 'cat');
-		
+
 		\util\ParseHelper::setArrayParam($RtbBidRequestProducer, $producer, 'domain');
 		
 		return (object)$producer;
@@ -475,8 +467,6 @@ class RtbBidRequestJsonEncoder {
 		\util\ParseHelper::setArrayParam($RtbBidRequestContent, $content, 'url');
 		
 		\util\ParseHelper::setArrayParam($RtbBidRequestContent, $content, 'cat');
-		
-		self::convertToIabCategory($content, 'cat');
 		
 		\util\ParseHelper::setArrayParam($RtbBidRequestContent, $content, 'videoquality');
 	
@@ -519,8 +509,6 @@ class RtbBidRequestJsonEncoder {
 		\util\ParseHelper::setArrayParam($RtbBidRequestPublisher, $publisher, 'name');
 		
 		\util\ParseHelper::setArrayParam($RtbBidRequestPublisher, $publisher, 'cat');
-		
-		self::convertToIabCategory($publisher, 'cat');
 		
 		\util\ParseHelper::setArrayParam($RtbBidRequestPublisher, $publisher, 'domain');
 	

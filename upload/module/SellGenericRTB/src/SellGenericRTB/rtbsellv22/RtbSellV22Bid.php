@@ -189,16 +189,15 @@ use rtbsell\RtbSellBid;
 		
 		$this->setObjParam($RtbBidRequestPublisher, $banner_request, "publisher_id", "id");
 		$this->setObjParam($RtbBidRequestPublisher, $banner_request, "publisher_name", "name");
-		// $this->setObjParam($RtbBidRequestPublisher, $banner_request, "publisher_iab_category", "cat");
+		$this->setObjParam($RtbBidRequestPublisher, $banner_request, "publisher_iab_category", "cat");
 		$this->setObjParam($RtbBidRequestPublisher, $banner_request, "publisher_info_website", "domain");
-		$this->setObjParam($RtbBidRequestPublisher, $banner_request, "iab_category", "cat");
-		
+
 		$this->setObjParam($RtbBidRequestSite, $banner_request, "website_id", "id");
 		$this->setObjParam($RtbBidRequestSite, $banner_request, "org_tld", "domain");
-		$this->setObjParam($RtbBidRequestSite, $banner_request, "iab_category", "category");
+		$this->setObjParam($RtbBidRequestSite, $banner_request, "iab_category", "cat");
 		$this->setObjParam($RtbBidRequestSite, $banner_request, "loc", "page");
 		$this->setObjParam($RtbBidRequestSite, $banner_request, "ref");
-		
+
 		$RtbBidRequestSite->RtbBidRequestPublisher 	= $RtbBidRequestPublisher;
 		
 		$RtbBidRequest->RtbBidRequestSite 			= $RtbBidRequestSite;

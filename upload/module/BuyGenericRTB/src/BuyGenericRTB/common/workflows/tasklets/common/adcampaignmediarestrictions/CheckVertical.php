@@ -13,22 +13,35 @@ class CheckVertical {
 
 	public static function execute(&$Logger, &$Workflow, \model\openrtb\RtbBidRequest &$RtbBidRequest, \model\openrtb\RtbBidRequestImp &$RtbBidRequestImp, &$AdCampaignBanner, &$AdCampaignMediaRestrictions) {
 
+		
+		$vertical_to_check = null;
+		
+		if (!empty($RtbBidRequest->RtbBidRequestSite->cat)):
+			$verticals_to_check = $RtbBidRequest->RtbBidRequestSite->cat;
+		elseif (!empty($RtbBidRequest->RtbBidRequestSite->RtbBidRequestPublisher->cat)):
+			$verticals_to_check = $RtbBidRequest->RtbBidRequestSite->RtbBidRequestPublisher->cat;
+		endif;
+		
 		/*
 		 * Check banner for it being in the right vertical
 		 */
-		if ($AdCampaignMediaRestrictions->Vertical !== null && !empty($RtbBidRequest->RtbBidRequestSite->RtbBidRequestPublisher->cat)):
+		if ($AdCampaignMediaRestrictions->Vertical !== null && !empty($verticals_to_check) && is_array($verticals_to_check)):
 		
 			$has_vertical = false;
 			
 			$vertical_list = explode(",", $AdCampaignMediaRestrictions->Vertical);
 			foreach ($vertical_list as $vertical_id):
 				
-				if ($RtbBidRequest->RtbBidRequestSite->RtbBidRequestPublisher->cat == $vertical_id):
-				
-					$has_vertical = true;
-					break;
+				foreach ($verticals_to_check as $vertical_to_check):
+						
+					if ($vertical_to_check == $vertical_id):
 					
-				endif;
+						$has_vertical = true;
+						break;
+						
+					endif;
+
+				endforeach;
 				
 			endforeach;
 			

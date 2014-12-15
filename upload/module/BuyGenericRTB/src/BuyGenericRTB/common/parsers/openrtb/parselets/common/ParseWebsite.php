@@ -375,20 +375,17 @@ class ParseWebsite {
 	
 	private static function fix_iab_categories(&$obj, $name) {
 		if (isset($obj->$name) && is_array($obj->$name)):
-			self::fix_iab_categories($obj->$name);
+			self::fix_iab_category_list($obj->$name);
 		else:
 			unset($obj->$name);
 		endif;
 	}
 	
-	private static function fix_iab_category_list($iab_category_list) {
+	private static function fix_iab_category_list(&$iab_category_list) {
 		
 		for ($i = 0; $i < count($iab_category_list); $i++):
-			
-			$iab_category_list[$i] = self::get_category($iab_category_list[$i]);
-			
+			$iab_category_list[$i] = self::get_category($iab_category_list[$i]);	
 		endfor;
-		
 	}
 	
 	/*

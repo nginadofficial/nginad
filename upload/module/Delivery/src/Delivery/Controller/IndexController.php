@@ -426,8 +426,8 @@ class IndexController extends AbstractActionController
     	endif;
     	
     	$banner_request["WebDomain"] 				= $PublisherWebsite->WebDomain;
-    	$banner_request["iab_category"] 			= $PublisherWebsite->IABCategory;
-    	$banner_request["iab_sub_category"] 		= $PublisherWebsite->IABSubCategory;
+    	$banner_request["iab_category"] 			= array($PublisherWebsite->IABCategory);
+    	$banner_request["iab_sub_category"] 		= array($PublisherWebsite->IABSubCategory);
     	
     	if (!isset($banner_request["org_tld"]) || $banner_request["org_tld"] == null):
     	
@@ -450,7 +450,7 @@ class IndexController extends AbstractActionController
     	$banner_request["publisher_info_website"] 	= $PublisherInfo->Domain;
     	$banner_request["publisher_id"] 			= $PublisherInfo->PublisherInfoID;
     	$banner_request["publisher_name"] 			= $PublisherInfo->Name;
-    	$banner_request["publisher_iab_category"] 	= $PublisherInfo->IABCategory;
+    	$banner_request["publisher_iab_category"] 	= array($PublisherInfo->IABCategory);
     	
     }
     
