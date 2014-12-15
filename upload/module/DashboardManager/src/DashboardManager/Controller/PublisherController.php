@@ -50,7 +50,7 @@ class PublisherController extends PublisherAbstractActionController {
 	        // admin is logged in as a user, get the markup if any for that user
 	        if ($this->EffectiveID != 0):
 
-		        $publisher_markup = \util\Markup::getMarkupForPublisher($this->EffectiveID, $this->config_handle, false);
+		        $publisher_markup = \util\Markup::getMarkupForPublisher($this->PublisherInfoID, $this->config_handle, false);
 		        if ($publisher_markup != null):
 		        	$publisher_markup_rate = $publisher_markup->MarkupRate;
 		        endif;
@@ -90,6 +90,7 @@ class PublisherController extends PublisherAbstractActionController {
 	    	 'domain_owner' => isset($PublisherInfo->Name) ? $PublisherInfo->Name : "",
 	         'impersonate_id' => $this->ImpersonateID,
 	    	 'effective_id' => $this->auth->getEffectiveIdentityID(),
+	    	 'publisher_info_id' => $this->PublisherInfoID,
 	    	 'dashboard_view' => 'publisher',
 	    	 'user_identity' => $this->identity(),
 	    	 'publisher_markup_rate' => $publisher_markup_rate,

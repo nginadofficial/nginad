@@ -31,7 +31,7 @@ $effective_user_in_dashboard = false;
 			<?php if ($effective_id != 0 && $effective_user_in_dashboard === true): ?>
 
 					<form name="changepublishermarkup" id="changepublishermarkup" action="/publisher/changepublishermarkup"class="forms pull-right" >
-						<input type="hidden" name="markuppublisherinfoid" value="<?php echo $effective_id;?>" />
+						<input type="hidden" name="markuppublisherinfoid" value="<?php echo $publisher_info_id;?>" />
 				
 					<span style="font-size: 12px; font-weight: bold;">Publisher Markup Rate:</span>	 <input type="text"  style="text-align: right" name="publisher-markup" class="span1" value="<?php echo $publisher_markup_rate;?>">%
 						
