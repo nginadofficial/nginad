@@ -62,18 +62,7 @@ class IndexController extends AbstractActionController {
             endif;
         endforeach;
 
-        echo "NGINAD MAINTENANCE<br />\n";
-        exit;
-    }
-
-    public function excelAction() {
-        define('EOL', (PHP_SAPI == 'cli') ? PHP_EOL : '<br />');
-        // Create new PHPExcel object
-        echo date('H:i:s'), " Create new PHPExcel object", EOL;
-        $objPHPExcel = new \PHPExcel();
-
-        var_dump($objPHPExcel);
-        echo "EXCEL MAINTENANCE ACTION<br />\n";
+        echo "NGINAD MAINTENANCE\n";
         exit;
     }
 
@@ -216,69 +205,4 @@ class IndexController extends AbstractActionController {
     	endforeach;
     }
     
-    private function getPerTime($obj, $config, $is_admin, $extra_params = null) {
-    
-    
-    	$params = $this->params()->fromQuery();
-    	if (!empty($params['step'])) {
-    		$step = $params['step'];
-    	} else {
-    		$step = 1;
-    	}
-    
-    	$DateCreatedGreater = date('Y-m-d H:i:s', time() - 15 * $step * 60);
-    	$DateCreatedLower = date('Y-m-d H:i:s', time() - 15 * ($step - 1) * 60);
-    
-    	if (!empty($params['step'])) {
-    
-    		switch ($params['interval']) {
-    
-    			case '0':
-    				$where_params = array(
-    				'DateCreatedGreater' => $DateCreatedGreater,
-    				'DateCreatedLower' => $DateCreatedLower,
-    				);
-    				break;
-    
-    			case '1':
-    				$where_params = array(
-    				'DateCreatedGreater' => ($params['time_from'] < $params['time_to']) ? $params['time_from'] : $params['time_to'],
-    				'DateCreatedLower' => ($params['time_from'] > $params['time_to']) ? $params['time_from'] : $params['time_to'],
-    				);
-    				break;
-    
-    			default:
-    				return false;
-    				break;
-    		}
-    	} else {
-    		$where_params = array(
-    				'DateCreatedGreater' => $DateCreatedGreater,
-    				'DateCreatedLower' => $DateCreatedLower,
-    		);
-    	}
-    
-    	if ($extra_params !== null && count($extra_params) > 0):
-	    	foreach ($extra_params as $key => $value):
-	    		$where_params[$key] = $value;
-	    	endforeach;
-    	endif;
-    
-    	
-    	if (!empty($params['refresh'])) {
-    		$refresh = true;
-    	} else {
-    		$refresh = false;
-    	}
-    
-    	$data = array(
-    			// 'data' => $obj->getPerTimeCached($config, $where_params, 900, $refresh, $is_admin),
-    			'data' => $obj->getPerTime($where_params),
-    			'step' => $step
-    	);
-    
-    	return json_encode($data);
-    
-    }
-
 }
