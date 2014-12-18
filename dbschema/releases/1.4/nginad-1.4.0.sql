@@ -778,8 +778,8 @@ CREATE TABLE `PublisherAdZone` (
   `Width` int(11) NOT NULL,
   `Height` int(11) NOT NULL,
   `FloorPrice` decimal(10,2) unsigned NOT NULL DEFAULT '0.00',
-  `TotalAsk` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Aggregated Statistics Field',
-  `TotalImpressions` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT 'Aggregated Statistics Field',
+  `TotalRequests` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT 'Aggregated Statistics Field',
+  `TotalImpressionsFilled` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT 'Aggregated Statistics Field',
   `TotalAmount` decimal(20,2) unsigned NOT NULL DEFAULT '0.00' COMMENT 'Aggregated Statistics Field',
   `DateCreated` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `DateUpdated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -1123,6 +1123,12 @@ CREATE VIEW `userImpressionsSpendAdmin` AS select `BuySideHourlyImpressionsCount
 -- ----------------------------
 DROP VIEW IF EXISTS `PublisherImpressionsAndSpendHourly`;
 CREATE VIEW `PublisherImpressionsAndSpendHourly` AS select `phb`.`MDYH`, `phb`.`PublisherAdZoneID`, `pi`.`Name` as PublisherName, pad.`AdOwnerID` as PublisherInfoID, `pad`.`AdName`, `phb`.`AuctionCounter` as `Requests`, `phb`.`BidsWonCounter` as `Impressions`, round(((`phb`.`SpendTotalNet` / `phb`.`BidsWonCounter`) * 1000),7) AS `eCPM`, round(((`phb`.`SpendTotalGross` / `phb`.`BidsWonCounter`) * 1000),7) AS `GrossECPM`, concat(round((`phb`.`BidsWonCounter` / `phb`.`AuctionCounter`) * 100, 2), '%') as `FillRate`, round(`phb`.`SpendTotalNet`, 7) as `Revenue`, round(`phb`.`SpendTotalGross`, 7) as `GrossRevenue`, `phb`.`DateCreated` from `PublisherHourlyBids` phb inner join `PublisherAdZone` pad on phb.`PublisherAdZoneID` = pad.`PublisherAdZoneID` inner join `PublisherInfo` pi on pad.`AdOwnerID` = pi.`PublisherInfoID` ;
+
+-- ----------------------------
+-- View structure for PublisherImpressionsAndSpendHourlyTotals
+-- ----------------------------
+DROP VIEW IF EXISTS `PublisherImpressionsAndSpendHourlyTotals`;
+CREATE VIEW `PublisherImpressionsAndSpendHourlyTotals` AS select PublisherAdZoneID, PublisherName, PublisherInfoID, SUM(Requests) as TotalRequests, SUM(Impressions) as TotalImpressions, SUM(Revenue) as TotalRevenue from PublisherImpressionsAndSpendHourly group by PublisherAdZoneID order by PublisherAdZoneID ;
 
 -- ----------------------------
 -- View structure for DemandImpressionsAndSpendHourlyPre

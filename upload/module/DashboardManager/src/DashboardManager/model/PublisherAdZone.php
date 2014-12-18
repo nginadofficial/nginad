@@ -30,8 +30,8 @@ class PublisherAdZone  implements InputFilterAwareInterface
     public $Width;
     public $Height;
     public $FloorPrice;
-    public $TotalAsk;
-    public $TotalImpressions;
+    public $TotalRequests;
+    public $TotalImpressionsFilled;
     public $TotalAmount;
     public $DateCreated;
     public $DateUpdated;

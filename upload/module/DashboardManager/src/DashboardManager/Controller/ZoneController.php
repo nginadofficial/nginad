@@ -138,13 +138,13 @@ class ZoneController extends PublisherAbstractActionController {
         endif;
         if ($this->is_admin):
         
-            $headers = array("#","Ad Zone Name","Status","Space Size","Floor Price","Total Ask","Impressions","Total Revenue","Created","Updated","Action");
-            $meta_data = array("AdName","AdStatus","AutoApprove","AdTemplateID","FloorPrice","TotalAsk","TotalImpressions","TotalAmount","DateCreated","DateUpdated");
+            $headers = array("#","Ad Zone Name","Status","Space Size","Floor Price","Total Requests","Impressions Filled","Total Revenue","Created","Updated","Action");
+            $meta_data = array("AdName","AdStatus","AutoApprove","AdTemplateID","FloorPrice","TotalRequests","TotalImpressionsFilled","TotalAmount","DateCreated","DateUpdated");
         
         else:
         
-            $headers = array("#","Ad Zone Name","Status","Space Size","Floor Price","Total Ask","Impressions","Total Revenue","Created","Updated","Action");
-            $meta_data = array("AdName","AdStatus","AutoApprove","AdTemplateID","FloorPrice","TotalAsk","TotalImpressions","TotalAmount","DateCreated","DateUpdated");
+            $headers = array("#","Ad Zone Name","Status","Space Size","Floor Price","Total Requests","Impressions Filled","Total Revenue","Created","Updated","Action");
+            $meta_data = array("AdName","AdStatus","AutoApprove","AdTemplateID","FloorPrice","TotalRequests","TotalImpressionsFilled","TotalAmount","DateCreated","DateUpdated");
         endif;
         
         // TO DO: Permission issues.

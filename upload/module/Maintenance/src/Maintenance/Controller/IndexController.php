@@ -83,79 +83,137 @@ class IndexController extends AbstractActionController {
 
     public function tenMinuteMaintenanceAction() {
 
-        /*
-         * update all compiled stats into the AdCampaignBanner table
-         */
+		$this->updateAdCampaignBannerTotals();
+    	$this->updatePublisherZoneTotals();
+    }
+    
+    private function updatePublisherZoneTotals() {
+    	 
+    	/*
+    	 * update all compiled stats into the PublisherAdZone table
+    	*/
+    	
+    	$PublisherImpressionsAndSpendHourlyTotals = \_factory\PublisherImpressionsAndSpendHourlyTotals::get_instance();
+    	
+    	$PublisherAdZoneFactory = \_factory\PublisherAdZone::get_instance();
+    	$params = array();
+    	$PublisherAdZoneList = $PublisherAdZoneFactory->get($params);
+    	 
+    	foreach ($PublisherAdZoneList as $PublisherAdZone):
+    	
+	    	$ad_zone_id = $PublisherAdZone->PublisherAdZoneID;
+	    	
+	    	$params = array();
+	    	$params["PublisherAdZoneID"] = $ad_zone_id;
+	    	$PublisherTotalsRollup = $PublisherImpressionsAndSpendHourlyTotals->get_row($params);
+	    	if ($PublisherTotalsRollup == null):
+	    		continue;
+	    	endif;
+	    	
+	    	$PublisherAdZoneNew = new \model\PublisherAdZone();
+	    	
+	    	$PublisherAdZoneNew->PublisherAdZoneID = $PublisherAdZone->PublisherAdZoneID;
+	    	$PublisherAdZoneNew->PublisherWebsiteID = $PublisherAdZone->PublisherWebsiteID;
+	    	$PublisherAdZoneNew->PublisherAdZoneTypeID = $PublisherAdZone->PublisherAdZoneTypeID;
+	    	$PublisherAdZoneNew->ImpressionType = $PublisherAdZone->ImpressionType;
+	    	$PublisherAdZoneNew->AdOwnerID = $PublisherAdZone->AdOwnerID;
+	    	$PublisherAdZoneNew->AdName = $PublisherAdZone->AdName;
+	    	$PublisherAdZoneNew->Description = $PublisherAdZone->Description;
+	    	$PublisherAdZoneNew->PassbackAdTag = $PublisherAdZone->PassbackAdTag;
+	    	$PublisherAdZoneNew->AdStatus = $PublisherAdZone->AdStatus;
+	    	$PublisherAdZoneNew->AutoApprove = $PublisherAdZone->AutoApprove;
+	    	$PublisherAdZoneNew->AdTemplateID = $PublisherAdZone->AdTemplateID;
+	    	$PublisherAdZoneNew->IsMobileFlag = $PublisherAdZone->IsMobileFlag;
+	    	$PublisherAdZoneNew->Width = $PublisherAdZone->Width;
+	    	$PublisherAdZoneNew->Height = $PublisherAdZone->Height;
+	    	$PublisherAdZoneNew->FloorPrice = $PublisherAdZone->FloorPrice;
+	    	$PublisherAdZoneNew->TotalRequests = $PublisherTotalsRollup->TotalRequests;
+	    	$PublisherAdZoneNew->TotalImpressionsFilled = $PublisherTotalsRollup->TotalImpressions;
+	    	$PublisherAdZoneNew->TotalAmount = $PublisherTotalsRollup->TotalRevenue;
+	    	$PublisherAdZoneNew->DateCreated = $PublisherAdZone->DateCreated;
+	    	$PublisherAdZoneNew->DateUpdated = $PublisherAdZone->DateUpdated;
 
-        $BidTotalsRollupFactory = \_factory\BidTotalsRollup::get_instance();
-        $ImpressionAndSpendTotalsRollupFactory = \_factory\ImpressionAndSpendTotalsRollup::get_instance();
-
-        $AdCampaignBannerFactory = \_factory\AdCampaignBanner::get_instance();
-        $params = array();
-        $params["Active"] = 1;
-        $AdCampaignBannerList = $AdCampaignBannerFactory->get($params);
-
-        foreach ($AdCampaignBannerList as $AdCampaignBanner):
-
-            $banner_id = $AdCampaignBanner->AdCampaignBannerID;
-
-            $params = array();
-            $params["AdCampaignBannerID"] = $banner_id;
-            $BidTotalsRollup = $BidTotalsRollupFactory->get_row($params);
-            if ($BidTotalsRollup == null):
-                continue;
-            endif;
-            $ImpressionAndSpendTotalsRollup = $ImpressionAndSpendTotalsRollupFactory->get_row($params);
-            if ($ImpressionAndSpendTotalsRollup == null):
-                continue;
-            endif;
-
-            $AdCampaignBanner->BidsCounter = $BidTotalsRollup->TotalBids;
-            $AdCampaignBanner->ImpressionsCounter = $ImpressionAndSpendTotalsRollup->TotalImpressions;
-            $AdCampaignBanner->CurrentSpend = $ImpressionAndSpendTotalsRollup->TotalSpendGross;
-
-            $data = $AdCampaignBanner->getArrayCopy();
-
-            $AdCampaignBannerFactory->saveAdCampaignBannerFromDataArray($data);
-
-        endforeach;
-        
-        /*
-         * Update all AdCampaign tables with the new info from the AdCampaignBanner tables
-         */
-        
-        $AdCampaignFactory = \_factory\AdCampaign::get_instance();
-        $params = array();
-        $params["Active"] = 1;
-        $AdCampaignList = $AdCampaignFactory->get($params);
-        
-        foreach ($AdCampaignList as $AdCampaign):
-        
-	        $ad_campaign_id = $AdCampaign->AdCampaignID;
-
-	        $AdCampaignBannerFactory = \_factory\AdCampaignBanner::get_instance();
-	        $params = array();
-	        $params["AdCampaignID"] = $ad_campaign_id;
-	        $AdCampaignBannerList = $AdCampaignBannerFactory->get($params);
-        
-	        $impressions_counter 	= 0;
-	        $current_spend			= 0;
-	        
-	        foreach ($AdCampaignBannerList as $AdCampaignBanner):
-	        
-	        	$impressions_counter 	+= $AdCampaignBanner->ImpressionsCounter;
-	        	$current_spend 			+= floatval($AdCampaignBanner->CurrentSpend);
-	        
-	        endforeach;
-
-	        $AdCampaign->ImpressionsCounter 	= $impressions_counter;
-	        $AdCampaign->CurrentSpend 			= $current_spend;
-	        
-	        $data = $AdCampaign->getArrayCopy();
-	        
-	        $AdCampaignFactory->saveAdCampaignFromDataArray($data);
-	        
-        endforeach;
+	    	$PublisherAdZoneFactory->save_ads($PublisherAdZoneNew);
+	    	
+    	endforeach;
+    	
+    }
+    
+    private function updateAdCampaignBannerTotals() {
+    	
+    	/*
+    	 * update all compiled stats into the AdCampaignBanner table
+    	*/
+    	
+    	$BidTotalsRollupFactory = \_factory\BidTotalsRollup::get_instance();
+    	$ImpressionAndSpendTotalsRollupFactory = \_factory\ImpressionAndSpendTotalsRollup::get_instance();
+    	
+    	$AdCampaignBannerFactory = \_factory\AdCampaignBanner::get_instance();
+    	$params = array();
+    	$params["Active"] = 1;
+    	$AdCampaignBannerList = $AdCampaignBannerFactory->get($params);
+    	
+    	foreach ($AdCampaignBannerList as $AdCampaignBanner):
+	    	
+	    	$banner_id = $AdCampaignBanner->AdCampaignBannerID;
+	    	
+	    	$params = array();
+	    	$params["AdCampaignBannerID"] = $banner_id;
+	    	$BidTotalsRollup = $BidTotalsRollupFactory->get_row($params);
+	    	if ($BidTotalsRollup == null):
+	    		continue;
+	    	endif;
+	    	$ImpressionAndSpendTotalsRollup = $ImpressionAndSpendTotalsRollupFactory->get_row($params);
+	    	if ($ImpressionAndSpendTotalsRollup == null):
+	    		continue;
+	    	endif;
+	    	
+	    	$AdCampaignBanner->BidsCounter = $BidTotalsRollup->TotalBids;
+	    	$AdCampaignBanner->ImpressionsCounter = $ImpressionAndSpendTotalsRollup->TotalImpressions;
+	    	$AdCampaignBanner->CurrentSpend = $ImpressionAndSpendTotalsRollup->TotalSpendGross;
+	    	
+	    	$data = $AdCampaignBanner->getArrayCopy();
+	    	
+	    	$AdCampaignBannerFactory->saveAdCampaignBannerFromDataArray($data);
+	    	
+    	endforeach;
+    	
+    	/*
+    	 * Update all AdCampaign tables with the new info from the AdCampaignBanner tables
+    	*/
+    	
+    	$AdCampaignFactory = \_factory\AdCampaign::get_instance();
+    	$params = array();
+    	$params["Active"] = 1;
+    	$AdCampaignList = $AdCampaignFactory->get($params);
+    	
+    	foreach ($AdCampaignList as $AdCampaign):
+    	
+	    	$ad_campaign_id = $AdCampaign->AdCampaignID;
+	    	
+	    	$AdCampaignBannerFactory = \_factory\AdCampaignBanner::get_instance();
+	    	$params = array();
+	    	$params["AdCampaignID"] = $ad_campaign_id;
+	    	$AdCampaignBannerList = $AdCampaignBannerFactory->get($params);
+	    	
+	    	$impressions_counter 	= 0;
+	    	$current_spend			= 0;
+	    	 
+	    	foreach ($AdCampaignBannerList as $AdCampaignBanner):
+	    	 
+		    	$impressions_counter 	+= $AdCampaignBanner->ImpressionsCounter;
+		    	$current_spend 			+= floatval($AdCampaignBanner->CurrentSpend);
+		    	 
+	    	endforeach;
+	    	
+	    	$AdCampaign->ImpressionsCounter 	= $impressions_counter;
+	    	$AdCampaign->CurrentSpend 			= $current_spend;
+	    	 
+	    	$data = $AdCampaign->getArrayCopy();
+	    	 
+	    	$AdCampaignFactory->saveAdCampaignFromDataArray($data);
+	    	 
+    	endforeach;
     }
     
     private function getPerTime($obj, $config, $is_admin, $extra_params = null) {

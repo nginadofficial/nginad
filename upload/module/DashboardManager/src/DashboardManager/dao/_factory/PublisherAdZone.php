@@ -247,13 +247,13 @@ class PublisherAdZone extends \_factory\CachedTableRead
    	
    	    $data['FloorPrice'] = $rawData->FloorPrice;
    	endif;
-   	if ($rawData->TotalAsk !== null):
+   	if ($rawData->TotalRequests !== null):
    	
-   	    $data['TotalAsk'] = intval(abs($rawData->TotalAsk));
+   	    $data['TotalRequests'] = intval(abs($rawData->TotalRequests));
    	endif;
-   	if ($rawData->TotalImpressions !== null):
+   	if ($rawData->TotalImpressionsFilled !== null):
    	
-   	    $data['TotalImpressions'] = intval(abs($rawData->TotalImpressions));
+   	    $data['TotalImpressionsFilled'] = intval(abs($rawData->TotalImpressionsFilled));
    	endif;
    	if (is_numeric($rawData->TotalAmount) && $rawData->TotalAmount !== null):
    	

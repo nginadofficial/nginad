@@ -53,13 +53,11 @@ function submitForm() {
 	                    $ad_id = $zone_list_raw[$row_number]["PublisherAdZoneID"];
 	                    
 	                    $impression_type = $zone_list_raw[$row_number]["ImpressionType"];
-                        ?>
-                        <td>
-                            <?php 
+                        
                                 // Change display format according to column specified.
                                 switch($zone_list["meta"][$column_key]):
                                     case "AdName":
-                                        echo $data . " (" . $ad_id .")";
+                                        echo '<td>' . $data . " (" . $ad_id .")" . '</td>';
                                         break; 
                                 	case "AdStatus":
                                 		$approve_verb = 'Approve';
@@ -84,31 +82,37 @@ function submitForm() {
                                 	    endif;
                                 	    
                                 	    if($is_admin)
-                                	        echo $admin_approval[intval($data)];
+                                	        echo '<td>' . $admin_approval[intval($data)] . '</td>';
                                 	    else
-                                	        echo $approval[intval($data)];
+                                	        echo '<td>' . $approval[intval($data)] . '</td>';
                                         break;
                                 	case "AdTemplateID":
                                 		
                                 		if ($impression_type == 'video'):
-                                			echo "VAST Video";
+                                			echo '<td>' . "VAST Video" . '</td>';
                                 	    elseif($data == 0):
-                                	        echo "Custom:<br />" . 
+                                	        echo '<td>' . "Custom:<br />" . 
                                 	           $zone_list_raw[$row_number]["Width"] . " x " .
-                                	           $zone_list_raw[$row_number]["Height"];
+                                	           $zone_list_raw[$row_number]["Height"] . '</td>';
                                 	    else:
-                                	        echo $zone_list_raw[$row_number]["TemplateName"] . ":<br />" .
+                                	        echo '<td>' . $zone_list_raw[$row_number]["TemplateName"] . ":<br />" .
                                     	        $zone_list_raw[$row_number]["TemplateX"] . " x " .
-                                    	        $zone_list_raw[$row_number]["TemplateY"];
+                                    	        $zone_list_raw[$row_number]["TemplateY"] . '</td>';
                                 	    endif;
                                 	    break;
+                                	case "TotalRequests":
+                                	case "TotalImpressionsFilled":
+                                	    echo '<td style="text-align: right">' . number_format($data) . '</td>';
+                                	    break;
+                                	case "TotalAmount":
+                                	case "FloorPrice":
+                                	    echo '<td style="text-align: right">' . '$' . sprintf("%1.2f", $data) . '</td>';
+                                	    break;
                                     default:
-                                        echo $data;
+                                        echo '<td>' . $data . '</td>';
                                         break;
                                 endswitch;
-                            ?>
-                        </td>
-                    <?php endforeach; ?>
+                            endforeach; ?>
                     <td>
                     <?php if ($is_admin === true || $is_rejected !== true): ?>
                     	<a href="/publisher/zone/<?php echo $domain_id;?>/edit/<?php echo $ad_id;?>">Edit 
