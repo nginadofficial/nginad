@@ -1,6 +1,20 @@
 nginad
 =======
 
+December 19, 2014
+------------------
+The NginAd OpenRTB Ad Server version 1.5 leads-unlimited branch has now been cut. 
+This 1.5 release aims to do the following:
+
+ * Create and implement a new standard specification for leads data API for buying and selling on lead exchanges implementing the API, based on JSON and new technologies not patented, and loosely based on the IAB OpenRTB protocol
+ * Create a location based data center which can match the location of lead buyers to sellers in a geographically correct way
+ * Create timeout windows for certain lead types which can assure the freshness of sales and financial leads bought and sold through the exchange
+ * Provide a CPM to Lead tasklet workflow which eliminates the need for a landing page or website for the user to complete sales lead information. This will allow direct lead conversions from DSP traffic.
+ * Provide some type of free online business referral quality control mechanism or provide API to access a paid service for those who buy a SaaS solution
+ * Provide a secure data transmission mechanism for leads of a financial nature such as Forex leads, large purchase leads, mortgage leads, insurance leads, loan leads, credit card leads, ect...
+ * Provide lead submissions over most if not all IAB advertising verticals listed in the OpenRTB 2.2 specification
+ * Provide an initial marketplace for NginAd 1.5 users to buy and sell leads, while they build other partners
+
 December 12, 2014
 ------------------
 NginAd OpenRTB Ad Server version 1.4 has now been released to the public. 
