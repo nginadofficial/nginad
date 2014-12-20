@@ -24,13 +24,13 @@ $(function() {
 		changeMonth: true,
 		changeYear: true,
 		showOtherMonths: true,
-        selectOtherMonths: false,
+        selectOtherMonths: true,
         yearRange: "-1:+6",
 	    onSelect: function(date){
 	        var selectedDate = new Date(date);
 	        var msecsInADay = 86400000;
 	        var endDate = new Date(selectedDate.getTime() + msecsInADay);
-	        $("#enddate").datepicker( "option", "minDate", endDate );
+	        $("#enddate").datepicker( "option", "setDate", endDate );
 	    }
 	});
 	
@@ -44,10 +44,10 @@ $(function() {
 		changeMonth: true,
 		changeYear: true,
 		showOtherMonths: true,
-        selectOtherMonths: false,
+        selectOtherMonths: true,
         yearRange: "-1:+6",
        <?php if($minEndDate[2]!='0000'):?>
-        minDate:new Date(<?php echo $minEndDate[2];?>,<?php echo $minEndDate[0];?>,<?php echo $minEndDate[1];?>)
+        setDate:new Date(<?php echo $minEndDate[2];?>,<?php echo $minEndDate[0];?>,<?php echo $minEndDate[1];?>)
        <?php endif;?> 
 	});
 	
