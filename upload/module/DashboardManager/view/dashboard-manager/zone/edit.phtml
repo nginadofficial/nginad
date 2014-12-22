@@ -109,7 +109,7 @@ $(function() {
     <div class="control-group">
     <label for="Width" class="control-label">Ad Width</label>
     <div class="controls">
-    <input type="text " value="<?php if ($editResultObj->Width): echo $editResultObj->Width; endif;?>" class="input-mini" size="5" maxlength="10" id="Width" name="Width">    </div>
+    <input type="text" value="<?php if ($editResultObj->Width): echo $editResultObj->Width; endif;?>" class="input-mini" size="5" maxlength="10" id="Width" name="Width">    </div>
     </div>   
     
     <div class="control-group">
@@ -118,14 +118,14 @@ $(function() {
     <input type="text" value="<?php if ($editResultObj->Width): echo $editResultObj->Height; endif;?>" class="input-mini" size="5" maxlength="10" id="Height" name="Height">    </div>
     </div>
     
-    <div class="control-group">
+    <div class="control-group nobanner" style="display: none;">
     <label for="MinDuration" class="control-label">Minimum Ad Duration : <span class="hlp"><small><i>(required)</i></small></span></label>
     <div class="controls">
     <input type="text" value="<?php echo $current_min_duration;?>" class="input-mini" size="5" maxlength="10" id="MinDuration" name="MinDuration">
     </div> 
     </div>  
     
-    <div class="control-group">
+    <div class="control-group nobanner" style="display: none;">
     <label for="MaxDuration" class="control-label">Maximum Ad Duration : <span class="hlp"><small><i>(required)</i></small></span></label>
     <div class="controls">
     <input type="text" value="<?php echo $current_max_duration;?>" class="input-mini" size="5" maxlength="10" id="MaxDuration" name="MaxDuration">   </div>
