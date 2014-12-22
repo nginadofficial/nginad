@@ -783,6 +783,7 @@ class ZoneController extends PublisherAbstractActionController {
         $error_message = null;
         $DomainID = intval($this->params()->fromRoute('param1', 0));
         $PublisherAdZoneFactory = \_factory\PublisherAdZone::get_instance();
+        $PublisherAdZoneVideoFactory = \_factory\PublisherAdZoneVideo::get_instance();
         
         $DomainObj = $this->get_domain_data($DomainID, $this->PublisherInfoID);
         $success = false;
@@ -815,6 +816,8 @@ class ZoneController extends PublisherAbstractActionController {
             		    	if ($this->is_admin || $DomainObj->DomainOwnerID == $this->PublisherInfoID):
             		    	
             		    		if (intval($PublisherAdZoneFactory->delete_zone(intval($deleteCheckResultObj->PublisherAdZoneID))) > -1):
+
+            		    			$PublisherAdZoneVideoFactory->delete_zone(intval($deleteCheckResultObj->PublisherAdZoneID));
             		    		
             		    			// Delete success! Return to publisher.
             		    			$success = true;
