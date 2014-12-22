@@ -279,11 +279,20 @@ class ZoneController extends PublisherAbstractActionController {
 				$publisher_ad_zone_type_id = AD_TYPE_ANY_REMNANT;
 				$linkedbanners = array();
 				
+				$auto_approve_zones = $this->config_handle['settings']['publisher']['auto_approve_zones'];
+				$ad->AutoApprove = ($auto_approve_zones == true) ? 1 : 0;
+				
+				// Disapprove the changes if not admin.
+				if ($this->is_admin || $auto_approve_zones == true):
+					$ad->AdStatus = 1;
+				else:
+					$ad->AdStatus = 0;
+				endif;
+				
 				// only the admin can create direct contracts between publishers and demand customers
 				if ($this->is_admin):
 					$publisher_ad_zone_type_id = $request->getPost("PublisherAdZoneTypeID");
 					$linkedbanners = $this->getRequest()->getPost('linkedbanners');
-					$ad->AdStatus 			   = 1;
 				endif;
 				
 				$ad->PublisherAdZoneTypeID	= $publisher_ad_zone_type_id;
