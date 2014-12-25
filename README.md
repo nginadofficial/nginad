@@ -9,7 +9,7 @@ Christmas day - lost impressions due to client networks fix.
 This fix aims to harmonize the numbers between SSPs which are sold ad inventory and the NginAd instance when a certain percentage of client impressions are lost in the ad tag loading chain or due to client bounces where the nested creatives were not completely loaded.
 
 Set up ad impression network loss damper percentages. 
-A certain percentage of users will load the initial ad tag, but bounce before the demand customer's inner ad creatives will load. This will trigger impressions on the NginAd instance, but the impressions will not match on the SSPs. To compensate, we set up an impressions lost damper percentage to compensate, and to harmonize the imps number from the NginAd instance to the SSPs where they are being sold.
+A certain percentage of users will load the initial ad tag, but bounce before the demand customer's inner ad creatives will load. This will trigger impressions on the NginAd instance, but the impressions will not match on the SSPs. To compensate, we set up an impressions lost damper percentage, and to harmonize the imps number from the NginAd instance to the SSPs where they are being sold.
 
 December 19, 2014
 ------------------
