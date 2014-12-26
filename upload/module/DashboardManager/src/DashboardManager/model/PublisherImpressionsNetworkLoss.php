@@ -11,7 +11,7 @@ namespace model;
 
 class PublisherImpressionsNetworkLoss {
 
-    public $PublisherWebsiteID;
+    public $PublisherInfoID;
     public $CorrectionRate;
 
 }
