@@ -192,6 +192,12 @@ class IndexController extends AbstractActionController
 	 		$winning_ad_tag 	= $AuctionPopo->winning_ad_tag;
 
 	 		/*
+	 		 * Auction stats should be published to the database
+	 		 * regardless of whether there was a winning bid or not.
+	 		 */
+	 		$PingManager->process_rtb_ping_statistics($AuctionPopo);
+	 		
+	 		/*
 	 		 * The RTB auction may not have been won because
 	 		 * a floor price wasn't met or there simply may not 
 	 		 * have been a valid bid on the auction.
@@ -222,8 +228,6 @@ class IndexController extends AbstractActionController
 		 		$winning_ad_tag = str_replace("{NGINWBIDPRC}", $AuctionPopo->winning_bid_price, $winning_ad_tag);
 		 		
 	 		endif;
-	 		
-	 		$PingManager->process_rtb_ping_statistics($AuctionPopo);
 	 		
 	 		// now output the logs to the log file
 	
