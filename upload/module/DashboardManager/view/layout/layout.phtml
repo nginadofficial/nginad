@@ -48,14 +48,16 @@ echo $this->doctype(); ?>
                         ->prependStylesheet($this->basePath() . '/css/style.css')
                         ->prependStylesheet($this->basePath() . '/css/bootstrap.css')
                         ->prependStylesheet($this->basePath() . '/css/default.dashboard.css')
+                        ->prependStylesheet($this->basePath() . '/css/qtip/jquery.qtip.min.css');
         ?>
 
         <!-- Scripts -->
         <?php echo $this->headScript()->prependFile($this->basePath() . '/js/3rdparty/html5.js', 'text/javascript', array('conditional' => 'lt IE 9',))
                                       ->prependFile($this->basePath() . '/js/3rdparty/jquery.validate.min.js')
                                       ->prependFile($this->basePath() . '/js/3rdparty/bootstrap.min.js')
+                                      ->prependFile($this->basePath() . '/js/qtip/jquery.qtip.min.js')
                                       ->prependFile($this->basePath() . '/js/3rdparty/jquery-1.11.1.min.js');
-                                      
+
                                        ?>
                                        <!--<link href='//fonts.googleapis.com/css?family=Cabin' rel='stylesheet' type='text/css'>-->
                                        <link href='//fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>

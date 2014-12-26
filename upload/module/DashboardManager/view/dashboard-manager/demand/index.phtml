@@ -5,6 +5,13 @@ $this->headScript()->captureStart() ?>
 function submitForm() {
 	$('#loginas').submit();
 }
+
+$(document).ready(function () {
+
+    $('span[title]').qtip();
+    
+});
+
 <?php $this->headScript()->captureEnd();  
 $effective_user_in_dashboard = false;
 ?>
@@ -33,8 +40,10 @@ $effective_user_in_dashboard = false;
 						<input type="hidden" name="markupuserid" value="<?php echo $effective_id;?>" />
 				
 					<span style="font-size: 12px; font-weight: bold;">User Markup Rate:</span>	 <input type="text"  style="text-align: right" name="user-markup" class="span1" value="<?php echo $user_markup_rate;?>">%
-						
-						<input type="submit" name="user-markup-submit" class="btn actv  btn-small" value="Change User Markup" style="margin-left: 8px; margin-bottom: 10px;" />
+						<div style="display: inline;">
+							<input type="submit" name="user-markup-submit" class="btn actv  btn-small" value="Change User Markup" style="margin-left: 8px; margin-bottom: 10px;" />
+							<span style="cursor: pointer;" title="The Rate that the Impressions Will be Marked up from the Bid Price (Your Profit)"><img style="border: 0; margin-bottom: 10px;" src="/images/tooltip.jpg" /></span>
+						</div>
 					</form>
 
 			<?php endif; ?>

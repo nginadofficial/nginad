@@ -38,7 +38,7 @@ class NetworkLossCorrection {
 	
 	}
 	
-	public static function getPublisherMarkupRate($publisher_website_id, $publisher_info_id, $config, $cached = true) {
+	public static function getPublisherNetworkLossCorrectionRate($publisher_website_id, $publisher_info_id, $config, $cached = true) {
 	
 		// is this campaign exempt from being marked up?
 	
