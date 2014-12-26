@@ -56,19 +56,23 @@ return array(
 				)
 		),
 		'system' => array(
-				'debug' 								=> false, // simple debug information to track errors/status.
-				'debug_verbose'                     	=> false, // maximum debug information.
+				'debug' 												=> false, // simple debug information to track errors/status.
+				'debug_verbose'                     					=> false, // maximum debug information.
 				// delay between maintenance updates in minutes
-				'maintenance_updates_minutes' 			=> 15,
-				// default demand 40% markup
-				'default_demand_markup_rate' 			=> 0.40,
-				// default publisher 40% markup
-				'default_publisher_markup_rate' 		=> 0.40,
+				'maintenance_updates_minutes' 							=> 15,
+				// default demand 30% markup
+				'default_demand_markup_rate' 							=> 0.30,
+				// default publisher 30% markup
+				'default_publisher_markup_rate' 						=> 0.30,
 				// our house user ids are exempt from being marked up
-				'markup_exempt_userid_list'				=> array(1),
+				'markup_exempt_userid_list'								=> array(1),
 				// our house publisher ids are exempt from being marked up
-				'markup_exempt_publisher_info_id_list'	=> array(),
+				'markup_exempt_publisher_info_id_list'					=> array(),
+				// default publisher 20% impressions lost to client network bounce rate
+				'default_publisher_impressions_network_loss_rate' 		=> 0.20,
+				// our house publisher ids are exempt from being scrubbed as network loss
+				'network_loss_exempt_publisher_info_id_list'			=> array(),
 				// version
-				'version_id'							=> '1.4'
+				'version_id'											=> '1.4.46'
 		),
 );

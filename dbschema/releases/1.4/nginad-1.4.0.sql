@@ -911,9 +911,27 @@ CREATE TABLE `PublisherWebsiteMarkup` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- ----------------------------
--- Records of PublisherWebsiteMarkup
+-- Table structure for PublisherImpressionsNetworkLoss
 -- ----------------------------
-INSERT INTO `PublisherWebsiteMarkup` VALUES ('4', '0.4');
+DROP TABLE IF EXISTS `PublisherImpressionsNetworkLoss`;
+CREATE TABLE `PublisherImpressionsNetworkLoss` (
+  `PublisherInfoID` int(11) NOT NULL,
+  `CorrectionRate` float NOT NULL,
+  PRIMARY KEY (`PublisherInfoID`),
+  UNIQUE KEY `PublisherInfoID` (`PublisherInfoID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+-- ----------------------------
+-- Table structure for PublisherWebsiteImpressionsNetworkLoss
+-- ----------------------------
+DROP TABLE IF EXISTS `PublisherWebsiteImpressionsNetworkLoss`;
+CREATE TABLE `PublisherWebsiteImpressionsNetworkLoss` (
+  `PublisherWebsiteID` int(11) NOT NULL,
+  `CorrectionRate` float NOT NULL,
+  PRIMARY KEY (`PublisherWebsiteID`),
+  UNIQUE KEY `PublisherWebsiteID` (`PublisherWebsiteID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- ----------------------------
 -- Table structure for rbac_permission
