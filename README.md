@@ -1,6 +1,15 @@
 nginad
 =======
 
+December 26, 2014
+------------------
+
+Last 1.4 Post Fix to be implemented - Excel Spreadsheet Export in the Reporting tab for Publishers and Demand clients
+
+Obviously publishers and demand customers need to be able to download an excel file for billing.
+Right now they have to copy/paste the numbers off the screen due to the not-so-stellar performance of the Ukrainian development team that originally worked on this feature.
+This crucial feature should be finished in the next couple days and a new 1.4.47 release will be created.
+
 December 25, 2014
 ------------------
 
