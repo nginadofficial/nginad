@@ -68,7 +68,7 @@ return array(
 				'markup_exempt_userid_list'								=> array(1),
 				// our house publisher ids are exempt from being marked up
 				'markup_exempt_publisher_info_id_list'					=> array(),
-				// default publisher 20% impressions lost to client network bounce rate
+				// default publisher 0% impressions lost to client network bounce rate
 				'default_publisher_impressions_network_loss_rate' 		=> 0.00,
 				// our house publisher ids are exempt from being scrubbed as network loss
 				'network_loss_exempt_publisher_info_id_list'			=> array(),
