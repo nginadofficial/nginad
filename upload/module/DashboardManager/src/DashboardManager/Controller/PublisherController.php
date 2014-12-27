@@ -526,6 +526,100 @@ class PublisherController extends PublisherAbstractActionController {
 	    
 	}
 	
+	public function changepublisherimpressionsnetworklossAction() {
+	
+		$initialized = $this->initialize();
+		if ($initialized !== true) return $initialized;
+	
+		if ($this->is_admin == false):
+			die("You do not have permission to access this page");
+		endif;
+	 
+		$publisher_info_id 						= $this->getRequest()->getQuery('networkimpressionslosspublisherinfoid');
+		$publisher_impressions_network_loss 	= $this->getRequest()->getQuery('publisher-impressions-network-loss');
+	
+		$PublisherImpressionsNetworkLossFactory = \_factory\PublisherImpressionsNetworkLoss::get_instance();
+		$params = array();
+		$params["PublisherInfoID"] 				= $publisher_info_id;
+		$PublisherImpressionsNetworkLoss 		= $PublisherImpressionsNetworkLossFactory->get_row($params);
+	
+		$publisher_impressions_network_loss 	= floatval($publisher_impressions_network_loss) / 100;
+	
+		if ($publisher_impressions_network_loss < 0):
+			die("Publisher Impressions Network Loss can not be less than zero percent");
+		endif;
+	
+		if ($publisher_impressions_network_loss >= 1):
+			die("Publisher Impressions Network Loss can not be greater than or equal to one hundred percent");
+		endif;
+	
+		$publisher_impressions_network_loss 	= sprintf("%1.2f", $publisher_impressions_network_loss);
+	
+		$_PublisherImpressionsNetworkLoss = new \model\PublisherImpressionsNetworkLoss();
+		$_PublisherImpressionsNetworkLoss->PublisherInfoID 		= $publisher_info_id;
+		$_PublisherImpressionsNetworkLoss->CorrectionRate 		= $publisher_impressions_network_loss;
+	
+		if ($PublisherImpressionsNetworkLoss != null):
+	
+			$PublisherImpressionsNetworkLossFactory->updatePublisherMarkup($_PublisherImpressionsNetworkLoss);
+	
+		else:
+	
+			$PublisherImpressionsNetworkLossFactory->insertPublisherImpressionsNetworkLoss($_PublisherImpressionsNetworkLoss);
+	
+		endif;
+	
+		return $this->redirect()->toRoute('publisher');
+	
+	}
+	
+	public function changedomainimpressionsnetworklossAction() {
+	
+		$initialized = $this->initialize();
+		if ($initialized !== true) return $initialized;
+	
+		if ($this->is_admin == false):
+			die("You do not have permission to access this page");
+		endif;
+	
+		$publisher_website_id 							= $this->getRequest()->getQuery('impressionsnetworklossdomainid');
+		$publisher_website_impressions_network_loss 	= $this->getRequest()->getQuery('domain-impressions-network-loss');
+	
+		$PublisherWebsiteImpressionsNetworkLossFactory 	= \_factory\PublisherWebsiteImpressionsNetworkLoss::get_instance();
+		$params = array();
+		$params["PublisherWebsiteID"] 					= $publisher_website_id;
+		$PublisherWebsiteImpressionsNetworkLoss 		= $PublisherWebsiteImpressionsNetworkLossFactory->get_row($params);
+	
+		$publisher_website_impressions_network_loss 	= floatval($publisher_website_impressions_network_loss) / 100;
+	
+		if ($publisher_website_impressions_network_loss <= 0):
+			die("Domain Impressions Network Loss can not be less than or equal to zero percent");
+		endif;
+	
+		if ($publisher_website_impressions_network_loss >= 1):
+			die("Domain Impressions Network Loss can not be greater than or equal to one hundred percent");
+		endif;
+	
+		$publisher_website_impressions_network_loss 	= sprintf("%1.2f", $publisher_website_impressions_network_loss);
+	
+		$_PublisherWebsiteImpressionsNetworkLoss 						= new \model\PublisherWebsiteImpressionsNetworkLoss();
+		$_PublisherWebsiteImpressionsNetworkLoss->PublisherWebsiteID 	= $publisher_website_id;
+		$_PublisherWebsiteImpressionsNetworkLoss->CorrectionRate 		= $publisher_website_impressions_network_loss;
+	
+		if ($PublisherWebsiteImpressionsNetworkLoss != null):
+	
+			$PublisherWebsiteImpressionsNetworkLossFactory->updatePublisherWebsiteImpressionsNetworkLoss($_PublisherWebsiteImpressionsNetworkLoss);
+	
+		else:
+	
+			$PublisherWebsiteImpressionsNetworkLossFactory->insertPublisherWebsiteImpressionsNetworkLoss($_PublisherWebsiteImpressionsNetworkLoss);
+	
+		endif;
+	
+		return $this->redirect()->toRoute('publisher');
+	
+	}
+	
 	/**
 	 *
 	 * @return Ambigous <\Zend\Http\Response, \Zend\Stdlib\ResponseInterface>

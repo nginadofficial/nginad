@@ -84,7 +84,7 @@ class PublisherWebsiteImpressionsNetworkLoss extends \_factory\CachedTableRead
     public function insertPublisherWebsiteImpressionsNetworkLoss(\model\PublisherWebsiteImpressionsNetworkLoss $PublisherWebsiteImpressionsNetworkLoss) {
     	$data = array(
     	        'PublisherWebsiteID'    => $PublisherWebsiteImpressionsNetworkLoss->PublisherWebsiteID,
-    			'MarkupRate'        	=> $PublisherWebsiteImpressionsNetworkLoss->MarkupRate
+    			'CorrectionRate'        => $PublisherWebsiteImpressionsNetworkLoss->CorrectionRate
     	);
 
     	$this->insert($data);
@@ -93,7 +93,7 @@ class PublisherWebsiteImpressionsNetworkLoss extends \_factory\CachedTableRead
     public function updatePublisherWebsiteImpressionsNetworkLoss(\model\PublisherWebsiteImpressionsNetworkLoss $PublisherWebsiteImpressionsNetworkLoss) {
     	$data = array(
     	        'PublisherWebsiteID'    => $PublisherWebsiteImpressionsNetworkLoss->PublisherWebsiteID,
-    			'MarkupRate'        	=> $PublisherWebsiteImpressionsNetworkLoss->MarkupRate
+    			'CorrectionRate'        => $PublisherWebsiteImpressionsNetworkLoss->CorrectionRate
     	);
 
     	$publisher_website_impressions_network_loss_id = $PublisherWebsiteImpressionsNetworkLoss->PublisherWebsiteID;
