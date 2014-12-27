@@ -53,7 +53,7 @@ class ReportController extends PublisherAbstractActionController {
                 ->get('viewrenderer')
                 ->render($view);
 
-        $impression = \_factory\PublisherImpressionsAndSpendHourly::get_instance();
+        $impression = \_factory\PublisherImpressionsAndSpendHourly::get_instance($this->config_handle);
 
         $stats	= json_decode($this->getPerTime($impression, $extra_params), TRUE);
         
@@ -594,7 +594,7 @@ class ReportController extends PublisherAbstractActionController {
     	endif;
     	
     	return $this->getResponse()->setContent(
-        		$this->getPerTime(\_factory\PublisherImpressionsAndSpendHourly::get_instance(), $extra_params)
+        		$this->getPerTime(\_factory\PublisherImpressionsAndSpendHourly::get_instance($this->config_handle), $extra_params)
     	);
     }
 

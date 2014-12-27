@@ -20,11 +20,14 @@ class PublisherImpressionsAndSpendHourly extends \_factory\CachedTableRead {
     static protected $instance = null;
     static $visibleAdminFiealds = array();
     static $visibleUserFiealds = array();
-
-    public static function get_instance() {
+    protected $network_loss_rate_list = array();
+	protected $config;
+	
+    public static function get_instance($config) {
 
         if (self::$instance == null):
             self::$instance = new \_factory\PublisherImpressionsAndSpendHourly();
+        	self::$instance->config = $config;
         endif;
         return self::$instance;
     }
@@ -62,6 +65,18 @@ class PublisherImpressionsAndSpendHourly extends \_factory\CachedTableRead {
         );
 
         foreach ($resultSet as $obj):
+        
+	        $publisher_impressions_network_loss_rate = \util\NetworkLossCorrection::getNetworkLossCorrectionRateFromPublisherAdZone($this->config, $obj->PublisherAdZoneID, $this->network_loss_rate_list);
+	         
+	        if ($publisher_impressions_network_loss_rate > 0):
+	        
+		        $obj->Requests = \util\NetworkLossCorrection::correctAmountWithNetworkLossCorrectionRateInteger($publisher_impressions_network_loss_rate, $obj->Requests);
+		        $obj->Impressions = \util\NetworkLossCorrection::correctAmountWithNetworkLossCorrectionRateInteger($publisher_impressions_network_loss_rate, $obj->Impressions);
+		        $obj->Revenue = \util\NetworkLossCorrection::correctAmountWithNetworkLossCorrectionRateMoney($publisher_impressions_network_loss_rate, $obj->Revenue);
+		        $obj->GrossRevenue = \util\NetworkLossCorrection::correctAmountWithNetworkLossCorrectionRateMoney($publisher_impressions_network_loss_rate, $obj->GrossRevenue);
+		         
+	        endif;
+        
             return $obj;
         endforeach;
 
@@ -85,6 +100,18 @@ class PublisherImpressionsAndSpendHourly extends \_factory\CachedTableRead {
         );
 
         foreach ($resultSet as $obj):
+        
+	        $publisher_impressions_network_loss_rate = \util\NetworkLossCorrection::getNetworkLossCorrectionRateFromPublisherAdZone($this->config, $obj->PublisherAdZoneID, $this->network_loss_rate_list);
+	        
+	        if ($publisher_impressions_network_loss_rate > 0):
+		        
+		        $obj->Requests = \util\NetworkLossCorrection::correctAmountWithNetworkLossCorrectionRateInteger($publisher_impressions_network_loss_rate, $obj->Requests);
+		        $obj->Impressions = \util\NetworkLossCorrection::correctAmountWithNetworkLossCorrectionRateInteger($publisher_impressions_network_loss_rate, $obj->Impressions);
+		        $obj->Revenue = \util\NetworkLossCorrection::correctAmountWithNetworkLossCorrectionRateMoney($publisher_impressions_network_loss_rate, $obj->Revenue);
+		        $obj->GrossRevenue = \util\NetworkLossCorrection::correctAmountWithNetworkLossCorrectionRateMoney($publisher_impressions_network_loss_rate, $obj->GrossRevenue);
+		         
+	        endif;
+	        
             $obj_list[] = $obj;
         endforeach;
 
@@ -150,6 +177,18 @@ class PublisherImpressionsAndSpendHourly extends \_factory\CachedTableRead {
 	    			return $value !== FALSE;
 	    		});
 	    	endif;
+
+	    	$publisher_impressions_network_loss_rate = \util\NetworkLossCorrection::getNetworkLossCorrectionRateFromPublisherAdZone($this->config, $obj['PublisherAdZoneID'], $this->network_loss_rate_list);
+
+	    	if ($publisher_impressions_network_loss_rate > 0):
+	    	
+		    	$obj['Requests'] = \util\NetworkLossCorrection::correctAmountWithNetworkLossCorrectionRateInteger($publisher_impressions_network_loss_rate, $obj['Requests']);
+		    	$obj['Impressions'] = \util\NetworkLossCorrection::correctAmountWithNetworkLossCorrectionRateInteger($publisher_impressions_network_loss_rate, $obj['Impressions']);
+		    	$obj['Revenue'] = \util\NetworkLossCorrection::correctAmountWithNetworkLossCorrectionRateMoney($publisher_impressions_network_loss_rate, $obj['Revenue']);
+		    	$obj['GrossRevenue'] = \util\NetworkLossCorrection::correctAmountWithNetworkLossCorrectionRateMoney($publisher_impressions_network_loss_rate, $obj['GrossRevenue']);
+
+		    endif;
+		    	
 	    	$obj['MDYH'] = 'DATE SPAN';
 	    	$obj_list[] = $obj;
     	endforeach;
@@ -217,6 +256,18 @@ class PublisherImpressionsAndSpendHourly extends \_factory\CachedTableRead {
                     return $value !== FALSE;
                 });
             }
+            
+            $publisher_impressions_network_loss_rate = \util\NetworkLossCorrection::getNetworkLossCorrectionRateFromPublisherAdZone($this->config, $obj['PublisherAdZoneID'], $this->network_loss_rate_list);
+            
+            if ($publisher_impressions_network_loss_rate > 0):
+            
+	            $obj['Requests'] = \util\NetworkLossCorrection::correctAmountWithNetworkLossCorrectionRateInteger($publisher_impressions_network_loss_rate, $obj['Requests']);
+	            $obj['Impressions'] = \util\NetworkLossCorrection::correctAmountWithNetworkLossCorrectionRateInteger($publisher_impressions_network_loss_rate, $obj['Impressions']);
+	            $obj['Revenue'] = \util\NetworkLossCorrection::correctAmountWithNetworkLossCorrectionRateMoney($publisher_impressions_network_loss_rate, $obj['Revenue']);
+	            $obj['GrossRevenue'] = \util\NetworkLossCorrection::correctAmountWithNetworkLossCorrectionRateMoney($publisher_impressions_network_loss_rate, $obj['GrossRevenue']);
+	            
+            endif;
+            
             $obj['MDYH'] = $this->re_normalize_time($obj['MDYH']);
             $obj_list[] = $obj;
         endforeach;

@@ -15,11 +15,14 @@ class PublisherImpressionsAndSpendHourlyTotals extends \_factory\CachedTableRead
 {
 
 	static protected $instance = null;
-
-	public static function get_instance() {
+	protected $network_loss_rate_list = array();
+	protected $config;
+	
+	public static function get_instance($config) {
 
 		if (self::$instance == null):
 			self::$instance = new \_factory\PublisherImpressionsAndSpendHourlyTotals();
+			self::$instance->config = $config;
 		endif;
 		return self::$instance;
 	}
@@ -51,7 +54,18 @@ class PublisherImpressionsAndSpendHourlyTotals extends \_factory\CachedTableRead
         	);
 
     	    foreach ($resultSet as $obj):
-    	         return $obj;
+    	    
+	    	    $publisher_impressions_network_loss_rate = \util\NetworkLossCorrection::getNetworkLossCorrectionRateFromPublisherAdZone($this->config, $obj->PublisherAdZoneID, $this->network_loss_rate_list);
+	    	    
+	    	    if ($publisher_impressions_network_loss_rate > 0):
+	    	     
+		    	    $obj->TotalRequests = \util\NetworkLossCorrection::correctAmountWithNetworkLossCorrectionRateInteger($publisher_impressions_network_loss_rate, $obj->TotalRequests);
+		    	    $obj->TotalImpressions = \util\NetworkLossCorrection::correctAmountWithNetworkLossCorrectionRateInteger($publisher_impressions_network_loss_rate, $obj->TotalImpressions);
+		    	    $obj->TotalRevenue = \util\NetworkLossCorrection::correctAmountWithNetworkLossCorrectionRateMoney($publisher_impressions_network_loss_rate, $obj->TotalRevenue);
+		    	    
+	    	    endif;
+
+    	        return $obj;
     	    endforeach;
 
         	return null;
@@ -75,6 +89,17 @@ class PublisherImpressionsAndSpendHourlyTotals extends \_factory\CachedTableRead
     	);
 
     	    foreach ($resultSet as $obj):
+
+	    	    $publisher_impressions_network_loss_rate = \util\NetworkLossCorrection::getNetworkLossCorrectionRateFromPublisherAdZone($this->config, $obj->PublisherAdZoneID, $this->network_loss_rate_list);
+	    	    
+	    	    if ($publisher_impressions_network_loss_rate > 0):
+	    	     
+		    	    $obj->TotalRequests = \util\NetworkLossCorrection::correctAmountWithNetworkLossCorrectionRateInteger($publisher_impressions_network_loss_rate, $obj->TotalRequests);
+		    	    $obj->TotalImpressions = \util\NetworkLossCorrection::correctAmountWithNetworkLossCorrectionRateInteger($publisher_impressions_network_loss_rate, $obj->TotalImpressions);
+		    	    $obj->TotalRevenue = \util\NetworkLossCorrection::correctAmountWithNetworkLossCorrectionRateMoney($publisher_impressions_network_loss_rate, $obj->TotalRevenue);
+		    	    
+	    	    endif;
+    	    
     	        $obj_list[] = $obj;
     	    endforeach;
 

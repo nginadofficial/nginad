@@ -38,6 +38,56 @@ class NetworkLossCorrection {
 	
 	}
 	
+	public static function correctAmountWithNetworkLossCorrectionRateInteger($publisher_impressions_network_loss_rate, $value) {
+		
+		$correction_amount		= floatval($value) * floatval($publisher_impressions_network_loss_rate);
+		$corrected_amount 		= floatval($value) - floatval($correction_amount);
+		
+		$corrected_amount 		= intval($corrected_amount);
+		
+		return (string)$corrected_amount;
+	}
+	
+	public static function correctAmountWithNetworkLossCorrectionRateMoney($publisher_impressions_network_loss_rate, $value) {
+		
+		$correction_amount		= floatval($value) * floatval($publisher_impressions_network_loss_rate);
+		$corrected_amount 		= floatval($value) - floatval($correction_amount);
+		
+		return sprintf("%1.7f", $corrected_amount);
+	}
+	
+	public static function getNetworkLossCorrectionRateFromPublisherAdZone($config, $publisher_ad_zone_id, &$network_loss_rate_list) {
+		
+		$PublisherAdZoneFactory = \_factory\PublisherAdZone::get_instance();
+
+		$params = array();
+		$params['PublisherAdZoneID'] = $publisher_ad_zone_id;
+		$PublisherAdZone = $PublisherAdZoneFactory->get_row($params);
+		
+		if ($PublisherAdZone === null):
+			return 0;
+		endif;
+		
+		$publisher_info_id 		= $PublisherAdZone->AdOwnerID;
+		$publisher_website_id 	= $PublisherAdZone->PublisherWebsiteID;
+		
+		$hash_key = $publisher_info_id . '-' . $publisher_website_id;
+		
+		if (isset($network_loss_rate_list[$hash_key])):
+		
+			$publisher_impressions_network_loss_rate = $network_loss_rate_list[$hash_key];
+		
+		else:
+		
+			$publisher_impressions_network_loss_rate = \util\NetworkLossCorrection::getPublisherNetworkLossCorrectionRate($publisher_website_id, $publisher_info_id, $config, false);
+			$network_loss_rate_list[$hash_key] = $publisher_impressions_network_loss_rate;
+			
+		endif;
+		
+		return $publisher_impressions_network_loss_rate;
+		
+	}
+	
 	public static function getPublisherNetworkLossCorrectionRate($publisher_website_id, $publisher_info_id, $config, $cached = true) {
 	
 		// is this campaign exempt from being marked up?
