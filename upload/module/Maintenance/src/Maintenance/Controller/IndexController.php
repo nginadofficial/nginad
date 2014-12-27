@@ -28,6 +28,8 @@ use util\Maintenance;
 
 class IndexController extends AbstractActionController {
 
+	protected $config;
+	
     public function indexAction() {
         echo "NGINAD MAINTENANCE<br />\n";
         exit;
@@ -45,6 +47,8 @@ class IndexController extends AbstractActionController {
     public function crontabAction() {
 
         $config = $this->getServiceLocator()->get('Config');
+
+        $this->config = $config;
 
         $secret_key = $this->getRequest()->getQuery('secret_key');
 
@@ -82,7 +86,7 @@ class IndexController extends AbstractActionController {
     	 * update all compiled stats into the PublisherAdZone table
     	*/
     	
-    	$PublisherImpressionsAndSpendHourlyTotals = \_factory\PublisherImpressionsAndSpendHourlyTotals::get_instance();
+    	$PublisherImpressionsAndSpendHourlyTotals = \_factory\PublisherImpressionsAndSpendHourlyTotals::get_instance($this->config);
     	
     	$PublisherAdZoneFactory = \_factory\PublisherAdZone::get_instance();
     	$params = array();
