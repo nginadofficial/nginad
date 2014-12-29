@@ -34,10 +34,10 @@ class DemandController extends DemandAbstractActionController {
 		$user_markup_rate = $this->config_handle['system']['default_demand_markup_rate'];
 		$campaign_markup_rate_list = array();
 
-		if (strpos($this->auth->getPrimaryRole(), $this->config_handle['roles']['admin']) !== false):
+		if ($this->is_admin):
 
 		    // admin is logged in as a user, get the markup if any for that user
-		    if ($this->auth->getEffectiveIdentityID() != 0):
+		    if ($this->ImpersonateID != 0 && !empty($this->DemandCustomerInfoID)):
 		    
 		    	$user_markup = \util\Markup::getMarkupForUser($this->auth->getEffectiveIdentityID(), $this->config_handle, false);
 		    	if ($user_markup != null):
@@ -45,16 +45,6 @@ class DemandController extends DemandAbstractActionController {
 				endif;
 		    endif;
 
-		endif;
-
-		if ($this->config_handle['system']['debug']):
-			echo "<br />\n";
-		    echo "My role in this application is: ";
-		    var_dump($this->auth->getPrimaryRole());
-		    echo "<br />\n";
-		    echo "My UserID in this application is: ";
-		    var_dump($this->auth->getUserID());
-		    echo "<br />\n";
 		endif;
 
 	    $AdCampaignFactory = \_factory\AdCampaign::get_instance();

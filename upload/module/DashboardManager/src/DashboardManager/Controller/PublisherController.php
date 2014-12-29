@@ -49,7 +49,7 @@ class PublisherController extends PublisherAbstractActionController {
 	        $meta_data = array("WebDomain","DomainMarkupRate","DomainPublisherImpressionsLossRate","DomainOwnerID","DateCreated","DateUpdated","ApprovalFlag");
 	    
 	        // admin is logged in as a user, get the markup if any for that user
-	        if ($this->EffectiveID != 0):
+	        if ($this->ImpersonateID != 0 && !empty($this->PublisherInfoID)):
 
 		        $publisher_markup = \util\Markup::getMarkupForPublisher($this->PublisherInfoID, $this->config_handle, false);
 		        if ($publisher_markup != null):

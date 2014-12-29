@@ -32,6 +32,10 @@ class ReportController extends PublisherAbstractActionController {
         if ($this->is_admin):
             $this->adminFunctionsSufix = 'Admin';
             $user_role = 1;
+            // admin is logged in as a user, get the stats for just that user
+            if ($this->ImpersonateID != 0 && !empty($this->PublisherInfoID)):
+            	$extra_params = array('PublisherInfoID' => $this->PublisherInfoID);
+            endif;
         elseif ($this->PublisherInfoID != null):
             $user_role = 2;
             $extra_params = array('PublisherInfoID' => $this->PublisherInfoID);
@@ -89,13 +93,16 @@ class ReportController extends PublisherAbstractActionController {
     	if ($this->is_admin):
     		$this->adminFunctionsSufix = 'Admin';
     		$user_role = 1;
+    		// admin is logged in as a user, get the stats for just that user
+    		if ($this->ImpersonateID != 0 && !empty($this->DemandCustomerInfoID)):
+	    		$extra_params = array('DemandCustomerInfoID' => $this->DemandCustomerInfoID);
+    		endif;
     	elseif ($this->PublisherInfoID != null):
     		return $this->redirect()->toUrl('report/');
     		$user_role = 2;
     	elseif ($this->DemandCustomerInfoID != null):
     		$user_role = 3;
     		$extra_params = array('DemandCustomerInfoID' => $this->DemandCustomerInfoID);
-    		$extra_params_user = array('auth_Users.user_id' => $this->EffectiveID);
     	endif;
     
     
