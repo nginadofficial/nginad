@@ -167,8 +167,6 @@ class ReportController extends PublisherAbstractActionController {
     	$user_tld_statistic 		= $user_tld_impression->getUserTLDStatistic($extra_params_user);
     	$user_tld_statistic_header 	= $user_tld_impression->getUserTLDStatisticHeader();
     	
-    	$impression = \_factory\DemandImpressionsAndSpendHourly::get_instance();
-    	
     	$totals = $this->createTotals($user_tld_statistic);
     	
     	$totals["PublisherTLD"] = "Totals:";
@@ -517,10 +515,8 @@ class ReportController extends PublisherAbstractActionController {
     	
     	$extra_params_user = array();
     	
-    	if ($this->is_admin || $this->DemandCustomerInfoID != null):
-	    	$user_role = 2;
-	    	$extra_params_user = array('auth_Users.user_id' => $this->EffectiveID);
-    	elseif ($this->DemandCustomerInfoID == null):
+    	if (!$this->is_admin):
+    		$user_role = 1;
     		die("bad request");
     	endif;
     	
@@ -531,7 +527,34 @@ class ReportController extends PublisherAbstractActionController {
         );
         return $this->getResponse()->setContent(json_encode($data));
     }
+    
+    public function getUserTLDStatisticExcelAction() {
+    
+    	$initialized = $this->initialize();
+    	if ($initialized !== true) return $initialized;
+    	 
+    	$extra_params_user = array();
+    	 
+    	if (!$this->is_admin):
+    		$user_role = 1;
+    		die("bad request");
+    	endif;
+    	 
+    	$user_tld_impression = \_factory\BuySideHourlyImpressionsByTLD::get_instance();
+    	 
+    	$user_tld_statistic 		= $user_tld_impression->getUserTLDStatistic($extra_params_user);
+    	$user_tld_statistic_header 	= $user_tld_impression->getUserTLDStatisticHeader();
+    	
+    	$totals = $this->createTotals($user_tld_statistic);
 
+    	$dates = $this->getDatesForExcelReport();
+    	
+    	$title = "User Totals";
+    	
+    	\util\ReportHelper::download_excel_file($user_tld_statistic, array_values($user_tld_statistic_header), $totals, $title, $dates);
+
+    }
+    
     public function getUserImpressionsSpendAction() {
 
     	if (!$this->is_admin):
@@ -578,6 +601,33 @@ class ReportController extends PublisherAbstractActionController {
         		$this->getPerTime(\_factory\DemandImpressionsAndSpendHourly::get_instance(), $extra_params)
         );
     }
+    
+    public function getDemandImpressionsPerTimeExcelAction() {
+    
+    	$initialized = $this->initialize(); 
+    	if ($initialized !== true) return $initialized;
+    	 
+    	$extra_params = array();
+    	 
+    	if ($this->DemandCustomerInfoID != null):
+    		$user_role = 2;
+    		$extra_params = array('DemandCustomerInfoID' => $this->DemandCustomerInfoID);
+    	elseif (!$this->is_admin):
+    		die("bad request");
+    	endif;
+    
+    	$impression = \_factory\DemandImpressionsAndSpendHourly::get_instance();
+    
+    	$stats	= json_decode($this->getPerTime($impression, $extra_params), TRUE);
+    	 
+    	$impression_headers = $impression->getPerTimeHeader($this->is_admin);
+    
+    	$dates = $this->getDatesForExcelReport();
+    	 
+    	$title = "Demand Impressions";
+    
+    	\util\ReportHelper::download_excel_file($stats['data'], $impression_headers, $stats['totals'], $title, $dates);
+    }
   
     public function getPublisherImpressionsPerTimeAction() {
     	
@@ -597,6 +647,33 @@ class ReportController extends PublisherAbstractActionController {
         		$this->getPerTime(\_factory\PublisherImpressionsAndSpendHourly::get_instance($this->config_handle), $extra_params)
     	);
     }
+    
+    public function getPublisherImpressionsPerTimeExcelAction() {
+    	 
+    	$initialized = $this->initialize();
+    	if ($initialized !== true) return $initialized;
+    	 
+    	$extra_params = array();
+    	 
+    	if ($this->PublisherInfoID != null):
+    		$user_role = 2;
+    		$extra_params = array('PublisherInfoID' => $this->PublisherInfoID);
+    	elseif (!$this->is_admin):
+    		die("bad request");
+    	endif;
+
+    	$impression = \_factory\PublisherImpressionsAndSpendHourly::get_instance($this->config_handle);
+    	 
+    	$stats	= json_decode($this->getPerTime($impression, $extra_params), TRUE);
+    	
+    	$impression_headers = $impression->getPerTimeHeader($this->is_admin);
+    	 
+    	$dates = $this->getDatesForExcelReport();
+    	
+    	$title = "Publisher Impressions";
+    
+    	\util\ReportHelper::download_excel_file($stats['data'], $impression_headers, $stats['totals'], $title, $dates);
+    }
 
     public function getIncomingBidsPerTimeAction() {
 
@@ -612,6 +689,28 @@ class ReportController extends PublisherAbstractActionController {
     	);
     }
 
+    public function getIncomingBidsPerTimeExcelAction() {
+    
+    	$initialized = $this->initialize();
+    	if ($initialized !== true) return $initialized;
+    	 
+    	if (!$this->is_admin):
+    		die("bad request");
+    	endif;
+    	
+    	$incoming_bid = \_factory\BuySideHourlyBidsCounter::get_instance();
+    	$extra_params = array();
+    	$stats	= json_decode($this->getPerTime($incoming_bid, $extra_params), TRUE);
+    	
+    	$incoming_bid_headers = $incoming_bid->getPerTimeHeader($this->is_admin);
+    	
+    	$dates = $this->getDatesForExcelReport();
+    	 
+    	$title = "Incoming Bids";
+    	
+    	\util\ReportHelper::download_excel_file($stats['data'], $incoming_bid_headers, $stats['totals'], $title, $dates);
+    }
+    
     public function getOutgoingBidsPerTimeAction() {
 
     	$initialized = $this->initialize();
@@ -624,6 +723,28 @@ class ReportController extends PublisherAbstractActionController {
     	return $this->getResponse()->setContent(
         		$this->getPerTime(\_factory\SellSidePartnerHourlyBids::get_instance())
     	);
+    }
+    
+    public function getOutgoingBidsPerTimeExcelAction() {
+    
+    	$initialized = $this->initialize();
+    	if ($initialized !== true) return $initialized;
+    	 
+    	if (!$this->is_admin):
+    		die("bad request");
+    	endif;
+    	 
+    	$outgoing_bid = \_factory\SellSidePartnerHourlyBids::get_instance();
+    	$extra_params = array();
+    	$stats	= json_decode($this->getPerTime($outgoing_bid, $extra_params), TRUE);
+    	
+    	$outgoing_bid_headers = $outgoing_bid->getPerTimeHeader($this->is_admin);
+    	
+    	$dates = $this->getDatesForExcelReport();
+    	 
+    	$title = "Outgoing Bids";
+    	
+    	\util\ReportHelper::download_excel_file($stats['data'], $outgoing_bid_headers, $stats['totals'], $title, $dates);
     }
 
     public function getContractImpressionsPerTimeAction() {
@@ -638,6 +759,28 @@ class ReportController extends PublisherAbstractActionController {
     	return $this->getResponse()->setContent(
         		$this->getPerTime(\_factory\ContractPublisherZoneHourlyImpressions::get_instance())
     	);
+    }
+    
+    public function getContractImpressionsPerTimeExcelAction() {
+    	 
+    	$initialized = $this->initialize();
+    	if ($initialized !== true) return $initialized;
+    	 
+    	if (!$this->is_admin):
+    		die("bad request");
+    	endif;
+    	 
+    	$impressions = \_factory\ContractPublisherZoneHourlyImpressions::get_instance();
+    	$stats	= json_decode($this->getPerTime($impressions), TRUE);
+    	 
+    	$impressions_headers = $impressions->getPerTimeHeader($this->is_admin);
+    	 
+    	$dates = $this->getDatesForExcelReport();
+    	
+    	$title = "Contract Impressions";
+    	 
+    	\util\ReportHelper::download_excel_file($stats['data'], $impressions_headers, $stats['totals'], $title, $dates);
+    
     }
 
     public function getImpressionsCurrentSpendPerTimeAction() {
@@ -677,13 +820,15 @@ class ReportController extends PublisherAbstractActionController {
 		    		endif;
 			    	if (!empty($value)):
 			    		$totals[$name]  = empty($totals[$name]) ? $value : $totals[$name] + $value;
+			    	elseif (!isset($totals[$name])):
+			    		$totals[$name] = "";
 			    	endif;
 		    	else:
 		    		$totals[$name] = "";
 		    	endif;
 	    	endforeach;
     	endforeach;
-    	 
+
     	// format numbers
     	foreach ($totals as $name => $value):
     		$totals[$name] = str_replace(array("$", "%"), array("", ""), $totals[$name]);
@@ -718,14 +863,17 @@ class ReportController extends PublisherAbstractActionController {
     private function isRevWord($test_word) {
     	$match_words = array(
     		"revenue",
-    		"cost"	
+    		"cost",
+    		"revtotal",
+    		"spendtotal"
     	);
     	return $this->isWordMatch($match_words, $test_word);
     }
     
     private function isCpmWord($test_word) {
     	$match_words = array(
-    			"cpm"
+    			"cpm",
+    			"averagebid"
     	);
     	return $this->isWordMatch($match_words, $test_word);
     }
@@ -814,6 +962,29 @@ class ReportController extends PublisherAbstractActionController {
         
         return json_encode($data);
 
+    }
+    
+    private function getDatesForExcelReport() {
+    	 
+    	$params = $this->params()->fromQuery();
+    	 
+    	if (!empty($params['time_from']) && !empty($params['time_to'])):
+    		$dates = $params['time_from'] . ' to ' .  $params['time_to'];
+    	else:
+	    	if (!empty($params['step'])):
+	    		$step = $params['step'];
+	    	else:
+	    		$step = 1;
+	    	endif;
+	    
+	    	// default 12 hours
+	    	$DateCreatedGreater = date('Y-m-d H:i:s', time() - (12 * 3600 * $step));
+	    	$DateCreatedLower = date('Y-m-d H:i:s', time() - (12 * 3600 * ($step - 1)));
+	    
+	    	$dates = $DateCreatedLower . ' to ' .  $DateCreatedGreater;
+    	endif;
+    	 
+    	return $dates;
     }
 
 }

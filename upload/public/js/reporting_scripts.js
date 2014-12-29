@@ -40,6 +40,7 @@ function sendFilterData() {
         datasend['interval'] = $('#interval_type').val();
         datasend['step'] = step;
         datasend['refresh'] = $(this).data('refresh');
+        datasend['excel'] = $(this).data('excel');
         if (datasend['interval'] == 1) {
             datasend['time_from'] = $('#time_from').val();
             datasend['time_to'] = $('#time_to').val();
@@ -55,44 +56,15 @@ function sendFilterData() {
             }
         }
 
+        if($(this).data('excel')){
+            var method = "";
+            var url = '/report/' + $(this).data('action') + 'Excel/?'+ $.param( datasend, true );
+            window.location = url;
+            return false;
+        }
+        
         updateStatistic('report_list', $(this).data('action'), datasend);
 
-//        if($(this).data('refresh')){
-//            
-//            if($(this).data('tab') == 1){
-//                getTotalSpend();
-//                getImpressionsByUserTld();
-//            }
-//            else if($(this).data('tab') == 2){
-//                getAverageBids();
-//            }
-//            else if($(this).data('tab') == 3){
-//                getSpendByWebomain();
-//            }
-//            
-//            
-//        }
-
-        if($(this).data('refresh')){
-            
-            if($(this).data('tab') == 1){
-                updateStatistic('impressions_by_user_tld_area', 'getUserTLDStatistic');
-            }
-            else if($(this).data('tab') == 2){
-                updateStatistic('average_bids_area', 'getAverageIncomingBids');
-            }
-            else if($(this).data('tab') == 3){
-                updateStatistic('spend_by_webdomain_area', 'getOutgoingBidsPerZone');
-            }
-            else if($(this).data('tab') == 4){
-                updateStatistic('spend_per_webdomain', 'getImpressionsPerContractZone');
-            }
-            else if($(this).data('tab') == 5){
-                updateStatistic('total_spend_area', 'getUserImpressionsSpend');
-            }
-            
-            
-        }
         return false;
     });
 }

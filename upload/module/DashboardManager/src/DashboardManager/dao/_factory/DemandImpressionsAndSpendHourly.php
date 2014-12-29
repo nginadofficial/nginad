@@ -39,6 +39,7 @@ class DemandImpressionsAndSpendHourly extends \_factory\CachedTableRead {
 
         $this->adminFields = array_merge($this->adminFields, array(
         	'DemandCustomerInfoID',
+        	'DemandCustomerName',
             'GrossCost',
             'GrossCPM',
         	'DateCreated'
@@ -232,14 +233,6 @@ class DemandImpressionsAndSpendHourly extends \_factory\CachedTableRead {
 
         $metadata = new Metadata($this->adapter);
         $header = $metadata->getColumnNames('DemandImpressionsAndSpendHourly');
-        
-        if (self::$perTimeCustomInvoked == true):
-	        foreach ($header as $key => $value):
-				if ($value == "PublisherTLDs"):
-					unset($header[$key]);
-				endif;
-	        endforeach;
-        endif;
         
         return ($is_admin) ? $header : array_values(array_diff($header, $this->adminFields));
     }

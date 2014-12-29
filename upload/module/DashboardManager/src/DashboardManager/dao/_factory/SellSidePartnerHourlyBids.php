@@ -142,6 +142,15 @@ class SellSidePartnerHourlyBids extends \_factory\CachedTableRead {
                     return $value !== FALSE;
                 });
             }
+            
+            if (empty($obj['AverageBidNet'])):
+            	$obj['AverageBidNet'] = 0;
+            endif;
+            
+            if (empty($obj['AverageBidGross'])):
+            	$obj['AverageBidGross'] = 0;
+            endif;
+            
             if($list_date_span === true):
            		$obj['MDYH'] = 'DATE SPAN';
             else:
