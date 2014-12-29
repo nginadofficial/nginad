@@ -152,7 +152,16 @@ class DemandImpressionsAndSpendHourly extends \_factory\CachedTableRead {
 	    		$obj = array_filter($obj, function($value) {
 	    			return $value !== FALSE;
 	    		});
+	    	else:
+	    		if (empty($obj['GrossCPM'])):
+	    			$obj['GrossCPM'] = 0;
+	    		endif;
 	    	endif;
+	    	
+	    	if (empty($obj['CPM'])):
+	    		$obj['CPM'] = 0;
+	    	endif;
+	    	
 	    	$obj['MDYH'] = 'DATE SPAN';
 	    	$obj_list[] = $obj;
     	endforeach;
@@ -212,7 +221,7 @@ class DemandImpressionsAndSpendHourly extends \_factory\CachedTableRead {
         $results = $statement->execute();
 
         foreach ($results as $obj):
-            if (!$is_admin) {
+            if (!$is_admin):
                 array_walk($obj, function($item, $key) use (&$obj) {
                     if (array_search($key, $this->adminFields) !== FALSE) {
                         $obj[$key] = FALSE;
@@ -221,7 +230,16 @@ class DemandImpressionsAndSpendHourly extends \_factory\CachedTableRead {
                 $obj = array_filter($obj, function($value) {
                     return $value !== FALSE;
                 });
-            }
+	    	else:
+	    		if (empty($obj['GrossCPM'])):
+	    			$obj['GrossCPM'] = 0;
+	    		endif;
+	    	endif;
+	    	
+	    	if (empty($obj['CPM'])):
+	    		$obj['CPM'] = 0;
+	    	endif;
+	    	
             $obj['MDYH'] = $this->re_normalize_time($obj['MDYH']);
             $obj_list[] = $obj;
         endforeach;

@@ -176,17 +176,26 @@ class PublisherImpressionsAndSpendHourly extends \_factory\CachedTableRead {
 	    		$obj = array_filter($obj, function($value) {
 	    			return $value !== FALSE;
 	    		});
+	    	else:
+	    		if (empty($obj['GrossECPM'])):
+	    			$obj['GrossECPM'] = 0;
+	    		endif;
 	    	endif;
-
+	    	
 	    	$publisher_impressions_network_loss_rate = \util\NetworkLossCorrection::getNetworkLossCorrectionRateFromPublisherAdZone($this->config, $obj['PublisherAdZoneID'], $this->network_loss_rate_list);
-
+	    	
+	    	if (empty($obj['eCPM'])):
+	    		$obj['eCPM'] = 0;
+	    	endif;
+	    	
 	    	if ($publisher_impressions_network_loss_rate > 0):
 	    	
 		    	$obj['Requests'] = \util\NetworkLossCorrection::correctAmountWithNetworkLossCorrectionRateInteger($publisher_impressions_network_loss_rate, $obj['Requests']);
 		    	$obj['Impressions'] = \util\NetworkLossCorrection::correctAmountWithNetworkLossCorrectionRateInteger($publisher_impressions_network_loss_rate, $obj['Impressions']);
 		    	$obj['Revenue'] = \util\NetworkLossCorrection::correctAmountWithNetworkLossCorrectionRateMoney($publisher_impressions_network_loss_rate, $obj['Revenue']);
-		    	$obj['GrossRevenue'] = \util\NetworkLossCorrection::correctAmountWithNetworkLossCorrectionRateMoney($publisher_impressions_network_loss_rate, $obj['GrossRevenue']);
-
+		    	if ($is_admin):
+		    		$obj['GrossRevenue'] = \util\NetworkLossCorrection::correctAmountWithNetworkLossCorrectionRateMoney($publisher_impressions_network_loss_rate, $obj['GrossRevenue']);
+				endif;
 		    endif;
 		    	
 	    	$obj['MDYH'] = 'DATE SPAN';
@@ -246,7 +255,7 @@ class PublisherImpressionsAndSpendHourly extends \_factory\CachedTableRead {
         $results = $statement->execute();
 
         foreach ($results as $obj):
-            if (!$is_admin) {
+            if (!$is_admin):
                 array_walk($obj, function($item, $key) use (&$obj) {
                     if (array_search($key, $this->adminFields) !== FALSE) {
                         $obj[$key] = FALSE;
@@ -255,17 +264,26 @@ class PublisherImpressionsAndSpendHourly extends \_factory\CachedTableRead {
                 $obj = array_filter($obj, function($value) {
                     return $value !== FALSE;
                 });
-            }
+            else:
+	            if (empty($obj['GrossECPM'])):
+	            	$obj['GrossECPM'] = 0;
+	            endif;
+            endif;
             
             $publisher_impressions_network_loss_rate = \util\NetworkLossCorrection::getNetworkLossCorrectionRateFromPublisherAdZone($this->config, $obj['PublisherAdZoneID'], $this->network_loss_rate_list);
+
+            if (empty($obj['eCPM'])):
+           		$obj['eCPM'] = 0;
+            endif;
             
             if ($publisher_impressions_network_loss_rate > 0):
             
 	            $obj['Requests'] = \util\NetworkLossCorrection::correctAmountWithNetworkLossCorrectionRateInteger($publisher_impressions_network_loss_rate, $obj['Requests']);
 	            $obj['Impressions'] = \util\NetworkLossCorrection::correctAmountWithNetworkLossCorrectionRateInteger($publisher_impressions_network_loss_rate, $obj['Impressions']);
 	            $obj['Revenue'] = \util\NetworkLossCorrection::correctAmountWithNetworkLossCorrectionRateMoney($publisher_impressions_network_loss_rate, $obj['Revenue']);
-	            $obj['GrossRevenue'] = \util\NetworkLossCorrection::correctAmountWithNetworkLossCorrectionRateMoney($publisher_impressions_network_loss_rate, $obj['GrossRevenue']);
-	            
+	            if ($is_admin):
+	           		$obj['GrossRevenue'] = \util\NetworkLossCorrection::correctAmountWithNetworkLossCorrectionRateMoney($publisher_impressions_network_loss_rate, $obj['GrossRevenue']);
+	            endif;
             endif;
             
             $obj['MDYH'] = $this->re_normalize_time($obj['MDYH']);
