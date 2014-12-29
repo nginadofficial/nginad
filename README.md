@@ -1,6 +1,14 @@
 nginad
 =======
 
+December 28, 2014
+------------------
+
+The 1.4.47 release to address the missing Excel Report download button feature is complete. It was coded and added to all report types. Also there are some small reporting bug fixes in NginAd 1.4. This may be the last feature update in 1.4 until we merge the leads-unlimited branch and release NginAd 1.5
+
+ * Implemented Excel file downloads for every type of statistics report
+ * Also did some bug fixes to the statistics totals in the JSON.
+
 December 26, 2014
 ------------------
 
