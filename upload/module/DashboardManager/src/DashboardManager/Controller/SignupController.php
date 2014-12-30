@@ -129,37 +129,42 @@ class SignupController extends PublisherAbstractActionController {
 				$authUsers->create_date	   	      	= date("Y-m-d H:i:s");
 				
 				$authUsersFactory->saveUser($authUsers);
-				
-				$partner_type = \util\DeliveryFilterOptions::$partner_type;
-
-				$message = '<b>New Demand Customer Registered.</b><br /><br />';
-				$message = $message.'<table border="0" width="10%">';
-				$message = $message.'<tr><td><b>Name: </b></td><td>'.$Name.'</td></tr>';
-				$message = $message.'<tr><td><b>Email: </b></td><td>'.$Email.'</td></tr>';
-				$message = $message.'<tr><td><b>Website: </b></td><td>'.$Website.'</td></tr>';
-				$message = $message.'<tr><td><b>Company: </b></td><td>'.$Company.'</td></tr>';
-				$message = $message.'<tr><td><b>Partner Type: </b></td><td>'.$partner_type[$PartnerType].'</td></tr>';
-				$message = $message.'</table>';
-				
-				$subject = "New Demand Customer Registered";
-				
-				$transport = $this->getServiceLocator()->get('mail.transport');
-				
-				$text = new Mime\Part($message);
-				$text->type = Mime\Mime::TYPE_HTML;
-				$text->charset = 'utf-8';
-				
-				$mimeMessage = new Mime\Message();
-				$mimeMessage->setParts(array($text));
-				$zf_message = new Message();
-	
-				$zf_message->addTo($config['mail']['admin-email']['email'], $config['mail']['admin-email']['name'])
-					->addFrom($config['mail']['reply-to']['email'], $config['mail']['reply-to']['name'])
-					->setSubject($subject)
-					->setBody($mimeMessage);
-				$transport->send($zf_message);
-				
 				$success_msg = 1;
+				
+				if ($config['mail']['subscribe']['signups'] === true):
+					
+					$partner_type = isset(\util\DeliveryFilterOptions::$partner_type[$PartnerType]) ? \util\DeliveryFilterOptions::$partner_type[$PartnerType] : "N/A";
+	
+					$message = '<b>New NginAd Demand Customer Registered.</b><br /><br />';
+					$message = $message.'<table border="0" width="10%">';
+					$message = $message.'<tr><td><b>Login: </b></td><td>'.$user_login.'</td></tr>';
+					$message = $message.'<tr><td><b>Name: </b></td><td>'.$Name.'</td></tr>';
+					$message = $message.'<tr><td><b>Email: </b></td><td>'.$Email.'</td></tr>';
+					$message = $message.'<tr><td><b>Website: </b></td><td>'.$Website.'</td></tr>';
+					$message = $message.'<tr><td><b>Company: </b></td><td>'.$Company.'</td></tr>';
+					$message = $message.'<tr><td><b>Partner Type: </b></td><td>'.$partner_type.'</td></tr>';
+					$message = $message.'</table>';
+					
+					$subject = "New NginAd Demand Customer Registered: " . $user_login;
+					
+					$transport = $this->getServiceLocator()->get('mail.transport');
+					
+					$text = new Mime\Part($message);
+					$text->type = Mime\Mime::TYPE_HTML;
+					$text->charset = 'utf-8';
+					
+					$mimeMessage = new Mime\Message();
+					$mimeMessage->setParts(array($text));
+					$zf_message = new Message();
+		
+					$zf_message->addTo($config['mail']['admin-email']['email'], $config['mail']['admin-email']['name'])
+						->addFrom($config['mail']['reply-to']['email'], $config['mail']['reply-to']['name'])
+						->setSubject($subject)
+						->setBody($mimeMessage);
+					$transport->send($zf_message);
+					
+				endif;
+
 			else:
 				$error_msg = "ERROR: A duplicate Account may exist. Please try another.";
 			endif;
@@ -183,6 +188,8 @@ class SignupController extends PublisherAbstractActionController {
 		if (!$request->isPost()):
 			 return $this->redirect()->toRoute('signup');
 		endif;
+		
+		$config = $this->getServiceLocator()->get('Config');
 		
 		$Name	     = $request->getPost('Name');
 		$Email		 = $request->getPost('Email');
@@ -225,6 +232,38 @@ class SignupController extends PublisherAbstractActionController {
 			
 			$authUsersFactory->saveUser($authUsers);
 			$success_msg = 1;
+			
+			if ($config['mail']['subscribe']['signups'] === true):
+			
+				$iab_cat = isset(\util\DeliveryFilterOptions::$vertical_map[$IABCategory]) ? \util\DeliveryFilterOptions::$vertical_map[$IABCategory] : "N/A";
+				
+				$message = '<b>New NginAd Publisher Registered.</b><br /><br />';
+				$message = $message.'<table border="0" width="10%">';
+				$message = $message.'<tr><td><b>Login: </b></td><td>'.$user_login.'</td></tr>';
+				$message = $message.'<tr><td><b>Name: </b></td><td>'.$Name.'</td></tr>';
+				$message = $message.'<tr><td><b>Email: </b></td><td>'.$Email.'</td></tr>';
+				$message = $message.'<tr><td><b>Domain: </b></td><td>'.$Domain.'</td></tr>';
+				$message = $message.'<tr><td><b>IABCategory: </b></td><td>'.$iab_cat.'</td></tr>';
+				$message = $message.'</table>';
+				
+				$subject = "New NginAd Publisher Registered: " . $user_login;
+				
+				$transport = $this->getServiceLocator()->get('mail.transport');
+				
+				$text = new Mime\Part($message);
+				$text->type = Mime\Mime::TYPE_HTML;
+				$text->charset = 'utf-8';
+				
+				$mimeMessage = new Mime\Message();
+				$mimeMessage->setParts(array($text));
+				$zf_message = new Message();
+				
+				$zf_message->addTo($config['mail']['admin-email']['email'], $config['mail']['admin-email']['name'])
+				->addFrom($config['mail']['reply-to']['email'], $config['mail']['reply-to']['name'])
+				->setSubject($subject)
+				->setBody($mimeMessage);
+				$transport->send($zf_message);
+			endif;
 		else:
 			$error_msg = "ERROR: A duplicate Account may exist. Please try another.";
 		endif;
@@ -813,10 +852,15 @@ class SignupController extends PublisherAbstractActionController {
 	    	if ($PublisherWebsiteFactory->get_row($params) === null):
 	    	  	$PublisherWebsiteFactory->save_domain($PublisherWebsite);
 	    	
-	    		if ($auto_approve_websites != true):
-		    	  	$message = "New website for approval.<br /><b>".$website."</b>";
-					
-					$subject = "New website for approval: " . $website;
+	    		if ($auto_approve_websites != true || $this->config_handle['mail']['subscribe']['websites'] === true):
+	    		
+	    			if ($auto_approve_websites != true):
+			    	  	$message = "New NginAd Website for Approval.<br /><b>".$website."</b><br /><br />Username: " . $this->true_user_name;
+						$subject = "New NginAd Website for Approval: " . $website;
+					else:
+						$message = "New NginAd Website.<br /><b>".$website."</b><br /><br />Username: " . $this->true_user_name;
+						$subject = "New NginAd Website: " . $website;
+					endif;
 					
 					$transport = $this->getServiceLocator()->get('mail.transport');
 					

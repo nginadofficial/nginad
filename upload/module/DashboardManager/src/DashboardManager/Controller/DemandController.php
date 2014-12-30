@@ -12,7 +12,8 @@ use DashboardManager\ParentControllers\DemandAbstractActionController;
 use Zend\View\Model\ViewModel;
 //use Zend\Session\Container; // We need this when using sessions (No longer used?)
 use transformation;
-
+use Zend\Mail\Message;
+use Zend\Mime;
 
 /**
  * @author Christopher Gu
@@ -358,7 +359,7 @@ class DemandController extends DemandAbstractActionController {
 			* THEN IT CREATES A PREVIEW VERSION OF THE AD CAMPAIGN
 			*/
 			$update_data = array('type'=>'AdCampaignBannerID', 'id'=>$id);
-			$return_val = \transformation\TransformPreview::previewCheckBannerID($id, $this->auth, $update_data);
+			$return_val = \transformation\TransformPreview::previewCheckBannerID($id, $this->auth, $this->config_handle, $this->getServiceLocator()->get('mail.transport'), $update_data);
 			
 			if ($return_val !== null):
 				$id = $return_val["AdCampaignBannerPreviewID"];
@@ -431,7 +432,7 @@ class DemandController extends DemandAbstractActionController {
 			* THEN IT CREATES A PREVIEW VERSION OF THE AD CAMPAIGN
 			*/
 			$update_data = array('type'=>'AdCampaignBannerID', 'id'=>$bannerid);
-			$return_val = \transformation\TransformPreview::previewCheckBannerID($bannerid, $this->auth, $update_data);
+			$return_val = \transformation\TransformPreview::previewCheckBannerID($bannerid, $this->auth, $this->config_handle, $this->getServiceLocator()->get('mail.transport'), $update_data);
 		
 			if ($return_val !== null):
 				$banner_preview_id = $return_val["AdCampaignBannerPreviewID"];
@@ -608,7 +609,7 @@ class DemandController extends DemandAbstractActionController {
 				* THEN IT CREATES A PREVIEW VERSION OF THE AD CAMPAIGN
 				*/
 				$update_data = array('type'=>'AdCampaignBannerID', 'id'=>$bannerid);
-				$return_val = \transformation\TransformPreview::previewCheckBannerID($bannerid, $this->auth, $update_data);
+				$return_val = \transformation\TransformPreview::previewCheckBannerID($bannerid, $this->auth, $this->config_handle, $this->getServiceLocator()->get('mail.transport'), $update_data);
 	
 				if ($return_val !== null):
 					$banner_preview_id = $return_val["AdCampaignBannerPreviewID"];
@@ -1336,7 +1337,7 @@ class DemandController extends DemandAbstractActionController {
 
 			$update_data = array('type'=>'AdCampaignBannerDomainExclusiveInclusionID', 'id'=>$id);
 
-			$return_val = \transformation\TransformPreview::previewCheckBannerID($banner_id, $this->auth, $update_data);
+			$return_val = \transformation\TransformPreview::previewCheckBannerID($banner_id, $this->auth, $this->config_handle, $this->getServiceLocator()->get('mail.transport'), $update_data);
 
 			if ($return_val !== null && array_key_exists("error", $return_val)):
 
@@ -1496,7 +1497,7 @@ class DemandController extends DemandAbstractActionController {
 			* THEN IT CREATES A PREVIEW VERSION OF THE AD CAMPAIGN
 			*/
 			$update_data = array('type'=>'AdCampaignBannerID', 'id'=>$bannerid);
-			$return_val = \transformation\TransformPreview::previewCheckBannerID($bannerid, $this->auth, $update_data);
+			$return_val = \transformation\TransformPreview::previewCheckBannerID($bannerid, $this->auth, $this->config_handle, $this->getServiceLocator()->get('mail.transport'), $update_data);
 
 			if ($return_val !== null):
 				$banner_preview_id = $return_val["AdCampaignBannerPreviewID"];
@@ -1698,7 +1699,7 @@ class DemandController extends DemandAbstractActionController {
 
 			$update_data = array('type'=>'AdCampaignBannerDomainExclusionID', 'id'=>$id);
 
-			$return_val = \transformation\TransformPreview::previewCheckBannerID($banner_id, $this->auth, $update_data);
+			$return_val = \transformation\TransformPreview::previewCheckBannerID($banner_id, $this->auth, $this->config_handle, $this->getServiceLocator()->get('mail.transport'), $update_data);
 
 			if ($return_val !== null && array_key_exists("error", $return_val)):
 
@@ -1859,7 +1860,7 @@ class DemandController extends DemandAbstractActionController {
 			* THEN IT CREATES A PREVIEW VERSION OF THE AD CAMPAIGN
 			*/
 			$update_data = array('type'=>'AdCampaignBannerID', 'id'=>$bannerid);
-			$return_val = \transformation\TransformPreview::previewCheckBannerID($bannerid, $this->auth, $update_data);
+			$return_val = \transformation\TransformPreview::previewCheckBannerID($bannerid, $this->auth, $this->config_handle, $this->getServiceLocator()->get('mail.transport'), $update_data);
 
 			if ($return_val !== null):
 				$banner_preview_id = $return_val["AdCampaignBannerPreviewID"];
@@ -1934,7 +1935,7 @@ class DemandController extends DemandAbstractActionController {
 			*/
 
 			$update_data = array('type'=>'AdCampaignBannerID', 'id'=>$id);
-			$return_val = \transformation\TransformPreview::previewCheckBannerID($id, $this->auth, $update_data);
+			$return_val = \transformation\TransformPreview::previewCheckBannerID($id, $this->auth, $this->config_handle, $this->getServiceLocator()->get('mail.transport'), $update_data);
 
 			if ($return_val !== null && array_key_exists("error", $return_val)):
 
@@ -2233,7 +2234,7 @@ class DemandController extends DemandAbstractActionController {
 				$update_data = array('type'=>'AdCampaignID', 'id'=>$campaignid);
 			endif;
 
-			$return_val = \transformation\TransformPreview::previewCheckAdCampaignID($campaignid, $this->auth, $update_data);
+			$return_val = \transformation\TransformPreview::previewCheckAdCampaignID($campaignid, $this->auth, $this->config_handle, $this->getServiceLocator()->get('mail.transport'), $update_data);
 
 			if ($return_val !== null):
 				if ($bannerid != null):
@@ -2791,7 +2792,7 @@ class DemandController extends DemandAbstractActionController {
 			*/
 
 			$update_data = array('type'=>'AdCampaignID', 'id'=>$id);
-			$return_val = \transformation\TransformPreview::previewCheckAdCampaignID($id, $this->auth, $update_data);
+			$return_val = \transformation\TransformPreview::previewCheckAdCampaignID($id, $this->auth, $this->config_handle, $this->getServiceLocator()->get('mail.transport'), $update_data);
 			
 			if ($return_val !== null && array_key_exists("error", $return_val)):
 
@@ -3019,7 +3020,7 @@ class DemandController extends DemandAbstractActionController {
 		    */
 
 		    $update_data = array('type'=>'AdCampaignID', 'id'=>$campaignid);
-		    $return_val = \transformation\TransformPreview::previewCheckAdCampaignID($campaignid, $this->auth, $update_data);
+		    $return_val = \transformation\TransformPreview::previewCheckAdCampaignID($campaignid, $this->auth, $this->config_handle, $this->getServiceLocator()->get('mail.transport'), $update_data);
 
 		    if ($return_val !== null):
 			    $campaign_preview_id 	= $return_val["AdCampaignPreviewID"];
@@ -3062,8 +3063,44 @@ class DemandController extends DemandAbstractActionController {
     	$AdCampaignPreview->ChangeWentLive            = 0;
 
 	    $AdCampaignPreviewFactory = \_factory\AdCampaignPreview::get_instance();
-	    $AdCampaignPreviewFactory->saveAdCampaignPreview($AdCampaignPreview);
+	    $new_campaign_preview_id = $AdCampaignPreviewFactory->saveAdCampaignPreview($AdCampaignPreview);
 
+	    if (!$this->is_admin && $new_campaign_preview_id !== null && $this->config_handle['mail']['subscribe']['campaigns'] === true):
+	    
+		    // if this ad campaign was not created/edited by the admin, then send out a notification email
+		    $message = '<b>NginAd Demand Customer Campaign Added by ' . $this->true_user_name . '.</b><br /><br />';
+		    $message = $message.'<table border="0" width="10%">';
+		    $message = $message.'<tr><td><b>AdCampaignID: </b></td><td>'.$new_campaign_preview_id.'</td></tr>';
+		    $message = $message.'<tr><td><b>UserID: </b></td><td>'.$AdCampaignPreview->UserID.'</td></tr>';
+		    $message = $message.'<tr><td><b>Name: </b></td><td>'.$AdCampaignPreview->Name.'</td></tr>';
+		    $message = $message.'<tr><td><b>StartDate: </b></td><td>'.$AdCampaignPreview->StartDate.'</td></tr>';
+		    $message = $message.'<tr><td><b>EndDate: </b></td><td>'.$AdCampaignPreview->EndDate.'</td></tr>';
+		    $message = $message.'<tr><td><b>Customer: </b></td><td>'.$AdCampaignPreview->Customer.'</td></tr>';
+		    $message = $message.'<tr><td><b>CustomerID: </b></td><td>'.$AdCampaignPreview->CustomerID.'</td></tr>';
+		    $message = $message.'<tr><td><b>MaxImpressions: </b></td><td>'.$AdCampaignPreview->MaxImpressions.'</td></tr>';
+		    $message = $message.'<tr><td><b>MaxSpend: </b></td><td>'.$AdCampaignPreview->MaxSpend.'</td></tr>';
+		    $message = $message.'</table>';
+		    	
+		    $subject = "NginAd Demand Customer Campaign Added by " . $this->true_user_name;
+		    
+		    $transport = $this->getServiceLocator()->get('mail.transport');
+		    
+		    $text = new Mime\Part($message);
+		    $text->type = Mime\Mime::TYPE_HTML;
+		    $text->charset = 'utf-8';
+		    
+		    $mimeMessage = new Mime\Message();
+		    $mimeMessage->setParts(array($text));
+		    $zf_message = new Message();
+		    
+		    $zf_message->addTo($this->config_handle['mail']['admin-email']['email'], $this->config_handle['mail']['admin-email']['name'])
+		    ->addFrom($this->config_handle['mail']['reply-to']['email'], $this->config_handle['mail']['reply-to']['name'])
+		    ->setSubject($subject)
+		    ->setBody($mimeMessage);
+		    $transport->send($zf_message);
+		    
+	    endif;
+	    
 		$refresh_url = "/demand/?ispreview=true";
 		$viewModel = new ViewModel(array('refresh_url' => $refresh_url));
 

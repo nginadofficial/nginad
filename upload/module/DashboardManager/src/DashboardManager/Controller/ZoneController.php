@@ -11,6 +11,8 @@ namespace DashboardManager\Controller;
 use DashboardManager\ParentControllers\PublisherAbstractActionController;
 use Zend\View\Model\ViewModel;
 use transformation;
+use Zend\Mail\Message;
+use Zend\Mime;
 
 /**
  * @author Kelvin Mok
@@ -369,6 +371,45 @@ class ZoneController extends PublisherAbstractActionController {
 			                    endforeach;
 		                    
 		                    endif;
+		                elseif ($this->config_handle['mail']['subscribe']['zones'] === true):
+		                
+			                $is_approved = $ad->AdStatus == 1 ? 'Yes' : 'No';
+		                	$is_mobile = $ad->IsMobileFlag == 1 ? 'Yes' : 'No';
+		                	
+			                // if this zone was not created by the admin, then send out a notification email
+			                $message = '<b>New NginAd Publisher Zone Added by ' . $this->true_user_name . '.</b><br /><br />';
+			                $message = $message.'<table border="0" width="10%">';
+			                $message = $message.'<tr><td><b>WebDomain: </b></td><td>'.$DomainObj->WebDomain.'</td></tr>';
+			                $message = $message.'<tr><td><b>AdName: </b></td><td>'.$ad->AdName.'</td></tr>';
+			                $message = $message.'<tr><td><b>Description: </b></td><td>'.$ad->Description.'</td></tr>';
+			                $message = $message.'<tr><td><b>PassbackAdTag: </b></td><td>'.$ad->PassbackAdTag.'</td></tr>';
+			                $message = $message.'<tr><td><b>FloorPrice: </b></td><td>'.$ad->FloorPrice.'</td></tr>';
+			                $message = $message.'<tr><td><b>IsMobile: </b></td><td>'.$is_mobile.'</td></tr>';
+			                $message = $message.'<tr><td><b>FloorPrice: </b></td><td>'.$ad->FloorPrice.'</td></tr>';
+			                $message = $message.'<tr><td><b>Ad Tag Size: </b></td><td>'.$ad->Width.'x'.$ad->Height.'</td></tr>';
+			                $message = $message.'<tr><td><b>AdOwnerID: </b></td><td>'.$ad->AdOwnerID.'</td></tr>';
+			                $message = $message.'<tr><td><b>ImpressionType: </b></td><td>'.$ad->ImpressionType.'</td></tr>';
+			                $message = $message.'<tr><td><b>Approved: </b></td><td>'.$is_approved.'</td></tr>';
+			                $message = $message.'</table>';
+			                
+			                $subject = "New NginAd Publisher Zone Added by " . $this->true_user_name;
+			                	
+			                $transport = $this->getServiceLocator()->get('mail.transport');
+			                	
+			                $text = new Mime\Part($message);
+			                $text->type = Mime\Mime::TYPE_HTML;
+			                $text->charset = 'utf-8';
+			                	
+			                $mimeMessage = new Mime\Message();
+			                $mimeMessage->setParts(array($text));
+			                $zf_message = new Message();
+			                	
+			                $zf_message->addTo($this->config_handle['mail']['admin-email']['email'], $this->config_handle['mail']['admin-email']['name'])
+			                ->addFrom($this->config_handle['mail']['reply-to']['email'], $this->config_handle['mail']['reply-to']['name'])
+			                ->setSubject($subject)
+			                ->setBody($mimeMessage);
+			                $transport->send($zf_message);
+		                    
 						endif;
 	                    
 	                    return $this->redirect()->toRoute('publisher/zone',array('param1' => $DomainObj->PublisherWebsiteID));
@@ -702,6 +743,46 @@ class ZoneController extends PublisherAbstractActionController {
 		                				endforeach;
 	                				
 	                				endif;
+	                			
+	                			elseif ($this->config_handle['mail']['subscribe']['zones'] === true):
+	                			
+	                				$is_approved = $editResultObj->AdStatus == 1 ? 'Yes' : 'No';
+	                				$is_mobile = $ad->IsMobileFlag == 1 ? 'Yes' : 'No';
+	                			
+		                			// if this zone was not created by the admin, then send out a notification email
+		                			$message = '<b>New NginAd Publisher Zone Edited by ' . $this->true_user_name . '.</b><br /><br />';
+		                			$message = $message.'<table border="0" width="10%">';
+		                			$message = $message.'<tr><td><b>WebDomain: </b></td><td>'.$DomainObj->WebDomain.'</td></tr>';
+		                			$message = $message.'<tr><td><b>AdName: </b></td><td>'.$editResultObj->AdName.'</td></tr>';
+		                			$message = $message.'<tr><td><b>Description: </b></td><td>'.$editResultObj->Description.'</td></tr>';
+		                			$message = $message.'<tr><td><b>PassbackAdTag: </b></td><td>'.$editResultObj->PassbackAdTag.'</td></tr>';
+		                			$message = $message.'<tr><td><b>FloorPrice: </b></td><td>'.$editResultObj->FloorPrice.'</td></tr>';
+		                			$message = $message.'<tr><td><b>IsMobile: </b></td><td>'.$is_mobile.'</td></tr>';
+		                			$message = $message.'<tr><td><b>FloorPrice: </b></td><td>'.$editResultObj->FloorPrice.'</td></tr>';
+		                			$message = $message.'<tr><td><b>Ad Tag Size: </b></td><td>'.$editResultObj->Width.'x'.$editResultObj->Height.'</td></tr>';
+		                			$message = $message.'<tr><td><b>AdOwnerID: </b></td><td>'.$editResultObj->AdOwnerID.'</td></tr>';
+		                			$message = $message.'<tr><td><b>ImpressionType: </b></td><td>'.$editResultObj->ImpressionType.'</td></tr>';
+		                			$message = $message.'<tr><td><b>Approved: </b></td><td>'.$is_approved.'</td></tr>';
+		                			$message = $message.'</table>';
+		                			
+		                			$subject = "New NginAd Publisher Zone Edited by " . $this->true_user_name;
+		                			
+		                			$transport = $this->getServiceLocator()->get('mail.transport');
+		                			
+		                			$text = new Mime\Part($message);
+		                			$text->type = Mime\Mime::TYPE_HTML;
+		                			$text->charset = 'utf-8';
+		                			
+		                			$mimeMessage = new Mime\Message();
+		                			$mimeMessage->setParts(array($text));
+		                			$zf_message = new Message();
+		                			
+		                			$zf_message->addTo($this->config_handle['mail']['admin-email']['email'], $this->config_handle['mail']['admin-email']['name'])
+		                			->addFrom($this->config_handle['mail']['reply-to']['email'], $this->config_handle['mail']['reply-to']['name'])
+		                			->setSubject($subject)
+		                			->setBody($mimeMessage);
+		                			$transport->send($zf_message);
+	                				
                 				endif;
                 				
                 				return $this->redirect()->toRoute('publisher/zone',array('param1' => $DomainObj->PublisherWebsiteID));

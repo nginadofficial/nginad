@@ -9,6 +9,9 @@
 
 namespace transformation;
 
+use Zend\Mail\Message;
+use Zend\Mime;
+
 /*
  * Static class to transform AdCampaignBanner and AdCampaign and dependent objects
  * to and from their preview form
@@ -16,7 +19,7 @@ namespace transformation;
 
 class TransformPreview {
 
-	public static function previewCheckBannerID($banner_id, $auth, $update_data = array()) {
+	public static function previewCheckBannerID($banner_id, $auth, $config, $mail_transport, $update_data = array()) {
 
 		/*
 		 * SHOULD WE CREATE A NEW PREVIEW MODE?
@@ -36,7 +39,7 @@ class TransformPreview {
 				return $params;
 			endif;
 
-			return self::cloneAdCampaignIntoAdCampaignPreview($AdCampaignBanner->AdCampaignID, $auth, $update_data);
+			return self::cloneAdCampaignIntoAdCampaignPreview($AdCampaignBanner->AdCampaignID, $auth, $config, $mail_transport, $update_data);
 
 		else:
 
@@ -46,7 +49,7 @@ class TransformPreview {
 
 	}
 
-	public static function previewCheckAdCampaignID($ad_campaign_id, $auth, $update_data = array()) {
+	public static function previewCheckAdCampaignID($ad_campaign_id, $auth, $config, $mail_transport, $update_data = array()) {
 
 		/*
 		 * SHOULD WE CREATE A NEW PREVIEW MODE?
@@ -66,7 +69,7 @@ class TransformPreview {
 				return $params;
 			endif;
 
-			return self::cloneAdCampaignIntoAdCampaignPreview($AdCampaign->AdCampaignID, $auth, $update_data);
+			return self::cloneAdCampaignIntoAdCampaignPreview($AdCampaign->AdCampaignID, $auth, $config, $mail_transport, $update_data);
 
 		else:
 
@@ -508,7 +511,7 @@ class TransformPreview {
 	}
 
 
-	public static function cloneAdCampaignIntoAdCampaignPreview($ad_campaign_id, $auth, $update_data) {
+	public static function cloneAdCampaignIntoAdCampaignPreview($ad_campaign_id, $auth, $config, $mail_transport, $update_data) {
 
 		$return_val = array();
 
@@ -799,6 +802,38 @@ class TransformPreview {
 
 		endforeach;
 
+		if (!$auth->getIsAdmin() && $config['mail']['subscribe']['campaigns'] === true):
+			// if this ad campaign was not created/edited by the admin, then send out a notification email
+			$message = '<b>NginAd Demand Customer Campaign Edited by ' . $auth->getUserName() . '.</b><br /><br />';
+			$message = $message.'<table border="0" width="10%">';
+			$message = $message.'<tr><td><b>AdCampaignID: </b></td><td>'.$AdCampaign->AdCampaignID.'</td></tr>';
+			$message = $message.'<tr><td><b>UserID: </b></td><td>'.$AdCampaign->UserID.'</td></tr>';
+			$message = $message.'<tr><td><b>Name: </b></td><td>'.$AdCampaign->Name.'</td></tr>';
+			$message = $message.'<tr><td><b>StartDate: </b></td><td>'.$AdCampaign->StartDate.'</td></tr>';
+			$message = $message.'<tr><td><b>EndDate: </b></td><td>'.$AdCampaign->EndDate.'</td></tr>';
+			$message = $message.'<tr><td><b>Customer: </b></td><td>'.$AdCampaign->Customer.'</td></tr>';
+			$message = $message.'<tr><td><b>CustomerID: </b></td><td>'.$AdCampaign->CustomerID.'</td></tr>';
+			$message = $message.'<tr><td><b>MaxImpressions: </b></td><td>'.$AdCampaign->MaxImpressions.'</td></tr>';
+			$message = $message.'<tr><td><b>MaxSpend: </b></td><td>'.$AdCampaign->MaxSpend.'</td></tr>';
+			$message = $message.'</table>';
+			
+			$subject = "NginAd Demand Customer Campaign Edited by " . $auth->getUserName();
+
+			$text = new Mime\Part($message);
+			$text->type = Mime\Mime::TYPE_HTML;
+			$text->charset = 'utf-8';
+				
+			$mimeMessage = new Mime\Message();
+			$mimeMessage->setParts(array($text));
+			$zf_message = new Message();
+				
+			$zf_message->addTo($config['mail']['admin-email']['email'], $config['mail']['admin-email']['name'])
+			->addFrom($config['mail']['reply-to']['email'], $config['mail']['reply-to']['name'])
+			->setSubject($subject)
+			->setBody($mimeMessage);
+			$mail_transport->send($zf_message);
+		endif;
+		
 		return $return_val;
 
 	}

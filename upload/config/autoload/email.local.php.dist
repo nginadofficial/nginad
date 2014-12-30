@@ -9,6 +9,19 @@ return array(
 				'email' => 'admin@localhost',
 				'name'	=> 'NginAd Ad Server'
 			),
+	/*
+	 * Here you can elect to subscribe to get
+	 * emails about a certain kind of event
+	 * such as user sign-ups, ad zone changes,
+	 * website domain additions, and
+	 * ad campaign changes
+	 */
+	'subscribe' => array(
+		'zones' 	=> true,
+		'campaigns'	=> true,
+		'signups'	=> true,
+		'websites'	=> true
+		),
     'transport' => array(
     	// if SMTP is false sendmail will be used
     	'smtp'	  => true,
