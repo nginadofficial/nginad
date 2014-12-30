@@ -1,6 +1,16 @@
 nginad
 =======
 
+December 29, 2014
+------------------
+
+The 1.4.48 release to address the lack of a way to view statistics for an individual demand customer or publisher as admin, and provides a way to download excel stats for single users only for accounting purposes.
+Also addresses the lack of admin email alerts and ways to turn those alerts on or off via the email config file.
+
+ * Fixes statistics functions so if a publisher or demand user is selected, the statistics will be shown for that user only until they are deselected. The same functionality is applied to the Excel file download.
+ * Also adds configurable email alerts for the following user events: user sign-ups, ad zone changes, website domain additions, and ad campaign changes. The new alerts are configurable in email.local.php in the dist file.
+
+
 December 28, 2014
 ------------------
 
