@@ -73,6 +73,6 @@ return array(
 				// our house publisher ids are exempt from being scrubbed as network loss
 				'network_loss_exempt_publisher_info_id_list'			=> array(),
 				// version
-				'version_id'											=> '1.4.46'
+				'version_id'											=> '1.4.48'
 		),
 );
