@@ -9,7 +9,8 @@ Also addresses the lack of admin email alerts and ways to turn those alerts on o
 
  * Fixes statistics functions so if a publisher or demand user is selected, the statistics will be shown for that user only until they are deselected. The same functionality is applied to the Excel file download.
  * Also adds configurable email alerts for the following user events: user sign-ups, ad zone changes, website domain additions, and ad campaign changes. The new alerts are configurable in email.local.php in the dist file.
-
+ * Users need to be notified by email when their domains, ad zones and ad campaigns are manually approved as opposed to auto-approval for publisher domains and ad zones. 
+ * Also removed a needless comments in ReportHelper.php
 
 December 28, 2014
 ------------------
