@@ -981,9 +981,39 @@ class ZoneController extends PublisherAbstractActionController {
                     $AdObject->AdStatus = intval($flag);
                     if ($PublisherAdZoneFactory->save_ads($AdObject)):
                     
-                        
+	                    if ($AdObject->AdStatus == 1):
+	                    
+		                    $PublisherInfoFactory = \_factory\PublisherInfo::get_instance();
+		                    $params = array();
+		                    $params["PublisherInfoID"] = $DomainObj->DomainOwnerID;
+		                    $PublisherInfo = $PublisherInfoFactory->get_row($params);
+		                    
+		                    if ($PublisherInfo !== null):
+			                    // approval, send out email
+			                    $message = 'Your NginAd Exchange Publisher Ad Zone for : ' . $DomainObj->WebDomain . ' : ' . $AdObject->AdName . ' was approved.<br /><br />Please login <a href="http://server.nginad.com/auth/login">here</a> with your email and password';
+			                     
+			                    $subject = "Your NginAd Exchange Publisher Ad Zone for : " . $DomainObj->WebDomain . " was approved";
+			                    
+			                    $transport = $this->getServiceLocator()->get('mail.transport');
+			                    
+			                    $text = new Mime\Part($message);
+			                    $text->type = Mime\Mime::TYPE_HTML;
+			                    $text->charset = 'utf-8';
+			                    
+			                    $mimeMessage = new Mime\Message();
+			                    $mimeMessage->setParts(array($text));
+			                    $zf_message = new Message();
+			                    $zf_message->addTo($PublisherInfo->Email)
+			                    ->addFrom($this->config_handle['mail']['reply-to']['email'], $this->config_handle['mail']['reply-to']['name'])
+			                    ->setSubject($subject)
+			                    ->setBody($mimeMessage);
+			                    $transport->send($zf_message);
+			             	endif;
+	                   	endif;
+	                   	
                         return TRUE;
-                    endif;
+                    
+                  	endif;
                 endif;
             endif;
         endif;

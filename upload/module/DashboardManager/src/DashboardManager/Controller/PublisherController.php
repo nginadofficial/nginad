@@ -154,7 +154,7 @@ class PublisherController extends PublisherAbstractActionController {
 	    	$PublisherWebsiteFactory = \_factory\PublisherWebsite::get_instance();
 	    	$domain_object = new \model\PublisherWebsite();
 	    	$request = $this->getRequest();
-	    	$parameters = array("PublisherWebsiteID" => $PublisherWebsiteID, "DomainOwnerID" => $this->PublisherInfoID);
+	    	$parameters = array("PublisherWebsiteID" => $PublisherWebsiteID);
 	    	$domain_object = $PublisherWebsiteFactory->get_row_object($parameters);
 
 	    	// Make sure entry exists.
@@ -177,6 +177,38 @@ class PublisherController extends PublisherAbstractActionController {
 		    			$PublisherAdZoneFactory->updatePublisherAdZonePublisherAdZoneStatus($PublisherAdZone->PublisherAdZoneID, 2);
 		    		
 		    		endforeach;
+	    		endif;
+	    		
+	    		if ($flag == 1):
+
+		    		$PublisherInfoFactory = \_factory\PublisherInfo::get_instance();
+		    		$params = array();
+		    		$params["PublisherInfoID"] = $domain_object->DomainOwnerID;
+		    		$PublisherInfo = $PublisherInfoFactory->get_row($params);
+		    		
+		    		if ($PublisherInfo !== null):
+		    			// approval, send out email
+			    		$message = 'Your NginAd Exchange Publisher Domain: ' . $domain_object->WebDomain . ' was approved.<br /><br />Please login <a href="http://server.nginad.com/auth/login">here</a> with your email and password';
+			    		
+			    		$subject = "Your NginAd Exchange Publisher Domain: " . $domain_object->WebDomain . " was approved";
+			    			
+			    		$transport = $this->getServiceLocator()->get('mail.transport');
+			    			
+			    		$text = new Mime\Part($message);
+			    		$text->type = Mime\Mime::TYPE_HTML;
+			    		$text->charset = 'utf-8';
+			    			
+			    		$mimeMessage = new Mime\Message();
+			    		$mimeMessage->setParts(array($text));
+			    		$zf_message = new Message();
+			    		$zf_message->addTo($PublisherInfo->Email)
+			    		->addFrom($this->config_handle['mail']['reply-to']['email'], $this->config_handle['mail']['reply-to']['name'])
+			    		->setSubject($subject)
+			    		->setBody($mimeMessage);
+			    		$transport->send($zf_message);
+			    		
+		    		endif;
+		    		
 	    		endif;
 	    		
 	    		if ($PublisherWebsiteFactory->save_domain($domain_object) > 0):

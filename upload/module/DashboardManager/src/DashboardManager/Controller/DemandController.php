@@ -264,10 +264,46 @@ class DemandController extends DemandAbstractActionController {
 		endif;
 
 		// copy the preview campaign and its elements into the production campaign
-		\transformation\TransformPreview::cloneAdCampaignPreviewIntoAdCampaign($id, $this->auth, $this->config_handle);
+		$ad_campaign_id = \transformation\TransformPreview::cloneAdCampaignPreviewIntoAdCampaign($id, $this->auth, $this->config_handle);
 		// set the preview campaigns and its elements to inactive and mark the date and time they went live
 		\transformation\TransformPreview::deletePreviewModeCampaign($id, $this->auth, true);
 
+		$AdCampaignFactory = \_factory\AdCampaign::get_instance();
+		$params = array();
+		$params["AdCampaignID"] = $ad_campaign_id;
+		$AdCampaign = $AdCampaignFactory->get_row($params);
+		
+		if ($AdCampaign == null):
+			return $this->redirect()->toRoute('demand');
+		endif;
+		
+        $authUsersFactory = \_factory\authUsers::get_instance();
+        $params = array();
+        $params["user_id"] = $AdCampaign->UserID; // First get the role ID of the role "member"
+        $auth_User = $authUsersFactory->get_row($params);
+		
+        if ($auth_User !== null):
+			// approval, send out email
+			$message = 'Your NginAd Exchange Demand Ad Campaign : ' . $AdCampaign->Name . ' was approved.<br /><br />Please login <a href="http://server.nginad.com/auth/login">here</a> with your email and password';
+			
+			$subject = "Your NginAd Exchange Demand Ad Campaign : " . $AdCampaign->Name . " was approved";
+			 
+			$transport = $this->getServiceLocator()->get('mail.transport');
+			 
+			$text = new Mime\Part($message);
+			$text->type = Mime\Mime::TYPE_HTML;
+			$text->charset = 'utf-8';
+			 
+			$mimeMessage = new Mime\Message();
+			$mimeMessage->setParts(array($text));
+			$zf_message = new Message();
+			$zf_message->addTo($auth_User->user_email)
+			->addFrom($this->config_handle['mail']['reply-to']['email'], $this->config_handle['mail']['reply-to']['name'])
+			->setSubject($subject)
+			->setBody($mimeMessage);
+			$transport->send($zf_message);
+		endif;
+		
 		return $this->redirect()->toRoute('demand');
 
 	}

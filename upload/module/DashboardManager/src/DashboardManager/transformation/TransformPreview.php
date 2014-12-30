@@ -508,6 +508,8 @@ class TransformPreview {
 
 		endforeach;
 
+		return $ad_campaign_id;
+		
 	}
 
 
