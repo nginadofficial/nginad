@@ -17,10 +17,14 @@ return array(
 	 * ad campaign changes
 	 */
 	'subscribe' => array(
-		'zones' 	=> true,
-		'campaigns'	=> true,
-		'signups'	=> true,
-		'websites'	=> true
+		'zones' 			=> true,
+		'campaigns'			=> true,
+		'signups'			=> true,
+		'websites'			=> true,
+		// dashboard user emails settings
+		'user_zones'		=> true,
+		'user_domains'		=> true,
+		'user_ad_campaigns'	=> true,
 		),
     'transport' => array(
     	// if SMTP is false sendmail will be used

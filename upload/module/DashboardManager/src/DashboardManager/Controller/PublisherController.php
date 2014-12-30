@@ -179,7 +179,7 @@ class PublisherController extends PublisherAbstractActionController {
 		    		endforeach;
 	    		endif;
 	    		
-	    		if ($flag == 1):
+	    		if (($flag == 1 || $flag == 2) && $this->config_handle['mail']['subscribe']['user_domains']):
 
 		    		$PublisherInfoFactory = \_factory\PublisherInfo::get_instance();
 		    		$params = array();
@@ -188,10 +188,13 @@ class PublisherController extends PublisherAbstractActionController {
 		    		
 		    		if ($PublisherInfo !== null):
 		    			// approval, send out email
-			    		$message = 'Your NginAd Exchange Publisher Domain: ' . $domain_object->WebDomain . ' was approved.<br /><br />Please login <a href="http://server.nginad.com/auth/login">here</a> with your email and password';
-			    		
-			    		$subject = "Your NginAd Exchange Publisher Domain: " . $domain_object->WebDomain . " was approved";
-			    			
+		    			if ($flag == 1):
+				    		$message = 'Your NginAd Exchange Publisher Domain: ' . $domain_object->WebDomain . ' was approved.<br /><br />Please login <a href="http://server.nginad.com/auth/login">here</a> with your email and password';
+				    		$subject = "Your NginAd Exchange Publisher Domain: " . $domain_object->WebDomain . " was approved";
+			    		else:
+				    		$message = 'Your NginAd Exchange Publisher Domain: ' . $domain_object->WebDomain . ' was rejected.<br /><br />Please login <a href="http://server.nginad.com/auth/login">here</a> with your email and password';
+				    		$subject = "Your NginAd Exchange Publisher Domain: " . $domain_object->WebDomain . " was rejected";
+			    		endif;
 			    		$transport = $this->getServiceLocator()->get('mail.transport');
 			    			
 			    		$text = new Mime\Part($message);

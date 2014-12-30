@@ -9,9 +9,6 @@ class ReportHelper {
 	
 	public static function download_excel_file($data, $data_headers, $totals, $title, $dates) {
 		
-		// $data = json_decode($this->getPerTime($publisher_impression_factory, $config, $is_admin, $where_params), TRUE)['data'];
-		// $data_headers = $publisher_impression_factory->getPerTimeHeader($is_admin);
-
 		$letters = range('A', 'Z');
 		
 		$cells_header = $title . ' for ' . $dates;

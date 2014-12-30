@@ -279,10 +279,10 @@ class DemandController extends DemandAbstractActionController {
 		
         $authUsersFactory = \_factory\authUsers::get_instance();
         $params = array();
-        $params["user_id"] = $AdCampaign->UserID; // First get the role ID of the role "member"
+        $params["user_id"] = $AdCampaign->UserID; 
         $auth_User = $authUsersFactory->get_row($params);
 		
-        if ($auth_User !== null):
+        if ($auth_User !== null && $this->config_handle['mail']['subscribe']['user_ad_campaigns']):
 			// approval, send out email
 			$message = 'Your NginAd Exchange Demand Ad Campaign : ' . $AdCampaign->Name . ' was approved.<br /><br />Please login <a href="http://server.nginad.com/auth/login">here</a> with your email and password';
 			
@@ -349,9 +349,48 @@ class DemandController extends DemandAbstractActionController {
 			die("Invalid Campaign Preview ID");
 		endif;
 
+		$AdCampaignPreviewFactory = \_factory\AdCampaignPreview::get_instance();
+		$params = array();
+		$params["AdCampaignPreviewID"] = $id;
+		$AdCampaignPreview = $AdCampaignPreviewFactory->get_row($params);
+		
+		if ($AdCampaignPreview == null):
+			die("AdCampaignPreviewID not found");
+		endif;	
+		
+		$ad_campaign_preview_name = $AdCampaignPreview->Name;
+		$user_id = $AdCampaignPreview->UserID;
+		
 		// set the preview campaigns and its elements to inactive and mark the date and time they went live
 		\transformation\TransformPreview::deletePreviewModeCampaign($id, $this->auth, false);
-
+		
+		$authUsersFactory = \_factory\authUsers::get_instance();
+		$params = array();
+		$params["user_id"] = $user_id; 
+		$auth_User = $authUsersFactory->get_row($params);
+		
+		if ($auth_User !== null && $ad_campaign_preview_name && $this->config_handle['mail']['subscribe']['user_ad_campaigns']):
+			// approval, send out email
+			$message = 'Your NginAd Exchange Demand Ad Campaign : ' . $ad_campaign_preview_name . ' was rejected.<br /><br />Please login <a href="http://server.nginad.com/auth/login">here</a> with your email and password';
+				
+			$subject = "Your NginAd Exchange Demand Ad Campaign : " . $ad_campaign_preview_name . " was rejected";
+			
+			$transport = $this->getServiceLocator()->get('mail.transport');
+			
+			$text = new Mime\Part($message);
+			$text->type = Mime\Mime::TYPE_HTML;
+			$text->charset = 'utf-8';
+			
+			$mimeMessage = new Mime\Message();
+			$mimeMessage->setParts(array($text));
+			$zf_message = new Message();
+			$zf_message->addTo($auth_User->user_email)
+			->addFrom($this->config_handle['mail']['reply-to']['email'], $this->config_handle['mail']['reply-to']['name'])
+			->setSubject($subject)
+			->setBody($mimeMessage);
+			$transport->send($zf_message);
+		endif;
+		
 		return $this->redirect()->toRoute('demand');
 
 	}

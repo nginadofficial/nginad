@@ -981,7 +981,7 @@ class ZoneController extends PublisherAbstractActionController {
                     $AdObject->AdStatus = intval($flag);
                     if ($PublisherAdZoneFactory->save_ads($AdObject)):
                     
-	                    if ($AdObject->AdStatus == 1):
+	                    if (($flag == 1 || $flag == 2) && $this->config_handle['mail']['subscribe']['user_zones']):
 	                    
 		                    $PublisherInfoFactory = \_factory\PublisherInfo::get_instance();
 		                    $params = array();
@@ -990,10 +990,14 @@ class ZoneController extends PublisherAbstractActionController {
 		                    
 		                    if ($PublisherInfo !== null):
 			                    // approval, send out email
-			                    $message = 'Your NginAd Exchange Publisher Ad Zone for : ' . $DomainObj->WebDomain . ' : ' . $AdObject->AdName . ' was approved.<br /><br />Please login <a href="http://server.nginad.com/auth/login">here</a> with your email and password';
-			                     
-			                    $subject = "Your NginAd Exchange Publisher Ad Zone for : " . $DomainObj->WebDomain . " was approved";
 			                    
+		                    	if ($flag == 1):
+			                   		$message = 'Your NginAd Exchange Publisher Ad Zone for : ' . $DomainObj->WebDomain . ' : ' . $AdObject->AdName . ' was approved.<br /><br />Please login <a href="http://server.nginad.com/auth/login">here</a> with your email and password';
+			                    	$subject = "Your NginAd Exchange Publisher Ad Zone for : " . $DomainObj->WebDomain . " was approved";
+			                    else:
+				                    $message = 'Your NginAd Exchange Publisher Ad Zone for : ' . $DomainObj->WebDomain . ' : ' . $AdObject->AdName . ' was rejected.<br /><br />Please login <a href="http://server.nginad.com/auth/login">here</a> with your email and password';
+				                    $subject = "Your NginAd Exchange Publisher Ad Zone for : " . $DomainObj->WebDomain . " was rejected";
+			                    endif;
 			                    $transport = $this->getServiceLocator()->get('mail.transport');
 			                    
 			                    $text = new Mime\Part($message);
