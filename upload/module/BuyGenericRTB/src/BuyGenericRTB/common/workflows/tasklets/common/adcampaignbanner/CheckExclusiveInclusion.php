@@ -24,6 +24,8 @@ class CheckExclusiveInclusion {
 		$params["AdCampaignBannerID"] = $AdCampaignBanner->AdCampaignBannerID;
 		$AdCampaignBannerExclusiveInclusionList = $AdCampaignBannerExclusiveInclusionFactory->get_cached($Workflow->config, $params);
 		
+		$result = true;
+		
 		foreach ($AdCampaignBannerExclusiveInclusionList as $AdCampaignBannerExclusiveInclusion):
 			
 			$domain_to_match = strtolower($AdCampaignBannerExclusiveInclusion->DomainName);
@@ -42,9 +44,13 @@ class CheckExclusiveInclusion {
 								. $page_url . ", bid_request_site_domain: " 
 								. $domain;
 					endif;
-					// goto next banner
-					return false;
+					$result = false;
+					continue;
 					
+				else:
+				
+					return true;
+				
 				endif;
 			
 			elseif ($AdCampaignBannerExclusiveInclusion->InclusionType == "referrer"):
@@ -56,7 +62,12 @@ class CheckExclusiveInclusion {
 					if ($Logger->setting_log === true):
 						$Logger->log[] = "Failed: " . "Check banner page referrer url, site exclusive inclusions do not match :: EXPECTED: " . $domain_to_match . " GOT: " . $RtbBidRequest->refurl;
 					endif;
-					return false;
+					$result = false;
+					continue;
+					
+				else:
+					
+					return true;
 					
 				endif;
 			
@@ -64,7 +75,7 @@ class CheckExclusiveInclusion {
 		
 		endforeach;
 		
-		return true;
+		return $result;
 	}
 	
 }
