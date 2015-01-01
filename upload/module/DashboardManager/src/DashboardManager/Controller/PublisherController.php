@@ -600,7 +600,7 @@ class PublisherController extends PublisherAbstractActionController {
 	
 		if ($PublisherImpressionsNetworkLoss != null):
 	
-			$PublisherImpressionsNetworkLossFactory->updatePublisherMarkup($_PublisherImpressionsNetworkLoss);
+			$PublisherImpressionsNetworkLossFactory->updatePublisherImpressionsNetworkLoss($_PublisherImpressionsNetworkLoss);
 	
 		else:
 	
