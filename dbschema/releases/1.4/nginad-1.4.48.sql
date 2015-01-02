@@ -196,8 +196,8 @@ DROP TABLE IF EXISTS `AdCampaignBannerRestrictions`;
 CREATE TABLE `AdCampaignBannerRestrictions` (
   `AdCampaignBannerRestrictionsID` int(11) NOT NULL AUTO_INCREMENT,
   `AdCampaignBannerID` int(11) NOT NULL,
-  `GeoCountry` char(100) DEFAULT NULL,
-  `GeoState` char(100) DEFAULT NULL,
+  `GeoCountry` char(255) DEFAULT NULL,
+  `GeoState` char(255) DEFAULT NULL,
   `GeoCity` char(255) DEFAULT NULL,
   `AdTagType` enum('JavaScript','Iframe') DEFAULT NULL,
   `AdPositionMinLeft` int(11) DEFAULT NULL,
@@ -237,8 +237,8 @@ DROP TABLE IF EXISTS `AdCampaignVideoRestrictions`;
 CREATE TABLE `AdCampaignVideoRestrictions` (
   `AdCampaignVideoRestrictionsID` int(11) NOT NULL AUTO_INCREMENT,
   `AdCampaignBannerID` int(11) DEFAULT NULL,
-  `GeoCountry` char(100) DEFAULT NULL,
-  `GeoState` char(100) DEFAULT NULL,
+  `GeoCountry` char(255) DEFAULT NULL,
+  `GeoState` char(255) DEFAULT NULL,
   `GeoCity` char(255) DEFAULT NULL,
   `MimesCommaSeparated` char(100) DEFAULT NULL,
   `MinDuration` int(10) unsigned DEFAULT NULL,
@@ -273,8 +273,8 @@ DROP TABLE IF EXISTS `AdCampaignBannerRestrictionsPreview`;
 CREATE TABLE `AdCampaignBannerRestrictionsPreview` (
   `AdCampaignBannerRestrictionsPreviewID` int(11) NOT NULL AUTO_INCREMENT,
   `AdCampaignBannerPreviewID` int(11) NOT NULL,
-  `GeoCountry` char(100) DEFAULT NULL,
-  `GeoState` char(100) DEFAULT NULL,
+  `GeoCountry` char(255) DEFAULT NULL,
+  `GeoState` char(255) DEFAULT NULL,
   `GeoCity` char(255) DEFAULT NULL,
   `AdTagType` enum('JavaScript','Iframe') DEFAULT NULL,
   `AdPositionMinLeft` int(11) DEFAULT NULL,
@@ -314,8 +314,8 @@ DROP TABLE IF EXISTS `AdCampaignVideoRestrictionsPreview`;
 CREATE TABLE `AdCampaignVideoRestrictionsPreview` (
   `AdCampaignVideoRestrictionsPreviewID` int(11) NOT NULL AUTO_INCREMENT,
   `AdCampaignBannerPreviewID` int(11) NOT NULL,
-  `GeoCountry` char(100) DEFAULT NULL,
-  `GeoState` char(100) DEFAULT NULL,
+  `GeoCountry` char(255) DEFAULT NULL,
+  `GeoState` char(255) DEFAULT NULL,
   `GeoCity` char(255) DEFAULT NULL,
   `MimesCommaSeparated` char(100) DEFAULT NULL,
   `MinDuration` int(10) unsigned DEFAULT NULL,
