@@ -96,9 +96,20 @@ class SignupController extends PublisherAbstractActionController {
 			$Email		 = $request->getPost('email');
 			$Website	 = $request->getPost('website');
 			$Company	 = $request->getPost('company');
-			$PartnerType = $request->getPost('partner_type');
+			$PartnerType = intval($request->getPost('partner_type'));
 			$Password	 = $request->getPost('password');
 			$user_login	 = $request->getPost('user_login');
+			
+			if (preg_match('/[^-_. 0-9A-Za-z]/', $Name)
+				|| !filter_var($Email, FILTER_VALIDATE_EMAIL)
+				|| preg_match('/[^-_. 0-9A-Za-z]/', $Website)
+				|| preg_match('/[^-_. 0-9A-Za-z]/', $Company)
+				|| empty($PartnerType)
+				|| empty($Password)
+				|| !ctype_alnum($user_login)):
+			
+				die("Invalid Registration Data");
+			endif;
 			
 			$DemandCustomerInfo = new \model\DemandCustomerInfo();
 			$DemandCustomerInfoFactory = \_factory\DemandCustomerInfo::get_instance();
@@ -197,6 +208,16 @@ class SignupController extends PublisherAbstractActionController {
 		$IABCategory = $request->getPost('IABCategory');
 		$Password	 = $request->getPost('Password');
 		$user_login	 = $request->getPost('user_login');
+		
+		if (preg_match('/[^-_. 0-9A-Za-z]/', $Name)
+			|| !filter_var($Email, FILTER_VALIDATE_EMAIL)
+			|| preg_match('/[^-_. 0-9A-Za-z]/', $Domain)
+			|| preg_match('/[^-_. 0-9A-Za-z]/', $IABCategory)
+			|| empty($Password)
+			|| !ctype_alnum($user_login)):
+			
+			die("Invalid Registration Data");
+		endif;
 		
 		$PublisherInfo = new \model\PublisherInfo();
 		$PublisherInfoFactory = \_factory\PublisherInfo::get_instance();
