@@ -59,16 +59,14 @@ class IndexController extends AbstractActionController
         	$GenericBuysidePartnerBid->convert_ads_to_bid_response();
         	$GenericBuysidePartnerBid->build_outgoing_bid_response();
         	$GenericBuysidePartnerBid->send_bid_response();
-        	if ($GenericBuysidePartnerBid->had_bid_response == true && \buygenericbuysidepartner\GenericBuysidePartnerLogger::get_instance()->setting_only_log_bids == true):
+        	if ($GenericBuysidePartnerBid->had_bid_response == true || \buygenericbuysidepartner\GenericBuysidePartnerLogger::get_instance()->setting_only_log_bids == false):
             	\buygenericbuysidepartner\GenericBuysidePartnerLogger::get_instance()->output_log();
         	endif;
 
         } catch (Exception $e) {
             \buygenericbuysidepartner\GenericBuysidePartnerLogger::get_instance()->log[] = "BID EXCEPTION: ID: " . $request_id . " MESSAGE: " . $e->getMessage();
-            header("Content-type: text/plain");
-            echo "requestId=" . $request_id . "\n";
-            echo "bid=0" . "\n";
-            echo "error=" . $e->getMessage() . "\n";
+            header("Content-type: application/json");
+            echo '{"seatbid":[{"bid":[{"price":0}]}],"nbr":2}';
         }
         
         if (\buygenericbuysidepartner\GenericBuysidePartnerLogger::get_instance()->setting_only_log_bids == false):

@@ -59,16 +59,14 @@ class IndexController extends AbstractActionController
         	$LoopbackPartnerBid->convert_ads_to_bid_response();
         	$LoopbackPartnerBid->build_outgoing_bid_response();
         	$LoopbackPartnerBid->send_bid_response();
-        	if ($LoopbackPartnerBid->had_bid_response == true && \buyloopbackpartner\LoopbackPartnerLogger::get_instance()->setting_only_log_bids == true):
+        	if ($LoopbackPartnerBid->had_bid_response == true || \buyloopbackpartner\LoopbackPartnerLogger::get_instance()->setting_only_log_bids == false):
             	\buyloopbackpartner\LoopbackPartnerLogger::get_instance()->output_log();
         	endif;
 
         } catch (Exception $e) {
             \buyloopbackpartner\LoopbackPartnerLogger::get_instance()->log[] = "BID EXCEPTION: ID: " . $request_id . " MESSAGE: " . $e->getMessage();
-            header("Content-type: text/plain");
-            echo "requestId=" . $request_id . "\n";
-            echo "bid=0" . "\n";
-            echo "error=" . $e->getMessage() . "\n";
+            header("Content-type: application/json");
+            echo '{"seatbid":[{"bid":[{"price":0}]}],"nbr":2}';
         }
         if (\buyloopbackpartner\LoopbackPartnerLogger::get_instance()->setting_only_log_bids == false):
             \buyloopbackpartner\LoopbackPartnerLogger::get_instance()->output_log();
