@@ -82,7 +82,7 @@ class CheckHighBid {
 			
 			endforeach;
 			
-			if ($bids_remain == true):
+			if ($bids_remain === true):
 			
 				/*
 				 * Those RTBPingers that still have at least 1 bid get added
