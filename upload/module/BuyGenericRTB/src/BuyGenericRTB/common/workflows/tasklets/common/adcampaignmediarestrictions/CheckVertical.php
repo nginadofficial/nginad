@@ -34,13 +34,7 @@ class CheckVertical {
 				
 				foreach ($verticals_to_check as $vertical_to_check):
 						
-					if (isset(\buyrtb\parsers\openrtb\parselets\common\ParseWebsite::$vertical_map[$vertical_to_check])):
-						$mapped_vertical = \buyrtb\parsers\openrtb\parselets\common\ParseWebsite::$vertical_map[$vertical_to_check];
-					else:
-						continue;
-					endif;
-
-					if ($mapped_vertical == $vertical_id):
+					if ($vertical_to_check == $vertical_id):
 					
 						$has_vertical = true;
 						break 2;
