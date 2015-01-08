@@ -822,7 +822,8 @@ class ReportController extends PublisherAbstractActionController {
 		    	if ($name == "MDYH"):
 		    		$totals[$name] = "Totals:";
 		    	elseif ((is_numeric($value) || $this->isCpmWord($name)) && strpos($name, "ID") === false):
-		    		if ($is_percent === false):
+		    		if ($is_percent === false
+		    			&& (($this->isCpmWord($name) && !empty($value)) || !$this->isCpmWord($name))):	
 		    			$counts_holder[$name] = empty($counts_holder[$name]) ? 1 : $counts_holder[$name] + 1;
 		    		endif;
 			    	if (!empty($value)):
