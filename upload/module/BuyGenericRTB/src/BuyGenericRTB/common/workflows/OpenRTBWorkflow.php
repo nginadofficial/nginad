@@ -53,7 +53,7 @@ class OpenRTBWorkflow
     	
     	// Check Publisher Score
     	if (\buyrtb\workflows\tasklets\common\thirdparty\CheckAdFraud::execute($logger, $this, $RtbBidRequest) === false):
-    		$no_bid_reason = BID_AD_FRAUD;
+    		$no_bid_reason = NOBID_AD_FRAUD;
     	 	return $AdCampaignBanner_Match_List;
     	endif;
 
