@@ -32,10 +32,18 @@ return array(
 				),
 				'rtb' => array(
 						// default US dollars
-						'auction_currency' 		=> "USD",
-						'second_price_auction' 	=> false,
+						'auction_currency' 				=> "USD",
+						'second_price_auction' 			=> false,
 						// integral traq score 500+
-						'third_party_traq'		=> false
+						'third_party_traq'				=> false,
+						// enable project honeypot protection
+						'project_honeypot_protected'	=> false,
+						/*
+						 * Project Honey Pot key, register at http://www.projecthoneypot.org for free to get one
+						 * Then visit: http://www.projecthoneypot.org/httpbl_configure.php
+						 * to get the API key to paste here
+						 */ 
+						'project_honeypot_api_key'		=> '[MY_API_KEY]'
 				),
 				'shell' => array(
 						'has_curl_on_path'		=> false
