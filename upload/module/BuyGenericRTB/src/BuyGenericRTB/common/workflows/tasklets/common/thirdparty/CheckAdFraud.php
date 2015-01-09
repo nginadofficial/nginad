@@ -101,7 +101,7 @@ class CheckAdFraud {
 		$params = array();
 		$params["remote_ip"] = $remote_ip;
 	
-		$boolean_result = \util\CacheSql::get_cached_read_result_apc($config, $params, self::$class_name);
+		$boolean_result = \util\CacheSql::get_cached_read_result_apc_type_convert($config, $params, self::$class_name);
 	
 		return $boolean_result;
 	}

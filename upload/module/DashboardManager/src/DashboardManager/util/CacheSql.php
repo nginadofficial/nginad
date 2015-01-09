@@ -45,6 +45,20 @@ class CacheSql {
 		return null;
 	}
 	
+	public static function get_cached_read_result_apc_type_convert($config, $params, $class_name) {
+	
+		$unserialized_data = self::get_cached_read_result_apc($config, $params, $class_name);
+		
+		if ($unserialized_data === self::$empty_array_value):
+			return array();
+		elseif ($unserialized_data === self::$null_value):
+			return null;
+		else:
+			return $unserialized_data;
+		endif;
+
+	}
+	
 	// 60 second time to live by default
 	public static function put_cached_read_result_apc($config, $params, $class_name, $data, $ttl = 60) {
 	
