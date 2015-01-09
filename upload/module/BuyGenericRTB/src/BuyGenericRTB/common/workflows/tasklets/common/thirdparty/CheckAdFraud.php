@@ -11,6 +11,8 @@ namespace buyrtb\workflows\tasklets\common\thirdparty;
 
 class CheckAdFraud {
 	
+	private static $class_name = 'CheckAdFraud';
+	
 	public static function execute(&$Logger, &$Workflow, \model\openrtb\RtbBidRequest &$RtbBidRequest) {
     	/*
     	 * This is a placeholder for a User Scoring Tasklet
@@ -38,32 +40,70 @@ class CheckAdFraud {
 		
 		if ($Workflow->config['settings']['rtb']['project_honeypot_protected'] == true):
 			
-			$project_honeypot_api_key = $Workflow->config['settings']['rtb']['project_honeypot_api_key'];
+			$is_honeypot_safe = self::get_honeypot_score_from_service($Workflow->config, $remote_ip);
 		
+			return $is_honeypot_safe;
+			
+		endif;
+
+        return true;
+	}
+	
+	private function get_honeypot_score_from_service($config, $remote_ip) {
+	
+		$honeypot_safe = self::checkHoneyPotCached($config, $remote_ip);
+	
+		if ($honeypot_safe === null):
+		
+			$project_honeypot_api_key = $config['settings']['rtb']['project_honeypot_api_key'];
+				
 			$ProjectHoneyPot = new \util\ProjectHoneyPot($remote_ip, $project_honeypot_api_key);
 			
 			if ($ProjectHoneyPot->getError() !== null):
 				/*
 				 * something went wrong with the honeypot service
-				 * better luck next time
-				 */
+				* better luck next time
+				*/
 				return true;
 			endif;
 			
-			$passed_honeypot = !$ProjectHoneyPot->isListed();
+			$honeypot_listed = !$ProjectHoneyPot->isListed();
 			
 			/*
-			 * IPs are re-assigned. Only the ones with activity in the last 
-			 * month should trigger ad fraud.
-			 */
-			if ($passed_honeypot === false && $ProjectHoneyPot->getRecency() <= 30):
+			 * IPs are re-assigned. Only the ones with activity in the last
+			* month should trigger ad fraud.
+			*/
+			if ($honeypot_listed === false && $ProjectHoneyPot->getRecency() <= 30):
 				// optionally do some logging here with $Logger
-				return false;
+				$honeypot_safe = false;
+			else:
+				$honeypot_safe = true;
 			endif;
+					
+			/*
+			 * If we get valid response from the service,
+			 * store it for 1 hour, so we are not constantly
+			 * calling the service with the same parameters
+			 */
 			
+			$params = array();
+			$params["remote_ip"] = $remote_ip;
+			$one_hour_in_seconds = 3600;
+			\util\CacheSql::put_cached_read_result_apc($config, $params, self::$class_name, $honeypot_safe, $one_hour_in_seconds);
+	
 		endif;
-
-        return true;
+	
+		return $honeypot_safe;
+	}
+	
+	private static function checkHoneyPotCached($config, $remote_ip) {
+	
+		$params = array();
+		$params["remote_ip"] = $remote_ip;
+	
+		$boolean_result = \util\CacheSql::get_cached_read_result_apc($config, $params, self::$class_name);
+	
+		return $boolean_result;
 	}
 	
 }
