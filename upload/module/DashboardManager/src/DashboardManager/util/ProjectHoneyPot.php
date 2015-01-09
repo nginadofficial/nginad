@@ -47,7 +47,7 @@ class ProjectHoneyPot {
 		try {
 			$this->query();
 		} catch (Exception $e) {
-			$error = $e->getMessage();
+			$this->error = $e->getMessage();
 		}
 	}
 
