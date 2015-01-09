@@ -39,7 +39,13 @@ class CacheSql {
 		$data = apc_fetch($key, $success);
 		if ($success == true):
 			$unserialized_data = unserialize($data);
-			return $unserialized_data;
+			if ($unserialized_data === self::$empty_array_value):
+				return array();
+			elseif ($unserialized_data === self::$null_value):
+				return null;
+			else:
+				return $unserialized_data;
+			endif;
 		endif;
 		
 		return null;
@@ -54,7 +60,7 @@ class CacheSql {
 
 		if (is_array($data) && count($data) == 0):
 			$data = self::$empty_array_value;
-		elseif ($data == null):
+		elseif ($data === null):
 			$data = self::$null_value;
 		endif;
 
