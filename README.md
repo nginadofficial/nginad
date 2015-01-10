@@ -1,6 +1,11 @@
 nginad
 =======
 
+January 10, 2015
+------------------
+
+The 1.4.51 release adds Google backed Project Honeypot ad fraud detection to NginAd, though it is disabled by default.
+
 December 29, 2014
 ------------------
 
