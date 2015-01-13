@@ -193,18 +193,31 @@ class ZoneController extends PublisherAbstractActionController {
         	$error_message = "This domain was rejected and you can not add any new zones.";
         
         endif;
+
+        $request = $this->getRequest();
         
-        $needed_input = array(
-				'AdName',
-				'Description',
-				'Width',
-				'Height'
-		);
+        if ($request->getPost("ImpressionType") == 'video'):
+	         
+	        $needed_input = array(
+	        		'AdName',
+	        		'Description',
+	        		'Width',
+	        		'Height'
+	        );
+	        
+	    else:
+	        
+	        $needed_input = array(
+	        		'AdName',
+	        		'Description',
+	        		'MinDuration',
+	        		'MaxDuration',
+	        		'Mimes'
+	        );
+        
+        endif;
 		
         $AdTemplateList = $this->get_ad_templates();
-        
-        $request = $this->getRequest();
- 
         
         if ($request->isPost() && $DomainObj !== null && $error_message === null):
         
