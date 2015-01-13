@@ -201,19 +201,19 @@ class ZoneController extends PublisherAbstractActionController {
 	        $needed_input = array(
 	        		'AdName',
 	        		'Description',
-	        		'Width',
-	        		'Height'
-	        );
-	        
-	    else:
-	        
-	        $needed_input = array(
-	        		'AdName',
-	        		'Description',
 	        		'MinDuration',
 	        		'MaxDuration',
 	        		'Mimes'
 	        );
+	        
+	    else:
+	        
+		    $needed_input = array(
+		    		'AdName',
+		    		'Description',
+		    		'Width',
+		    		'Height'
+		    );
         
         endif;
 		
@@ -529,19 +529,19 @@ class ZoneController extends PublisherAbstractActionController {
 	        	$needed_input = array(
 	        			'AdName',
 	        			'Description',
-	        			'Width',
-	        			'Height'
+	        			'MinDuration',
+	        			'MaxDuration',
+	        			'Mimes'
 	        	);
 	        	
         	else:
         
-	            $needed_input = array(
-					'AdName',
-					'Description',
-					'MinDuration',
-					'MaxDuration',
-	            	'Mimes'
-				);
+	        	$needed_input = array(
+	        			'AdName',
+	        			'Description',
+	        			'Width',
+	        			'Height'
+	        	);
             
             endif;
 		
