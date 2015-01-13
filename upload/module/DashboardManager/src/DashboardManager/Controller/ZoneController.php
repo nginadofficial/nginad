@@ -524,7 +524,9 @@ class ZoneController extends PublisherAbstractActionController {
         
         else:
         
-        	if ($editResultObj->ImpressionType == 'video'):
+        	$request = $this->getRequest();
+        
+        	if ($request->getPost("ImpressionType") == 'video'):
         	
 	        	$needed_input = array(
 	        			'AdName',
@@ -549,8 +551,7 @@ class ZoneController extends PublisherAbstractActionController {
             $linkedbanners = array();
             
             $AdTemplateList = $this->get_ad_templates();
-            $request = $this->getRequest();
-            
+
             $current_mimes 					= \util\BannerOptions::$mimes;
             
             $current_min_duration 			= "0";
