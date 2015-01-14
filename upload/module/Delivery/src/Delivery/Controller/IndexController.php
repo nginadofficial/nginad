@@ -67,7 +67,7 @@ class IndexController extends AbstractActionController
     	
     	if (isset($banner_request["video"]) && $banner_request["video"] == 'vast'):
     		header("Content-type: text/xml");
-    		echo '<?xml version="1.0" encoding="utf-8"?><VAST version="2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="vast.xsd"><Ad id="NONDELIVERY"><InLine><AdSystem>NginAd Exchange</AdSystem><AdTitle /><Impression></Impression><Creatives><Creative /></Creatives></InLine></Ad></VAST>';
+    		echo '<?xml version="1.0" encoding="utf-8"?><VAST version="2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="vast.xsd"><Ad id="NONDELIVERY"><InLine><AdSystem>NGINAD AD SERVER</AdSystem><AdTitle /><Impression></Impression><Creatives><Creative /></Creatives></InLine></Ad></VAST>';
     	else:
     		echo "<!DOCTYPE html>\n<html><body><div style='margin: 0px; padding: 0px;'><!-- NGINAD AD SERVER - NO AD AVAILABLE --></div></body></html>\n";
         endif;
