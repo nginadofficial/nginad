@@ -377,19 +377,19 @@ class IndexController extends AbstractActionController
     		return;
     	endif;
     	
-    	if ($PublisherAdZoneVideo->MimesCommaSeparated !== null):
+    	if (!empty($PublisherAdZoneVideo->MimesCommaSeparated)):
     		$banner_request["video_mimes"] 				= explode(',', $PublisherAdZoneVideo->MimesCommaSeparated);
     	endif;
-    	if ($PublisherAdZoneVideo->ApisSupportedCommaSeparated !== null):
+    	if (!empty($PublisherAdZoneVideo->ApisSupportedCommaSeparated)):
     		$banner_request["video_apis_supported"] 	= explode(',', $PublisherAdZoneVideo->ApisSupportedCommaSeparated);
     	endif;
-    	if ($PublisherAdZoneVideo->ProtocolsCommaSeparated !== null):
+    	if (!empty($PublisherAdZoneVideo->ProtocolsCommaSeparated)):
     		$banner_request["video_protocols"] 			= explode(',', $PublisherAdZoneVideo->ProtocolsCommaSeparated);
     	endif;
-    	if ($PublisherAdZoneVideo->DeliveryCommaSeparated !== null):
+    	if (!empty($PublisherAdZoneVideo->DeliveryCommaSeparated)):
     		$banner_request["video_delivery"] 			= explode(',', $PublisherAdZoneVideo->DeliveryCommaSeparated);
     	endif;
-    	if ($PublisherAdZoneVideo->PlaybackCommaSeparated !== null):
+    	if (!empty($PublisherAdZoneVideo->PlaybackCommaSeparated)):
     		$banner_request["video_playback"]			= explode(',', $PublisherAdZoneVideo->PlaybackCommaSeparated);
     	endif;
     	
