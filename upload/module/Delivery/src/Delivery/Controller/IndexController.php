@@ -377,11 +377,21 @@ class IndexController extends AbstractActionController
     		return;
     	endif;
     	
-    	$banner_request["video_mimes"] 				= explode(',', $PublisherAdZoneVideo->MimesCommaSeparated);
-    	$banner_request["video_apis_supported"] 	= explode(',', $PublisherAdZoneVideo->ApisSupportedCommaSeparated);
-    	$banner_request["video_protocols"] 			= explode(',', $PublisherAdZoneVideo->ProtocolsCommaSeparated);
-    	$banner_request["video_delivery"] 			= explode(',', $PublisherAdZoneVideo->DeliveryCommaSeparated);
-    	$banner_request["video_playback"]			= explode(',', $PublisherAdZoneVideo->PlaybackCommaSeparated);
+    	if ($PublisherAdZoneVideo->MimesCommaSeparated !== null):
+    		$banner_request["video_mimes"] 				= explode(',', $PublisherAdZoneVideo->MimesCommaSeparated);
+    	endif;
+    	if ($PublisherAdZoneVideo->ApisSupportedCommaSeparated !== null):
+    		$banner_request["video_apis_supported"] 	= explode(',', $PublisherAdZoneVideo->ApisSupportedCommaSeparated);
+    	endif;
+    	if ($PublisherAdZoneVideo->ProtocolsCommaSeparated !== null):
+    		$banner_request["video_protocols"] 			= explode(',', $PublisherAdZoneVideo->ProtocolsCommaSeparated);
+    	endif;
+    	if ($PublisherAdZoneVideo->DeliveryCommaSeparated !== null):
+    		$banner_request["video_delivery"] 			= explode(',', $PublisherAdZoneVideo->DeliveryCommaSeparated);
+    	endif;
+    	if ($PublisherAdZoneVideo->PlaybackCommaSeparated !== null):
+    		$banner_request["video_playback"]			= explode(',', $PublisherAdZoneVideo->PlaybackCommaSeparated);
+    	endif;
     	
     	$banner_request["video_min_duration"] 		= $PublisherAdZoneVideo->MinDuration;
     	$banner_request["video_max_duration"] 		= $PublisherAdZoneVideo->MaxDuration;
