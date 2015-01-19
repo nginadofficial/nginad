@@ -28,7 +28,8 @@ class IndexController extends AbstractActionController
     	
     	$banner_request["demand_banner_id"] 	= $this->getRequest()->getQuery('zoneid');
     	$banner_request["publisher_banner_id"] 	= $this->getRequest()->getQuery('pzoneid');
-
+	
+    	$banner_request["dtrack"] 				= $this->getRequest()->getQuery('dtrack');
     	$banner_request["vast"] 				= $this->getRequest()->getQuery('vast');
     	$banner_request["video"] 				= $this->getRequest()->getQuery('video');
     	$banner_request["adpos_x"] 				= $this->getRequest()->getQuery('adpos_x');
@@ -53,11 +54,16 @@ class IndexController extends AbstractActionController
     	 * Validate that the banner_id is an integer before continuing
     	 */
     	
-    	if (isset($banner_request["vast"]) && $banner_request["vast"] == "tracker")
+    	if (isset($banner_request["dtrack"]) && $banner_request["dtrack"] == "true"):
+    	
+    		echo "dtrack";
+    		exit;
+    	
+    	elseif (isset($banner_request["vast"]) && $banner_request["vast"] == "tracker"):
     	
     		$this->track_video_impression($config, $banner_request);
     	
-    	if (intval($banner_request["demand_banner_id"])):
+    	elseif (intval($banner_request["demand_banner_id"])):
 	
     		$this->process_demand_tag($config, $banner_request);
 
@@ -280,7 +286,7 @@ class IndexController extends AbstractActionController
 	 			if ($banner_request["ImpressionType"] == 'video'):
 		 			header("Content-type: text/xml");
 	 				if(\util\ParseHelper::isVastURL($winning_ad_tag) === true):
-	 					echo $this->get_vast_wrapper_xml($winning_ad_tag, $tracker_url);
+	 					echo $this->get_vast_wrapper_xml($config, $winning_ad_tag, $tracker_url);
 	 				else:
 	 					echo $winning_ad_tag;
 	 				endif;
@@ -671,7 +677,7 @@ class IndexController extends AbstractActionController
 	    			if (isset($banner_request["tracker_url"])):
 	    				$tracker_url = $banner_request["tracker_url"];
 	    			endif;
-	    			$output = $this->get_vast_wrapper_xml($adtag, $tracker_url);
+	    			$output = $this->get_vast_wrapper_xml($config, $adtag, $tracker_url);
 	    			$tag_cachable = false;
 	    			
 	    		else:
@@ -797,7 +803,9 @@ class IndexController extends AbstractActionController
     	 
     }
     
-    private function get_vast_wrapper_xml($vast_url, $tracker_url) {
+    private function get_vast_wrapper_xml($config, $vast_url, $tracker_url) {
+    	
+    	$delivery_adtag = $config['delivery']['url'];
     	
     	$nl = "\n";
     	
@@ -812,9 +820,19 @@ class IndexController extends AbstractActionController
     	
     		$vast_wrapper_xml.= '			<Impression><![CDATA[' . $tracker_url . ']]></Impression>' . $nl;
     	
+    	else:
+    	
+    		// dummy code for required field	
+    		$vast_wrapper_xml.= '			<Impression><![CDATA[' . $delivery_adtag . "?dtrack=true" . ']]></Impression>' . $nl;
+    	
     	endif;
     	
-    	$vast_wrapper_xml.= '		</Wrapper>' . $nl
+    	$vast_wrapper_xml.= '			<Creatives>' . $nl
+    						. '				<Creative>' . $nl
+    						. '					<CompanionAds/>' . $nl
+    						. '				</Creative>' . $nl
+    						. '			</Creatives>' . $nl
+    						. '		</Wrapper>' . $nl
     						. '	</Ad>' . $nl
     						. '</VAST>';
     	
