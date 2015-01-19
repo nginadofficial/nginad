@@ -351,10 +351,34 @@ class PingManager {
 		$PublisherHourlyBids->SpendTotalNet			= $spend_total_net;
 		
 		if ($AuctionPopo->ImpressionType == "video" && $AuctionPopo->auction_was_won && \util\ParseHelper::isVastURL($AuctionPopo->winning_ad_tag) === true):
-			$AuctionPopo->vast_publisher_imp_obj 	= $PublisherHourlyBids;
-		else:
-			\util\CachedStatsWrites::incrementPublisherBidsCounterCached($this->config, $PublisherHourlyBids);
+			
+			/*
+			 * If this is a video impression record the winning auction 
+			 * information when the VASTAdTagURI is loaded from the 
+			 * publisher's video player.
+			 */
+			$PublisherHourlyBidsCopy = new \model\PublisherHourlyBids();
+		
+			$PublisherHourlyBidsCopy->PublisherAdZoneID	= $this->PublisherAdZoneID;
+			$PublisherHourlyBidsCopy->AuctionCounter	= 0;
+			$PublisherHourlyBidsCopy->BidsWonCounter	= 1;
+			$PublisherHourlyBidsCopy->BidsLostCounter	= 0;
+			$PublisherHourlyBidsCopy->BidsErrorCounter	= 0;
+			$PublisherHourlyBidsCopy->SpendTotalGross	= $spend_total_gross;
+			$PublisherHourlyBidsCopy->SpendTotalNet		= $spend_total_net;
+			
+			$AuctionPopo->vast_publisher_imp_obj 	= $PublisherHourlyBidsCopy;
+			
+			/*
+			 * Record the general impression auction information here now.
+			 */
+			
+			$PublisherHourlyBids->BidsWonCounter		= 0;
+			$PublisherHourlyBids->SpendTotalGross		= 0;
+			$PublisherHourlyBids->SpendTotalNet			= 0;
 		endif;
+		
+		\util\CachedStatsWrites::incrementPublisherBidsCounterCached($this->config, $PublisherHourlyBids);
 		
 		$log_header = "----------------------------------------------------------------\n";
 		$log_header.= "NEW BID RESPONSE, WEBSITE: " . $this->WebDomain . ", PubZoneID: " . $this->PublisherAdZoneID . ", AD: " . $this->AdName;
