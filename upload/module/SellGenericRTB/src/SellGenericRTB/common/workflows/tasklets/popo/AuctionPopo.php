@@ -52,4 +52,6 @@ class AuctionPopo {
 	public $ImpressionType;
 	
 	public $request_impid;
+	
+	public $vast_publisher_imp_obj;
 }

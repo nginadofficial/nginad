@@ -29,6 +29,7 @@ class IndexController extends AbstractActionController
     	$banner_request["demand_banner_id"] 	= $this->getRequest()->getQuery('zoneid');
     	$banner_request["publisher_banner_id"] 	= $this->getRequest()->getQuery('pzoneid');
 
+    	$banner_request["vast"] 				= $this->getRequest()->getQuery('vast');
     	$banner_request["video"] 				= $this->getRequest()->getQuery('video');
     	$banner_request["adpos_x"] 				= $this->getRequest()->getQuery('adpos_x');
     	$banner_request["adpos_y"] 				= $this->getRequest()->getQuery('adpos_y');
@@ -51,6 +52,10 @@ class IndexController extends AbstractActionController
     	/*
     	 * Validate that the banner_id is an integer before continuing
     	 */
+    	
+    	if (isset($banner_request["vast"]) && $banner_request["vast"] == "tracker")
+    	
+    		$this->track_video_impression($config, $banner_request);
     	
     	if (intval($banner_request["demand_banner_id"])):
 	
@@ -239,6 +244,24 @@ class IndexController extends AbstractActionController
 	
 	 		\rtbsellv22\RtbSellV22Logger::get_instance()->output_log();
 	 		
+	 		
+	 		$tracker_url = "";
+	 		
+	 		if ($banner_request["ImpressionType"] == 'video' && \util\ParseHelper::isVastURL($winning_ad_tag) === true):
+	 		
+		 		$encryption_key 				= $config['settings']['rtb']['encryption_key'];
+		 		$params = array();
+		 		$params["winning_price"]		= $AuctionPopo->winning_bid_price;
+		 		$params["auction_timestamp"] 	= time();
+		 		
+		 		$vast_auction_param 	= $this->encrypt_vast_auction_params($encryption_key, $params);
+		 		$vast_publisher_param 	= $this->encrypt_vast_auction_params($encryption_key, $AuctionPopo->vast_publisher_imp_obj);
+		 			
+		 		$tracker_url = $this->get_vast_tracker_url($config, $vast_auction_param, $vast_publisher_param);
+		 		$banner_request["tracker_url"] = $tracker_url;
+		 		
+	 		endif;
+	 		
 	 		if ($AuctionPopo->loopback_demand_partner_won === true):
 	 			
 	 			$banner_request["demand_banner_id"] = $AuctionPopo->loopback_demand_partner_ad_campaign_banner_id;
@@ -253,12 +276,18 @@ class IndexController extends AbstractActionController
 	 			
 	 		else:
 		 		
-	 			if ($banner_request["ImpressionType"] == 'video'):
 
+	 			if ($banner_request["ImpressionType"] == 'video'):
 		 			header("Content-type: text/xml");
-		 			echo $winning_ad_tag;
-		 			
+	 				if(\util\ParseHelper::isVastURL($winning_ad_tag) === true):
+	 					echo $this->get_vast_wrapper_xml($winning_ad_tag, $tracker_url);
+	 				else:
+	 					echo $winning_ad_tag;
+	 				endif;
+
 	 			else:
+	 			
+	 				// credit publisher account here
 		 		
 		 			header("Content-type: application/javascript");
 			 		$output = "document.write(" . json_encode($winning_ad_tag) . ");";
@@ -597,18 +626,28 @@ class IndexController extends AbstractActionController
 		    
 			endif;
 		    
-		    $AdCampaignBannerFactory->incrementAdCampaignBannerImpressionsCounterAndSpendCached($config, $buyer_id, $banner_request_id, $spend_increase_gross, $spend_increase_net);
-		    $AdCampaignBannerFactory->incrementBuySideHourlyImpressionsByTLDCached($config, $banner_request_id, $banner_request["tld"]);
+			$AdCampaignBannerFactory->incrementAdCampaignBannerImpressionsCounterAndSpendCached($config, $buyer_id, $banner_request_id, $spend_increase_gross, $spend_increase_net);
+			$AdCampaignBannerFactory->incrementBuySideHourlyImpressionsByTLDCached($config, $banner_request_id, $banner_request["tld"]);
 
-	    	if (file_exists($cache_file)):
+			$is_video_impression 		= false;
+			
+			if ((isset($banner_request["ImpressionType"]) && $banner_request["ImpressionType"] == 'video')
+				||
+				(isset($banner_request["video"]) && $banner_request["video"] == 'vast')
+				):
+			
+				$is_video_impression 	= true;
+			
+			endif;
+			
+			/*
+			 * Video can not be cached
+			 */
+	    	if (file_exists($cache_file) && $is_video_impression === false):
 	    	
 	    		$cached_tag = file_get_contents($cache_file);
-	    		if ((isset($banner_request["ImpressionType"]) && $banner_request["ImpressionType"] == 'video')
-	    			 || 	
-	    			 (isset($banner_request["video"]) && $banner_request["video"] == 'vast')
-	    			):
-	    			header("Content-type: text/xml");
-	    		elseif ($banner_request["dt"] == "in"):
+	    		
+	    		if ($banner_request["dt"] == "in"):
 	    			$this->ad_macros_to_adtag($cached_tag, $banner_request);
 	    			header("Content-type: application/javascript");
 	    		else:
@@ -622,33 +661,19 @@ class IndexController extends AbstractActionController
     	
 	    	$tag_cachable 				= true;
 	    	
-	    	$is_video_impression 		= false;
-	    	
-	    	if ((isset($banner_request["ImpressionType"]) && $banner_request["ImpressionType"] == 'video')
-	    			 || 	
-	    			 (isset($banner_request["video"]) && $banner_request["video"] == 'vast')
-	    		):
+	    	if ($is_video_impression === true):
     		
-	    		$is_video_impression 	= true;
-	    		
 	    		$adtag = $AdCampaignBanner->AdTag;
 	    	
 	    		if(\util\ParseHelper::isVastURL($adtag) === true):
 	    			
-		    		/*
-		    		 * This is a VAST video ad tag and the tag is a 
-		    		 * URL to another video ad server like LiveRail
-		    		 *
-		    		 * We must now reverse proxy the VAST XML back to the
-		    		 * publisher's Flash Video Player in the HTTP
-		    		 * Ad Tag response.
-		    		 */
-		    		 
-		    		$output = \util\WorkflowHelper::get_ping_notice_url_curl_request($adtag);
-
-	    			if ($config['delivery']['cache_proxied_vast_xml'] == false):
-	    				$tag_cachable = false;
+	    			$tracker_url = "";
+	    			if (isset($banner_request["tracker_url"])):
+	    				$tracker_url = $banner_request["tracker_url"];
 	    			endif;
+	    			$output = $this->get_vast_wrapper_xml($adtag, $tracker_url);
+	    			$tag_cachable = false;
+	    			
 	    		else:
 	    			$output = $adtag;
 	    		endif;
@@ -687,6 +712,122 @@ class IndexController extends AbstractActionController
     	
     	echo "NGINAD";
     	exit;
+    }
+    
+    private function track_video_impression($config, $banner_request) {
+    	
+    	$error_message 			= "Error";
+    	
+    	$ap_param 				= $this->getRequest()->getQuery('ap');
+    	$pp_param 				= $this->getRequest()->getQuery('pp');
+    	
+    	if (empty($ap_param) || empty($pp_param)):
+    		die($error_message);
+    	endif;
+    	
+    	$encryption_key 	= $config['settings']['rtb']['encryption_key'];
+    	
+    	$ap = $this->decrypt_vast_auction_params($encryption_key, $ap_param);
+    	
+    	if (empty($ap)):
+    		die($error_message);
+    	endif;
+    	
+    	$pp = $this->decrypt_vast_auction_params($encryption_key, $pp_param);
+    	
+    	if (empty($ap) || (!($pp instanceof \model\PublisherHourlyBids))):
+    		die($error_message);
+    	endif;
+    	
+    	$minutes_to_expire = 5;
+    	
+    	if (intval($ap["auction_timestamp"]) < (time() - (60 * $minutes_to_expire))):
+    		// timestamp token expired
+    		die($error_message);
+    	endif;
+    	
+    	\util\CachedStatsWrites::incrementPublisherBidsCounterCached($config, $pp);
+    	
+    	echo 'tracking_id: ' . $pp->PublisherAdZoneID . '_' . md5($pp_param . $ap_param);
+    	exit;
+    }
+    
+    private function encrypt_vast_auction_params($encryption_key, $params) {
+    		
+    	/*
+    	 * serialize params for URL using ZF2 encryption
+    	 */
+    	
+    	$filter = new \Zend\Filter\Encrypt();
+    	$filter->setKey($encryption_key);
+    	$filter->setVector('12345678901234567890');
+    	return urlencode($filter->filter(serialize($params)));
+    	
+    }
+    
+    private function get_vast_tracker_url($config, $vast_auction_param, $vast_publisher_param) {
+    
+    	$delivery_adtag = $config['delivery']['url'];
+    	
+    	$cache_buster = time();
+    
+    	$notice_tag = $delivery_adtag . "?vast=tracker&ap=" . $vast_auction_param . "&pp=" . $vast_publisher_param . "&cb=" . $cache_buster;
+    
+    	return $notice_tag;
+    }
+    
+    private function decrypt_vast_auction_params($encryption_key, $param) {
+    
+    	/*
+    	 * unserialize params for URL using ZF2 encryption
+    	 */
+    	 
+    	$decrypted_params = null;
+    	
+    	try {
+	    	$filter = new \Zend\Filter\Decrypt();
+			$filter->setKey($encryption_key);
+			$decrypted_string = $filter->filter($param);
+			$decrypted_params = unserialize($decrypted_string);
+    	} catch (Exception $e) {
+    		// logging here
+    	}
+    	
+    	return $decrypted_params;
+    	 
+    }
+    
+    private function get_vast_wrapper_xml($vast_url, $tracker_url) {
+    	
+    	$nl = "\n";
+    	
+    	$vast_wrapper_xml = '<VideoAdServingTemplate ' . $nl
+    						. '	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ' . $nl
+    						. '	xsi:noNamespaceSchemaLocation="vast.xsd">' . $nl
+    						. '	<Ad id="videoAd_wrapper">' . $nl
+    						. '		<Wrapper>' . $nl
+    						. '			<AdSystem>NGINAD AD SERVER</AdSystem>' . $nl
+    						. '			<VASTAdTagURL>' . $nl
+    						. '				<URL id="WinningVastTag">' . $nl
+    						. '					<![CDATA[' . $vast_url . ']]>' . $nl
+    						. '				</URL>' . $nl
+    						. '			</VASTAdTagURL>' . $nl;
+    	
+    	if (!empty($tracker_url)):
+    	
+    		$vast_wrapper_xml.= '			<Impression>' . $nl
+    						. '				<URL id="NginAdImpression">' . $nl
+    						. '					<![CDATA[' . $tracker_url . ']]>' . $nl
+    						. '				</URL>' . $nl
+    						. '			</Impression>' . $nl;
+    	
+    	endif;
+    	
+    	$vast_wrapper_xml.= '		</Wrapper>' . $nl
+    						. '	</Ad>' . $nl
+    						. '</VideoAdServingTemplate>';
+    	
+    	return $vast_wrapper_xml;
     }
     
     private function ad_macros_to_adtag(&$adtag, &$banner_request) {

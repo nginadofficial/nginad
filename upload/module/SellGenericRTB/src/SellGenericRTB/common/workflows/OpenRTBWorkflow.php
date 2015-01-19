@@ -83,16 +83,10 @@ class OpenRTBWorkflow {
     	if ($AuctionPopo->ImpressionType == 'video' && empty($WinningRtbResponseBid->adm)
     			&& !empty($WinningRtbResponseBid->nurl)):
     			
-    		if (!$WinningRTBPinger->is_loopback_pinger):
-    		
 	    		/*
 	    		 * This is a VAST video ad zone auction and it was won
 	    		 * by a bidder that put a URL to the VAST XML in their
 	    		 * OpenRTB 2.2 nurl param so adm is empty.
-	    		 * 
-	    		 * We must now reverse proxy the VAST XML back to the 
-	    		 * publisher's Flash Video Player in the HTTP
-	    		 * Ad Tag response.
 	    		 * 
 	    		 * Could be a LiveRail Tag or something.
 	    		 */
@@ -103,7 +97,8 @@ class OpenRTBWorkflow {
 	    		 * again. We are putting it in the field for conceptual
 	    		 * parity reasons only.
 	    		 */
-	    		$WinningRtbResponseBid->adm 		= \util\WorkflowHelper::get_ping_notice_url_curl_request($WinningRtbResponseBid->nurl);
+    		
+	    		$WinningRtbResponseBid->adm 		= $WinningRtbResponseBid->nurl;
 
 	    		$AuctionPopo->winning_ad_tag		= $WinningRtbResponseBid->adm;
 	    		
@@ -113,7 +108,6 @@ class OpenRTBWorkflow {
 	    		 */ 
 	    		unset($WinningRtbResponseBid->nurl);
 	    		
-    		endif;
     	elseif (!empty($WinningRtbResponseBid->adm)):
     	
     		$AuctionPopo->winning_ad_tag		= rawurldecode($WinningRtbResponseBid->adm);

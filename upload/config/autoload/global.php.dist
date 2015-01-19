@@ -31,6 +31,8 @@ return array(
 						'auto_approve_websites' => true
 				),
 				'rtb' => array(
+						// rtb encrytion key
+						'encryption_key'				=> 'my_encryption_key',
 						// default US dollars
 						'auction_currency' 				=> "USD",
 						'second_price_auction' 			=> false,

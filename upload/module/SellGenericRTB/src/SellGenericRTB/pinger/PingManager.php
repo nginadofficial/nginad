@@ -350,7 +350,11 @@ class PingManager {
 		$PublisherHourlyBids->SpendTotalGross		= $spend_total_gross;
 		$PublisherHourlyBids->SpendTotalNet			= $spend_total_net;
 		
-		\util\CachedStatsWrites::incrementPublisherBidsCounterCached($this->config, $PublisherHourlyBids);
+		if ($AuctionPopo->ImpressionType == "video"):
+			$AuctionPopo->vast_publisher_imp_obj 	= $PublisherHourlyBids;
+		else:
+			\util\CachedStatsWrites::incrementPublisherBidsCounterCached($this->config, $PublisherHourlyBids);
+		endif;
 		
 		$log_header = "----------------------------------------------------------------\n";
 		$log_header.= "NEW BID RESPONSE, WEBSITE: " . $this->WebDomain . ", PubZoneID: " . $this->PublisherAdZoneID . ", AD: " . $this->AdName;
