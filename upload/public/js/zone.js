@@ -9,7 +9,7 @@ function switchImpressionType() {
 		
 		$(".novideo").hide();
 		$(".nobanner").show();
-		$("#passbackTag").html("Passback VAST XML");
+		$("#passbackTag").html("Passback VAST XML (VAST URL also OK)");
 		$("label[for=Height]").html('Video Height');
 		$("label[for=Width]").html('Video Width');
 		

@@ -247,7 +247,7 @@ class IndexController extends AbstractActionController
 	 		
 	 		$tracker_url = "";
 	 		
-	 		if ($banner_request["ImpressionType"] == 'video' && \util\ParseHelper::isVastURL($winning_ad_tag) === true):
+	 		if ($banner_request["ImpressionType"] == 'video' && \util\ParseHelper::isVastURL($winning_ad_tag) === true && $AuctionPopo->auction_was_won):
 	 		
 		 		$encryption_key 				= $config['settings']['rtb']['encryption_key'];
 		 		$params = array();

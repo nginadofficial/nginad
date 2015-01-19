@@ -350,7 +350,7 @@ class PingManager {
 		$PublisherHourlyBids->SpendTotalGross		= $spend_total_gross;
 		$PublisherHourlyBids->SpendTotalNet			= $spend_total_net;
 		
-		if ($AuctionPopo->ImpressionType == "video"):
+		if ($AuctionPopo->ImpressionType == "video" && $AuctionPopo->auction_was_won && \util\ParseHelper::isVastURL($AuctionPopo->winning_ad_tag) === true):
 			$AuctionPopo->vast_publisher_imp_obj 	= $PublisherHourlyBids;
 		else:
 			\util\CachedStatsWrites::incrementPublisherBidsCounterCached($this->config, $PublisherHourlyBids);
