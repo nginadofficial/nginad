@@ -1,6 +1,16 @@
 nginad
 =======
 
+January 18, 2015
+------------------
+
+The 1.4.52 release fixes many bugs with VAST/VPAID ad delivery. 
+
+ * Default VAST tag for when no passback exists and the auction is not won
+ * Video Zone input validation bug fix
+ * Video Ad Campaign Restrictions on APIs bug fix
+ * Video VAST URL Wrapper bug fix for secondary video servers like LiveRail
+
 January 10, 2015
 ------------------
 
