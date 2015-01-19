@@ -10,6 +10,7 @@ The 1.4.52 release fixes many bugs with VAST/VPAID ad delivery.
  * Video Zone input validation bug fix
  * Video Ad Campaign Restrictions on APIs bug fix
  * Video VAST URL Wrapper bug fix for secondary video servers like LiveRail
+ * NginAd Ad Server now requires php-mcrypt to be installed to function due to the use of ZF2 encryption methods
 
 January 10, 2015
 ------------------
