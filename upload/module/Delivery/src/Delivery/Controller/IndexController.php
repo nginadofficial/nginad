@@ -801,31 +801,22 @@ class IndexController extends AbstractActionController
     	
     	$nl = "\n";
     	
-    	$vast_wrapper_xml = '<VideoAdServingTemplate ' . $nl
-    						. '	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ' . $nl
-    						. '	xsi:noNamespaceSchemaLocation="vast.xsd">' . $nl
-    						. '	<Ad id="videoAd_wrapper">' . $nl
+    	$vast_wrapper_xml = '<?xml version="1.0" encoding="utf-8"?> ' . $nl
+    						. '<VAST version="2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="vast.xsd"> ' . $nl
+    						. '	<Ad id="NginAdVideoAd">' . $nl
     						. '		<Wrapper>' . $nl
     						. '			<AdSystem>NGINAD AD SERVER</AdSystem>' . $nl
-    						. '			<VASTAdTagURL>' . $nl
-    						. '				<URL id="WinningVastTag">' . $nl
-    						. '					<![CDATA[' . $vast_url . ']]>' . $nl
-    						. '				</URL>' . $nl
-    						. '			</VASTAdTagURL>' . $nl;
+    						. '			<VASTAdTagURI><![CDATA[' . $vast_url . ']]></VASTAdTagURI>' . $nl;
     	
     	if (!empty($tracker_url)):
     	
-    		$vast_wrapper_xml.= '			<Impression>' . $nl
-    						. '				<URL id="NginAdImpression">' . $nl
-    						. '					<![CDATA[' . $tracker_url . ']]>' . $nl
-    						. '				</URL>' . $nl
-    						. '			</Impression>' . $nl;
+    		$vast_wrapper_xml.= '			<Impression><![CDATA[' . $tracker_url . ']]></Impression>' . $nl;
     	
     	endif;
     	
     	$vast_wrapper_xml.= '		</Wrapper>' . $nl
     						. '	</Ad>' . $nl
-    						. '</VideoAdServingTemplate>';
+    						. '</VAST>';
     	
     	return $vast_wrapper_xml;
     }
