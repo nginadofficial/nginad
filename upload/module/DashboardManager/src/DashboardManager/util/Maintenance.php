@@ -11,7 +11,7 @@ namespace util;
 
 class Maintenance {
 
-	public function checkRunMaintenance($tagname, $interval_in_minutes) {
+	public static function checkRunMaintenance($tagname, $interval_in_minutes) {
 
 		$MaintenanceFactory = \_factory\Maintenance::get_instance();
 		$params = array();
