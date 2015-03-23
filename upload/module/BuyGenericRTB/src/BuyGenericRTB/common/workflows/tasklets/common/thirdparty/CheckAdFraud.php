@@ -49,7 +49,7 @@ class CheckAdFraud {
         return true;
 	}
 	
-	private function get_honeypot_score_from_service($config, $remote_ip) {
+	private static function get_honeypot_score_from_service($config, $remote_ip) {
 	
 		$honeypot_safe = self::checkHoneyPotCached($config, $remote_ip);
 	
