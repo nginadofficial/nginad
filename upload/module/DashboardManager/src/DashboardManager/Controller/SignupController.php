@@ -100,10 +100,12 @@ class SignupController extends PublisherAbstractActionController {
 			$Password	 = $request->getPost('password');
 			$user_login	 = $request->getPost('user_login');
 			
+			$Password = str_replace(array("'",";"), array("",""), $Password);
+			
 			if (preg_match('/[^-_. 0-9A-Za-z]/', $Name)
 				|| !filter_var($Email, FILTER_VALIDATE_EMAIL)
-				|| preg_match('/[^-_. 0-9A-Za-z]/', $Website)
-				|| preg_match('/[^-_. 0-9A-Za-z]/', $Company)
+				|| empty($Website) || preg_match('/[^-_. 0-9A-Za-z]/', $Website)
+				|| empty($Company) || preg_match('/[^-_. 0-9A-Za-z]/', $Company)
 				|| empty($PartnerType)
 				|| empty($Password)
 				|| !ctype_alnum($user_login)):
@@ -209,10 +211,12 @@ class SignupController extends PublisherAbstractActionController {
 		$Password	 = $request->getPost('Password');
 		$user_login	 = $request->getPost('user_login');
 		
+		$Password = str_replace(array("'",";"), array("",""), $Password);
+		
 		if (preg_match('/[^-_. 0-9A-Za-z]/', $Name)
 			|| !filter_var($Email, FILTER_VALIDATE_EMAIL)
-			|| preg_match('/[^-_. 0-9A-Za-z]/', $Domain)
-			|| preg_match('/[^-_. 0-9A-Za-z]/', $IABCategory)
+			|| empty($Domain)|| preg_match('/[^-_. 0-9A-Za-z]/', $Domain)
+			|| empty($IABCategory) || preg_match('/[^-_. 0-9A-Za-z]/', $IABCategory)
 			|| empty($Password)
 			|| !ctype_alnum($user_login)):
 			
