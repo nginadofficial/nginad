@@ -105,7 +105,7 @@ abstract class RtbBuyV22Bid extends RtbBuyBid {
 			$cache_buster = time();
 
 			if ($this->rtb_provider != "BuyLoopbackPartner"):
-				$winning_bid_auction_param = "&winbid={NGINWBIDPRC}";
+				$winning_bid_auction_param = "&winbid=\${AUCTION_PRICE}";
 			endif;
 			
 			$effective_tag = "<script type='text/javascript' src='" . $delivery_adtag_js . "?zoneid=" . $AdCampaignBanner->AdCampaignBannerID . "&buyerid=" . $this->rtb_seat_id . "&height=" . $AdCampaignBanner->Height . "&width=" . $AdCampaignBanner->Width . "&tld=" . $tld . "&clktrc={NGINCLKTRK}" . $winning_bid_auction_param . "&ui=" . $this->user_ip_hash . "&cb=" . $cache_buster . "'></script>";
@@ -124,7 +124,7 @@ abstract class RtbBuyV22Bid extends RtbBuyBid {
 		$cache_buster = time();
 	
 		if ($this->rtb_provider != "BuyLoopbackPartner"):
-			$winning_bid_auction_param = "&winbid={NGINWBIDPRC}";
+			$winning_bid_auction_param = "&winbid=\${AUCTION_PRICE}";
 		endif;
 
 		$notice_tag = $delivery_adtag . "?video=vast&zoneid=" . $AdCampaignBanner->AdCampaignBannerID . "&buyerid=" . $this->rtb_seat_id . "&tld=" . $tld . "&clktrc={NGINCLKTRK}" . $winning_bid_auction_param . "&ui=" . $this->user_ip_hash . "&cb=" . $cache_buster;
