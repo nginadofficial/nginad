@@ -181,16 +181,26 @@ abstract class RtbBuyV22Bid extends RtbBuyBid {
 
 		if ($this->RtbBidRequest != null):
 		
-			$parse = parse_url($this->RtbBidRequest->RtbBidRequestSite->domain);
-			if (isset($parse['host'])):
+			$parse = null;
+		
+			if (isset($this->RtbBidRequest->RtbBidRequestSite->domain)):
+				$parse = parse_url($this->RtbBidRequest->RtbBidRequestSite->domain);
+			elseif (isset($this->RtbBidRequest->RtbBidRequestApp->domain)):
+				$parse = parse_url($this->RtbBidRequest->RtbBidRequestApp->domain);
+			endif;
+			
+			if (!empty($parse) && isset($parse['host'])):
 				$tld = $parse['host'];
 			else:
-				$parse = parse_url($this->RtbBidRequest->RtbBidRequestSite->page);
-				if (isset($parse['host'])):
+				if (isset($this->RtbBidRequest->RtbBidRequestSite->page)):
+					$parse = parse_url($this->RtbBidRequest->RtbBidRequestSite->page);
+				elseif (isset($this->RtbBidRequest->RtbBidRequestApp->page)):
+					$parse = parse_url($this->RtbBidRequest->RtbBidRequestApp->page);
+				endif;
+				if (!empty($parse) && isset($parse['host'])):
 					$tld = $parse['host'];
 				endif;
 			endif;
-
 
 			$this->user_ip_hash = md5($this->RtbBidRequest->RtbBidRequestDevice->ip);
 			
