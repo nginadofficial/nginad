@@ -85,19 +85,19 @@ class OpenRTBParser {
 				"badv");
 		
         // Parse Site
-        if (!isset($this->json_post["site"])):
-        	throw new Exception($this->expeption_missing_min_bid_request_params . ": at least 1 site object");
+        if (isset($this->json_post["site"])):
+	
+	        $ad_campaign_site = $this->json_post["site"];
+	        $RtbBidRequestSite = new \model\openrtb\RtbBidRequestSite();
+	        
+	        try {
+	        	\buyrtb\parsers\openrtb\parselets\common\ParseWebsite::execute($logger, $this, $this->RtbBidRequest, $RtbBidRequestSite, $ad_campaign_site);
+	        	$this->RtbBidRequest->RtbBidRequestSite = $RtbBidRequestSite;
+	        } catch (Exception $e) {
+	        	throw new Exception($e->getMessage(), $e->getCode(), $e->getPrevious());
+	        }
+	        
         endif;
-        
-        $ad_campaign_site = $this->json_post["site"];
-        $RtbBidRequestSite = new \model\openrtb\RtbBidRequestSite();
-        
-        try {
-        	\buyrtb\parsers\openrtb\parselets\common\ParseWebsite::execute($logger, $this, $this->RtbBidRequest, $RtbBidRequestSite, $ad_campaign_site);
-        	$this->RtbBidRequest->RtbBidRequestSite = $RtbBidRequestSite;
-        } catch (Exception $e) {
-        	throw new Exception($e->getMessage(), $e->getCode(), $e->getPrevious());
-        }
        
         // Parse App
         if (isset($this->json_post["app"])):
