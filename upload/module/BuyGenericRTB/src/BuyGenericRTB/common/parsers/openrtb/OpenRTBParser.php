@@ -130,21 +130,20 @@ class OpenRTBParser {
         endif;
         
         // Parse Device
-        if (!isset($this->json_post["device"])):
-        	throw new Exception($this->expeption_missing_min_bid_request_params . ": at least 1 site object");
+        if (isset($this->json_post["device"])):
+	
+	        $device = $this->json_post["device"];
+	        $RtbBidRequestDevice = new \model\openrtb\RtbBidRequestDevice();
+	        
+	        try {
+	        	\buyrtb\parsers\openrtb\parselets\common\device\ParseDevice::execute($logger, $this, $this->RtbBidRequest, $RtbBidRequestDevice, $device);
+	        	$this->RtbBidRequest->RtbBidRequestDevice = $RtbBidRequestDevice;
+	        	$logger->log[] = "Is Mobile: " . $this->RtbBidRequest->RtbBidRequestDevice->devicetype != 2;
+	        
+	        } catch (Exception $e) {
+	        	throw new Exception($e->getMessage(), $e->getCode(), $e->getPrevious());
+	        }
         endif;
-        
-        $device = $this->json_post["device"];
-        $RtbBidRequestDevice = new \model\openrtb\RtbBidRequestDevice();
-        
-        try {
-        	\buyrtb\parsers\openrtb\parselets\common\device\ParseDevice::execute($logger, $this, $this->RtbBidRequest, $RtbBidRequestDevice, $device);
-        	$this->RtbBidRequest->RtbBidRequestDevice = $RtbBidRequestDevice;
-        	$logger->log[] = "Is Mobile: " . $this->RtbBidRequest->RtbBidRequestDevice->devicetype != 2;
-        
-        } catch (Exception $e) {
-        	throw new Exception($e->getMessage(), $e->getCode(), $e->getPrevious());
-        }
         
         // Parse Regs
 
