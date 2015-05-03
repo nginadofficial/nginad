@@ -186,8 +186,12 @@ class ParseDevice {
 				$RtbBidRequestDevice->devicetype = DEVICE_TABLET;
 				 
 			endif;
-			 
-		elseif (isset($RtbBidRequestDevice->ua) && $RtbBidRequestDevice->ua != null):
+		
+		endif;
+			
+		if ($RtbBidRequestDevice->devicetype == DEVICE_DESKTOP
+				&& isset($RtbBidRequestDevice->ua) 
+				&& $RtbBidRequestDevice->ua != null):
 		
 			$detect = new \mobileutil\MobileDetect(null, $RtbBidRequestDevice->ua);
 			 
