@@ -5,7 +5,7 @@ May 2, 2015
 ------------------
 
 The 1.5 release fixes various OpenRTB specific bugs encountered when using the app versus the site object.
-It also fixes logging bug with the geo object.
+It also fixes a logging bug with the geo object.
 
 
 January 18, 2015
