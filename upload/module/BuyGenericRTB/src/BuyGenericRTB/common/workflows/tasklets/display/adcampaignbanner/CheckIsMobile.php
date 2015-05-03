@@ -27,7 +27,7 @@ class CheckIsMobile {
        		if ($Logger->setting_log === true):
         		$Logger->log[] = "Failed: " . "Check is mobile web :: EXPECTED: " . $AdCampaignBanner->IsMobile . " GOT: " . $is_mobile;
       		endif;
-     		continue;
+     		return false;
 		endif;
 			
 		return true;
