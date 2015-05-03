@@ -79,13 +79,13 @@ class ParseGeo {
 				"type");
 
 		if (isset($RtbBidRequestGeo->country)):
-			$Logger->log[] = "Geo Data Country: " . $this->bid_request_geo["country"];
+			$Logger->log[] = "Geo Data Country: " . $RtbBidRequestGeo->country;
 		endif;
 		if (isset($RtbBidRequestGeo->region)):
-			$Logger->log[] = "Geo Data Region: " . $this->bid_request_geo["region"];
+			$Logger->log[] = "Geo Data Region: " . $RtbBidRequestGeo->region;
 		endif;
 		if (isset($RtbBidRequestGeo->city)):
-			$Logger->log[] = "Geo Data City: " . $this->bid_request_geo["city"];
+			$Logger->log[] = "Geo Data City: " . $RtbBidRequestGeo->city;
 		endif;
 	}
 }
