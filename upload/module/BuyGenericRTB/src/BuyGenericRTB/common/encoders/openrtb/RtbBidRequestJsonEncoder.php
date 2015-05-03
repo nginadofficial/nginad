@@ -19,6 +19,12 @@ class RtbBidRequestJsonEncoder {
 	
 		$bid_request["imp"] 	= self::getRtbBidRequestImpList($RtbBidRequest);
 	
+		if ($RtbBidRequest->RtbBidRequestApp != null):
+		
+			$bid_request["app"] 	= self::getRtbBidRequestApp($RtbBidRequest->RtbBidRequestApp);
+		
+		endif;
+		
 		if ($RtbBidRequest->RtbBidRequestSite != null):
 	
 			$bid_request["site"] 	= self::getRtbBidRequestSite($RtbBidRequest->RtbBidRequestSite);
@@ -139,6 +145,50 @@ class RtbBidRequestJsonEncoder {
 		\util\ParseHelper::setArrayParam($RtbBidRequestDirectDeals, $pmpdeal, 'at');
 	
 		return (object)$pmpdeal;
+	
+	}
+	
+	private static function getRtbBidRequestApp(&$RtbBidRequestApp) {
+	
+		$app 				= array();
+	
+		\util\ParseHelper::setArrayParam($RtbBidRequestApp, $app, 'id');
+	
+		\util\ParseHelper::setArrayParam($RtbBidRequestApp, $app, 'name');
+	
+		\util\ParseHelper::setArrayParam($RtbBidRequestApp, $app, 'domain');
+	
+		\util\ParseHelper::setArrayParam($RtbBidRequestApp, $app, 'cat');
+	
+		\util\ParseHelper::setArrayParam($RtbBidRequestApp, $app, 'sectioncat');
+	
+		\util\ParseHelper::setArrayParam($RtbBidRequestApp, $app, 'pagecat');
+	
+		\util\ParseHelper::setArrayParam($RtbBidRequestApp, $app, 'page');
+	
+		\util\ParseHelper::setArrayParam($RtbBidRequestApp, $app, 'privacypolicy');
+	
+		\util\ParseHelper::setArrayParam($RtbBidRequestApp, $app, 'ref');
+	
+		\util\ParseHelper::setArrayParam($RtbBidRequestApp, $app, 'search');
+	
+		\util\ParseHelper::setArrayParam($RtbBidRequestApp, $app, 'keywords');
+	
+		\util\ParseHelper::setArrayParam($RtbBidRequestApp, $app, 'storeurl');
+	
+		if ($RtbBidRequestSite->RtbBidRequestPublisher != null):
+	
+			$app['publisher'] = self::getRtbBidRequestPublisher($RtbBidRequestSite->RtbBidRequestPublisher);
+	
+		endif;
+	
+		if ($RtbBidRequestSite->RtbBidRequestContent != null):
+	
+			$app['content'] = self::getRtbBidRequestContent($RtbBidRequestSite->RtbBidRequestContent);
+	
+		endif;
+	
+		return (object)$app;
 	
 	}
 	
