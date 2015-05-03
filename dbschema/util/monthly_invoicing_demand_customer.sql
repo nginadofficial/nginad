@@ -14,5 +14,5 @@ inner join AdCampaignBanner acb on acb.`AdCampaignBannerID` = bshiccs.`AdCampaig
 inner join auth_Users au on acb.UserID = au.user_id
 where bshiccs.DateCreated >= '2015-02-01 00:00:00'
 and bshiccs.DateCreated < '2015-03-01 00:00:00'
--- and LOWER(au.user_login) = 'username'
+-- and LOWER(au.user_login) = 'userlogin'
 group by LOWER(au.user_login)
