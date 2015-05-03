@@ -31,9 +31,9 @@ class RtbBidRequestApp {
 	
 	public $paid;
 	
-	public $publisher;
+	public $RtbBidRequestPublisher;
 	
-	public $content;
+	public $RtbBidRequestContent;
 	
 	public $storeurl;
 	

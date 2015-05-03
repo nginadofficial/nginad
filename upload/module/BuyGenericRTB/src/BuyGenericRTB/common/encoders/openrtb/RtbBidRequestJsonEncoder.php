@@ -176,15 +176,15 @@ class RtbBidRequestJsonEncoder {
 	
 		\util\ParseHelper::setArrayParam($RtbBidRequestApp, $app, 'storeurl');
 	
-		if ($RtbBidRequestSite->RtbBidRequestPublisher != null):
+		if ($RtbBidRequestApp->RtbBidRequestPublisher != null):
 	
-			$app['publisher'] = self::getRtbBidRequestPublisher($RtbBidRequestSite->RtbBidRequestPublisher);
+			$app['publisher'] = self::getRtbBidRequestPublisher($RtbBidRequestApp->RtbBidRequestPublisher);
 	
 		endif;
 	
-		if ($RtbBidRequestSite->RtbBidRequestContent != null):
+		if ($RtbBidRequestApp->RtbBidRequestContent != null):
 	
-			$app['content'] = self::getRtbBidRequestContent($RtbBidRequestSite->RtbBidRequestContent);
+			$app['content'] = self::getRtbBidRequestContent($RtbBidRequestApp->RtbBidRequestContent);
 	
 		endif;
 	
