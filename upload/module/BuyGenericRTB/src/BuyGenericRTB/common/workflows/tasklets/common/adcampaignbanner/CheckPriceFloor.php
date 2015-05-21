@@ -22,7 +22,7 @@ class CheckPriceFloor {
 
     	if (floatval($imp_floor) > floatval($banner_bid_amount)):
         	if ($Logger->setting_log === true):
-           		$Logger->log[] = "Failed: " . "Check bid floor :: EXPECTED LESS THAN: " . $imp_floor . "->" . $AdCampaignBanner->EndDate . " GOT: " . $banner_bid_amount;
+           		$Logger->log[] = "Failed: " . "Check bid floor :: EXPECTED LESS THAN: " . $imp_floor . " -> GOT: " . $banner_bid_amount;
          	endif;
          	
          	return false;
