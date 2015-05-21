@@ -13,12 +13,16 @@ class CheckAdFraud {
 	
 	private static $class_name = 'CheckAdFraud';
 	
+	protected static $forensiq_url = "http://api.forensiq.com/check";
+	
 	public static function execute(&$Logger, &$Workflow, \model\openrtb\RtbBidRequest &$RtbBidRequest) {
     	/*
     	 * This is a placeholder for a User Scoring Tasklet
     	 * 
-    	 * IE. DoubleVerify, Moat, ect...
+    	 * IE. DoubleVerify, Forensiq, Moat, ect...
     	*/
+		
+		$page_to_check = self::get_url_to_check($Logger, $Workflow, $RtbBidRequest);
 
 		/*
 		 * Check valid IP Address
@@ -38,15 +42,47 @@ class CheckAdFraud {
 		
 		// global.php settings config
 		
+		
+		
 		if ($Workflow->config['settings']['rtb']['project_honeypot_protected'] == true):
 			
 			$is_honeypot_safe = self::get_honeypot_score_from_service($Workflow->config, $remote_ip);
+			if ($is_honeypot_safe === false):
+				// optionally do some logging here with $Logger
+				return false;
+			endif;
+		endif;
 		
-			return $is_honeypot_safe;
-			
+		if ($Workflow->config['settings']['rtb']['forensiq_protected'] == true):
+			$passed_forensiq 		= self::check_forensiq($Workflow, $page_to_check, $RtbBidRequest);
+			if ($passed_forensiq === false):
+				// optionally do some logging here with $Logger
+				return false;
+			endif;
 		endif;
 
         return true;
+	}
+	
+	private static function check_forensiq(&$Workflow, $page_to_check, \model\openrtb\RtbBidRequest &$RtbBidRequest) {
+	
+		$score_codes = self::get_forensiq_score_from_service($Workflow->config, $page_to_check, $RtbBidRequest);
+	
+		if ($score_codes == null):
+			return true;
+		endif;
+	
+		if (!empty($score_codes["suspect"]) && $score_codes["suspect"] == "true"):
+			// overall action failed
+			return false;
+		endif;
+	
+		if (!empty($score_codes["riskScore"]) && intval($score_codes["riskScore"]) >= 65):
+			// risk score action failed
+			return false;
+		endif;
+	
+		return true;
 	}
 	
 	private static function get_honeypot_score_from_service($config, $remote_ip) {
@@ -94,6 +130,33 @@ class CheckAdFraud {
 		endif;
 	
 		return $honeypot_safe;
+	}
+	
+	private static function get_forensiq_score_from_service($config, $page_to_check, \model\openrtb\RtbBidRequest &$RtbBidRequest) {
+	
+		$forensiq_api_key 			= $config['settings']['rtb']['forensiq_api_key'];
+		$remote_ip 					= isset($RtbBidRequest->RtbBidRequestDevice->ip) ? $RtbBidRequest->RtbBidRequestDevice->ip : "unknown";
+		$domain 					= isset($RtbBidRequest->RtbBidRequestSite->domain) ? $RtbBidRequest->RtbBidRequestSite->domain : "unknown";
+		$ua		 					= isset($RtbBidRequest->RtbBidRequestDevice->ua) ? $RtbBidRequest->RtbBidRequestDevice->ua : "unknown";
+		$pid						= isset($RtbBidRequest->RtbBidRequestSite->RtbBidRequestPublisher->name) ? $RtbBidRequest->RtbBidRequestSite->RtbBidRequestPublisher->name : "unknown";
+		$sid						= isset($RtbBidRequest->RtbBidRequestSite->RtbBidRequestPublisher->id) ? $RtbBidRequest->RtbBidRequestSite->RtbBidRequestPublisher->id : "unknown";
+		$imptype					= empty($RtbBidRequestImp->RtbBidRequestVideo) == 'video' ? 'video' : 'display';
+	
+		$forensiq_url 				= self::$forensiq_url;
+		$forensiq_url.= 			'?ck=' . $forensiq_api_key;
+		$forensiq_url.= 			'&rt=' . $imptype;
+		$forensiq_url.= 			'&output=JSON';
+		$forensiq_url.= 			'&ip=' . $remote_ip;
+		$forensiq_url.= 			'&url=' . rawurlencode($page_to_check);
+		$forensiq_url.= 			'&ua=' . rawurlencode($ua);
+		$forensiq_url.= 			'&seller=' . rawurlencode($domain);
+		$forensiq_url.= 			'&cmp=' . rawurlencode($pid);
+		$forensiq_url.= 			'&s=' . rawurlencode($sid);
+	
+		$raw_response 				= \util\WorkflowHelper::get_ping_notice_url_curl_request($forensiq_url);
+		$forensiq_json_response 	= json_decode($raw_response, true);
+	
+		return $forensiq_json_response;
 	}
 	
 	private static function checkHoneyPotCached($config, $remote_ip) {

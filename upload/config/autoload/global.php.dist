@@ -45,7 +45,17 @@ return array(
 						 * Then visit: http://www.projecthoneypot.org/httpbl_configure.php
 						 * to get the API key to paste here
 						 */ 
-						'project_honeypot_api_key'		=> '[MY_API_KEY]'
+						'project_honeypot_api_key'		=> '[MY_API_KEY]',
+						/*
+						 * enable Forensiq.com protection
+						 * Forensiq is a pay service that costs money.
+						 * You need to use the contact form at 
+						 * http://www.forensiq.com if you want to sign up
+						 * and pay for the RTB Ad Fraud API.
+						 */ 
+						'forensiq_protected'			=> false,
+						// Your Forensiq API key goes here
+						'forensiq_api_key'				=> '[MY_API_KEY]'
 				),
 				'shell' => array(
 						'has_curl_on_path'		=> false
