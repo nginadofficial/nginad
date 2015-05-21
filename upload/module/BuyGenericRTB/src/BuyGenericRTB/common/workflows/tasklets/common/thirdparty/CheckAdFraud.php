@@ -169,4 +169,21 @@ class CheckAdFraud {
 		return $boolean_result;
 	}
 	
+	private static function get_url_to_check(&$Logger, &$Workflow, \model\openrtb\RtbBidRequest &$RtbBidRequest) {
+	
+		// try a few OpenRTB params to find one that's present
+	
+		$page_to_check = null;
+	
+		if (!empty($RtbBidRequest->RtbBidRequestSite->page)):
+		$page_to_check = $RtbBidRequest->RtbBidRequestSite->page;
+		elseif (!empty($RtbBidRequest->RtbBidRequestSite->domain)):
+		$page_to_check = $RtbBidRequest->RtbBidRequestSite->domain;
+		elseif (!empty($RtbBidRequest->RtbBidRequestSite->RtbBidRequestPublisher->domain)):
+		$page_to_check = $RtbBidRequest->RtbBidRequestSite->RtbBidRequestPublisher->domain;
+		endif;
+	
+		return $page_to_check;
+	}
+	
 }
