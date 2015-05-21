@@ -43,25 +43,6 @@ class OpenRTBWorkflow
     	
     	// match ip against country code
     	\buyrtb\workflows\tasklets\common\adcampaign\GetGeoCodeCountry::execute($logger, $this, $RtbBidRequest);
-    	
-
-    	// Check Ad Fraud
-    	if (\buyrtb\workflows\tasklets\common\thirdparty\CheckPublisherScore::execute($logger, $this, $RtbBidRequest) === false):
-	    	$no_bid_reason = NOBID_BAD_PUBLISHER;
-	    	return $AdCampaignBanner_Match_List;
-    	endif;
-    	
-    	// Check Publisher Score
-    	if (\buyrtb\workflows\tasklets\common\thirdparty\CheckAdFraud::execute($logger, $this, $RtbBidRequest) === false):
-    		$no_bid_reason = NOBID_AD_FRAUD;
-    	 	return $AdCampaignBanner_Match_List;
-    	endif;
-
-    	// Check Cookie Match
-    	if (\buyrtb\workflows\tasklets\common\thirdparty\CheckCookieMatch::execute($logger, $this, $RtbBidRequest) === false):
-	    	$no_bid_reason = NOBID_UNMATCHED_USER;
-	    	return $AdCampaignBanner_Match_List;
-    	endif;
 
     	foreach ($AdCampaignList as $AdCampaign):
 
@@ -178,6 +159,28 @@ class OpenRTBWorkflow
 
     	endforeach;
 
+    	if (count($AdCampaignBanner_Match_List)):
+    	
+	    	// Check Ad Fraud
+	    	if (\buyrtb\workflows\tasklets\common\thirdparty\CheckPublisherScore::execute($logger, $this, $RtbBidRequest) === false):
+		    	$no_bid_reason = NOBID_BAD_PUBLISHER;
+		    	return array();
+	    	endif;
+	    	
+	    	// Check Publisher Score
+	    	if (\buyrtb\workflows\tasklets\common\thirdparty\CheckAdFraud::execute($logger, $this, $RtbBidRequest) === false):
+		    	$no_bid_reason = NOBID_AD_FRAUD;
+		    	return array();
+	    	endif;
+	    	
+	    	// Check Cookie Match
+	    	if (\buyrtb\workflows\tasklets\common\thirdparty\CheckCookieMatch::execute($logger, $this, $RtbBidRequest) === false):
+		    	$no_bid_reason = NOBID_UNMATCHED_USER;
+		    	return array();
+	    	endif;
+	    	 
+    	endif;
+    	
     	return $AdCampaignBanner_Match_List;
 
     }
