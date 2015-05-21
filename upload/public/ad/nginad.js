@@ -10,6 +10,10 @@ var adserver_domain = 'server.nginad.com';
 var script_name = 'nginad.js';
 var delivery_path = '/delivery/impress';
 
+/* Are you using the Forensiq.com Ad Fraud Service? */
+var forensiq_enabled = false;
+var forensiq_api_key = '';
+
 var quality_scoring_pixels = [                   
 	// QS SERVICE 1
 	// "http://myqualityscore1.com/server/pixel.htm?uid=user_id", 	
@@ -64,10 +68,10 @@ function fireCookieMatchingPixels() {
 
 }
 
-function fireQSPixels() {
+function fireQSPixels(id, id_type, org_tld, ref) {
 	
-	for (i in quality_scoring_pixels) {
-		createTrackingPixel(quality_scoring_pixels[i]);
+	if (forensiq_enabled == true) {
+		trackForensiq(id, id_type, org_tld, ref);
 	}
 
 }
@@ -398,12 +402,6 @@ function createiFrame(id, width, height) {
 	  return ifrm;
 }
 
-// fire off cookie matching pixels first
-fireCookieMatchingPixels();
-
-// next, fire off quality scoring pixels
-fireQSPixels();
-
 // now process the ad tag
 var qs = null;
 var scriptTag;
@@ -427,9 +425,11 @@ var cdpnLocTag = "<script type='text/javascript'>var NGIN_Loc={};" + "NGIN_Loc.l
 var domain = getQueryStringArg(qs,'NGIN_domain', adserver_domain);
 
 var abf = 0;
+var id_type = 'pzoneid';
 var id = getQueryStringArg(qs, 'pzoneid');
 if (!id) {
 	id = getQueryStringArg(qs, 'zoneid');
+	id_type = 'zoneid';
 }
 
 abf = getNGINAtf(id, getNGINViewport());
@@ -440,6 +440,12 @@ var buyer_id = getQueryStringArg(qs, 'buyerid', "");
 var sndprc = getQueryStringArg(qs, 'sndprc', "");
 var ui = getQueryStringArg(qs, 'ui', "");
 var cb = Math.round(new Date().getTime() / 1000);
+
+//fire off cookie matching pixels first
+fireCookieMatchingPixels();
+
+// next, fire off quality scoring pixels
+fireQSPixels(id, id_type, org_tld, getRefSiteURL());
 
 var adQueryString = getNGINQueryString(id, qs, abf, false);
 adQueryString += "&dt=in";
@@ -498,3 +504,29 @@ if (isInIframe()) {
 
 NGIN_placement_id = null;
 NGIN_AdsiFrame_Opts = null;
+
+function trackForensiq(id, id_type, org_tld, ref) {
+	
+	var cmpid = id_type + '-' + id;
+	
+	var forensiqTracker = '//c.fqtag.com/tag/implement-r.js?org=' + forensiq_api_key;
+	forensiqTracker += '&s=' + guid();
+	forensiqTracker += '&p=' + escape(org_tld);
+	forensiqTracker += '&cmp=' + cmpid;
+	forensiqTracker += '&rt=display&sl=1';
+	forensiqTracker += '&fmt=banner';
+	forensiqTracker += '&rd=' + escape(ref);
+	forensiqTracker += '&fq=1';
+	
+	document.write('<scri' + 'pt src="' + forensiqTracker + '"></scri' + 'pt>');
+}
+
+function guid() {
+	  function s4() {
+	    return Math.floor((1 + Math.random()) * 0x10000)
+	      .toString(16)
+	      .substring(1);
+	  }
+	  return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+	    s4() + '-' + s4() + s4() + s4();
+}
