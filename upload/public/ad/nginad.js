@@ -52,6 +52,8 @@ var cookie_matching_pixels = [
 	// "http://pixel.rubiconproject.com/tap.php?v=other&nid=partner_id&put={user_token}&expires={days}",
 	// AUDIENCE SCIENCE
 	// "http://pix04.revsci.net/D08734/a3/0/3/0.302?matchId=100&PV=0"
+	// FIDELITY MEDIA
+	// http://x.fidelity-media.com/pixel.gif?dsp=<DSP-ID>&url=<DSP-Redirect-URL>&<DSP-ID-Variable>=<DSPUser-ID>&<SSP-ID-Variable>=<SSP-User-ID>
 ];
                            
 function createTrackingPixel(url) {
