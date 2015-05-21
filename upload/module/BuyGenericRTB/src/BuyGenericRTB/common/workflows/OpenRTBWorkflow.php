@@ -112,6 +112,11 @@ class OpenRTBWorkflow
 		        		continue;
 		        	endif;
 	            	
+		        	// Check impression price floor
+		        	if (\buyrtb\workflows\tasklets\common\adcampaignbanner\CheckPriceFloor::execute($logger, $this, $RtbBidRequest, $RtbBidRequestImp, $AdCampaignBanner, $AdCampaignBannerExclusiveInclusionFactory) === false):
+		        		continue;
+		        	endif;
+		        	
 	            	// Check banner domain exclusive inclusions
 		        	if (\buyrtb\workflows\tasklets\common\adcampaignbanner\CheckExclusiveInclusion::execute($logger, $this, $RtbBidRequest, $RtbBidRequestImp, $AdCampaignBanner, $AdCampaignBannerExclusiveInclusionFactory) === false):
 		        		continue;
