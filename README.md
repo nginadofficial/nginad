@@ -1,6 +1,20 @@
 nginad
 =======
 
+May 20, 2015
+------------------
+
+The 1.5.1 release adds support for the Forensiq.com proprietary Ad Fraud detection service. 
+It adds both the OpenRTB API implementation for real time ad fraud blocking and the pixel service for tracking
+the success of the blocking campaign after the ad tag has already been shown, or is in the process of being loaded
+by the end user's browser. Support for Forensiq is disabled by default just like the Project Honeypot check.
+You need to go to http://www.forensiq.com and contact them if you wish to pay for their service.
+Also, the paid 3rd party API was optimized in the work flow so it's only used when
+an OpenRTB request has a valid response. You wouldn't want to run up your 3rd party service API bill if 
+your instance of NginAd has no valid response to the bid request. Also added was a tasklet to check the floor 
+price against the OpenRTB impression bidfloor price. That way it can respect the low bid of DSPs.
+You may want to disable this, but it's enabled by default.
+
 May 2, 2015
 ------------------
 
