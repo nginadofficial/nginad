@@ -75,6 +75,11 @@ return array(
 						 * 	   include conf.d/tor-ip.conf;
 						 * 
 						 * That way you don't waste resources on Tor clients
+						 * 
+						 * File location must be writable by nginx.
+						 * eg. 
+						 * touch /etc/nginx/conf.d/tor-ip.conf
+						 * chown nginx:nginx /etc/nginx/conf.d/tor-ip.conf
 						 */
 						'tor_file_save_location'		=> '/etc/nginx/conf.d/tor-ip.conf'
 				),
