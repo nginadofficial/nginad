@@ -3,11 +3,11 @@
  * CDNPAL NGINAD Customization
  */
 
-namespace buyrtbsmaato\parsers\openrtb\parselets\common;
+namespace buyrtb\parsers\openrtb\parselets\common;
 
 class ParseApp {
 	
-	public static function execute(&$Logger, \buyrtbsmaato\parsers\openrtb\OpenRTBParser &$Parser, \model\openrtb\RtbBidRequest &$RtbBidRequest, \model\openrtb\RtbBidRequestApp &$RtbBidRequestApp, &$rtb_app) {
+	public static function execute(&$Logger, \buyrtb\parsers\openrtb\OpenRTBParser &$Parser, \model\openrtb\RtbBidRequest &$RtbBidRequest, \model\openrtb\RtbBidRequestApp &$RtbBidRequestApp, &$rtb_app) {
 	
 		
 		// ID
