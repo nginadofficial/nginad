@@ -42,9 +42,9 @@ class CheckAdFraud {
 		
 		// global.php settings config
 		
-		if ($this->config['settings']['rtb']['tor_protected'] == true):
+		if ($Workflow->config['settings']['rtb']['tor_protected'] == true):
 			
-			$is_tor_request = self::get_request_from_tor_browser($Workflow->config, $remote_ip);
+			$is_tor_request = self::get_request_from_tor_browser($Workflow, $remote_ip);
 			if ($is_tor_request === true):
 				// optionally do some logging here with $Logger
 				return false;
@@ -80,6 +80,7 @@ class CheckAdFraud {
 		/*
 		 * IP is a tor IP address
 		 */
+
 		if (!empty($apc_cached_tor_ip_list) && isset($apc_cached_tor_ip_list[$remote_ip])):
 			return false;
 		endif;

@@ -95,6 +95,10 @@ return array(
 						'interval_in_minutes' => 1440,
 						'maintenance_function' => 'dailyMaintenanceAction'
 					),
+					'hourly' => array(
+							'interval_in_minutes' => 60,
+							'maintenance_function' => 'hourlyMaintenanceAction'
+					),
 					'ten_minute' => array(
 						'interval_in_minutes' => 10,
 						'maintenance_function' => 'tenMinuteMaintenanceAction'
