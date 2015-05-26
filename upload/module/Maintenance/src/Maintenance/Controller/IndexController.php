@@ -27,7 +27,7 @@ class IndexController extends AbstractActionController {
 
 	protected $config;
 	
-	protected static $tor_file_source_location = 'tor-ip.conf';
+	protected static $tor_file_source_location = 'https://www.dan.me.uk/torlist/';
 	
     public function indexAction() {
         echo "NGINAD MAINTENANCE<br />\n";
