@@ -1,0 +1,1 @@
+5 * * * * curl 'http://dev.nginad.com/maintenance/torlist?secret_key=nginadxyz'; /usr/sbin/nginx -s reload

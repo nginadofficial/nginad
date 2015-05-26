@@ -1,1 +1,0 @@
-*/5 * * * *  curl 'http://dev.nginad.com/maintenance/crontab?secret_key=nginadxyz'
