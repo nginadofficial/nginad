@@ -80,6 +80,9 @@ return array(
 						 * eg. 
 						 * touch /etc/nginx/conf.d/tor-ip.conf
 						 * chown nginx:nginx /etc/nginx/conf.d/tor-ip.conf
+						 * 
+						 * Also requires a new crontab separate from Maintenance:
+						 * 5 * * * * curl 'http://server.nginad.com/maintenance/torlist?secret_key=nginadxyz'; /usr/sbin/nginx -s reload
 						 */
 						'tor_file_save_location'		=> '/etc/nginx/conf.d/tor-ip.conf'
 				),
@@ -94,10 +97,6 @@ return array(
 					'daily' => array(
 						'interval_in_minutes' => 1440,
 						'maintenance_function' => 'dailyMaintenanceAction'
-					),
-					'hourly' => array(
-							'interval_in_minutes' => 60,
-							'maintenance_function' => 'hourlyMaintenanceAction'
 					),
 					'ten_minute' => array(
 						'interval_in_minutes' => 10,

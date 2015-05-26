@@ -42,13 +42,13 @@ return array(
             				),
             		),
             ),
-            'excel' => array(
+            'torlist' => array(
             		'type' => 'Zend\Mvc\Router\Http\Literal',
             		'options' => array(
-            				'route'    => '/maintenance/excel',
+            				'route'    => '/maintenance/torlist',
             				'defaults' => array(
             						'controller' => 'Maintenance\Controller\Index',
-            						'action'     => 'excel',
+            						'action'     => 'torlist',
             				),
             		),
             ),

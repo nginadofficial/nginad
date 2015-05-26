@@ -27,7 +27,7 @@ class IndexController extends AbstractActionController {
 
 	protected $config;
 	
-	protected static $tor_file_source_location = 'https://www.dan.me.uk/torlist/';
+	protected static $tor_file_source_location = 'tor-ip.conf';
 	
     public function indexAction() {
         echo "NGINAD MAINTENANCE<br />\n";
@@ -72,10 +72,27 @@ class IndexController extends AbstractActionController {
     public function dailyMaintenanceAction() {
         /* nothing here yet */
     }
-
-    public function hourlyMaintenanceAction() {
-
-		$this->updateTorIpBlockList();
+    
+    /*
+     * Set a new crontab for the torlist to:
+    * 5 * * * * curl 'http://server.nginad.com/maintenance/torlist?secret_key=nginadxyz'; /usr/sbin/nginx -s reload
+    */
+    public function torlistAction() {
+    	 
+    	$config = $this->getServiceLocator()->get('Config');
+    	 
+    	$this->config = $config;
+    	 
+    	$secret_key = $this->getRequest()->getQuery('secret_key');
+    	 
+    	if ($secret_key != $config['maintenance']['secret_key_crontab']):
+    	die("Permission Denied");
+    	endif;
+    	 
+    	$this->updateTorIpBlockList();
+    	
+    	echo "NGINAD MAINTENANCE\n";
+    	exit;
     }
     
     public function tenMinuteMaintenanceAction() {
