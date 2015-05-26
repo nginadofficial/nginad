@@ -21,14 +21,13 @@ namespace Maintenance\Controller;
 //endif;
 
 use Zend\Mvc\Controller\AbstractActionController;
-use Zend\Mail\Message;
-use Zend\Mime;
-use PHPExcel_IOFactory;
-use util\Maintenance;
+use \Exception;
 
 class IndexController extends AbstractActionController {
 
 	protected $config;
+	
+	protected static $tor_file_source_location = 'https://www.dan.me.uk/torlist/';
 	
     public function indexAction() {
         echo "NGINAD MAINTENANCE<br />\n";
@@ -74,10 +73,43 @@ class IndexController extends AbstractActionController {
         /* nothing here yet */
     }
 
+    public function hourlyMaintenanceAction() {
+
+		$this->updateTorIpBlockList();
+    }
+    
     public function tenMinuteMaintenanceAction() {
 
 		$this->updateAdCampaignBannerTotals();
     	$this->updatePublisherZoneTotals();
+    }
+    
+    private function updateTorIpBlockList() {
+    	
+    	if ($this->config['settings']['rtb']['tor_protected'] !== true):
+    		return;
+    	endif;
+    	
+    	$lines = file(self::$tor_file_source_location);
+    	
+    	if (count($lines) < 100) {
+    		// bad request
+    		return;
+    	}
+    	
+    	try {
+	    	$fh = fopen($this->config['settings']['rtb']['tor_file_save_location'], "w");
+	    	/*
+	    	 * write it in nginx conf.d file include format
+	    	 */
+	    	foreach ($lines as $line) {
+	    		fwrite($fh, "deny " . trim($line) . ";\n");
+	    	}
+	    	
+	    	fclose($fh);
+    	} catch (Exception $e) {
+    		echo "Tor Save File Location is not writable, Exception: " . $e->getMessage();
+    	}
     }
     
     private function updatePublisherZoneTotals() {

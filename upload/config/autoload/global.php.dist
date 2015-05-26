@@ -55,7 +55,28 @@ return array(
 						 */ 
 						'forensiq_protected'			=> false,
 						// Your Forensiq API key goes here
-						'forensiq_api_key'				=> '[MY_API_KEY]'
+						'forensiq_api_key'				=> '[MY_API_KEY]',
+						/*
+						 * enable Tor filtering
+						 * Ad impressions from Tor IP Addresses
+						 * and browsers are rarely worth anything 
+						 * when sold on peer exchanges
+						*/
+						'tor_protected'					=> false,
+						/*
+						 * You want to put the tor deny list in the nginx
+						 * conf.d folder so it doubles to block tor users
+						 * from accessing nginx as well.
+						 * 
+						 * In your /etc/nginx/conf.d/default.conf you can add
+						 * the tor-ip.conf include to your php files:
+						 * 
+						 * location ~ \.php$ {
+						 * 	   include conf.d/tor-ip.conf;
+						 * 
+						 * That way you don't waste resources on Tor clients
+						 */
+						'tor_file_save_location'		=> '/etc/nginx/conf.d/tor-ip.conf'
 				),
 				'shell' => array(
 						'has_curl_on_path'		=> false
