@@ -87,29 +87,44 @@ class IndexController extends AbstractActionController {
     private function updateTorIpBlockList() {
     	
     	if ($this->config['settings']['rtb']['tor_protected'] !== true):
-    		return;
+    		return false;
     	endif;
     	
     	$lines = file(self::$tor_file_source_location);
     	
     	if (count($lines) < 100) {
     		// bad request
-    		return;
+    		return false;
     	}
     	
-    	try {
-	    	$fh = fopen($this->config['settings']['rtb']['tor_file_save_location'], "w");
-	    	/*
-	    	 * write it in nginx conf.d file include format
-	    	 */
-	    	foreach ($lines as $line) {
-	    		fwrite($fh, "deny " . trim($line) . ";\n");
+    	$apc_cached_tor_ip_list = array();
+    	
+    	if (is_writable($this->config['settings']['rtb']['tor_file_save_location'])):
+	    	try {
+		    	$fh = fopen($this->config['settings']['rtb']['tor_file_save_location'], "w");
+		    	/*
+		    	 * write it in nginx conf.d file include format
+		    	 */
+		    	foreach ($lines as $line):
+		    		fwrite($fh, "deny " . trim($line) . ";\n");
+		    	endforeach;
+		    	
+		    	fclose($fh);
+	    	} catch (Exception $e) {
+	    		echo "Tor Save File Location is not writable, Exception: " . $e->getMessage();
 	    	}
-	    	
-	    	fclose($fh);
-    	} catch (Exception $e) {
-    		echo "Tor Save File Location is not writable, Exception: " . $e->getMessage();
-    	}
+    	endif;
+    	
+	    foreach ($lines as $line):
+		    $apc_cached_tor_ip_list[trim($line)] = 1;
+	    endforeach;
+
+    	$params = array();
+    	// 2 hour cache
+    	\util\CacheSql::put_cached_read_result_apc($this->config, $params, "Maintenance", $apc_cached_tor_ip_list, 7200);
+    	
+    	return true;
+    	
     }
     
     private function updatePublisherZoneTotals() {

@@ -42,6 +42,14 @@ class CheckAdFraud {
 		
 		// global.php settings config
 		
+		if ($this->config['settings']['rtb']['tor_protected'] == true):
+			
+			$is_tor_request = self::get_request_from_tor_browser($Workflow->config, $remote_ip);
+			if ($is_tor_request === true):
+				// optionally do some logging here with $Logger
+				return false;
+			endif;
+		endif;
 		
 		
 		if ($Workflow->config['settings']['rtb']['project_honeypot_protected'] == true):
@@ -64,7 +72,20 @@ class CheckAdFraud {
         return true;
 	}
 	
-	private static function check_forensiq(&$Workflow, $page_to_check, \model\openrtb\RtbBidRequest &$RtbBidRequest) {
+	protected static function get_request_from_tor_browser(&$Workflow, $remote_ip) {
+
+		$params = array();
+		$apc_cached_tor_ip_list = \util\CacheSql::get_cached_read_result_apc_type_convert($Workflow->config, $params, "Maintenance");
+		
+		/*
+		 * IP is a tor IP address
+		 */
+		if (!empty($apc_cached_tor_ip_list) && isset($apc_cached_tor_ip_list[$remote_ip])):
+			return false;
+		endif;
+	}
+	
+	protected static function check_forensiq(&$Workflow, $page_to_check, \model\openrtb\RtbBidRequest &$RtbBidRequest) {
 	
 		$score_codes = self::get_forensiq_score_from_service($Workflow->config, $page_to_check, $RtbBidRequest);
 	
@@ -85,7 +106,7 @@ class CheckAdFraud {
 		return true;
 	}
 	
-	private static function get_honeypot_score_from_service($config, $remote_ip) {
+	protected static function get_honeypot_score_from_service($config, $remote_ip) {
 	
 		$honeypot_safe = self::checkHoneyPotCached($config, $remote_ip);
 	
