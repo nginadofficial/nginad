@@ -86,7 +86,7 @@ class IndexController extends AbstractActionController {
     	$secret_key = $this->getRequest()->getQuery('secret_key');
     	 
     	if ($secret_key != $config['maintenance']['secret_key_crontab']):
-    	die("Permission Denied");
+    		die("Permission Denied");
     	endif;
     	 
     	$this->updateTorIpBlockList();
@@ -132,9 +132,9 @@ class IndexController extends AbstractActionController {
 	    	}
     	endif;
     	
-	    foreach ($lines as $line):
-		    $apc_cached_tor_ip_list[trim($line)] = 1;
-	    endforeach;
+    	foreach ($lines as $line):
+    		$apc_cached_tor_ip_list[trim($line)] = 1;
+    	endforeach;
 
     	$params = array();
     	// 2 hour cache
