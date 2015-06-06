@@ -31,6 +31,7 @@ class IndexController extends AbstractActionController
 	
     	$banner_request["dtrack"] 				= $this->getRequest()->getQuery('dtrack');
     	$banner_request["vast"] 				= $this->getRequest()->getQuery('vast');
+    	$banner_request["nurl"] 				= $this->getRequest()->getQuery('nurl');
     	$banner_request["video"] 				= $this->getRequest()->getQuery('video');
     	$banner_request["adpos_x"] 				= $this->getRequest()->getQuery('adpos_x');
     	$banner_request["adpos_y"] 				= $this->getRequest()->getQuery('adpos_y');
@@ -58,7 +59,12 @@ class IndexController extends AbstractActionController
     	
     		echo "dtrack";
     		exit;
-    	
+    		
+    	elseif (isset($banner_request["nurl"]) && $banner_request["nurl"] == "true"):
+    		 
+    		$this->track_banner_impression($config, $banner_request);
+    		 
+    		 
     	elseif (isset($banner_request["vast"]) && $banner_request["vast"] == "tracker"):
     	
     		$this->track_video_impression($config, $banner_request);
@@ -718,6 +724,47 @@ class IndexController extends AbstractActionController
     	
     	echo "NGINAD";
     	exit;
+    }
+    
+    private function track_banner_impression($config, $banner_request) {
+    	 
+    	$error_message 			= "Error";
+    	 
+    	$banner_id 				= $this->getRequest()->getQuery('zoneid');
+    	$buyerid 				= $this->getRequest()->getQuery('buyerid');
+    	$orgprc 				= $this->getRequest()->getQuery('orgprc');
+    	$request_id 			= $this->getRequest()->getQuery('request_id');
+    	$tld 					= $this->getRequest()->getQuery('tld');
+    	$winbid 				= $this->getRequest()->getQuery('winbid');
+    	
+    	if ($winbid == '{NGINWBIDPRC}') $winbid = 'na';
+    			
+    	$auction_log = date('m-d-Y H:i:s') . ",request_id:" . $request_id
+    					. ",banner_id:" . $banner_id
+    					. ",buyerid:" . $buyerid
+    					. ",orgprc:" . $orgprc
+    					. ",winbid:" . $winbid
+    					. ",tld:" . $tld . "\n";
+    	
+    	$this->output_win_notice_results($auction_log);
+    	 
+    	echo 'tracking_id: ' . $request_id;
+    	exit;
+    }
+    
+    private function output_win_notice_results($auction_log) {
+    
+    	$log_file_dir = "logs/fidelity_logs/win_notices/" . date('m.d.Y');
+    
+    	if (!file_exists($log_file_dir)):
+    		mkdir($log_file_dir, 0777, true);
+    	endif;
+    
+    	$fh = fopen($log_file_dir . "/" . date('g_A') . '.log', "a");
+    
+    	fwrite($fh, $auction_log);
+    
+    	fclose($fh);
     }
     
     private function track_video_impression($config, $banner_request) {

@@ -54,6 +54,15 @@ define('NOBID_BAD_PUBLISHER', 			7);
 define('NOBID_UNMATCHED_USER', 			8);
 
 /*
+ * Configure OpenRTB Banner Types
+*/
+
+define('BANNER_TYPE_XHTML_TEXT_AD', 		1);
+define('BANNER_TYPE_XHTML_BANNER_AD', 		2);
+define('BANNER_TYPE_JAVASCRIPT_AD', 		3);
+define('BANNER_TYPE_IFRAME_AD', 			4);
+
+/*
  * We do not want autoloading. It does not work 
  * according to the documentation.
  * 

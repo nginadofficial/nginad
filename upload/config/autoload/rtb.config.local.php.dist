@@ -51,24 +51,20 @@ return array (
 							'response_seat_id'	=> '8181'
 					),
 					/*
-					 * As you grow your RTB ad traffic network you will 
-					 * get more DSPs to buy traffic from. 
-					 * You must add a new entry for each DSP partner you sign up with.
+					 * Fidelity RTB DSP integration
 					 * 
-					 * If the buy side partner does not have any OpenRTB extensions
-					 * and they use OpenRTB, you can simply use the existing
-					 * buy side module GenericBuysidePartner
+					 * http://server.nginad.com/bid?rtb_seat_id=9876&secret_key=fid1234y
 					 */
-					'Sample DSP Partner 2' => array(
-							'module_name' 		=> 'GenericBuysidePartner',
-							'partner_name' 		=> 'My Second Sample Generic OpenRTB DSP Partner',
-							'buyer_id'			=> '0002',
-							'secret_key'		=> 'nginad',   // change this key to your own
+					'Fidelity DSP' => array(
+							'module_name' 		=> 'FidelityBuysidePartner',
+							'partner_name' 		=> 'Fidelity OpenRTB DSP Partner',
+							'buyer_id'			=> '9876',
+							'secret_key'		=> 'fid1234y',   // change this key to your own
 							/*
 							 * This is YOUR seat_id that you are sending back to the partner
 							 * in RTB bid responses to your DSPs
 							 */
-							'response_seat_id'	=> '8181'
+							'response_seat_id'	=> '9874'
 									
 					),
 					/* If the buy side partner does not use OpenRTB

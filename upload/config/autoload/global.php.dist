@@ -20,7 +20,13 @@
  */
 
 return array(
-
+		/*
+		 * UNCOMMENT ON PRODUCTION
+		 * 
+		'view_manager' => array(
+    			'display_exceptions' => false
+		),
+		*/
 		'roles' => array(
 				'member' => "member",
 				'admin' => "admin",
