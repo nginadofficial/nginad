@@ -7,11 +7,11 @@
  * @license GPLv3
  */
 
-namespace buyrtb\parsers\openrtb\parselets\common;
+namespace buyrtbfidelity\parsers\openrtb\parselets\common;
 
 class ParseApp {
 	
-	public static function execute(&$Logger, \buyrtb\parsers\openrtb\OpenRTBParser &$Parser, \model\openrtb\RtbBidRequest &$RtbBidRequest, \model\openrtb\RtbBidRequestApp &$RtbBidRequestApp, &$rtb_app) {
+	public static function execute(&$Logger, \buyrtbfidelity\parsers\openrtb\OpenRTBParser &$Parser, \model\openrtb\RtbBidRequest &$RtbBidRequest, \model\openrtb\RtbBidRequestApp &$RtbBidRequestApp, &$rtb_app) {
 	
 		
 		// ID
