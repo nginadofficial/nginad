@@ -1,6 +1,11 @@
 nginad
 =======
 
+June 6, 2015
+------------------
+
+The 1.5.2 release adds support for the Fidelity Media OpenRTB bid responder module: http://fidelity-media.com
+
 May 20, 2015
 ------------------
 
