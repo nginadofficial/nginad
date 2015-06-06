@@ -120,6 +120,8 @@ abstract class RtbBuyFidelityBid extends \rtbbuy\RtbBuyBid {
 			
 		$classname = $this->random_classname();
 	
+		$vendor = "fidelity";
+		
 		$winning_bid_auction_param = "";
 			
 		$cache_buster = time();
@@ -128,7 +130,7 @@ abstract class RtbBuyFidelityBid extends \rtbbuy\RtbBuyBid {
 			$winning_bid_auction_param = "&winbid=\${AUCTION_PRICE}";
 		endif;
 	
-		$notice_tag = $delivery_adtag . "?nurl=true&zoneid=" . $AdCampaignBanner->AdCampaignBannerID . "&buyerid=" . $this->rtb_seat_id . "&orgprc=" . $price . "&request_id=" . $request_id . "&tld=" . $tld . $winning_bid_auction_param . "&ui=" . $this->user_ip_hash . "&cb=" . $cache_buster;
+		$notice_tag = $delivery_adtag . "?nurl=true&zoneid=" . $AdCampaignBanner->AdCampaignBannerID . "&buyerid=" . $this->rtb_seat_id . "&orgprc=" . $price . "&request_id=" . $request_id . "&vendor=" . $vendor . "&tld=" . $tld . $winning_bid_auction_param . "&ui=" . $this->user_ip_hash . "&cb=" . $cache_buster;
 	
 		return $notice_tag;
 	}

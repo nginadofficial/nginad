@@ -736,6 +736,13 @@ class IndexController extends AbstractActionController
     	$request_id 			= $this->getRequest()->getQuery('request_id');
     	$tld 					= $this->getRequest()->getQuery('tld');
     	$winbid 				= $this->getRequest()->getQuery('winbid');
+    	$vendor 				= $this->getRequest()->getQuery('vendor');
+    	
+    	$check_log_file_dir = "logs/" . $vendor . "_logs/";
+    	
+    	if (!file_exists($check_log_file_dir)):
+    		die("DSP Not Registered on this instance of NginAd OpenRTB Server");
+    	endif;
     	
     	if ($winbid == '{NGINWBIDPRC}') $winbid = 'na';
     			
@@ -746,15 +753,15 @@ class IndexController extends AbstractActionController
     					. ",winbid:" . $winbid
     					. ",tld:" . $tld . "\n";
     	
-    	$this->output_win_notice_results($auction_log);
+    	$this->output_win_notice_results($auction_log, $vendor);
     	 
     	echo 'tracking_id: ' . $request_id;
     	exit;
     }
     
-    private function output_win_notice_results($auction_log) {
+    private function output_win_notice_results($auction_log, $vendor) {
     
-    	$log_file_dir = "logs/fidelity_logs/win_notices/" . date('m.d.Y');
+    	$log_file_dir = "logs/" . $vendor . "_logs/win_notices/" . date('m.d.Y');
     
     	if (!file_exists($log_file_dir)):
     		mkdir($log_file_dir, 0777, true);
