@@ -5,7 +5,7 @@ June 6, 2015
 ------------------
 
 The 1.5.2 release adds support for the Fidelity Media OpenRTB bid responder module: http://fidelity-media.com
-It also adds nurl (bid win notice URL) tracking and logging and a JSON log aggregator in the new unit_test folder.
+* It also adds nurl (bid win notice URL) tracking and logging and a JSON log aggregator in the new unit_test folder.
 
 May 20, 2015
 ------------------
