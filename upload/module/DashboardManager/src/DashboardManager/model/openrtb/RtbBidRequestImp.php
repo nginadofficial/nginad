@@ -39,7 +39,7 @@ class RtbBidRequestImp {
 	
 	public $RtbBidRequestPmp;
 	
-	public $ext;
+	public $RtbBidRequestImpExtensions;
 	
 	/*
 	 * Not used by OpenRTB

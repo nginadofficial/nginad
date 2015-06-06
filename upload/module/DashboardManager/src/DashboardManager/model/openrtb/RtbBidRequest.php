@@ -47,7 +47,7 @@ class RtbBidRequest {
 	
 	public $RtbBidRequestRegulations;
 	
-	public $ext;
+	public $RtbBidRequestExtensions;
 
 	// used only by NginAd internally
 	public $is_local_request;
