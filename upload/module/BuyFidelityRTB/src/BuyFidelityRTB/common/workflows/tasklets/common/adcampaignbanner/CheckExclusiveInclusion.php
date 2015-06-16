@@ -11,7 +11,7 @@ namespace buyrtbfidelity\workflows\tasklets\common\adcampaignbanner;
 
 class CheckExclusiveInclusion {
 
-	public static function execute(&$Logger, &$Workflow, \model\openrtb\RtbBidRequest &$RtbBidRequest, \model\openrtb\RtbBidRequestImp &$RtbBidRequestImp, &$AdCampaignBanner, &$AdCampaignBannerExclusiveInclusionFactory) {
+	public static function execute(&$Logger, &$Workflow, \model\openrtb\RtbBidRequest &$RtbBidRequest, \model\openrtb\RtbBidRequestImp &$RtbBidRequestImp, &$InsertionOrderLineItem, &$InsertionOrderLineItemExclusiveInclusionFactory) {
 		
 		/*
 		 * Check banner domain exclusive inclusions
@@ -21,16 +21,16 @@ class CheckExclusiveInclusion {
 		 */
 		
 		$params = array();
-		$params["AdCampaignBannerID"] = $AdCampaignBanner->AdCampaignBannerID;
-		$AdCampaignBannerExclusiveInclusionList = $AdCampaignBannerExclusiveInclusionFactory->get_cached($Workflow->config, $params);
+		$params["InsertionOrderLineItemID"] = $InsertionOrderLineItem->InsertionOrderLineItemID;
+		$InsertionOrderLineItemExclusiveInclusionList = $InsertionOrderLineItemExclusiveInclusionFactory->get_cached($Workflow->config, $params);
 		
 		$result = true;
 		
-		foreach ($AdCampaignBannerExclusiveInclusionList as $AdCampaignBannerExclusiveInclusion):
+		foreach ($InsertionOrderLineItemExclusiveInclusionList as $InsertionOrderLineItemExclusiveInclusion):
 			
-			$domain_to_match = strtolower($AdCampaignBannerExclusiveInclusion->DomainName);
+			$domain_to_match = strtolower($InsertionOrderLineItemExclusiveInclusion->DomainName);
 			
-			if ($AdCampaignBannerExclusiveInclusion->InclusionType == "url"):
+			if ($InsertionOrderLineItemExclusiveInclusion->InclusionType == "url"):
 					
 				$page_url = $RtbBidRequest->RtbBidRequestSite->page != null ? $RtbBidRequest->RtbBidRequestSite->page : "";
 				$domain = $RtbBidRequest->RtbBidRequestSite->domain != null ? $RtbBidRequest->RtbBidRequestSite->domain : "";
@@ -53,7 +53,7 @@ class CheckExclusiveInclusion {
 				
 				endif;
 			
-			elseif ($AdCampaignBannerExclusiveInclusion->InclusionType == "referrer"):
+			elseif ($InsertionOrderLineItemExclusiveInclusion->InclusionType == "referrer"):
 			
 				$referrer = $RtbBidRequest->RtbBidRequestSite->ref != null ? $RtbBidRequest->RtbBidRequestSite->ref : "";
 

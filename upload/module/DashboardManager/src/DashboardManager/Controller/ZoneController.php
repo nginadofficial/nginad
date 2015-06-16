@@ -355,7 +355,7 @@ class ZoneController extends PublisherAbstractActionController {
 	                    // only the admin can create direct contracts between publishers and demand customers
 	                    if ($this->is_admin):
 	                    
-	                    	$AdCampaignBannerFactory = \_factory\AdCampaignBanner::get_instance();
+	                    	$InsertionOrderLineItemFactory = \_factory\InsertionOrderLineItem::get_instance();
 		                    $LinkedBannerToAdZoneFactory = \_factory\LinkedBannerToAdZone::get_instance();
 		                    
 		                    // campaigntype AD_TYPE_CONTRACT case
@@ -364,22 +364,22 @@ class ZoneController extends PublisherAbstractActionController {
 			                    foreach($linkedbanners as $linked_banner_id):
 			                    
 			                    	$params = array();
-			                    	$params["AdCampaignBannerID"] = $linked_banner_id;
-			                    	$LinkedAdCampaignBanner = $AdCampaignBannerFactory->get_row($params);
+			                    	$params["InsertionOrderLineItemID"] = $linked_banner_id;
+			                    	$LinkedInsertionOrderLineItem = $InsertionOrderLineItemFactory->get_row($params);
 			                    
-			                    	if ($LinkedAdCampaignBanner == null):
+			                    	if ($LinkedInsertionOrderLineItem == null):
 			                    		continue;
 			                    	endif;
 			                    	 
 			                    	$LinkedBannerToAdZone = new \model\LinkedBannerToAdZone();
-			                    	$LinkedBannerToAdZone->AdCampaignBannerID 			= intval($linked_banner_id);
+			                    	$LinkedBannerToAdZone->InsertionOrderLineItemID 			= intval($linked_banner_id);
 			                    	$LinkedBannerToAdZone->PublisherAdZoneID			= $publisher_ad_zone_id;
-			                    	$LinkedBannerToAdZone->Weight						= intval($LinkedAdCampaignBanner->Weight);
+			                    	$LinkedBannerToAdZone->Weight						= intval($LinkedInsertionOrderLineItem->Weight);
 			                    	$LinkedBannerToAdZone->DateCreated					= date("Y-m-d H:i:s");
 			                    	$LinkedBannerToAdZone->DateUpdated					= date("Y-m-d H:i:s");
 			                    	$LinkedBannerToAdZoneFactory->saveLinkedBannerToAdZone($LinkedBannerToAdZone);
 			                    
-			                    	$AdCampaignBannerFactory->updateAdCampaignBannerAdCampaignType($LinkedAdCampaignBanner->AdCampaignBannerID, AD_TYPE_CONTRACT);
+			                    	$InsertionOrderLineItemFactory->updateInsertionOrderLineItemInsertionOrderType($LinkedInsertionOrderLineItem->InsertionOrderLineItemID, AD_TYPE_CONTRACT);
 			                    
 			                    endforeach;
 		                    
@@ -505,7 +505,7 @@ class ZoneController extends PublisherAbstractActionController {
         
         $DomainID = intval($this->params()->fromRoute('param1', 0));
         $PublisherAdZoneFactory = \_factory\PublisherAdZone::get_instance();
-        $AdCampaignBannerFactory = \_factory\AdCampaignBanner::get_instance();
+        $InsertionOrderLineItemFactory = \_factory\InsertionOrderLineItem::get_instance();
         $PublisherAdZoneVideoFactory = \_factory\PublisherAdZoneVideo::get_instance();
         
         $current_publisheradzonetype = AD_TYPE_ANY_REMNANT;
@@ -737,22 +737,22 @@ class ZoneController extends PublisherAbstractActionController {
 		                				foreach($linkedbanners as $linked_banner_id):
 		                					
 		                					$params = array();
-		                					$params["AdCampaignBannerID"] = $linked_banner_id;
-		                					$LinkedAdCampaignBanner = $AdCampaignBannerFactory->get_row($params);
+		                					$params["InsertionOrderLineItemID"] = $linked_banner_id;
+		                					$LinkedInsertionOrderLineItem = $InsertionOrderLineItemFactory->get_row($params);
 		                					
-		                					if ($LinkedAdCampaignBanner == null):
+		                					if ($LinkedInsertionOrderLineItem == null):
 		                						continue;
 		                					endif;
 		                				
 			                				$LinkedBannerToAdZone = new \model\LinkedBannerToAdZone();
-			                				$LinkedBannerToAdZone->AdCampaignBannerID 			= intval($linked_banner_id);
+			                				$LinkedBannerToAdZone->InsertionOrderLineItemID 			= intval($linked_banner_id);
 			                				$LinkedBannerToAdZone->PublisherAdZoneID			= $editResultObj->PublisherAdZoneID;
-			                				$LinkedBannerToAdZone->Weight						= intval($LinkedAdCampaignBanner->Weight);
+			                				$LinkedBannerToAdZone->Weight						= intval($LinkedInsertionOrderLineItem->Weight);
 			                				$LinkedBannerToAdZone->DateCreated					= date("Y-m-d H:i:s");
 			                				$LinkedBannerToAdZone->DateUpdated					= date("Y-m-d H:i:s");
 			                				$LinkedBannerToAdZoneFactory->saveLinkedBannerToAdZone($LinkedBannerToAdZone);
 			                				
-			                				$AdCampaignBannerFactory->updateAdCampaignBannerAdCampaignType($LinkedAdCampaignBanner->AdCampaignBannerID, AD_TYPE_CONTRACT);
+			                				$InsertionOrderLineItemFactory->updateInsertionOrderLineItemInsertionOrderType($LinkedInsertionOrderLineItem->InsertionOrderLineItemID, AD_TYPE_CONTRACT);
 			                				
 		                				endforeach;
 	                				
@@ -1251,19 +1251,19 @@ class ZoneController extends PublisherAbstractActionController {
      	$params["Active"] 	= 1;
      	// $params["UserID"] 	= $this->EffectiveID;
      
-     	$AdCampaignBannerFactory = \_factory\AdCampaignBanner::get_instance();
-     	$AdCampaignBannerList = $AdCampaignBannerFactory->get($params);
-     	if ($AdCampaignBannerList === null):
-     		$AdCampaignBannerList = array();
+     	$InsertionOrderLineItemFactory = \_factory\InsertionOrderLineItem::get_instance();
+     	$InsertionOrderLineItemList = $InsertionOrderLineItemFactory->get($params);
+     	if ($InsertionOrderLineItemList === null):
+     		$InsertionOrderLineItemList = array();
      	endif;
      
      	$complete_banner_list = array();
      
-     	foreach ($AdCampaignBannerList as $AdCampaignBanner):
+     	foreach ($InsertionOrderLineItemList as $InsertionOrderLineItem):
      
 	     	$complete_banner_list[] = array(
-	     			"banner_id"	=>	$AdCampaignBanner->AdCampaignBannerID,
-	     			"ad_name"	=>	$AdCampaignBanner->Name
+	     			"banner_id"	=>	$InsertionOrderLineItem->InsertionOrderLineItemID,
+	     			"ad_name"	=>	$InsertionOrderLineItem->Name
 	     	);
 	     
      	endforeach;
@@ -1272,12 +1272,12 @@ class ZoneController extends PublisherAbstractActionController {
      
      	foreach ($linked_ad_banners as $linked_ad_banner):
      
-     		$linked_banner_list[] = $linked_ad_banner->AdCampaignBannerID;
+     		$linked_banner_list[] = $linked_ad_banner->InsertionOrderLineItemID;
      		
      	endforeach;
      
      	$data = array(
-     			'success' => count($AdCampaignBannerList) > 0,
+     			'success' => count($InsertionOrderLineItemList) > 0,
      			'linked_ad_banners' => implode(',', $linked_banner_list),
      			'complete_banner_list' => $complete_banner_list
      	);

@@ -12,7 +12,7 @@ namespace model;
 class BuySideHourlyImpressionsCounterCurrentSpend {
 	public $BuySideHourlyImpressionsCounterCurrentSpendID;
 	public $BuySidePartnerID;
-	public $AdCampaignBannerID;
+	public $InsertionOrderLineItemID;
 	public $MDYH;
     public $ImpressionsCounter;
     public $CurrentSpendGross;

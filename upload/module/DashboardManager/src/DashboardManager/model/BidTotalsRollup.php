@@ -11,7 +11,7 @@ namespace model;
 
 class BidTotalsRollup {
 
-    public $AdCampaignBannerID;
+    public $InsertionOrderLineItemID;
     public $TotalBids;
 
 }

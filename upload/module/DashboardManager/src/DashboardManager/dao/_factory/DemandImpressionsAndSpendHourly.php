@@ -59,7 +59,7 @@ class DemandImpressionsAndSpendHourly extends \_factory\CachedTableRead {
                 );
             endforeach;
             $select->limit(1, 0);
-            $select->order(array('MDYH', 'AdCampaignBannerID'));
+            $select->order(array('MDYH', 'InsertionOrderLineItemID'));
         }
         );
 
@@ -82,7 +82,7 @@ class DemandImpressionsAndSpendHourly extends \_factory\CachedTableRead {
                 );
             endforeach;
             //$select->limit(10, 0);
-            $select->order(array('MDYH', 'AdCampaignBannerID'));
+            $select->order(array('MDYH', 'InsertionOrderLineItemID'));
         }
         );
 
@@ -103,7 +103,7 @@ class DemandImpressionsAndSpendHourly extends \_factory\CachedTableRead {
     	$select = $sql->select();
     	$select->columns(array(
     			'MDYH' => new \Zend\Db\Sql\Expression('MAX(MDYH)'),
-    			'AdCampaignBannerID',
+    			'InsertionOrderLineItemID',
     			'DemandCustomerName',
     			'DemandCustomerInfoID',
     			'BannerName',
@@ -137,8 +137,8 @@ class DemandImpressionsAndSpendHourly extends \_factory\CachedTableRead {
 	    	endif;
     	endforeach;
     	
-    	$select->group('AdCampaignBannerID');
-    	$select->order('AdCampaignBannerID');
+    	$select->group('InsertionOrderLineItemID');
+    	$select->order('InsertionOrderLineItemID');
     	$statement = $sql->prepareStatementForSqlObject($select);
     	$results = $statement->execute();
     

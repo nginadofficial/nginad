@@ -84,7 +84,7 @@ class BuySideDailyImpressionsByTLD extends \_factory\CachedTableRead
 
     public function insertBuySideDailyImpressionsByTLD(\model\BuySideDailyImpressionsByTLD $BuySideDailyImpressionsByTLD) {
     	$data = array(
-    			'AdCampaignBannerID'   => $BuySideDailyImpressionsByTLD->AdCampaignBannerID,
+    			'InsertionOrderLineItemID'   => $BuySideDailyImpressionsByTLD->InsertionOrderLineItemID,
     			'MDY'   		=> $BuySideDailyImpressionsByTLD->MDY,
     			'PublisherTLD'  => $BuySideDailyImpressionsByTLD->PublisherTLD,
     			'Impressions'  	=> $BuySideDailyImpressionsByTLD->Impressions,

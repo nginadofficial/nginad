@@ -11,14 +11,14 @@ namespace buyrtbfidelity\workflows\tasklets\common\adcampaignbanner;
 
 class CheckPriceFloor {
 	
-	public static function execute(&$Logger, &$Workflow, \model\openrtb\RtbBidRequest &$RtbBidRequest, \model\openrtb\RtbBidRequestImp &$RtbBidRequestImp, &$AdCampaignBanner, $markup_rate) {
+	public static function execute(&$Logger, &$Workflow, \model\openrtb\RtbBidRequest &$RtbBidRequest, \model\openrtb\RtbBidRequestImp &$RtbBidRequestImp, &$InsertionOrderLineItem, $markup_rate) {
 	
 		/*
 		 * Check banner floor
 		 */
         $imp_floor                 		= $RtbBidRequestImp->bidfloor;
-        $mark_down 						= floatval($AdCampaignBanner->BidAmount) * floatval($markup_rate);
-  		$banner_bid_amount              = floatval($AdCampaignBanner->BidAmount) - floatval($mark_down);
+        $mark_down 						= floatval($InsertionOrderLineItem->BidAmount) * floatval($markup_rate);
+  		$banner_bid_amount              = floatval($InsertionOrderLineItem->BidAmount) - floatval($mark_down);
 
     	if (floatval($imp_floor) > floatval($banner_bid_amount)):
         	if ($Logger->setting_log === true):

@@ -98,21 +98,21 @@ class IndexController extends AbstractActionController
     	
     	$banner_request["demand_banner_id"] = $this->get_banner_id_from_display_probability($linked_banner_to_ad_zone_list);
     
-    	$AdCampaignBannerFactory = \_factory\AdCampaignBanner::get_instance();
+    	$InsertionOrderLineItemFactory = \_factory\InsertionOrderLineItem::get_instance();
     	
     	$params = array();
-    	$params["AdCampaignBannerID"] 	= $banner_request["demand_banner_id"];
-    	$AdCampaignBanner 				= $AdCampaignBannerFactory->get_row_cached($config, $params);
+    	$params["InsertionOrderLineItemID"] 	= $banner_request["demand_banner_id"];
+    	$InsertionOrderLineItem 				= $InsertionOrderLineItemFactory->get_row_cached($config, $params);
     	
-    	if ($AdCampaignBanner != null):
-    		$cpm_price = $AdCampaignBanner->BidAmount;
+    	if ($InsertionOrderLineItem != null):
+    		$cpm_price = $InsertionOrderLineItem->BidAmount;
     	else:
     		$cpm_price = 0;
 		endif;
 		    	
     	$ContractPublisherZoneHourlyImpressions = new \model\ContractPublisherZoneHourlyImpressions();
     	
-    	$ContractPublisherZoneHourlyImpressions->AdCampaignBannerID		= $banner_request["demand_banner_id"];
+    	$ContractPublisherZoneHourlyImpressions->InsertionOrderLineItemID		= $banner_request["demand_banner_id"];
     	$ContractPublisherZoneHourlyImpressions->PublisherAdZoneID		= $banner_request["publisher_banner_id"];
     	$ContractPublisherZoneHourlyImpressions->Impressions			= 1;
     	$ContractPublisherZoneHourlyImpressions->SpendTotalGross		= floatval($cpm_price) / 1000;
@@ -138,7 +138,7 @@ class IndexController extends AbstractActionController
     		
     		for ($i = 0; $i < $linked_banner_to_ad_zone->Weight; $i++):
     			
-    			$banner_display_probability_pool[] = $linked_banner_to_ad_zone->AdCampaignBannerID;
+    			$banner_display_probability_pool[] = $linked_banner_to_ad_zone->InsertionOrderLineItemID;
     	
     		endfor;
     		
@@ -589,15 +589,15 @@ class IndexController extends AbstractActionController
     	
     	$cache_file = $cache_file_dir . $banner_request_id . "." . $tag_type . ".zone.txt";
     	
-    	$AdCampaignBannerFactory = \_factory\AdCampaignBanner::get_instance();
+    	$InsertionOrderLineItemFactory = \_factory\InsertionOrderLineItem::get_instance();
     	
     	$params = array();
-    	$params["AdCampaignBannerID"] 	= $banner_request_id;
-    	$AdCampaignBanner 				= $AdCampaignBannerFactory->get_row_cached($config, $params);    	
+    	$params["InsertionOrderLineItemID"] 	= $banner_request_id;
+    	$InsertionOrderLineItem 				= $InsertionOrderLineItemFactory->get_row_cached($config, $params);    	
 
-	    if ($AdCampaignBanner != null):
+	    if ($InsertionOrderLineItem != null):
 	    
-		    $banner_impression_cost 		= $AdCampaignBanner->BidAmount;
+		    $banner_impression_cost 		= $InsertionOrderLineItem->BidAmount;
 		    $spend_increase_gross 			= floatval($banner_impression_cost) / 1000;
 		    $spend_increase_net				= $spend_increase_gross;
 		    
@@ -623,23 +623,23 @@ class IndexController extends AbstractActionController
 			     * 
 			     * Remember that the RTB bid price sent to the DSP was already marked down by the markup
 			     * price in class RtbBuyV22Workflow:
-			     * Line 544: $adusted_amount = floatval($AdCampaignBanner->BidAmount) - floatval($mark_down);
+			     * Line 544: $adusted_amount = floatval($InsertionOrderLineItem->BidAmount) - floatval($mark_down);
 			     */
 
-			    $AdCampaignFactory		= \_factory\AdCampaign::get_instance();
+			    $InsertionOrderFactory		= \_factory\InsertionOrder::get_instance();
 		    	$params					= array();
-		    	$params["AdCampaignID"] = $AdCampaignBanner->AdCampaignID;
-			    $AdCampaign				= $AdCampaignFactory->get_row_cached($config, $params);
+		    	$params["InsertionOrderID"] = $InsertionOrderLineItem->InsertionOrderID;
+			    $InsertionOrder				= $InsertionOrderFactory->get_row_cached($config, $params);
 			    
-			    $markup_rate 			= \util\Markup::getMarkupRate($AdCampaign, $config);
+			    $markup_rate 			= \util\Markup::getMarkupRate($InsertionOrder, $config);
 			    
 			    $mark_down 				= floatval($spend_increase_gross) * floatval($markup_rate);
 			    $spend_increase_net 	= floatval($spend_increase_gross) - floatval($mark_down);
 		    
 			endif;
 		    
-			$AdCampaignBannerFactory->incrementAdCampaignBannerImpressionsCounterAndSpendCached($config, $buyer_id, $banner_request_id, $spend_increase_gross, $spend_increase_net);
-			$AdCampaignBannerFactory->incrementBuySideHourlyImpressionsByTLDCached($config, $banner_request_id, $banner_request["tld"]);
+			$InsertionOrderLineItemFactory->incrementInsertionOrderLineItemImpressionsCounterAndSpendCached($config, $buyer_id, $banner_request_id, $spend_increase_gross, $spend_increase_net);
+			$InsertionOrderLineItemFactory->incrementBuySideHourlyImpressionsByTLDCached($config, $banner_request_id, $banner_request["tld"]);
 
 			$is_video_impression 		= false;
 			
@@ -675,7 +675,7 @@ class IndexController extends AbstractActionController
 	    	
 	    	if ($is_video_impression === true):
     		
-	    		$adtag = $AdCampaignBanner->AdTag;
+	    		$adtag = $InsertionOrderLineItem->AdTag;
 	    	
 	    		if(\util\ParseHelper::isVastURL($adtag) === true):
 	    			
@@ -695,11 +695,11 @@ class IndexController extends AbstractActionController
 	    	elseif ($banner_request["dt"] == "in"):
 	    	
 		    	header("Content-type: application/javascript");
-		    	$output = "document.write(" . json_encode($AdCampaignBanner->AdTag) . ");";
+		    	$output = "document.write(" . json_encode($InsertionOrderLineItem->AdTag) . ");";
 		    	 
     		else:
     		
-		    	$output = "<!DOCTYPE html>\n<html><head></head><body style=\"margin: 0px; padding: 0px;\">" . $AdCampaignBanner->AdTag
+		    	$output = "<!DOCTYPE html>\n<html><head></head><body style=\"margin: 0px; padding: 0px;\">" . $InsertionOrderLineItem->AdTag
 		    	. "\r\n\r\n</body></html>";
     		
 	    	endif;

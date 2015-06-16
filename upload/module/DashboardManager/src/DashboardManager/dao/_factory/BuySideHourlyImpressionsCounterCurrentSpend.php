@@ -198,7 +198,7 @@ class BuySideHourlyImpressionsCounterCurrentSpend extends \_factory\CachedTableR
 
         $data = array(
             'BuySidePartnerID' => $BuySideHourlyImpressionsCounterCurrentSpend->BuySidePartnerID,
-            'AdCampaignBannerID' => $BuySideHourlyImpressionsCounterCurrentSpend->AdCampaignBannerID,
+            'InsertionOrderLineItemID' => $BuySideHourlyImpressionsCounterCurrentSpend->InsertionOrderLineItemID,
             'MDYH' => $BuySideHourlyImpressionsCounterCurrentSpend->MDYH,
             'ImpressionsCounter' => $BuySideHourlyImpressionsCounterCurrentSpend->ImpressionsCounter,
             'CurrentSpendGross' => $BuySideHourlyImpressionsCounterCurrentSpend->CurrentSpendGross,

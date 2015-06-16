@@ -9,11 +9,11 @@
 
 namespace model;
 
-class AdCampaignBannerDomainExclusion {
+class InsertionOrderLineItemDomainExclusiveInclusionPreview {
 
-    public $AdCampaignBannerDomainExclusionID;
-    public $AdCampaignBannerID;
-    public $ExclusionType;
+    public $InsertionOrderLineItemDomainExclusiveInclusionPreviewID;
+    public $InsertionOrderLineItemPreviewID;
+    public $InclusionType;
     public $DomainName;
     public $DateCreated;
 }

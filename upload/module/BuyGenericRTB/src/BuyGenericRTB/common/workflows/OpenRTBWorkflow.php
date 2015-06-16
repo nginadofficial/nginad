@@ -26,56 +26,56 @@ class OpenRTBWorkflow
     	
     	// $logger = \rtbbuyv22\RtbBuyV22Logger::get_instance();
     	
-        $AdCampaignBanner_Match_List = array();
+        $InsertionOrderLineItem_Match_List = array();
 
-    	$AdCampaignFactory = \_factory\AdCampaign::get_instance();
+    	$InsertionOrderFactory = \_factory\InsertionOrder::get_instance();
     	$params = array();
     	$params["Active"] = 1;
-    	$AdCampaignList = $AdCampaignFactory->get_cached($this->config, $params);
+    	$InsertionOrderList = $InsertionOrderFactory->get_cached($this->config, $params);
 
     	$this->current_time = time();
 
-    	$AdCampaignBannerFactory = \_factory\AdCampaignBanner::get_instance();
-    	$AdCampaignBannerDomainExclusionFactory = \_factory\AdCampaignBannerDomainExclusion::get_instance();
-    	$AdCampaignBannerExclusiveInclusionFactory = \_factory\AdCampaignBannerDomainExclusiveInclusion::get_instance();
-    	$AdCampaignBannerRestrictionsFactory = \_factory\AdCampaignBannerRestrictions::get_instance();
-    	$AdCampaignVideoRestrictionsFactory = \_factory\AdCampaignVideoRestrictions::get_instance();
+    	$InsertionOrderLineItemFactory = \_factory\InsertionOrderLineItem::get_instance();
+    	$InsertionOrderLineItemDomainExclusionFactory = \_factory\InsertionOrderLineItemDomainExclusion::get_instance();
+    	$InsertionOrderLineItemExclusiveInclusionFactory = \_factory\InsertionOrderLineItemDomainExclusiveInclusion::get_instance();
+    	$InsertionOrderLineItemRestrictionsFactory = \_factory\InsertionOrderLineItemRestrictions::get_instance();
+    	$InsertionOrderLineItemVideoRestrictionsFactory = \_factory\InsertionOrderLineItemVideoRestrictions::get_instance();
     	
     	// match ip against country code
     	\buyrtb\workflows\tasklets\common\adcampaign\GetGeoCodeCountry::execute($logger, $this, $RtbBidRequest);
 
-    	foreach ($AdCampaignList as $AdCampaign):
+    	foreach ($InsertionOrderList as $InsertionOrder):
 
 	    	// Check campaign date
-	    	if (\buyrtb\workflows\tasklets\common\adcampaign\CheckCampaignDate::execute($logger, $this, $RtbBidRequest, $AdCampaign) === false):
+	    	if (\buyrtb\workflows\tasklets\common\adcampaign\CheckCampaignDate::execute($logger, $this, $RtbBidRequest, $InsertionOrder) === false):
 	    		continue;
 	    	endif;
 
         	// Check max spend
-	    	if (\buyrtb\workflows\tasklets\common\adcampaign\CheckMaxSpend::execute($logger, $this, $RtbBidRequest, $AdCampaign) === false):
+	    	if (\buyrtb\workflows\tasklets\common\adcampaign\CheckMaxSpend::execute($logger, $this, $RtbBidRequest, $InsertionOrder) === false):
 	    		continue;
 	    	endif;
 
 	    	// Check max impressions
-	    	if (\buyrtb\workflows\tasklets\common\adcampaign\CheckMaxImpressions::execute($logger, $this, $RtbBidRequest, $AdCampaign) === false):
+	    	if (\buyrtb\workflows\tasklets\common\adcampaign\CheckMaxImpressions::execute($logger, $this, $RtbBidRequest, $InsertionOrder) === false):
 	    		continue;
 	    	endif;
 
 	    	// get markup rate for ad campaign
-        	$markup_rate = \util\Markup::getMarkupRate($AdCampaign, $this->config);
+        	$markup_rate = \util\Markup::getMarkupRate($InsertionOrder, $this->config);
 
         	// iterate the active banners for this ad campaign
         	$params = array();
-        	$params["AdCampaignID"] = $AdCampaign->AdCampaignID;
+        	$params["InsertionOrderID"] = $InsertionOrder->InsertionOrderID;
         	$params["Active"] = 1;
-        	$AdCampaignBannerList = $AdCampaignBannerFactory->get_cached($this->config, $params);
+        	$InsertionOrderLineItemList = $InsertionOrderLineItemFactory->get_cached($this->config, $params);
 
         	foreach ($RtbBidRequest->RtbBidRequestImpList as $RtbBidRequestImp):
         		
-	        	foreach ($AdCampaignBannerList as $AdCampaignBanner):
+	        	foreach ($InsertionOrderLineItemList as $InsertionOrderLineItem):
 			        	
-	        		if (empty($RtbBidRequestImp->RtbBidRequestVideo) && $AdCampaignBanner->ImpressionType == 'video'
-	        				|| !empty($RtbBidRequestImp->RtbBidRequestVideo) && $AdCampaignBanner->ImpressionType == 'banner'):
+	        		if (empty($RtbBidRequestImp->RtbBidRequestVideo) && $InsertionOrderLineItem->ImpressionType == 'video'
+	        				|| !empty($RtbBidRequestImp->RtbBidRequestVideo) && $InsertionOrderLineItem->ImpressionType == 'banner'):
 	        			continue;
 	        		endif;
 	        		
@@ -84,27 +84,27 @@ class OpenRTBWorkflow
 			         */
 		        	
 		        	// Check banner date
-		        	if (\buyrtb\workflows\tasklets\common\adcampaignbanner\CheckBannerDate::execute($logger, $this, $RtbBidRequest, $RtbBidRequestImp, $AdCampaignBanner) === false):
+		        	if (\buyrtb\workflows\tasklets\common\adcampaignbanner\CheckBannerDate::execute($logger, $this, $RtbBidRequest, $RtbBidRequestImp, $InsertionOrderLineItem) === false):
 		        		continue;
 		        	endif;
 	            
 	            	// Check to see if this AdCampaginBanner is associated to a contract zone.
-		        	if (\buyrtb\workflows\tasklets\common\adcampaignbanner\CheckIsContract::execute($logger, $this, $RtbBidRequest, $RtbBidRequestImp, $AdCampaignBanner) === false):
+		        	if (\buyrtb\workflows\tasklets\common\adcampaignbanner\CheckIsContract::execute($logger, $this, $RtbBidRequest, $RtbBidRequestImp, $InsertionOrderLineItem) === false):
 		        		continue;
 		        	endif;
 	            	
 		        	// Check impression price floor
-		        	if (\buyrtb\workflows\tasklets\common\adcampaignbanner\CheckPriceFloor::execute($logger, $this, $RtbBidRequest, $RtbBidRequestImp, $AdCampaignBanner, $markup_rate) === false):
+		        	if (\buyrtb\workflows\tasklets\common\adcampaignbanner\CheckPriceFloor::execute($logger, $this, $RtbBidRequest, $RtbBidRequestImp, $InsertionOrderLineItem, $markup_rate) === false):
 		        		continue;
 		        	endif;
 		        	
 	            	// Check banner domain exclusive inclusions
-		        	if (\buyrtb\workflows\tasklets\common\adcampaignbanner\CheckExclusiveInclusion::execute($logger, $this, $RtbBidRequest, $RtbBidRequestImp, $AdCampaignBanner, $AdCampaignBannerExclusiveInclusionFactory) === false):
+		        	if (\buyrtb\workflows\tasklets\common\adcampaignbanner\CheckExclusiveInclusion::execute($logger, $this, $RtbBidRequest, $RtbBidRequestImp, $InsertionOrderLineItem, $InsertionOrderLineItemExclusiveInclusionFactory) === false):
 		        		continue;
 		        	endif;
 	
 	            	// Check banner domain exclusions match
-		        	if (\buyrtb\workflows\tasklets\common\adcampaignbanner\CheckDomainExclusion::execute($logger, $this, $RtbBidRequest, $RtbBidRequestImp, $AdCampaignBanner, $AdCampaignBannerDomainExclusionFactory) === false):
+		        	if (\buyrtb\workflows\tasklets\common\adcampaignbanner\CheckDomainExclusion::execute($logger, $this, $RtbBidRequest, $RtbBidRequestImp, $InsertionOrderLineItem, $InsertionOrderLineItemDomainExclusionFactory) === false):
 		        		continue;
 		        	endif;
 		        	
@@ -113,13 +113,13 @@ class OpenRTBWorkflow
 						
 						// Video Workflow
 						$VideoWorkflow = new \buyrtb\workflows\VideoWorkflow();
-						$passed_child_workflow = $VideoWorkflow->process_business_rules_workflow($logger, $this, $RtbBidRequest, $RtbBidRequestImp, $AdCampaignBanner, $AdCampaignVideoRestrictionsFactory);
+						$passed_child_workflow = $VideoWorkflow->process_business_rules_workflow($logger, $this, $RtbBidRequest, $RtbBidRequestImp, $InsertionOrderLineItem, $InsertionOrderLineItemVideoRestrictionsFactory);
 							
 					else:
 					
 						// Display Banner Workflow - Default
 						$DisplayWorkflow = new \buyrtb\workflows\DisplayWorkflow();
-						$passed_child_workflow = $DisplayWorkflow->process_business_rules_workflow($logger, $this, $RtbBidRequest, $RtbBidRequestImp, $AdCampaignBanner, $AdCampaignBannerRestrictionsFactory);
+						$passed_child_workflow = $DisplayWorkflow->process_business_rules_workflow($logger, $this, $RtbBidRequest, $RtbBidRequestImp, $InsertionOrderLineItem, $InsertionOrderLineItemRestrictionsFactory);
 
 					endif;
 					
@@ -130,16 +130,16 @@ class OpenRTBWorkflow
 	            	/*
 	            	 * PASSED ALL THE BUSINESS RULES, ADD TO THE RESULTS
 	            	 */
-	                $AdCampaignBannerFactory->incrementAdCampaignBannerBidsCounterCached($this->config, $rtb_seat_id, $AdCampaignBanner->AdCampaignBannerID);
+	                $InsertionOrderLineItemFactory->incrementInsertionOrderLineItemBidsCounterCached($this->config, $rtb_seat_id, $InsertionOrderLineItem->InsertionOrderLineItemID);
 	
 	                /*
 	                 * Adjust the bid rate according to the markup
 	                 */
 	
-	                $mark_down = floatval($AdCampaignBanner->BidAmount) * floatval($markup_rate);
-	                $adusted_amount = floatval($AdCampaignBanner->BidAmount) - floatval($mark_down);
+	                $mark_down = floatval($InsertionOrderLineItem->BidAmount) * floatval($markup_rate);
+	                $adusted_amount = floatval($InsertionOrderLineItem->BidAmount) - floatval($mark_down);
 	
-	                $AdCampaignBanner->BidAmount = sprintf("%1.4f", $adusted_amount);
+	                $InsertionOrderLineItem->BidAmount = sprintf("%1.4f", $adusted_amount);
 	                
 	                // default in config
 					$currency = $this->config['settings']['rtb']['auction_currency'];
@@ -148,10 +148,10 @@ class OpenRTBWorkflow
 						$currency = $RtbBidRequest->cur[0];
 					endif;
 	                
-	            	$AdCampaignBanner_Match_List[(string)$AdCampaignBanner->UserID][] = array(
+	            	$InsertionOrderLineItem_Match_List[(string)$InsertionOrderLineItem->UserID][] = array(
 	            											"currency" => $currency,
 	            											"impid" => $RtbBidRequestImp->id,
-	            											"AdCampaignBanner" => $AdCampaignBanner);
+	            											"InsertionOrderLineItem" => $InsertionOrderLineItem);
 	
 	        	endforeach;
         	
@@ -159,7 +159,7 @@ class OpenRTBWorkflow
 
     	endforeach;
 
-    	if (count($AdCampaignBanner_Match_List)):
+    	if (count($InsertionOrderLineItem_Match_List)):
     	
     		// Check Publisher Score
 	    	if (\buyrtb\workflows\tasklets\common\thirdparty\CheckPublisherScore::execute($logger, $this, $RtbBidRequest) === false):
@@ -181,7 +181,7 @@ class OpenRTBWorkflow
 	    	 
     	endif;
     	
-    	return $AdCampaignBanner_Match_List;
+    	return $InsertionOrderLineItem_Match_List;
 
     }
 

@@ -11,11 +11,11 @@ namespace buyrtbfidelity\workflows\tasklets\video\adcampaignvideorestrictions;
 
 class CheckStartDelay {
 	
-	public static function execute(&$Logger, &$Workflow, \model\openrtb\RtbBidRequest &$RtbBidRequest, \model\openrtb\RtbBidRequestImp &$RtbBidRequestImp, &$AdCampaignBanner, &$AdCampaignVideoRestrictions) {
+	public static function execute(&$Logger, &$Workflow, \model\openrtb\RtbBidRequest &$RtbBidRequest, \model\openrtb\RtbBidRequestImp &$RtbBidRequestImp, &$InsertionOrderLineItem, &$InsertionOrderLineItemVideoRestrictions) {
 		
 		$RtbBidRequestVideo = $RtbBidRequestImp->RtbBidRequestVideo;
 		
-		if (!is_numeric($AdCampaignVideoRestrictions->StartDelay)):
+		if (!is_numeric($InsertionOrderLineItemVideoRestrictions->StartDelay)):
 			return true;
 		endif;
 		
@@ -29,11 +29,11 @@ class CheckStartDelay {
 			return false;
 		endif;
 		
-		$result = $AdCampaignVideoRestrictions->StartDelay == $RtbBidRequestVideo->startdelay;
+		$result = $InsertionOrderLineItemVideoRestrictions->StartDelay == $RtbBidRequestVideo->startdelay;
 		
 		if ($result === false && $Logger->setting_log === true):
 			$Logger->log[] = "Failed: " . "Check video start delay code :: EXPECTED: "
-				. $AdCampaignVideoRestrictions->StartDelay
+				. $InsertionOrderLineItemVideoRestrictions->StartDelay
 				. " GOT: " . $RtbBidRequestVideo->startdelay;
 		endif;
 		

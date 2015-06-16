@@ -40,9 +40,9 @@ abstract class RtbBuyV22Bid extends RtbBuyBid {
 	);
 
 	/*
-	 * A List of AdCampaignBanner ORM objects that matched all the business rules from the incoming request
+	 * A List of InsertionOrderLineItem ORM objects that matched all the business rules from the incoming request
 	*/
-	private $AdCampaignBanner_Match_List = array();
+	private $InsertionOrderLineItem_Match_List = array();
 
 	private $no_bid_reason;
 	
@@ -86,7 +86,7 @@ abstract class RtbBuyV22Bid extends RtbBuyBid {
 		$this->bid_responses = \buyrtb\encoders\openrtb\RtbBidResponseJsonEncoder::execute($this->RtbBidResponse);
 	}
 
-	private function get_effective_ad_tag(&$AdCampaignBanner, $tld) {
+	private function get_effective_ad_tag(&$InsertionOrderLineItem, $tld) {
 
 			/*
 			 * This is an ad tag somebody copy pasted into the RTB Manager
@@ -108,12 +108,12 @@ abstract class RtbBuyV22Bid extends RtbBuyBid {
 				$winning_bid_auction_param = "&winbid=\${AUCTION_PRICE}";
 			endif;
 			
-			$effective_tag = "<script type='text/javascript' src='" . $delivery_adtag_js . "?zoneid=" . $AdCampaignBanner->AdCampaignBannerID . "&buyerid=" . $this->rtb_seat_id . "&height=" . $AdCampaignBanner->Height . "&width=" . $AdCampaignBanner->Width . "&tld=" . $tld . "&clktrc={NGINCLKTRK}" . $winning_bid_auction_param . "&ui=" . $this->user_ip_hash . "&cb=" . $cache_buster . "'></script>";
+			$effective_tag = "<script type='text/javascript' src='" . $delivery_adtag_js . "?zoneid=" . $InsertionOrderLineItem->InsertionOrderLineItemID . "&buyerid=" . $this->rtb_seat_id . "&height=" . $InsertionOrderLineItem->Height . "&width=" . $InsertionOrderLineItem->Width . "&tld=" . $tld . "&clktrc={NGINCLKTRK}" . $winning_bid_auction_param . "&ui=" . $this->user_ip_hash . "&cb=" . $cache_buster . "'></script>";
 			
 			return rawurlencode($effective_tag);
 	}
 	
-	private function get_video_notice_url(&$AdCampaignBanner, $tld) {
+	private function get_video_notice_url(&$InsertionOrderLineItem, $tld) {
 	
 		$delivery_adtag = $this->config['delivery']['url'];
 			
@@ -127,7 +127,7 @@ abstract class RtbBuyV22Bid extends RtbBuyBid {
 			$winning_bid_auction_param = "&winbid=\${AUCTION_PRICE}";
 		endif;
 
-		$notice_tag = $delivery_adtag . "?video=vast&zoneid=" . $AdCampaignBanner->AdCampaignBannerID . "&buyerid=" . $this->rtb_seat_id . "&tld=" . $tld . "&clktrc={NGINCLKTRK}" . $winning_bid_auction_param . "&ui=" . $this->user_ip_hash . "&cb=" . $cache_buster;
+		$notice_tag = $delivery_adtag . "?video=vast&zoneid=" . $InsertionOrderLineItem->InsertionOrderLineItemID . "&buyerid=" . $this->rtb_seat_id . "&tld=" . $tld . "&clktrc={NGINCLKTRK}" . $winning_bid_auction_param . "&ui=" . $this->user_ip_hash . "&cb=" . $cache_buster;
 	
 		return $notice_tag;
 	}
@@ -152,7 +152,7 @@ abstract class RtbBuyV22Bid extends RtbBuyBid {
 
 	public function process_business_logic() {
 
-	    $this->AdCampaignBanner_Match_List = \rtbbuyv22\RtbBuyV22Workflow::get_instance()->process_business_rules_workflow($this->config, $this->rtb_seat_id, $this->no_bid_reason, $this->RtbBidRequest);
+	    $this->InsertionOrderLineItem_Match_List = \rtbbuyv22\RtbBuyV22Workflow::get_instance()->process_business_rules_workflow($this->config, $this->rtb_seat_id, $this->no_bid_reason, $this->RtbBidRequest);
 	}
 
 	public function parse_incoming_request($raw_post = null) {
@@ -212,17 +212,17 @@ abstract class RtbBuyV22Bid extends RtbBuyBid {
 		
 		$currency = null;
 
-		foreach ($this->AdCampaignBanner_Match_List as $user_id => $AdCampaignBannerObjList):
+		foreach ($this->InsertionOrderLineItem_Match_List as $user_id => $InsertionOrderLineItemObjList):
 			
 			$RtbBidResponseSeatBid	= new \model\openrtb\RtbBidResponseSeatBid();
 		
-			foreach ($AdCampaignBannerObjList as $AdCampaignBannerObj):
+			foreach ($InsertionOrderLineItemObjList as $InsertionOrderLineItemObj):
 			
-				$bid_imp_id 				= $AdCampaignBannerObj["impid"];
-				$AdCampaignBanner 			= $AdCampaignBannerObj["AdCampaignBanner"];
+				$bid_imp_id 				= $InsertionOrderLineItemObj["impid"];
+				$InsertionOrderLineItem 			= $InsertionOrderLineItemObj["InsertionOrderLineItem"];
 				
-				if (isset($AdCampaignBannerObj["currency"]) && $currency == null):
-					$currency = $AdCampaignBannerObj["currency"];
+				if (isset($InsertionOrderLineItemObj["currency"]) && $currency == null):
+					$currency = $InsertionOrderLineItemObj["currency"];
 				endif;
 				
 				$RtbBidResponseBid	= new \model\openrtb\RtbBidResponseBid();
@@ -230,15 +230,15 @@ abstract class RtbBuyV22Bid extends RtbBuyBid {
 				$RtbBidResponseBid->id			= $this->generate_transaction_id();
 				$RtbBidResponseBid->adid		= $RtbBidResponseBid->id;
 				$RtbBidResponseBid->impid		= $bid_imp_id;
-				$RtbBidResponseBid->price		= $AdCampaignBanner->BidAmount;
-				if ($AdCampaignBanner->ImpressionType == 'video'):
-					$RtbBidResponseBid->nurl 	= $this->get_video_notice_url($AdCampaignBanner, $tld);
+				$RtbBidResponseBid->price		= $InsertionOrderLineItem->BidAmount;
+				if ($InsertionOrderLineItem->ImpressionType == 'video'):
+					$RtbBidResponseBid->nurl 	= $this->get_video_notice_url($InsertionOrderLineItem, $tld);
 				else:
-					$RtbBidResponseBid->adm		= $this->get_effective_ad_tag($AdCampaignBanner, $tld);
+					$RtbBidResponseBid->adm		= $this->get_effective_ad_tag($InsertionOrderLineItem, $tld);
 				endif;
-				$RtbBidResponseBid->adomain[] 	= $AdCampaignBanner->LandingPageTLD;
-				$RtbBidResponseBid->cid	 		= "nginad_" . $AdCampaignBanner->AdCampaignID;
-				$RtbBidResponseBid->crid	 	= "nginad_" . $AdCampaignBanner->AdCampaignBannerID;
+				$RtbBidResponseBid->adomain[] 	= $InsertionOrderLineItem->LandingPageTLD;
+				$RtbBidResponseBid->cid	 		= "nginad_" . $InsertionOrderLineItem->InsertionOrderID;
+				$RtbBidResponseBid->crid	 	= "nginad_" . $InsertionOrderLineItem->InsertionOrderLineItemID;
 				$this->had_bid_response = true;
 
 				$RtbBidResponseSeatBid->RtbBidResponseBidList[] = $RtbBidResponseBid;
@@ -250,7 +250,7 @@ abstract class RtbBuyV22Bid extends RtbBuyBid {
 			
 		endforeach;
 		
-		if (isset($AdCampaignBannerObj["currency"]) && $currency == null):
+		if (isset($InsertionOrderLineItemObj["currency"]) && $currency == null):
 			$RtbBidResponse->cur				= $currency;
 		else: 
 			$RtbBidResponse->cur				= $this->config['settings']['rtb']['auction_currency'];

@@ -48,28 +48,28 @@ class DemandController extends DemandAbstractActionController {
 
 		endif;
 
-	    $AdCampaignFactory = \_factory\AdCampaign::get_instance();
+	    $InsertionOrderFactory = \_factory\InsertionOrder::get_instance();
 	    $params = array();
 	    $params["Active"] = 1;
 	    // admin should see campaigns requiring approval and the user they belong to ONLY
 	    $params["UserID"] = $this->auth->getEffectiveUserID();
 
-	    $_ad_campaign_list = $AdCampaignFactory->get($params);
-	    $AdCampaignPreviewFactory = \_factory\AdCampaignPreview::get_instance();
+	    $_ad_campaign_list = $InsertionOrderFactory->get($params);
+	    $InsertionOrderPreviewFactory = \_factory\InsertionOrderPreview::get_instance();
 
 	    $ad_campaign_list = array();
 
 	    // admin should see campaigns requiring approval and the user they belong to ONLY
 	    foreach ($_ad_campaign_list as $ad_campaign):
-		  	$is_preview = \transformation\TransformPreview::doesPreviewAdCampaignExistForAdCampaign($ad_campaign->AdCampaignID, $this->auth);
+		  	$is_preview = \transformation\TransformPreview::doesPreviewInsertionOrderExistForInsertionOrder($ad_campaign->InsertionOrderID, $this->auth);
 		 	if ($is_preview != true):
 		    	$ad_campaign_list[] = $ad_campaign;
-		 		$ad_campaign_markup = \util\Markup::getMarkupForAdCampaign($ad_campaign->AdCampaignID, $this->config_handle, false);
+		 		$ad_campaign_markup = \util\Markup::getMarkupForInsertionOrder($ad_campaign->InsertionOrderID, $this->config_handle, false);
 
 		 		if ($ad_campaign_markup != null):
-		 			$campaign_markup_rate_list[$ad_campaign->AdCampaignID] = $ad_campaign_markup->MarkupRate * 100;
+		 			$campaign_markup_rate_list[$ad_campaign->InsertionOrderID] = $ad_campaign_markup->MarkupRate * 100;
 		 		else:
-		 			$campaign_markup_rate_list[$ad_campaign->AdCampaignID] = $user_markup_rate * 100;
+		 			$campaign_markup_rate_list[$ad_campaign->InsertionOrderID] = $user_markup_rate * 100;
 		 		endif;
 
 		 	endif;
@@ -85,19 +85,19 @@ class DemandController extends DemandAbstractActionController {
 	    	$params["UserID"] = $this->auth->getUserID();
 	    endif;
 	    
-	    $_ad_campaign_preview_list = $AdCampaignPreviewFactory->get($params);
+	    $_ad_campaign_preview_list = $InsertionOrderPreviewFactory->get($params);
 
 	    foreach ($_ad_campaign_preview_list as $ad_campaign_preview):
 		    if ($ad_campaign_preview != null):
 		    	$ad_campaign_list[] = $ad_campaign_preview;
-		    	if ($ad_campaign_preview->AdCampaignID != null):
+		    	if ($ad_campaign_preview->InsertionOrderID != null):
 
-				    $ad_campaign_markup = \util\Markup::getMarkupForAdCampaign($ad_campaign_preview->AdCampaignID, $this->config_handle, false);
+				    $ad_campaign_markup = \util\Markup::getMarkupForInsertionOrder($ad_campaign_preview->InsertionOrderID, $this->config_handle, false);
 
 				    if ($ad_campaign_markup != null):
-				    	$campaign_markup_rate_list[$ad_campaign_preview->AdCampaignID] = $ad_campaign_markup->MarkupRate * 100;
+				    	$campaign_markup_rate_list[$ad_campaign_preview->InsertionOrderID] = $ad_campaign_markup->MarkupRate * 100;
 				    else:
-				    	$campaign_markup_rate_list[$ad_campaign_preview->AdCampaignID] = $user_markup_rate * 100;
+				    	$campaign_markup_rate_list[$ad_campaign_preview->InsertionOrderID] = $user_markup_rate * 100;
 				    endif;
 
 			    endif;
@@ -210,10 +210,10 @@ class DemandController extends DemandAbstractActionController {
 		$campaign_id 		= $this->getRequest()->getQuery('markupcampaignid');
 		$campaign_markup 	= $this->getRequest()->getQuery('campaign-markup');
 
-		$AdCampainMarkupFactory = \_factory\AdCampainMarkup::get_instance();
+		$InsertionOrderMarkupFactory = \_factory\InsertionOrderMarkup::get_instance();
 		$params = array();
-		$params["AdCampaignID"] = $campaign_id;
-		$AdCampainMarkup = $AdCampainMarkupFactory->get_row($params);
+		$params["InsertionOrderID"] = $campaign_id;
+		$InsertionOrderMarkup = $InsertionOrderMarkupFactory->get_row($params);
 
 		$campaign_markup = floatval($campaign_markup) / 100;
 
@@ -227,17 +227,17 @@ class DemandController extends DemandAbstractActionController {
 
 		$campaign_markup = sprintf("%1.2f", $campaign_markup);
 
-		$_AdCampainMarkup = new \model\AdCampainMarkup();
-		$_AdCampainMarkup->AdCampaignID 	= $campaign_id;
-		$_AdCampainMarkup->MarkupRate 		= $campaign_markup;
+		$_InsertionOrderMarkup = new \model\InsertionOrderMarkup();
+		$_InsertionOrderMarkup->InsertionOrderID 	= $campaign_id;
+		$_InsertionOrderMarkup->MarkupRate 		= $campaign_markup;
 
-			if ($AdCampainMarkup != null):
+			if ($InsertionOrderMarkup != null):
 	
-				$AdCampainMarkupFactory->updateAdCampainMarkup($_AdCampainMarkup);
+				$InsertionOrderMarkupFactory->updateInsertionOrderMarkup($_InsertionOrderMarkup);
 	
 			else:
 	
-				$AdCampainMarkupFactory->insertAdCampainMarkup($_AdCampainMarkup);
+				$InsertionOrderMarkupFactory->insertInsertionOrderMarkup($_InsertionOrderMarkup);
 	
 			endif;
 
@@ -264,29 +264,29 @@ class DemandController extends DemandAbstractActionController {
 		endif;
 
 		// copy the preview campaign and its elements into the production campaign
-		$ad_campaign_id = \transformation\TransformPreview::cloneAdCampaignPreviewIntoAdCampaign($id, $this->auth, $this->config_handle);
+		$ad_campaign_id = \transformation\TransformPreview::cloneInsertionOrderPreviewIntoInsertionOrder($id, $this->auth, $this->config_handle);
 		// set the preview campaigns and its elements to inactive and mark the date and time they went live
 		\transformation\TransformPreview::deletePreviewModeCampaign($id, $this->auth, true);
 
-		$AdCampaignFactory = \_factory\AdCampaign::get_instance();
+		$InsertionOrderFactory = \_factory\InsertionOrder::get_instance();
 		$params = array();
-		$params["AdCampaignID"] = $ad_campaign_id;
-		$AdCampaign = $AdCampaignFactory->get_row($params);
+		$params["InsertionOrderID"] = $ad_campaign_id;
+		$InsertionOrder = $InsertionOrderFactory->get_row($params);
 		
-		if ($AdCampaign == null):
+		if ($InsertionOrder == null):
 			return $this->redirect()->toRoute('demand');
 		endif;
 		
         $authUsersFactory = \_factory\authUsers::get_instance();
         $params = array();
-        $params["user_id"] = $AdCampaign->UserID; 
+        $params["user_id"] = $InsertionOrder->UserID; 
         $auth_User = $authUsersFactory->get_row($params);
 		
         if ($auth_User !== null && $this->config_handle['mail']['subscribe']['user_ad_campaigns']):
 			// approval, send out email
-			$message = 'Your NginAd Exchange Demand Ad Campaign : ' . $AdCampaign->Name . ' was approved.<br /><br />Please login <a href="http://server.nginad.com/auth/login">here</a> with your email and password';
+			$message = 'Your NginAd Exchange Demand Ad Campaign : ' . $InsertionOrder->Name . ' was approved.<br /><br />Please login <a href="http://server.nginad.com/auth/login">here</a> with your email and password';
 			
-			$subject = "Your NginAd Exchange Demand Ad Campaign : " . $AdCampaign->Name . " was approved";
+			$subject = "Your NginAd Exchange Demand Ad Campaign : " . $InsertionOrder->Name . " was approved";
 			 
 			$transport = $this->getServiceLocator()->get('mail.transport');
 			 
@@ -322,7 +322,7 @@ class DemandController extends DemandAbstractActionController {
 		if ($initialized !== true) return $initialized;
 
 		// ACL PREVIEW PERMISSIONS CHECK
-		transformation\CheckPermissions::checkEditPermissionAdCampaignPreview($id, $this->auth, $this->config_handle);
+		transformation\CheckPermissions::checkEditPermissionInsertionOrderPreview($id, $this->auth, $this->config_handle);
 
 		// set the preview campaigns and its elements to inactive and mark the date and time they went live
 		\transformation\TransformPreview::deletePreviewModeCampaign($id, $this->auth, false);
@@ -349,17 +349,17 @@ class DemandController extends DemandAbstractActionController {
 			die("Invalid Campaign Preview ID");
 		endif;
 
-		$AdCampaignPreviewFactory = \_factory\AdCampaignPreview::get_instance();
+		$InsertionOrderPreviewFactory = \_factory\InsertionOrderPreview::get_instance();
 		$params = array();
-		$params["AdCampaignPreviewID"] = $id;
-		$AdCampaignPreview = $AdCampaignPreviewFactory->get_row($params);
+		$params["InsertionOrderPreviewID"] = $id;
+		$InsertionOrderPreview = $InsertionOrderPreviewFactory->get_row($params);
 		
-		if ($AdCampaignPreview == null):
-			die("AdCampaignPreviewID not found");
+		if ($InsertionOrderPreview == null):
+			die("InsertionOrderPreviewID not found");
 		endif;	
 		
-		$ad_campaign_preview_name = $AdCampaignPreview->Name;
-		$user_id = $AdCampaignPreview->UserID;
+		$ad_campaign_preview_name = $InsertionOrderPreview->Name;
+		$user_id = $InsertionOrderPreview->UserID;
 		
 		// set the preview campaigns and its elements to inactive and mark the date and time they went live
 		\transformation\TransformPreview::deletePreviewModeCampaign($id, $this->auth, false);
@@ -396,7 +396,7 @@ class DemandController extends DemandAbstractActionController {
 	}
 
 	/*
-	 * BEGIN NGINAD AdCampaignBannerRestrictions Actions
+	 * BEGIN NGINAD InsertionOrderLineItemRestrictions Actions
 	 */
 
 	/**
@@ -424,7 +424,7 @@ class DemandController extends DemandAbstractActionController {
 		if ($initialized !== true) return $initialized;
 
 		// ACL PERMISSIONS CHECK
-		//transformation\CheckPermissions::checkEditPermissionAdCampaignBanner($id, $auth, $config);
+		//transformation\CheckPermissions::checkEditPermissionInsertionOrderLineItem($id, $auth, $config);
 		$ispreview 				= $this->getRequest()->getQuery('ispreview');
 		
 		if ($ispreview != "true"):
@@ -433,11 +433,11 @@ class DemandController extends DemandAbstractActionController {
 			* IF NOT, IT CHECKS THE ACL PERMISSIONS ON THE PRODUCTION BANNER/CAMPAIGN REFERENCED
 			* THEN IT CREATES A PREVIEW VERSION OF THE AD CAMPAIGN
 			*/
-			$update_data = array('type'=>'AdCampaignBannerID', 'id'=>$id);
+			$update_data = array('type'=>'InsertionOrderLineItemID', 'id'=>$id);
 			$return_val = \transformation\TransformPreview::previewCheckBannerID($id, $this->auth, $this->config_handle, $this->getServiceLocator()->get('mail.transport'), $update_data);
 			
 			if ($return_val !== null):
-				$id = $return_val["AdCampaignBannerPreviewID"];
+				$id = $return_val["InsertionOrderLineItemPreviewID"];
 			else:
 				$success = false;
 				$data = array(
@@ -450,7 +450,7 @@ class DemandController extends DemandAbstractActionController {
 		
 		endif;
 		
-		$response = transformation\CheckPermissions::checkEditPermissionAdCampaignBannerPreview($id, $this->auth, $this->config_handle);
+		$response = transformation\CheckPermissions::checkEditPermissionInsertionOrderLineItemPreview($id, $this->auth, $this->config_handle);
 		
 		if(array_key_exists("error", $response) > 0):
 			$success = false;
@@ -462,22 +462,22 @@ class DemandController extends DemandAbstractActionController {
 	   	   return $this->getResponse()->setContent(json_encode($data));
 		endif;
 		
-		$AdCampaignBannerPreviewFactory = \_factory\AdCampaignBannerPreview::get_instance();
-		$AdCampaignVideoRestrictionsPreviewFactory = \_factory\AdCampaignVideoRestrictionsPreview::get_instance();
-		$AdCampaignBannerRestrictionsPreviewFactory = \_factory\AdCampaignBannerRestrictionsPreview::get_instance();
+		$InsertionOrderLineItemPreviewFactory = \_factory\InsertionOrderLineItemPreview::get_instance();
+		$InsertionOrderLineItemVideoRestrictionsPreviewFactory = \_factory\InsertionOrderLineItemVideoRestrictionsPreview::get_instance();
+		$InsertionOrderLineItemRestrictionsPreviewFactory = \_factory\InsertionOrderLineItemRestrictionsPreview::get_instance();
 		
-		$AdCampaignBannerRestrictionsPreviewFactory->deleteAdCampaignBannerRestrictionsPreview($id);
-		$AdCampaignVideoRestrictionsPreviewFactory->deleteAdCampaignVideoRestrictionsPreview($id);
+		$InsertionOrderLineItemRestrictionsPreviewFactory->deleteInsertionOrderLineItemRestrictionsPreview($id);
+		$InsertionOrderLineItemVideoRestrictionsPreviewFactory->deleteInsertionOrderLineItemVideoRestrictionsPreview($id);
 		
 		$params = array();
-		$params["AdCampaignBannerPreviewID"] = $id;
-		$AdCampaignBannerPreview = $AdCampaignBannerPreviewFactory->get_row($params);
+		$params["InsertionOrderLineItemPreviewID"] = $id;
+		$InsertionOrderLineItemPreview = $InsertionOrderLineItemPreviewFactory->get_row($params);
 		
 		$success = true;
 		$data = array(
 		     'success' => $success,
 			 'location' => '/demand/viewbanner/',
-			 'previewid' => $AdCampaignBannerPreview->AdCampaignPreviewID,
+			 'previewid' => $InsertionOrderLineItemPreview->InsertionOrderPreviewID,
 		     'data' => array('error_msg' => $error_msg)
 	   	);
    		 
@@ -506,17 +506,17 @@ class DemandController extends DemandAbstractActionController {
 			* IF NOT, IT CHECKS THE ACL PERMISSIONS ON THE PRODUCTION BANNER/CAMPAIGN REFERENCED
 			* THEN IT CREATES A PREVIEW VERSION OF THE AD CAMPAIGN
 			*/
-			$update_data = array('type'=>'AdCampaignBannerID', 'id'=>$bannerid);
+			$update_data = array('type'=>'InsertionOrderLineItemID', 'id'=>$bannerid);
 			$return_val = \transformation\TransformPreview::previewCheckBannerID($bannerid, $this->auth, $this->config_handle, $this->getServiceLocator()->get('mail.transport'), $update_data);
 		
 			if ($return_val !== null):
-				$banner_preview_id = $return_val["AdCampaignBannerPreviewID"];
+				$banner_preview_id = $return_val["InsertionOrderLineItemPreviewID"];
 			endif;
 		
 		endif;
 	
 		// ACL PREVIEW PERMISSIONS CHECK
-		transformation\CheckPermissions::checkEditPermissionAdCampaignBannerPreview($banner_preview_id, $this->auth, $this->config_handle);
+		transformation\CheckPermissions::checkEditPermissionInsertionOrderLineItemPreview($banner_preview_id, $this->auth, $this->config_handle);
 
 		$start_delay 				= $this->getRequest()->getPost("StartDelay");
 			
@@ -606,21 +606,21 @@ class DemandController extends DemandAbstractActionController {
 		
 		endif;
 	
-		$AdCampaignVideoRestrictionsPreviewFactory = \_factory\AdCampaignVideoRestrictionsPreview::get_instance();
+		$InsertionOrderLineItemVideoRestrictionsPreviewFactory = \_factory\InsertionOrderLineItemVideoRestrictionsPreview::get_instance();
 		$params = array();
-		$params["AdCampaignBannerPreviewID"] = $banner_preview_id;
+		$params["InsertionOrderLineItemPreviewID"] = $banner_preview_id;
 	
-		$AdCampaignVideoRestrictionsPreview = $AdCampaignVideoRestrictionsPreviewFactory->get_row($params);
+		$InsertionOrderLineItemVideoRestrictionsPreview = $InsertionOrderLineItemVideoRestrictionsPreviewFactory->get_row($params);
 	
-		$VideoRestrictionsPreview = new \model\AdCampaignVideoRestrictionsPreview();
+		$VideoRestrictionsPreview = new \model\InsertionOrderLineItemVideoRestrictionsPreview();
 	
-		if ($AdCampaignVideoRestrictionsPreview != null):
+		if ($InsertionOrderLineItemVideoRestrictionsPreview != null):
 	
-			$VideoRestrictionsPreview->AdCampaignVideoRestrictionsPreviewID            = $AdCampaignVideoRestrictionsPreview->AdCampaignVideoRestrictionsPreviewID;
+			$VideoRestrictionsPreview->InsertionOrderLineItemVideoRestrictionsPreviewID            = $InsertionOrderLineItemVideoRestrictionsPreview->InsertionOrderLineItemVideoRestrictionsPreviewID;
 	
 		endif;
 	
-		$VideoRestrictionsPreview->AdCampaignBannerPreviewID                = $banner_preview_id;
+		$VideoRestrictionsPreview->InsertionOrderLineItemPreviewID                = $banner_preview_id;
 		$VideoRestrictionsPreview->Vertical                                 = trim($vertical);
 		$VideoRestrictionsPreview->GeoCountry                               = trim($geocountry);
 		$VideoRestrictionsPreview->GeoState                                 = trim($geostate);
@@ -643,16 +643,16 @@ class DemandController extends DemandAbstractActionController {
 		$VideoRestrictionsPreview->DateCreated                              = date("Y-m-d H:i:s");
 		$VideoRestrictionsPreview->DateUpdated                              = date("Y-m-d H:i:s");
 
-		$AdCampaignVideoRestrictionsPreviewFactory = \_factory\AdCampaignVideoRestrictionsPreview::get_instance();
-		$AdCampaignVideoRestrictionsPreviewFactory->saveAdCampaignVideoRestrictionsPreview($VideoRestrictionsPreview);
+		$InsertionOrderLineItemVideoRestrictionsPreviewFactory = \_factory\InsertionOrderLineItemVideoRestrictionsPreview::get_instance();
+		$InsertionOrderLineItemVideoRestrictionsPreviewFactory->saveInsertionOrderLineItemVideoRestrictionsPreview($VideoRestrictionsPreview);
 	
-		$AdCampaignBannerPreviewFactory = \_factory\AdCampaignBannerPreview::get_instance();
+		$InsertionOrderLineItemPreviewFactory = \_factory\InsertionOrderLineItemPreview::get_instance();
 		$params = array();
-		$params["AdCampaignBannerPreviewID"] = $banner_preview_id;
+		$params["InsertionOrderLineItemPreviewID"] = $banner_preview_id;
 	
-		$AdCampaignBannerPreview = $AdCampaignBannerPreviewFactory->get_row($params);
+		$InsertionOrderLineItemPreview = $InsertionOrderLineItemPreviewFactory->get_row($params);
 	
-		$refresh_url = "/demand/viewbanner/" . $AdCampaignBannerPreview->AdCampaignPreviewID . "?ispreview=true";
+		$refresh_url = "/demand/viewbanner/" . $InsertionOrderLineItemPreview->InsertionOrderPreviewID . "?ispreview=true";
 		$viewModel = new ViewModel(array('refresh_url' => $refresh_url));
 	
 		return $viewModel->setTemplate('dashboard-manager/demand/interstitial.phtml');
@@ -683,17 +683,17 @@ class DemandController extends DemandAbstractActionController {
 				* IF NOT, IT CHECKS THE ACL PERMISSIONS ON THE PRODUCTION BANNER/CAMPAIGN REFERENCED
 				* THEN IT CREATES A PREVIEW VERSION OF THE AD CAMPAIGN
 				*/
-				$update_data = array('type'=>'AdCampaignBannerID', 'id'=>$bannerid);
+				$update_data = array('type'=>'InsertionOrderLineItemID', 'id'=>$bannerid);
 				$return_val = \transformation\TransformPreview::previewCheckBannerID($bannerid, $this->auth, $this->config_handle, $this->getServiceLocator()->get('mail.transport'), $update_data);
 	
 				if ($return_val !== null):
-					$banner_preview_id = $return_val["AdCampaignBannerPreviewID"];
+					$banner_preview_id = $return_val["InsertionOrderLineItemPreviewID"];
 				endif;
 	
 			endif;
 
 		// ACL PREVIEW PERMISSIONS CHECK
-		transformation\CheckPermissions::checkEditPermissionAdCampaignBannerPreview($banner_preview_id, $this->auth, $this->config_handle);
+		transformation\CheckPermissions::checkEditPermissionInsertionOrderLineItemPreview($banner_preview_id, $this->auth, $this->config_handle);
 
 		$vertical = $this->getRequest()->getPost('vertical');
 		$geocountry = $this->getRequest()->getPost('geocountry');
@@ -761,21 +761,21 @@ class DemandController extends DemandAbstractActionController {
 	
 			endif;
 
-		$AdCampaignBannerRestrictionsPreviewFactory = \_factory\AdCampaignBannerRestrictionsPreview::get_instance();
+		$InsertionOrderLineItemRestrictionsPreviewFactory = \_factory\InsertionOrderLineItemRestrictionsPreview::get_instance();
 		$params = array();
-		$params["AdCampaignBannerPreviewID"] = $banner_preview_id;
+		$params["InsertionOrderLineItemPreviewID"] = $banner_preview_id;
 
-		$AdCampaignBannerRestrictionsPreview = $AdCampaignBannerRestrictionsPreviewFactory->get_row($params);
+		$InsertionOrderLineItemRestrictionsPreview = $InsertionOrderLineItemRestrictionsPreviewFactory->get_row($params);
 
-		$BannerRestrictionsPreview = new \model\AdCampaignBannerRestrictionsPreview();
+		$BannerRestrictionsPreview = new \model\InsertionOrderLineItemRestrictionsPreview();
 
-			if ($AdCampaignBannerRestrictionsPreview != null):
+			if ($InsertionOrderLineItemRestrictionsPreview != null):
 	
-			      $BannerRestrictionsPreview->AdCampaignBannerRestrictionsPreviewID            = $AdCampaignBannerRestrictionsPreview->AdCampaignBannerRestrictionsPreviewID;
+			      $BannerRestrictionsPreview->InsertionOrderLineItemRestrictionsPreviewID            = $InsertionOrderLineItemRestrictionsPreview->InsertionOrderLineItemRestrictionsPreviewID;
 	
 			endif;
 
-		$BannerRestrictionsPreview->AdCampaignBannerPreviewID                       = $banner_preview_id;
+		$BannerRestrictionsPreview->InsertionOrderLineItemPreviewID                       = $banner_preview_id;
 		$BannerRestrictionsPreview->GeoCountry                               = trim($geocountry);
 		$BannerRestrictionsPreview->GeoState                                 = trim($geostate);
 		$BannerRestrictionsPreview->GeoCity                                  = trim($geocity);
@@ -803,16 +803,16 @@ class DemandController extends DemandAbstractActionController {
 		$BannerRestrictionsPreview->DateCreated                              = date("Y-m-d H:i:s");
 		$BannerRestrictionsPreview->DateUpdated                              = date("Y-m-d H:i:s");
 
-		$AdCampaignBannerRestrictionsPreviewFactory = \_factory\AdCampaignBannerRestrictionsPreview::get_instance();
-		$AdCampaignBannerRestrictionsPreviewFactory->saveAdCampaignBannerRestrictionsPreview($BannerRestrictionsPreview);
+		$InsertionOrderLineItemRestrictionsPreviewFactory = \_factory\InsertionOrderLineItemRestrictionsPreview::get_instance();
+		$InsertionOrderLineItemRestrictionsPreviewFactory->saveInsertionOrderLineItemRestrictionsPreview($BannerRestrictionsPreview);
 
-		$AdCampaignBannerPreviewFactory = \_factory\AdCampaignBannerPreview::get_instance();
+		$InsertionOrderLineItemPreviewFactory = \_factory\InsertionOrderLineItemPreview::get_instance();
 		$params = array();
-		$params["AdCampaignBannerPreviewID"] = $banner_preview_id;
+		$params["InsertionOrderLineItemPreviewID"] = $banner_preview_id;
 
-		$AdCampaignBannerPreview = $AdCampaignBannerPreviewFactory->get_row($params);
+		$InsertionOrderLineItemPreview = $InsertionOrderLineItemPreviewFactory->get_row($params);
 
-		$refresh_url = "/demand/viewbanner/" . $AdCampaignBannerPreview->AdCampaignPreviewID . "?ispreview=true";
+		$refresh_url = "/demand/viewbanner/" . $InsertionOrderLineItemPreview->InsertionOrderPreviewID . "?ispreview=true";
 		$viewModel = new ViewModel(array('refresh_url' => $refresh_url));
 
 		return $viewModel->setTemplate('dashboard-manager/demand/interstitial.phtml');
@@ -840,36 +840,36 @@ class DemandController extends DemandAbstractActionController {
 	
 		if ($is_preview == true):
 			// ACL PREVIEW PERMISSIONS CHECK
-			transformation\CheckPermissions::checkEditPermissionAdCampaignBannerPreview($id, $this->auth, $this->config_handle);
+			transformation\CheckPermissions::checkEditPermissionInsertionOrderLineItemPreview($id, $this->auth, $this->config_handle);
 		
-			$AdCampaignVideoRestrictionsPreviewFactory = \_factory\AdCampaignVideoRestrictionsPreview::get_instance();
+			$InsertionOrderLineItemVideoRestrictionsPreviewFactory = \_factory\InsertionOrderLineItemVideoRestrictionsPreview::get_instance();
 			$params = array();
-			$params["AdCampaignBannerPreviewID"] = $id;
+			$params["InsertionOrderLineItemPreviewID"] = $id;
 			$banner_preview_id = $id;
 			$id = "";
-			$AdCampaignVideoRestrictions = $AdCampaignVideoRestrictionsPreviewFactory->get_row($params);
+			$InsertionOrderLineItemVideoRestrictions = $InsertionOrderLineItemVideoRestrictionsPreviewFactory->get_row($params);
 		
-			$AdCampaignBannerPreviewFactory = \_factory\AdCampaignBannerPreview::get_instance();
+			$InsertionOrderLineItemPreviewFactory = \_factory\InsertionOrderLineItemPreview::get_instance();
 			$params = array();
-			$params["AdCampaignBannerPreviewID"] = $banner_preview_id;
-			$AdCampaignBannerPreview = $AdCampaignBannerPreviewFactory->get_row($params);
-			$campaign_preview_id = $AdCampaignBannerPreview->AdCampaignPreviewID;
+			$params["InsertionOrderLineItemPreviewID"] = $banner_preview_id;
+			$InsertionOrderLineItemPreview = $InsertionOrderLineItemPreviewFactory->get_row($params);
+			$campaign_preview_id = $InsertionOrderLineItemPreview->InsertionOrderPreviewID;
 		
 		else:
 			// ACL PERMISSIONS CHECK
-			transformation\CheckPermissions::checkEditPermissionAdCampaignBanner($id, $this->auth, $this->config_handle);
+			transformation\CheckPermissions::checkEditPermissionInsertionOrderLineItem($id, $this->auth, $this->config_handle);
 		
-			$AdCampaignVideoRestrictionsFactory = \_factory\AdCampaignVideoRestrictions::get_instance();
+			$InsertionOrderLineItemVideoRestrictionsFactory = \_factory\InsertionOrderLineItemVideoRestrictions::get_instance();
 			$params = array();
-			$params["AdCampaignBannerID"] = $id;
+			$params["InsertionOrderLineItemID"] = $id;
 		
-			$AdCampaignVideoRestrictions = $AdCampaignVideoRestrictionsFactory->get_row($params);
+			$InsertionOrderLineItemVideoRestrictions = $InsertionOrderLineItemVideoRestrictionsFactory->get_row($params);
 		
-			$AdCampaignBannerFactory = \_factory\AdCampaignBanner::get_instance();
+			$InsertionOrderLineItemFactory = \_factory\InsertionOrderLineItem::get_instance();
 			$params = array();
-			$params["AdCampaignBannerID"] = $id;
-			$AdCampaignBanner = $AdCampaignBannerFactory->get_row($params);
-			$campaign_id = $AdCampaignBanner->AdCampaignID;
+			$params["InsertionOrderLineItemID"] = $id;
+			$InsertionOrderLineItem = $InsertionOrderLineItemFactory->get_row($params);
+			$campaign_id = $InsertionOrderLineItem->InsertionOrderID;
 		endif;
 	
 		$current_states 				= "";
@@ -904,33 +904,33 @@ class DemandController extends DemandAbstractActionController {
 		$current_playback_methods_raw 	= "";
 		$current_vertical_raw 			= "";
 		
-		if ($AdCampaignVideoRestrictions != null):
+		if ($InsertionOrderLineItemVideoRestrictions != null):
 		
-			$current_foldpos = $AdCampaignVideoRestrictions->Vertical == null ? "" : $AdCampaignVideoRestrictions->Vertical;
-			$current_states = $AdCampaignVideoRestrictions->GeoState == null ? "" : $AdCampaignVideoRestrictions->GeoState;
-			$current_country = $AdCampaignVideoRestrictions->GeoCountry == null ? "" : $AdCampaignVideoRestrictions->GeoCountry;
-			$geocity_option = $AdCampaignVideoRestrictions->GeoCity == null ? "" : $AdCampaignVideoRestrictions->GeoCity;
+			$current_foldpos = $InsertionOrderLineItemVideoRestrictions->Vertical == null ? "" : $InsertionOrderLineItemVideoRestrictions->Vertical;
+			$current_states = $InsertionOrderLineItemVideoRestrictions->GeoState == null ? "" : $InsertionOrderLineItemVideoRestrictions->GeoState;
+			$current_country = $InsertionOrderLineItemVideoRestrictions->GeoCountry == null ? "" : $InsertionOrderLineItemVideoRestrictions->GeoCountry;
+			$geocity_option = $InsertionOrderLineItemVideoRestrictions->GeoCity == null ? "" : $InsertionOrderLineItemVideoRestrictions->GeoCity;
 			
-			$current_mimes_raw = $AdCampaignVideoRestrictions->MimesCommaSeparated == null ? "" : $AdCampaignVideoRestrictions->MimesCommaSeparated;
-			$current_apis_supported_raw = $AdCampaignVideoRestrictions->ApisSupportedCommaSeparated == null ? "" : $AdCampaignVideoRestrictions->ApisSupportedCommaSeparated;
-			$current_protocols_raw = $AdCampaignVideoRestrictions->ProtocolsCommaSeparated == null ? "" : $AdCampaignVideoRestrictions->ProtocolsCommaSeparated;
-			$current_delivery_methods_raw = $AdCampaignVideoRestrictions->DeliveryCommaSeparated == null ? "" : $AdCampaignVideoRestrictions->DeliveryCommaSeparated;
-			$current_playback_methods_raw = $AdCampaignVideoRestrictions->PlaybackCommaSeparated == null ? "" : $AdCampaignVideoRestrictions->PlaybackCommaSeparated;
+			$current_mimes_raw = $InsertionOrderLineItemVideoRestrictions->MimesCommaSeparated == null ? "" : $InsertionOrderLineItemVideoRestrictions->MimesCommaSeparated;
+			$current_apis_supported_raw = $InsertionOrderLineItemVideoRestrictions->ApisSupportedCommaSeparated == null ? "" : $InsertionOrderLineItemVideoRestrictions->ApisSupportedCommaSeparated;
+			$current_protocols_raw = $InsertionOrderLineItemVideoRestrictions->ProtocolsCommaSeparated == null ? "" : $InsertionOrderLineItemVideoRestrictions->ProtocolsCommaSeparated;
+			$current_delivery_methods_raw = $InsertionOrderLineItemVideoRestrictions->DeliveryCommaSeparated == null ? "" : $InsertionOrderLineItemVideoRestrictions->DeliveryCommaSeparated;
+			$current_playback_methods_raw = $InsertionOrderLineItemVideoRestrictions->PlaybackCommaSeparated == null ? "" : $InsertionOrderLineItemVideoRestrictions->PlaybackCommaSeparated;
 			
-			$current_start_delay = $AdCampaignVideoRestrictions->StartDelay == null ? "" : $AdCampaignVideoRestrictions->StartDelay;
-			$current_linearity = $AdCampaignVideoRestrictions->Linearity == null ? "" : $AdCampaignVideoRestrictions->Linearity;
-			$current_fold_pos = $AdCampaignVideoRestrictions->FoldPos == null ? "" : $AdCampaignVideoRestrictions->FoldPos;
+			$current_start_delay = $InsertionOrderLineItemVideoRestrictions->StartDelay == null ? "" : $InsertionOrderLineItemVideoRestrictions->StartDelay;
+			$current_linearity = $InsertionOrderLineItemVideoRestrictions->Linearity == null ? "" : $InsertionOrderLineItemVideoRestrictions->Linearity;
+			$current_fold_pos = $InsertionOrderLineItemVideoRestrictions->FoldPos == null ? "" : $InsertionOrderLineItemVideoRestrictions->FoldPos;
 
-			$current_min_duration = $AdCampaignVideoRestrictions->MinDuration == null ? "" : $AdCampaignVideoRestrictions->MinDuration;
-			$current_max_duration = $AdCampaignVideoRestrictions->MaxDuration == null ? "" : $AdCampaignVideoRestrictions->MaxDuration;
+			$current_min_duration = $InsertionOrderLineItemVideoRestrictions->MinDuration == null ? "" : $InsertionOrderLineItemVideoRestrictions->MinDuration;
+			$current_max_duration = $InsertionOrderLineItemVideoRestrictions->MaxDuration == null ? "" : $InsertionOrderLineItemVideoRestrictions->MaxDuration;
 			
-			$current_min_height = $AdCampaignVideoRestrictions->MinHeight == null ? "" : $AdCampaignVideoRestrictions->MinHeight;
-			$current_min_width = $AdCampaignVideoRestrictions->MinWidth == null ? "" : $AdCampaignVideoRestrictions->MinWidth;
+			$current_min_height = $InsertionOrderLineItemVideoRestrictions->MinHeight == null ? "" : $InsertionOrderLineItemVideoRestrictions->MinHeight;
+			$current_min_width = $InsertionOrderLineItemVideoRestrictions->MinWidth == null ? "" : $InsertionOrderLineItemVideoRestrictions->MinWidth;
 
-			$current_pmpenable = $AdCampaignVideoRestrictions->PmpEnable == null ? "" : $AdCampaignVideoRestrictions->PmpEnable;
-			$current_secure = $AdCampaignVideoRestrictions->Secure == null ? "" : $AdCampaignVideoRestrictions->Secure;
-			$current_optout = $AdCampaignVideoRestrictions->Optout == null ? "" : $AdCampaignVideoRestrictions->Optout;
-			$current_vertical_raw = $AdCampaignVideoRestrictions->Vertical == null ? "" : $AdCampaignVideoRestrictions->Vertical;
+			$current_pmpenable = $InsertionOrderLineItemVideoRestrictions->PmpEnable == null ? "" : $InsertionOrderLineItemVideoRestrictions->PmpEnable;
+			$current_secure = $InsertionOrderLineItemVideoRestrictions->Secure == null ? "" : $InsertionOrderLineItemVideoRestrictions->Secure;
+			$current_optout = $InsertionOrderLineItemVideoRestrictions->Optout == null ? "" : $InsertionOrderLineItemVideoRestrictions->Optout;
+			$current_vertical_raw = $InsertionOrderLineItemVideoRestrictions->Vertical == null ? "" : $InsertionOrderLineItemVideoRestrictions->Vertical;
 			
 		endif;
 	
@@ -1077,36 +1077,36 @@ class DemandController extends DemandAbstractActionController {
 
 			if ($is_preview == true):
 				// ACL PREVIEW PERMISSIONS CHECK
-				transformation\CheckPermissions::checkEditPermissionAdCampaignBannerPreview($id, $this->auth, $this->config_handle);
+				transformation\CheckPermissions::checkEditPermissionInsertionOrderLineItemPreview($id, $this->auth, $this->config_handle);
 	
-				$AdCampaignBannerRestrictionsPreviewFactory = \_factory\AdCampaignBannerRestrictionsPreview::get_instance();
+				$InsertionOrderLineItemRestrictionsPreviewFactory = \_factory\InsertionOrderLineItemRestrictionsPreview::get_instance();
 				$params = array();
-				$params["AdCampaignBannerPreviewID"] = $id;
+				$params["InsertionOrderLineItemPreviewID"] = $id;
 				$banner_preview_id = $id;
 				$id = "";
-				$AdCampaignBannerRestrictions = $AdCampaignBannerRestrictionsPreviewFactory->get_row($params);
+				$InsertionOrderLineItemRestrictions = $InsertionOrderLineItemRestrictionsPreviewFactory->get_row($params);
 	
-				$AdCampaignBannerPreviewFactory = \_factory\AdCampaignBannerPreview::get_instance();
+				$InsertionOrderLineItemPreviewFactory = \_factory\InsertionOrderLineItemPreview::get_instance();
 				$params = array();
-				$params["AdCampaignBannerPreviewID"] = $banner_preview_id;
-				$AdCampaignBannerPreview = $AdCampaignBannerPreviewFactory->get_row($params);
-				$campaign_preview_id = $AdCampaignBannerPreview->AdCampaignPreviewID;
+				$params["InsertionOrderLineItemPreviewID"] = $banner_preview_id;
+				$InsertionOrderLineItemPreview = $InsertionOrderLineItemPreviewFactory->get_row($params);
+				$campaign_preview_id = $InsertionOrderLineItemPreview->InsertionOrderPreviewID;
 	
 			else:
 				// ACL PERMISSIONS CHECK
-				transformation\CheckPermissions::checkEditPermissionAdCampaignBanner($id, $this->auth, $this->config_handle);
+				transformation\CheckPermissions::checkEditPermissionInsertionOrderLineItem($id, $this->auth, $this->config_handle);
 	
-				$AdCampaignBannerRestrictionsFactory = \_factory\AdCampaignBannerRestrictions::get_instance();
+				$InsertionOrderLineItemRestrictionsFactory = \_factory\InsertionOrderLineItemRestrictions::get_instance();
 				$params = array();
-				$params["AdCampaignBannerID"] = $id;
+				$params["InsertionOrderLineItemID"] = $id;
 	
-				$AdCampaignBannerRestrictions = $AdCampaignBannerRestrictionsFactory->get_row($params);
+				$InsertionOrderLineItemRestrictions = $InsertionOrderLineItemRestrictionsFactory->get_row($params);
 	
-				$AdCampaignBannerFactory = \_factory\AdCampaignBanner::get_instance();
+				$InsertionOrderLineItemFactory = \_factory\InsertionOrderLineItem::get_instance();
 				$params = array();
-				$params["AdCampaignBannerID"] = $id;
-				$AdCampaignBanner = $AdCampaignBannerFactory->get_row($params);
-				$campaign_id = $AdCampaignBanner->AdCampaignID;
+				$params["InsertionOrderLineItemID"] = $id;
+				$InsertionOrderLineItem = $InsertionOrderLineItemFactory->get_row($params);
+				$campaign_id = $InsertionOrderLineItem->InsertionOrderID;
 			endif;
 
 		$current_states = "";
@@ -1135,32 +1135,32 @@ class DemandController extends DemandAbstractActionController {
 		$current_vertical = array();
 
 
-		if ($AdCampaignBannerRestrictions != null):
+		if ($InsertionOrderLineItemRestrictions != null):
 
-    		$current_states = $AdCampaignBannerRestrictions->GeoState == null ? "" : $AdCampaignBannerRestrictions->GeoState;
-    		$current_country = $AdCampaignBannerRestrictions->GeoCountry == null ? "" : $AdCampaignBannerRestrictions->GeoCountry;
-    		$current_foldpos = $AdCampaignBannerRestrictions->FoldPos == null ? "" : $AdCampaignBannerRestrictions->FoldPos;
-    		$frequency_option = $AdCampaignBannerRestrictions->Freq == null ? "" : $AdCampaignBannerRestrictions->Freq;
-    		$geocity_option = $AdCampaignBannerRestrictions->GeoCity == null ? "" : $AdCampaignBannerRestrictions->GeoCity;
-    		$adpositionminleft_option = $AdCampaignBannerRestrictions->AdPositionMinLeft == null ? "" : $AdCampaignBannerRestrictions->AdPositionMinLeft;
-    		$adpositionmaxleft_option = $AdCampaignBannerRestrictions->AdPositionMaxLeft == null ? "" : $AdCampaignBannerRestrictions->AdPositionMaxLeft;
-    		$adpositionmintop_option = $AdCampaignBannerRestrictions->AdPositionMinTop == null ? "" : $AdCampaignBannerRestrictions->AdPositionMinTop;
-    		$adpositionmaxtop_option = $AdCampaignBannerRestrictions->AdPositionMaxTop == null ? "" : $AdCampaignBannerRestrictions->AdPositionMaxTop;
-    		$current_timezone = $AdCampaignBannerRestrictions->Timezone == null ? "" : $AdCampaignBannerRestrictions->Timezone;
-    		$current_adtagtype = $AdCampaignBannerRestrictions->AdTagType == null ? "" : $AdCampaignBannerRestrictions->AdTagType;
-    		$current_iniframe = $AdCampaignBannerRestrictions->InIframe == null ? "" : $AdCampaignBannerRestrictions->InIframe;
-    		$current_inmultiplenestediframes = $AdCampaignBannerRestrictions->InMultipleNestedIframes == null ? "" : $AdCampaignBannerRestrictions->InMultipleNestedIframes;
-    		$minscreenresolutionwidth_option = $AdCampaignBannerRestrictions->MinScreenResolutionWidth == null ? "" : $AdCampaignBannerRestrictions->MinScreenResolutionWidth;
-    		$maxscreenresolutionwidth_option = $AdCampaignBannerRestrictions->MaxScreenResolutionWidth == null ? "" : $AdCampaignBannerRestrictions->MaxScreenResolutionWidth;
-    		$minscreenresolutionheight_option = $AdCampaignBannerRestrictions->MinScreenResolutionHeight == null ? "" : $AdCampaignBannerRestrictions->MinScreenResolutionHeight;
-    		$maxscreenresolutionheight_option = $AdCampaignBannerRestrictions->MaxScreenResolutionHeight == null ? "" : $AdCampaignBannerRestrictions->MaxScreenResolutionHeight;
-    		$httplanguage_option = $AdCampaignBannerRestrictions->HttpLanguage == null ? "" : $AdCampaignBannerRestrictions->HttpLanguage;
-    		$browseruseragentgrep_option = $AdCampaignBannerRestrictions->BrowserUserAgentGrep == null ? "" : $AdCampaignBannerRestrictions->BrowserUserAgentGrep;
-    		$cookiegrep_option = $AdCampaignBannerRestrictions->CookieGrep == null ? "" : $AdCampaignBannerRestrictions->CookieGrep;
-    		$current_pmpenable = $AdCampaignBannerRestrictions->PmpEnable == null ? "" : $AdCampaignBannerRestrictions->PmpEnable;
-    		$current_secure = $AdCampaignBannerRestrictions->Secure == null ? "" : $AdCampaignBannerRestrictions->Secure;
-    		$current_optout = $AdCampaignBannerRestrictions->Optout == null ? "" : $AdCampaignBannerRestrictions->Optout;
-    		$current_vertical = $AdCampaignBannerRestrictions->Vertical == null ? "" : $AdCampaignBannerRestrictions->Vertical;
+    		$current_states = $InsertionOrderLineItemRestrictions->GeoState == null ? "" : $InsertionOrderLineItemRestrictions->GeoState;
+    		$current_country = $InsertionOrderLineItemRestrictions->GeoCountry == null ? "" : $InsertionOrderLineItemRestrictions->GeoCountry;
+    		$current_foldpos = $InsertionOrderLineItemRestrictions->FoldPos == null ? "" : $InsertionOrderLineItemRestrictions->FoldPos;
+    		$frequency_option = $InsertionOrderLineItemRestrictions->Freq == null ? "" : $InsertionOrderLineItemRestrictions->Freq;
+    		$geocity_option = $InsertionOrderLineItemRestrictions->GeoCity == null ? "" : $InsertionOrderLineItemRestrictions->GeoCity;
+    		$adpositionminleft_option = $InsertionOrderLineItemRestrictions->AdPositionMinLeft == null ? "" : $InsertionOrderLineItemRestrictions->AdPositionMinLeft;
+    		$adpositionmaxleft_option = $InsertionOrderLineItemRestrictions->AdPositionMaxLeft == null ? "" : $InsertionOrderLineItemRestrictions->AdPositionMaxLeft;
+    		$adpositionmintop_option = $InsertionOrderLineItemRestrictions->AdPositionMinTop == null ? "" : $InsertionOrderLineItemRestrictions->AdPositionMinTop;
+    		$adpositionmaxtop_option = $InsertionOrderLineItemRestrictions->AdPositionMaxTop == null ? "" : $InsertionOrderLineItemRestrictions->AdPositionMaxTop;
+    		$current_timezone = $InsertionOrderLineItemRestrictions->Timezone == null ? "" : $InsertionOrderLineItemRestrictions->Timezone;
+    		$current_adtagtype = $InsertionOrderLineItemRestrictions->AdTagType == null ? "" : $InsertionOrderLineItemRestrictions->AdTagType;
+    		$current_iniframe = $InsertionOrderLineItemRestrictions->InIframe == null ? "" : $InsertionOrderLineItemRestrictions->InIframe;
+    		$current_inmultiplenestediframes = $InsertionOrderLineItemRestrictions->InMultipleNestedIframes == null ? "" : $InsertionOrderLineItemRestrictions->InMultipleNestedIframes;
+    		$minscreenresolutionwidth_option = $InsertionOrderLineItemRestrictions->MinScreenResolutionWidth == null ? "" : $InsertionOrderLineItemRestrictions->MinScreenResolutionWidth;
+    		$maxscreenresolutionwidth_option = $InsertionOrderLineItemRestrictions->MaxScreenResolutionWidth == null ? "" : $InsertionOrderLineItemRestrictions->MaxScreenResolutionWidth;
+    		$minscreenresolutionheight_option = $InsertionOrderLineItemRestrictions->MinScreenResolutionHeight == null ? "" : $InsertionOrderLineItemRestrictions->MinScreenResolutionHeight;
+    		$maxscreenresolutionheight_option = $InsertionOrderLineItemRestrictions->MaxScreenResolutionHeight == null ? "" : $InsertionOrderLineItemRestrictions->MaxScreenResolutionHeight;
+    		$httplanguage_option = $InsertionOrderLineItemRestrictions->HttpLanguage == null ? "" : $InsertionOrderLineItemRestrictions->HttpLanguage;
+    		$browseruseragentgrep_option = $InsertionOrderLineItemRestrictions->BrowserUserAgentGrep == null ? "" : $InsertionOrderLineItemRestrictions->BrowserUserAgentGrep;
+    		$cookiegrep_option = $InsertionOrderLineItemRestrictions->CookieGrep == null ? "" : $InsertionOrderLineItemRestrictions->CookieGrep;
+    		$current_pmpenable = $InsertionOrderLineItemRestrictions->PmpEnable == null ? "" : $InsertionOrderLineItemRestrictions->PmpEnable;
+    		$current_secure = $InsertionOrderLineItemRestrictions->Secure == null ? "" : $InsertionOrderLineItemRestrictions->Secure;
+    		$current_optout = $InsertionOrderLineItemRestrictions->Optout == null ? "" : $InsertionOrderLineItemRestrictions->Optout;
+    		$current_vertical = $InsertionOrderLineItemRestrictions->Vertical == null ? "" : $InsertionOrderLineItemRestrictions->Vertical;
 
 		endif;
 
@@ -1244,11 +1244,11 @@ class DemandController extends DemandAbstractActionController {
 	}
 
 	/*
-	 * END NGINAD AdCampaignBannerRestrictions Actions
+	 * END NGINAD InsertionOrderLineItemRestrictions Actions
 	*/
 
 	/*
-	 * BEGIN NGINAD AdCampaignBannerDomainExclusiveInclusion Actions
+	 * BEGIN NGINAD InsertionOrderLineItemDomainExclusiveInclusion Actions
 	*/
 
 	/**
@@ -1277,37 +1277,37 @@ class DemandController extends DemandAbstractActionController {
 
 		if ($is_preview == true):
 			// ACL PREVIEW PERMISSIONS CHECK
-			transformation\CheckPermissions::checkEditPermissionAdCampaignBannerPreview($id, $this->auth, $this->config_handle);
+			transformation\CheckPermissions::checkEditPermissionInsertionOrderLineItemPreview($id, $this->auth, $this->config_handle);
 
-			$AdCampaignBannerDomainExclusiveInclusionPreviewFactory = \_factory\AdCampaignBannerDomainExclusiveInclusionPreview::get_instance();
+			$InsertionOrderLineItemDomainExclusiveInclusionPreviewFactory = \_factory\InsertionOrderLineItemDomainExclusiveInclusionPreview::get_instance();
 			$params = array();
-			$params["AdCampaignBannerPreviewID"] = $id;
+			$params["InsertionOrderLineItemPreviewID"] = $id;
 			$banner_preview_id = $id;
 			$id = "";
-			$rtb_domain_exclusive_inclusions = $AdCampaignBannerDomainExclusiveInclusionPreviewFactory->get($params);
+			$rtb_domain_exclusive_inclusions = $InsertionOrderLineItemDomainExclusiveInclusionPreviewFactory->get($params);
 
-			$AdCampaignBannerPreviewFactory = \_factory\AdCampaignBannerPreview::get_instance();
+			$InsertionOrderLineItemPreviewFactory = \_factory\InsertionOrderLineItemPreview::get_instance();
 			$params = array();
-			$params["AdCampaignBannerPreviewID"] = $banner_preview_id;
+			$params["InsertionOrderLineItemPreviewID"] = $banner_preview_id;
 
-			$AdCampaignBannerPreview = $AdCampaignBannerPreviewFactory->get_row($params);
-			$campaign_preview_id = $AdCampaignBannerPreview->AdCampaignPreviewID;
+			$InsertionOrderLineItemPreview = $InsertionOrderLineItemPreviewFactory->get_row($params);
+			$campaign_preview_id = $InsertionOrderLineItemPreview->InsertionOrderPreviewID;
 
 		else:
 			// ACL PERMISSIONS CHECK
-			transformation\CheckPermissions::checkEditPermissionAdCampaignBanner($id, $this->auth, $this->config_handle);
+			transformation\CheckPermissions::checkEditPermissionInsertionOrderLineItem($id, $this->auth, $this->config_handle);
 
-			$AdCampaignBannerDomainExclusiveInclusionFactory = \_factory\AdCampaignBannerDomainExclusiveInclusion::get_instance();
+			$InsertionOrderLineItemDomainExclusiveInclusionFactory = \_factory\InsertionOrderLineItemDomainExclusiveInclusion::get_instance();
 			$params = array();
-			$params["AdCampaignBannerID"] = $id;
-			$rtb_domain_exclusive_inclusions = $AdCampaignBannerDomainExclusiveInclusionFactory->get($params);
+			$params["InsertionOrderLineItemID"] = $id;
+			$rtb_domain_exclusive_inclusions = $InsertionOrderLineItemDomainExclusiveInclusionFactory->get($params);
 
-			$AdCampaignBannerFactory = \_factory\AdCampaignBanner::get_instance();
+			$InsertionOrderLineItemFactory = \_factory\InsertionOrderLineItem::get_instance();
 			$params = array();
-			$params["AdCampaignBannerID"] = $id;
+			$params["InsertionOrderLineItemID"] = $id;
 
-			$AdCampaignBanner = $AdCampaignBannerFactory->get_row($params);
-			$campaign_id = $AdCampaignBanner->AdCampaignID;
+			$InsertionOrderLineItem = $InsertionOrderLineItemFactory->get_row($params);
+			$campaign_id = $InsertionOrderLineItem->InsertionOrderID;
 
 		endif;
 
@@ -1367,19 +1367,19 @@ class DemandController extends DemandAbstractActionController {
 
 		$exclusiveinclusion_preview_id = null;
 
-		$AdCampaignBannerDomainExclusiveInclusionPreviewFactory = \_factory\AdCampaignBannerDomainExclusiveInclusionPreview::get_instance();
+		$InsertionOrderLineItemDomainExclusiveInclusionPreviewFactory = \_factory\InsertionOrderLineItemDomainExclusiveInclusionPreview::get_instance();
 
 		// verify
 		if ($is_preview != "true"):
 
-			$AdCampaignBannerDomainExclusiveInclusionFactory = \_factory\AdCampaignBannerDomainExclusiveInclusion::get_instance();
+			$InsertionOrderLineItemDomainExclusiveInclusionFactory = \_factory\InsertionOrderLineItemDomainExclusiveInclusion::get_instance();
 			$params = array();
-			$params["AdCampaignBannerDomainExclusiveInclusionID"] = $id;
-			$rtb_domain_exclusive_inclusion = $AdCampaignBannerDomainExclusiveInclusionFactory->get_row($params);
+			$params["InsertionOrderLineItemDomainExclusiveInclusionID"] = $id;
+			$rtb_domain_exclusive_inclusion = $InsertionOrderLineItemDomainExclusiveInclusionFactory->get_row($params);
 
 			if ($rtb_domain_exclusive_inclusion == null):
-				//die("Invalid AdCampaignBannerDomainExclusiveInclusion ID");
-				$error_msg = "Invalid AdCampaignBannerDomainExclusiveInclusion ID";
+				//die("Invalid InsertionOrderLineItemDomainExclusiveInclusion ID");
+				$error_msg = "Invalid InsertionOrderLineItemDomainExclusiveInclusion ID";
 			    $success = false;
 			    $data = array(
 		         'success' => $success,
@@ -1389,10 +1389,10 @@ class DemandController extends DemandAbstractActionController {
           		return $this->getResponse()->setContent(json_encode($data));
 			endif;
 
-			$banner_id = $rtb_domain_exclusive_inclusion->AdCampaignBannerID;
+			$banner_id = $rtb_domain_exclusive_inclusion->InsertionOrderLineItemID;
 
 			// ACL PERMISSIONS CHECK
-			$response = transformation\CheckPermissions::checkEditPermissionAdCampaignBanner($banner_id, $this->auth, $this->config_handle);
+			$response = transformation\CheckPermissions::checkEditPermissionInsertionOrderLineItem($banner_id, $this->auth, $this->config_handle);
 			
 			if(array_key_exists("error", $response) > 0):
 				$success = false;
@@ -1410,7 +1410,7 @@ class DemandController extends DemandAbstractActionController {
 			* THEN IT CREATES A PREVIEW VERSION OF THE AD CAMPAIGN
 			*/
 
-			$update_data = array('type'=>'AdCampaignBannerDomainExclusiveInclusionID', 'id'=>$id);
+			$update_data = array('type'=>'InsertionOrderLineItemDomainExclusiveInclusionID', 'id'=>$id);
 
 			$return_val = \transformation\TransformPreview::previewCheckBannerID($banner_id, $this->auth, $this->config_handle, $this->getServiceLocator()->get('mail.transport'), $update_data);
 
@@ -1426,19 +1426,19 @@ class DemandController extends DemandAbstractActionController {
 			endif;
 			
 			if ($return_val !== null):
-				$banner_preview_id 	= $return_val["AdCampaignBannerPreviewID"];
-				$exclusiveinclusion_preview_id = $return_val["AdCampaignBannerDomainExclusiveInclusionPreviewID"];
+				$banner_preview_id 	= $return_val["InsertionOrderLineItemPreviewID"];
+				$exclusiveinclusion_preview_id = $return_val["InsertionOrderLineItemDomainExclusiveInclusionPreviewID"];
 			endif;
 
 		else:
 
 			$params = array();
-			$params["AdCampaignBannerDomainExclusiveInclusionPreviewID"] = $id;
-			$rtb_domain_exclusive_inclusion_preview = $AdCampaignBannerDomainExclusiveInclusionPreviewFactory->get_row($params);
+			$params["InsertionOrderLineItemDomainExclusiveInclusionPreviewID"] = $id;
+			$rtb_domain_exclusive_inclusion_preview = $InsertionOrderLineItemDomainExclusiveInclusionPreviewFactory->get_row($params);
 
 			if ($rtb_domain_exclusive_inclusion_preview == null):
-				//die("Invalid AdCampaignBannerDomainExclusiveInclusionPreview ID");
-				$error_msg = "Invalid AdCampaignBannerDomainExclusiveInclusionPreview ID";
+				//die("Invalid InsertionOrderLineItemDomainExclusiveInclusionPreview ID");
+				$error_msg = "Invalid InsertionOrderLineItemDomainExclusiveInclusionPreview ID";
 			    $success = false;
 			    $data = array(
 		         'success' => $success,
@@ -1448,11 +1448,11 @@ class DemandController extends DemandAbstractActionController {
           		return $this->getResponse()->setContent(json_encode($data));
 			endif;
 
-			$banner_preview_id = $rtb_domain_exclusive_inclusion_preview->AdCampaignBannerPreviewID;
-			$exclusiveinclusion_preview_id = $rtb_domain_exclusive_inclusion_preview->AdCampaignBannerDomainExclusiveInclusionPreviewID;
+			$banner_preview_id = $rtb_domain_exclusive_inclusion_preview->InsertionOrderLineItemPreviewID;
+			$exclusiveinclusion_preview_id = $rtb_domain_exclusive_inclusion_preview->InsertionOrderLineItemDomainExclusiveInclusionPreviewID;
 
 			// ACL PREVIEW PERMISSIONS CHECK
-			$response = transformation\CheckPermissions::checkEditPermissionAdCampaignBannerPreview($banner_preview_id, $this->auth, $this->config_handle);
+			$response = transformation\CheckPermissions::checkEditPermissionInsertionOrderLineItemPreview($banner_preview_id, $this->auth, $this->config_handle);
 			
 			if(array_key_exists("error", $response) > 0):
 				$success = false;
@@ -1466,7 +1466,7 @@ class DemandController extends DemandAbstractActionController {
 
 		endif;
 
-		$AdCampaignBannerDomainExclusiveInclusionPreviewFactory->deleteAdCampaignBannerDomainExclusiveInclusionPreview($exclusiveinclusion_preview_id);
+		$InsertionOrderLineItemDomainExclusiveInclusionPreviewFactory->deleteInsertionOrderLineItemDomainExclusiveInclusionPreview($exclusiveinclusion_preview_id);
 
 
 		  $data = array(
@@ -1505,25 +1505,25 @@ class DemandController extends DemandAbstractActionController {
 
 		if ($is_preview == "true"):
 			// ACL PERMISSIONS CHECK
-			transformation\CheckPermissions::checkEditPermissionAdCampaignBannerPreview($id, $this->auth, $this->config_handle);
+			transformation\CheckPermissions::checkEditPermissionInsertionOrderLineItemPreview($id, $this->auth, $this->config_handle);
 			$banner_preview_id = $id;
 			$id = "";
 
-			$AdCampaignBannerPreviewFactory = \_factory\AdCampaignBannerPreview::get_instance();
+			$InsertionOrderLineItemPreviewFactory = \_factory\InsertionOrderLineItemPreview::get_instance();
 			$params = array();
-			$params["AdCampaignBannerPreviewID"] = $banner_preview_id;
-			$AdCampaignBannerPreview = $AdCampaignBannerPreviewFactory->get_row($params);
-			$campaign_preview_id = $AdCampaignBannerPreview->AdCampaignPreviewID;
+			$params["InsertionOrderLineItemPreviewID"] = $banner_preview_id;
+			$InsertionOrderLineItemPreview = $InsertionOrderLineItemPreviewFactory->get_row($params);
+			$campaign_preview_id = $InsertionOrderLineItemPreview->InsertionOrderPreviewID;
 
 		else:
 			// ACL PERMISSIONS CHECK
-			transformation\CheckPermissions::checkEditPermissionAdCampaignBanner($id, $this->auth, $this->config_handle);
+			transformation\CheckPermissions::checkEditPermissionInsertionOrderLineItem($id, $this->auth, $this->config_handle);
 
-			$AdCampaignBannerFactory = \_factory\AdCampaignBanner::get_instance();
+			$InsertionOrderLineItemFactory = \_factory\InsertionOrderLineItem::get_instance();
 			$params = array();
-			$params["AdCampaignBannerID"] = $id;
-			$AdCampaignBanner = $AdCampaignBannerFactory->get_row($params);
-			$campaign_id = $AdCampaignBanner->AdCampaignID;
+			$params["InsertionOrderLineItemID"] = $id;
+			$InsertionOrderLineItem = $InsertionOrderLineItemFactory->get_row($params);
+			$campaign_id = $InsertionOrderLineItem->InsertionOrderID;
 
 		endif;
 
@@ -1571,30 +1571,30 @@ class DemandController extends DemandAbstractActionController {
 			* IF NOT, IT CHECKS THE ACL PERMISSIONS ON THE PRODUCTION BANNER/CAMPAIGN REFERENCED
 			* THEN IT CREATES A PREVIEW VERSION OF THE AD CAMPAIGN
 			*/
-			$update_data = array('type'=>'AdCampaignBannerID', 'id'=>$bannerid);
+			$update_data = array('type'=>'InsertionOrderLineItemID', 'id'=>$bannerid);
 			$return_val = \transformation\TransformPreview::previewCheckBannerID($bannerid, $this->auth, $this->config_handle, $this->getServiceLocator()->get('mail.transport'), $update_data);
 
 			if ($return_val !== null):
-				$banner_preview_id = $return_val["AdCampaignBannerPreviewID"];
+				$banner_preview_id = $return_val["InsertionOrderLineItemPreviewID"];
 			endif;
 
 		endif;
 
 		// ACL PREVIEW PERMISSIONS CHECK
-		transformation\CheckPermissions::checkEditPermissionAdCampaignBannerPreview($banner_preview_id, $this->auth, $this->config_handle);
+		transformation\CheckPermissions::checkEditPermissionInsertionOrderLineItemPreview($banner_preview_id, $this->auth, $this->config_handle);
 
 		$inclusiontype = $this->getRequest()->getPost('inclusiontype');
 		$domainname = $this->getRequest()->getPost('domainname');
 
-		$BannerDomainExclusiveInclusionPreview = new \model\AdCampaignBannerDomainExclusiveInclusionPreview();
-		$BannerDomainExclusiveInclusionPreview->AdCampaignBannerPreviewID           = $banner_preview_id;
+		$BannerDomainExclusiveInclusionPreview = new \model\InsertionOrderLineItemDomainExclusiveInclusionPreview();
+		$BannerDomainExclusiveInclusionPreview->InsertionOrderLineItemPreviewID           = $banner_preview_id;
 		$BannerDomainExclusiveInclusionPreview->InclusionType             = $inclusiontype;
 		$BannerDomainExclusiveInclusionPreview->DomainName                = $domainname;
 		$BannerDomainExclusiveInclusionPreview->DateCreated               = date("Y-m-d H:i:s");
 		$BannerDomainExclusiveInclusionPreview->DateUpdated               = date("Y-m-d H:i:s");
 
-		$AdCampaignBannerDomainExclusiveInclusionPreviewFactory = \_factory\AdCampaignBannerDomainExclusiveInclusionPreview::get_instance();
-		$AdCampaignBannerDomainExclusiveInclusionPreviewFactory->saveAdCampaignBannerDomainExclusiveInclusionPreview($BannerDomainExclusiveInclusionPreview);
+		$InsertionOrderLineItemDomainExclusiveInclusionPreviewFactory = \_factory\InsertionOrderLineItemDomainExclusiveInclusionPreview::get_instance();
+		$InsertionOrderLineItemDomainExclusiveInclusionPreviewFactory->saveInsertionOrderLineItemDomainExclusiveInclusionPreview($BannerDomainExclusiveInclusionPreview);
 
 		$refresh_url = "/demand/viewexclusiveinclusion/" . $banner_preview_id . "?ispreview=true";
 		$viewModel = new ViewModel(array('refresh_url' => $refresh_url));
@@ -1604,11 +1604,11 @@ class DemandController extends DemandAbstractActionController {
 	}
 
 	/*
-	 * END NGINAD AdCampaignBannerDomainExclusiveInclusion Actions
+	 * END NGINAD InsertionOrderLineItemDomainExclusiveInclusion Actions
 	*/
 
 	/*
-	 * BEGIN NGINAD AdCampaignBannerDomainExclusion Actions
+	 * BEGIN NGINAD InsertionOrderLineItemDomainExclusion Actions
 	*/
 
 
@@ -1638,37 +1638,37 @@ class DemandController extends DemandAbstractActionController {
 
 		if ($is_preview == true):
 			// ACL PREVIEW PERMISSIONS CHECK
-			transformation\CheckPermissions::checkEditPermissionAdCampaignBannerPreview($id, $this->auth, $this->config_handle);
+			transformation\CheckPermissions::checkEditPermissionInsertionOrderLineItemPreview($id, $this->auth, $this->config_handle);
 
-			$AdCampaignBannerDomainExclusionPreviewFactory = \_factory\AdCampaignBannerDomainExclusionPreview::get_instance();
+			$InsertionOrderLineItemDomainExclusionPreviewFactory = \_factory\InsertionOrderLineItemDomainExclusionPreview::get_instance();
 			$params = array();
-			$params["AdCampaignBannerPreviewID"] = $id;
+			$params["InsertionOrderLineItemPreviewID"] = $id;
 			$banner_preview_id = $id;
 			$id = "";
-			$rtb_domain_exclusions = $AdCampaignBannerDomainExclusionPreviewFactory->get($params);
+			$rtb_domain_exclusions = $InsertionOrderLineItemDomainExclusionPreviewFactory->get($params);
 
-			$AdCampaignBannerPreviewFactory = \_factory\AdCampaignBannerPreview::get_instance();
+			$InsertionOrderLineItemPreviewFactory = \_factory\InsertionOrderLineItemPreview::get_instance();
 			$params = array();
-			$params["AdCampaignBannerPreviewID"] = $banner_preview_id;
+			$params["InsertionOrderLineItemPreviewID"] = $banner_preview_id;
 
-			$AdCampaignBannerPreview = $AdCampaignBannerPreviewFactory->get_row($params);
-			$campaign_preview_id = $AdCampaignBannerPreview->AdCampaignPreviewID;
+			$InsertionOrderLineItemPreview = $InsertionOrderLineItemPreviewFactory->get_row($params);
+			$campaign_preview_id = $InsertionOrderLineItemPreview->InsertionOrderPreviewID;
 
 		else:
 			// ACL PERMISSIONS CHECK
-			transformation\CheckPermissions::checkEditPermissionAdCampaignBanner($id, $this->auth, $this->config_handle);
+			transformation\CheckPermissions::checkEditPermissionInsertionOrderLineItem($id, $this->auth, $this->config_handle);
 
-			$AdCampaignBannerDomainExclusionFactory = \_factory\AdCampaignBannerDomainExclusion::get_instance();
+			$InsertionOrderLineItemDomainExclusionFactory = \_factory\InsertionOrderLineItemDomainExclusion::get_instance();
 			$params = array();
-			$params["AdCampaignBannerID"] = $id;
-			$rtb_domain_exclusions = $AdCampaignBannerDomainExclusionFactory->get($params);
+			$params["InsertionOrderLineItemID"] = $id;
+			$rtb_domain_exclusions = $InsertionOrderLineItemDomainExclusionFactory->get($params);
 
-			$AdCampaignBannerFactory = \_factory\AdCampaignBanner::get_instance();
+			$InsertionOrderLineItemFactory = \_factory\InsertionOrderLineItem::get_instance();
 			$params = array();
-			$params["AdCampaignBannerID"] = $id;
+			$params["InsertionOrderLineItemID"] = $id;
 
-			$AdCampaignBanner = $AdCampaignBannerFactory->get_row($params);
-			$campaign_id = $AdCampaignBanner->AdCampaignID;
+			$InsertionOrderLineItem = $InsertionOrderLineItemFactory->get_row($params);
+			$campaign_id = $InsertionOrderLineItem->InsertionOrderID;
 
 		endif;
 
@@ -1727,19 +1727,19 @@ class DemandController extends DemandAbstractActionController {
 
 		$exclusion_preview_id = null;
 
-		$AdCampaignBannerDomainExclusionPreviewFactory = \_factory\AdCampaignBannerDomainExclusionPreview::get_instance();
+		$InsertionOrderLineItemDomainExclusionPreviewFactory = \_factory\InsertionOrderLineItemDomainExclusionPreview::get_instance();
 
 		// verify
 		if ($is_preview != "true"):
 
-			$AdCampaignBannerDomainExclusionFactory = \_factory\AdCampaignBannerDomainExclusion::get_instance();
+			$InsertionOrderLineItemDomainExclusionFactory = \_factory\InsertionOrderLineItemDomainExclusion::get_instance();
 			$params = array();
-			$params["AdCampaignBannerDomainExclusionID"] = $id;
-			$rtb_domain_exclusion = $AdCampaignBannerDomainExclusionFactory->get_row($params);
+			$params["InsertionOrderLineItemDomainExclusionID"] = $id;
+			$rtb_domain_exclusion = $InsertionOrderLineItemDomainExclusionFactory->get_row($params);
 
 			if ($rtb_domain_exclusion == null):
-				//die("Invalid AdCampaignBannerDomainExclusion ID");
-				$error_msg = "Invalid AdCampaignBanner Domain Exclusion ID";
+				//die("Invalid InsertionOrderLineItemDomainExclusion ID");
+				$error_msg = "Invalid InsertionOrderLineItem Domain Exclusion ID";
 			    $success = false;
 			    $data = array(
 		         'success' => $success,
@@ -1750,11 +1750,11 @@ class DemandController extends DemandAbstractActionController {
 				
 			endif;
 
-			$banner_id = $rtb_domain_exclusion->AdCampaignBannerID;
+			$banner_id = $rtb_domain_exclusion->InsertionOrderLineItemID;
 
 			// ACL PERMISSIONS CHECK
-			//transformation\CheckPermissions::checkEditPermissionAdCampaignBanner($banner_id, $auth, $config);
-			$response = transformation\CheckPermissions::checkEditPermissionAdCampaignBanner($banner_id, $this->auth, $this->config_handle);
+			//transformation\CheckPermissions::checkEditPermissionInsertionOrderLineItem($banner_id, $auth, $config);
+			$response = transformation\CheckPermissions::checkEditPermissionInsertionOrderLineItem($banner_id, $this->auth, $this->config_handle);
 			
 			if(array_key_exists("error", $response) > 0):
 				$success = false;
@@ -1772,7 +1772,7 @@ class DemandController extends DemandAbstractActionController {
 			* THEN IT CREATES A PREVIEW VERSION OF THE AD CAMPAIGN
 			*/
 
-			$update_data = array('type'=>'AdCampaignBannerDomainExclusionID', 'id'=>$id);
+			$update_data = array('type'=>'InsertionOrderLineItemDomainExclusionID', 'id'=>$id);
 
 			$return_val = \transformation\TransformPreview::previewCheckBannerID($banner_id, $this->auth, $this->config_handle, $this->getServiceLocator()->get('mail.transport'), $update_data);
 
@@ -1788,19 +1788,19 @@ class DemandController extends DemandAbstractActionController {
 			endif;
 			
 			if ($return_val !== null):
-				$banner_preview_id 	= $return_val["AdCampaignBannerPreviewID"];
-				$exclusion_preview_id = $return_val["AdCampaignBannerDomainExclusionPreviewID"];
+				$banner_preview_id 	= $return_val["InsertionOrderLineItemPreviewID"];
+				$exclusion_preview_id = $return_val["InsertionOrderLineItemDomainExclusionPreviewID"];
 			endif;
 
 		else:
 
 			$params = array();
-			$params["AdCampaignBannerDomainExclusionPreviewID"] = $id;
-			$rtb_domain_exclusion_preview = $AdCampaignBannerDomainExclusionPreviewFactory->get_row($params);
+			$params["InsertionOrderLineItemDomainExclusionPreviewID"] = $id;
+			$rtb_domain_exclusion_preview = $InsertionOrderLineItemDomainExclusionPreviewFactory->get_row($params);
 
 			if ($rtb_domain_exclusion_preview == null):
-				//die("Invalid AdCampaignBannerDomainExclusionPreview ID");
-				$error_msg = "Invalid AdCampaignBanner Domain Exclusion Preview ID";
+				//die("Invalid InsertionOrderLineItemDomainExclusionPreview ID");
+				$error_msg = "Invalid InsertionOrderLineItem Domain Exclusion Preview ID";
 			    $success = false;
 			    $data = array(
 		         'success' => $success,
@@ -1810,12 +1810,12 @@ class DemandController extends DemandAbstractActionController {
 	           return $this->getResponse()->setContent(json_encode($data));
 			endif;
 
-			$banner_preview_id = $rtb_domain_exclusion_preview->AdCampaignBannerPreviewID;
-			$exclusion_preview_id = $rtb_domain_exclusion_preview->AdCampaignBannerDomainExclusionPreviewID;
+			$banner_preview_id = $rtb_domain_exclusion_preview->InsertionOrderLineItemPreviewID;
+			$exclusion_preview_id = $rtb_domain_exclusion_preview->InsertionOrderLineItemDomainExclusionPreviewID;
 
 			// ACL PREVIEW PERMISSIONS CHECK
-			//transformation\CheckPermissions::checkEditPermissionAdCampaignBannerPreview($banner_preview_id, $auth, $config);
-			$response = transformation\CheckPermissions::checkEditPermissionAdCampaignBannerPreview($banner_preview_id, $this->auth, $this->config_handle);
+			//transformation\CheckPermissions::checkEditPermissionInsertionOrderLineItemPreview($banner_preview_id, $auth, $config);
+			$response = transformation\CheckPermissions::checkEditPermissionInsertionOrderLineItemPreview($banner_preview_id, $this->auth, $this->config_handle);
 			
 			
 			if(array_key_exists("error", $response) > 0):
@@ -1830,7 +1830,7 @@ class DemandController extends DemandAbstractActionController {
 
 		endif;
 
-		$AdCampaignBannerDomainExclusionPreviewFactory->deleteAdCampaignBannerDomainExclusionPreview($exclusion_preview_id);
+		$InsertionOrderLineItemDomainExclusionPreviewFactory->deleteInsertionOrderLineItemDomainExclusionPreview($exclusion_preview_id);
 
 		$data = array(
 		         'success' => $success,
@@ -1869,25 +1869,25 @@ class DemandController extends DemandAbstractActionController {
 
 		if ($is_preview == "true"):
 			// ACL PERMISSIONS CHECK
-			transformation\CheckPermissions::checkEditPermissionAdCampaignBannerPreview($id, $this->auth, $this->config_handle);
+			transformation\CheckPermissions::checkEditPermissionInsertionOrderLineItemPreview($id, $this->auth, $this->config_handle);
 			$banner_preview_id = $id;
 			$id = "";
 
-			$AdCampaignBannerPreviewFactory = \_factory\AdCampaignBannerPreview::get_instance();
+			$InsertionOrderLineItemPreviewFactory = \_factory\InsertionOrderLineItemPreview::get_instance();
 			$params = array();
-			$params["AdCampaignBannerPreviewID"] = $banner_preview_id;
-			$AdCampaignBannerPreview = $AdCampaignBannerPreviewFactory->get_row($params);
-			$campaign_preview_id = $AdCampaignBannerPreview->AdCampaignPreviewID;
+			$params["InsertionOrderLineItemPreviewID"] = $banner_preview_id;
+			$InsertionOrderLineItemPreview = $InsertionOrderLineItemPreviewFactory->get_row($params);
+			$campaign_preview_id = $InsertionOrderLineItemPreview->InsertionOrderPreviewID;
 
 		else:
 			// ACL PERMISSIONS CHECK
-			transformation\CheckPermissions::checkEditPermissionAdCampaignBanner($id, $this->auth, $this->config_handle);
+			transformation\CheckPermissions::checkEditPermissionInsertionOrderLineItem($id, $this->auth, $this->config_handle);
 
-			$AdCampaignBannerFactory = \_factory\AdCampaignBanner::get_instance();
+			$InsertionOrderLineItemFactory = \_factory\InsertionOrderLineItem::get_instance();
 			$params = array();
-			$params["AdCampaignBannerID"] = $id;
-			$AdCampaignBanner = $AdCampaignBannerFactory->get_row($params);
-			$campaign_id = $AdCampaignBanner->AdCampaignID;
+			$params["InsertionOrderLineItemID"] = $id;
+			$InsertionOrderLineItem = $InsertionOrderLineItemFactory->get_row($params);
+			$campaign_id = $InsertionOrderLineItem->InsertionOrderID;
 		endif;
 
 		return new ViewModel(array(
@@ -1934,30 +1934,30 @@ class DemandController extends DemandAbstractActionController {
 			* IF NOT, IT CHECKS THE ACL PERMISSIONS ON THE PRODUCTION BANNER/CAMPAIGN REFERENCED
 			* THEN IT CREATES A PREVIEW VERSION OF THE AD CAMPAIGN
 			*/
-			$update_data = array('type'=>'AdCampaignBannerID', 'id'=>$bannerid);
+			$update_data = array('type'=>'InsertionOrderLineItemID', 'id'=>$bannerid);
 			$return_val = \transformation\TransformPreview::previewCheckBannerID($bannerid, $this->auth, $this->config_handle, $this->getServiceLocator()->get('mail.transport'), $update_data);
 
 			if ($return_val !== null):
-				$banner_preview_id = $return_val["AdCampaignBannerPreviewID"];
+				$banner_preview_id = $return_val["InsertionOrderLineItemPreviewID"];
 			endif;
 
 		endif;
 
 		// ACL PREVIEW PERMISSIONS CHECK
-		transformation\CheckPermissions::checkEditPermissionAdCampaignBannerPreview($banner_preview_id, $this->auth, $this->config_handle);
+		transformation\CheckPermissions::checkEditPermissionInsertionOrderLineItemPreview($banner_preview_id, $this->auth, $this->config_handle);
 
 		$exclusiontype = $this->getRequest()->getPost('exclusiontype');
 		$domainname = $this->getRequest()->getPost('domainname');
 
-		$BannerDomainExclusionPreview = new \model\AdCampaignBannerDomainExclusionPreview();
-		$BannerDomainExclusionPreview->AdCampaignBannerPreviewID           = $banner_preview_id;
+		$BannerDomainExclusionPreview = new \model\InsertionOrderLineItemDomainExclusionPreview();
+		$BannerDomainExclusionPreview->InsertionOrderLineItemPreviewID           = $banner_preview_id;
 		$BannerDomainExclusionPreview->ExclusionType             = $exclusiontype;
 		$BannerDomainExclusionPreview->DomainName                = $domainname;
 		$BannerDomainExclusionPreview->DateCreated               = date("Y-m-d H:i:s");
 		$BannerDomainExclusionPreview->DateUpdated               = date("Y-m-d H:i:s");
 
-		$AdCampaignBannerDomainExclusionPreviewFactory = \_factory\AdCampaignBannerDomainExclusionPreview::get_instance();
-		$AdCampaignBannerDomainExclusionPreviewFactory->saveAdCampaignBannerDomainExclusionPreview($BannerDomainExclusionPreview);
+		$InsertionOrderLineItemDomainExclusionPreviewFactory = \_factory\InsertionOrderLineItemDomainExclusionPreview::get_instance();
+		$InsertionOrderLineItemDomainExclusionPreviewFactory->saveInsertionOrderLineItemDomainExclusionPreview($BannerDomainExclusionPreview);
 
 		$refresh_url = "/demand/viewdomainexclusion/" . $banner_preview_id . "?ispreview=true";
 		$viewModel = new ViewModel(array('refresh_url' => $refresh_url));
@@ -1967,11 +1967,11 @@ class DemandController extends DemandAbstractActionController {
 	}
 
 	/*
-	 * END NGINAD AdCampaignBannerDomainExclusion Actions
+	 * END NGINAD InsertionOrderLineItemDomainExclusion Actions
 	*/
 
 	/*
-	 * BEGIN NGINAD AdCampaignBanner Actions
+	 * BEGIN NGINAD InsertionOrderLineItem Actions
 	*/
 
 	/**
@@ -2009,7 +2009,7 @@ class DemandController extends DemandAbstractActionController {
 			* THEN IT CREATES A PREVIEW VERSION OF THE AD CAMPAIGN
 			*/
 
-			$update_data = array('type'=>'AdCampaignBannerID', 'id'=>$id);
+			$update_data = array('type'=>'InsertionOrderLineItemID', 'id'=>$id);
 			$return_val = \transformation\TransformPreview::previewCheckBannerID($id, $this->auth, $this->config_handle, $this->getServiceLocator()->get('mail.transport'), $update_data);
 
 			if ($return_val !== null && array_key_exists("error", $return_val)):
@@ -2024,13 +2024,13 @@ class DemandController extends DemandAbstractActionController {
 			endif;
 			
 			if ($return_val !== null):
-				$id 	= $return_val["AdCampaignBannerPreviewID"];
+				$id 	= $return_val["InsertionOrderLineItemPreviewID"];
 			endif;
 	   endif;
 
 		// ACL PREVIEW PERMISSIONS CHECK
-		//transformation\CheckPermissions::checkEditPermissionAdCampaignBannerPreview($id, $auth, $config);
-		$response = transformation\CheckPermissions::checkEditPermissionAdCampaignBannerPreview($id, $this->auth, $this->config_handle);
+		//transformation\CheckPermissions::checkEditPermissionInsertionOrderLineItemPreview($id, $auth, $config);
+		$response = transformation\CheckPermissions::checkEditPermissionInsertionOrderLineItemPreview($id, $this->auth, $this->config_handle);
 		if(array_key_exists("error", $response) > 0):
 			$success = false;
 			$data = array(
@@ -2041,13 +2041,13 @@ class DemandController extends DemandAbstractActionController {
 	   	   return $this->getResponse()->setContent(json_encode($data));
 		endif;
 
-		$AdCampaignBannerPreviewFactory = \_factory\AdCampaignBannerPreview::get_instance();
+		$InsertionOrderLineItemPreviewFactory = \_factory\InsertionOrderLineItemPreview::get_instance();
 		$params = array();
-		$params["AdCampaignBannerPreviewID"] = $id;
+		$params["InsertionOrderLineItemPreviewID"] = $id;
 
-		$AdCampaignBannerPreview = $AdCampaignBannerPreviewFactory->get_row($params);
+		$InsertionOrderLineItemPreview = $InsertionOrderLineItemPreviewFactory->get_row($params);
 
-		if ($AdCampaignBannerPreview == null):
+		if ($InsertionOrderLineItemPreview == null):
 		  //die("Invalid Banner ID");
 		  $error_msg = "Invalid Banner ID";
 		   $success = false;
@@ -2059,9 +2059,9 @@ class DemandController extends DemandAbstractActionController {
           return $this->getResponse()->setContent(json_encode($data));
 		endif;
 
-		$campaign_preview_id = $AdCampaignBannerPreview->AdCampaignPreviewID;
+		$campaign_preview_id = $InsertionOrderLineItemPreview->InsertionOrderPreviewID;
 
-		$AdCampaignBannerPreviewFactory->deActivateAdCampaignBannerPreview($id);
+		$InsertionOrderLineItemPreviewFactory->deActivateInsertionOrderLineItemPreview($id);
 
 		$data = array(
 	        'success' => $success,
@@ -2097,36 +2097,36 @@ class DemandController extends DemandAbstractActionController {
 
         // verify
 		if ($is_preview == "true"):
-			$is_preview = \transformation\TransformPreview::doesPreviewAdCampaignExist($id, $this->auth);
+			$is_preview = \transformation\TransformPreview::doesPreviewInsertionOrderExist($id, $this->auth);
 		endif;
 
 		if ($is_preview == true):
 			// ACL PERMISSIONS CHECK
-			transformation\CheckPermissions::checkEditPermissionAdCampaignPreview($id, $this->auth, $this->config_handle);
+			transformation\CheckPermissions::checkEditPermissionInsertionOrderPreview($id, $this->auth, $this->config_handle);
 
-			$AdCampaignBannerPreviewFactory = \_factory\AdCampaignBannerPreview::get_instance();
+			$InsertionOrderLineItemPreviewFactory = \_factory\InsertionOrderLineItemPreview::get_instance();
 			$params = array();
-			$params["AdCampaignPreviewID"] = $id;
+			$params["InsertionOrderPreviewID"] = $id;
 			$params["Active"] = 1;
 
-			$rtb_banner_list = $AdCampaignBannerPreviewFactory->get($params);
+			$rtb_banner_list = $InsertionOrderLineItemPreviewFactory->get($params);
 			$campaign_preview_id = $id;
 			$id = "";
 		else:
 			// ACL PERMISSIONS CHECK
-			transformation\CheckPermissions::checkEditPermissionAdCampaign($id, $this->auth, $this->config_handle);
+			transformation\CheckPermissions::checkEditPermissionInsertionOrder($id, $this->auth, $this->config_handle);
 
-			$AdCampaignBannerFactory = \_factory\AdCampaignBanner::get_instance();
+			$InsertionOrderLineItemFactory = \_factory\InsertionOrderLineItem::get_instance();
 			$params = array();
-			$params["AdCampaignID"] = $id;
+			$params["InsertionOrderID"] = $id;
 			$params["Active"] = 1;
-			$rtb_banner_list = $AdCampaignBannerFactory->get($params);
+			$rtb_banner_list = $InsertionOrderLineItemFactory->get($params);
 
 		endif;
 
 		$navigation = $this->getServiceLocator()->get('navigation');
                 $page = $navigation->findBy('id', 'ViewBannerLevel');
-                $page->set("label","View Banners (" . $this->getBreadCrumbInfoFromAdCampaign($id, $campaign_preview_id, $is_preview)["BCAdCampaign"] . ")");
+                $page->set("label","View Banners (" . $this->getBreadCrumbInfoFromInsertionOrder($id, $campaign_preview_id, $is_preview)["BCInsertionOrder"] . ")");
                 $page->set("params", array("param1" => $id));
 
         if ($is_preview == true):
@@ -2140,7 +2140,7 @@ class DemandController extends DemandAbstractActionController {
 				'rtb_banners' => $rtb_banner_list,
 		        'campaign_id' => $id,
 				'campaign_preview_id' => $campaign_preview_id,
-				'bread_crumb_info' => $this->getBreadCrumbInfoFromAdCampaign($id, $campaign_preview_id, $is_preview),
+				'bread_crumb_info' => $this->getBreadCrumbInfoFromInsertionOrder($id, $campaign_preview_id, $is_preview),
 				'user_id_list' => $this->user_id_list_demand_customer,
 	    		'user_identity' => $this->identity(),
 				'true_user_name' => $this->auth->getUserName(),
@@ -2168,19 +2168,19 @@ class DemandController extends DemandAbstractActionController {
 
         // verify
         if ($is_preview == "true"):
-        	$is_preview = \transformation\TransformPreview::doesPreviewAdCampaignExist($id, $this->auth);
+        	$is_preview = \transformation\TransformPreview::doesPreviewInsertionOrderExist($id, $this->auth);
         endif;
 
         $campaignpreviewid = "";
 
         if ($is_preview == "true"):
 	        // ACL PERMISSIONS CHECK
-	        transformation\CheckPermissions::checkEditPermissionAdCampaignPreview($id, $this->auth, $this->config_handle);
+	        transformation\CheckPermissions::checkEditPermissionInsertionOrderPreview($id, $this->auth, $this->config_handle);
         	$campaignpreviewid = $id;
         	$id = "";
         else:
 	        // ACL PERMISSIONS CHECK
-	        transformation\CheckPermissions::checkEditPermissionAdCampaign($id, $this->auth, $this->config_handle);
+	        transformation\CheckPermissions::checkEditPermissionInsertionOrder($id, $this->auth, $this->config_handle);
         endif;
 
         $current_mimes 					= array();
@@ -2196,10 +2196,10 @@ class DemandController extends DemandAbstractActionController {
         		'ispreview'	  				=> $is_preview == true ? '1' : '0',
         		'campaignid'       			=> $id,
         		'campaignpreviewid' 		=> $campaignpreviewid,
-        		'adcampaigntype_options'   	=> $this->getAdCampaignTypeOptions(),
+        		'adcampaigntype_options'   	=> $this->getInsertionOrderTypeOptions(),
                 'mobile_options'    		=> \util\BannerOptions::$mobile_options,
                 'size_list'         		=> \util\BannerOptions::$iab_banner_options,
-				'bread_crumb_info' 			=> $this->getBreadCrumbInfoFromAdCampaign($id, $campaignpreviewid, $is_preview),
+				'bread_crumb_info' 			=> $this->getBreadCrumbInfoFromInsertionOrder($id, $campaignpreviewid, $is_preview),
         		'user_id_list' => $this->user_id_list_demand_customer,
     			'center_class' 				=> 'centerj',
 	    		'user_identity' 			=> $this->identity(),
@@ -2227,17 +2227,17 @@ class DemandController extends DemandAbstractActionController {
         ));
 	}
 
-	private function getAdCampaignTypeOptions() {
+	private function getInsertionOrderTypeOptions() {
 		
-		$AdCampaignTypeFactory = \_factory\AdCampaignType::get_instance();
+		$InsertionOrderTypeFactory = \_factory\InsertionOrderType::get_instance();
 		$params = array();
-		$AdCampaignTypeList = $AdCampaignTypeFactory->get($params);
+		$InsertionOrderTypeList = $InsertionOrderTypeFactory->get($params);
 		
 		$adcampaigntype_options = array();
 		
-		foreach ($AdCampaignTypeList as $AdCampaignType):
+		foreach ($InsertionOrderTypeList as $InsertionOrderType):
 
-			$adcampaigntype_options[$AdCampaignType->AdCampaignTypeID] = $AdCampaignType->Description;
+			$adcampaigntype_options[$InsertionOrderType->InsertionOrderTypeID] = $InsertionOrderType->Description;
 		
 		endforeach;
 		
@@ -2304,25 +2304,25 @@ class DemandController extends DemandAbstractActionController {
 			*/
 
 			if ($bannerid != null):
-				$update_data = array('type'=>'AdCampaignBannerID', 'id'=>$bannerid);
+				$update_data = array('type'=>'InsertionOrderLineItemID', 'id'=>$bannerid);
 			else:
-				$update_data = array('type'=>'AdCampaignID', 'id'=>$campaignid);
+				$update_data = array('type'=>'InsertionOrderID', 'id'=>$campaignid);
 			endif;
 
-			$return_val = \transformation\TransformPreview::previewCheckAdCampaignID($campaignid, $this->auth, $this->config_handle, $this->getServiceLocator()->get('mail.transport'), $update_data);
+			$return_val = \transformation\TransformPreview::previewCheckInsertionOrderID($campaignid, $this->auth, $this->config_handle, $this->getServiceLocator()->get('mail.transport'), $update_data);
 
 			if ($return_val !== null):
 				if ($bannerid != null):
-					$campaign_preview_id 	= $return_val["AdCampaignPreviewID"];
-					$banner_preview_id 		= $return_val["AdCampaignBannerPreviewID"];
+					$campaign_preview_id 	= $return_val["InsertionOrderPreviewID"];
+					$banner_preview_id 		= $return_val["InsertionOrderLineItemPreviewID"];
 				else:
-					$campaign_preview_id 	= $return_val["AdCampaignPreviewID"];
+					$campaign_preview_id 	= $return_val["InsertionOrderPreviewID"];
 				endif;
 			endif;
 		endif;
 
 		// ACL PREVIEW PERMISSIONS CHECK
-		transformation\CheckPermissions::checkEditPermissionAdCampaignPreview($campaign_preview_id, $this->auth, $this->config_handle);
+		transformation\CheckPermissions::checkEditPermissionInsertionOrderPreview($campaign_preview_id, $this->auth, $this->config_handle);
 
 		$bannername = $this->getRequest()->getPost('bannername');
 		$startdate = $this->getRequest()->getPost('startdate');
@@ -2384,19 +2384,19 @@ class DemandController extends DemandAbstractActionController {
 
 		endif;
 		
-		$BannerPreview = new \model\AdCampaignBannerPreview();
+		$BannerPreview = new \model\InsertionOrderLineItemPreview();
 		if ($banner_preview_id != null):
-		  $BannerPreview->AdCampaignBannerPreviewID             = $banner_preview_id;
+		  $BannerPreview->InsertionOrderLineItemPreviewID             = $banner_preview_id;
 		endif;
 
 		$BannerPreview->UserID             	= $this->auth->getEffectiveUserID();
 
 		$BannerPreview->Name                      = $bannername;
-		$BannerPreview->AdCampaignPreviewID       = $campaign_preview_id;
+		$BannerPreview->InsertionOrderPreviewID       = $campaign_preview_id;
 		$BannerPreview->StartDate                 = date("Y-m-d H:i:s", strtotime($startdate));
 		$BannerPreview->EndDate                   = date("Y-m-d H:i:s", strtotime($enddate));
 		if ($this->is_admin || $banner_preview_id == null):
-			$BannerPreview->AdCampaignTypeID      = $adcampaigntype;
+			$BannerPreview->InsertionOrderTypeID      = $adcampaigntype;
 		endif;
 		
 		$BannerPreview->ImpressionType			  = $ImpressionType;
@@ -2417,58 +2417,58 @@ class DemandController extends DemandAbstractActionController {
 		$BannerPreview->DateUpdated               = date("Y-m-d H:i:s");
 		$BannerPreview->ChangeWentLive       	  = 0;
 
-		$AdCampaignBannerPreviewFactory = \_factory\AdCampaignBannerPreview::get_instance();
-		$banner_preview_id_new = $AdCampaignBannerPreviewFactory->saveAdCampaignBannerPreview($BannerPreview);
+		$InsertionOrderLineItemPreviewFactory = \_factory\InsertionOrderLineItemPreview::get_instance();
+		$banner_preview_id_new = $InsertionOrderLineItemPreviewFactory->saveInsertionOrderLineItemPreview($BannerPreview);
 
 		if ($banner_preview_id_new != null):
 			$banner_preview_id = $banner_preview_id_new;
-		elseif ($BannerPreview->AdCampaignBannerPreviewID == null):
-			$BannerPreview->AdCampaignBannerPreviewID = $banner_preview_id;
+		elseif ($BannerPreview->InsertionOrderLineItemPreviewID == null):
+			$BannerPreview->InsertionOrderLineItemPreviewID = $banner_preview_id;
 		endif;
 		
-		$AdCampaignVideoRestrictionsPreviewFactory = \_factory\AdCampaignVideoRestrictionsPreview::get_instance();
-		$AdCampaignBannerRestrictionsPreviewFactory = \_factory\AdCampaignBannerRestrictionsPreview::get_instance();
+		$InsertionOrderLineItemVideoRestrictionsPreviewFactory = \_factory\InsertionOrderLineItemVideoRestrictionsPreview::get_instance();
+		$InsertionOrderLineItemRestrictionsPreviewFactory = \_factory\InsertionOrderLineItemRestrictionsPreview::get_instance();
 		
 		if ($ImpressionType == 'video'):
 
 			$params = array();
-			$params["AdCampaignBannerPreviewID"] = $banner_preview_id;
-			$AdCampaignVideoRestrictionsPreview = $AdCampaignVideoRestrictionsPreviewFactory->get_row($params);
+			$params["InsertionOrderLineItemPreviewID"] = $banner_preview_id;
+			$InsertionOrderLineItemVideoRestrictionsPreview = $InsertionOrderLineItemVideoRestrictionsPreviewFactory->get_row($params);
 			
-			if ($AdCampaignVideoRestrictionsPreview == null):
+			if ($InsertionOrderLineItemVideoRestrictionsPreview == null):
 			
-				$AdCampaignVideoRestrictionsPreview = new \model\AdCampaignVideoRestrictionsPreview();
+				$InsertionOrderLineItemVideoRestrictionsPreview = new \model\InsertionOrderLineItemVideoRestrictionsPreview();
 				
 			endif;
 			
-			$AdCampaignVideoRestrictionsPreview->AdCampaignBannerPreviewID 			= $banner_preview_id;
+			$InsertionOrderLineItemVideoRestrictionsPreview->InsertionOrderLineItemPreviewID 			= $banner_preview_id;
 
-			$AdCampaignVideoRestrictionsPreview->DateCreated               			= date("Y-m-d H:i:s");
+			$InsertionOrderLineItemVideoRestrictionsPreview->DateCreated               			= date("Y-m-d H:i:s");
 			
-			$AdCampaignVideoRestrictionsPreview->MimesCommaSeparated 				= trim($mimes);
-			$AdCampaignVideoRestrictionsPreview->ProtocolsCommaSeparated 			= trim($protocols);
-			$AdCampaignVideoRestrictionsPreview->ApisSupportedCommaSeparated 		= trim($apis_supported);
-			$AdCampaignVideoRestrictionsPreview->DeliveryCommaSeparated 			= trim($delivery);
-			$AdCampaignVideoRestrictionsPreview->PlaybackCommaSeparated 			= trim($playback);
+			$InsertionOrderLineItemVideoRestrictionsPreview->MimesCommaSeparated 				= trim($mimes);
+			$InsertionOrderLineItemVideoRestrictionsPreview->ProtocolsCommaSeparated 			= trim($protocols);
+			$InsertionOrderLineItemVideoRestrictionsPreview->ApisSupportedCommaSeparated 		= trim($apis_supported);
+			$InsertionOrderLineItemVideoRestrictionsPreview->DeliveryCommaSeparated 			= trim($delivery);
+			$InsertionOrderLineItemVideoRestrictionsPreview->PlaybackCommaSeparated 			= trim($playback);
 			
-			$AdCampaignVideoRestrictionsPreview->StartDelay 						= trim($start_delay);
-			$AdCampaignVideoRestrictionsPreview->Linearity 							= trim($linearity);
+			$InsertionOrderLineItemVideoRestrictionsPreview->StartDelay 						= trim($start_delay);
+			$InsertionOrderLineItemVideoRestrictionsPreview->Linearity 							= trim($linearity);
 
 			
-			$AdCampaignVideoRestrictionsPreviewFactory->saveAdCampaignVideoRestrictionsPreview($AdCampaignVideoRestrictionsPreview);
+			$InsertionOrderLineItemVideoRestrictionsPreviewFactory->saveInsertionOrderLineItemVideoRestrictionsPreview($InsertionOrderLineItemVideoRestrictionsPreview);
 			
-			$AdCampaignBannerRestrictionsPreviewFactory->deleteAdCampaignBannerRestrictionsPreview($banner_preview_id);
+			$InsertionOrderLineItemRestrictionsPreviewFactory->deleteInsertionOrderLineItemRestrictionsPreview($banner_preview_id);
 			
 		else:
 		
-			$AdCampaignVideoRestrictionsPreviewFactory->deleteAdCampaignVideoRestrictionsPreview($banner_preview_id);
+			$InsertionOrderLineItemVideoRestrictionsPreviewFactory->deleteInsertionOrderLineItemVideoRestrictionsPreview($banner_preview_id);
 			
 		endif;
 		
 		if ($this->is_admin):
 		
 			$LinkedBannerToAdZonePreviewFactory = \_factory\LinkedBannerToAdZonePreview::get_instance();
-			$LinkedBannerToAdZonePreviewFactory->deleteLinkedBannerToAdZonePreview($BannerPreview->AdCampaignBannerPreviewID);
+			$LinkedBannerToAdZonePreviewFactory->deleteLinkedBannerToAdZonePreview($BannerPreview->InsertionOrderLineItemPreviewID);
 			
 			// campaigntype AD_TYPE_CONTRACT case
 			if ($adcampaigntype == AD_TYPE_CONTRACT && $linkedzones != null && count($linkedzones) > 0):
@@ -2476,7 +2476,7 @@ class DemandController extends DemandAbstractActionController {
 				foreach($linkedzones as $linked_zone_id):
 					
 					$LinkedBannerToAdZonePreview = new \model\LinkedBannerToAdZonePreview();
-					$LinkedBannerToAdZonePreview->AdCampaignBannerPreviewID = $BannerPreview->AdCampaignBannerPreviewID;
+					$LinkedBannerToAdZonePreview->InsertionOrderLineItemPreviewID = $BannerPreview->InsertionOrderLineItemPreviewID;
 					$LinkedBannerToAdZonePreview->PublisherAdZoneID			= intval($linked_zone_id);
 					$LinkedBannerToAdZonePreview->Weight					= intval($weight);
 					$LinkedBannerToAdZonePreview->DateCreated				= date("Y-m-d H:i:s");
@@ -2488,7 +2488,7 @@ class DemandController extends DemandAbstractActionController {
 			
 		endif;
 
-		$refresh_url = "/demand/viewbanner/" . $BannerPreview->AdCampaignPreviewID . "?ispreview=true";
+		$refresh_url = "/demand/viewbanner/" . $BannerPreview->InsertionOrderPreviewID . "?ispreview=true";
 		$viewModel = new ViewModel(array('refresh_url' => $refresh_url));
 
 		return $viewModel->setTemplate('dashboard-manager/demand/interstitial.phtml');
@@ -2520,69 +2520,69 @@ class DemandController extends DemandAbstractActionController {
 		if ($is_preview == true):
 
 			// ACL PREVIEW PERMISSIONS CHECK
-			transformation\CheckPermissions::checkEditPermissionAdCampaignBannerPreview($id, $this->auth, $this->config_handle);
+			transformation\CheckPermissions::checkEditPermissionInsertionOrderLineItemPreview($id, $this->auth, $this->config_handle);
 
-			$AdCampaignVideoRestrictionsPreviewFactory = \_factory\AdCampaignVideoRestrictionsPreview::get_instance();
+			$InsertionOrderLineItemVideoRestrictionsPreviewFactory = \_factory\InsertionOrderLineItemVideoRestrictionsPreview::get_instance();
 			$params = array();
-			$params["AdCampaignBannerPreviewID"] = $id;
-			$AdCampaignVideoRestrictions = $AdCampaignVideoRestrictionsPreviewFactory->get_row($params);
+			$params["InsertionOrderLineItemPreviewID"] = $id;
+			$InsertionOrderLineItemVideoRestrictions = $InsertionOrderLineItemVideoRestrictionsPreviewFactory->get_row($params);
 			
-			$AdCampaignBannerPreviewFactory = \_factory\AdCampaignBannerPreview::get_instance();
+			$InsertionOrderLineItemPreviewFactory = \_factory\InsertionOrderLineItemPreview::get_instance();
 			$params = array();
 			$params["Active"] = 1;
-			$params["AdCampaignBannerPreviewID"] = $id;
+			$params["InsertionOrderLineItemPreviewID"] = $id;
 			$banner_preview_id = $id;
 
-			$AdCampaignBanner = $AdCampaignBannerPreviewFactory->get_row($params);
+			$InsertionOrderLineItem = $InsertionOrderLineItemPreviewFactory->get_row($params);
 
 		else:
 			// ACL PERMISSIONS CHECK
-			transformation\CheckPermissions::checkEditPermissionAdCampaignBanner($id, $this->auth, $this->config_handle);
+			transformation\CheckPermissions::checkEditPermissionInsertionOrderLineItem($id, $this->auth, $this->config_handle);
 
-			$AdCampaignVideoRestrictionsFactory = \_factory\AdCampaignVideoRestrictions::get_instance();
+			$InsertionOrderLineItemVideoRestrictionsFactory = \_factory\InsertionOrderLineItemVideoRestrictions::get_instance();
 			$params = array();
-			$params["AdCampaignBannerID"] = $id;
+			$params["InsertionOrderLineItemID"] = $id;
 			
-			$AdCampaignVideoRestrictions = $AdCampaignVideoRestrictionsFactory->get_row($params);
+			$InsertionOrderLineItemVideoRestrictions = $InsertionOrderLineItemVideoRestrictionsFactory->get_row($params);
 
-			$AdCampaignBannerFactory = \_factory\AdCampaignBanner::get_instance();
+			$InsertionOrderLineItemFactory = \_factory\InsertionOrderLineItem::get_instance();
 			$params = array();
 			$params["Active"] = 1;
-			$params["AdCampaignBannerID"] = $id;
+			$params["InsertionOrderLineItemID"] = $id;
 
-			$AdCampaignBanner = $AdCampaignBannerFactory->get_row($params);
+			$InsertionOrderLineItem = $InsertionOrderLineItemFactory->get_row($params);
 
 		endif;
 
-		if ($AdCampaignBanner == null):
-		  die("Invalid $AdCampaignBanner ID");
+		if ($InsertionOrderLineItem == null):
+		  die("Invalid $InsertionOrderLineItem ID");
 		endif;
 
-		$campaignid               = isset($AdCampaignBanner->AdCampaignID) ? $AdCampaignBanner->AdCampaignID : "";
-		$bannerid                 = isset($AdCampaignBanner->AdCampaignBannerID) ? $AdCampaignBanner->AdCampaignBannerID : "";
-		$campaignpreviewid        = isset($AdCampaignBanner->AdCampaignPreviewID) ? $AdCampaignBanner->AdCampaignPreviewID : "";
-		$bannerpreviewid          = isset($AdCampaignBanner->AdCampaignBannerPreviewID) ? $AdCampaignBanner->AdCampaignBannerPreviewID : "";
-		$bannername               = $AdCampaignBanner->Name;
-		$startdate                = date('m/d/Y', strtotime($AdCampaignBanner->StartDate));
-		$enddate                  = date('m/d/Y', strtotime($AdCampaignBanner->EndDate));
-		$current_adcampaigntype   = $AdCampaignBanner->AdCampaignTypeID;
-		$current_mobile           = $AdCampaignBanner->IsMobile;
-		if ($AdCampaignBanner->IsMobile == 2):
+		$campaignid               = isset($InsertionOrderLineItem->InsertionOrderID) ? $InsertionOrderLineItem->InsertionOrderID : "";
+		$bannerid                 = isset($InsertionOrderLineItem->InsertionOrderLineItemID) ? $InsertionOrderLineItem->InsertionOrderLineItemID : "";
+		$campaignpreviewid        = isset($InsertionOrderLineItem->InsertionOrderPreviewID) ? $InsertionOrderLineItem->InsertionOrderPreviewID : "";
+		$bannerpreviewid          = isset($InsertionOrderLineItem->InsertionOrderLineItemPreviewID) ? $InsertionOrderLineItem->InsertionOrderLineItemPreviewID : "";
+		$bannername               = $InsertionOrderLineItem->Name;
+		$startdate                = date('m/d/Y', strtotime($InsertionOrderLineItem->StartDate));
+		$enddate                  = date('m/d/Y', strtotime($InsertionOrderLineItem->EndDate));
+		$current_adcampaigntype   = $InsertionOrderLineItem->InsertionOrderTypeID;
+		$current_mobile           = $InsertionOrderLineItem->IsMobile;
+		if ($InsertionOrderLineItem->IsMobile == 2):
 		      $size_list                = \util\BannerOptions::$iab_mobile_tablet_banner_options;
-		elseif ($AdCampaignBanner->IsMobile > 0):
+		elseif ($InsertionOrderLineItem->IsMobile > 0):
 		      $size_list                = \util\BannerOptions::$iab_mobile_phone_banner_options;
 		else:
 		      $size_list                = \util\BannerOptions::$iab_banner_options;
 		endif;
-		$height                   = $AdCampaignBanner->Height;
-		$width                    = $AdCampaignBanner->Width;
-		$weight                   = $AdCampaignBanner->Weight;
-		$bidamount                = $AdCampaignBanner->BidAmount;
-		$adtag                    = $AdCampaignBanner->AdTag;
-		$landingpagetld           = $AdCampaignBanner->LandingPageTLD;
-		$current_iabsize          = $AdCampaignBanner->IABSize;
+		$height                   = $InsertionOrderLineItem->Height;
+		$width                    = $InsertionOrderLineItem->Width;
+		$weight                   = $InsertionOrderLineItem->Weight;
+		$bidamount                = $InsertionOrderLineItem->BidAmount;
+		$adtag                    = $InsertionOrderLineItem->AdTag;
+		$landingpagetld           = $InsertionOrderLineItem->LandingPageTLD;
+		$current_iabsize          = $InsertionOrderLineItem->IABSize;
 		
-		$ImpressionType           = $AdCampaignBanner->ImpressionType;
+		$ImpressionType           = $InsertionOrderLineItem->ImpressionType;
 
 		$current_mimes 					= array();
 		$current_apis_supported 		= array();
@@ -2595,16 +2595,16 @@ class DemandController extends DemandAbstractActionController {
 		
 		$impression_type				= "banner";
 		
-		if ($AdCampaignVideoRestrictions != null):
+		if ($InsertionOrderLineItemVideoRestrictions != null):
 		
-			$current_mimes_raw = $AdCampaignVideoRestrictions->MimesCommaSeparated;
-			$current_apis_supported_raw = $AdCampaignVideoRestrictions->ApisSupportedCommaSeparated;
-			$current_protocols_raw = $AdCampaignVideoRestrictions->ProtocolsCommaSeparated;
-			$current_delivery_methods_raw = $AdCampaignVideoRestrictions->DeliveryCommaSeparated;
-			$current_playback_methods_raw = $AdCampaignVideoRestrictions->PlaybackCommaSeparated;
+			$current_mimes_raw = $InsertionOrderLineItemVideoRestrictions->MimesCommaSeparated;
+			$current_apis_supported_raw = $InsertionOrderLineItemVideoRestrictions->ApisSupportedCommaSeparated;
+			$current_protocols_raw = $InsertionOrderLineItemVideoRestrictions->ProtocolsCommaSeparated;
+			$current_delivery_methods_raw = $InsertionOrderLineItemVideoRestrictions->DeliveryCommaSeparated;
+			$current_playback_methods_raw = $InsertionOrderLineItemVideoRestrictions->PlaybackCommaSeparated;
 			
-			$current_start_delay = $AdCampaignVideoRestrictions->StartDelay;
-			$current_linearity = $AdCampaignVideoRestrictions->Linearity;
+			$current_start_delay = $InsertionOrderLineItemVideoRestrictions->StartDelay;
+			$current_linearity = $InsertionOrderLineItemVideoRestrictions->Linearity;
 
 			$current_mimes = array();
 			
@@ -2661,7 +2661,7 @@ class DemandController extends DemandAbstractActionController {
     		    'startdate'               => $startdate,
     		    'enddate'                 => $enddate,
 				'current_adcampaigntype'  => $current_adcampaigntype,
-				'adcampaigntype_options'  => $this->getAdCampaignTypeOptions(),
+				'adcampaigntype_options'  => $this->getInsertionOrderTypeOptions(),
 				'current_mobile'          => $current_mobile,
 		        'mobile_options'          => \util\BannerOptions::$mobile_options,
     		    'size_list'               => $size_list,
@@ -2748,37 +2748,37 @@ class DemandController extends DemandAbstractActionController {
 			if ($is_preview === true):
 
 				// ACL PREVIEW PERMISSIONS CHECK
-				transformation\CheckPermissions::checkEditPermissionAdCampaignBannerPreview($id, $this->auth, $this->config_handle);
+				transformation\CheckPermissions::checkEditPermissionInsertionOrderLineItemPreview($id, $this->auth, $this->config_handle);
 			
-				$AdCampaignBannerPreviewFactory = \_factory\AdCampaignBannerPreview::get_instance();
+				$InsertionOrderLineItemPreviewFactory = \_factory\InsertionOrderLineItemPreview::get_instance();
 				$params = array();
 				$params["Active"] = 1;
-				$params["AdCampaignBannerPreviewID"] = $id;
+				$params["InsertionOrderLineItemPreviewID"] = $id;
 				$banner_preview_id = $id;
 			
-				$AdCampaignBanner = $AdCampaignBannerPreviewFactory->get_row($params);
+				$InsertionOrderLineItem = $InsertionOrderLineItemPreviewFactory->get_row($params);
 				
 				$LinkedBannerToAdZonePreviewFactory = \_factory\LinkedBannerToAdZonePreview::get_instance();
 				$params = array();
-				$params["AdCampaignBannerPreviewID"] = $id;
+				$params["InsertionOrderLineItemPreviewID"] = $id;
 
 				$linked_ad_zones = $LinkedBannerToAdZonePreviewFactory->get($params);
 				
 			else:
 			
 				// ACL PERMISSIONS CHECK
-				transformation\CheckPermissions::checkEditPermissionAdCampaignBanner($id, $this->auth, $this->config_handle);
+				transformation\CheckPermissions::checkEditPermissionInsertionOrderLineItem($id, $this->auth, $this->config_handle);
 			
-				$AdCampaignBannerFactory = \_factory\AdCampaignBanner::get_instance();
+				$InsertionOrderLineItemFactory = \_factory\InsertionOrderLineItem::get_instance();
 				$params = array();
 				$params["Active"] = 1;
-				$params["AdCampaignBannerID"] = $id;
+				$params["InsertionOrderLineItemID"] = $id;
 			
-				$AdCampaignBanner = $AdCampaignBannerFactory->get_row($params);
+				$InsertionOrderLineItem = $InsertionOrderLineItemFactory->get_row($params);
 	
 				$LinkedBannerToAdZoneFactory = \_factory\LinkedBannerToAdZone::get_instance();
 				$params = array();
-				$params["AdCampaignBannerID"] = $id;
+				$params["InsertionOrderLineItemID"] = $id;
 				$linked_ad_zones = $LinkedBannerToAdZoneFactory->get($params);
 				
 			endif;
@@ -2825,11 +2825,11 @@ class DemandController extends DemandAbstractActionController {
 	}
 	
 	/*
-	 * END NGINAD AdCampaignBanner Actions
+	 * END NGINAD InsertionOrderLineItem Actions
 	*/
 
 	/*
-	 * BEGIN NGINAD AdCampaign Actions
+	 * BEGIN NGINAD InsertionOrder Actions
 	*/
 
 	/**
@@ -2866,8 +2866,8 @@ class DemandController extends DemandAbstractActionController {
 			* THEN IT CREATES A PREVIEW VERSION OF THE AD CAMPAIGN
 			*/
 
-			$update_data = array('type'=>'AdCampaignID', 'id'=>$id);
-			$return_val = \transformation\TransformPreview::previewCheckAdCampaignID($id, $this->auth, $this->config_handle, $this->getServiceLocator()->get('mail.transport'), $update_data);
+			$update_data = array('type'=>'InsertionOrderID', 'id'=>$id);
+			$return_val = \transformation\TransformPreview::previewCheckInsertionOrderID($id, $this->auth, $this->config_handle, $this->getServiceLocator()->get('mail.transport'), $update_data);
 			
 			if ($return_val !== null && array_key_exists("error", $return_val)):
 
@@ -2881,13 +2881,13 @@ class DemandController extends DemandAbstractActionController {
 			endif;
 
 			if ($return_val !== null):
-				$id = $return_val["AdCampaignPreviewID"];
+				$id = $return_val["InsertionOrderPreviewID"];
 			endif;
 		endif;
 
 		// ACL PREVIEW PERMISSIONS CHECK
-		//transformation\CheckPermissions::checkEditPermissionAdCampaignPreview($id, $auth, $config);
-		$response = transformation\CheckPermissions::checkEditPermissionAdCampaignPreview($id, $this->auth, $this->config_handle);
+		//transformation\CheckPermissions::checkEditPermissionInsertionOrderPreview($id, $auth, $config);
+		$response = transformation\CheckPermissions::checkEditPermissionInsertionOrderPreview($id, $this->auth, $this->config_handle);
 
 		if(array_key_exists("error", $response) > 0):
 			$success = false;
@@ -2899,15 +2899,15 @@ class DemandController extends DemandAbstractActionController {
 	   	   return $this->getResponse()->setContent(json_encode($data));
 		endif;
 
-		$AdCampaignPreviewFactory = \_factory\AdCampaignPreview::get_instance();
+		$InsertionOrderPreviewFactory = \_factory\InsertionOrderPreview::get_instance();
 		$params = array();
-		$params["AdCampaignPreviewID"] = $id;
+		$params["InsertionOrderPreviewID"] = $id;
 
-		$AdCampaignPreview = $AdCampaignPreviewFactory->get_row($params);
+		$InsertionOrderPreview = $InsertionOrderPreviewFactory->get_row($params);
 
-		if ($AdCampaignPreview == null):
-		  //die("Invalid AdCampaign Preview ID");
-		  $error_msg = "Invalid AdCampaign Preview ID";
+		if ($InsertionOrderPreview == null):
+		  //die("Invalid InsertionOrder Preview ID");
+		  $error_msg = "Invalid InsertionOrder Preview ID";
 		  $success = false;
 		  $data = array(
 	        'success' => $success,
@@ -2917,22 +2917,22 @@ class DemandController extends DemandAbstractActionController {
          return $this->getResponse()->setContent(json_encode($data));
 		endif;
 
-		$ad_campaign_preview_id = $AdCampaignPreview->AdCampaignPreviewID;
+		$ad_campaign_preview_id = $InsertionOrderPreview->InsertionOrderPreviewID;
 
-		$AdCampaignBannerPreviewFactory = \_factory\AdCampaignBannerPreview::get_instance();
+		$InsertionOrderLineItemPreviewFactory = \_factory\InsertionOrderLineItemPreview::get_instance();
 		$params = array();
-		$params["AdCampaignPreviewID"] = $AdCampaignPreview->AdCampaignPreviewID;
+		$params["InsertionOrderPreviewID"] = $InsertionOrderPreview->InsertionOrderPreviewID;
 
-		$AdCampaignBannerPreviewList = $AdCampaignBannerPreviewFactory->get($params);
+		$InsertionOrderLineItemPreviewList = $InsertionOrderLineItemPreviewFactory->get($params);
 
-        foreach ($AdCampaignBannerPreviewList as $AdCampaignBannerPreview):
+        foreach ($InsertionOrderLineItemPreviewList as $InsertionOrderLineItemPreview):
 
-            $banner_preview_id = $AdCampaignBannerPreview->AdCampaignBannerPreviewID;
-    		$AdCampaignBannerPreviewFactory->deActivateAdCampaignBannerPreview($banner_preview_id);
+            $banner_preview_id = $InsertionOrderLineItemPreview->InsertionOrderLineItemPreviewID;
+    		$InsertionOrderLineItemPreviewFactory->deActivateInsertionOrderLineItemPreview($banner_preview_id);
 
 		endforeach;
 
-    	$AdCampaignPreviewFactory->doDeletedAdCampaignPreview($ad_campaign_preview_id);
+    	$InsertionOrderPreviewFactory->doDeletedInsertionOrderPreview($ad_campaign_preview_id);
 
 		$data = array(
 	        'success' => $success,
@@ -2965,49 +2965,49 @@ class DemandController extends DemandAbstractActionController {
 
 		// verify
 		if ($is_preview == "true"):
-			$is_preview = \transformation\TransformPreview::doesPreviewAdCampaignExist($id, $this->auth);
+			$is_preview = \transformation\TransformPreview::doesPreviewInsertionOrderExist($id, $this->auth);
 		endif;
 		$campaign_preview_id = "";
 
 		if ($is_preview == true):
 
 			// ACL PREVIEW PERMISSIONS CHECK
-			transformation\CheckPermissions::checkEditPermissionAdCampaignPreview($id, $this->auth, $this->config_handle);
+			transformation\CheckPermissions::checkEditPermissionInsertionOrderPreview($id, $this->auth, $this->config_handle);
 
-			$AdCampaignPreviewFactory = \_factory\AdCampaignPreview::get_instance();
+			$InsertionOrderPreviewFactory = \_factory\InsertionOrderPreview::get_instance();
 			$params = array();
-			$params["AdCampaignPreviewID"] = $id;
+			$params["InsertionOrderPreviewID"] = $id;
 			$params["Active"] = 1;
 
-			$AdCampaign = $AdCampaignPreviewFactory->get_row($params);
+			$InsertionOrder = $InsertionOrderPreviewFactory->get_row($params);
 
 			$campaign_preview_id = $id;
 			$id = "";
 
 		else:
 			// ACL PERMISSIONS CHECK
-			transformation\CheckPermissions::checkEditPermissionAdCampaign($id, $this->auth, $this->config_handle);
+			transformation\CheckPermissions::checkEditPermissionInsertionOrder($id, $this->auth, $this->config_handle);
 
-			$AdCampaignFactory = \_factory\AdCampaign::get_instance();
+			$InsertionOrderFactory = \_factory\InsertionOrder::get_instance();
 			$params = array();
-			$params["AdCampaignID"] = $id;
+			$params["InsertionOrderID"] = $id;
 			$params["Active"] = 1;
 
-			$AdCampaign = $AdCampaignFactory->get_row($params);
+			$InsertionOrder = $InsertionOrderFactory->get_row($params);
 
 		endif;
 
-		if ($AdCampaign == null):
-			die("Invalid AdCampaign ID");
+		if ($InsertionOrder == null):
+			die("Invalid InsertionOrder ID");
 		endif;
 
-		$campaignname              = $AdCampaign->Name;
-		$startdate                 = date('m/d/Y', strtotime($AdCampaign->StartDate));
-		$enddate                   = date('m/d/Y', strtotime($AdCampaign->EndDate));
-		$customername              = $AdCampaign->Customer;
-		$customerid                = $AdCampaign->CustomerID;
-		$maximpressions            = $AdCampaign->MaxImpressions;
-		$maxspend                  = sprintf("%1.2f", $AdCampaign->MaxSpend);
+		$campaignname              = $InsertionOrder->Name;
+		$startdate                 = date('m/d/Y', strtotime($InsertionOrder->StartDate));
+		$enddate                   = date('m/d/Y', strtotime($InsertionOrder->EndDate));
+		$customername              = $InsertionOrder->Customer;
+		$customerid                = $InsertionOrder->CustomerID;
+		$maximpressions            = $InsertionOrder->MaxImpressions;
+		$maxspend                  = sprintf("%1.2f", $InsertionOrder->MaxSpend);
 
 
 		return new ViewModel(array(
@@ -3021,7 +3021,7 @@ class DemandController extends DemandAbstractActionController {
 				'customerid' => $customerid,
 				'maximpressions' => $maximpressions,
 				'maxspend' => $maxspend,
-				'bread_crumb_info' => $this->getBreadCrumbInfoFromAdCampaign($id, $campaign_preview_id, $is_preview),
+				'bread_crumb_info' => $this->getBreadCrumbInfoFromInsertionOrder($id, $campaign_preview_id, $is_preview),
 				'user_id_list' => $this->user_id_list_demand_customer,
     			'center_class' => 'centerj',
 	    		'user_identity' => $this->identity(),
@@ -3085,7 +3085,7 @@ class DemandController extends DemandAbstractActionController {
 	    $campaign_preview_id 		= $this->getRequest()->getPost('campaignpreviewid');
 	    $ispreview 					= $this->getRequest()->getPost('ispreview');
 
-	    $AdCampaignPreview = new \model\AdCampaignPreview();
+	    $InsertionOrderPreview = new \model\InsertionOrderPreview();
 
 	    if ($campaignid != null && $ispreview != true):
 		    /*
@@ -3094,14 +3094,14 @@ class DemandController extends DemandAbstractActionController {
 		    * THEN IT CREATES A PREVIEW VERSION OF THE AD CAMPAIGN
 		    */
 
-		    $update_data = array('type'=>'AdCampaignID', 'id'=>$campaignid);
-		    $return_val = \transformation\TransformPreview::previewCheckAdCampaignID($campaignid, $this->auth, $this->config_handle, $this->getServiceLocator()->get('mail.transport'), $update_data);
+		    $update_data = array('type'=>'InsertionOrderID', 'id'=>$campaignid);
+		    $return_val = \transformation\TransformPreview::previewCheckInsertionOrderID($campaignid, $this->auth, $this->config_handle, $this->getServiceLocator()->get('mail.transport'), $update_data);
 
 		    if ($return_val !== null):
-			    $campaign_preview_id 	= $return_val["AdCampaignPreviewID"];
+			    $campaign_preview_id 	= $return_val["InsertionOrderPreviewID"];
 		    endif;
 
-		    $AdCampaignPreview->AdCampaignID 	= $campaignid;
+		    $InsertionOrderPreview->InsertionOrderID 	= $campaignid;
 
 	    endif;
 
@@ -3109,51 +3109,51 @@ class DemandController extends DemandAbstractActionController {
 	    if ($campaign_preview_id != null):
 
 		    // ACL PREVIEW PERMISSIONS CHECK
-		    transformation\CheckPermissions::checkEditPermissionAdCampaignPreview($campaign_preview_id, $this->auth, $this->config_handle);
-	       	$AdCampaignPreview->AdCampaignPreviewID               = $campaign_preview_id;
+		    transformation\CheckPermissions::checkEditPermissionInsertionOrderPreview($campaign_preview_id, $this->auth, $this->config_handle);
+	       	$InsertionOrderPreview->InsertionOrderPreviewID               = $campaign_preview_id;
 
 	       	$params = array();
-	       	$params["AdCampaignPreviewID"] = $campaign_preview_id;
-	       	$AdCampaignPreviewFactory = \_factory\AdCampaignPreview::get_instance();
-	       	$_AdCampaignPreview = $AdCampaignPreviewFactory->get_row($params);
-	       	$AdCampaignPreview->AdCampaignID 	= $_AdCampaignPreview->AdCampaignID;
+	       	$params["InsertionOrderPreviewID"] = $campaign_preview_id;
+	       	$InsertionOrderPreviewFactory = \_factory\InsertionOrderPreview::get_instance();
+	       	$_InsertionOrderPreview = $InsertionOrderPreviewFactory->get_row($params);
+	       	$InsertionOrderPreview->InsertionOrderID 	= $_InsertionOrderPreview->InsertionOrderID;
 	    endif;
 
 	    // else new campaign, ispreview is always true
 
-	    $AdCampaignPreview->UserID             			= $this->auth->getEffectiveUserID();
+	    $InsertionOrderPreview->UserID             			= $this->auth->getEffectiveUserID();
 
-    	$AdCampaignPreview->Name                      = $campaignname;
-    	$AdCampaignPreview->StartDate                 = date("Y-m-d H:i:s", strtotime($startdate));
-    	$AdCampaignPreview->EndDate                   = date("Y-m-d H:i:s", strtotime($enddate));
-    	$AdCampaignPreview->Customer                  = $customername;
-    	$AdCampaignPreview->CustomerID                = $customerid;
-    	$AdCampaignPreview->ImpressionsCounter        = 0;
-    	$AdCampaignPreview->MaxImpressions            = $maximpressions;
-    	$AdCampaignPreview->CurrentSpend              = 0;
-    	$AdCampaignPreview->MaxSpend                  = $maxspend;
-    	$AdCampaignPreview->Active                    = 1;
-    	$AdCampaignPreview->DateCreated               = date("Y-m-d H:i:s");
-    	$AdCampaignPreview->DateUpdated               = date("Y-m-d H:i:s");
-    	$AdCampaignPreview->ChangeWentLive            = 0;
+    	$InsertionOrderPreview->Name                      = $campaignname;
+    	$InsertionOrderPreview->StartDate                 = date("Y-m-d H:i:s", strtotime($startdate));
+    	$InsertionOrderPreview->EndDate                   = date("Y-m-d H:i:s", strtotime($enddate));
+    	$InsertionOrderPreview->Customer                  = $customername;
+    	$InsertionOrderPreview->CustomerID                = $customerid;
+    	$InsertionOrderPreview->ImpressionsCounter        = 0;
+    	$InsertionOrderPreview->MaxImpressions            = $maximpressions;
+    	$InsertionOrderPreview->CurrentSpend              = 0;
+    	$InsertionOrderPreview->MaxSpend                  = $maxspend;
+    	$InsertionOrderPreview->Active                    = 1;
+    	$InsertionOrderPreview->DateCreated               = date("Y-m-d H:i:s");
+    	$InsertionOrderPreview->DateUpdated               = date("Y-m-d H:i:s");
+    	$InsertionOrderPreview->ChangeWentLive            = 0;
 
-	    $AdCampaignPreviewFactory = \_factory\AdCampaignPreview::get_instance();
-	    $new_campaign_preview_id = $AdCampaignPreviewFactory->saveAdCampaignPreview($AdCampaignPreview);
+	    $InsertionOrderPreviewFactory = \_factory\InsertionOrderPreview::get_instance();
+	    $new_campaign_preview_id = $InsertionOrderPreviewFactory->saveInsertionOrderPreview($InsertionOrderPreview);
 
 	    if (!$this->is_admin && $new_campaign_preview_id !== null && $this->config_handle['mail']['subscribe']['campaigns'] === true):
 	    
 		    // if this ad campaign was not created/edited by the admin, then send out a notification email
 		    $message = '<b>NginAd Demand Customer Campaign Added by ' . $this->true_user_name . '.</b><br /><br />';
 		    $message = $message.'<table border="0" width="10%">';
-		    $message = $message.'<tr><td><b>AdCampaignID: </b></td><td>'.$new_campaign_preview_id.'</td></tr>';
-		    $message = $message.'<tr><td><b>UserID: </b></td><td>'.$AdCampaignPreview->UserID.'</td></tr>';
-		    $message = $message.'<tr><td><b>Name: </b></td><td>'.$AdCampaignPreview->Name.'</td></tr>';
-		    $message = $message.'<tr><td><b>StartDate: </b></td><td>'.$AdCampaignPreview->StartDate.'</td></tr>';
-		    $message = $message.'<tr><td><b>EndDate: </b></td><td>'.$AdCampaignPreview->EndDate.'</td></tr>';
-		    $message = $message.'<tr><td><b>Customer: </b></td><td>'.$AdCampaignPreview->Customer.'</td></tr>';
-		    $message = $message.'<tr><td><b>CustomerID: </b></td><td>'.$AdCampaignPreview->CustomerID.'</td></tr>';
-		    $message = $message.'<tr><td><b>MaxImpressions: </b></td><td>'.$AdCampaignPreview->MaxImpressions.'</td></tr>';
-		    $message = $message.'<tr><td><b>MaxSpend: </b></td><td>'.$AdCampaignPreview->MaxSpend.'</td></tr>';
+		    $message = $message.'<tr><td><b>InsertionOrderID: </b></td><td>'.$new_campaign_preview_id.'</td></tr>';
+		    $message = $message.'<tr><td><b>UserID: </b></td><td>'.$InsertionOrderPreview->UserID.'</td></tr>';
+		    $message = $message.'<tr><td><b>Name: </b></td><td>'.$InsertionOrderPreview->Name.'</td></tr>';
+		    $message = $message.'<tr><td><b>StartDate: </b></td><td>'.$InsertionOrderPreview->StartDate.'</td></tr>';
+		    $message = $message.'<tr><td><b>EndDate: </b></td><td>'.$InsertionOrderPreview->EndDate.'</td></tr>';
+		    $message = $message.'<tr><td><b>Customer: </b></td><td>'.$InsertionOrderPreview->Customer.'</td></tr>';
+		    $message = $message.'<tr><td><b>CustomerID: </b></td><td>'.$InsertionOrderPreview->CustomerID.'</td></tr>';
+		    $message = $message.'<tr><td><b>MaxImpressions: </b></td><td>'.$InsertionOrderPreview->MaxImpressions.'</td></tr>';
+		    $message = $message.'<tr><td><b>MaxSpend: </b></td><td>'.$InsertionOrderPreview->MaxSpend.'</td></tr>';
 		    $message = $message.'</table>';
 		    	
 		    $subject = "NginAd Demand Customer Campaign Added by " . $this->true_user_name;
@@ -3184,7 +3184,7 @@ class DemandController extends DemandAbstractActionController {
 	}
 
 	/*
-	 * END NGINAD AdCampaign Actions
+	 * END NGINAD InsertionOrder Actions
 	*/
 
 	/*
@@ -3198,7 +3198,7 @@ class DemandController extends DemandAbstractActionController {
 	 * @param unknown $is_preview
 	 * @return multitype:NULL
 	 */
-	private function getBreadCrumbInfoFromAdCampaign($campaign_id, $campaign_preview_id, $is_preview) {
+	private function getBreadCrumbInfoFromInsertionOrder($campaign_id, $campaign_preview_id, $is_preview) {
 
 			if ($is_preview == true):
 				return $this->getBreadCrumbInfoFromCampaignPreviewID($campaign_preview_id);
@@ -3216,9 +3216,9 @@ class DemandController extends DemandAbstractActionController {
 	private function getBreadCrumbInfoFromBanner($banner_id, $banner_preview_id, $is_preview) {
 
 			if ($is_preview == true):
-				return $this->getBreadCrumbInfoFromAdCampaignBannerPreviewID($banner_preview_id);
+				return $this->getBreadCrumbInfoFromInsertionOrderLineItemPreviewID($banner_preview_id);
 			else:
-				return $this->getBreadCrumbInfoFromAdCampaignBannerID($banner_id);
+				return $this->getBreadCrumbInfoFromInsertionOrderLineItemID($banner_id);
 			endif;
 	}
 
@@ -3227,16 +3227,16 @@ class DemandController extends DemandAbstractActionController {
 	 * @param unknown $id
 	 * @return unknown
 	 */
-	private function getBreadCrumbInfoFromAdCampaignBannerID($id) {
+	private function getBreadCrumbInfoFromInsertionOrderLineItemID($id) {
 
-		$AdCampaignBannerFactory = \_factory\AdCampaignBanner::get_instance();
+		$InsertionOrderLineItemFactory = \_factory\InsertionOrderLineItem::get_instance();
 		$params = array();
-		$params["AdCampaignBannerID"] = $id;
+		$params["InsertionOrderLineItemID"] = $id;
 
-		$AdCampaignBanner = $AdCampaignBannerFactory->get_row($params);
+		$InsertionOrderLineItem = $InsertionOrderLineItemFactory->get_row($params);
 
-		$bread_crumb_info = $this->getBreadCrumbInfoFromCampaignID($AdCampaignBanner->AdCampaignID);
-		$bread_crumb_info["BCBanner"] = $AdCampaignBanner->Name;
+		$bread_crumb_info = $this->getBreadCrumbInfoFromCampaignID($InsertionOrderLineItem->InsertionOrderID);
+		$bread_crumb_info["BCBanner"] = $InsertionOrderLineItem->Name;
 
 		return $bread_crumb_info;
 
@@ -3247,16 +3247,16 @@ class DemandController extends DemandAbstractActionController {
 	 * @param unknown $id
 	 * @return unknown
 	 */
-	private function getBreadCrumbInfoFromAdCampaignBannerPreviewID($id) {
+	private function getBreadCrumbInfoFromInsertionOrderLineItemPreviewID($id) {
 
-		$AdCampaignBannerPreviewFactory = \_factory\AdCampaignBannerPreview::get_instance();
+		$InsertionOrderLineItemPreviewFactory = \_factory\InsertionOrderLineItemPreview::get_instance();
 		$params = array();
-		$params["AdCampaignBannerPreviewID"] = $id;
+		$params["InsertionOrderLineItemPreviewID"] = $id;
 
-		$AdCampaignBannerPreview = $AdCampaignBannerPreviewFactory->get_row($params);
+		$InsertionOrderLineItemPreview = $InsertionOrderLineItemPreviewFactory->get_row($params);
 
-		$bread_crumb_info = $this->getBreadCrumbInfoFromCampaignPreviewID($AdCampaignBannerPreview->AdCampaignPreviewID);
-		$bread_crumb_info["BCBanner"] = $AdCampaignBannerPreview->Name;
+		$bread_crumb_info = $this->getBreadCrumbInfoFromCampaignPreviewID($InsertionOrderLineItemPreview->InsertionOrderPreviewID);
+		$bread_crumb_info["BCBanner"] = $InsertionOrderLineItemPreview->Name;
 
 		return $bread_crumb_info;
 
@@ -3269,13 +3269,13 @@ class DemandController extends DemandAbstractActionController {
 	 */
 	private function getBreadCrumbInfoFromCampaignID($id) {
 
-		$AdCampaignFactory = \_factory\AdCampaign::get_instance();
+		$InsertionOrderFactory = \_factory\InsertionOrder::get_instance();
 		$params = array();
-		$params["AdCampaignID"] = $id;
+		$params["InsertionOrderID"] = $id;
 
-		$AdCampaign = $AdCampaignFactory->get_row($params);
+		$InsertionOrder = $InsertionOrderFactory->get_row($params);
 
-		return array("BCAdCampaign"=>'<a href="/demand/viewbanner/' . $AdCampaign->AdCampaignID . '">' . $AdCampaign->Name . "</a>");
+		return array("BCInsertionOrder"=>'<a href="/demand/viewbanner/' . $InsertionOrder->InsertionOrderID . '">' . $InsertionOrder->Name . "</a>");
 
 	}
 
@@ -3286,13 +3286,13 @@ class DemandController extends DemandAbstractActionController {
 	 */
 	private function getBreadCrumbInfoFromCampaignPreviewID($id) {
 
-		$AdCampaignPreviewFactory = \_factory\AdCampaignPreview::get_instance();
+		$InsertionOrderPreviewFactory = \_factory\InsertionOrderPreview::get_instance();
 		$params = array();
-		$params["AdCampaignPreviewID"] = $id;
+		$params["InsertionOrderPreviewID"] = $id;
 
-		$AdCampaignPreview = $AdCampaignPreviewFactory->get_row($params);
+		$InsertionOrderPreview = $InsertionOrderPreviewFactory->get_row($params);
 
-		return array("BCAdCampaign"=>'<a href="/demand/viewbanner/' . $AdCampaignPreview->AdCampaignPreviewID . '?ispreview=true">' . $AdCampaignPreview->Name . "</a>");
+		return array("BCInsertionOrder"=>'<a href="/demand/viewbanner/' . $InsertionOrderPreview->InsertionOrderPreviewID . '?ispreview=true">' . $InsertionOrderPreview->Name . "</a>");
 
 	}
 

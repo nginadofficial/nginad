@@ -14,7 +14,7 @@ class CachedStatsWrites {
 	public static function incrementContractPublisherZoneHourlyImpressionsCached($config, \model\ContractPublisherZoneHourlyImpressions $ContractPublisherZoneHourlyImpressions) {
 
 		$params = array();
-		$params["AdCampaignBannerID"] 	= $ContractPublisherZoneHourlyImpressions->AdCampaignBannerID;
+		$params["InsertionOrderLineItemID"] 	= $ContractPublisherZoneHourlyImpressions->InsertionOrderLineItemID;
 		$params["PublisherAdZoneID"] 	= $ContractPublisherZoneHourlyImpressions->PublisherAdZoneID;
 		
 		$class_dir_name = 'ContractPublisherZoneHourlyImpressions';
@@ -72,13 +72,13 @@ class CachedStatsWrites {
 		$current_hour = date("m/d/Y H");
 	
 		$params = array();
-		$params["AdCampaignBannerID"] 				= $ContractPublisherZoneHourlyImpressionsToAdd->AdCampaignBannerID;
+		$params["InsertionOrderLineItemID"] 				= $ContractPublisherZoneHourlyImpressionsToAdd->InsertionOrderLineItemID;
 		$params["PublisherAdZoneID"] 				= $ContractPublisherZoneHourlyImpressionsToAdd->PublisherAdZoneID;
 		$params["MDYH"] 							= $current_hour;
 		$ContractPublisherZoneHourlyImpressions 	= $ContractPublisherZoneHourlyImpressionsFactory->get_row($params);
 	
 		$contract_publisher_zone_hourly_counter 						= new \model\ContractPublisherZoneHourlyImpressions();
-		$contract_publisher_zone_hourly_counter->AdCampaignBannerID 	= $ContractPublisherZoneHourlyImpressionsToAdd->AdCampaignBannerID;
+		$contract_publisher_zone_hourly_counter->InsertionOrderLineItemID 	= $ContractPublisherZoneHourlyImpressionsToAdd->InsertionOrderLineItemID;
 		$contract_publisher_zone_hourly_counter->PublisherAdZoneID 		= $ContractPublisherZoneHourlyImpressionsToAdd->PublisherAdZoneID;
 	
 

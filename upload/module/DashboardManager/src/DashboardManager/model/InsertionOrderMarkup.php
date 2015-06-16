@@ -9,8 +9,8 @@
 
 namespace model;
 
-class AdCampainMarkup {
-    public $AdCampaignID;
+class InsertionOrderMarkup {
+    public $InsertionOrderID;
     public $MarkupRate;
 }
 

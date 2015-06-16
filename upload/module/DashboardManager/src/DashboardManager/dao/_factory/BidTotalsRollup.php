@@ -45,7 +45,7 @@ class BidTotalsRollup extends \_factory\CachedTableRead
         	);
         	endforeach;
         	$select->limit(1, 0);
-        	$select->order('AdCampaignBannerID');
+        	$select->order('InsertionOrderLineItemID');
 
         }
         	);
@@ -69,7 +69,7 @@ class BidTotalsRollup extends \_factory\CachedTableRead
         		);
         		endforeach;
         		//$select->limit(10, 0);
-        		$select->order('AdCampaignBannerID');
+        		$select->order('InsertionOrderLineItemID');
 
         	}
     	);

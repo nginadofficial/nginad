@@ -9,10 +9,10 @@
 
 namespace model;
 
-class AdCampaignVideoRestrictions {
+class InsertionOrderLineItemVideoRestrictionsPreview {
 
-    public $AdCampaignVideoRestrictionsID;
-    public $AdCampaignBannerID;
+    public $InsertionOrderLineItemVideoRestrictionsPreviewID;
+    public $InsertionOrderLineItemPreviewID;
     public $GeoCountry;
     public $GeoState;
     public $GeoCity;
@@ -35,3 +35,4 @@ class AdCampaignVideoRestrictions {
     public $DateCreated;
 
 }
+	

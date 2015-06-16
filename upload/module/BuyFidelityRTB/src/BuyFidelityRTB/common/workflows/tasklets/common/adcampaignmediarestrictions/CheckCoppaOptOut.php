@@ -11,15 +11,15 @@ namespace buyrtbfidelity\workflows\tasklets\common\adcampaignmediarestrictions;
 
 class CheckCoppaOptOut {
 	
-	public static function execute(&$Logger, &$Workflow, \model\openrtb\RtbBidRequest &$RtbBidRequest, \model\openrtb\RtbBidRequestImp &$RtbBidRequestImp, &$AdCampaignBanner, &$AdCampaignMediaRestrictions) {
+	public static function execute(&$Logger, &$Workflow, \model\openrtb\RtbBidRequest &$RtbBidRequest, \model\openrtb\RtbBidRequestImp &$RtbBidRequestImp, &$InsertionOrderLineItem, &$InsertionOrderMediaRestrictions) {
 	
 		/*
 		 * Check user for Coppa opt out status
 		*/
-		if ($AdCampaignMediaRestrictions->Optout !== null && $RtbBidRequest->RtbBidRequestRegulations !== null && $RtbBidRequest->RtbBidRequestRegulations->coppa != $AdCampaignMediaRestrictions->Optout):
+		if ($InsertionOrderMediaRestrictions->Optout !== null && $RtbBidRequest->RtbBidRequestRegulations !== null && $RtbBidRequest->RtbBidRequestRegulations->coppa != $InsertionOrderMediaRestrictions->Optout):
 			if ($Logger->setting_log === true):
 				$Logger->log[] = "Failed: " . "Check user for Coppa opt out status :: EXPECTED: " 
-					. $AdCampaignMediaRestrictions->Optout . " GOT: " 
+					. $InsertionOrderMediaRestrictions->Optout . " GOT: " 
 					. $RtbBidRequest->RtbBidRequestRegulations->coppa;
 			endif;
 			return false;

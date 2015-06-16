@@ -11,7 +11,7 @@ namespace model;
 
 class ContractPublisherZoneHourlyImpressions {
 	public $ContractPublisherZoneHourlyImpressionsID;
-    public $AdCampaignBannerID;
+    public $InsertionOrderLineItemID;
     public $PublisherAdZoneID;
     public $MDYH;
     public $Impressions;

@@ -39,9 +39,9 @@ use rtbsell\RtbSellBid;
 	public $org_request;
 	
 	/*
-	 * A List of AdCampaignBanner ORM objects that matched all the business rules from the incoming request
+	 * A List of InsertionOrderLineItem ORM objects that matched all the business rules from the incoming request
 	*/
-	private $AdCampaignBanner_Match_List = array();
+	private $InsertionOrderLineItem_Match_List = array();
 
 	private $expeption_missing_min_bid_request_params = "Bid Request missing required parameter";
 	private $missing_optional_bid_request_params = "Bid Request missing optional parameter";

@@ -97,7 +97,7 @@ class LinkedBannerToAdZone extends \_factory\CachedTableRead
     
     public function saveLinkedBannerToAdZone(\model\LinkedBannerToAdZone $LinkedBannerToAdZone) {
     	$data = array(
-    			'AdCampaignBannerID'	=> $LinkedBannerToAdZone->AdCampaignBannerID,
+    			'InsertionOrderLineItemID'	=> $LinkedBannerToAdZone->InsertionOrderLineItemID,
     			'PublisherAdZoneID'		=> $LinkedBannerToAdZone->PublisherAdZoneID,
     			'Weight'				=> $LinkedBannerToAdZone->Weight,
     			'DateUpdated'           => $LinkedBannerToAdZone->DateUpdated
@@ -123,7 +123,7 @@ class LinkedBannerToAdZone extends \_factory\CachedTableRead
     	$PublisherAdZoneFactory = \_factory\PublisherAdZone::get_instance();
     	$LinkedBannerToAdZoneFactory = \_factory\LinkedBannerToAdZone::get_instance();
     	$params = array();
-    	$params["AdCampaignBannerID"] = $banner_id;
+    	$params["InsertionOrderLineItemID"] = $banner_id;
     	$LinkedBannerToAdZoneList = $LinkedBannerToAdZoneFactory->get($params);
     	
     	if ($LinkedBannerToAdZoneList != null):
@@ -137,7 +137,7 @@ class LinkedBannerToAdZone extends \_factory\CachedTableRead
 	    	endforeach;
     	endif;
     	
-    	$this->delete(array('AdCampaignBannerID' => $banner_id));
+    	$this->delete(array('InsertionOrderLineItemID' => $banner_id));
     }
     
     public function deleteLinkedBannerToAdZoneByPublisherAdZoneID($publisher_ad_zone_id) {
@@ -146,7 +146,7 @@ class LinkedBannerToAdZone extends \_factory\CachedTableRead
     	 * First go through each banner and make sure that 
     	 * each one no longer is selected for contract
     	 */
-    	$AdCampaignBannerFactory = \_factory\AdCampaignBanner::get_instance();
+    	$InsertionOrderLineItemFactory = \_factory\InsertionOrderLineItem::get_instance();
     	$LinkedBannerToAdZoneFactory = \_factory\LinkedBannerToAdZone::get_instance();
     	$params = array();
     	$params["PublisherAdZoneID"] = $publisher_ad_zone_id;
@@ -155,10 +155,10 @@ class LinkedBannerToAdZone extends \_factory\CachedTableRead
     	if ($LinkedBannerToAdZoneList != null):
 	    	foreach ($LinkedBannerToAdZoneList as $LinkedBannerToAdZone):
 		    	$params = array();
-		    	$params["AdCampaignBannerID"] = $LinkedBannerToAdZone->AdCampaignBannerID;
-		    	$LinkedBannerToAdZoneByAdCampaignBannerList = $LinkedBannerToAdZoneFactory->get($params);
-	    		if (count($LinkedBannerToAdZoneByAdCampaignBannerList) <= 1):
-	    			$AdCampaignBannerFactory->updateAdCampaignBannerAdCampaignType($LinkedBannerToAdZone->AdCampaignBannerID, AD_TYPE_ANY_REMNANT);
+		    	$params["InsertionOrderLineItemID"] = $LinkedBannerToAdZone->InsertionOrderLineItemID;
+		    	$LinkedBannerToAdZoneByInsertionOrderLineItemList = $LinkedBannerToAdZoneFactory->get($params);
+	    		if (count($LinkedBannerToAdZoneByInsertionOrderLineItemList) <= 1):
+	    			$InsertionOrderLineItemFactory->updateInsertionOrderLineItemInsertionOrderType($LinkedBannerToAdZone->InsertionOrderLineItemID, AD_TYPE_ANY_REMNANT);
 	    		endif;
 	    	endforeach;
     	endif;

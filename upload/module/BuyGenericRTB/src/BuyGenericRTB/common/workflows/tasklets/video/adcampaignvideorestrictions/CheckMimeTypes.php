@@ -11,17 +11,17 @@ namespace buyrtb\workflows\tasklets\video\adcampaignvideorestrictions;
 
 class CheckMimeTypes {
 	
-	public static function execute(&$Logger, &$Workflow, \model\openrtb\RtbBidRequest &$RtbBidRequest, \model\openrtb\RtbBidRequestImp &$RtbBidRequestImp, &$AdCampaignBanner, &$AdCampaignVideoRestrictions) {
+	public static function execute(&$Logger, &$Workflow, \model\openrtb\RtbBidRequest &$RtbBidRequest, \model\openrtb\RtbBidRequestImp &$RtbBidRequestImp, &$InsertionOrderLineItem, &$InsertionOrderLineItemVideoRestrictions) {
 		
 		$RtbBidRequestVideo = $RtbBidRequestImp->RtbBidRequestVideo;
 		
 		$result = true;
 		
-		if (empty($AdCampaignVideoRestrictions->MimesCommaSeparated)):
+		if (empty($InsertionOrderLineItemVideoRestrictions->MimesCommaSeparated)):
 			return $result;
 		endif;
 		
-		$mime_code_list = explode(',', strtolower($AdCampaignVideoRestrictions->MimesCommaSeparated));
+		$mime_code_list = explode(',', strtolower($InsertionOrderLineItemVideoRestrictions->MimesCommaSeparated));
 		
 		if (!count($mime_code_list)):
 			return $result;
@@ -56,7 +56,7 @@ class CheckMimeTypes {
 		
 		if ($result === false && $Logger->setting_log === true):
 			$Logger->log[] = "Failed: " . "Check video mime type code :: EXPECTED: "
-				. $AdCampaignVideoRestrictions->MimesCommaSeparated
+				. $InsertionOrderLineItemVideoRestrictions->MimesCommaSeparated
 				. " GOT: " . join(',', $RtbBidRequestVideo->mimes);
 		endif;
 		

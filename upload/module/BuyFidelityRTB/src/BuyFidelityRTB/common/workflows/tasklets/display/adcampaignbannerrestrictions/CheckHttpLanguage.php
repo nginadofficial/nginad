@@ -11,17 +11,17 @@ namespace buyrtbfidelity\workflows\tasklets\display\adcampaignbannerrestrictions
 
 class CheckHttpLanguage {
 	
-	public static function execute(&$Logger, &$Workflow, \model\openrtb\RtbBidRequest &$RtbBidRequest, \model\openrtb\RtbBidRequestImp &$RtbBidRequestImp, &$AdCampaignBanner, &$AdCampaignBannerRestrictions) {
+	public static function execute(&$Logger, &$Workflow, \model\openrtb\RtbBidRequest &$RtbBidRequest, \model\openrtb\RtbBidRequestImp &$RtbBidRequestImp, &$InsertionOrderLineItem, &$InsertionOrderLineItemRestrictions) {
 	
 		/*
 		 * Check browser language
 		*/
-		if ($AdCampaignBannerRestrictions->HttpLanguage !== null && $RtbBidRequest->RtbBidRequestDevice->language !== null):
+		if ($InsertionOrderLineItemRestrictions->HttpLanguage !== null && $RtbBidRequest->RtbBidRequestDevice->language !== null):
 		
 			$has_http_language = false;
 			
 			$request_language_list = explode(";", strtolower($RtbBidRequest->RtbBidRequestDevice->language));
-			$http_language_list = explode(";", strtolower($AdCampaignBannerRestrictions->HttpLanguage));
+			$http_language_list = explode(";", strtolower($InsertionOrderLineItemRestrictions->HttpLanguage));
 			
 			foreach ($http_language_list as $http_language):
 				
@@ -36,7 +36,7 @@ class CheckHttpLanguage {
 			
 			if ($has_http_language === false):
 				if ($Logger->setting_log === true):
-					$Logger->log[] = "Failed: " . "Check browser language :: EXPECTED: " . $AdCampaignBannerRestrictions->HttpLanguage . " GOT: " . $RtbBidRequest->RtbBidRequestDevice->language;
+					$Logger->log[] = "Failed: " . "Check browser language :: EXPECTED: " . $InsertionOrderLineItemRestrictions->HttpLanguage . " GOT: " . $RtbBidRequest->RtbBidRequestDevice->language;
 				endif;
 				return false;
 			endif;

@@ -11,11 +11,11 @@ namespace buyrtb\workflows\tasklets\video\adcampaignvideorestrictions;
 
 class CheckFoldPosition {
 	
-	public static function execute(&$Logger, &$Workflow, \model\openrtb\RtbBidRequest &$RtbBidRequest, \model\openrtb\RtbBidRequestImp &$RtbBidRequestImp, &$AdCampaignBanner, &$AdCampaignVideoRestrictions) {
+	public static function execute(&$Logger, &$Workflow, \model\openrtb\RtbBidRequest &$RtbBidRequest, \model\openrtb\RtbBidRequestImp &$RtbBidRequestImp, &$InsertionOrderLineItem, &$InsertionOrderLineItemVideoRestrictions) {
 		
 		$RtbBidRequestVideo = $RtbBidRequestImp->RtbBidRequestVideo;
 		
-		if (!is_numeric($AdCampaignVideoRestrictions->FoldPos)):
+		if (!is_numeric($InsertionOrderLineItemVideoRestrictions->FoldPos)):
 			return true;
 		endif;
 		
@@ -29,11 +29,11 @@ class CheckFoldPosition {
 			return false;
 		endif;
 		
-		$result = $AdCampaignVideoRestrictions->FoldPos == $RtbBidRequestVideo->pos;
+		$result = $InsertionOrderLineItemVideoRestrictions->FoldPos == $RtbBidRequestVideo->pos;
 		
 		if ($result === false && $Logger->setting_log === true):
 			$Logger->log[] = "Failed: " . "Check video fold position :: EXPECTED: "
-					. $AdCampaignVideoRestrictions->FoldPos
+					. $InsertionOrderLineItemVideoRestrictions->FoldPos
 					. " GOT: " . $RtbBidRequestVideo->pos;
 		endif;
 		

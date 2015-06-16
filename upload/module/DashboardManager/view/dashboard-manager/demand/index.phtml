@@ -118,11 +118,11 @@ $effective_user_in_dashboard = false;
            </tr>
 
     <?php foreach ($ad_campaigns as $ad_campaign) :
-    		$preview_query = isset($ad_campaign->AdCampaignPreviewID) ? "?ispreview=true" : "";
-		    if (isset($ad_campaign->AdCampaignPreviewID)):
-			    $campaign_id = $ad_campaign->AdCampaignPreviewID;
+    		$preview_query = isset($ad_campaign->InsertionOrderPreviewID) ? "?ispreview=true" : "";
+		    if (isset($ad_campaign->InsertionOrderPreviewID)):
+			    $campaign_id = $ad_campaign->InsertionOrderPreviewID;
 		    else:
-			    $campaign_id = $ad_campaign->AdCampaignID;
+			    $campaign_id = $ad_campaign->InsertionOrderID;
 		    endif;
     ?>
             <tr>
@@ -134,10 +134,10 @@ $effective_user_in_dashboard = false;
 					User Unknown
               <?php endif; ?>
            </td>
-           <?php if (isset($ad_campaign->AdCampaignPreviewID)): ?>
+           <?php if (isset($ad_campaign->InsertionOrderPreviewID)): ?>
            <td>
-              <a href="/demand/approvecampaign/<?php echo $ad_campaign->AdCampaignPreviewID;?>" onclick="return confirm('Are you sure?');">APPROVE CAMPAIGN CHANGES</a>
-              <hr /><a href="/demand/rejectcampaign/<?php echo $ad_campaign->AdCampaignPreviewID; ?>" onclick="return confirm('Are you sure?');">REJECT CAMPAIGN CHANGES</a>
+              <a href="/demand/approvecampaign/<?php echo $ad_campaign->InsertionOrderPreviewID;?>" onclick="return confirm('Are you sure?');">APPROVE CAMPAIGN CHANGES</a>
+              <hr /><a href="/demand/rejectcampaign/<?php echo $ad_campaign->InsertionOrderPreviewID; ?>" onclick="return confirm('Are you sure?');">REJECT CAMPAIGN CHANGES</a>
            </td>
            <?php else: ?>
            <td>
@@ -147,11 +147,11 @@ $effective_user_in_dashboard = false;
 
 	<?php if ($is_admin === true && $effective_id != 0): ?>
            <td>
-           		<?php if (isset($ad_campaign->AdCampaignID) && $ad_campaign->AdCampaignID != null && isset($campaign_markup_rate_list[$ad_campaign->AdCampaignID])): ?>
-					<form name="change-campaign-markup-<?php echo $ad_campaign->AdCampaignID;?>" class="change-campaign-markup" action="/demand/changecampaignmarkup">
-						<input type="hidden" name="markupcampaignid" value="<?php echo $ad_campaign->AdCampaignID;?>" />
+           		<?php if (isset($ad_campaign->InsertionOrderID) && $ad_campaign->InsertionOrderID != null && isset($campaign_markup_rate_list[$ad_campaign->InsertionOrderID])): ?>
+					<form name="change-campaign-markup-<?php echo $ad_campaign->InsertionOrderID;?>" class="change-campaign-markup" action="/demand/changecampaignmarkup">
+						<input type="hidden" name="markupcampaignid" value="<?php echo $ad_campaign->InsertionOrderID;?>" />
 						<div style="float: right;">
-							<input type="text" style="text-align: right" name="campaign-markup" class="input-mini" value="<?php echo $campaign_markup_rate_list[$ad_campaign->AdCampaignID];?>">%
+							<input type="text" style="text-align: right" name="campaign-markup" class="input-mini" value="<?php echo $campaign_markup_rate_list[$ad_campaign->InsertionOrderID];?>">%
 						</div>
 						<div>
 							<input type="submit" name="campaign-markup-submit" class="btn btn-warning btn-mini" value="Update Markup" style="" />
@@ -166,24 +166,24 @@ $effective_user_in_dashboard = false;
 
 	<?php endif; ?>
            <td>
-            <?php if (!isset($ad_campaign->AdCampaignPreviewID)): ?>
+            <?php if (!isset($ad_campaign->InsertionOrderPreviewID)): ?>
             	<?php echo '<span style="color:green; font-weight: bold;">APROVED</span>'; ?>
             <?php elseif (isset($ad_campaign->Deleted) && $ad_campaign->Deleted == 1): ?>
             	<?php echo '<span style="color:red; font-weight: bold;">DELETED</span>'; ?>
             	<?php if ($is_admin === false): ?>
-            		<hr /><a href="/demand/cancelcampaign/<?php echo $ad_campaign->AdCampaignPreviewID; ?>" onclick="return confirm('Are you sure?');">CANCEL CAMPAIGN CHANGES</a>
+            		<hr /><a href="/demand/cancelcampaign/<?php echo $ad_campaign->InsertionOrderPreviewID; ?>" onclick="return confirm('Are you sure?');">CANCEL CAMPAIGN CHANGES</a>
             	<?php endif; ?>
             <?php else: ?>
             	<?php echo '<span style="color:brown; font-weight: bold;">PENDING APPROVAL</span>'; ?>
             	<?php if ($is_admin === false): ?>
-            		<hr /><a href="/demand/cancelcampaign/<?php echo $ad_campaign->AdCampaignPreviewID; ?>" onclick="return confirm('Are you sure?');">CANCEL CAMPAIGN CHANGES</a>
+            		<hr /><a href="/demand/cancelcampaign/<?php echo $ad_campaign->InsertionOrderPreviewID; ?>" onclick="return confirm('Are you sure?');">CANCEL CAMPAIGN CHANGES</a>
             	<?php endif; ?>
             <?php endif; ?>
            </td>
            <td>
             <?php
-            if (isset($ad_campaign->AdCampaignID)):
-            	echo '<span style="color:black;">' . $ad_campaign->AdCampaignID . '</span>';
+            if (isset($ad_campaign->InsertionOrderID)):
+            	echo '<span style="color:black;">' . $ad_campaign->InsertionOrderID . '</span>';
             elseif (isset($ad_campaign->Deleted) && $ad_campaign->Deleted == 1):
             	echo '<span style="color:red; font-weight: bold;">DELETED</span>';
             else:
@@ -198,7 +198,7 @@ $effective_user_in_dashboard = false;
             <?php echo $ad_campaign->StartDate; ?><hr /><?php echo $ad_campaign->EndDate; ?>
            </td>
            <td>
-           	<?php if (!isset($ad_campaign->AdCampaignPreviewID)): ?>
+           	<?php if (!isset($ad_campaign->InsertionOrderPreviewID)): ?>
             	<?php echo number_format($ad_campaign->ImpressionsCounter); ?>
             <?php else: ?>
 				N/A in Edit Mode
@@ -208,7 +208,7 @@ $effective_user_in_dashboard = false;
            <?php echo number_format($ad_campaign->MaxImpressions); ?>
            </td>
            <td>
-           	<?php if (!isset($ad_campaign->AdCampaignPreviewID)): ?>
+           	<?php if (!isset($ad_campaign->InsertionOrderPreviewID)): ?>
             	$<?php echo number_format($ad_campaign->CurrentSpend, 4, '.', ','); ?>
             <?php else: ?>
 				N/A in Edit Mode

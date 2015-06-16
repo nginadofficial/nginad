@@ -11,7 +11,7 @@ namespace buyrtbfidelity\workflows\tasklets\display\adcampaignbannerrestrictions
 
 class CheckInIFrame {
 	
-	public static function execute(&$Logger, &$Workflow, \model\openrtb\RtbBidRequest &$RtbBidRequest, \model\openrtb\RtbBidRequestImp &$RtbBidRequestImp, &$AdCampaignBanner, &$AdCampaignBannerRestrictions) {
+	public static function execute(&$Logger, &$Workflow, \model\openrtb\RtbBidRequest &$RtbBidRequest, \model\openrtb\RtbBidRequestImp &$RtbBidRequestImp, &$InsertionOrderLineItem, &$InsertionOrderLineItemRestrictions) {
 		
 		$RtbBidRequestBanner = $RtbBidRequestImp->RtbBidRequestBanner;
 		
@@ -24,10 +24,10 @@ class CheckInIFrame {
 		 * Check banner IFRAME disposition
 		 * - we are checking for string 0 as well
 		*/
-		if ($AdCampaignBannerRestrictions->InIframe != null && $AdCampaignBannerRestrictions->InIframe == 0 && $in_iframe == true):
+		if ($InsertionOrderLineItemRestrictions->InIframe != null && $InsertionOrderLineItemRestrictions->InIframe == 0 && $in_iframe == true):
 			if ($Logger->setting_log === true):
 				$Logger->log[] = "Failed: " . "Check banner in IFRAME :: EXPECTED: " 
-					. $AdCampaignBannerRestrictions->InIframe
+					. $InsertionOrderLineItemRestrictions->InIframe
 					. " GOT: " . $in_iframe;
 			endif;
 			return false;
@@ -37,10 +37,10 @@ class CheckInIFrame {
 		 * Check banner multiple nested IFRAMEs disposition
 		 * - we are checking for string 0 as well
 		*/
-		if ($AdCampaignBannerRestrictions->InMultipleNestedIframes != null && $AdCampaignBannerRestrictions->InMultipleNestedIframes == 0 && $in_iframe == true):
+		if ($InsertionOrderLineItemRestrictions->InMultipleNestedIframes != null && $InsertionOrderLineItemRestrictions->InMultipleNestedIframes == 0 && $in_iframe == true):
 			if ($Logger->setting_log === true):
 			$Logger->log[] = "Failed: " . "Check banner in multiple nested IFRAMEs :: EXPECTED: "
-					. $AdCampaignBannerRestrictions->InMultipleNestedIframes
+					. $InsertionOrderLineItemRestrictions->InMultipleNestedIframes
 					. " GOT: " . $in_iframe;
 			endif;
 			return false;

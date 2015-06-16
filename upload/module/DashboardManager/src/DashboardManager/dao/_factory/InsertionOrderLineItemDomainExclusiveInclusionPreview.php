@@ -12,7 +12,7 @@ namespace _factory;
 use Zend\Db\TableGateway\AbstractTableGateway;
 use Zend\Db\TableGateway\Feature;
 
-class AdCampaignBannerDomainExclusiveInclusionPreview extends AbstractTableGateway
+class InsertionOrderLineItemDomainExclusiveInclusionPreview extends AbstractTableGateway
 {
 
 	static protected $instance = null;
@@ -20,7 +20,7 @@ class AdCampaignBannerDomainExclusiveInclusionPreview extends AbstractTableGatew
 	public static function get_instance() {
 
 		if (self::$instance == null):
-			self::$instance = new \_factory\AdCampaignBannerDomainExclusiveInclusionPreview();
+			self::$instance = new \_factory\InsertionOrderLineItemDomainExclusiveInclusionPreview();
 		endif;
 		return self::$instance;
 	}
@@ -28,7 +28,7 @@ class AdCampaignBannerDomainExclusiveInclusionPreview extends AbstractTableGatew
 
     function __construct() {
 
-            $this->table = 'AdCampaignBannerDomainExclusiveInclusionPreview';
+            $this->table = 'InsertionOrderLineItemDomainExclusiveInclusionPreview';
             $this->featureSet = new Feature\FeatureSet();
             $this->featureSet->addFeature(new Feature\GlobalAdapterFeature());
             $this->initialize();
@@ -46,7 +46,7 @@ class AdCampaignBannerDomainExclusiveInclusionPreview extends AbstractTableGatew
         	);
         	endforeach;
         	$select->limit(1, 0);
-        	$select->order('AdCampaignBannerDomainExclusiveInclusionPreviewID');
+        	$select->order('InsertionOrderLineItemDomainExclusiveInclusionPreviewID');
 
         }
         	);
@@ -70,7 +70,7 @@ class AdCampaignBannerDomainExclusiveInclusionPreview extends AbstractTableGatew
         		);
         		endforeach;
         		//$select->limit(10, 0);
-        		$select->order('AdCampaignBannerDomainExclusiveInclusionPreviewID');
+        		$select->order('InsertionOrderLineItemDomainExclusiveInclusionPreviewID');
 
         	}
     	);
@@ -82,28 +82,28 @@ class AdCampaignBannerDomainExclusiveInclusionPreview extends AbstractTableGatew
     		return $obj_list;
     }
 
-    public function saveAdCampaignBannerDomainExclusiveInclusionPreview(\model\AdCampaignBannerDomainExclusiveInclusionPreview $BannerDomainExclusiveInclusionPreview) {
+    public function saveInsertionOrderLineItemDomainExclusiveInclusionPreview(\model\InsertionOrderLineItemDomainExclusiveInclusionPreview $BannerDomainExclusiveInclusionPreview) {
     	$data = array(
-    	        'AdCampaignBannerPreviewID'                     => $BannerDomainExclusiveInclusionPreview->AdCampaignBannerPreviewID,
+    	        'InsertionOrderLineItemPreviewID'                     => $BannerDomainExclusiveInclusionPreview->InsertionOrderLineItemPreviewID,
     			'InclusionType'                        			=> $BannerDomainExclusiveInclusionPreview->InclusionType,
     	        'DomainName'                           			=> $BannerDomainExclusiveInclusionPreview->DomainName,
     			'DateCreated'                          			=> $BannerDomainExclusiveInclusionPreview->DateCreated
     	);
-    	$banner_domain_exclusive_inclusion_preview_id = (int)$BannerDomainExclusiveInclusionPreview->AdCampaignBannerDomainExclusiveInclusionPreviewID;
+    	$banner_domain_exclusive_inclusion_preview_id = (int)$BannerDomainExclusiveInclusionPreview->InsertionOrderLineItemDomainExclusiveInclusionPreviewID;
     	if ($banner_domain_exclusive_inclusion_preview_id === 0): 
     		$this->insert($data);
     		return $this->getLastInsertValue();
     	else: 
-    		$this->update($data, array('AdCampaignBannerDomainExclusiveInclusionPreviewID' => $banner_domain_exclusive_inclusion_preview_id));
+    		$this->update($data, array('InsertionOrderLineItemDomainExclusiveInclusionPreviewID' => $banner_domain_exclusive_inclusion_preview_id));
     		return null;
     	endif;
     }
 
-    public function deleteAdCampaignBannerDomainExclusiveInclusionPreview($banner_domain_exclusive_inclusion_preview_id) {
-        $this->delete(array('AdCampaignBannerDomainExclusiveInclusionPreviewID' => $banner_domain_exclusive_inclusion_preview_id));
+    public function deleteInsertionOrderLineItemDomainExclusiveInclusionPreview($banner_domain_exclusive_inclusion_preview_id) {
+        $this->delete(array('InsertionOrderLineItemDomainExclusiveInclusionPreviewID' => $banner_domain_exclusive_inclusion_preview_id));
     }
 
-    public function deleteAdCampaignBannerDomainExclusiveInclusionByBannerID($banner_id) {
-    	$this->delete(array('AdCampaignBannerPreviewID' => $banner_id));
+    public function deleteInsertionOrderLineItemDomainExclusiveInclusionByBannerID($banner_id) {
+    	$this->delete(array('InsertionOrderLineItemPreviewID' => $banner_id));
     }
 };

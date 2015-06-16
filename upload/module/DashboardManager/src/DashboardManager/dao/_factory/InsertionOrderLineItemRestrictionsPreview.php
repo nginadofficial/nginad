@@ -12,7 +12,7 @@ namespace _factory;
 use Zend\Db\TableGateway\AbstractTableGateway;
 use Zend\Db\TableGateway\Feature;
 
-class AdCampaignBannerRestrictionsPreview extends AbstractTableGateway
+class InsertionOrderLineItemRestrictionsPreview extends AbstractTableGateway
 {
 
 	static protected $instance = null;
@@ -20,7 +20,7 @@ class AdCampaignBannerRestrictionsPreview extends AbstractTableGateway
 	public static function get_instance() {
 
 		if (self::$instance == null):
-			self::$instance = new \_factory\AdCampaignBannerRestrictionsPreview();
+			self::$instance = new \_factory\InsertionOrderLineItemRestrictionsPreview();
 		endif;
 		return self::$instance;
 	}
@@ -28,7 +28,7 @@ class AdCampaignBannerRestrictionsPreview extends AbstractTableGateway
 
     function __construct() {
 
-            $this->table = 'AdCampaignBannerRestrictionsPreview';
+            $this->table = 'InsertionOrderLineItemRestrictionsPreview';
             $this->featureSet = new Feature\FeatureSet();
             $this->featureSet->addFeature(new Feature\GlobalAdapterFeature());
             $this->initialize();
@@ -46,7 +46,7 @@ class AdCampaignBannerRestrictionsPreview extends AbstractTableGateway
         	);
         	endforeach;
         	$select->limit(1, 0);
-        	$select->order('AdCampaignBannerRestrictionsPreviewID');
+        	$select->order('InsertionOrderLineItemRestrictionsPreviewID');
 
         }
         	);
@@ -70,7 +70,7 @@ class AdCampaignBannerRestrictionsPreview extends AbstractTableGateway
         		);
         		endforeach;
         		//$select->limit(10, 0);
-        		$select->order('AdCampaignBannerRestrictionsPreviewID');
+        		$select->order('InsertionOrderLineItemRestrictionsPreviewID');
 
         	}
     	);
@@ -82,9 +82,9 @@ class AdCampaignBannerRestrictionsPreview extends AbstractTableGateway
     		return $obj_list;
     }
 
-    public function saveAdCampaignBannerRestrictionsPreview(\model\AdCampaignBannerRestrictionsPreview $BannerRestrictionsPreview) {
+    public function saveInsertionOrderLineItemRestrictionsPreview(\model\InsertionOrderLineItemRestrictionsPreview $BannerRestrictionsPreview) {
     	$data = array(
-    	        'AdCampaignBannerPreviewID'                 => $BannerRestrictionsPreview->AdCampaignBannerPreviewID,
+    	        'InsertionOrderLineItemPreviewID'                 => $BannerRestrictionsPreview->InsertionOrderLineItemPreviewID,
     	        'GeoCountry'                       			=> $BannerRestrictionsPreview->GeoCountry === "" ? null : $BannerRestrictionsPreview->GeoCountry,
     	        'GeoState'                         			=> $BannerRestrictionsPreview->GeoState === "" ? null : $BannerRestrictionsPreview->GeoState,
     	        'GeoCity'                          			=> $BannerRestrictionsPreview->GeoCity === "" ? null : $BannerRestrictionsPreview->GeoCity,
@@ -112,27 +112,27 @@ class AdCampaignBannerRestrictionsPreview extends AbstractTableGateway
     			'DateCreated'                      			=> $BannerRestrictionsPreview->DateCreated
     	);
 
-    	$banner_preview_id = $BannerRestrictionsPreview->AdCampaignBannerPreviewID;
+    	$banner_preview_id = $BannerRestrictionsPreview->InsertionOrderLineItemPreviewID;
     	$params = array();
-    	$params["AdCampaignBannerPreviewID"] = $banner_preview_id;
+    	$params["InsertionOrderLineItemPreviewID"] = $banner_preview_id;
     	$_banner_restrictions_preview = $this->get_row($params);
 
-    	$banner_restrictions_preview_id = (int)$BannerRestrictionsPreview->AdCampaignBannerRestrictionsPreviewID;
+    	$banner_restrictions_preview_id = (int)$BannerRestrictionsPreview->InsertionOrderLineItemRestrictionsPreviewID;
 
     	if ($banner_restrictions_preview_id === 0 && $_banner_restrictions_preview === null): 
     		$this->insert($data);
     		return $this->getLastInsertValue();
     	else: 
     		if ($banner_restrictions_preview_id === 0):
-    			$banner_restrictions_preview_id = $_banner_restrictions_preview->AdCampaignBannerRestrictionsID;
+    			$banner_restrictions_preview_id = $_banner_restrictions_preview->InsertionOrderLineItemRestrictionsID;
     		endif;
-    		$this->update($data, array('AdCampaignBannerRestrictionsPreviewID' => $banner_restrictions_preview_id));
+    		$this->update($data, array('InsertionOrderLineItemRestrictionsPreviewID' => $banner_restrictions_preview_id));
     		return null;
     	endif;
     }
 
-    public function deleteAdCampaignBannerRestrictionsPreview($banner_restrictions_preview_id) {
-    	$this->delete(array('AdCampaignBannerPreviewID' => $banner_restrictions_preview_id));
+    public function deleteInsertionOrderLineItemRestrictionsPreview($banner_restrictions_preview_id) {
+    	$this->delete(array('InsertionOrderLineItemPreviewID' => $banner_restrictions_preview_id));
     }
 
 };

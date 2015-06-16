@@ -50,7 +50,7 @@ class BuySideHourlyBidsCounter extends \_factory\CachedTableRead
         	);
         	endforeach;
         	$select->limit(1, 0);
-        	$select->order('AdCampaignBannerID');
+        	$select->order('InsertionOrderLineItemID');
 
         }
         	);
@@ -74,7 +74,7 @@ class BuySideHourlyBidsCounter extends \_factory\CachedTableRead
         		);
         		endforeach;
         		//$select->limit(10, 0);
-        		$select->order('AdCampaignBannerID');
+        		$select->order('InsertionOrderLineItemID');
 
         	}
     	);
@@ -163,7 +163,7 @@ class BuySideHourlyBidsCounter extends \_factory\CachedTableRead
     public function insertBuySideHourlyBidsCounter(\model\BuySideHourlyBidsCounter $BuySideHourlyBidsCounter) {
     	$data = array(
     			'BuySidePartnerID'      => $BuySideHourlyBidsCounter->BuySidePartnerID,
-    			'AdCampaignBannerID'   	=> $BuySideHourlyBidsCounter->AdCampaignBannerID,
+    			'InsertionOrderLineItemID'   	=> $BuySideHourlyBidsCounter->InsertionOrderLineItemID,
     			'MDYH'   				=> $BuySideHourlyBidsCounter->MDYH,
     			'BidsCounter'   		=> $BuySideHourlyBidsCounter->BidsCounter,
     			'DateCreated'   		=> $BuySideHourlyBidsCounter->DateCreated

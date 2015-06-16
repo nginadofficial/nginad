@@ -11,7 +11,7 @@ namespace model;
 
 class ImpressionAndSpendTotalsRollup {
 
-    public $AdCampaignBannerID;
+    public $InsertionOrderLineItemID;
     public $TotalSpendGross;
     public $TotalSpendNet;
     public $TotalImpressions;

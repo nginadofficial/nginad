@@ -23,7 +23,7 @@ $is_bid = strpos(strtolower($request_path), "/bid") === 0;
 $is_report = strpos(strtolower($request_path), "/report") === 0;
 
 /*
- * Configure AdCampaignTypes
+ * Configure InsertionOrderTypes
  */
 
 define('AD_TYPE_ANY_REMNANT', 		1);

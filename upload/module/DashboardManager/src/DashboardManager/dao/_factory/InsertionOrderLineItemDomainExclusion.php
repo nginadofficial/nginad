@@ -11,7 +11,7 @@ namespace _factory;
 
 use Zend\Db\TableGateway\Feature;
 
-class AdCampaignBannerDomainExclusiveInclusion extends \_factory\CachedTableRead
+class InsertionOrderLineItemDomainExclusion extends \_factory\CachedTableRead
 {
 
 	static protected $instance = null;
@@ -19,7 +19,7 @@ class AdCampaignBannerDomainExclusiveInclusion extends \_factory\CachedTableRead
 	public static function get_instance() {
 
 		if (self::$instance == null):
-			self::$instance = new \_factory\AdCampaignBannerDomainExclusiveInclusion();
+			self::$instance = new \_factory\InsertionOrderLineItemDomainExclusion();
 		endif;
 		return self::$instance;
 	}
@@ -27,7 +27,7 @@ class AdCampaignBannerDomainExclusiveInclusion extends \_factory\CachedTableRead
 
     function __construct() {
 
-            $this->table = 'AdCampaignBannerDomainExclusiveInclusion';
+            $this->table = 'InsertionOrderLineItemDomainExclusion';
             $this->featureSet = new Feature\FeatureSet();
             $this->featureSet->addFeature(new Feature\GlobalAdapterFeature());
             $this->initialize();
@@ -45,7 +45,7 @@ class AdCampaignBannerDomainExclusiveInclusion extends \_factory\CachedTableRead
         	);
         	endforeach;
         	$select->limit(1, 0);
-        	$select->order('AdCampaignBannerDomainExclusiveInclusionID');
+        	$select->order('InsertionOrderLineItemDomainExclusionID');
 
         }
         	);
@@ -69,7 +69,7 @@ class AdCampaignBannerDomainExclusiveInclusion extends \_factory\CachedTableRead
         		);
         		endforeach;
         		//$select->limit(10, 0);
-        		$select->order('AdCampaignBannerDomainExclusiveInclusionID');
+        		$select->order('InsertionOrderLineItemDomainExclusionID');
 
         	}
     	);
@@ -81,26 +81,26 @@ class AdCampaignBannerDomainExclusiveInclusion extends \_factory\CachedTableRead
     		return $obj_list;
     }
 
-    public function saveAdCampaignBannerDomainExclusiveInclusion(\model\AdCampaignBannerDomainExclusiveInclusion $BannerDomainExclusiveInclusion) {
+    public function saveInsertionOrderLineItemDomainExclusion(\model\InsertionOrderLineItemDomainExclusion $BannerDomainExclusion) {
     	$data = array(
-    	        'AdCampaignBannerID'                        => $BannerDomainExclusiveInclusion->AdCampaignBannerID,
-    			'InclusionType'                        		=> $BannerDomainExclusiveInclusion->InclusionType,
-    	        'DomainName'                           		=> $BannerDomainExclusiveInclusion->DomainName,
-    			'DateCreated'                          		=> $BannerDomainExclusiveInclusion->DateCreated
+    	        'InsertionOrderLineItemID'                        => $BannerDomainExclusion->InsertionOrderLineItemID,
+    			'ExclusionType'                        		=> $BannerDomainExclusion->ExclusionType,
+    	        'DomainName'                           		=> $BannerDomainExclusion->DomainName,
+    			'DateCreated'                          		=> $BannerDomainExclusion->DateCreated
     	);
-    	$banner_domain_exclusive_inclusion_id = (int)$BannerDomainExclusiveInclusion->AdCampaignBannerDomainExclusiveInclusionID;
-    	if ($banner_domain_exclusive_inclusion_id === 0): 
+    	$banner_domain_exclusion_id = (int)$BannerDomainExclusion->InsertionOrderLineItemDomainExclusionID;
+    	if ($banner_domain_exclusion_id === 0): 
     		$this->insert($data);
     	else: 
-    		$this->update($data, array('AdCampaignBannerDomainExclusiveInclusionID' => $banner_domain_exclusive_inclusion_id));
+    		$this->update($data, array('InsertionOrderLineItemDomainExclusionID' => $banner_domain_exclusion_id));
     	endif;
     }
 
-    public function deleteAdCampaignBannerDomainExclusiveInclusion($banner_domain_exclusive_inclusion_id) {
-        $this->delete(array('AdCampaignBannerDomainExclusiveInclusionID' => $banner_domain_exclusive_inclusion_id));
+    public function deleteInsertionOrderLineItemDomainExclusion($banner_domain_exclusion_id) {
+        $this->delete(array('InsertionOrderLineItemDomainExclusionID' => $banner_domain_exclusion_id));
     }
 
-    public function deleteAdCampaignBannerDomainExclusiveInclusionByBannerID($banner_id) {
-    	$this->delete(array('AdCampaignBannerID' => $banner_id));
+    public function deleteInsertionOrderLineItemDomainExclusionByBannerID($banner_id) {
+    	$this->delete(array('InsertionOrderLineItemID' => $banner_id));
     }
 };

@@ -11,17 +11,17 @@ namespace buyrtb\workflows\tasklets\video\adcampaignvideorestrictions;
 
 class CheckSupportedApis {
 	
-	public static function execute(&$Logger, &$Workflow, \model\openrtb\RtbBidRequest &$RtbBidRequest, \model\openrtb\RtbBidRequestImp &$RtbBidRequestImp, &$AdCampaignBanner, &$AdCampaignVideoRestrictions) {
+	public static function execute(&$Logger, &$Workflow, \model\openrtb\RtbBidRequest &$RtbBidRequest, \model\openrtb\RtbBidRequestImp &$RtbBidRequestImp, &$InsertionOrderLineItem, &$InsertionOrderLineItemVideoRestrictions) {
 		
 		$RtbBidRequestVideo = $RtbBidRequestImp->RtbBidRequestVideo;
 		
 		$result = true;
 		
-		if (empty($AdCampaignVideoRestrictions->ApisSupportedCommaSeparated)):
+		if (empty($InsertionOrderLineItemVideoRestrictions->ApisSupportedCommaSeparated)):
 			return $result;
 		endif;
 		
-		$api_code_list = explode(',', $AdCampaignVideoRestrictions->ApisSupportedCommaSeparated);
+		$api_code_list = explode(',', $InsertionOrderLineItemVideoRestrictions->ApisSupportedCommaSeparated);
 		
 		if (!count($api_code_list)):
 			return $result;
@@ -55,7 +55,7 @@ class CheckSupportedApis {
 		
 		if ($result === false && $Logger->setting_log === true):
 			$Logger->log[] = "Failed: " . "Check video APIs code :: EXPECTED: "
-				. $AdCampaignVideoRestrictions->ApisSupportedCommaSeparated
+				. $InsertionOrderLineItemVideoRestrictions->ApisSupportedCommaSeparated
 				. " GOT: " . join(',', $RtbBidRequestVideo->api);
 		endif;
 		

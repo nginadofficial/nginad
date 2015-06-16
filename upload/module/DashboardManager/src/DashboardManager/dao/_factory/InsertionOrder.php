@@ -11,7 +11,7 @@ namespace _factory;
 
 use Zend\Db\TableGateway\Feature;
 
-class AdCampaign extends \_factory\CachedTableRead
+class InsertionOrder extends \_factory\CachedTableRead
 {
 
 	static protected $instance = null;
@@ -19,7 +19,7 @@ class AdCampaign extends \_factory\CachedTableRead
 	public static function get_instance() {
 
 		if (self::$instance == null):
-			self::$instance = new \_factory\AdCampaign();
+			self::$instance = new \_factory\InsertionOrder();
 		endif;
 		return self::$instance;
 	}
@@ -27,7 +27,7 @@ class AdCampaign extends \_factory\CachedTableRead
 
     function __construct() {
 
-            $this->table = 'AdCampaign';
+            $this->table = 'InsertionOrder';
             $this->featureSet = new Feature\FeatureSet();
             $this->featureSet->addFeature(new Feature\GlobalAdapterFeature());
             $this->initialize();
@@ -45,7 +45,7 @@ class AdCampaign extends \_factory\CachedTableRead
         	);
         	endforeach;
         	$select->limit(1, 0);
-        	$select->order('AdCampaignID');
+        	$select->order('InsertionOrderID');
 
         }
         	);
@@ -69,7 +69,7 @@ class AdCampaign extends \_factory\CachedTableRead
         		);
         		endforeach;
         		//$select->limit(10, 0);
-        		$select->order('AdCampaignID');
+        		$select->order('InsertionOrderID');
 
         	}
     	);
@@ -81,54 +81,54 @@ class AdCampaign extends \_factory\CachedTableRead
     		return $obj_list;
     }
 
-    public function saveAdCampaign(\model\AdCampaign $AdCampaign) {
+    public function saveInsertionOrder(\model\InsertionOrder $InsertionOrder) {
     	$data = array(
-    			'Name'                 => $AdCampaign->Name,
+    			'Name'                 => $InsertionOrder->Name,
     	         // convert to MySQL DateTime
-    			'StartDate'            => $AdCampaign->StartDate,
-    	        'EndDate'              => $AdCampaign->EndDate,
-    	        'Customer'             => $AdCampaign->Customer,
-    	        'CustomerID'           => $AdCampaign->CustomerID,
-    	        'MaxImpressions'       => $AdCampaign->MaxImpressions,
-    	        'MaxSpend'             => $AdCampaign->MaxSpend,
-    	        'Active'               => $AdCampaign->Active,
-    	        'DateUpdated'          => $AdCampaign->DateUpdated
+    			'StartDate'            => $InsertionOrder->StartDate,
+    	        'EndDate'              => $InsertionOrder->EndDate,
+    	        'Customer'             => $InsertionOrder->Customer,
+    	        'CustomerID'           => $InsertionOrder->CustomerID,
+    	        'MaxImpressions'       => $InsertionOrder->MaxImpressions,
+    	        'MaxSpend'             => $InsertionOrder->MaxSpend,
+    	        'Active'               => $InsertionOrder->Active,
+    	        'DateUpdated'          => $InsertionOrder->DateUpdated
     	);
 
-    	$ad_campaign_id = (int)$AdCampaign->AdCampaignID;
+    	$ad_campaign_id = (int)$InsertionOrder->InsertionOrderID;
     	if ($ad_campaign_id === 0): 
-    		$data['UserID'] 					= $AdCampaign->UserID;
-    		$data['DateCreated'] 				= $AdCampaign->DateCreated;
-    		$data['ImpressionsCounter']   		= $AdCampaign->ImpressionsCounter;
-    		$data['CurrentSpend']         		= $AdCampaign->CurrentSpend;
+    		$data['UserID'] 					= $InsertionOrder->UserID;
+    		$data['DateCreated'] 				= $InsertionOrder->DateCreated;
+    		$data['ImpressionsCounter']   		= $InsertionOrder->ImpressionsCounter;
+    		$data['CurrentSpend']         		= $InsertionOrder->CurrentSpend;
     		$this->insert($data);
     		return $this->getLastInsertValue();
     	else: 
-    		$this->update($data, array('AdCampaignID' => $ad_campaign_id));
+    		$this->update($data, array('InsertionOrderID' => $ad_campaign_id));
     		return $ad_campaign_id;
         endif;
     }
 
-    public function saveAdCampaignFromDataArray($data) {
+    public function saveInsertionOrderFromDataArray($data) {
 
-    	$this->update($data, array('AdCampaignID' => $data['AdCampaignID']));
+    	$this->update($data, array('InsertionOrderID' => $data['InsertionOrderID']));
     }
 
-    public function deleteAdCampaign($ad_campaign_id) {
-    	$this->delete(array('AdCampaignID' => $ad_campaign_id));
+    public function deleteInsertionOrder($ad_campaign_id) {
+    	$this->delete(array('InsertionOrderID' => $ad_campaign_id));
     }
 
-    public function deActivateAdCampaign($ad_campaign_id) {
+    public function deActivateInsertionOrder($ad_campaign_id) {
 
     	$params = array();
-    	$params["AdCampaignID"] = $ad_campaign_id;
-    	$AdCampaign = $this->get_row($params);
+    	$params["InsertionOrderID"] = $ad_campaign_id;
+    	$InsertionOrder = $this->get_row($params);
 
-    	$AdCampaign->Active = 0;
+    	$InsertionOrder->Active = 0;
     	// get array of data
-    	$data = $AdCampaign->getArrayCopy();
+    	$data = $InsertionOrder->getArrayCopy();
 
-    	$this->update($data, array('AdCampaignID' => $ad_campaign_id));
+    	$this->update($data, array('InsertionOrderID' => $ad_campaign_id));
     }
 
 };

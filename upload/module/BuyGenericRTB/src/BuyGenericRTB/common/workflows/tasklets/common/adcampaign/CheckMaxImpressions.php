@@ -11,12 +11,12 @@ namespace buyrtb\workflows\tasklets\common\adcampaign;
 
 class CheckMaxImpressions {
 	
-	public static function execute(&$Logger, &$Workflow, \model\openrtb\RtbBidRequest &$RtbBidRequest, &$AdCampaign) {
+	public static function execute(&$Logger, &$Workflow, \model\openrtb\RtbBidRequest &$RtbBidRequest, &$InsertionOrder) {
 	
         /*
        	 * Check max impressions
          */
-    	if ($AdCampaign->ImpressionsCounter >= $AdCampaign->MaxImpressions):
+    	if ($InsertionOrder->ImpressionsCounter >= $InsertionOrder->MaxImpressions):
       		if ($Logger->setting_log === true):
            		$Logger->log[] = "Failed: " . "Max Campaign Impressions Exceeded";
        		endif;

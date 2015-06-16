@@ -12,10 +12,10 @@ namespace buyrtb\workflows;
 class VideoWorkflow
 {
 	
-	public function process_business_rules_workflow(&$Logger, &$ParentWorkflow, \model\openrtb\RtbBidRequest &$RtbBidRequest, &$RtbBidRequestImp, &$AdCampaignBanner, &$AdCampaignVideoRestrictionsFactory) {
+	public function process_business_rules_workflow(&$Logger, &$ParentWorkflow, \model\openrtb\RtbBidRequest &$RtbBidRequest, &$RtbBidRequestImp, &$InsertionOrderLineItem, &$InsertionOrderLineItemVideoRestrictionsFactory) {
     	
     	// Check video restrictions
-    	if (\buyrtb\workflows\tasklets\video\adcampaignbanner\VideoRestrictionsWorkflow::execute($Logger, $ParentWorkflow, $RtbBidRequest, $RtbBidRequestImp, $AdCampaignBanner, $AdCampaignVideoRestrictionsFactory) === false):
+    	if (\buyrtb\workflows\tasklets\video\adcampaignbanner\VideoRestrictionsWorkflow::execute($Logger, $ParentWorkflow, $RtbBidRequest, $RtbBidRequestImp, $InsertionOrderLineItem, $InsertionOrderLineItemVideoRestrictionsFactory) === false):
     		return false;
     	endif;
     	

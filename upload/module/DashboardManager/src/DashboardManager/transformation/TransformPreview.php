@@ -13,7 +13,7 @@ use Zend\Mail\Message;
 use Zend\Mime;
 
 /*
- * Static class to transform AdCampaignBanner and AdCampaign and dependent objects
+ * Static class to transform InsertionOrderLineItem and InsertionOrder and dependent objects
  * to and from their preview form
  */
 
@@ -26,20 +26,20 @@ class TransformPreview {
 		*/
 		if (self::doesPreviewBannerExist($banner_id, $auth) == false):
 
-			$AdCampaignBannerFactory = \_factory\AdCampaignBanner::get_instance();
+			$InsertionOrderLineItemFactory = \_factory\InsertionOrderLineItem::get_instance();
 			$params = array();
-			$params["AdCampaignBannerID"] = $banner_id;
+			$params["InsertionOrderLineItemID"] = $banner_id;
 			$params["Active"] = 1;
 			$params["UserID"] = $auth->getEffectiveUserID();  // ACL permissions check equivalent
-			$AdCampaignBanner = $AdCampaignBannerFactory->get_row($params);
+			$InsertionOrderLineItem = $InsertionOrderLineItemFactory->get_row($params);
 
-			if ($AdCampaignBanner == null):
+			if ($InsertionOrderLineItem == null):
 				//die("No Such Banner");
 				$params["error"] = "No Such Banner";
 				return $params;
 			endif;
 
-			return self::cloneAdCampaignIntoAdCampaignPreview($AdCampaignBanner->AdCampaignID, $auth, $config, $mail_transport, $update_data);
+			return self::cloneInsertionOrderIntoInsertionOrderPreview($InsertionOrderLineItem->InsertionOrderID, $auth, $config, $mail_transport, $update_data);
 
 		else:
 
@@ -49,27 +49,27 @@ class TransformPreview {
 
 	}
 
-	public static function previewCheckAdCampaignID($ad_campaign_id, $auth, $config, $mail_transport, $update_data = array()) {
+	public static function previewCheckInsertionOrderID($ad_campaign_id, $auth, $config, $mail_transport, $update_data = array()) {
 
 		/*
 		 * SHOULD WE CREATE A NEW PREVIEW MODE?
 		*/
-		if (self::doesPreviewAdCampaignExistForAdCampaign($ad_campaign_id, $auth) == false):
+		if (self::doesPreviewInsertionOrderExistForInsertionOrder($ad_campaign_id, $auth) == false):
 
-			$AdCampaignFactory = \_factory\AdCampaign::get_instance();
+			$InsertionOrderFactory = \_factory\InsertionOrder::get_instance();
 			$params = array();
-			$params["AdCampaignID"] = $ad_campaign_id;
+			$params["InsertionOrderID"] = $ad_campaign_id;
 			$params["Active"] = 1;
 			$params["UserID"] = $auth->getEffectiveUserID();  // ACL permissions check equivalent
-			$AdCampaign = $AdCampaignFactory->get_row($params);
+			$InsertionOrder = $InsertionOrderFactory->get_row($params);
 
-			if ($AdCampaign == null):
+			if ($InsertionOrder == null):
 				//die("No Such Ad Campaign");
 				$params["error"] = "No Such Ad Campaign";
 				return $params;
 			endif;
 
-			return self::cloneAdCampaignIntoAdCampaignPreview($AdCampaign->AdCampaignID, $auth, $config, $mail_transport, $update_data);
+			return self::cloneInsertionOrderIntoInsertionOrderPreview($InsertionOrder->InsertionOrderID, $auth, $config, $mail_transport, $update_data);
 
 		else:
 
@@ -81,87 +81,87 @@ class TransformPreview {
 
 	public static function deletePreviewModeCampaign($ad_campaign_preview_id, $auth, $went_live = false) {
 
-		$AdCampaignPreviewFactory = \_factory\AdCampaignPreview::get_instance();
+		$InsertionOrderPreviewFactory = \_factory\InsertionOrderPreview::get_instance();
 		$params = array();
-		$params["AdCampaignPreviewID"] = $ad_campaign_preview_id;
+		$params["InsertionOrderPreviewID"] = $ad_campaign_preview_id;
 		$params["Active"] = 1;
-		$AdCampaignPreview = $AdCampaignPreviewFactory->get_row($params);
+		$InsertionOrderPreview = $InsertionOrderPreviewFactory->get_row($params);
 
-		if ($AdCampaignPreview == null):
+		if ($InsertionOrderPreview == null):
 			die("No Such Preview Ad Campaign");
 		endif;
 
 		if ($went_live == true):
-			$AdCampaignPreview->ChangeWentLive   	= 1;
-			$AdCampaignPreview->WentLiveDate 		= date("Y-m-d H:i:s");
+			$InsertionOrderPreview->ChangeWentLive   	= 1;
+			$InsertionOrderPreview->WentLiveDate 		= date("Y-m-d H:i:s");
 		else:
-			$AdCampaignPreview->ChangeWentLive   	= 0;
-			$AdCampaignPreview->WentLiveDate 		= date("Y-m-d H:i:s", 0);
+			$InsertionOrderPreview->ChangeWentLive   	= 0;
+			$InsertionOrderPreview->WentLiveDate 		= date("Y-m-d H:i:s", 0);
 		endif;
 
-		$AdCampaignPreview->Active 					= 0;
+		$InsertionOrderPreview->Active 					= 0;
 
-		$AdCampaignPreviewCopy = new \model\AdCampaignPreview();
+		$InsertionOrderPreviewCopy = new \model\InsertionOrderPreview();
 
-		$AdCampaignPreviewCopy->AdCampaignPreviewID 	= $ad_campaign_preview_id;
+		$InsertionOrderPreviewCopy->InsertionOrderPreviewID 	= $ad_campaign_preview_id;
 
-		if ($AdCampaignPreview->AdCampaignID != null):
-			$AdCampaignPreviewCopy->AdCampaignID 		= $AdCampaignPreview->AdCampaignID;
+		if ($InsertionOrderPreview->InsertionOrderID != null):
+			$InsertionOrderPreviewCopy->InsertionOrderID 		= $InsertionOrderPreview->InsertionOrderID;
 		endif;
 
-		$AdCampaignPreviewCopy->UserID 					= $AdCampaignPreview->UserID;
-		$AdCampaignPreviewCopy->Name					= $AdCampaignPreview->Name;
-		$AdCampaignPreviewCopy->StartDate				= $AdCampaignPreview->StartDate;
-		$AdCampaignPreviewCopy->EndDate					= $AdCampaignPreview->EndDate;
-		$AdCampaignPreviewCopy->Customer				= $AdCampaignPreview->Customer;
-		$AdCampaignPreviewCopy->CustomerID 				= $AdCampaignPreview->CustomerID;
-		$AdCampaignPreviewCopy->ImpressionsCounter 		= $AdCampaignPreview->ImpressionsCounter;
-		$AdCampaignPreviewCopy->MaxImpressions 			= $AdCampaignPreview->MaxImpressions;
-		$AdCampaignPreviewCopy->CurrentSpend 			= $AdCampaignPreview->CurrentSpend;
-		$AdCampaignPreviewCopy->MaxSpend 				= $AdCampaignPreview->MaxSpend;
-		$AdCampaignPreviewCopy->Active 					= 0;
-		$AdCampaignPreviewCopy->DateUpdated   			= $AdCampaignPreview->DateUpdated;
-		$AdCampaignPreviewCopy->ChangeWentLive   		= $AdCampaignPreview->ChangeWentLive;
-		$AdCampaignPreviewCopy->WentLiveDate 			= $AdCampaignPreview->WentLiveDate;
+		$InsertionOrderPreviewCopy->UserID 					= $InsertionOrderPreview->UserID;
+		$InsertionOrderPreviewCopy->Name					= $InsertionOrderPreview->Name;
+		$InsertionOrderPreviewCopy->StartDate				= $InsertionOrderPreview->StartDate;
+		$InsertionOrderPreviewCopy->EndDate					= $InsertionOrderPreview->EndDate;
+		$InsertionOrderPreviewCopy->Customer				= $InsertionOrderPreview->Customer;
+		$InsertionOrderPreviewCopy->CustomerID 				= $InsertionOrderPreview->CustomerID;
+		$InsertionOrderPreviewCopy->ImpressionsCounter 		= $InsertionOrderPreview->ImpressionsCounter;
+		$InsertionOrderPreviewCopy->MaxImpressions 			= $InsertionOrderPreview->MaxImpressions;
+		$InsertionOrderPreviewCopy->CurrentSpend 			= $InsertionOrderPreview->CurrentSpend;
+		$InsertionOrderPreviewCopy->MaxSpend 				= $InsertionOrderPreview->MaxSpend;
+		$InsertionOrderPreviewCopy->Active 					= 0;
+		$InsertionOrderPreviewCopy->DateUpdated   			= $InsertionOrderPreview->DateUpdated;
+		$InsertionOrderPreviewCopy->ChangeWentLive   		= $InsertionOrderPreview->ChangeWentLive;
+		$InsertionOrderPreviewCopy->WentLiveDate 			= $InsertionOrderPreview->WentLiveDate;
 
-		$AdCampaignPreviewFactory->saveAdCampaignPreview($AdCampaignPreviewCopy); // de-activate, not just deleted = 1
+		$InsertionOrderPreviewFactory->saveInsertionOrderPreview($InsertionOrderPreviewCopy); // de-activate, not just deleted = 1
 
-		$AdCampaignBannerPreviewFactory = \_factory\AdCampaignBannerPreview::get_instance();
+		$InsertionOrderLineItemPreviewFactory = \_factory\InsertionOrderLineItemPreview::get_instance();
 		$params = array();
-		$params["AdCampaignPreviewID"] = $AdCampaignPreview->AdCampaignPreviewID;
+		$params["InsertionOrderPreviewID"] = $InsertionOrderPreview->InsertionOrderPreviewID;
 		$params["Active"] = 1;
-		$AdCampaignBannerPreviewList = $AdCampaignBannerPreviewFactory->get($params);
+		$InsertionOrderLineItemPreviewList = $InsertionOrderLineItemPreviewFactory->get($params);
 
-		foreach ($AdCampaignBannerPreviewList as $AdCampaignBannerPreview):
+		foreach ($InsertionOrderLineItemPreviewList as $InsertionOrderLineItemPreview):
 
-			$AdCampaignBannerPreviewFactory->deActivateAdCampaignBannerPreview($AdCampaignBannerPreview->AdCampaignBannerPreviewID);
+			$InsertionOrderLineItemPreviewFactory->deActivateInsertionOrderLineItemPreview($InsertionOrderLineItemPreview->InsertionOrderLineItemPreviewID);
 
-			$banner_preview = new \model\AdCampaignBannerPreview();
+			$banner_preview = new \model\InsertionOrderLineItemPreview();
 
-			$banner_preview->AdCampaignBannerPreviewID 	= $AdCampaignBannerPreview->AdCampaignBannerPreviewID;
-			$banner_preview->AdCampaignPreviewID 		= $AdCampaignBannerPreview->AdCampaignPreviewID;
-			$banner_preview->AdCampaignBannerID 		= $AdCampaignBannerPreview->AdCampaignBannerID;
-			$banner_preview->ImpressionType 			= $AdCampaignBannerPreview->ImpressionType;
-			$banner_preview->UserID 					= $AdCampaignBannerPreview->UserID;
-			$banner_preview->Name 						= $AdCampaignBannerPreview->Name;
-			$banner_preview->StartDate					= $AdCampaignBannerPreview->StartDate;
-			$banner_preview->EndDate					= $AdCampaignBannerPreview->EndDate;
-			$banner_preview->AdCampaignTypeID			= $AdCampaignBannerPreview->AdCampaignTypeID;
-			$banner_preview->IsMobile					= $AdCampaignBannerPreview->IsMobile;
-			$banner_preview->IABSize					= $AdCampaignBannerPreview->IABSize;
-			$banner_preview->Height						= $AdCampaignBannerPreview->Height;
-			$banner_preview->Width						= $AdCampaignBannerPreview->Width;
-			$banner_preview->Weight						= $AdCampaignBannerPreview->Weight;
-			$banner_preview->BidAmount					= $AdCampaignBannerPreview->BidAmount;
-			$banner_preview->AdTag						= $AdCampaignBannerPreview->AdTag;
-			$banner_preview->DeliveryType				= $AdCampaignBannerPreview->DeliveryType;
-			$banner_preview->LandingPageTLD				= $AdCampaignBannerPreview->LandingPageTLD;
-			$banner_preview->ImpressionsCounter			= $AdCampaignBannerPreview->ImpressionsCounter;
-			$banner_preview->BidsCounter				= $AdCampaignBannerPreview->BidsCounter;
-			$banner_preview->CurrentSpend				= $AdCampaignBannerPreview->CurrentSpend;
+			$banner_preview->InsertionOrderLineItemPreviewID 	= $InsertionOrderLineItemPreview->InsertionOrderLineItemPreviewID;
+			$banner_preview->InsertionOrderPreviewID 		= $InsertionOrderLineItemPreview->InsertionOrderPreviewID;
+			$banner_preview->InsertionOrderLineItemID 		= $InsertionOrderLineItemPreview->InsertionOrderLineItemID;
+			$banner_preview->ImpressionType 			= $InsertionOrderLineItemPreview->ImpressionType;
+			$banner_preview->UserID 					= $InsertionOrderLineItemPreview->UserID;
+			$banner_preview->Name 						= $InsertionOrderLineItemPreview->Name;
+			$banner_preview->StartDate					= $InsertionOrderLineItemPreview->StartDate;
+			$banner_preview->EndDate					= $InsertionOrderLineItemPreview->EndDate;
+			$banner_preview->InsertionOrderTypeID			= $InsertionOrderLineItemPreview->InsertionOrderTypeID;
+			$banner_preview->IsMobile					= $InsertionOrderLineItemPreview->IsMobile;
+			$banner_preview->IABSize					= $InsertionOrderLineItemPreview->IABSize;
+			$banner_preview->Height						= $InsertionOrderLineItemPreview->Height;
+			$banner_preview->Width						= $InsertionOrderLineItemPreview->Width;
+			$banner_preview->Weight						= $InsertionOrderLineItemPreview->Weight;
+			$banner_preview->BidAmount					= $InsertionOrderLineItemPreview->BidAmount;
+			$banner_preview->AdTag						= $InsertionOrderLineItemPreview->AdTag;
+			$banner_preview->DeliveryType				= $InsertionOrderLineItemPreview->DeliveryType;
+			$banner_preview->LandingPageTLD				= $InsertionOrderLineItemPreview->LandingPageTLD;
+			$banner_preview->ImpressionsCounter			= $InsertionOrderLineItemPreview->ImpressionsCounter;
+			$banner_preview->BidsCounter				= $InsertionOrderLineItemPreview->BidsCounter;
+			$banner_preview->CurrentSpend				= $InsertionOrderLineItemPreview->CurrentSpend;
 			$banner_preview->Active						= 0;
-			$banner_preview->DateCreated				= $AdCampaignBannerPreview->DateCreated;
-			$banner_preview->DateUpdated				= $AdCampaignBannerPreview->DateUpdated;
+			$banner_preview->DateCreated				= $InsertionOrderLineItemPreview->DateCreated;
+			$banner_preview->DateUpdated				= $InsertionOrderLineItemPreview->DateUpdated;
 			if ($went_live == true):
 				$banner_preview->ChangeWentLive				= 1;
 				$banner_preview->WentLiveDate				= date("Y-m-d H:i:s");
@@ -172,7 +172,7 @@ class TransformPreview {
 
 
 			// de-active banner
-			$AdCampaignBannerPreviewFactory->saveAdCampaignBannerPreview($banner_preview);
+			$InsertionOrderLineItemPreviewFactory->saveInsertionOrderLineItemPreview($banner_preview);
 
 		endforeach;
 
@@ -180,161 +180,161 @@ class TransformPreview {
 
 	public static function doesPreviewBannerExist($banner_preview_id, $auth) {
 
-		$AdCampaignBannerPreviewFactory = \_factory\AdCampaignBannerPreview::get_instance();
+		$InsertionOrderLineItemPreviewFactory = \_factory\InsertionOrderLineItemPreview::get_instance();
 		$params = array();
-		$params["AdCampaignBannerPreviewID"] = $banner_preview_id;
+		$params["InsertionOrderLineItemPreviewID"] = $banner_preview_id;
 		$params["Active"] = 1;
 		$params["UserID"] = $auth->getEffectiveUserID();
-		$AdCampaignBannerPreview = $AdCampaignBannerPreviewFactory->get_row($params);
+		$InsertionOrderLineItemPreview = $InsertionOrderLineItemPreviewFactory->get_row($params);
 
-		return $AdCampaignBannerPreview !== null;
+		return $InsertionOrderLineItemPreview !== null;
 	}
 
-	public static function doesPreviewAdCampaignExist($ad_campaign_preview_id, $auth) {
+	public static function doesPreviewInsertionOrderExist($ad_campaign_preview_id, $auth) {
 
-		$AdCampaignPreviewFactory = \_factory\AdCampaignPreview::get_instance();
+		$InsertionOrderPreviewFactory = \_factory\InsertionOrderPreview::get_instance();
 		$params = array();
-		$params["AdCampaignPreviewID"] = $ad_campaign_preview_id;
-		$params["Active"] = 1;
-		$params["UserID"] = $auth->getEffectiveUserID();
-
-		$AdCampaignPreview = $AdCampaignPreviewFactory->get_row($params);
-
-		return $AdCampaignPreview !== null;
-	}
-
-	public static function doesPreviewAdCampaignExistForAdCampaign($ad_campaign_id, $auth) {
-
-		$AdCampaignPreviewFactory = \_factory\AdCampaignPreview::get_instance();
-		$params = array();
-		$params["AdCampaignID"] = $ad_campaign_id;
+		$params["InsertionOrderPreviewID"] = $ad_campaign_preview_id;
 		$params["Active"] = 1;
 		$params["UserID"] = $auth->getEffectiveUserID();
 
-		$AdCampaignPreview = $AdCampaignPreviewFactory->get_row($params);
+		$InsertionOrderPreview = $InsertionOrderPreviewFactory->get_row($params);
 
-		return $AdCampaignPreview !== null;
+		return $InsertionOrderPreview !== null;
+	}
+
+	public static function doesPreviewInsertionOrderExistForInsertionOrder($ad_campaign_id, $auth) {
+
+		$InsertionOrderPreviewFactory = \_factory\InsertionOrderPreview::get_instance();
+		$params = array();
+		$params["InsertionOrderID"] = $ad_campaign_id;
+		$params["Active"] = 1;
+		$params["UserID"] = $auth->getEffectiveUserID();
+
+		$InsertionOrderPreview = $InsertionOrderPreviewFactory->get_row($params);
+
+		return $InsertionOrderPreview !== null;
 	}
 
 
-	public static function cloneAdCampaignPreviewIntoAdCampaign($ad_campaign_preview_id, $auth, $config) {
+	public static function cloneInsertionOrderPreviewIntoInsertionOrder($ad_campaign_preview_id, $auth, $config) {
 
 		if ($ad_campaign_preview_id === null):
 			return;
 		endif;
 
-		$AdCampaignPreviewFactory = \_factory\AdCampaignPreview::get_instance();
+		$InsertionOrderPreviewFactory = \_factory\InsertionOrderPreview::get_instance();
 		$params = array();
-		$params["AdCampaignPreviewID"] = $ad_campaign_preview_id;
+		$params["InsertionOrderPreviewID"] = $ad_campaign_preview_id;
 		if (strpos($auth->getPrimaryRole(), $config['roles']['admin']) === false):
 			die("You do not have permission to access this page");
 		endif;
 		$params["Active"] = 1;
-		$AdCampaignPreview = $AdCampaignPreviewFactory->get_row($params);
+		$InsertionOrderPreview = $InsertionOrderPreviewFactory->get_row($params);
 
-		if ($AdCampaignPreview == null):
-			die("Invalid AdCampaignPreview ID");
+		if ($InsertionOrderPreview == null):
+			die("Invalid InsertionOrderPreview ID");
 		endif;
 
 		/*
-		 * Clone AdCampaignPreview into AdCampaign
+		 * Clone InsertionOrderPreview into InsertionOrder
 		*/
 
-		$AdCampaignFactory = \_factory\AdCampaign::get_instance();
-		$AdCampaign = new \model\AdCampaign();
+		$InsertionOrderFactory = \_factory\InsertionOrder::get_instance();
+		$InsertionOrder = new \model\InsertionOrder();
 
-		if ($AdCampaignPreview->AdCampaignID != null):
-			$AdCampaign->AdCampaignID 		= $AdCampaignPreview->AdCampaignID;
+		if ($InsertionOrderPreview->InsertionOrderID != null):
+			$InsertionOrder->InsertionOrderID 		= $InsertionOrderPreview->InsertionOrderID;
 		endif;
 
-		$campaign_active = isset($AdCampaignPreview->Deleted) && $AdCampaignPreview->Deleted == 1 ? 0 : 1;
+		$campaign_active = isset($InsertionOrderPreview->Deleted) && $InsertionOrderPreview->Deleted == 1 ? 0 : 1;
 
-		$AdCampaign->UserID 			= $AdCampaignPreview->UserID;
-		$AdCampaign->Name				= $AdCampaignPreview->Name;
-		$AdCampaign->StartDate			= $AdCampaignPreview->StartDate;
-		$AdCampaign->EndDate			= $AdCampaignPreview->EndDate;
-		$AdCampaign->Customer			= $AdCampaignPreview->Customer;
-		$AdCampaign->CustomerID 		= $AdCampaignPreview->CustomerID;
-		$AdCampaign->ImpressionsCounter = 0;
-		$AdCampaign->MaxImpressions 	= $AdCampaignPreview->MaxImpressions;
-		$AdCampaign->CurrentSpend 		= 0;
-		$AdCampaign->MaxSpend 			= $AdCampaignPreview->MaxSpend;
-		$AdCampaign->Active 			= $campaign_active;
-		$AdCampaign->DateUpdated   		= date("Y-m-d H:i:s");
+		$InsertionOrder->UserID 			= $InsertionOrderPreview->UserID;
+		$InsertionOrder->Name				= $InsertionOrderPreview->Name;
+		$InsertionOrder->StartDate			= $InsertionOrderPreview->StartDate;
+		$InsertionOrder->EndDate			= $InsertionOrderPreview->EndDate;
+		$InsertionOrder->Customer			= $InsertionOrderPreview->Customer;
+		$InsertionOrder->CustomerID 		= $InsertionOrderPreview->CustomerID;
+		$InsertionOrder->ImpressionsCounter = 0;
+		$InsertionOrder->MaxImpressions 	= $InsertionOrderPreview->MaxImpressions;
+		$InsertionOrder->CurrentSpend 		= 0;
+		$InsertionOrder->MaxSpend 			= $InsertionOrderPreview->MaxSpend;
+		$InsertionOrder->Active 			= $campaign_active;
+		$InsertionOrder->DateUpdated   		= date("Y-m-d H:i:s");
 
-		$ad_campaign_id = $AdCampaignFactory->saveAdCampaign($AdCampaign);
+		$ad_campaign_id = $InsertionOrderFactory->saveInsertionOrder($InsertionOrder);
 
-		$AdCampaignBannerPreviewFactory = \_factory\AdCampaignBannerPreview::get_instance();
+		$InsertionOrderLineItemPreviewFactory = \_factory\InsertionOrderLineItemPreview::get_instance();
 		$params = array();
-		$params["AdCampaignPreviewID"] = $ad_campaign_preview_id;
+		$params["InsertionOrderPreviewID"] = $ad_campaign_preview_id;
 		/*
 		 * get all banners, not just active ones, we want to set deleted banners to inactive on production also
 		 * if they were flagged that way in preview mode
 		 * $params["Active"] = 1;
 		 */
-		$AdCampaignBannerPreviewList = $AdCampaignBannerPreviewFactory->get($params);
+		$InsertionOrderLineItemPreviewList = $InsertionOrderLineItemPreviewFactory->get($params);
 
-		$AdCampaignBannerFactory = \_factory\AdCampaignBanner::get_instance();
-		$AdCampaignBannerPreviewFactory = \_factory\AdCampaignBannerPreview::get_instance();
-		$AdCampaignBannerRestrictionsFactory = \_factory\AdCampaignBannerRestrictions::get_instance();
-		$AdCampaignBannerRestrictionsPreviewFactory = \_factory\AdCampaignBannerRestrictionsPreview::get_instance();
+		$InsertionOrderLineItemFactory = \_factory\InsertionOrderLineItem::get_instance();
+		$InsertionOrderLineItemPreviewFactory = \_factory\InsertionOrderLineItemPreview::get_instance();
+		$InsertionOrderLineItemRestrictionsFactory = \_factory\InsertionOrderLineItemRestrictions::get_instance();
+		$InsertionOrderLineItemRestrictionsPreviewFactory = \_factory\InsertionOrderLineItemRestrictionsPreview::get_instance();
 		
-		$AdCampaignVideoRestrictionsFactory = \_factory\AdCampaignVideoRestrictions::get_instance();
-		$AdCampaignVideoRestrictionsPreviewFactory = \_factory\AdCampaignVideoRestrictionsPreview::get_instance();
+		$InsertionOrderLineItemVideoRestrictionsFactory = \_factory\InsertionOrderLineItemVideoRestrictions::get_instance();
+		$InsertionOrderLineItemVideoRestrictionsPreviewFactory = \_factory\InsertionOrderLineItemVideoRestrictionsPreview::get_instance();
 		
 		$PublisherAdZoneFactory = \_factory\PublisherAdZone::get_instance();
 		$LinkedBannerToAdZoneFactory = \_factory\LinkedBannerToAdZone::get_instance();
 		$LinkedBannerToAdZonePreviewFactory = \_factory\LinkedBannerToAdZonePreview::get_instance();		
-		$AdCampaignBannerDomainExclusionFactory = \_factory\AdCampaignBannerDomainExclusion::get_instance();
-		$AdCampaignBannerDomainExclusionPreviewFactory = \_factory\AdCampaignBannerDomainExclusionPreview::get_instance();
-		$AdCampaignBannerDomainExclusiveInclusionFactory = \_factory\AdCampaignBannerDomainExclusiveInclusion::get_instance();
-		$AdCampaignBannerDomainExclusiveInclusionPreviewFactory = \_factory\AdCampaignBannerDomainExclusiveInclusionPreview::get_instance();
+		$InsertionOrderLineItemDomainExclusionFactory = \_factory\InsertionOrderLineItemDomainExclusion::get_instance();
+		$InsertionOrderLineItemDomainExclusionPreviewFactory = \_factory\InsertionOrderLineItemDomainExclusionPreview::get_instance();
+		$InsertionOrderLineItemDomainExclusiveInclusionFactory = \_factory\InsertionOrderLineItemDomainExclusiveInclusion::get_instance();
+		$InsertionOrderLineItemDomainExclusiveInclusionPreviewFactory = \_factory\InsertionOrderLineItemDomainExclusiveInclusionPreview::get_instance();
 
-		foreach ($AdCampaignBannerPreviewList as $AdCampaignBannerPreview):
+		foreach ($InsertionOrderLineItemPreviewList as $InsertionOrderLineItemPreview):
 
-			$banner_preview_id = $AdCampaignBannerPreview->AdCampaignBannerPreviewID;
+			$banner_preview_id = $InsertionOrderLineItemPreview->InsertionOrderLineItemPreviewID;
 
-			$Banner = new \model\AdCampaignBanner();
+			$Banner = new \model\InsertionOrderLineItem();
 
-			$Banner->AdCampaignID 				= $ad_campaign_id;
+			$Banner->InsertionOrderID 				= $ad_campaign_id;
 
-			if ($AdCampaignBannerPreview->AdCampaignBannerID != null):
-				$Banner->AdCampaignBannerID 	= $AdCampaignBannerPreview->AdCampaignBannerID;
+			if ($InsertionOrderLineItemPreview->InsertionOrderLineItemID != null):
+				$Banner->InsertionOrderLineItemID 	= $InsertionOrderLineItemPreview->InsertionOrderLineItemID;
 			endif;
 
 			if ($campaign_active == 0):
 				$banner_active = 0;
 			else:
-				$banner_active = $AdCampaignBannerPreview->Active;
+				$banner_active = $InsertionOrderLineItemPreview->Active;
 			endif;
 
-			$Banner->UserID 					= $AdCampaignBannerPreview->UserID;
-			$Banner->Name 						= $AdCampaignBannerPreview->Name;
-			$Banner->ImpressionType 			= $AdCampaignBannerPreview->ImpressionType;
-			$Banner->StartDate 					= $AdCampaignBannerPreview->StartDate;
-			$Banner->EndDate 					= $AdCampaignBannerPreview->EndDate;
-			$Banner->AdCampaignTypeID 			= $AdCampaignBannerPreview->AdCampaignTypeID;
-			$Banner->IsMobile 					= $AdCampaignBannerPreview->IsMobile;
-			$Banner->IABSize 					= $AdCampaignBannerPreview->IABSize;
-			$Banner->Height 					= $AdCampaignBannerPreview->Height;
-			$Banner->Width 						= $AdCampaignBannerPreview->Width;
-			$Banner->Weight 					= $AdCampaignBannerPreview->Weight;
-			$Banner->BidAmount 					= $AdCampaignBannerPreview->BidAmount;
-			$Banner->AdTag 						= $AdCampaignBannerPreview->AdTag;
-			$Banner->DeliveryType 				= $AdCampaignBannerPreview->DeliveryType;
-			$Banner->LandingPageTLD 			= $AdCampaignBannerPreview->LandingPageTLD;
-			$Banner->ImpressionsCounter 		= $AdCampaignBannerPreview->ImpressionsCounter;
-			$Banner->BidsCounter 				= $AdCampaignBannerPreview->BidsCounter;
-			$Banner->CurrentSpend 				= $AdCampaignBannerPreview->CurrentSpend;
+			$Banner->UserID 					= $InsertionOrderLineItemPreview->UserID;
+			$Banner->Name 						= $InsertionOrderLineItemPreview->Name;
+			$Banner->ImpressionType 			= $InsertionOrderLineItemPreview->ImpressionType;
+			$Banner->StartDate 					= $InsertionOrderLineItemPreview->StartDate;
+			$Banner->EndDate 					= $InsertionOrderLineItemPreview->EndDate;
+			$Banner->InsertionOrderTypeID 			= $InsertionOrderLineItemPreview->InsertionOrderTypeID;
+			$Banner->IsMobile 					= $InsertionOrderLineItemPreview->IsMobile;
+			$Banner->IABSize 					= $InsertionOrderLineItemPreview->IABSize;
+			$Banner->Height 					= $InsertionOrderLineItemPreview->Height;
+			$Banner->Width 						= $InsertionOrderLineItemPreview->Width;
+			$Banner->Weight 					= $InsertionOrderLineItemPreview->Weight;
+			$Banner->BidAmount 					= $InsertionOrderLineItemPreview->BidAmount;
+			$Banner->AdTag 						= $InsertionOrderLineItemPreview->AdTag;
+			$Banner->DeliveryType 				= $InsertionOrderLineItemPreview->DeliveryType;
+			$Banner->LandingPageTLD 			= $InsertionOrderLineItemPreview->LandingPageTLD;
+			$Banner->ImpressionsCounter 		= $InsertionOrderLineItemPreview->ImpressionsCounter;
+			$Banner->BidsCounter 				= $InsertionOrderLineItemPreview->BidsCounter;
+			$Banner->CurrentSpend 				= $InsertionOrderLineItemPreview->CurrentSpend;
 			$Banner->Active 					= $banner_active;
 			$Banner->DateCreated 				= date("Y-m-d H:i:s");
 
 			// if the banner was deleted and there is no corresponding production banner, don't save it
-			if ($banner_active == 0 && $AdCampaignBannerPreview->AdCampaignBannerID == null):
+			if ($banner_active == 0 && $InsertionOrderLineItemPreview->InsertionOrderLineItemID == null):
 				continue;
 			endif;
 
-			$banner_id = $AdCampaignBannerFactory->saveAdCampaignBanner($Banner);
+			$banner_id = $InsertionOrderLineItemFactory->saveInsertionOrderLineItem($Banner);
 
 			// if the banner was deleted there's no reason to continue to copy it's properties here
 			if ($banner_active == 0):
@@ -348,37 +348,37 @@ class TransformPreview {
 				*/
 	
 				$params = array();
-				$params["AdCampaignBannerPreviewID"] = $banner_preview_id;
-				$AdCampaignVideoRestrictionsPreview = $AdCampaignVideoRestrictionsPreviewFactory->get_row($params);
+				$params["InsertionOrderLineItemPreviewID"] = $banner_preview_id;
+				$InsertionOrderLineItemVideoRestrictionsPreview = $InsertionOrderLineItemVideoRestrictionsPreviewFactory->get_row($params);
 	
-				if ($AdCampaignVideoRestrictionsPreview != null):
+				if ($InsertionOrderLineItemVideoRestrictionsPreview != null):
 	
-					$VideoRestrictions = new \model\AdCampaignVideoRestrictions();
-					$VideoRestrictions->AdCampaignBannerID 					= $banner_id;
-					$VideoRestrictions->GeoCountry 							= $AdCampaignVideoRestrictionsPreview->GeoCountry;
-					$VideoRestrictions->GeoState 							= $AdCampaignVideoRestrictionsPreview->GeoState;
-					$VideoRestrictions->GeoCity 							= $AdCampaignVideoRestrictionsPreview->GeoCity;
-					$VideoRestrictions->MimesCommaSeparated 				= $AdCampaignVideoRestrictionsPreview->MimesCommaSeparated;
-					$VideoRestrictions->MinDuration 						= $AdCampaignVideoRestrictionsPreview->MinDuration;
-					$VideoRestrictions->MaxDuration 						= $AdCampaignVideoRestrictionsPreview->MaxDuration;
-					$VideoRestrictions->ApisSupportedCommaSeparated 		= $AdCampaignVideoRestrictionsPreview->ApisSupportedCommaSeparated;
-					$VideoRestrictions->ProtocolsCommaSeparated 			= $AdCampaignVideoRestrictionsPreview->ProtocolsCommaSeparated;
-					$VideoRestrictions->DeliveryCommaSeparated 				= $AdCampaignVideoRestrictionsPreview->DeliveryCommaSeparated;
-					$VideoRestrictions->PlaybackCommaSeparated 				= $AdCampaignVideoRestrictionsPreview->PlaybackCommaSeparated;
-					$VideoRestrictions->StartDelay			 				= $AdCampaignVideoRestrictionsPreview->StartDelay;
-					$VideoRestrictions->Linearity			 				= $AdCampaignVideoRestrictionsPreview->Linearity;
-					$VideoRestrictions->FoldPos			 					= $AdCampaignVideoRestrictionsPreview->FoldPos;
-					$VideoRestrictions->MinHeight 							= $AdCampaignVideoRestrictionsPreview->MinHeight;
-					$VideoRestrictions->MinWidth 							= $AdCampaignVideoRestrictionsPreview->MinWidth;
-					$VideoRestrictions->PmpEnable 							= $AdCampaignVideoRestrictionsPreview->PmpEnable;
-					$VideoRestrictions->Secure 								= $AdCampaignVideoRestrictionsPreview->Secure;
-					$VideoRestrictions->Optout 								= $AdCampaignVideoRestrictionsPreview->Optout;
-					$VideoRestrictions->Vertical 							= $AdCampaignVideoRestrictionsPreview->Vertical;
+					$VideoRestrictions = new \model\InsertionOrderLineItemVideoRestrictions();
+					$VideoRestrictions->InsertionOrderLineItemID 					= $banner_id;
+					$VideoRestrictions->GeoCountry 							= $InsertionOrderLineItemVideoRestrictionsPreview->GeoCountry;
+					$VideoRestrictions->GeoState 							= $InsertionOrderLineItemVideoRestrictionsPreview->GeoState;
+					$VideoRestrictions->GeoCity 							= $InsertionOrderLineItemVideoRestrictionsPreview->GeoCity;
+					$VideoRestrictions->MimesCommaSeparated 				= $InsertionOrderLineItemVideoRestrictionsPreview->MimesCommaSeparated;
+					$VideoRestrictions->MinDuration 						= $InsertionOrderLineItemVideoRestrictionsPreview->MinDuration;
+					$VideoRestrictions->MaxDuration 						= $InsertionOrderLineItemVideoRestrictionsPreview->MaxDuration;
+					$VideoRestrictions->ApisSupportedCommaSeparated 		= $InsertionOrderLineItemVideoRestrictionsPreview->ApisSupportedCommaSeparated;
+					$VideoRestrictions->ProtocolsCommaSeparated 			= $InsertionOrderLineItemVideoRestrictionsPreview->ProtocolsCommaSeparated;
+					$VideoRestrictions->DeliveryCommaSeparated 				= $InsertionOrderLineItemVideoRestrictionsPreview->DeliveryCommaSeparated;
+					$VideoRestrictions->PlaybackCommaSeparated 				= $InsertionOrderLineItemVideoRestrictionsPreview->PlaybackCommaSeparated;
+					$VideoRestrictions->StartDelay			 				= $InsertionOrderLineItemVideoRestrictionsPreview->StartDelay;
+					$VideoRestrictions->Linearity			 				= $InsertionOrderLineItemVideoRestrictionsPreview->Linearity;
+					$VideoRestrictions->FoldPos			 					= $InsertionOrderLineItemVideoRestrictionsPreview->FoldPos;
+					$VideoRestrictions->MinHeight 							= $InsertionOrderLineItemVideoRestrictionsPreview->MinHeight;
+					$VideoRestrictions->MinWidth 							= $InsertionOrderLineItemVideoRestrictionsPreview->MinWidth;
+					$VideoRestrictions->PmpEnable 							= $InsertionOrderLineItemVideoRestrictionsPreview->PmpEnable;
+					$VideoRestrictions->Secure 								= $InsertionOrderLineItemVideoRestrictionsPreview->Secure;
+					$VideoRestrictions->Optout 								= $InsertionOrderLineItemVideoRestrictionsPreview->Optout;
+					$VideoRestrictions->Vertical 							= $InsertionOrderLineItemVideoRestrictionsPreview->Vertical;
 					$VideoRestrictions->DateCreated 						= date("Y-m-d H:i:s");
 					$VideoRestrictions->DateUpdated 						= date("Y-m-d H:i:s");
 	
-					$AdCampaignVideoRestrictionsFactory->saveAdCampaignVideoRestrictions($VideoRestrictions);
-					$AdCampaignBannerRestrictionsFactory->deleteAdCampaignBannerRestrictions($banner_id);
+					$InsertionOrderLineItemVideoRestrictionsFactory->saveInsertionOrderLineItemVideoRestrictions($VideoRestrictions);
+					$InsertionOrderLineItemRestrictionsFactory->deleteInsertionOrderLineItemRestrictions($banner_id);
 				endif;
 				
 			else:
@@ -388,42 +388,42 @@ class TransformPreview {
 				*/
 				
 				$params = array();
-				$params["AdCampaignBannerPreviewID"] = $banner_preview_id;
-				$AdCampaignBannerRestrictionsPreview = $AdCampaignBannerRestrictionsPreviewFactory->get_row($params);
+				$params["InsertionOrderLineItemPreviewID"] = $banner_preview_id;
+				$InsertionOrderLineItemRestrictionsPreview = $InsertionOrderLineItemRestrictionsPreviewFactory->get_row($params);
 				
-				if ($AdCampaignBannerRestrictionsPreview != null):
+				if ($InsertionOrderLineItemRestrictionsPreview != null):
 					
-					$BannerRestrictions = new \model\AdCampaignBannerRestrictions();
-					$BannerRestrictions->AdCampaignBannerID 				= $banner_id;
-					$BannerRestrictions->GeoCountry 						= $AdCampaignBannerRestrictionsPreview->GeoCountry;
-					$BannerRestrictions->GeoState 							= $AdCampaignBannerRestrictionsPreview->GeoState;
-					$BannerRestrictions->GeoCity 							= $AdCampaignBannerRestrictionsPreview->GeoCity;
-					$BannerRestrictions->AdTagType 							= $AdCampaignBannerRestrictionsPreview->AdTagType;
-					$BannerRestrictions->AdPositionMinLeft 					= $AdCampaignBannerRestrictionsPreview->AdPositionMinLeft;
-					$BannerRestrictions->AdPositionMaxLeft 					= $AdCampaignBannerRestrictionsPreview->AdPositionMaxLeft;
-					$BannerRestrictions->AdPositionMinTop 					= $AdCampaignBannerRestrictionsPreview->AdPositionMinTop;
-					$BannerRestrictions->AdPositionMaxTop 					= $AdCampaignBannerRestrictionsPreview->AdPositionMaxTop;
-					$BannerRestrictions->FoldPos 							= $AdCampaignBannerRestrictionsPreview->FoldPos;
-					$BannerRestrictions->Freq 								= $AdCampaignBannerRestrictionsPreview->Freq;
-					$BannerRestrictions->Timezone 							= $AdCampaignBannerRestrictionsPreview->Timezone;
-					$BannerRestrictions->InIframe 							= $AdCampaignBannerRestrictionsPreview->InIframe;
-					$BannerRestrictions->InMultipleNestedIframes 			= $AdCampaignBannerRestrictionsPreview->InMultipleNestedIframes;
-					$BannerRestrictions->MinScreenResolutionWidth 			= $AdCampaignBannerRestrictionsPreview->MinScreenResolutionWidth;
-					$BannerRestrictions->MaxScreenResolutionWidth 			= $AdCampaignBannerRestrictionsPreview->MaxScreenResolutionWidth;
-					$BannerRestrictions->MinScreenResolutionHeight 			= $AdCampaignBannerRestrictionsPreview->MinScreenResolutionHeight;
-					$BannerRestrictions->MaxScreenResolutionHeight 			= $AdCampaignBannerRestrictionsPreview->MaxScreenResolutionHeight;
-					$BannerRestrictions->HttpLanguage 						= $AdCampaignBannerRestrictionsPreview->HttpLanguage;
-					$BannerRestrictions->BrowserUserAgentGrep 				= $AdCampaignBannerRestrictionsPreview->BrowserUserAgentGrep;
-					$BannerRestrictions->CookieGrep 						= $AdCampaignBannerRestrictionsPreview->CookieGrep;
-					$BannerRestrictions->PmpEnable 							= $AdCampaignBannerRestrictionsPreview->PmpEnable;
-					$BannerRestrictions->Secure 							= $AdCampaignBannerRestrictionsPreview->Secure;
-					$BannerRestrictions->Optout 							= $AdCampaignBannerRestrictionsPreview->Optout;
-					$BannerRestrictions->Vertical 							= $AdCampaignBannerRestrictionsPreview->Vertical;
+					$BannerRestrictions = new \model\InsertionOrderLineItemRestrictions();
+					$BannerRestrictions->InsertionOrderLineItemID 				= $banner_id;
+					$BannerRestrictions->GeoCountry 						= $InsertionOrderLineItemRestrictionsPreview->GeoCountry;
+					$BannerRestrictions->GeoState 							= $InsertionOrderLineItemRestrictionsPreview->GeoState;
+					$BannerRestrictions->GeoCity 							= $InsertionOrderLineItemRestrictionsPreview->GeoCity;
+					$BannerRestrictions->AdTagType 							= $InsertionOrderLineItemRestrictionsPreview->AdTagType;
+					$BannerRestrictions->AdPositionMinLeft 					= $InsertionOrderLineItemRestrictionsPreview->AdPositionMinLeft;
+					$BannerRestrictions->AdPositionMaxLeft 					= $InsertionOrderLineItemRestrictionsPreview->AdPositionMaxLeft;
+					$BannerRestrictions->AdPositionMinTop 					= $InsertionOrderLineItemRestrictionsPreview->AdPositionMinTop;
+					$BannerRestrictions->AdPositionMaxTop 					= $InsertionOrderLineItemRestrictionsPreview->AdPositionMaxTop;
+					$BannerRestrictions->FoldPos 							= $InsertionOrderLineItemRestrictionsPreview->FoldPos;
+					$BannerRestrictions->Freq 								= $InsertionOrderLineItemRestrictionsPreview->Freq;
+					$BannerRestrictions->Timezone 							= $InsertionOrderLineItemRestrictionsPreview->Timezone;
+					$BannerRestrictions->InIframe 							= $InsertionOrderLineItemRestrictionsPreview->InIframe;
+					$BannerRestrictions->InMultipleNestedIframes 			= $InsertionOrderLineItemRestrictionsPreview->InMultipleNestedIframes;
+					$BannerRestrictions->MinScreenResolutionWidth 			= $InsertionOrderLineItemRestrictionsPreview->MinScreenResolutionWidth;
+					$BannerRestrictions->MaxScreenResolutionWidth 			= $InsertionOrderLineItemRestrictionsPreview->MaxScreenResolutionWidth;
+					$BannerRestrictions->MinScreenResolutionHeight 			= $InsertionOrderLineItemRestrictionsPreview->MinScreenResolutionHeight;
+					$BannerRestrictions->MaxScreenResolutionHeight 			= $InsertionOrderLineItemRestrictionsPreview->MaxScreenResolutionHeight;
+					$BannerRestrictions->HttpLanguage 						= $InsertionOrderLineItemRestrictionsPreview->HttpLanguage;
+					$BannerRestrictions->BrowserUserAgentGrep 				= $InsertionOrderLineItemRestrictionsPreview->BrowserUserAgentGrep;
+					$BannerRestrictions->CookieGrep 						= $InsertionOrderLineItemRestrictionsPreview->CookieGrep;
+					$BannerRestrictions->PmpEnable 							= $InsertionOrderLineItemRestrictionsPreview->PmpEnable;
+					$BannerRestrictions->Secure 							= $InsertionOrderLineItemRestrictionsPreview->Secure;
+					$BannerRestrictions->Optout 							= $InsertionOrderLineItemRestrictionsPreview->Optout;
+					$BannerRestrictions->Vertical 							= $InsertionOrderLineItemRestrictionsPreview->Vertical;
 					$BannerRestrictions->DateCreated 						= date("Y-m-d H:i:s");
 					$BannerRestrictions->DateUpdated 						= date("Y-m-d H:i:s");
 					
-					$AdCampaignBannerRestrictionsFactory->saveAdCampaignBannerRestrictions($BannerRestrictions);
-					$AdCampaignVideoRestrictionsFactory->deleteAdCampaignVideoRestrictions($banner_id);
+					$InsertionOrderLineItemRestrictionsFactory->saveInsertionOrderLineItemRestrictions($BannerRestrictions);
+					$InsertionOrderLineItemVideoRestrictionsFactory->deleteInsertionOrderLineItemVideoRestrictions($banner_id);
 				endif;
 					
 			endif;
@@ -436,14 +436,14 @@ class TransformPreview {
 			$LinkedBannerToAdZoneFactory->deleteLinkedBannerToAdZone($banner_id);
 			
 			$params = array();
-			$params["AdCampaignBannerPreviewID"] = $banner_preview_id;
+			$params["InsertionOrderLineItemPreviewID"] = $banner_preview_id;
 			$LinkedBannerToAdZonePreviewList = $LinkedBannerToAdZonePreviewFactory->get($params);
 			
 			foreach ($LinkedBannerToAdZonePreviewList as $LinkedBannerToAdZonePreview):
 			
 				$LinkedBannerToAdZone = new \model\LinkedBannerToAdZone();
 				
-				$LinkedBannerToAdZone->AdCampaignBannerID 	= $banner_id;
+				$LinkedBannerToAdZone->InsertionOrderLineItemID 	= $banner_id;
 				$LinkedBannerToAdZone->PublisherAdZoneID 	= $LinkedBannerToAdZonePreview->PublisherAdZoneID;
 				$LinkedBannerToAdZone->Weight 				= $LinkedBannerToAdZonePreview->Weight;
 				$LinkedBannerToAdZone->DateCreated 			= date("Y-m-d H:i:s");
@@ -460,23 +460,23 @@ class TransformPreview {
 			*/
 
 			// first delete the existing ones, then re-insert
-			$AdCampaignBannerDomainExclusionFactory->deleteAdCampaignBannerDomainExclusionByBannerID($banner_id);
+			$InsertionOrderLineItemDomainExclusionFactory->deleteInsertionOrderLineItemDomainExclusionByBannerID($banner_id);
 
 			$params = array();
-			$params["AdCampaignBannerPreviewID"] = $banner_preview_id;
-			$AdCampaignBannerDomainExclusionPreviewList = $AdCampaignBannerDomainExclusionPreviewFactory->get($params);
+			$params["InsertionOrderLineItemPreviewID"] = $banner_preview_id;
+			$InsertionOrderLineItemDomainExclusionPreviewList = $InsertionOrderLineItemDomainExclusionPreviewFactory->get($params);
 
-			foreach ($AdCampaignBannerDomainExclusionPreviewList as $AdCampaignBannerDomainExclusionPreview):
+			foreach ($InsertionOrderLineItemDomainExclusionPreviewList as $InsertionOrderLineItemDomainExclusionPreview):
 
-				$BannerDomainExclusion = new \model\AdCampaignBannerDomainExclusion();
+				$BannerDomainExclusion = new \model\InsertionOrderLineItemDomainExclusion();
 
-				$BannerDomainExclusion->AdCampaignBannerID 	= $banner_id;
-				$BannerDomainExclusion->ExclusionType 		= $AdCampaignBannerDomainExclusionPreview->ExclusionType;
-				$BannerDomainExclusion->DomainName 			= $AdCampaignBannerDomainExclusionPreview->DomainName;
+				$BannerDomainExclusion->InsertionOrderLineItemID 	= $banner_id;
+				$BannerDomainExclusion->ExclusionType 		= $InsertionOrderLineItemDomainExclusionPreview->ExclusionType;
+				$BannerDomainExclusion->DomainName 			= $InsertionOrderLineItemDomainExclusionPreview->DomainName;
 				$BannerDomainExclusion->DateCreated 		= date("Y-m-d H:i:s");
 				$BannerDomainExclusion->DateUpdated 		= date("Y-m-d H:i:s");
 
-				$AdCampaignBannerDomainExclusionFactory->saveAdCampaignBannerDomainExclusion($BannerDomainExclusion);
+				$InsertionOrderLineItemDomainExclusionFactory->saveInsertionOrderLineItemDomainExclusion($BannerDomainExclusion);
 
 			endforeach;
 
@@ -485,23 +485,23 @@ class TransformPreview {
 			*/
 
 			// first delete the existing ones, then re-insert
-			$AdCampaignBannerDomainExclusiveInclusionFactory->deleteAdCampaignBannerDomainExclusiveInclusionByBannerID($banner_id);
+			$InsertionOrderLineItemDomainExclusiveInclusionFactory->deleteInsertionOrderLineItemDomainExclusiveInclusionByBannerID($banner_id);
 
 			$params = array();
-			$params["AdCampaignBannerPreviewID"] = $banner_preview_id;
-			$AdCampaignBannerDomainExclusiveInclusionPreviewList = $AdCampaignBannerDomainExclusiveInclusionPreviewFactory->get($params);
+			$params["InsertionOrderLineItemPreviewID"] = $banner_preview_id;
+			$InsertionOrderLineItemDomainExclusiveInclusionPreviewList = $InsertionOrderLineItemDomainExclusiveInclusionPreviewFactory->get($params);
 
-			foreach ($AdCampaignBannerDomainExclusiveInclusionPreviewList as $AdCampaignBannerDomainExclusiveInclusionPreview):
+			foreach ($InsertionOrderLineItemDomainExclusiveInclusionPreviewList as $InsertionOrderLineItemDomainExclusiveInclusionPreview):
 
-				$BannerDomainExclusiveInclusion = new \model\AdCampaignBannerDomainExclusiveInclusion();
+				$BannerDomainExclusiveInclusion = new \model\InsertionOrderLineItemDomainExclusiveInclusion();
 
-				$BannerDomainExclusiveInclusion->AdCampaignBannerID 	= $banner_id;
-				$BannerDomainExclusiveInclusion->InclusionType 			= $AdCampaignBannerDomainExclusiveInclusionPreview->InclusionType;
-				$BannerDomainExclusiveInclusion->DomainName 			= $AdCampaignBannerDomainExclusiveInclusionPreview->DomainName;
+				$BannerDomainExclusiveInclusion->InsertionOrderLineItemID 	= $banner_id;
+				$BannerDomainExclusiveInclusion->InclusionType 			= $InsertionOrderLineItemDomainExclusiveInclusionPreview->InclusionType;
+				$BannerDomainExclusiveInclusion->DomainName 			= $InsertionOrderLineItemDomainExclusiveInclusionPreview->DomainName;
 				$BannerDomainExclusiveInclusion->DateCreated 			= date("Y-m-d H:i:s");
 				$BannerDomainExclusiveInclusion->DateUpdated 			= date("Y-m-d H:i:s");
 
-				$AdCampaignBannerDomainExclusiveInclusionFactory->saveAdCampaignBannerDomainExclusiveInclusion($BannerDomainExclusiveInclusion);
+				$InsertionOrderLineItemDomainExclusiveInclusionFactory->saveInsertionOrderLineItemDomainExclusiveInclusion($BannerDomainExclusiveInclusion);
 
 			endforeach;
 
@@ -513,7 +513,7 @@ class TransformPreview {
 	}
 
 
-	public static function cloneAdCampaignIntoAdCampaignPreview($ad_campaign_id, $auth, $config, $mail_transport, $update_data) {
+	public static function cloneInsertionOrderIntoInsertionOrderPreview($ad_campaign_id, $auth, $config, $mail_transport, $update_data) {
 
 		$return_val = array();
 
@@ -521,105 +521,105 @@ class TransformPreview {
 			return null;
 		endif;
 
-		$AdCampaignFactory = \_factory\AdCampaign::get_instance();
+		$InsertionOrderFactory = \_factory\InsertionOrder::get_instance();
 		$params = array();
-		$params["AdCampaignID"] = $ad_campaign_id;
+		$params["InsertionOrderID"] = $ad_campaign_id;
 		$params["UserID"] = $auth->getEffectiveUserID();
 		$params["Active"] = 1;
-		$AdCampaign = $AdCampaignFactory->get_row($params);
+		$InsertionOrder = $InsertionOrderFactory->get_row($params);
 
-		if ($AdCampaign == null):
-			//die("Invalid AdCampaign ID");
-			$params["error"] = "Invalid AdCampaign ID";
+		if ($InsertionOrder == null):
+			//die("Invalid InsertionOrder ID");
+			$params["error"] = "Invalid InsertionOrder ID";
 			return $params;
 		endif;
 
 		/*
-		 * Clone AdCampaign into AdCampaignPreview
+		 * Clone InsertionOrder into InsertionOrderPreview
 		 */
 
-		$AdCampaignPreviewFactory = \_factory\AdCampaignPreview::get_instance();
-		$AdCampaignPreview = new \model\AdCampaignPreview();
+		$InsertionOrderPreviewFactory = \_factory\InsertionOrderPreview::get_instance();
+		$InsertionOrderPreview = new \model\InsertionOrderPreview();
 
-		$AdCampaignPreview->AdCampaignID 		= $AdCampaign->AdCampaignID;
-		$AdCampaignPreview->UserID 				= $AdCampaign->UserID;
-		$AdCampaignPreview->Name				= $AdCampaign->Name;
-		$AdCampaignPreview->StartDate			= $AdCampaign->StartDate;
-		$AdCampaignPreview->EndDate				= $AdCampaign->EndDate;
-		$AdCampaignPreview->Customer			= $AdCampaign->Customer;
-		$AdCampaignPreview->CustomerID 			= $AdCampaign->CustomerID;
-		$AdCampaignPreview->ImpressionsCounter  = 0;
-		$AdCampaignPreview->MaxImpressions 		= $AdCampaign->MaxImpressions;
-		$AdCampaignPreview->CurrentSpend 		= 0;
-		$AdCampaignPreview->MaxSpend 			= $AdCampaign->MaxSpend;
-		$AdCampaignPreview->Active 				= 1;
-		$AdCampaignPreview->DateCreated   		= date("Y-m-d H:i:s");
-		$AdCampaignPreview->DateUpdated   		= date("Y-m-d H:i:s");
-		$AdCampaignPreview->ChangeWentLive   	= 0;
+		$InsertionOrderPreview->InsertionOrderID 		= $InsertionOrder->InsertionOrderID;
+		$InsertionOrderPreview->UserID 				= $InsertionOrder->UserID;
+		$InsertionOrderPreview->Name				= $InsertionOrder->Name;
+		$InsertionOrderPreview->StartDate			= $InsertionOrder->StartDate;
+		$InsertionOrderPreview->EndDate				= $InsertionOrder->EndDate;
+		$InsertionOrderPreview->Customer			= $InsertionOrder->Customer;
+		$InsertionOrderPreview->CustomerID 			= $InsertionOrder->CustomerID;
+		$InsertionOrderPreview->ImpressionsCounter  = 0;
+		$InsertionOrderPreview->MaxImpressions 		= $InsertionOrder->MaxImpressions;
+		$InsertionOrderPreview->CurrentSpend 		= 0;
+		$InsertionOrderPreview->MaxSpend 			= $InsertionOrder->MaxSpend;
+		$InsertionOrderPreview->Active 				= 1;
+		$InsertionOrderPreview->DateCreated   		= date("Y-m-d H:i:s");
+		$InsertionOrderPreview->DateUpdated   		= date("Y-m-d H:i:s");
+		$InsertionOrderPreview->ChangeWentLive   	= 0;
 
-		$AdCampaignPreviewID = $AdCampaignPreviewFactory->saveAdCampaignPreview($AdCampaignPreview);
+		$InsertionOrderPreviewID = $InsertionOrderPreviewFactory->saveInsertionOrderPreview($InsertionOrderPreview);
 
-		if ($update_data['type'] == 'AdCampaignID'):
-			$return_val = array('AdCampaignPreviewID'=>$AdCampaignPreviewID);
+		if ($update_data['type'] == 'InsertionOrderID'):
+			$return_val = array('InsertionOrderPreviewID'=>$InsertionOrderPreviewID);
 		endif;
 
-		$AdCampaignBannerFactory = \_factory\AdCampaignBanner::get_instance();
+		$InsertionOrderLineItemFactory = \_factory\InsertionOrderLineItem::get_instance();
 		$params = array();
-		$params["AdCampaignID"] = $AdCampaign->AdCampaignID;
+		$params["InsertionOrderID"] = $InsertionOrder->InsertionOrderID;
 		$params["Active"] = 1;
-		$AdCampaignBannerList = $AdCampaignBannerFactory->get($params);
+		$InsertionOrderLineItemList = $InsertionOrderLineItemFactory->get($params);
 
-		$AdCampaignBannerPreviewFactory = \_factory\AdCampaignBannerPreview::get_instance();
-		$AdCampaignBannerRestrictionsFactory = \_factory\AdCampaignBannerRestrictions::get_instance();
-		$AdCampaignBannerRestrictionsPreviewFactory = \_factory\AdCampaignBannerRestrictionsPreview::get_instance();
+		$InsertionOrderLineItemPreviewFactory = \_factory\InsertionOrderLineItemPreview::get_instance();
+		$InsertionOrderLineItemRestrictionsFactory = \_factory\InsertionOrderLineItemRestrictions::get_instance();
+		$InsertionOrderLineItemRestrictionsPreviewFactory = \_factory\InsertionOrderLineItemRestrictionsPreview::get_instance();
 		
-		$AdCampaignVideoRestrictionsFactory = \_factory\AdCampaignVideoRestrictions::get_instance();
-		$AdCampaignVideoRestrictionsPreviewFactory = \_factory\AdCampaignVideoRestrictionsPreview::get_instance();
+		$InsertionOrderLineItemVideoRestrictionsFactory = \_factory\InsertionOrderLineItemVideoRestrictions::get_instance();
+		$InsertionOrderLineItemVideoRestrictionsPreviewFactory = \_factory\InsertionOrderLineItemVideoRestrictionsPreview::get_instance();
 		
 		$LinkedBannerToAdZoneFactory = \_factory\LinkedBannerToAdZone::get_instance();
 		$LinkedBannerToAdZonePreviewFactory = \_factory\LinkedBannerToAdZonePreview::get_instance();
-		$AdCampaignBannerDomainExclusionFactory = \_factory\AdCampaignBannerDomainExclusion::get_instance();
-		$AdCampaignBannerDomainExclusionPreviewFactory = \_factory\AdCampaignBannerDomainExclusionPreview::get_instance();
-		$AdCampaignBannerDomainExclusiveInclusionFactory = \_factory\AdCampaignBannerDomainExclusiveInclusion::get_instance();
-		$AdCampaignBannerDomainExclusiveInclusionPreviewFactory = \_factory\AdCampaignBannerDomainExclusiveInclusionPreview::get_instance();
+		$InsertionOrderLineItemDomainExclusionFactory = \_factory\InsertionOrderLineItemDomainExclusion::get_instance();
+		$InsertionOrderLineItemDomainExclusionPreviewFactory = \_factory\InsertionOrderLineItemDomainExclusionPreview::get_instance();
+		$InsertionOrderLineItemDomainExclusiveInclusionFactory = \_factory\InsertionOrderLineItemDomainExclusiveInclusion::get_instance();
+		$InsertionOrderLineItemDomainExclusiveInclusionPreviewFactory = \_factory\InsertionOrderLineItemDomainExclusiveInclusionPreview::get_instance();
 
-		foreach ($AdCampaignBannerList as $AdCampaignBanner):
+		foreach ($InsertionOrderLineItemList as $InsertionOrderLineItem):
 
-			$banner_id = $AdCampaignBanner->AdCampaignBannerID;
+			$banner_id = $InsertionOrderLineItem->InsertionOrderLineItemID;
 
 			
-			$BannerPreview = new \model\AdCampaignBannerPreview();
+			$BannerPreview = new \model\InsertionOrderLineItemPreview();
 
-			$BannerPreview->AdCampaignPreviewID 		= $AdCampaignPreviewID;
-			$BannerPreview->AdCampaignBannerID 			= $AdCampaignBanner->AdCampaignBannerID;
-			$BannerPreview->UserID 						= $AdCampaignBanner->UserID;
-			$BannerPreview->Name 						= $AdCampaignBanner->Name;
-			$BannerPreview->ImpressionType 				= $AdCampaignBanner->ImpressionType;
-			$BannerPreview->StartDate 					= $AdCampaignBanner->StartDate;
-			$BannerPreview->EndDate 					= $AdCampaignBanner->EndDate;
-			$BannerPreview->AdCampaignTypeID 			= $AdCampaignBanner->AdCampaignTypeID;
-			$BannerPreview->IsMobile 					= $AdCampaignBanner->IsMobile;
-			$BannerPreview->IABSize 					= $AdCampaignBanner->IABSize;
-			$BannerPreview->Height 						= $AdCampaignBanner->Height;
-			$BannerPreview->Width 						= $AdCampaignBanner->Width;
-			$BannerPreview->Weight 						= $AdCampaignBanner->Weight;
-			$BannerPreview->BidAmount 					= $AdCampaignBanner->BidAmount;
-			$BannerPreview->AdTag 						= $AdCampaignBanner->AdTag;
-			$BannerPreview->DeliveryType				= $AdCampaignBanner->DeliveryType;
-			$BannerPreview->LandingPageTLD 				= $AdCampaignBanner->LandingPageTLD;
-			$BannerPreview->ImpressionsCounter 			= $AdCampaignBanner->ImpressionsCounter;
-			$BannerPreview->BidsCounter 				= $AdCampaignBanner->BidsCounter;
-			$BannerPreview->CurrentSpend 				= $AdCampaignBanner->CurrentSpend;
-			$BannerPreview->Active 						= $AdCampaignBanner->Active;
+			$BannerPreview->InsertionOrderPreviewID 		= $InsertionOrderPreviewID;
+			$BannerPreview->InsertionOrderLineItemID 			= $InsertionOrderLineItem->InsertionOrderLineItemID;
+			$BannerPreview->UserID 						= $InsertionOrderLineItem->UserID;
+			$BannerPreview->Name 						= $InsertionOrderLineItem->Name;
+			$BannerPreview->ImpressionType 				= $InsertionOrderLineItem->ImpressionType;
+			$BannerPreview->StartDate 					= $InsertionOrderLineItem->StartDate;
+			$BannerPreview->EndDate 					= $InsertionOrderLineItem->EndDate;
+			$BannerPreview->InsertionOrderTypeID 			= $InsertionOrderLineItem->InsertionOrderTypeID;
+			$BannerPreview->IsMobile 					= $InsertionOrderLineItem->IsMobile;
+			$BannerPreview->IABSize 					= $InsertionOrderLineItem->IABSize;
+			$BannerPreview->Height 						= $InsertionOrderLineItem->Height;
+			$BannerPreview->Width 						= $InsertionOrderLineItem->Width;
+			$BannerPreview->Weight 						= $InsertionOrderLineItem->Weight;
+			$BannerPreview->BidAmount 					= $InsertionOrderLineItem->BidAmount;
+			$BannerPreview->AdTag 						= $InsertionOrderLineItem->AdTag;
+			$BannerPreview->DeliveryType				= $InsertionOrderLineItem->DeliveryType;
+			$BannerPreview->LandingPageTLD 				= $InsertionOrderLineItem->LandingPageTLD;
+			$BannerPreview->ImpressionsCounter 			= $InsertionOrderLineItem->ImpressionsCounter;
+			$BannerPreview->BidsCounter 				= $InsertionOrderLineItem->BidsCounter;
+			$BannerPreview->CurrentSpend 				= $InsertionOrderLineItem->CurrentSpend;
+			$BannerPreview->Active 						= $InsertionOrderLineItem->Active;
 			$BannerPreview->DateCreated 				= date("Y-m-d H:i:s");
 			$BannerPreview->DateUpdated 				= date("Y-m-d H:i:s");
 			$BannerPreview->ChangeWentLive 				= 0;
 
-			$AdCampaignBannerPreviewID = $AdCampaignBannerPreviewFactory->saveAdCampaignBannerPreview($BannerPreview);
+			$InsertionOrderLineItemPreviewID = $InsertionOrderLineItemPreviewFactory->saveInsertionOrderLineItemPreview($BannerPreview);
 
-			if ($update_data['type'] == 'AdCampaignBannerID' && $update_data['id'] == $banner_id):
-				$return_val = array('AdCampaignBannerPreviewID'=>$AdCampaignBannerPreviewID,
-									'AdCampaignPreviewID'=>$AdCampaignPreviewID);
+			if ($update_data['type'] == 'InsertionOrderLineItemID' && $update_data['id'] == $banner_id):
+				$return_val = array('InsertionOrderLineItemPreviewID'=>$InsertionOrderLineItemPreviewID,
+									'InsertionOrderPreviewID'=>$InsertionOrderPreviewID);
 
 			endif;
 
@@ -631,41 +631,41 @@ class TransformPreview {
 				*/
 			
 				$params = array();
-				$params["AdCampaignBannerID"] = $banner_id;
-				$AdCampaignVideoRestrictions = $AdCampaignVideoRestrictionsFactory->get_row($params);
+				$params["InsertionOrderLineItemID"] = $banner_id;
+				$InsertionOrderLineItemVideoRestrictions = $InsertionOrderLineItemVideoRestrictionsFactory->get_row($params);
 
-				if ($AdCampaignVideoRestrictions != null):
+				if ($InsertionOrderLineItemVideoRestrictions != null):
 				
-					$VideoRestrictionsPreview = new \model\AdCampaignVideoRestrictionsPreview();
-					$VideoRestrictionsPreview->AdCampaignBannerPreviewID 				= $AdCampaignBannerPreviewID;
-					$VideoRestrictionsPreview->GeoCountry 						= $AdCampaignVideoRestrictions->GeoCountry;
-					$VideoRestrictionsPreview->GeoState 						= $AdCampaignVideoRestrictions->GeoState;
-					$VideoRestrictionsPreview->GeoCity 							= $AdCampaignVideoRestrictions->GeoCity;
-					$VideoRestrictionsPreview->MimesCommaSeparated 				= $AdCampaignVideoRestrictions->MimesCommaSeparated;
-					$VideoRestrictionsPreview->MinDuration 						= $AdCampaignVideoRestrictions->MinDuration;
-					$VideoRestrictionsPreview->MaxDuration 						= $AdCampaignVideoRestrictions->MaxDuration;
-					$VideoRestrictionsPreview->ApisSupportedCommaSeparated 		= $AdCampaignVideoRestrictions->ApisSupportedCommaSeparated;
-					$VideoRestrictionsPreview->ProtocolsCommaSeparated 			= $AdCampaignVideoRestrictions->ProtocolsCommaSeparated;
-					$VideoRestrictionsPreview->DeliveryCommaSeparated 			= $AdCampaignVideoRestrictions->DeliveryCommaSeparated;
-					$VideoRestrictionsPreview->PlaybackCommaSeparated 			= $AdCampaignVideoRestrictions->PlaybackCommaSeparated;
-					$VideoRestrictionsPreview->StartDelay			 			= $AdCampaignVideoRestrictions->StartDelay;
-					$VideoRestrictionsPreview->Linearity			 			= $AdCampaignVideoRestrictions->Linearity;
-					$VideoRestrictionsPreview->FoldPos			 				= $AdCampaignVideoRestrictions->FoldPos;
-					$VideoRestrictionsPreview->MinHeight 						= $AdCampaignVideoRestrictions->MinHeight;
-					$VideoRestrictionsPreview->MinWidth 						= $AdCampaignVideoRestrictions->MinWidth;
-					$VideoRestrictionsPreview->PmpEnable 						= $AdCampaignVideoRestrictions->PmpEnable;
-					$VideoRestrictionsPreview->Secure 							= $AdCampaignVideoRestrictions->Secure;
-					$VideoRestrictionsPreview->Optout 							= $AdCampaignVideoRestrictions->Optout;
-					$VideoRestrictionsPreview->Vertical 						= $AdCampaignVideoRestrictions->Vertical;
+					$VideoRestrictionsPreview = new \model\InsertionOrderLineItemVideoRestrictionsPreview();
+					$VideoRestrictionsPreview->InsertionOrderLineItemPreviewID 				= $InsertionOrderLineItemPreviewID;
+					$VideoRestrictionsPreview->GeoCountry 						= $InsertionOrderLineItemVideoRestrictions->GeoCountry;
+					$VideoRestrictionsPreview->GeoState 						= $InsertionOrderLineItemVideoRestrictions->GeoState;
+					$VideoRestrictionsPreview->GeoCity 							= $InsertionOrderLineItemVideoRestrictions->GeoCity;
+					$VideoRestrictionsPreview->MimesCommaSeparated 				= $InsertionOrderLineItemVideoRestrictions->MimesCommaSeparated;
+					$VideoRestrictionsPreview->MinDuration 						= $InsertionOrderLineItemVideoRestrictions->MinDuration;
+					$VideoRestrictionsPreview->MaxDuration 						= $InsertionOrderLineItemVideoRestrictions->MaxDuration;
+					$VideoRestrictionsPreview->ApisSupportedCommaSeparated 		= $InsertionOrderLineItemVideoRestrictions->ApisSupportedCommaSeparated;
+					$VideoRestrictionsPreview->ProtocolsCommaSeparated 			= $InsertionOrderLineItemVideoRestrictions->ProtocolsCommaSeparated;
+					$VideoRestrictionsPreview->DeliveryCommaSeparated 			= $InsertionOrderLineItemVideoRestrictions->DeliveryCommaSeparated;
+					$VideoRestrictionsPreview->PlaybackCommaSeparated 			= $InsertionOrderLineItemVideoRestrictions->PlaybackCommaSeparated;
+					$VideoRestrictionsPreview->StartDelay			 			= $InsertionOrderLineItemVideoRestrictions->StartDelay;
+					$VideoRestrictionsPreview->Linearity			 			= $InsertionOrderLineItemVideoRestrictions->Linearity;
+					$VideoRestrictionsPreview->FoldPos			 				= $InsertionOrderLineItemVideoRestrictions->FoldPos;
+					$VideoRestrictionsPreview->MinHeight 						= $InsertionOrderLineItemVideoRestrictions->MinHeight;
+					$VideoRestrictionsPreview->MinWidth 						= $InsertionOrderLineItemVideoRestrictions->MinWidth;
+					$VideoRestrictionsPreview->PmpEnable 						= $InsertionOrderLineItemVideoRestrictions->PmpEnable;
+					$VideoRestrictionsPreview->Secure 							= $InsertionOrderLineItemVideoRestrictions->Secure;
+					$VideoRestrictionsPreview->Optout 							= $InsertionOrderLineItemVideoRestrictions->Optout;
+					$VideoRestrictionsPreview->Vertical 						= $InsertionOrderLineItemVideoRestrictions->Vertical;
 					$VideoRestrictionsPreview->DateCreated 						= date("Y-m-d H:i:s");
 					$VideoRestrictionsPreview->DateUpdated 						= date("Y-m-d H:i:s");
 					
-			    	$AdCampaignVideoRestrictionsPreviewID = $AdCampaignVideoRestrictionsPreviewFactory->saveAdCampaignVideoRestrictionsPreview($VideoRestrictionsPreview);
+			    	$InsertionOrderLineItemVideoRestrictionsPreviewID = $InsertionOrderLineItemVideoRestrictionsPreviewFactory->saveInsertionOrderLineItemVideoRestrictionsPreview($VideoRestrictionsPreview);
 	
-					if ($update_data['type'] == 'AdCampaignVideoRestrictionsID' && $update_data['id'] == $AdCampaignVideoRestrictions->AdCampaignVideoRestrictionsID):
-					$return_val = array('AdCampaignVideoRestrictionsPreviewID'=>$AdCampaignVideoRestrictionsPreviewID,
-							'AdCampaignBannerPreviewID'=>$AdCampaignBannerPreviewID,
-							'AdCampaignPreviewID'=>$AdCampaignPreviewID);
+					if ($update_data['type'] == 'InsertionOrderLineItemVideoRestrictionsID' && $update_data['id'] == $InsertionOrderLineItemVideoRestrictions->InsertionOrderLineItemVideoRestrictionsID):
+					$return_val = array('InsertionOrderLineItemVideoRestrictionsPreviewID'=>$InsertionOrderLineItemVideoRestrictionsPreviewID,
+							'InsertionOrderLineItemPreviewID'=>$InsertionOrderLineItemPreviewID,
+							'InsertionOrderPreviewID'=>$InsertionOrderPreviewID);
 					endif;
 				endif;
 				
@@ -676,47 +676,47 @@ class TransformPreview {
 				 */
 	
 				$params = array();
-				$params["AdCampaignBannerID"] = $banner_id;
-				$AdCampaignBannerRestrictions = $AdCampaignBannerRestrictionsFactory->get_row($params);
+				$params["InsertionOrderLineItemID"] = $banner_id;
+				$InsertionOrderLineItemRestrictions = $InsertionOrderLineItemRestrictionsFactory->get_row($params);
 	
 				// may not be present
-				if ($AdCampaignBannerRestrictions != null):
-					$BannerRestrictionsPreview = new \model\AdCampaignBannerRestrictionsPreview();
+				if ($InsertionOrderLineItemRestrictions != null):
+					$BannerRestrictionsPreview = new \model\InsertionOrderLineItemRestrictionsPreview();
 	
-				    $BannerRestrictionsPreview->AdCampaignBannerPreviewID 			= $AdCampaignBannerPreviewID;
-				    $BannerRestrictionsPreview->GeoCountry 							= $AdCampaignBannerRestrictions->GeoCountry;
-				    $BannerRestrictionsPreview->GeoState 							= $AdCampaignBannerRestrictions->GeoState;
-				    $BannerRestrictionsPreview->GeoCity 							= $AdCampaignBannerRestrictions->GeoCity;
-				    $BannerRestrictionsPreview->AdTagType 							= $AdCampaignBannerRestrictions->AdTagType;
-				    $BannerRestrictionsPreview->AdPositionMinLeft 					= $AdCampaignBannerRestrictions->AdPositionMinLeft;
-				    $BannerRestrictionsPreview->AdPositionMaxLeft 					= $AdCampaignBannerRestrictions->AdPositionMaxLeft;
-				    $BannerRestrictionsPreview->AdPositionMinTop 					= $AdCampaignBannerRestrictions->AdPositionMinTop;
-				    $BannerRestrictionsPreview->AdPositionMaxTop 					= $AdCampaignBannerRestrictions->AdPositionMaxTop;
-				    $BannerRestrictionsPreview->FoldPos 							= $AdCampaignBannerRestrictions->FoldPos;
-				    $BannerRestrictionsPreview->Freq 								= $AdCampaignBannerRestrictions->Freq;
-				    $BannerRestrictionsPreview->Timezone 							= $AdCampaignBannerRestrictions->Timezone;
-				    $BannerRestrictionsPreview->InIframe 							= $AdCampaignBannerRestrictions->InIframe;
-				    $BannerRestrictionsPreview->InMultipleNestedIframes 			= $AdCampaignBannerRestrictions->InMultipleNestedIframes;
-				    $BannerRestrictionsPreview->MinScreenResolutionWidth 			= $AdCampaignBannerRestrictions->MinScreenResolutionWidth;
-				    $BannerRestrictionsPreview->MaxScreenResolutionWidth 			= $AdCampaignBannerRestrictions->MaxScreenResolutionWidth;
-				    $BannerRestrictionsPreview->MinScreenResolutionHeight 			= $AdCampaignBannerRestrictions->MinScreenResolutionHeight;
-				    $BannerRestrictionsPreview->MaxScreenResolutionHeight 			= $AdCampaignBannerRestrictions->MaxScreenResolutionHeight;
-				    $BannerRestrictionsPreview->HttpLanguage 						= $AdCampaignBannerRestrictions->HttpLanguage;
-				    $BannerRestrictionsPreview->BrowserUserAgentGrep 				= $AdCampaignBannerRestrictions->BrowserUserAgentGrep;
-				    $BannerRestrictionsPreview->CookieGrep 							= $AdCampaignBannerRestrictions->CookieGrep;
-				    $BannerRestrictionsPreview->PmpEnable 							= $AdCampaignBannerRestrictions->PmpEnable;
-				    $BannerRestrictionsPreview->Secure 								= $AdCampaignBannerRestrictions->Secure;
-				    $BannerRestrictionsPreview->Optout 								= $AdCampaignBannerRestrictions->Optout;
-				    $BannerRestrictionsPreview->Vertical 							= $AdCampaignBannerRestrictions->Vertical;
+				    $BannerRestrictionsPreview->InsertionOrderLineItemPreviewID 			= $InsertionOrderLineItemPreviewID;
+				    $BannerRestrictionsPreview->GeoCountry 							= $InsertionOrderLineItemRestrictions->GeoCountry;
+				    $BannerRestrictionsPreview->GeoState 							= $InsertionOrderLineItemRestrictions->GeoState;
+				    $BannerRestrictionsPreview->GeoCity 							= $InsertionOrderLineItemRestrictions->GeoCity;
+				    $BannerRestrictionsPreview->AdTagType 							= $InsertionOrderLineItemRestrictions->AdTagType;
+				    $BannerRestrictionsPreview->AdPositionMinLeft 					= $InsertionOrderLineItemRestrictions->AdPositionMinLeft;
+				    $BannerRestrictionsPreview->AdPositionMaxLeft 					= $InsertionOrderLineItemRestrictions->AdPositionMaxLeft;
+				    $BannerRestrictionsPreview->AdPositionMinTop 					= $InsertionOrderLineItemRestrictions->AdPositionMinTop;
+				    $BannerRestrictionsPreview->AdPositionMaxTop 					= $InsertionOrderLineItemRestrictions->AdPositionMaxTop;
+				    $BannerRestrictionsPreview->FoldPos 							= $InsertionOrderLineItemRestrictions->FoldPos;
+				    $BannerRestrictionsPreview->Freq 								= $InsertionOrderLineItemRestrictions->Freq;
+				    $BannerRestrictionsPreview->Timezone 							= $InsertionOrderLineItemRestrictions->Timezone;
+				    $BannerRestrictionsPreview->InIframe 							= $InsertionOrderLineItemRestrictions->InIframe;
+				    $BannerRestrictionsPreview->InMultipleNestedIframes 			= $InsertionOrderLineItemRestrictions->InMultipleNestedIframes;
+				    $BannerRestrictionsPreview->MinScreenResolutionWidth 			= $InsertionOrderLineItemRestrictions->MinScreenResolutionWidth;
+				    $BannerRestrictionsPreview->MaxScreenResolutionWidth 			= $InsertionOrderLineItemRestrictions->MaxScreenResolutionWidth;
+				    $BannerRestrictionsPreview->MinScreenResolutionHeight 			= $InsertionOrderLineItemRestrictions->MinScreenResolutionHeight;
+				    $BannerRestrictionsPreview->MaxScreenResolutionHeight 			= $InsertionOrderLineItemRestrictions->MaxScreenResolutionHeight;
+				    $BannerRestrictionsPreview->HttpLanguage 						= $InsertionOrderLineItemRestrictions->HttpLanguage;
+				    $BannerRestrictionsPreview->BrowserUserAgentGrep 				= $InsertionOrderLineItemRestrictions->BrowserUserAgentGrep;
+				    $BannerRestrictionsPreview->CookieGrep 							= $InsertionOrderLineItemRestrictions->CookieGrep;
+				    $BannerRestrictionsPreview->PmpEnable 							= $InsertionOrderLineItemRestrictions->PmpEnable;
+				    $BannerRestrictionsPreview->Secure 								= $InsertionOrderLineItemRestrictions->Secure;
+				    $BannerRestrictionsPreview->Optout 								= $InsertionOrderLineItemRestrictions->Optout;
+				    $BannerRestrictionsPreview->Vertical 							= $InsertionOrderLineItemRestrictions->Vertical;
 				    $BannerRestrictionsPreview->DateCreated 						= date("Y-m-d H:i:s");
 				    $BannerRestrictionsPreview->DateUpdated 						= date("Y-m-d H:i:s");
 	
-				    $AdCampaignBannerRestrictionsPreviewID = $AdCampaignBannerRestrictionsPreviewFactory->saveAdCampaignBannerRestrictionsPreview($BannerRestrictionsPreview);
+				    $InsertionOrderLineItemRestrictionsPreviewID = $InsertionOrderLineItemRestrictionsPreviewFactory->saveInsertionOrderLineItemRestrictionsPreview($BannerRestrictionsPreview);
 	
-				    if ($update_data['type'] == 'AdCampaignBannerRestrictionsID' && $update_data['id'] == $AdCampaignBannerRestrictions->AdCampaignBannerRestrictionsID):
-				    	$return_val = array('AdCampaignBannerRestrictionsPreviewID'=>$AdCampaignBannerRestrictionsPreviewID,
-				    						'AdCampaignBannerPreviewID'=>$AdCampaignBannerPreviewID,
-											'AdCampaignPreviewID'=>$AdCampaignPreviewID);
+				    if ($update_data['type'] == 'InsertionOrderLineItemRestrictionsID' && $update_data['id'] == $InsertionOrderLineItemRestrictions->InsertionOrderLineItemRestrictionsID):
+				    	$return_val = array('InsertionOrderLineItemRestrictionsPreviewID'=>$InsertionOrderLineItemRestrictionsPreviewID,
+				    						'InsertionOrderLineItemPreviewID'=>$InsertionOrderLineItemPreviewID,
+											'InsertionOrderPreviewID'=>$InsertionOrderPreviewID);
 				    endif;
 				    
 			    endif;
@@ -727,14 +727,14 @@ class TransformPreview {
 			*/
 				
 			$params = array();
-			$params["AdCampaignBannerID"] = $banner_id;
+			$params["InsertionOrderLineItemID"] = $banner_id;
 			$LinkedBannerToAdZoneList = $LinkedBannerToAdZoneFactory->get($params);
 				
 			foreach ($LinkedBannerToAdZoneList as $LinkedBannerToAdZone):
 					
 				$LinkedBannerToAdZonePreview = new \model\LinkedBannerToAdZonePreview();
 				
-				$LinkedBannerToAdZonePreview->AdCampaignBannerPreviewID 	= $AdCampaignBannerPreviewID;
+				$LinkedBannerToAdZonePreview->InsertionOrderLineItemPreviewID 	= $InsertionOrderLineItemPreviewID;
 				$LinkedBannerToAdZonePreview->PublisherAdZoneID 			= $LinkedBannerToAdZone->PublisherAdZoneID;
 				$LinkedBannerToAdZonePreview->Weight 						= $LinkedBannerToAdZone->Weight;
 				$LinkedBannerToAdZonePreview->DateCreated 					= date("Y-m-d H:i:s");
@@ -749,25 +749,25 @@ class TransformPreview {
 		    */
 
 		    $params = array();
-		    $params["AdCampaignBannerID"] = $banner_id;
-		    $AdCampaignBannerDomainExclusionList = $AdCampaignBannerDomainExclusionFactory->get($params);
+		    $params["InsertionOrderLineItemID"] = $banner_id;
+		    $InsertionOrderLineItemDomainExclusionList = $InsertionOrderLineItemDomainExclusionFactory->get($params);
 
-		    foreach ($AdCampaignBannerDomainExclusionList as $AdCampaignBannerDomainExclusion):
+		    foreach ($InsertionOrderLineItemDomainExclusionList as $InsertionOrderLineItemDomainExclusion):
 
-		    	$BannerDomainExclusionPreview = new \model\AdCampaignBannerDomainExclusionPreview();
+		    	$BannerDomainExclusionPreview = new \model\InsertionOrderLineItemDomainExclusionPreview();
 
-		    	$BannerDomainExclusionPreview->AdCampaignBannerPreviewID 		= $AdCampaignBannerPreviewID;
-		    	$BannerDomainExclusionPreview->ExclusionType 					= $AdCampaignBannerDomainExclusion->ExclusionType;
-		    	$BannerDomainExclusionPreview->DomainName 						= $AdCampaignBannerDomainExclusion->DomainName;
+		    	$BannerDomainExclusionPreview->InsertionOrderLineItemPreviewID 		= $InsertionOrderLineItemPreviewID;
+		    	$BannerDomainExclusionPreview->ExclusionType 					= $InsertionOrderLineItemDomainExclusion->ExclusionType;
+		    	$BannerDomainExclusionPreview->DomainName 						= $InsertionOrderLineItemDomainExclusion->DomainName;
 		    	$BannerDomainExclusionPreview->DateCreated 						= date("Y-m-d H:i:s");
 		    	$BannerDomainExclusionPreview->DateUpdated 						= date("Y-m-d H:i:s");
 
-		    	$AdCampaignBannerDomainExclusionPreviewID = $AdCampaignBannerDomainExclusionPreviewFactory->saveAdCampaignBannerDomainExclusionPreview($BannerDomainExclusionPreview);
+		    	$InsertionOrderLineItemDomainExclusionPreviewID = $InsertionOrderLineItemDomainExclusionPreviewFactory->saveInsertionOrderLineItemDomainExclusionPreview($BannerDomainExclusionPreview);
 
-		    	if ($update_data['type'] == 'AdCampaignBannerDomainExclusionID' && $update_data['id'] == $AdCampaignBannerDomainExclusion->AdCampaignBannerDomainExclusionID):
-		    		$return_val = array('AdCampaignBannerDomainExclusionPreviewID'=>$AdCampaignBannerDomainExclusionPreviewID,
-		    							'AdCampaignBannerPreviewID'=>$AdCampaignBannerPreviewID,
-										'AdCampaignPreviewID'=>$AdCampaignPreviewID);
+		    	if ($update_data['type'] == 'InsertionOrderLineItemDomainExclusionID' && $update_data['id'] == $InsertionOrderLineItemDomainExclusion->InsertionOrderLineItemDomainExclusionID):
+		    		$return_val = array('InsertionOrderLineItemDomainExclusionPreviewID'=>$InsertionOrderLineItemDomainExclusionPreviewID,
+		    							'InsertionOrderLineItemPreviewID'=>$InsertionOrderLineItemPreviewID,
+										'InsertionOrderPreviewID'=>$InsertionOrderPreviewID);
 		    	endif;
 
 		    endforeach;
@@ -777,25 +777,25 @@ class TransformPreview {
 		    */
 
 		    $params = array();
-		    $params["AdCampaignBannerID"] = $banner_id;
-		    $AdCampaignBannerDomainExclusiveInclusionList = $AdCampaignBannerDomainExclusiveInclusionFactory->get($params);
+		    $params["InsertionOrderLineItemID"] = $banner_id;
+		    $InsertionOrderLineItemDomainExclusiveInclusionList = $InsertionOrderLineItemDomainExclusiveInclusionFactory->get($params);
 
-		    foreach ($AdCampaignBannerDomainExclusiveInclusionList as $AdCampaignBannerDomainExclusiveInclusion):
+		    foreach ($InsertionOrderLineItemDomainExclusiveInclusionList as $InsertionOrderLineItemDomainExclusiveInclusion):
 
-			    $BannerDomainExclusiveInclusionPreview = new \model\AdCampaignBannerDomainExclusiveInclusionPreview();
+			    $BannerDomainExclusiveInclusionPreview = new \model\InsertionOrderLineItemDomainExclusiveInclusionPreview();
 
-			    $BannerDomainExclusiveInclusionPreview->AdCampaignBannerPreviewID 		= $AdCampaignBannerPreviewID;
-			    $BannerDomainExclusiveInclusionPreview->InclusionType 					= $AdCampaignBannerDomainExclusiveInclusion->InclusionType;
-			    $BannerDomainExclusiveInclusionPreview->DomainName 						= $AdCampaignBannerDomainExclusiveInclusion->DomainName;
+			    $BannerDomainExclusiveInclusionPreview->InsertionOrderLineItemPreviewID 		= $InsertionOrderLineItemPreviewID;
+			    $BannerDomainExclusiveInclusionPreview->InclusionType 					= $InsertionOrderLineItemDomainExclusiveInclusion->InclusionType;
+			    $BannerDomainExclusiveInclusionPreview->DomainName 						= $InsertionOrderLineItemDomainExclusiveInclusion->DomainName;
 			    $BannerDomainExclusiveInclusionPreview->DateCreated 					= date("Y-m-d H:i:s");
 			    $BannerDomainExclusiveInclusionPreview->DateUpdated 					= date("Y-m-d H:i:s");
 
-			    $AdCampaignBannerDomainExclusiveInclusionPreviewID = $AdCampaignBannerDomainExclusiveInclusionPreviewFactory->saveAdCampaignBannerDomainExclusiveInclusionPreview($BannerDomainExclusiveInclusionPreview);
+			    $InsertionOrderLineItemDomainExclusiveInclusionPreviewID = $InsertionOrderLineItemDomainExclusiveInclusionPreviewFactory->saveInsertionOrderLineItemDomainExclusiveInclusionPreview($BannerDomainExclusiveInclusionPreview);
 
-			    if ($update_data['type'] == 'AdCampaignBannerDomainExclusiveInclusionID' && $update_data['id'] == $AdCampaignBannerDomainExclusiveInclusion->AdCampaignBannerDomainExclusiveInclusionID):
-			    	$return_val = array('AdCampaignBannerDomainExclusiveInclusionPreviewID'=>$AdCampaignBannerDomainExclusiveInclusionPreviewID,
-		    							'AdCampaignBannerPreviewID'=>$AdCampaignBannerPreviewID,
-										'AdCampaignPreviewID'=>$AdCampaignPreviewID);
+			    if ($update_data['type'] == 'InsertionOrderLineItemDomainExclusiveInclusionID' && $update_data['id'] == $InsertionOrderLineItemDomainExclusiveInclusion->InsertionOrderLineItemDomainExclusiveInclusionID):
+			    	$return_val = array('InsertionOrderLineItemDomainExclusiveInclusionPreviewID'=>$InsertionOrderLineItemDomainExclusiveInclusionPreviewID,
+		    							'InsertionOrderLineItemPreviewID'=>$InsertionOrderLineItemPreviewID,
+										'InsertionOrderPreviewID'=>$InsertionOrderPreviewID);
 			    endif;
 
 
@@ -808,15 +808,15 @@ class TransformPreview {
 			// if this ad campaign was not created/edited by the admin, then send out a notification email
 			$message = '<b>NginAd Demand Customer Campaign Edited by ' . $auth->getUserName() . '.</b><br /><br />';
 			$message = $message.'<table border="0" width="10%">';
-			$message = $message.'<tr><td><b>AdCampaignID: </b></td><td>'.$AdCampaign->AdCampaignID.'</td></tr>';
-			$message = $message.'<tr><td><b>UserID: </b></td><td>'.$AdCampaign->UserID.'</td></tr>';
-			$message = $message.'<tr><td><b>Name: </b></td><td>'.$AdCampaign->Name.'</td></tr>';
-			$message = $message.'<tr><td><b>StartDate: </b></td><td>'.$AdCampaign->StartDate.'</td></tr>';
-			$message = $message.'<tr><td><b>EndDate: </b></td><td>'.$AdCampaign->EndDate.'</td></tr>';
-			$message = $message.'<tr><td><b>Customer: </b></td><td>'.$AdCampaign->Customer.'</td></tr>';
-			$message = $message.'<tr><td><b>CustomerID: </b></td><td>'.$AdCampaign->CustomerID.'</td></tr>';
-			$message = $message.'<tr><td><b>MaxImpressions: </b></td><td>'.$AdCampaign->MaxImpressions.'</td></tr>';
-			$message = $message.'<tr><td><b>MaxSpend: </b></td><td>'.$AdCampaign->MaxSpend.'</td></tr>';
+			$message = $message.'<tr><td><b>InsertionOrderID: </b></td><td>'.$InsertionOrder->InsertionOrderID.'</td></tr>';
+			$message = $message.'<tr><td><b>UserID: </b></td><td>'.$InsertionOrder->UserID.'</td></tr>';
+			$message = $message.'<tr><td><b>Name: </b></td><td>'.$InsertionOrder->Name.'</td></tr>';
+			$message = $message.'<tr><td><b>StartDate: </b></td><td>'.$InsertionOrder->StartDate.'</td></tr>';
+			$message = $message.'<tr><td><b>EndDate: </b></td><td>'.$InsertionOrder->EndDate.'</td></tr>';
+			$message = $message.'<tr><td><b>Customer: </b></td><td>'.$InsertionOrder->Customer.'</td></tr>';
+			$message = $message.'<tr><td><b>CustomerID: </b></td><td>'.$InsertionOrder->CustomerID.'</td></tr>';
+			$message = $message.'<tr><td><b>MaxImpressions: </b></td><td>'.$InsertionOrder->MaxImpressions.'</td></tr>';
+			$message = $message.'<tr><td><b>MaxSpend: </b></td><td>'.$InsertionOrder->MaxSpend.'</td></tr>';
 			$message = $message.'</table>';
 			
 			$subject = "NginAd Demand Customer Campaign Edited by " . $auth->getUserName();

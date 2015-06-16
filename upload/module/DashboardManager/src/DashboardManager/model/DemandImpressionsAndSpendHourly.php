@@ -11,7 +11,7 @@ namespace model;
 
 class DemandImpressionsAndSpendHourly {
 	public $MDYH;
-	public $AdCampaignBannerID;
+	public $InsertionOrderLineItemID;
     public $DemandCustomerName;
     public $DemandCustomerInfoID;
     public $BannerName;

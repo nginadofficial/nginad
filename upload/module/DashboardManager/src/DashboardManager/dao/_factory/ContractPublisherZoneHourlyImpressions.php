@@ -127,7 +127,7 @@ class ContractPublisherZoneHourlyImpressions extends \_factory\CachedTableRead
                      array('AdName')
                 );
                 
-                $select->order($this->table . '.AdCampaignBannerID');
+                $select->order($this->table . '.InsertionOrderLineItemID');
 
             }
         );
@@ -173,18 +173,18 @@ class ContractPublisherZoneHourlyImpressions extends \_factory\CachedTableRead
                 );
                 
                 $select->join(
-                     'AdCampaignBanner',
-                     $this->table . '.AdCampaignBannerID = AdCampaignBanner.AdCampaignBannerID',
+                     'InsertionOrderLineItem',
+                     $this->table . '.InsertionOrderLineItemID = InsertionOrderLineItem.InsertionOrderLineItemID',
                      array('banner_name' => 'Name')
                 );
 
                 $select->join(
                      'auth_Users',
-                     'auth_Users.user_id = AdCampaignBanner.UserID',
+                     'auth_Users.user_id = InsertionOrderLineItem.UserID',
                      array('user_login')
                 );
 
-                $select->group($this->table . '.AdCampaignBannerID');
+                $select->group($this->table . '.InsertionOrderLineItemID');
                 $select->group($this->table . '.PublisherAdZoneID');
 
                 $select->order('PublisherWebsite.WebDomain');
@@ -201,7 +201,7 @@ class ContractPublisherZoneHourlyImpressions extends \_factory\CachedTableRead
 
     public function insertContractPublisherZoneHourlyImpressions(\model\ContractPublisherZoneHourlyImpressions $ContractPublisherZoneHourlyImpressions) {
     	$data = array(
-    			'AdCampaignBannerID'   		=> $ContractPublisherZoneHourlyImpressions->AdCampaignBannerID,
+    			'InsertionOrderLineItemID'   		=> $ContractPublisherZoneHourlyImpressions->InsertionOrderLineItemID,
     			'PublisherAdZoneID'    		=> $ContractPublisherZoneHourlyImpressions->PublisherAdZoneID,
     			'MDYH'						=> $ContractPublisherZoneHourlyImpressions->MDYH,
     			'Impressions'  				=> $ContractPublisherZoneHourlyImpressions->Impressions,

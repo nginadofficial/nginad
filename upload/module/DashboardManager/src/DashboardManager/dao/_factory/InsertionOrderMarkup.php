@@ -11,7 +11,7 @@ namespace _factory;
 
 use Zend\Db\TableGateway\Feature;
 
-class AdCampainMarkup extends \_factory\CachedTableRead
+class InsertionOrderMarkup extends \_factory\CachedTableRead
 {
 
 	static protected $instance = null;
@@ -19,7 +19,7 @@ class AdCampainMarkup extends \_factory\CachedTableRead
 	public static function get_instance() {
 
 		if (self::$instance == null):
-			self::$instance = new \_factory\AdCampainMarkup();
+			self::$instance = new \_factory\InsertionOrderMarkup();
 		endif;
 		return self::$instance;
 	}
@@ -27,7 +27,7 @@ class AdCampainMarkup extends \_factory\CachedTableRead
 
     function __construct() {
 
-            $this->table = 'AdCampainMarkup';
+            $this->table = 'InsertionOrderMarkup';
             $this->featureSet = new Feature\FeatureSet();
             $this->featureSet->addFeature(new Feature\GlobalAdapterFeature());
             $this->initialize();
@@ -45,7 +45,7 @@ class AdCampainMarkup extends \_factory\CachedTableRead
         	);
         	endforeach;
         	$select->limit(1, 0);
-        	$select->order('AdCampaignID');
+        	$select->order('InsertionOrderID');
 
         }
         	);
@@ -69,7 +69,7 @@ class AdCampainMarkup extends \_factory\CachedTableRead
         		);
         		endforeach;
         		//$select->limit(10, 0);
-        		$select->order('AdCampaignID');
+        		$select->order('InsertionOrderID');
 
         	}
     	);
@@ -81,27 +81,27 @@ class AdCampainMarkup extends \_factory\CachedTableRead
     		return $obj_list;
     }
 
-    public function insertAdCampainMarkup(\model\AdCampainMarkup $AdCampainMarkup) {
+    public function insertInsertionOrderMarkup(\model\InsertionOrderMarkup $InsertionOrderMarkup) {
     	$data = array(
-    	        'AdCampaignID'         	=> $AdCampainMarkup->AdCampaignID,
-    			'MarkupRate'        	=> $AdCampainMarkup->MarkupRate
+    	        'InsertionOrderID'         	=> $InsertionOrderMarkup->InsertionOrderID,
+    			'MarkupRate'        	=> $InsertionOrderMarkup->MarkupRate
     	);
 
     	$this->insert($data);
     }
 
-    public function updateAdCampainMarkup(\model\AdCampainMarkup $AdCampainMarkup) {
+    public function updateInsertionOrderMarkup(\model\InsertionOrderMarkup $InsertionOrderMarkup) {
     	$data = array(
-    	        'AdCampaignID'         	=> $AdCampainMarkup->AdCampaignID,
-    			'MarkupRate'        	=> $AdCampainMarkup->MarkupRate
+    	        'InsertionOrderID'         	=> $InsertionOrderMarkup->InsertionOrderID,
+    			'MarkupRate'        	=> $InsertionOrderMarkup->MarkupRate
     	);
 
-    	$ad_campaign_id = $AdCampainMarkup->AdCampaignID;
-    	$this->update($data, array('AdCampaignID' => $ad_campaign_id));
+    	$ad_campaign_id = $InsertionOrderMarkup->InsertionOrderID;
+    	$this->update($data, array('InsertionOrderID' => $ad_campaign_id));
     }
 
     public function deleteMaintenanceRecord($ad_campaign_id) {
-    	$this->delete(array('AdCampaignID' => $ad_campaign_id));
+    	$this->delete(array('InsertionOrderID' => $ad_campaign_id));
     }
 
 };

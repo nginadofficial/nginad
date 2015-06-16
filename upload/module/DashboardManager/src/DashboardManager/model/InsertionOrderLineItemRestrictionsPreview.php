@@ -9,10 +9,10 @@
 
 namespace model;
 
-class AdCampaignBannerRestrictions {
+class InsertionOrderLineItemRestrictionsPreview {
 
-    public $AdCampaignBannerRestrictionsID;
-    public $AdCampaignBannerID;
+    public $InsertionOrderLineItemRestrictionsPreviewID;
+    public $InsertionOrderLineItemPreviewID;
     public $GeoCountry;
     public $GeoState;
     public $GeoCity;

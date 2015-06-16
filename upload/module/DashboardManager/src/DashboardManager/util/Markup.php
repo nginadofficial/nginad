@@ -11,17 +11,17 @@ namespace util;
 
 class Markup {
 
-	public static function getMarkupRate($AdCampaign, $config, $cached = true) {
+	public static function getMarkupRate($InsertionOrder, $config, $cached = true) {
 
 		// is this campaign exempt from being marked up?
 
-		if (in_array($AdCampaign->UserID, $config['system']['markup_exempt_userid_list'])):
+		if (in_array($InsertionOrder->UserID, $config['system']['markup_exempt_userid_list'])):
 			return null;
 		endif;
 
 		// first try ad campaign specific markup
 
-		$ad_campaign_markup = self::getMarkupForAdCampaign($AdCampaign->AdCampaignID, $config, $cached);
+		$ad_campaign_markup = self::getMarkupForInsertionOrder($InsertionOrder->InsertionOrderID, $config, $cached);
 
 		if ($ad_campaign_markup != null):
 			return $ad_campaign_markup->MarkupRate;
@@ -29,7 +29,7 @@ class Markup {
 
 		// next try user specific markup
 
-		$user_markup = self::getMarkupForUser($AdCampaign->UserID, $config, $cached);
+		$user_markup = self::getMarkupForUser($InsertionOrder->UserID, $config, $cached);
 
 		if ($user_markup != null):
 			return $user_markup->MarkupRate;
@@ -40,15 +40,15 @@ class Markup {
 		return $config['system']['default_demand_markup_rate'];
 	}
 
-	public static function getMarkupForAdCampaign($ad_campaign_id, $config, $cached = true) {
+	public static function getMarkupForInsertionOrder($ad_campaign_id, $config, $cached = true) {
 
-		$AdCampainMarkupFactory = \_factory\AdCampainMarkup::get_instance();
+		$InsertionOrderMarkupFactory = \_factory\InsertionOrderMarkup::get_instance();
 		$params = array();
-		$params["AdCampaignID"] = $ad_campaign_id;
+		$params["InsertionOrderID"] = $ad_campaign_id;
 		if ($cached === true):
-			$ad_campaign_markup = $AdCampainMarkupFactory->get_row_cached($config, $params);
+			$ad_campaign_markup = $InsertionOrderMarkupFactory->get_row_cached($config, $params);
 		else:
-			$ad_campaign_markup = $AdCampainMarkupFactory->get_row($params);
+			$ad_campaign_markup = $InsertionOrderMarkupFactory->get_row($params);
 		endif;
 		
 		return $ad_campaign_markup;

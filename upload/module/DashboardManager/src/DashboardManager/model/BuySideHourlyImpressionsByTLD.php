@@ -12,7 +12,7 @@ namespace model;
 class BuySideHourlyImpressionsByTLD {
 
 	public $BuySideHourlyImpressionsByTLDID;
-    public $AdCampaignBannerID;
+    public $InsertionOrderLineItemID;
     public $MDYH;
     public $PublisherTLD;
     public $Impressions;

@@ -11,7 +11,7 @@ namespace buyrtbfidelity\workflows\tasklets\display\adcampaignbanner;
 
 class CheckIsCorrectType {
 	
-	public static function execute(&$Logger, &$Workflow, \model\openrtb\RtbBidRequest &$RtbBidRequest, \model\openrtb\RtbBidRequestImp &$RtbBidRequestImp, &$AdCampaignBanner) {
+	public static function execute(&$Logger, &$Workflow, \model\openrtb\RtbBidRequest &$RtbBidRequest, \model\openrtb\RtbBidRequestImp &$RtbBidRequestImp, &$InsertionOrderLineItem) {
 		
 		/*
 		 * Check is mobile web, phone, tablet, native iOS or native Android
@@ -45,9 +45,9 @@ class CheckIsCorrectType {
 			elseif (!empty($RtbBidRequestImp->RtbBidRequestBanner->mimes)
 				&& is_array($RtbBidRequestImp->RtbBidRequestBanner->mimes)):
 				
-				if ($AdCampaignBanner->ImpressionType == 'image'):
+				if ($InsertionOrderLineItem->ImpressionType == 'image'):
 					// image ad
-					$adtag = $AdCampaignBanner->AdTag;
+					$adtag = $InsertionOrderLineItem->AdTag;
 					
 					preg_match('/< *img[^>]*src *= *["\']?([^"\']*)/i', $adtag, $matches);
 					

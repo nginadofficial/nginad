@@ -11,7 +11,7 @@ namespace _factory;
 
 use Zend\Db\TableGateway\Feature;
 
-class AdCampaignBannerRestrictions extends \_factory\CachedTableRead
+class InsertionOrderLineItemRestrictions extends \_factory\CachedTableRead
 {
 
 	static protected $instance = null;
@@ -19,7 +19,7 @@ class AdCampaignBannerRestrictions extends \_factory\CachedTableRead
 	public static function get_instance() {
 
 		if (self::$instance == null):
-			self::$instance = new \_factory\AdCampaignBannerRestrictions();
+			self::$instance = new \_factory\InsertionOrderLineItemRestrictions();
 		endif;
 		return self::$instance;
 	}
@@ -27,7 +27,7 @@ class AdCampaignBannerRestrictions extends \_factory\CachedTableRead
 
     function __construct() {
 
-            $this->table = 'AdCampaignBannerRestrictions';
+            $this->table = 'InsertionOrderLineItemRestrictions';
             $this->featureSet = new Feature\FeatureSet();
             $this->featureSet->addFeature(new Feature\GlobalAdapterFeature());
             $this->initialize();
@@ -45,7 +45,7 @@ class AdCampaignBannerRestrictions extends \_factory\CachedTableRead
         	);
         	endforeach;
         	$select->limit(1, 0);
-        	$select->order('AdCampaignBannerRestrictionsID');
+        	$select->order('InsertionOrderLineItemRestrictionsID');
 
         }
         	);
@@ -69,7 +69,7 @@ class AdCampaignBannerRestrictions extends \_factory\CachedTableRead
         		);
         		endforeach;
         		//$select->limit(10, 0);
-        		$select->order('AdCampaignBannerRestrictionsID');
+        		$select->order('InsertionOrderLineItemRestrictionsID');
 
         	}
     	);
@@ -81,10 +81,10 @@ class AdCampaignBannerRestrictions extends \_factory\CachedTableRead
     		return $obj_list;
     }
 
-    public function saveAdCampaignBannerRestrictions(\model\AdCampaignBannerRestrictions $BannerRestrictions) {
+    public function saveInsertionOrderLineItemRestrictions(\model\InsertionOrderLineItemRestrictions $BannerRestrictions) {
     	$data = array(
 
-    	        'AdCampaignBannerID'               => $BannerRestrictions->AdCampaignBannerID,
+    	        'InsertionOrderLineItemID'               => $BannerRestrictions->InsertionOrderLineItemID,
     	        'GeoCountry'                       => $BannerRestrictions->GeoCountry === "" ? null : $BannerRestrictions->GeoCountry,
     	        'GeoState'                         => $BannerRestrictions->GeoState === "" ? null : $BannerRestrictions->GeoState,
     	        'GeoCity'                          => $BannerRestrictions->GeoCity === "" ? null : $BannerRestrictions->GeoCity,
@@ -112,24 +112,24 @@ class AdCampaignBannerRestrictions extends \_factory\CachedTableRead
     			'DateCreated'                      => $BannerRestrictions->DateCreated
     	);
 
-    	$banner_id = $BannerRestrictions->AdCampaignBannerID;
+    	$banner_id = $BannerRestrictions->InsertionOrderLineItemID;
 		$params = array();
-		$params["AdCampaignBannerID"] = $banner_id;
+		$params["InsertionOrderLineItemID"] = $banner_id;
     	$_banner_restrictions = $this->get_row($params);
 
-    	$banner_restrictions_id = (int)$BannerRestrictions->AdCampaignBannerRestrictionsID;
+    	$banner_restrictions_id = (int)$BannerRestrictions->InsertionOrderLineItemRestrictionsID;
     	if ($banner_restrictions_id === 0 && $_banner_restrictions === null): 
     		$this->insert($data);
     	else: 
     		if ($banner_restrictions_id === 0):
-    			$banner_restrictions_id = $_banner_restrictions->AdCampaignBannerRestrictionsID;
+    			$banner_restrictions_id = $_banner_restrictions->InsertionOrderLineItemRestrictionsID;
     		endif;
-    		$this->update($data, array('AdCampaignBannerRestrictionsID' => $banner_restrictions_id));
+    		$this->update($data, array('InsertionOrderLineItemRestrictionsID' => $banner_restrictions_id));
     	endif;
     }
 
-    public function deleteAdCampaignBannerRestrictions($banner_id) {
-    	$this->delete(array('AdCampaignBannerID' => $banner_id));
+    public function deleteInsertionOrderLineItemRestrictions($banner_id) {
+    	$this->delete(array('InsertionOrderLineItemID' => $banner_id));
     }
 
 };

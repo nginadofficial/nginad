@@ -95,26 +95,26 @@ class ViewsGetter extends Select
                     ));
                 
                 $select->join(
-                     'AdCampaignBanner',
-                     $this->table . '.AdCampaignBannerID = AdCampaignBanner.AdCampaignBannerID',
+                     'InsertionOrderLineItem',
+                     $this->table . '.InsertionOrderLineItemID = InsertionOrderLineItem.InsertionOrderLineItemID',
                      array()
                 );
 
                 $select->join(
-                     'AdCampaign',
-                     'AdCampaignBanner.AdCampaignID = AdCampaign.AdCampaignID',
+                     'InsertionOrder',
+                     'InsertionOrderLineItem.InsertionOrderID = InsertionOrder.InsertionOrderID',
                      array('Name')
                 );
 
                 $select->join(
                      'auth_Users',
-                     'auth_Users.user_id = AdCampaignBanner.UserID',
+                     'auth_Users.user_id = InsertionOrderLineItem.UserID',
                      array('user_login')
                 );
 
-//                $select->group('AdCampaignBanner.UserID');
+//                $select->group('InsertionOrderLineItem.UserID');
                 $select->group('BuySidePartnerID');
-                $select->group('BuySideHourlyImpressionsCounterCurrentSpend.AdCampaignBannerID');
+                $select->group('BuySideHourlyImpressionsCounterCurrentSpend.InsertionOrderLineItemID');
                 $select->order('user_login');
 
             }
@@ -152,7 +152,7 @@ class ViewsGetter extends Select
 
     	$data = array(
     			'BuySidePartnerID'        	=> $BuySideHourlyImpressionsCounterCurrentSpend->BuySidePartnerID,
-    			'AdCampaignBannerID'        => $BuySideHourlyImpressionsCounterCurrentSpend->AdCampaignBannerID,
+    			'InsertionOrderLineItemID'        => $BuySideHourlyImpressionsCounterCurrentSpend->InsertionOrderLineItemID,
     			'MDYH'						=> $BuySideHourlyImpressionsCounterCurrentSpend->MDYH,
     			'ImpressionsCounter'   		=> $BuySideHourlyImpressionsCounterCurrentSpend->ImpressionsCounter,
     			'CurrentSpendGross'        	=> $BuySideHourlyImpressionsCounterCurrentSpend->CurrentSpendGross,

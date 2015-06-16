@@ -11,17 +11,17 @@ namespace buyrtbfidelity\workflows\tasklets\video\adcampaignvideorestrictions;
 
 class CheckDelivery {
 	
-	public static function execute(&$Logger, &$Workflow, \model\openrtb\RtbBidRequest &$RtbBidRequest, \model\openrtb\RtbBidRequestImp &$RtbBidRequestImp, &$AdCampaignBanner, &$AdCampaignVideoRestrictions) {
+	public static function execute(&$Logger, &$Workflow, \model\openrtb\RtbBidRequest &$RtbBidRequest, \model\openrtb\RtbBidRequestImp &$RtbBidRequestImp, &$InsertionOrderLineItem, &$InsertionOrderLineItemVideoRestrictions) {
 		
 		$RtbBidRequestVideo = $RtbBidRequestImp->RtbBidRequestVideo;
 		
 		$result = true;
 		
-		if (empty($AdCampaignVideoRestrictions->DeliveryCommaSeparated)):
+		if (empty($InsertionOrderLineItemVideoRestrictions->DeliveryCommaSeparated)):
 			return $result;
 		endif;
 		
-		$delivery_code_list = explode(',', $AdCampaignVideoRestrictions->DeliveryCommaSeparated);
+		$delivery_code_list = explode(',', $InsertionOrderLineItemVideoRestrictions->DeliveryCommaSeparated);
 
 		if (!count($delivery_code_list)):
 			return $result;
@@ -55,7 +55,7 @@ class CheckDelivery {
 		
 		if ($result === false && $Logger->setting_log === true):
 			$Logger->log[] = "Failed: " . "Check video delivery code :: EXPECTED: "
-				. $AdCampaignVideoRestrictions->DeliveryCommaSeparated
+				. $InsertionOrderLineItemVideoRestrictions->DeliveryCommaSeparated
 				. " GOT: " . join(',', $RtbBidRequestVideo->delivery);
 		endif;
 		

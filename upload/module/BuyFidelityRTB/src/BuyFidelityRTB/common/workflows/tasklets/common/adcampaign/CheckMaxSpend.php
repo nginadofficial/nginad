@@ -11,9 +11,9 @@ namespace buyrtbfidelity\workflows\tasklets\common\adcampaign;
 
 class CheckMaxSpend {
 	
-	public static function execute(&$Logger, &$Workflow, \model\openrtb\RtbBidRequest &$RtbBidRequest, &$AdCampaign) {
+	public static function execute(&$Logger, &$Workflow, \model\openrtb\RtbBidRequest &$RtbBidRequest, &$InsertionOrder) {
 	
-        	if ($AdCampaign->CurrentSpend >= $AdCampaign->MaxSpend):
+        	if ($InsertionOrder->CurrentSpend >= $InsertionOrder->MaxSpend):
             	if ($Logger->setting_log === true):
             	   $Logger->log[] = "Failed: " . "Max Campaign Spend Exceeded";
             	endif;

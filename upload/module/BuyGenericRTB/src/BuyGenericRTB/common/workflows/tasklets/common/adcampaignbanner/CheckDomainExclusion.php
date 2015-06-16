@@ -11,21 +11,21 @@ namespace buyrtb\workflows\tasklets\common\adcampaignbanner;
 
 class CheckDomainExclusion {
 	
-	public static function execute(&$Logger, &$Workflow, \model\openrtb\RtbBidRequest &$RtbBidRequest, \model\openrtb\RtbBidRequestImp &$RtbBidRequestImp, &$AdCampaignBanner, &$AdCampaignBannerDomainExclusionFactory) {
+	public static function execute(&$Logger, &$Workflow, \model\openrtb\RtbBidRequest &$RtbBidRequest, \model\openrtb\RtbBidRequestImp &$RtbBidRequestImp, &$InsertionOrderLineItem, &$InsertionOrderLineItemDomainExclusionFactory) {
 	
 		/*
 		 * Check banner domain exclusions match
 		 */
 		
 		$params = array();
-		$params["AdCampaignBannerID"] = $AdCampaignBanner->AdCampaignBannerID;
-		$AdCampaignBannerDomainExclusionList = $AdCampaignBannerDomainExclusionFactory->get_cached($Workflow->config, $params);
+		$params["InsertionOrderLineItemID"] = $InsertionOrderLineItem->InsertionOrderLineItemID;
+		$InsertionOrderLineItemDomainExclusionList = $InsertionOrderLineItemDomainExclusionFactory->get_cached($Workflow->config, $params);
 		
-		foreach ($AdCampaignBannerDomainExclusionList as $AdCampaignBannerDomainExclusion):
+		foreach ($InsertionOrderLineItemDomainExclusionList as $InsertionOrderLineItemDomainExclusion):
 			
-			$domain_to_match = strtolower($AdCampaignBannerDomainExclusion->DomainName);
+			$domain_to_match = strtolower($InsertionOrderLineItemDomainExclusion->DomainName);
 			
-			if ($AdCampaignBannerDomainExclusion->ExclusionType == "url"):
+			if ($InsertionOrderLineItemDomainExclusion->ExclusionType == "url"):
 				
 			 	$page_url = $RtbBidRequest->RtbBidRequestSite->page != null ? $RtbBidRequest->RtbBidRequestSite->page : "";
 				$domain = $RtbBidRequest->RtbBidRequestSite->domain != null ? $RtbBidRequest->RtbBidRequestSite->domain : "";
@@ -44,7 +44,7 @@ class CheckDomainExclusion {
 					
 				endif;
 				
-			elseif ($AdCampaignBannerDomainExclusion->ExclusionType == "referrer"):
+			elseif ($InsertionOrderLineItemDomainExclusion->ExclusionType == "referrer"):
 
 				$referrer = $RtbBidRequest->RtbBidRequestSite->ref != null ? $RtbBidRequest->RtbBidRequestSite->ref : "";
 

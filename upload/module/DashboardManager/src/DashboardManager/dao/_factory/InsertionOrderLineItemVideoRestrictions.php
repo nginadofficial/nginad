@@ -11,7 +11,7 @@ namespace _factory;
 
 use Zend\Db\TableGateway\Feature;
 
-class AdCampaignVideoRestrictions extends \_factory\CachedTableRead
+class InsertionOrderLineItemVideoRestrictions extends \_factory\CachedTableRead
 {
 
 	static protected $instance = null;
@@ -19,7 +19,7 @@ class AdCampaignVideoRestrictions extends \_factory\CachedTableRead
 	public static function get_instance() {
 
 		if (self::$instance == null):
-			self::$instance = new \_factory\AdCampaignVideoRestrictions();
+			self::$instance = new \_factory\InsertionOrderLineItemVideoRestrictions();
 		endif;
 		return self::$instance;
 	}
@@ -27,7 +27,7 @@ class AdCampaignVideoRestrictions extends \_factory\CachedTableRead
 
     function __construct() {
 
-            $this->table = 'AdCampaignVideoRestrictions';
+            $this->table = 'InsertionOrderLineItemVideoRestrictions';
             $this->featureSet = new Feature\FeatureSet();
             $this->featureSet->addFeature(new Feature\GlobalAdapterFeature());
             $this->initialize();
@@ -45,7 +45,7 @@ class AdCampaignVideoRestrictions extends \_factory\CachedTableRead
         	);
         	endforeach;
         	$select->limit(1, 0);
-        	$select->order('AdCampaignVideoRestrictionsID');
+        	$select->order('InsertionOrderLineItemVideoRestrictionsID');
 
         }
         	);
@@ -69,7 +69,7 @@ class AdCampaignVideoRestrictions extends \_factory\CachedTableRead
         		);
         		endforeach;
         		//$select->limit(10, 0);
-        		$select->order('AdCampaignVideoRestrictionsID');
+        		$select->order('InsertionOrderLineItemVideoRestrictionsID');
 
         	}
     	);
@@ -81,9 +81,9 @@ class AdCampaignVideoRestrictions extends \_factory\CachedTableRead
     		return $obj_list;
     }
     
-    public function saveAdCampaignVideoRestrictions(\model\AdCampaignVideoRestrictions $VideoRestrictions) {
+    public function saveInsertionOrderLineItemVideoRestrictions(\model\InsertionOrderLineItemVideoRestrictions $VideoRestrictions) {
     	$data = array( 
-    			'AdCampaignBannerID'               => $VideoRestrictions->AdCampaignBannerID,
+    			'InsertionOrderLineItemID'               => $VideoRestrictions->InsertionOrderLineItemID,
     	        'GeoCountry'                       => $VideoRestrictions->GeoCountry === "" ? null : $VideoRestrictions->GeoCountry,
     	        'GeoState'                         => $VideoRestrictions->GeoState === "" ? null : $VideoRestrictions->GeoState,
     	        'GeoCity'                          => $VideoRestrictions->GeoCity === "" ? null : $VideoRestrictions->GeoCity,
@@ -106,24 +106,24 @@ class AdCampaignVideoRestrictions extends \_factory\CachedTableRead
     			'DateCreated'                      => $VideoRestrictions->DateCreated
     	);
 
-    	$video_id = $VideoRestrictions->AdCampaignBannerID;
+    	$video_id = $VideoRestrictions->InsertionOrderLineItemID;
 		$params = array();
-		$params["AdCampaignBannerID"] = $video_id;
+		$params["InsertionOrderLineItemID"] = $video_id;
     	$_video_restrictions = $this->get_row($params);
 
-    	$video_restrictions_id = (int)$VideoRestrictions->AdCampaignVideoRestrictionsID;
+    	$video_restrictions_id = (int)$VideoRestrictions->InsertionOrderLineItemVideoRestrictionsID;
     	if ($video_restrictions_id === 0 && $_video_restrictions === null): 
     		$this->insert($data);
     	else: 
     		if ($video_restrictions_id === 0):
-    			$video_restrictions_id = $_video_restrictions->AdCampaignVideoRestrictionsID;
+    			$video_restrictions_id = $_video_restrictions->InsertionOrderLineItemVideoRestrictionsID;
     		endif;
-    		$this->update($data, array('AdCampaignVideoRestrictionsID' => $video_restrictions_id));
+    		$this->update($data, array('InsertionOrderLineItemVideoRestrictionsID' => $video_restrictions_id));
     	endif;
     }
 
-    public function deleteAdCampaignVideoRestrictions($banner_id) {
-    	$this->delete(array('AdCampaignBannerID' => $banner_id));
+    public function deleteInsertionOrderLineItemVideoRestrictions($banner_id) {
+    	$this->delete(array('InsertionOrderLineItemID' => $banner_id));
     }
 
 };

@@ -11,7 +11,7 @@ namespace buyrtbfidelity\workflows\tasklets\common\adcampaignmediarestrictions;
 
 class CheckVertical {
 
-	public static function execute(&$Logger, &$Workflow, \model\openrtb\RtbBidRequest &$RtbBidRequest, \model\openrtb\RtbBidRequestImp &$RtbBidRequestImp, &$AdCampaignBanner, &$AdCampaignMediaRestrictions) {
+	public static function execute(&$Logger, &$Workflow, \model\openrtb\RtbBidRequest &$RtbBidRequest, \model\openrtb\RtbBidRequestImp &$RtbBidRequestImp, &$InsertionOrderLineItem, &$InsertionOrderMediaRestrictions) {
 
 		
 		$vertical_to_check = null;
@@ -25,11 +25,11 @@ class CheckVertical {
 		/*
 		 * Check banner for it being in the right vertical
 		 */
-		if ($AdCampaignMediaRestrictions->Vertical !== null && !empty($verticals_to_check) && is_array($verticals_to_check)):
+		if ($InsertionOrderMediaRestrictions->Vertical !== null && !empty($verticals_to_check) && is_array($verticals_to_check)):
 		
 			$has_vertical = false;
 			
-			$vertical_list = explode(",", $AdCampaignMediaRestrictions->Vertical);
+			$vertical_list = explode(",", $InsertionOrderMediaRestrictions->Vertical);
 			foreach ($vertical_list as $vertical_id):
 				
 				foreach ($verticals_to_check as $vertical_to_check):
@@ -47,7 +47,7 @@ class CheckVertical {
 			
 			if ($has_vertical === false):
 				if ($Logger->setting_log === true):
-					$Logger->log[] = "Failed: " . "Check banner for it being in the right vertical :: EXPECTED: " . $AdCampaignMediaRestrictions->Vertical . " GOT: " . $RtbBidRequest->RtbBidRequestSite->RtbBidRequestPublisher->cat;
+					$Logger->log[] = "Failed: " . "Check banner for it being in the right vertical :: EXPECTED: " . $InsertionOrderMediaRestrictions->Vertical . " GOT: " . $RtbBidRequest->RtbBidRequestSite->RtbBidRequestPublisher->cat;
 				endif;
 				return false;
 			endif;

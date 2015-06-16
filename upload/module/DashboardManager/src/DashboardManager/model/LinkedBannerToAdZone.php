@@ -11,7 +11,7 @@ namespace model;
 
 class LinkedBannerToAdZone {
     public $LinkedBannerToAdZoneID;
-    public $AdCampaignBannerID;
+    public $InsertionOrderLineItemID;
     public $PublisherAdZoneID;
     public $Weight;
     public $DateCreated;

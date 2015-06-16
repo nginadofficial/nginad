@@ -9,12 +9,11 @@
 
 namespace model;
 
-class AdCampaignBannerPreview {
+class InsertionOrderLineItem {
 
-    public $AdCampaignBannerPreviewID;
-    public $AdCampaignPreviewID;
-    public $AdCampaignBannerID;  // nullable
-    public $AdCampaignTypeID;
+    public $InsertionOrderLineItemID;
+    public $InsertionOrderID;
+    public $InsertionOrderTypeID;
     public $ImpressionType;
     public $UserID;
     public $Name;
@@ -34,8 +33,7 @@ class AdCampaignBannerPreview {
     public $CurrentSpend;
     public $Active;
     public $DateCreated;
-    public $ChangeWentLive;
-    public $WentLiveDate;
+
 }
 
 ?>

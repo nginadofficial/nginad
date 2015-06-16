@@ -11,17 +11,17 @@ namespace buyrtbfidelity\workflows\tasklets\video\adcampaignvideorestrictions;
 
 class CheckProtocols {
 	
-	public static function execute(&$Logger, &$Workflow, \model\openrtb\RtbBidRequest &$RtbBidRequest, \model\openrtb\RtbBidRequestImp &$RtbBidRequestImp, &$AdCampaignBanner, &$AdCampaignVideoRestrictions) {
+	public static function execute(&$Logger, &$Workflow, \model\openrtb\RtbBidRequest &$RtbBidRequest, \model\openrtb\RtbBidRequestImp &$RtbBidRequestImp, &$InsertionOrderLineItem, &$InsertionOrderLineItemVideoRestrictions) {
 		
 		$RtbBidRequestVideo = $RtbBidRequestImp->RtbBidRequestVideo;
 
 		$result = true;
 		
-		if (empty($AdCampaignVideoRestrictions->ProtocolsCommaSeparated)):
+		if (empty($InsertionOrderLineItemVideoRestrictions->ProtocolsCommaSeparated)):
 			return $result;
 		endif;
 
-		$protocols_code_list = explode(',', $AdCampaignVideoRestrictions->ProtocolsCommaSeparated);
+		$protocols_code_list = explode(',', $InsertionOrderLineItemVideoRestrictions->ProtocolsCommaSeparated);
 		
 		if (!count($protocols_code_list)):
 			return $result;
@@ -55,7 +55,7 @@ class CheckProtocols {
 		
 		if ($result === false && $Logger->setting_log === true):
 			$Logger->log[] = "Failed: " . "Check video protocols code :: EXPECTED: "
-				. $AdCampaignVideoRestrictions->ProtocolsCommaSeparated
+				. $InsertionOrderLineItemVideoRestrictions->ProtocolsCommaSeparated
 				. " GOT: " . join(',', $RtbBidRequestVideo->protocols);
 		endif;
 		

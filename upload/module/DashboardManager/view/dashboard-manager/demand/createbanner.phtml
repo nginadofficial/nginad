@@ -56,7 +56,7 @@ $(function() {
 
  <ul class="breadcrumb">
     <li><a href="/demand/<?php echo $preview_query; ?>">Ad Campaigns</a> <span class="divider">/</span></li>
-    <li><?php echo $bread_crumb_info["BCAdCampaign"]; ?><span class="divider">/</span></li>
+    <li><?php echo $bread_crumb_info["BCInsertionOrder"]; ?><span class="divider">/</span></li>
      <li><a href="/demand/viewbanner/<?php echo $ad_campaign_id; ?><?php echo $preview_query; ?>">Banners</a><span class="divider">/</span></li>
     <li class="active">Create Banner</li>
     </ul>
@@ -150,7 +150,7 @@ $(function() {
 	<?php if ($is_admin): ?>
 	<div class="form-group novideo">
 		<label for="adcampaigntype">What type of ad campaign banner is this?</label>
-        <select id="adcampaigntype"  class="selbox-width" name="adcampaigntype" onchange="switchAdCampaignType();">
+        <select id="adcampaigntype"  class="selbox-width" name="adcampaigntype" onchange="switchInsertionOrderType();">
             <?php foreach ($adcampaigntype_options as $code => $name): ?>
                 <option value="<?php echo $code;?>"><?php echo $name;?></option>
             <?php endforeach; ?>

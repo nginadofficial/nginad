@@ -11,11 +11,11 @@ namespace buyrtbfidelity\workflows\tasklets\video\adcampaignvideorestrictions;
 
 class CheckLinearity {
 	
-	public static function execute(&$Logger, &$Workflow, \model\openrtb\RtbBidRequest &$RtbBidRequest, \model\openrtb\RtbBidRequestImp &$RtbBidRequestImp, &$AdCampaignBanner, &$AdCampaignVideoRestrictions) {
+	public static function execute(&$Logger, &$Workflow, \model\openrtb\RtbBidRequest &$RtbBidRequest, \model\openrtb\RtbBidRequestImp &$RtbBidRequestImp, &$InsertionOrderLineItem, &$InsertionOrderLineItemVideoRestrictions) {
 		
 		$RtbBidRequestVideo = $RtbBidRequestImp->RtbBidRequestVideo;
 		
-		if (!is_numeric($AdCampaignVideoRestrictions->Linearity)):
+		if (!is_numeric($InsertionOrderLineItemVideoRestrictions->Linearity)):
 			return true;
 		endif;
 		
@@ -29,11 +29,11 @@ class CheckLinearity {
 			return false;
 		endif;
 		
-		$result = $AdCampaignVideoRestrictions->Linearity == $RtbBidRequestVideo->linearity;
+		$result = $InsertionOrderLineItemVideoRestrictions->Linearity == $RtbBidRequestVideo->linearity;
 		
 		if ($result === false && $Logger->setting_log === true):
 			$Logger->log[] = "Failed: " . "Check video linearity code :: EXPECTED: "
-				. $AdCampaignVideoRestrictions->Linearity
+				. $InsertionOrderLineItemVideoRestrictions->Linearity
 				. " GOT: " . $RtbBidRequestVideo->linearity;
 		endif;
 		

@@ -72,7 +72,7 @@ function switchMobile (elem) {
 	}
 }
 
-function switchAdCampaignType() {
+function switchInsertionOrderType() {
 	
 	var adCampaignType = $("#adcampaigntype :selected").text();
 
@@ -279,5 +279,5 @@ function switchImpressionType(adtagtype) {
 
 $().ready(function() {
 
-	switchAdCampaignType();
+	switchInsertionOrderType();
 });

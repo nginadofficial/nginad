@@ -11,14 +11,14 @@ namespace buyrtb\workflows\tasklets\video\adcampaignvideorestrictions;
 
 class CheckDuration {
 	
-	public static function execute(&$Logger, &$Workflow, \model\openrtb\RtbBidRequest &$RtbBidRequest, \model\openrtb\RtbBidRequestImp &$RtbBidRequestImp, &$AdCampaignBanner, &$AdCampaignVideoRestrictions) {
+	public static function execute(&$Logger, &$Workflow, \model\openrtb\RtbBidRequest &$RtbBidRequest, \model\openrtb\RtbBidRequestImp &$RtbBidRequestImp, &$InsertionOrderLineItem, &$InsertionOrderLineItemVideoRestrictions) {
 		
 		$RtbBidRequestVideo = $RtbBidRequestImp->RtbBidRequestVideo;
 		
 		$result1 = true;
 		$result2 = true;
 		
-		if (is_numeric($AdCampaignVideoRestrictions->MinDuration) && $AdCampaignVideoRestrictions->MinDuration != 0):
+		if (is_numeric($InsertionOrderLineItemVideoRestrictions->MinDuration) && $InsertionOrderLineItemVideoRestrictions->MinDuration != 0):
 			
 			// Validate that the value is a number
 			if (!is_numeric($RtbBidRequestVideo->minduration)):
@@ -31,18 +31,18 @@ class CheckDuration {
 				
 			else:
 			
-				$result1 = $RtbBidRequestVideo->minduration >= $AdCampaignVideoRestrictions->MinDuration;
+				$result1 = $RtbBidRequestVideo->minduration >= $InsertionOrderLineItemVideoRestrictions->MinDuration;
 				
 				if ($result1 === false && $Logger->setting_log === true):
 					$Logger->log[] = "Failed: " . "Check video minimum duration :: EXPECTED: "
-							. $AdCampaignVideoRestrictions->MinDuration
+							. $InsertionOrderLineItemVideoRestrictions->MinDuration
 							. " GOT: " . $RtbBidRequestVideo->minduration;
 				endif;
 			endif;
 			
 		endif;
 		
-		if (is_numeric($AdCampaignVideoRestrictions->MaxDuration) && $AdCampaignVideoRestrictions->MaxDuration != 0):
+		if (is_numeric($InsertionOrderLineItemVideoRestrictions->MaxDuration) && $InsertionOrderLineItemVideoRestrictions->MaxDuration != 0):
 			
 			// Validate that the value is a number
 			if (!is_numeric($RtbBidRequestVideo->maxduration)):
@@ -55,11 +55,11 @@ class CheckDuration {
 			
 			else:
 				
-				$result2 = $RtbBidRequestVideo->maxduration <= $AdCampaignVideoRestrictions->MaxDuration;
+				$result2 = $RtbBidRequestVideo->maxduration <= $InsertionOrderLineItemVideoRestrictions->MaxDuration;
 				
 				if ($result2 === false && $Logger->setting_log === true):
 					$Logger->log[] = "Failed: " . "Check video maximum duration :: EXPECTED: "
-							. $AdCampaignVideoRestrictions->MaxDuration
+							. $InsertionOrderLineItemVideoRestrictions->MaxDuration
 							. " GOT: " . $RtbBidRequestVideo->maxduration;
 				endif;
 			

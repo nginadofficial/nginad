@@ -11,58 +11,58 @@ namespace transformation;
 
 class CheckPermissions {
 
-	public static function checkEditPermissionAdCampaignBanner($banner_id, $auth, $config) {
+	public static function checkEditPermissionInsertionOrderLineItem($banner_id, $auth, $config) {
 		$params = array();
-		$params["AdCampaignBannerID"] = $banner_id;
+		$params["InsertionOrderLineItemID"] = $banner_id;
 		if (strpos(self::getPrimaryRole($auth), $config['roles']['admin']) === false):
 			$params["UserID"] = $auth->getUserID();
 		endif;
-		$AdCampaignBannerFactory = \_factory\AdCampaignBanner::get_instance();
-		$AdCampaignBanner = $AdCampaignBannerFactory->get_row($params);
-		if ($AdCampaignBanner === null):
+		$InsertionOrderLineItemFactory = \_factory\InsertionOrderLineItem::get_instance();
+		$InsertionOrderLineItem = $InsertionOrderLineItemFactory->get_row($params);
+		if ($InsertionOrderLineItem === null):
 			//die("You are trying to view/edit an item you do not have permissions on");
 			$params["error"] = "You are trying to view/edit an item you do not have permissions on";
 		endif;
 		return $params;
 	}
 
-	public static function checkEditPermissionAdCampaign($campaign_id, $auth, $config) {
+	public static function checkEditPermissionInsertionOrder($campaign_id, $auth, $config) {
 		$params = array();
-		$params["AdCampaignID"] = $campaign_id;
+		$params["InsertionOrderID"] = $campaign_id;
 		if (strpos(self::getPrimaryRole($auth), $config['roles']['admin']) === false):
 			$params["UserID"] = $auth->getUserID();
 		endif;
-		$AdCampaignFactory = \_factory\AdCampaign::get_instance();
-		$AdCampaign = $AdCampaignFactory->get_row($params);
-		if ($AdCampaign === null):
+		$InsertionOrderFactory = \_factory\InsertionOrder::get_instance();
+		$InsertionOrder = $InsertionOrderFactory->get_row($params);
+		if ($InsertionOrder === null):
 			die("You are trying to view/edit an item you do not have permissions on");
 		endif;
 	}
 
-	public static function checkEditPermissionAdCampaignBannerPreview($banner_preview_id, $auth, $config) {
+	public static function checkEditPermissionInsertionOrderLineItemPreview($banner_preview_id, $auth, $config) {
 		$params = array();
-		$params["AdCampaignBannerPreviewID"] = $banner_preview_id;
+		$params["InsertionOrderLineItemPreviewID"] = $banner_preview_id;
 		if (strpos(self::getPrimaryRole($auth), $config['roles']['admin']) === false):
 			$params["UserID"] = $auth->getUserID();
 		endif;
-		$AdCampaignBannerPreviewFactory = \_factory\AdCampaignBannerPreview::get_instance();
-		$AdCampaignBannerPreview = $AdCampaignBannerPreviewFactory->get_row($params);
-		if ($AdCampaignBannerPreview === null):
+		$InsertionOrderLineItemPreviewFactory = \_factory\InsertionOrderLineItemPreview::get_instance();
+		$InsertionOrderLineItemPreview = $InsertionOrderLineItemPreviewFactory->get_row($params);
+		if ($InsertionOrderLineItemPreview === null):
 			//die("You are trying to view/edit an item you do not have permissions on");
 			$params["error"] = "You are trying to view/edit an item you do not have permissions on";
 		endif;
 		return $params;
 	}
 
-	public static function checkEditPermissionAdCampaignPreview($campaign_preview_id, $auth, $config) {
+	public static function checkEditPermissionInsertionOrderPreview($campaign_preview_id, $auth, $config) {
 		$params = array();
-		$params["AdCampaignPreviewID"] = $campaign_preview_id;
+		$params["InsertionOrderPreviewID"] = $campaign_preview_id;
 		if (strpos(self::getPrimaryRole($auth), $config['roles']['admin']) === false):
 			$params["UserID"] = $auth->getUserID();
 		endif;
-		$AdCampaignPreviewFactory = \_factory\AdCampaignPreview::get_instance();
-		$AdCampaignPreview = $AdCampaignPreviewFactory->get_row($params);
-		if ($AdCampaignPreview === null):
+		$InsertionOrderPreviewFactory = \_factory\InsertionOrderPreview::get_instance();
+		$InsertionOrderPreview = $InsertionOrderPreviewFactory->get_row($params);
+		if ($InsertionOrderPreview === null):
 			//die("You are trying to view/edit an item you do not have permissions on");
 			$params["error"] = "You are trying to view/edit an item you do not have permissions on";
 		endif;

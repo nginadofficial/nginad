@@ -13,7 +13,7 @@ endif;
 <div class="steps-container step1">
 <ul class="breadcrumb breadcrumb-heading">
     <li><a href="/demand/<?php echo $preview_query; ?>">Ad Campaigns</a><span class="divider">/</span></li>
-    <li><?php echo $bread_crumb_info["BCAdCampaign"]; ?><span class="divider">/</span></li>
+    <li><?php echo $bread_crumb_info["BCInsertionOrder"]; ?><span class="divider">/</span></li>
     <li class="active">Banners</li>
     </ul>
 
@@ -66,11 +66,11 @@ endif;
     <?php foreach ($rtb_banners as $rtb_banner) :
 
             if ($ispreview == true):
-           		$banner_id = $rtb_banner->AdCampaignBannerPreviewID;
-            	$campaign_id = $rtb_banner->AdCampaignPreviewID;
+           		$banner_id = $rtb_banner->InsertionOrderLineItemPreviewID;
+            	$campaign_id = $rtb_banner->InsertionOrderPreviewID;
             else:
-            	$banner_id = $rtb_banner->AdCampaignBannerID;
-            	$campaign_id = $rtb_banner->AdCampaignID;
+            	$banner_id = $rtb_banner->InsertionOrderLineItemID;
+            	$campaign_id = $rtb_banner->InsertionOrderID;
             endif;
 
             if ($rtb_banner->ImpressionType == 'video'):

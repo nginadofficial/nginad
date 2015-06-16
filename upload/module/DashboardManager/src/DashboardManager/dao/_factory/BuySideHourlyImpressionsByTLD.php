@@ -83,7 +83,7 @@ class BuySideHourlyImpressionsByTLD extends \_factory\CachedTableRead {
     public function getPerTime($where_params = null, $is_admin = false) {
 
         $results = $this->select(function (\Zend\Db\Sql\Select $select) use ($where_params) {
-            $select->columns(array('AdCampaignBannerID', 'PublisherTLD', 'MDYH', 'Impressions', 'DateCreated', 'DateUpdated'));
+            $select->columns(array('InsertionOrderLineItemID', 'PublisherTLD', 'MDYH', 'Impressions', 'DateCreated', 'DateUpdated'));
             if (!empty($where_params['DateCreatedGreater'])):
                 $select->where(
                         $select->where->greaterThanOrEqualTo('DateCreated', $where_params['DateCreatedGreater'])
@@ -96,7 +96,7 @@ class BuySideHourlyImpressionsByTLD extends \_factory\CachedTableRead {
                 );
             endif;
 
-            $select->order('AdCampaignBannerID');
+            $select->order('InsertionOrderLineItemID');
         }
         );
         
@@ -108,14 +108,14 @@ class BuySideHourlyImpressionsByTLD extends \_factory\CachedTableRead {
     public function getPerTimeHeader($is_admin = false) {
 
         return ($is_admin) ? array(
-            'AdCampaignBannerID' => '',
+            'InsertionOrderLineItemID' => '',
             'PublisherTLD' => '',
             'MDYH' => '',
             'Impressions' => '',
             'DateCreated' => '',
             'DateUpdated' => ''
                 ) : array(
-            'AdCampaignBannerID' => '',
+            'InsertionOrderLineItemID' => '',
             'PublisherTLD' => '',
             'MDYH' => '',
             'Impressions' => '',
@@ -134,20 +134,20 @@ class BuySideHourlyImpressionsByTLD extends \_factory\CachedTableRead {
                 $select->columns(array('PublisherTLD', 'total_impressions' => new \Zend\Db\Sql\Expression('SUM(' . $this->table  . '.impressions)')));
                 
                 $select->join(
-                     'AdCampaignBanner',
-                     $this->table . '.AdCampaignBannerID = AdCampaignBanner.AdCampaignBannerID',
+                     'InsertionOrderLineItem',
+                     $this->table . '.InsertionOrderLineItemID = InsertionOrderLineItem.InsertionOrderLineItemID',
                      array()
                 );
 
                 $select->join(
-                     'AdCampaign',
-                     'AdCampaignBanner.AdCampaignID = AdCampaign.AdCampaignID',
+                     'InsertionOrder',
+                     'InsertionOrderLineItem.InsertionOrderID = InsertionOrder.InsertionOrderID',
                      array('Name')
                 );
 
                 $select->join(
                      'auth_Users',
-                     'auth_Users.user_id = AdCampaignBanner.UserID',
+                     'auth_Users.user_id = InsertionOrderLineItem.UserID',
                      array('user_login')
                 );
 
@@ -157,7 +157,7 @@ class BuySideHourlyImpressionsByTLD extends \_factory\CachedTableRead {
 	                );
                 endforeach;
                 
-                $select->group('AdCampaignBanner.UserID');
+                $select->group('InsertionOrderLineItem.UserID');
                 $select->group('PublisherTLD');
                 $select->order('PublisherTLD');
 
@@ -189,7 +189,7 @@ class BuySideHourlyImpressionsByTLD extends \_factory\CachedTableRead {
 
     public function insertBuySideHourlyImpressionsByTLD(\model\BuySideHourlyImpressionsByTLD $BuySideHourlyImpressionsByTLD) {
         $data = array(
-            'AdCampaignBannerID' => $BuySideHourlyImpressionsByTLD->AdCampaignBannerID,
+            'InsertionOrderLineItemID' => $BuySideHourlyImpressionsByTLD->InsertionOrderLineItemID,
             'MDYH' => $BuySideHourlyImpressionsByTLD->MDYH,
             'PublisherTLD' => $BuySideHourlyImpressionsByTLD->PublisherTLD,
             'Impressions' => $BuySideHourlyImpressionsByTLD->Impressions,

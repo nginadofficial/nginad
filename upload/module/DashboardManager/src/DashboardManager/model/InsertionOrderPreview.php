@@ -9,9 +9,10 @@
 
 namespace model;
 
-class AdCampaign {
+class InsertionOrderPreview {
 
-    public $AdCampaignID;
+    public $InsertionOrderPreviewID;
+    public $InsertionOrderID;
     public $UserID;
     public $Name;
     public $StartDate;
@@ -24,7 +25,8 @@ class AdCampaign {
     public $MaxSpend;
     public $Active;
     public $DateCreated;
-
+    public $ChangeWentLive;
+    public $WentLiveDate;
 }
 
 ?>

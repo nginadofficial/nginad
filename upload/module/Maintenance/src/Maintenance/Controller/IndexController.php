@@ -97,7 +97,7 @@ class IndexController extends AbstractActionController {
     
     public function tenMinuteMaintenanceAction() {
 
-		$this->updateAdCampaignBannerTotals();
+		$this->updateInsertionOrderLineItemTotals();
     	$this->updatePublisherZoneTotals();
     }
     
@@ -196,26 +196,26 @@ class IndexController extends AbstractActionController {
     	
     }
     
-    private function updateAdCampaignBannerTotals() {
+    private function updateInsertionOrderLineItemTotals() {
     	
     	/*
-    	 * update all compiled stats into the AdCampaignBanner table
+    	 * update all compiled stats into the InsertionOrderLineItem table
     	*/
     	
     	$BidTotalsRollupFactory = \_factory\BidTotalsRollup::get_instance();
     	$ImpressionAndSpendTotalsRollupFactory = \_factory\ImpressionAndSpendTotalsRollup::get_instance();
     	
-    	$AdCampaignBannerFactory = \_factory\AdCampaignBanner::get_instance();
+    	$InsertionOrderLineItemFactory = \_factory\InsertionOrderLineItem::get_instance();
     	$params = array();
     	$params["Active"] = 1;
-    	$AdCampaignBannerList = $AdCampaignBannerFactory->get($params);
+    	$InsertionOrderLineItemList = $InsertionOrderLineItemFactory->get($params);
     	
-    	foreach ($AdCampaignBannerList as $AdCampaignBanner):
+    	foreach ($InsertionOrderLineItemList as $InsertionOrderLineItem):
 	    	
-	    	$banner_id = $AdCampaignBanner->AdCampaignBannerID;
+	    	$banner_id = $InsertionOrderLineItem->InsertionOrderLineItemID;
 	    	
 	    	$params = array();
-	    	$params["AdCampaignBannerID"] = $banner_id;
+	    	$params["InsertionOrderLineItemID"] = $banner_id;
 	    	$BidTotalsRollup = $BidTotalsRollupFactory->get_row($params);
 	    	if ($BidTotalsRollup == null):
 	    		continue;
@@ -225,50 +225,50 @@ class IndexController extends AbstractActionController {
 	    		continue;
 	    	endif;
 	    	
-	    	$AdCampaignBanner->BidsCounter = $BidTotalsRollup->TotalBids;
-	    	$AdCampaignBanner->ImpressionsCounter = $ImpressionAndSpendTotalsRollup->TotalImpressions;
-	    	$AdCampaignBanner->CurrentSpend = $ImpressionAndSpendTotalsRollup->TotalSpendGross;
+	    	$InsertionOrderLineItem->BidsCounter = $BidTotalsRollup->TotalBids;
+	    	$InsertionOrderLineItem->ImpressionsCounter = $ImpressionAndSpendTotalsRollup->TotalImpressions;
+	    	$InsertionOrderLineItem->CurrentSpend = $ImpressionAndSpendTotalsRollup->TotalSpendGross;
 	    	
-	    	$data = $AdCampaignBanner->getArrayCopy();
+	    	$data = $InsertionOrderLineItem->getArrayCopy();
 	    	
-	    	$AdCampaignBannerFactory->saveAdCampaignBannerFromDataArray($data);
+	    	$InsertionOrderLineItemFactory->saveInsertionOrderLineItemFromDataArray($data);
 	    	
     	endforeach;
     	
     	/*
-    	 * Update all AdCampaign tables with the new info from the AdCampaignBanner tables
+    	 * Update all InsertionOrder tables with the new info from the InsertionOrderLineItem tables
     	*/
     	
-    	$AdCampaignFactory = \_factory\AdCampaign::get_instance();
+    	$InsertionOrderFactory = \_factory\InsertionOrder::get_instance();
     	$params = array();
     	$params["Active"] = 1;
-    	$AdCampaignList = $AdCampaignFactory->get($params);
+    	$InsertionOrderList = $InsertionOrderFactory->get($params);
     	
-    	foreach ($AdCampaignList as $AdCampaign):
+    	foreach ($InsertionOrderList as $InsertionOrder):
     	
-	    	$ad_campaign_id = $AdCampaign->AdCampaignID;
+	    	$ad_campaign_id = $InsertionOrder->InsertionOrderID;
 	    	
-	    	$AdCampaignBannerFactory = \_factory\AdCampaignBanner::get_instance();
+	    	$InsertionOrderLineItemFactory = \_factory\InsertionOrderLineItem::get_instance();
 	    	$params = array();
-	    	$params["AdCampaignID"] = $ad_campaign_id;
-	    	$AdCampaignBannerList = $AdCampaignBannerFactory->get($params);
+	    	$params["InsertionOrderID"] = $ad_campaign_id;
+	    	$InsertionOrderLineItemList = $InsertionOrderLineItemFactory->get($params);
 	    	
 	    	$impressions_counter 	= 0;
 	    	$current_spend			= 0;
 	    	 
-	    	foreach ($AdCampaignBannerList as $AdCampaignBanner):
+	    	foreach ($InsertionOrderLineItemList as $InsertionOrderLineItem):
 	    	 
-		    	$impressions_counter 	+= $AdCampaignBanner->ImpressionsCounter;
-		    	$current_spend 			+= floatval($AdCampaignBanner->CurrentSpend);
+		    	$impressions_counter 	+= $InsertionOrderLineItem->ImpressionsCounter;
+		    	$current_spend 			+= floatval($InsertionOrderLineItem->CurrentSpend);
 		    	 
 	    	endforeach;
 	    	
-	    	$AdCampaign->ImpressionsCounter 	= $impressions_counter;
-	    	$AdCampaign->CurrentSpend 			= $current_spend;
+	    	$InsertionOrder->ImpressionsCounter 	= $impressions_counter;
+	    	$InsertionOrder->CurrentSpend 			= $current_spend;
 	    	 
-	    	$data = $AdCampaign->getArrayCopy();
+	    	$data = $InsertionOrder->getArrayCopy();
 	    	 
-	    	$AdCampaignFactory->saveAdCampaignFromDataArray($data);
+	    	$InsertionOrderFactory->saveInsertionOrderFromDataArray($data);
 	    	 
     	endforeach;
     }

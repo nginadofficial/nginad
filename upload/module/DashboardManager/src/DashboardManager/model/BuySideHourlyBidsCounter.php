@@ -12,7 +12,7 @@ namespace model;
 class BuySideHourlyBidsCounter {
 	public $BuySideHourlyBidsCounterID;
 	public $BuySidePartnerID;
-	public $AdCampaignBannerID;
+	public $InsertionOrderLineItemID;
 	public $MDYH;
     public $BidsCounter;
     public $DateCreated;

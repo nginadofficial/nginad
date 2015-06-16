@@ -13,7 +13,7 @@ use Zend\Db\TableGateway\AbstractTableGateway;
 use Zend\Db\TableGateway\Feature;
 
 
-class AdCampaignType extends AbstractTableGateway
+class InsertionOrderType extends AbstractTableGateway
 {
 
 	static protected $instance = null;
@@ -21,7 +21,7 @@ class AdCampaignType extends AbstractTableGateway
 	public static function get_instance() {
 
 		if (self::$instance == null):
-			self::$instance = new \_factory\AdCampaignType();
+			self::$instance = new \_factory\InsertionOrderType();
 		endif;
 		return self::$instance;
 	}
@@ -29,7 +29,7 @@ class AdCampaignType extends AbstractTableGateway
 
     function __construct() {
 
-            $this->table = 'AdCampaignType';
+            $this->table = 'InsertionOrderType';
             $this->featureSet = new Feature\FeatureSet();
             $this->featureSet->addFeature(new Feature\GlobalAdapterFeature());
             $this->initialize();
@@ -53,7 +53,7 @@ class AdCampaignType extends AbstractTableGateway
         	);
         	endforeach;
         	$select->limit(1, 0);
-        	$select->order('AdCampaignTypeID');
+        	$select->order('InsertionOrderTypeID');
 
         }
         	);
@@ -83,7 +83,7 @@ class AdCampaignType extends AbstractTableGateway
         		);
         		endforeach;
         		//$select->limit(10, 0);
-        		$select->order('AdCampaignTypeID');
+        		$select->order('InsertionOrderTypeID');
 
         	}
     	);

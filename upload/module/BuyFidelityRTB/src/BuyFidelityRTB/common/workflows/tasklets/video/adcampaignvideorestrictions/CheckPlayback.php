@@ -11,17 +11,17 @@ namespace buyrtbfidelity\workflows\tasklets\video\adcampaignvideorestrictions;
 
 class CheckPlayback {
 	
-	public static function execute(&$Logger, &$Workflow, \model\openrtb\RtbBidRequest &$RtbBidRequest, \model\openrtb\RtbBidRequestImp &$RtbBidRequestImp, &$AdCampaignBanner, &$AdCampaignVideoRestrictions) {
+	public static function execute(&$Logger, &$Workflow, \model\openrtb\RtbBidRequest &$RtbBidRequest, \model\openrtb\RtbBidRequestImp &$RtbBidRequestImp, &$InsertionOrderLineItem, &$InsertionOrderLineItemVideoRestrictions) {
 		
 		$RtbBidRequestVideo = $RtbBidRequestImp->RtbBidRequestVideo;
 		
 		$result = true;
 		
-		if (empty($AdCampaignVideoRestrictions->PlaybackCommaSeparated)):
+		if (empty($InsertionOrderLineItemVideoRestrictions->PlaybackCommaSeparated)):
 			return $result;
 		endif;
 		
-		$playbackmethod_code_list = explode(',', $AdCampaignVideoRestrictions->PlaybackCommaSeparated);
+		$playbackmethod_code_list = explode(',', $InsertionOrderLineItemVideoRestrictions->PlaybackCommaSeparated);
 		
 		if (!count($playbackmethod_code_list)):
 			return $result;
@@ -55,7 +55,7 @@ class CheckPlayback {
 		
 		if ($result === false && $Logger->setting_log === true):
 			$Logger->log[] = "Failed: " . "Check video playback code :: EXPECTED: "
-				. $AdCampaignVideoRestrictions->PlaybackCommaSeparated
+				. $InsertionOrderLineItemVideoRestrictions->PlaybackCommaSeparated
 				. " GOT: " . join(',', $RtbBidRequestVideo->playbackmethod);
 		endif;
 		

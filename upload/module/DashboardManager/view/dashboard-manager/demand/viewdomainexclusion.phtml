@@ -14,7 +14,7 @@ endif;
 <div class="steps-container step1">
   <ul class="breadcrumb breadcrumb-heading">
     <li><a href="/demand/<?php echo $preview_query; ?>">Ad Campaigns</a><span class="divider">/</span></li>
-    <li><?php echo $bread_crumb_info["BCAdCampaign"]; ?><span class="divider">/</span></li>
+    <li><?php echo $bread_crumb_info["BCInsertionOrder"]; ?><span class="divider">/</span></li>
     <li><a href="/demand/viewbanner/<?php echo $ad_campaign_id; ?><?php echo $preview_query; ?>">Banners</a><span class="divider">/</span></li>
     <li><?php echo $bread_crumb_info["BCBanner"]; ?><span class="divider">/</span></li>
     <li>Domain Exclusions</li>
@@ -57,10 +57,10 @@ endif;
 
     $rtb_domain_exclusion_id = "";
 
-    if (isset($rtb_domain_exclusion->AdCampaignBannerDomainExclusionPreviewID)):
-    	$rtb_domain_exclusion_id = $rtb_domain_exclusion->AdCampaignBannerDomainExclusionPreviewID;
+    if (isset($rtb_domain_exclusion->InsertionOrderLineItemDomainExclusionPreviewID)):
+    	$rtb_domain_exclusion_id = $rtb_domain_exclusion->InsertionOrderLineItemDomainExclusionPreviewID;
     else:
-    	$rtb_domain_exclusion_id = $rtb_domain_exclusion->AdCampaignBannerDomainExclusionID;
+    	$rtb_domain_exclusion_id = $rtb_domain_exclusion->InsertionOrderLineItemDomainExclusionID;
     endif;
     ?>
             <tr>

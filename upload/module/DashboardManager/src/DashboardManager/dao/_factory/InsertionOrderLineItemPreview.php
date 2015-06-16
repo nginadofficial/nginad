@@ -12,7 +12,7 @@ namespace _factory;
 use Zend\Db\TableGateway\AbstractTableGateway;
 use Zend\Db\TableGateway\Feature;
 
-class AdCampaignBannerPreview extends AbstractTableGateway
+class InsertionOrderLineItemPreview extends AbstractTableGateway
 {
 
 	static protected $instance = null;
@@ -20,7 +20,7 @@ class AdCampaignBannerPreview extends AbstractTableGateway
 	public static function get_instance() {
 
 		if (self::$instance == null):
-			self::$instance = new \_factory\AdCampaignBannerPreview();
+			self::$instance = new \_factory\InsertionOrderLineItemPreview();
 		endif;
 		return self::$instance;
 	}
@@ -28,7 +28,7 @@ class AdCampaignBannerPreview extends AbstractTableGateway
 
     function __construct() {
 
-            $this->table = 'AdCampaignBannerPreview';
+            $this->table = 'InsertionOrderLineItemPreview';
             $this->featureSet = new Feature\FeatureSet();
             $this->featureSet->addFeature(new Feature\GlobalAdapterFeature());
             $this->initialize();
@@ -46,7 +46,7 @@ class AdCampaignBannerPreview extends AbstractTableGateway
         	);
         	endforeach;
         	$select->limit(1, 0);
-        	$select->order('AdCampaignBannerPreviewID');
+        	$select->order('InsertionOrderLineItemPreviewID');
 
         }
         	);
@@ -70,7 +70,7 @@ class AdCampaignBannerPreview extends AbstractTableGateway
         		);
         		endforeach;
         		//$select->limit(10, 0);
-        		$select->order('AdCampaignBannerPreviewID');
+        		$select->order('InsertionOrderLineItemPreviewID');
 
         	}
     	);
@@ -82,9 +82,9 @@ class AdCampaignBannerPreview extends AbstractTableGateway
     		return $obj_list;
     }
 
-    public function saveAdCampaignBannerPreview(\model\AdCampaignBannerPreview $BannerPreview) {
+    public function saveInsertionOrderLineItemPreview(\model\InsertionOrderLineItemPreview $BannerPreview) {
     	$data = array(
-    			'AdCampaignPreviewID'         	=> $BannerPreview->AdCampaignPreviewID,
+    			'InsertionOrderPreviewID'         	=> $BannerPreview->InsertionOrderPreviewID,
     			'Name'                 			=> $BannerPreview->Name,
     			'ImpressionType'       			=> $BannerPreview->ImpressionType,
     			// convert to MySQL DateTime
@@ -104,15 +104,15 @@ class AdCampaignBannerPreview extends AbstractTableGateway
     			'WentLiveDate'          		=> $BannerPreview->WentLiveDate
     	);
 
-    	if (intval($BannerPreview->AdCampaignTypeID)):
-    		$data['AdCampaignTypeID'] = $BannerPreview->AdCampaignTypeID;
+    	if (intval($BannerPreview->InsertionOrderTypeID)):
+    		$data['InsertionOrderTypeID'] = $BannerPreview->InsertionOrderTypeID;
     	endif;
     	
-    	if (isset($BannerPreview->AdCampaignBannerID) && !empty($BannerPreview->AdCampaignBannerID)):
-    		$data['AdCampaignBannerID'] = $BannerPreview->AdCampaignBannerID;
+    	if (isset($BannerPreview->InsertionOrderLineItemID) && !empty($BannerPreview->InsertionOrderLineItemID)):
+    		$data['InsertionOrderLineItemID'] = $BannerPreview->InsertionOrderLineItemID;
     	endif;
 
-    	$banner_preview_id = (int)$BannerPreview->AdCampaignBannerPreviewID;
+    	$banner_preview_id = (int)$BannerPreview->InsertionOrderLineItemPreviewID;
     	if ($banner_preview_id === 0): 
     		$data['UserID'] 			= $BannerPreview->UserID;
     		$data['ImpressionsCounter'] = $BannerPreview->ImpressionsCounter;
@@ -122,26 +122,26 @@ class AdCampaignBannerPreview extends AbstractTableGateway
     		$this->insert($data);
     		return $this->getLastInsertValue();
     	else: 
-    		$this->update($data, array('AdCampaignBannerPreviewID' => $banner_preview_id));
+    		$this->update($data, array('InsertionOrderLineItemPreviewID' => $banner_preview_id));
     		return null;
     	endif;
     }
 
-    public function deleteAdCampaignBannerPreview($banner_preview_id) {
-    	$this->delete(array('AdCampaignBannerPreviewID' => $banner_preview_id));
+    public function deleteInsertionOrderLineItemPreview($banner_preview_id) {
+    	$this->delete(array('InsertionOrderLineItemPreviewID' => $banner_preview_id));
     }
 
-    public function deActivateAdCampaignBannerPreview($banner_preview_id) {
+    public function deActivateInsertionOrderLineItemPreview($banner_preview_id) {
 
         $params = array();
-        $params["AdCampaignBannerPreviewID"] = $banner_preview_id;
-        $AdCampaignBannerPreview = $this->get_row($params);
+        $params["InsertionOrderLineItemPreviewID"] = $banner_preview_id;
+        $InsertionOrderLineItemPreview = $this->get_row($params);
 
-        $AdCampaignBannerPreview->Active = 0;
+        $InsertionOrderLineItemPreview->Active = 0;
         // get array of data
-        $data = $AdCampaignBannerPreview->getArrayCopy();
+        $data = $InsertionOrderLineItemPreview->getArrayCopy();
 
-        $this->update($data, array('AdCampaignBannerPreviewID' => $banner_preview_id));
+        $this->update($data, array('InsertionOrderLineItemPreviewID' => $banner_preview_id));
     }
 
 };

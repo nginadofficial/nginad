@@ -12,7 +12,7 @@ namespace _factory;
 use Zend\Db\TableGateway\AbstractTableGateway;
 use Zend\Db\TableGateway\Feature;
 
-class AdCampaignVideoRestrictionsPreview extends AbstractTableGateway
+class InsertionOrderLineItemVideoRestrictionsPreview extends AbstractTableGateway
 {
 
 	static protected $instance = null;
@@ -20,7 +20,7 @@ class AdCampaignVideoRestrictionsPreview extends AbstractTableGateway
 	public static function get_instance() {
 
 		if (self::$instance == null):
-			self::$instance = new \_factory\AdCampaignVideoRestrictionsPreview();
+			self::$instance = new \_factory\InsertionOrderLineItemVideoRestrictionsPreview();
 		endif;
 		return self::$instance;
 	}
@@ -28,7 +28,7 @@ class AdCampaignVideoRestrictionsPreview extends AbstractTableGateway
 
     function __construct() {
 
-            $this->table = 'AdCampaignVideoRestrictionsPreview';
+            $this->table = 'InsertionOrderLineItemVideoRestrictionsPreview';
             $this->featureSet = new Feature\FeatureSet();
             $this->featureSet->addFeature(new Feature\GlobalAdapterFeature());
             $this->initialize();
@@ -46,7 +46,7 @@ class AdCampaignVideoRestrictionsPreview extends AbstractTableGateway
         	);
         	endforeach;
         	$select->limit(1, 0);
-        	$select->order('AdCampaignVideoRestrictionsPreviewID');
+        	$select->order('InsertionOrderLineItemVideoRestrictionsPreviewID');
 
         }
         	);
@@ -70,7 +70,7 @@ class AdCampaignVideoRestrictionsPreview extends AbstractTableGateway
         		);
         		endforeach;
         		//$select->limit(10, 0);
-        		$select->order('AdCampaignVideoRestrictionsPreviewID');
+        		$select->order('InsertionOrderLineItemVideoRestrictionsPreviewID');
 
         	}
     	);
@@ -82,9 +82,9 @@ class AdCampaignVideoRestrictionsPreview extends AbstractTableGateway
     		return $obj_list;
     }
 
-    public function saveAdCampaignVideoRestrictionsPreview($VideoRestrictionsPreview) {
+    public function saveInsertionOrderLineItemVideoRestrictionsPreview($VideoRestrictionsPreview) {
     	$data = array(
-    	        'AdCampaignBannerPreviewID'        => $VideoRestrictionsPreview->AdCampaignBannerPreviewID,
+    	        'InsertionOrderLineItemPreviewID'        => $VideoRestrictionsPreview->InsertionOrderLineItemPreviewID,
     	        'GeoCountry'                       => $VideoRestrictionsPreview->GeoCountry === "" ? null : $VideoRestrictionsPreview->GeoCountry,
     	        'GeoState'                         => $VideoRestrictionsPreview->GeoState === "" ? null : $VideoRestrictionsPreview->GeoState,
     	        'GeoCity'                          => $VideoRestrictionsPreview->GeoCity === "" ? null : $VideoRestrictionsPreview->GeoCity,
@@ -107,27 +107,27 @@ class AdCampaignVideoRestrictionsPreview extends AbstractTableGateway
     			'DateCreated'                      => $VideoRestrictionsPreview->DateCreated
     	);
 
-    	$video_preview_id = $VideoRestrictionsPreview->AdCampaignBannerPreviewID;
+    	$video_preview_id = $VideoRestrictionsPreview->InsertionOrderLineItemPreviewID;
     	$params = array();
-    	$params["AdCampaignBannerPreviewID"] = $video_preview_id;
+    	$params["InsertionOrderLineItemPreviewID"] = $video_preview_id;
     	$_video_restrictions_preview = $this->get_row($params);
 
-    	$video_restrictions_preview_id = (int)$VideoRestrictionsPreview->AdCampaignVideoRestrictionsPreviewID;
+    	$video_restrictions_preview_id = (int)$VideoRestrictionsPreview->InsertionOrderLineItemVideoRestrictionsPreviewID;
     	 
     	if ($video_restrictions_preview_id === 0 && $_video_restrictions_preview === null): 
     		$this->insert($data);
     		return $this->getLastInsertValue();
     	else: 
     		if ($video_restrictions_preview_id === 0):
-    			$video_restrictions_preview_id = $_video_restrictions_preview->AdCampaignVideoRestrictionsID;
+    			$video_restrictions_preview_id = $_video_restrictions_preview->InsertionOrderLineItemVideoRestrictionsID;
     		endif;
-    		$this->update($data, array('AdCampaignVideoRestrictionsPreviewID' => $video_restrictions_preview_id));
+    		$this->update($data, array('InsertionOrderLineItemVideoRestrictionsPreviewID' => $video_restrictions_preview_id));
     		return null;
     	endif;
     }
 
-    public function deleteAdCampaignVideoRestrictionsPreview($video_restrictions_preview_id) {
-    	$this->delete(array('AdCampaignBannerPreviewID' => $video_restrictions_preview_id));
+    public function deleteInsertionOrderLineItemVideoRestrictionsPreview($video_restrictions_preview_id) {
+    	$this->delete(array('InsertionOrderLineItemPreviewID' => $video_restrictions_preview_id));
     }
 
 };

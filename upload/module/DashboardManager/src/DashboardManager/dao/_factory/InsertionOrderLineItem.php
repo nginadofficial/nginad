@@ -11,7 +11,7 @@ namespace _factory;
 
 use Zend\Db\TableGateway\Feature;
 
-class AdCampaignBanner extends \_factory\CachedTableRead
+class InsertionOrderLineItem extends \_factory\CachedTableRead
 {
 
 	static protected $instance = null;
@@ -19,7 +19,7 @@ class AdCampaignBanner extends \_factory\CachedTableRead
 	public static function get_instance() {
 
 		if (self::$instance == null):
-			self::$instance = new \_factory\AdCampaignBanner();
+			self::$instance = new \_factory\InsertionOrderLineItem();
 		endif;
 		return self::$instance;
 	}
@@ -27,7 +27,7 @@ class AdCampaignBanner extends \_factory\CachedTableRead
 
     function __construct() {
 
-            $this->table = 'AdCampaignBanner';
+            $this->table = 'InsertionOrderLineItem';
             $this->featureSet = new Feature\FeatureSet();
             $this->featureSet->addFeature(new Feature\GlobalAdapterFeature());
             $this->initialize();
@@ -45,7 +45,7 @@ class AdCampaignBanner extends \_factory\CachedTableRead
         	);
         	endforeach;
         	$select->limit(1, 0);
-        	$select->order('AdCampaignBannerID');
+        	$select->order('InsertionOrderLineItemID');
 
         }
         	);
@@ -69,7 +69,7 @@ class AdCampaignBanner extends \_factory\CachedTableRead
         		);
         		endforeach;
         		//$select->limit(10, 0);
-        		$select->order('AdCampaignBannerID');
+        		$select->order('InsertionOrderLineItemID');
 
         	}
     	);
@@ -81,10 +81,10 @@ class AdCampaignBanner extends \_factory\CachedTableRead
     		return $obj_list;
     }
 
-    public function saveAdCampaignBanner(\model\AdCampaignBanner $Banner) {
+    public function saveInsertionOrderLineItem(\model\InsertionOrderLineItem $Banner) {
     	$data = array(
-    			'AdCampaignID'         => $Banner->AdCampaignID,
-    			'AdCampaignTypeID'	   => $Banner->AdCampaignTypeID,
+    			'InsertionOrderID'         => $Banner->InsertionOrderID,
+    			'InsertionOrderTypeID'	   => $Banner->InsertionOrderTypeID,
     			'Name'                 => $Banner->Name,
     			'ImpressionType'       => $Banner->ImpressionType,
     			// convert to MySQL DateTime
@@ -101,7 +101,7 @@ class AdCampaignBanner extends \_factory\CachedTableRead
     	        'LandingPageTLD'       => $Banner->LandingPageTLD,
     	        'Active'               => $Banner->Active
     	);
-    	$banner_id = (int)$Banner->AdCampaignBannerID;
+    	$banner_id = (int)$Banner->InsertionOrderLineItemID;
     	if ($banner_id === 0): 
     		$data['UserID'] 			= $Banner->UserID;
     		$data['ImpressionsCounter'] = $Banner->ImpressionsCounter;
@@ -111,16 +111,16 @@ class AdCampaignBanner extends \_factory\CachedTableRead
     		$this->insert($data);
     		return $this->getLastInsertValue();
     	else: 
-    		$this->update($data, array('AdCampaignBannerID' => $banner_id));
+    		$this->update($data, array('InsertionOrderLineItemID' => $banner_id));
     		return $banner_id;
     	endif;
     }
     
-    public function incrementAdCampaignBannerImpressionsCounterAndSpendCached($config, $buyer_id, $banner_id, $impression_cost_gross, $impression_cost_net) {
+    public function incrementInsertionOrderLineItemImpressionsCounterAndSpendCached($config, $buyer_id, $banner_id, $impression_cost_gross, $impression_cost_net) {
     	 
     	$params = array();
     	$params["BuySidePartnerID"] 	= $buyer_id;
-    	$params["AdCampaignBannerID"] 	= $banner_id;
+    	$params["InsertionOrderLineItemID"] 	= $banner_id;
     	
     	$class_dir_name = 'BuySideHourlyImpressionsCounterCurrentSpend';
     	
@@ -143,7 +143,7 @@ class AdCampaignBanner extends \_factory\CachedTableRead
 		    	$bucket_spend_net = $current["spend_net"];
 
 		    	// write out values
-		    	$this->incrementAdCampaignBannerImpressionsCounterAndSpend($buyer_id, $banner_id, $bucket_impressions, $bucket_spend_gross, $bucket_spend_net);
+		    	$this->incrementInsertionOrderLineItemImpressionsCounterAndSpend($buyer_id, $banner_id, $bucket_impressions, $bucket_spend_gross, $bucket_spend_net);
 
 		    endif;
 		    
@@ -157,7 +157,7 @@ class AdCampaignBanner extends \_factory\CachedTableRead
     	
     }
 
-    public function incrementAdCampaignBannerImpressionsCounterAndSpend($buyer_id, $banner_id, $impressions_value_to_increment, $spend_value_to_increment_gross, $spend_value_to_increment_net) {
+    public function incrementInsertionOrderLineItemImpressionsCounterAndSpend($buyer_id, $banner_id, $impressions_value_to_increment, $spend_value_to_increment_gross, $spend_value_to_increment_net) {
 
     	$BuySideHourlyImpressionsCounterCurrentSpendFactory = \_factory\BuySideHourlyImpressionsCounterCurrentSpend::get_instance();
 
@@ -165,12 +165,12 @@ class AdCampaignBanner extends \_factory\CachedTableRead
 
     	$params = array();
     	$params["BuySidePartnerID"] 	= $buyer_id;
-    	$params["AdCampaignBannerID"] 	= $banner_id;
+    	$params["InsertionOrderLineItemID"] 	= $banner_id;
     	$params["MDYH"] 				= $current_hour;
     	$BuySideHourlyImpressionsCounterCurrentSpend = $BuySideHourlyImpressionsCounterCurrentSpendFactory->get_row($params);
     
     	$buyside_hourly_impressions_counter_current_spend = new \model\BuySideHourlyImpressionsCounterCurrentSpend();
-    	$buyside_hourly_impressions_counter_current_spend->AdCampaignBannerID 	= $banner_id;
+    	$buyside_hourly_impressions_counter_current_spend->InsertionOrderLineItemID 	= $banner_id;
     	$buyside_hourly_impressions_counter_current_spend->BuySidePartnerID 	= $buyer_id;
     	if ($BuySideHourlyImpressionsCounterCurrentSpend != null):
 	    	/*
@@ -194,11 +194,11 @@ class AdCampaignBanner extends \_factory\CachedTableRead
     	endif;
     }
 
-    public function incrementAdCampaignBannerBidsCounterCached($config, $buyer_id, $banner_id) {
+    public function incrementInsertionOrderLineItemBidsCounterCached($config, $buyer_id, $banner_id) {
     
     	$params = array();
     	$params["BuySidePartnerID"] 	= $buyer_id;
-    	$params["AdCampaignBannerID"] 	= $banner_id;
+    	$params["InsertionOrderLineItemID"] 	= $banner_id;
     	
   		$class_dir_name = 'BuySideHourlyBidsCounter';  	
 
@@ -218,7 +218,7 @@ class AdCampaignBanner extends \_factory\CachedTableRead
 		  		$bucket_value = $current["value"];
 		  		
 		  		// write out value
-		  		$this->incrementAdCampaignBannerBidsCounter($buyer_id, $banner_id, $bucket_value);
+		  		$this->incrementInsertionOrderLineItemBidsCounter($buyer_id, $banner_id, $bucket_value);
 	  		endif;
 	  		
 	  		// delete existing key - reset bucket
@@ -231,7 +231,7 @@ class AdCampaignBanner extends \_factory\CachedTableRead
   
     }
     
-    public function incrementAdCampaignBannerBidsCounter($buyer_id, $banner_id, $bid_count) {
+    public function incrementInsertionOrderLineItemBidsCounter($buyer_id, $banner_id, $bid_count) {
 
     	$BuySideHourlyBidsCounterFactory = \_factory\BuySideHourlyBidsCounter::get_instance();
 
@@ -239,13 +239,13 @@ class AdCampaignBanner extends \_factory\CachedTableRead
     	
     	$params = array();
     	$params["BuySidePartnerID"] 	= $buyer_id;
-    	$params["AdCampaignBannerID"] 	= $banner_id;
+    	$params["InsertionOrderLineItemID"] 	= $banner_id;
     	$params["MDYH"] 				= $current_hour;
     	$BuySideHourlyBidsCounter = $BuySideHourlyBidsCounterFactory->get_row($params);
 
     	$buyside_hourly_bids_counter = new \model\BuySideHourlyBidsCounter();
     	$buyside_hourly_bids_counter->BuySidePartnerID 		= $buyer_id;
-    	$buyside_hourly_bids_counter->AdCampaignBannerID 	= $banner_id;
+    	$buyside_hourly_bids_counter->InsertionOrderLineItemID 	= $banner_id;
 
     	if ($BuySideHourlyBidsCounter != null):
 
@@ -265,7 +265,7 @@ class AdCampaignBanner extends \_factory\CachedTableRead
     public function incrementBuySideHourlyImpressionsByTLDCached($config, $banner_id, $tld) {
     
     	$params = array();
-    	$params["AdCampaignBannerID"] = $banner_id;
+    	$params["InsertionOrderLineItemID"] = $banner_id;
     	$params["PublisherTLD"] = $tld;
     
     	$class_dir_name = 'BuySideHourlyImpressionsByTLD';
@@ -315,13 +315,13 @@ class AdCampaignBanner extends \_factory\CachedTableRead
         $current_hour = date("m/d/Y H");
     
     	$params = array();
-    	$params["AdCampaignBannerID"] = $banner_id;
+    	$params["InsertionOrderLineItemID"] = $banner_id;
     	$params["MDYH"] = $current_hour;
     	$params["PublisherTLD"] = $tld;
     	$BuySideHourlyImpressionsByTLD = $BuySideHourlyImpressionsByTLDFactory->get_row($params);
     
     	$buyside_hourly_impression_by_tld = new \model\BuySideHourlyImpressionsByTLD();
-    	$buyside_hourly_impression_by_tld->AdCampaignBannerID = $banner_id;
+    	$buyside_hourly_impression_by_tld->InsertionOrderLineItemID = $banner_id;
     	$buyside_hourly_impression_by_tld->MDYH = $current_hour;
     	$buyside_hourly_impression_by_tld->PublisherTLD = $tld;
     
@@ -339,62 +339,62 @@ class AdCampaignBanner extends \_factory\CachedTableRead
     
     }
 
-    public function deleteAdCampaignBanner($banner_id) {
-    	$this->delete(array('AdCampaignBannerID' => $banner_id));
+    public function deleteInsertionOrderLineItem($banner_id) {
+    	$this->delete(array('InsertionOrderLineItemID' => $banner_id));
     }
 
 
-    public function saveAdCampaignBannerFromDataArray($data) {
+    public function saveInsertionOrderLineItemFromDataArray($data) {
 
-    	$this->update($data, array('AdCampaignBannerID' => $data['AdCampaignBannerID']));
+    	$this->update($data, array('InsertionOrderLineItemID' => $data['InsertionOrderLineItemID']));
     }
 
-    public function updateAdCampaignBannerAdCampaignType($banner_id, $type_id) {
+    public function updateInsertionOrderLineItemInsertionOrderType($banner_id, $type_id) {
     
     	$params = array();
-    	$params["AdCampaignBannerID"] = $banner_id;
-    	$AdCampaignBanner = $this->get_row($params);
+    	$params["InsertionOrderLineItemID"] = $banner_id;
+    	$InsertionOrderLineItem = $this->get_row($params);
     
-    	if ($AdCampaignBanner != null):
+    	if ($InsertionOrderLineItem != null):
 	    	 
-    		$AdCampaignBanner->AdCampaignTypeID = $type_id;
+    		$InsertionOrderLineItem->InsertionOrderTypeID = $type_id;
 	    	// get array of data
-	    	$data = $AdCampaignBanner->getArrayCopy();
+	    	$data = $InsertionOrderLineItem->getArrayCopy();
 	    	 
-	    	$this->update($data, array('AdCampaignBannerID' => $banner_id));
+	    	$this->update($data, array('InsertionOrderLineItemID' => $banner_id));
     	endif;
     
     }
     
-    public function updateAdCampaignBannerBidAmount($banner_id, $bid_amount) {
+    public function updateInsertionOrderLineItemBidAmount($banner_id, $bid_amount) {
     
     	$params = array();
-    	$params["AdCampaignBannerID"] = $banner_id;
-    	$AdCampaignBanner = $this->get_row($params);
+    	$params["InsertionOrderLineItemID"] = $banner_id;
+    	$InsertionOrderLineItem = $this->get_row($params);
     
-    	if ($AdCampaignBanner != null):
+    	if ($InsertionOrderLineItem != null):
     	
-	    	$AdCampaignBanner->BidAmount = $bid_amount;
+	    	$InsertionOrderLineItem->BidAmount = $bid_amount;
 	    	// get array of data
-	    	$data = $AdCampaignBanner->getArrayCopy();
+	    	$data = $InsertionOrderLineItem->getArrayCopy();
 	    
-	    	$this->update($data, array('AdCampaignBannerID' => $banner_id));
+	    	$this->update($data, array('InsertionOrderLineItemID' => $banner_id));
     	endif;
     
     }
     
-    public function deActivateAdCampaignBanner($banner_id) {
+    public function deActivateInsertionOrderLineItem($banner_id) {
 
         $params = array();
-        $params["AdCampaignBannerID"] = $banner_id;
-        $AdCampaignBanner = $this->get_row($params);
-        if ($AdCampaignBanner != null):
+        $params["InsertionOrderLineItemID"] = $banner_id;
+        $InsertionOrderLineItem = $this->get_row($params);
+        if ($InsertionOrderLineItem != null):
         
-	        $AdCampaignBanner->Active = 0;
+	        $InsertionOrderLineItem->Active = 0;
 	        // get array of data
-	        $data = $AdCampaignBanner->getArrayCopy();
+	        $data = $InsertionOrderLineItem->getArrayCopy();
 	
-	        $this->update($data, array('AdCampaignBannerID' => $banner_id));
+	        $this->update($data, array('InsertionOrderLineItemID' => $banner_id));
 	
         endif;
     }

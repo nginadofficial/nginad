@@ -97,7 +97,7 @@ class LinkedBannerToAdZonePreview extends AbstractTableGateway
    
     public function saveLinkedBannerToAdZonePreview(\model\LinkedBannerToAdZonePreview $LinkedBannerToAdZonePreview) {
     	$data = array(
-    			'AdCampaignBannerPreviewID'		=> $LinkedBannerToAdZonePreview->AdCampaignBannerPreviewID,
+    			'InsertionOrderLineItemPreviewID'		=> $LinkedBannerToAdZonePreview->InsertionOrderLineItemPreviewID,
     			'PublisherAdZoneID'				=> $LinkedBannerToAdZonePreview->PublisherAdZoneID,
     			'Weight'						=> $LinkedBannerToAdZonePreview->Weight,
     			'DateUpdated'           		=> $LinkedBannerToAdZonePreview->DateUpdated
@@ -115,7 +115,7 @@ class LinkedBannerToAdZonePreview extends AbstractTableGateway
     }
     
     public function deleteLinkedBannerToAdZonePreview($preview_banner_id) {
-    	$this->delete(array('AdCampaignBannerPreviewID' => $preview_banner_id));
+    	$this->delete(array('InsertionOrderLineItemPreviewID' => $preview_banner_id));
     }
     
 };
