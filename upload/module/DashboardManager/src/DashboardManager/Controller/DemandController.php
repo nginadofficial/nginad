@@ -125,7 +125,7 @@ class DemandController extends DemandAbstractActionController {
 	    if ($this->is_admin == false 
 	    	|| ($this->is_admin == true && $this->DemandCustomerInfoID != null && $this->auth->getEffectiveIdentityID() != 0)):
 	    	
-	    	$view->header_title = '<a href="/demand/createcampaign/">Create Campaign</a>';
+	    	$view->header_title = '<a href="/demand/createinsertionorder/">Create Insertion Order</a>';
 	    else:
 	   		$view->header_title = '&nbsp;';
 	    endif;
@@ -476,7 +476,7 @@ class DemandController extends DemandAbstractActionController {
 		$success = true;
 		$data = array(
 		     'success' => $success,
-			 'location' => '/demand/viewbanner/',
+			 'location' => '/demand/viewlineitem/',
 			 'previewid' => $InsertionOrderLineItemPreview->InsertionOrderPreviewID,
 		     'data' => array('error_msg' => $error_msg)
 	   	);
@@ -652,7 +652,7 @@ class DemandController extends DemandAbstractActionController {
 	
 		$InsertionOrderLineItemPreview = $InsertionOrderLineItemPreviewFactory->get_row($params);
 	
-		$refresh_url = "/demand/viewbanner/" . $InsertionOrderLineItemPreview->InsertionOrderPreviewID . "?ispreview=true";
+		$refresh_url = "/demand/viewlineitem/" . $InsertionOrderLineItemPreview->InsertionOrderPreviewID . "?ispreview=true";
 		$viewModel = new ViewModel(array('refresh_url' => $refresh_url));
 	
 		return $viewModel->setTemplate('dashboard-manager/demand/interstitial.phtml');
@@ -812,7 +812,7 @@ class DemandController extends DemandAbstractActionController {
 
 		$InsertionOrderLineItemPreview = $InsertionOrderLineItemPreviewFactory->get_row($params);
 
-		$refresh_url = "/demand/viewbanner/" . $InsertionOrderLineItemPreview->InsertionOrderPreviewID . "?ispreview=true";
+		$refresh_url = "/demand/viewlineitem/" . $InsertionOrderLineItemPreview->InsertionOrderPreviewID . "?ispreview=true";
 		$viewModel = new ViewModel(array('refresh_url' => $refresh_url));
 
 		return $viewModel->setTemplate('dashboard-manager/demand/interstitial.phtml');
@@ -1978,7 +1978,7 @@ class DemandController extends DemandAbstractActionController {
 	 * 
 	 * @return Ambigous <\Zend\View\Model\ViewModel, \Zend\View\Model\ViewModel>
 	 */
-	public function deletebannerAction() {
+	public function deletelineitemAction() {
 		
 		$error_msg = null;
 		$success = true;
@@ -2065,14 +2065,14 @@ class DemandController extends DemandAbstractActionController {
 
 		$data = array(
 	        'success' => $success,
-			'location' => '/demand/viewbanner/',
+			'location' => '/demand/viewlineitem/',
 			'previewid' => $campaign_preview_id,
 	        'data' => array('error_msg' => $error_msg)
    		 );
    		 
         return $this->getResponse()->setContent(json_encode($data));
 		
-		/*$refresh_url = "/demand/viewbanner/" . $campaign_preview_id . "?ispreview=true";
+		/*$refresh_url = "/demand/viewlineitem/" . $campaign_preview_id . "?ispreview=true";
 		$viewModel = new ViewModel(array('refresh_url' => $refresh_url));
 
 		return $viewModel->setTemplate('dashboard-manager/demand/interstitial.phtml');*/
@@ -2083,7 +2083,7 @@ class DemandController extends DemandAbstractActionController {
 	 * 
 	 * @return \Zend\View\Model\ViewModel
 	 */
-	public function viewbannerAction() {
+	public function viewlineitemAction() {
 	    $id = $this->getEvent()->getRouteMatch()->getParam('param1');
         if ($id == null):
             die("Invalid Campaign ID");
@@ -2144,7 +2144,7 @@ class DemandController extends DemandAbstractActionController {
 				'user_id_list' => $this->user_id_list_demand_customer,
 	    		'user_identity' => $this->identity(),
 				'true_user_name' => $this->auth->getUserName(),
-				'header_title' => '<a href="/demand/createbanner/' . $ad_campaign_id . $this->preview_query . '">Create New Ad Campaign Banner</a>',
+				'header_title' => '<a href="/demand/createlineitem/' . $ad_campaign_id . $this->preview_query . '">Create New Line Item</a>',
 				'is_admin' => $this->is_admin,
 				'effective_id' => $this->auth->getEffectiveIdentityID(),
 				'impersonate_id' => $this->ImpersonateID
@@ -2155,7 +2155,7 @@ class DemandController extends DemandAbstractActionController {
 	 * 
 	 * @return \Zend\View\Model\ViewModel
 	 */
-	public function createbannerAction() {
+	public function createlineitemAction() {
 	    $id = $this->getEvent()->getRouteMatch()->getParam('param1');
         if ($id == null):
             die("Invalid Campaign ID");
@@ -2204,7 +2204,7 @@ class DemandController extends DemandAbstractActionController {
     			'center_class' 				=> 'centerj',
 	    		'user_identity' 			=> $this->identity(),
 	    		'true_user_name' => $this->auth->getUserName(),
-				'header_title' => 'Create Ad Campaign Banner',
+				'header_title' => 'Create Line Item',
 				'is_admin' => $this->is_admin,
 				'effective_id' => $this->auth->getEffectiveIdentityID(),
 				'impersonate_id' => $this->ImpersonateID,
@@ -2488,7 +2488,7 @@ class DemandController extends DemandAbstractActionController {
 			
 		endif;
 
-		$refresh_url = "/demand/viewbanner/" . $BannerPreview->InsertionOrderPreviewID . "?ispreview=true";
+		$refresh_url = "/demand/viewlineitem/" . $BannerPreview->InsertionOrderPreviewID . "?ispreview=true";
 		$viewModel = new ViewModel(array('refresh_url' => $refresh_url));
 
 		return $viewModel->setTemplate('dashboard-manager/demand/interstitial.phtml');
@@ -2499,7 +2499,7 @@ class DemandController extends DemandAbstractActionController {
 	 * 
 	 * @return \Zend\View\Model\ViewModel
 	 */
-	public function editbannerAction() {
+	public function editlineitemAction() {
 
 		$id = $this->getEvent()->getRouteMatch()->getParam('param1');
 		if ($id == null):
@@ -2678,7 +2678,7 @@ class DemandController extends DemandAbstractActionController {
     			'center_class' => 'centerj',
 	    		'user_identity' => $this->identity(),
 				'true_user_name' => $this->auth->getUserName(),
-				'header_title' => 'Edit Ad Campaign Banner',
+				'header_title' => 'Edit Insertion Order',
 				'is_admin' => $this->is_admin,
 				'effective_id' => $this->auth->getEffectiveIdentityID(),
 				'impersonate_id' => $this->ImpersonateID,
@@ -2836,7 +2836,7 @@ class DemandController extends DemandAbstractActionController {
 	 * 
 	 * @return Ambigous <\Zend\View\Model\ViewModel, \Zend\View\Model\ViewModel>
 	 */
-	public function deletecampaignAction() {
+	public function deleteinsertionorderAction() {
 
 		$error_msg = null;
 		$success = true;
@@ -2952,7 +2952,7 @@ class DemandController extends DemandAbstractActionController {
 	 * 
 	 * @return \Zend\View\Model\ViewModel
 	 */
-	public function editcampaignAction() {
+	public function editinsertionorderAction() {
 		$id = $this->getEvent()->getRouteMatch()->getParam('param1');
 		if ($id == null):
 			die("Invalid Campaign ID");
@@ -3026,7 +3026,7 @@ class DemandController extends DemandAbstractActionController {
     			'center_class' => 'centerj',
 	    		'user_identity' => $this->identity(),
 	    		'true_user_name' => $this->auth->getUserName(),
-				'header_title' => 'Edit Ad Campaign',
+				'header_title' => 'Edit Insertion Order',
 				'is_admin' => $this->is_admin,
 				'effective_id' => $this->auth->getEffectiveIdentityID(),
 				'impersonate_id' => $this->ImpersonateID
@@ -3036,7 +3036,7 @@ class DemandController extends DemandAbstractActionController {
 	/**
 	 * This function does ZERO, right now. Empty.
 	 */
-	public function createcampaignAction() {
+	public function createinsertionorderAction() {
 
 		$initialized = $this->initialize();
 		if ($initialized !== true) return $initialized;
@@ -3046,7 +3046,7 @@ class DemandController extends DemandAbstractActionController {
 				'user_id_list' => $this->user_id_list_demand_customer,
 				'user_identity' => $this->identity(),
 	    		'true_user_name' => $this->auth->getUserName(),
-				'header_title' => 'Create New Ad Campaign',
+				'header_title' => 'Create New Insertion Order',
 				'is_admin' => $this->is_admin,
 				'effective_id' => $this->auth->getEffectiveIdentityID(),
 				'impersonate_id' => $this->ImpersonateID
@@ -3275,7 +3275,7 @@ class DemandController extends DemandAbstractActionController {
 
 		$InsertionOrder = $InsertionOrderFactory->get_row($params);
 
-		return array("BCInsertionOrder"=>'<a href="/demand/viewbanner/' . $InsertionOrder->InsertionOrderID . '">' . $InsertionOrder->Name . "</a>");
+		return array("BCInsertionOrder"=>'<a href="/demand/viewlineitem/' . $InsertionOrder->InsertionOrderID . '">' . $InsertionOrder->Name . "</a>");
 
 	}
 
@@ -3292,7 +3292,7 @@ class DemandController extends DemandAbstractActionController {
 
 		$InsertionOrderPreview = $InsertionOrderPreviewFactory->get_row($params);
 
-		return array("BCInsertionOrder"=>'<a href="/demand/viewbanner/' . $InsertionOrderPreview->InsertionOrderPreviewID . '?ispreview=true">' . $InsertionOrderPreview->Name . "</a>");
+		return array("BCInsertionOrder"=>'<a href="/demand/viewlineitem/' . $InsertionOrderPreview->InsertionOrderPreviewID . '?ispreview=true">' . $InsertionOrderPreview->Name . "</a>");
 
 	}
 

@@ -220,14 +220,14 @@ $effective_user_in_dashboard = false;
            </td>
             <?php if (($is_admin === true && $effective_id != 0) || $is_admin === false): ?>
            <td>
-            <a href="/demand/editcampaign/<?php echo $campaign_id; ?><?php echo $preview_query; ?>">Edit Ad Campaign</a>
+            <a href="/demand/editinsertionorder/<?php echo $campaign_id; ?><?php echo $preview_query; ?>">Edit Ad Campaign</a>
             <hr />
            
-            <a href="javascript:void(0);" onclick="deleteCampaignModal('/demand/deletecampaign/<?php echo $campaign_id; ?><?php echo $preview_query;?>','<?php echo $ad_campaign->Name;?>');">Delete Ad Campaign</a>
+            <a href="javascript:void(0);" onclick="deleteCampaignModal('/demand/deleteinsertionorder/<?php echo $campaign_id; ?><?php echo $preview_query;?>','<?php echo $ad_campaign->Name;?>');">Delete Ad Campaign</a>
            </td>
            <td>
-            <a href="/demand/createbanner/<?php echo $campaign_id; ?><?php echo $preview_query;?>">Create Banner</a>
-            <hr /><a href="/demand/viewbanner/<?php echo $campaign_id; ?><?php echo $preview_query;?>">View Banners</a>
+            <a href="/demand/createlineitem/<?php echo $campaign_id; ?><?php echo $preview_query;?>">Create Banner</a>
+            <hr /><a href="/demand/viewlineitem/<?php echo $campaign_id; ?><?php echo $preview_query;?>">View Banners</a>
            </td>
            <?php endif; ?>
            </tr>
