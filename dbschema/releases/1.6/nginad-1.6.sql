@@ -852,6 +852,7 @@ INSERT INTO `PublisherAdZoneType` VALUES ('4', 'Contract', '2014-08-17 12:16:21'
 DROP TABLE IF EXISTS `PublisherInfo`;
 CREATE TABLE `PublisherInfo` (
   `PublisherInfoID` int(11) NOT NULL AUTO_INCREMENT,
+  `ParentID` int NOT NULL DEFAULT 0,
   `Name` varchar(255) NOT NULL,
   `Email` varchar(255) NOT NULL,
   `Domain` varchar(255) NOT NULL,
