@@ -16,11 +16,11 @@ Date: 2014-12-12 10:22:07
 SET FOREIGN_KEY_CHECKS=0;
 
 -- ----------------------------
--- Table structure for AdCampaign
+-- Table structure for InsertionOrder
 -- ----------------------------
-DROP TABLE IF EXISTS `AdCampaign`;
-CREATE TABLE `AdCampaign` (
-  `AdCampaignID` int(11) NOT NULL AUTO_INCREMENT,
+DROP TABLE IF EXISTS `InsertionOrder`;
+CREATE TABLE `InsertionOrder` (
+  `InsertionOrderID` int(11) NOT NULL AUTO_INCREMENT,
   `UserID` int(11) NOT NULL,
   `Name` char(100) NOT NULL,
   `StartDate` datetime NOT NULL,
@@ -34,23 +34,23 @@ CREATE TABLE `AdCampaign` (
   `Active` tinyint(1) NOT NULL,
   `DateCreated` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `DateUpdated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`AdCampaignID`)
+  PRIMARY KEY (`InsertionOrderID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 
 -- ----------------------------
--- Records of AdCampaign
+-- Records of InsertionOrder
 -- ----------------------------
-INSERT INTO `AdCampaign` VALUES ('4', '21', 'Desktop Media Campaign for XBrand', '2014-09-03 00:00:00', '2019-05-19 00:00:00', 'XBrand', '10101100', '0', '1000000', '0', '100', '1', '2014-09-03 22:57:27', '2015-04-26 21:56:20');
-INSERT INTO `AdCampaign` VALUES ('5', '21', 'Mobile Media Campaign for XBrand', '2014-09-03 00:00:00', '2019-05-01 00:00:00', 'XBrand', '10101100', '0', '1000000', '0', '100', '1', '2014-09-03 22:57:27', '2015-04-26 21:56:20');
+INSERT INTO `InsertionOrder` VALUES ('4', '21', 'Desktop Media Campaign for XBrand', '2014-09-03 00:00:00', '2019-05-19 00:00:00', 'XBrand', '10101100', '0', '1000000', '0', '100', '1', '2014-09-03 22:57:27', '2015-04-26 21:56:20');
+INSERT INTO `InsertionOrder` VALUES ('5', '21', 'Mobile Media Campaign for XBrand', '2014-09-03 00:00:00', '2019-05-01 00:00:00', 'XBrand', '10101100', '0', '1000000', '0', '100', '1', '2014-09-03 22:57:27', '2015-04-26 21:56:20');
 
 -- ----------------------------
--- Table structure for AdCampaignBanner
+-- Table structure for InsertionOrderLineItem
 -- ----------------------------
-DROP TABLE IF EXISTS `AdCampaignBanner`;
-CREATE TABLE `AdCampaignBanner` (
-  `AdCampaignBannerID` int(11) NOT NULL AUTO_INCREMENT,
-  `AdCampaignID` int(11) NOT NULL,
-  `AdCampaignTypeID` int(11) NOT NULL,
+DROP TABLE IF EXISTS `InsertionOrderLineItem`;
+CREATE TABLE `InsertionOrderLineItem` (
+  `InsertionOrderLineItemID` int(11) NOT NULL AUTO_INCREMENT,
+  `InsertionOrderID` int(11) NOT NULL,
+  `InsertionOrderTypeID` int(11) NOT NULL,
   `ImpressionType` char(10) NOT NULL DEFAULT 'banner',
   `UserID` int(11) NOT NULL,
   `Name` char(100) NOT NULL,
@@ -71,101 +71,101 @@ CREATE TABLE `AdCampaignBanner` (
   `Active` tinyint(1) NOT NULL,
   `DateCreated` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `DateUpdated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`AdCampaignBannerID`)
+  PRIMARY KEY (`InsertionOrderLineItemID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
 -- ----------------------------
--- Records of AdCampaignBanner
+-- Records of InsertionOrderLineItem
 -- ----------------------------
-INSERT INTO `AdCampaignBanner` VALUES ('1', '4', '1', 'banner', '21', 'Top Leaderboard Creative', '2014-09-03 00:00:00', '2019-11-04 00:00:00', '0', '728x90', '90', '728', '5', '0.25', '<!-- Desktop 728x90 START -->\r\n<a href=\"http://www.iab.net/guidelines/508676/508767/displayguidelines\"><img border=\"0\" src=\"http://www.iab.net/media/image/728x90.gif\" /></a>\r\n<!-- Desktop 728x90 END -->', 'js', 'iab.net', '0', '0', '0', '1', '2015-05-03 22:57:27', '2015-05-03 22:57:27');
-INSERT INTO `AdCampaignBanner` VALUES ('2', '4', '1', 'banner', '21', 'Medium Rectange Creative', '2014-09-03 00:00:00', '2019-11-04 00:00:00', '0', '300x250', '250', '300', '5', '0.25', '<!-- Desktop 300x250 START -->\r\n<a href=\"http://www.iab.net/guidelines/508676/508767/displayguidelines\"><img border=\"0\" src=\"http://www.iab.net/media/image/300x250.gif\" /></a>\r\n<!-- Desktop 300x250 END -->', 'js', 'iab.net', '0', '0', '0', '1', '2015-05-03 23:57:27', '2015-05-03 23:57:27');
-INSERT INTO `AdCampaignBanner` VALUES ('3', '4', '1', 'banner', '21', 'Wide Skyscraper Creative', '2014-09-03 00:00:00', '2019-11-04 00:00:00', '0', '160x600', '600', '160', '5', '0.25', '<!-- Desktop 160x600 START -->\r\n<a href=\"http://www.iab.net/guidelines/508676/508767/displayguidelines\"><img border=\"0\" src=\"http://www.iab.net/media/image/160x600.gif\" /></a>\r\n<!-- Desktop 160x600 END -->', 'js', 'iab.net', '0', '0', '0', '1', '2015-04-26 20:02:23', '2015-04-26 20:02:23');
+INSERT INTO `InsertionOrderLineItem` VALUES ('1', '4', '1', 'banner', '21', 'Top Leaderboard Creative', '2014-09-03 00:00:00', '2019-11-04 00:00:00', '0', '728x90', '90', '728', '5', '0.25', '<!-- Desktop 728x90 START -->\r\n<a href=\"http://www.iab.net/guidelines/508676/508767/displayguidelines\"><img border=\"0\" src=\"http://www.iab.net/media/image/728x90.gif\" /></a>\r\n<!-- Desktop 728x90 END -->', 'js', 'iab.net', '0', '0', '0', '1', '2015-05-03 22:57:27', '2015-05-03 22:57:27');
+INSERT INTO `InsertionOrderLineItem` VALUES ('2', '4', '1', 'banner', '21', 'Medium Rectange Creative', '2014-09-03 00:00:00', '2019-11-04 00:00:00', '0', '300x250', '250', '300', '5', '0.25', '<!-- Desktop 300x250 START -->\r\n<a href=\"http://www.iab.net/guidelines/508676/508767/displayguidelines\"><img border=\"0\" src=\"http://www.iab.net/media/image/300x250.gif\" /></a>\r\n<!-- Desktop 300x250 END -->', 'js', 'iab.net', '0', '0', '0', '1', '2015-05-03 23:57:27', '2015-05-03 23:57:27');
+INSERT INTO `InsertionOrderLineItem` VALUES ('3', '4', '1', 'banner', '21', 'Wide Skyscraper Creative', '2014-09-03 00:00:00', '2019-11-04 00:00:00', '0', '160x600', '600', '160', '5', '0.25', '<!-- Desktop 160x600 START -->\r\n<a href=\"http://www.iab.net/guidelines/508676/508767/displayguidelines\"><img border=\"0\" src=\"http://www.iab.net/media/image/160x600.gif\" /></a>\r\n<!-- Desktop 160x600 END -->', 'js', 'iab.net', '0', '0', '0', '1', '2015-04-26 20:02:23', '2015-04-26 20:02:23');
 -- MOBILE CAMPAIGNS
-INSERT INTO `AdCampaignBanner` VALUES ('4', '5', '1', 'banner', '21', 'Mobile Top Leaderboard Creative', '2014-09-03 00:00:00', '2019-11-04 00:00:00', '1', '728x90', '90', '728', '5', '0.25', '<!-- Mobile 728x90 START -->\r\n<a href=\"http://www.iab.net/guidelines/508676/508767/displayguidelines\"><img border=\"0\" src=\"http://www.iab.net/media/image/728x90.gif\" /></a>\r\n<!-- Mobile 728x90 END -->', 'js', 'iab.net', '0', '0', '0', '1', '2015-05-03 22:57:27', '2015-05-03 22:57:27');
-INSERT INTO `AdCampaignBanner` VALUES ('5', '5', '1', 'banner', '21', 'Mobile Medium Rectange Creative', '2014-09-03 00:00:00', '2019-11-04 00:00:00', '1', '300x250', '250', '300', '5', '0.25', '<!-- Mobile 300x250 START -->\r\n<a href=\"http://www.iab.net/guidelines/508676/508767/displayguidelines\"><img border=\"0\" src=\"http://www.iab.net/media/image/300x250.gif\" /></a>\r\n<!-- Mobile 300x250 END -->', 'js', 'iab.net', '0', '0', '0', '1', '2015-05-03 23:57:27', '2015-05-03 23:57:27');
-INSERT INTO `AdCampaignBanner` VALUES ('6', '5', '1', 'banner', '21', 'Mobile Wide Skyscraper Creative', '2014-09-03 00:00:00', '2019-11-04 00:00:00', '1', '160x600', '600', '160', '5', '0.25', '<!-- Mobile 160x600 START -->\r\n<a href=\"http://www.iab.net/guidelines/508676/508767/displayguidelines\"><img border=\"0\" src=\"http://www.iab.net/media/image/160x600.gif\" /></a>\r\n<!-- Mobile 160x600 END -->', 'js', 'iab.net', '0', '0', '0', '1', '2015-04-26 20:02:23', '2015-04-26 20:02:23');
+INSERT INTO `InsertionOrderLineItem` VALUES ('4', '5', '1', 'banner', '21', 'Mobile Top Leaderboard Creative', '2014-09-03 00:00:00', '2019-11-04 00:00:00', '1', '728x90', '90', '728', '5', '0.25', '<!-- Mobile 728x90 START -->\r\n<a href=\"http://www.iab.net/guidelines/508676/508767/displayguidelines\"><img border=\"0\" src=\"http://www.iab.net/media/image/728x90.gif\" /></a>\r\n<!-- Mobile 728x90 END -->', 'js', 'iab.net', '0', '0', '0', '1', '2015-05-03 22:57:27', '2015-05-03 22:57:27');
+INSERT INTO `InsertionOrderLineItem` VALUES ('5', '5', '1', 'banner', '21', 'Mobile Medium Rectange Creative', '2014-09-03 00:00:00', '2019-11-04 00:00:00', '1', '300x250', '250', '300', '5', '0.25', '<!-- Mobile 300x250 START -->\r\n<a href=\"http://www.iab.net/guidelines/508676/508767/displayguidelines\"><img border=\"0\" src=\"http://www.iab.net/media/image/300x250.gif\" /></a>\r\n<!-- Mobile 300x250 END -->', 'js', 'iab.net', '0', '0', '0', '1', '2015-05-03 23:57:27', '2015-05-03 23:57:27');
+INSERT INTO `InsertionOrderLineItem` VALUES ('6', '5', '1', 'banner', '21', 'Mobile Wide Skyscraper Creative', '2014-09-03 00:00:00', '2019-11-04 00:00:00', '1', '160x600', '600', '160', '5', '0.25', '<!-- Mobile 160x600 START -->\r\n<a href=\"http://www.iab.net/guidelines/508676/508767/displayguidelines\"><img border=\"0\" src=\"http://www.iab.net/media/image/160x600.gif\" /></a>\r\n<!-- Mobile 160x600 END -->', 'js', 'iab.net', '0', '0', '0', '1', '2015-04-26 20:02:23', '2015-04-26 20:02:23');
 
 -- ----------------------------
--- Table structure for AdCampaignBannerDomainExclusion
+-- Table structure for InsertionOrderLineItemDomainExclusion
 -- ----------------------------
-DROP TABLE IF EXISTS `AdCampaignBannerDomainExclusion`;
-CREATE TABLE `AdCampaignBannerDomainExclusion` (
-  `AdCampaignBannerDomainExclusionID` int(11) NOT NULL AUTO_INCREMENT,
-  `AdCampaignBannerID` int(11) NOT NULL,
+DROP TABLE IF EXISTS `InsertionOrderLineItemDomainExclusion`;
+CREATE TABLE `InsertionOrderLineItemDomainExclusion` (
+  `InsertionOrderLineItemDomainExclusionID` int(11) NOT NULL AUTO_INCREMENT,
+  `InsertionOrderLineItemID` int(11) NOT NULL,
   `ExclusionType` enum('url','referrer') NOT NULL,
   `DomainName` char(255) NOT NULL,
   `DateCreated` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `DateUpdated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`AdCampaignBannerDomainExclusionID`)
+  PRIMARY KEY (`InsertionOrderLineItemDomainExclusionID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- ----------------------------
--- Records of AdCampaignBannerDomainExclusion
+-- Records of InsertionOrderLineItemDomainExclusion
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for AdCampaignBannerDomainExclusionPreview
+-- Table structure for InsertionOrderLineItemDomainExclusionPreview
 -- ----------------------------
-DROP TABLE IF EXISTS `AdCampaignBannerDomainExclusionPreview`;
-CREATE TABLE `AdCampaignBannerDomainExclusionPreview` (
-  `AdCampaignBannerDomainExclusionPreviewID` int(11) NOT NULL AUTO_INCREMENT,
-  `AdCampaignBannerPreviewID` int(11) NOT NULL,
+DROP TABLE IF EXISTS `InsertionOrderLineItemDomainExclusionPreview`;
+CREATE TABLE `InsertionOrderLineItemDomainExclusionPreview` (
+  `InsertionOrderLineItemDomainExclusionPreviewID` int(11) NOT NULL AUTO_INCREMENT,
+  `InsertionOrderLineItemPreviewID` int(11) NOT NULL,
   `ExclusionType` enum('url','referrer') NOT NULL,
   `DomainName` char(255) NOT NULL,
   `DateCreated` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `DateUpdated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`AdCampaignBannerDomainExclusionPreviewID`)
+  PRIMARY KEY (`InsertionOrderLineItemDomainExclusionPreviewID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- ----------------------------
--- Records of AdCampaignBannerDomainExclusionPreview
+-- Records of InsertionOrderLineItemDomainExclusionPreview
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for AdCampaignBannerDomainExclusiveInclusion
+-- Table structure for InsertionOrderLineItemDomainExclusiveInclusion
 -- ----------------------------
-DROP TABLE IF EXISTS `AdCampaignBannerDomainExclusiveInclusion`;
-CREATE TABLE `AdCampaignBannerDomainExclusiveInclusion` (
-  `AdCampaignBannerDomainExclusiveInclusionID` int(11) NOT NULL AUTO_INCREMENT,
-  `AdCampaignBannerID` int(11) NOT NULL,
+DROP TABLE IF EXISTS `InsertionOrderLineItemDomainExclusiveInclusion`;
+CREATE TABLE `InsertionOrderLineItemDomainExclusiveInclusion` (
+  `InsertionOrderLineItemDomainExclusiveInclusionID` int(11) NOT NULL AUTO_INCREMENT,
+  `InsertionOrderLineItemID` int(11) NOT NULL,
   `InclusionType` enum('url','referrer') NOT NULL,
   `DomainName` char(255) NOT NULL,
   `DateCreated` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `DateUpdated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`AdCampaignBannerDomainExclusiveInclusionID`)
+  PRIMARY KEY (`InsertionOrderLineItemDomainExclusiveInclusionID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- ----------------------------
--- Records of AdCampaignBannerDomainExclusiveInclusion
+-- Records of InsertionOrderLineItemDomainExclusiveInclusion
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for AdCampaignBannerDomainExclusiveInclusionPreview
+-- Table structure for InsertionOrderLineItemDomainExclusiveInclusionPreview
 -- ----------------------------
-DROP TABLE IF EXISTS `AdCampaignBannerDomainExclusiveInclusionPreview`;
-CREATE TABLE `AdCampaignBannerDomainExclusiveInclusionPreview` (
-  `AdCampaignBannerDomainExclusiveInclusionPreviewID` int(11) NOT NULL AUTO_INCREMENT,
-  `AdCampaignBannerPreviewID` int(11) NOT NULL,
+DROP TABLE IF EXISTS `InsertionOrderLineItemDomainExclusiveInclusionPreview`;
+CREATE TABLE `InsertionOrderLineItemDomainExclusiveInclusionPreview` (
+  `InsertionOrderLineItemDomainExclusiveInclusionPreviewID` int(11) NOT NULL AUTO_INCREMENT,
+  `InsertionOrderLineItemPreviewID` int(11) NOT NULL,
   `InclusionType` enum('url','referrer') NOT NULL,
   `DomainName` char(255) NOT NULL,
   `DateCreated` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `DateUpdated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`AdCampaignBannerDomainExclusiveInclusionPreviewID`)
+  PRIMARY KEY (`InsertionOrderLineItemDomainExclusiveInclusionPreviewID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- ----------------------------
--- Records of AdCampaignBannerDomainExclusiveInclusionPreview
+-- Records of InsertionOrderLineItemDomainExclusiveInclusionPreview
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for AdCampaignBannerPreview
+-- Table structure for InsertionOrderLineItemPreview
 -- ----------------------------
-DROP TABLE IF EXISTS `AdCampaignBannerPreview`;
-CREATE TABLE `AdCampaignBannerPreview` (
-  `AdCampaignBannerPreviewID` int(11) NOT NULL AUTO_INCREMENT,
-  `AdCampaignPreviewID` int(11) NOT NULL,
-  `AdCampaignBannerID` int(11) NOT NULL,
-  `AdCampaignTypeID` int(11) NOT NULL,
+DROP TABLE IF EXISTS `InsertionOrderLineItemPreview`;
+CREATE TABLE `InsertionOrderLineItemPreview` (
+  `InsertionOrderLineItemPreviewID` int(11) NOT NULL AUTO_INCREMENT,
+  `InsertionOrderPreviewID` int(11) NOT NULL,
+  `InsertionOrderLineItemID` int(11) NOT NULL,
+  `InsertionOrderTypeID` int(11) NOT NULL,
   `ImpressionType` char(10) NOT NULL DEFAULT 'banner',
   `UserID` int(11) NOT NULL,
   `Name` char(100) NOT NULL,
@@ -188,21 +188,21 @@ CREATE TABLE `AdCampaignBannerPreview` (
   `DateUpdated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `ChangeWentLive` tinyint(1) NOT NULL DEFAULT '0',
   `WentLiveDate` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  PRIMARY KEY (`AdCampaignBannerPreviewID`)
+  PRIMARY KEY (`InsertionOrderLineItemPreviewID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
 -- ----------------------------
--- Records of AdCampaignBannerPreview
+-- Records of InsertionOrderLineItemPreview
 -- ----------------------------
-INSERT INTO `AdCampaignBannerPreview` VALUES ('1', '1', '0', '1', 'banner', '21', 'Top Leaderboard Creative', '2014-09-03 00:00:00', '2015-11-04 00:00:00', '0', '728x90', '90', '728', '5', '0.25', '<script language=\"Javascript\">\r\nvar zflag_nid=\"2674\"; var zflag_cid=\"1\"; var zflag_sid=\"1\"; var zflag_width=\"728\"; var zflag_height=\"90\"; var zflag_sz=\"14\";\r\n</script>\r\n<script language=\"Javascript\" src=\"http://xp2.zedo.com/jsc/xp2/fo.js\"></script>', 'js', 'nginad.com', '0', '0', '0', '0', '2014-09-03 22:44:59', '2014-09-03 22:57:27', '1', '2014-09-03 22:57:27');
+INSERT INTO `InsertionOrderLineItemPreview` VALUES ('1', '1', '0', '1', 'banner', '21', 'Top Leaderboard Creative', '2014-09-03 00:00:00', '2015-11-04 00:00:00', '0', '728x90', '90', '728', '5', '0.25', '<script language=\"Javascript\">\r\nvar zflag_nid=\"2674\"; var zflag_cid=\"1\"; var zflag_sid=\"1\"; var zflag_width=\"728\"; var zflag_height=\"90\"; var zflag_sz=\"14\";\r\n</script>\r\n<script language=\"Javascript\" src=\"http://xp2.zedo.com/jsc/xp2/fo.js\"></script>', 'js', 'nginad.com', '0', '0', '0', '0', '2014-09-03 22:44:59', '2014-09-03 22:57:27', '1', '2014-09-03 22:57:27');
 
 -- ----------------------------
--- Table structure for AdCampaignBannerRestrictions
+-- Table structure for InsertionOrderLineItemRestrictions
 -- ----------------------------
-DROP TABLE IF EXISTS `AdCampaignBannerRestrictions`;
-CREATE TABLE `AdCampaignBannerRestrictions` (
-  `AdCampaignBannerRestrictionsID` int(11) NOT NULL AUTO_INCREMENT,
-  `AdCampaignBannerID` int(11) NOT NULL,
+DROP TABLE IF EXISTS `InsertionOrderLineItemRestrictions`;
+CREATE TABLE `InsertionOrderLineItemRestrictions` (
+  `InsertionOrderLineItemRestrictionsID` int(11) NOT NULL AUTO_INCREMENT,
+  `InsertionOrderLineItemID` int(11) NOT NULL,
   `GeoCountry` char(255) DEFAULT NULL,
   `GeoState` char(255) DEFAULT NULL,
   `GeoCity` char(255) DEFAULT NULL,
@@ -229,21 +229,21 @@ CREATE TABLE `AdCampaignBannerRestrictions` (
   `Vertical` char(100) DEFAULT NULL,
   `DateCreated` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `DateUpdated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`AdCampaignBannerRestrictionsID`),
-  UNIQUE KEY `RTBBannerID` (`AdCampaignBannerID`)
+  PRIMARY KEY (`InsertionOrderLineItemRestrictionsID`),
+  UNIQUE KEY `RTBBannerID` (`InsertionOrderLineItemID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- ----------------------------
--- Records of AdCampaignBannerRestrictions
+-- Records of InsertionOrderLineItemRestrictions
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for AdCampaignVideoRestrictions
+-- Table structure for InsertionOrderItemRestrictionsVideoRestrictions
 -- ----------------------------
-DROP TABLE IF EXISTS `AdCampaignVideoRestrictions`;
-CREATE TABLE `AdCampaignVideoRestrictions` (
-  `AdCampaignVideoRestrictionsID` int(11) NOT NULL AUTO_INCREMENT,
-  `AdCampaignBannerID` int(11) DEFAULT NULL,
+DROP TABLE IF EXISTS `InsertionOrderLineItemVideoRestrictions`;
+CREATE TABLE `InsertionOrderLineItemVideoRestrictions` (
+  `InsertionOrderLineItemVideoRestrictionsID` int(11) NOT NULL AUTO_INCREMENT,
+  `InsertionOrderLineItemID` int(11) DEFAULT NULL,
   `GeoCountry` char(255) DEFAULT NULL,
   `GeoState` char(255) DEFAULT NULL,
   `GeoCity` char(255) DEFAULT NULL,
@@ -265,21 +265,21 @@ CREATE TABLE `AdCampaignVideoRestrictions` (
   `Vertical` char(100) DEFAULT NULL,
   `DateCreated` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `DateUpdated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`AdCampaignVideoRestrictionsID`),
-  UNIQUE KEY `RTBVideoID` (`AdCampaignBannerID`)
+  PRIMARY KEY (`InsertionOrderLineItemVideoRestrictionsID`),
+  UNIQUE KEY `RTBVideoID` (`InsertionOrderLineItemID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- ----------------------------
--- Records of AdCampaignVideoRestrictions
+-- Records of InsertionOrderVideoRestrictions
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for AdCampaignBannerRestrictionsPreview
+-- Table structure for InsertionOrderLineItemRestrictionsPreview
 -- ----------------------------
-DROP TABLE IF EXISTS `AdCampaignBannerRestrictionsPreview`;
-CREATE TABLE `AdCampaignBannerRestrictionsPreview` (
-  `AdCampaignBannerRestrictionsPreviewID` int(11) NOT NULL AUTO_INCREMENT,
-  `AdCampaignBannerPreviewID` int(11) NOT NULL,
+DROP TABLE IF EXISTS `InsertionOrderLineItemRestrictionsPreview`;
+CREATE TABLE `InsertionOrderLineItemRestrictionsPreview` (
+  `InsertionOrderLineItemRestrictionsPreviewID` int(11) NOT NULL AUTO_INCREMENT,
+  `InsertionOrderLineItemPreviewID` int(11) NOT NULL,
   `GeoCountry` char(255) DEFAULT NULL,
   `GeoState` char(255) DEFAULT NULL,
   `GeoCity` char(255) DEFAULT NULL,
@@ -306,21 +306,21 @@ CREATE TABLE `AdCampaignBannerRestrictionsPreview` (
   `Vertical` char(100) DEFAULT NULL,
   `DateCreated` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `DateUpdated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`AdCampaignBannerRestrictionsPreviewID`),
-  UNIQUE KEY `RTBBannerPreviewID` (`AdCampaignBannerPreviewID`)
+  PRIMARY KEY (`InsertionOrderLineItemRestrictionsPreviewID`),
+  UNIQUE KEY `RTBBannerPreviewID` (`InsertionOrderLineItemPreviewID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- ----------------------------
--- Records of AdCampaignBannerRestrictionsPreview
+-- Records of InsertionOrderLineItemRestrictionsPreview
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for AdCampaignVideoRestrictionsPreview
+-- Table structure for InsertionOrderLineItemVideoRestrictionsPreview
 -- ----------------------------
-DROP TABLE IF EXISTS `AdCampaignVideoRestrictionsPreview`;
-CREATE TABLE `AdCampaignVideoRestrictionsPreview` (
-  `AdCampaignVideoRestrictionsPreviewID` int(11) NOT NULL AUTO_INCREMENT,
-  `AdCampaignBannerPreviewID` int(11) NOT NULL,
+DROP TABLE IF EXISTS `InsertionOrderLineItemVideoRestrictionsPreview`;
+CREATE TABLE `InsertionOrderLineItemVideoRestrictionsPreview` (
+  `InsertionOrderLineItemVideoRestrictionsPreviewID` int(11) NOT NULL AUTO_INCREMENT,
+  `InsertionOrderLineItemPreviewID` int(11) NOT NULL,
   `GeoCountry` char(255) DEFAULT NULL,
   `GeoState` char(255) DEFAULT NULL,
   `GeoCity` char(255) DEFAULT NULL,
@@ -342,21 +342,21 @@ CREATE TABLE `AdCampaignVideoRestrictionsPreview` (
   `Vertical` char(100) DEFAULT NULL,
   `DateCreated` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `DateUpdated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`AdCampaignVideoRestrictionsPreviewID`),
-  UNIQUE KEY `RTBVideoPreviewID` (`AdCampaignBannerPreviewID`)
+  PRIMARY KEY (`InsertionOrderLineItemVideoRestrictionsPreviewID`),
+  UNIQUE KEY `RTBVideoPreviewID` (`InsertionOrderLineItemPreviewID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- ----------------------------
--- Records of AdCampaignVideoRestrictionsPreview
+-- Records of InsertionOrderVideoRestrictionsPreview
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for AdCampaignPreview
+-- Table structure for InsertionOrderPreview
 -- ----------------------------
-DROP TABLE IF EXISTS `AdCampaignPreview`;
-CREATE TABLE `AdCampaignPreview` (
-  `AdCampaignPreviewID` int(11) NOT NULL AUTO_INCREMENT,
-  `AdCampaignID` int(11) DEFAULT NULL,
+DROP TABLE IF EXISTS `InsertionOrderPreview`;
+CREATE TABLE `InsertionOrderPreview` (
+  `InsertionOrderPreviewID` int(11) NOT NULL AUTO_INCREMENT,
+  `InsertionOrderID` int(11) DEFAULT NULL,
   `UserID` int(11) NOT NULL,
   `Name` char(100) NOT NULL,
   `StartDate` datetime NOT NULL,
@@ -373,50 +373,50 @@ CREATE TABLE `AdCampaignPreview` (
   `DateUpdated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `ChangeWentLive` tinyint(1) NOT NULL DEFAULT '0',
   `WentLiveDate` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  PRIMARY KEY (`AdCampaignPreviewID`)
+  PRIMARY KEY (`InsertionOrderPreviewID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
 -- ----------------------------
--- Records of AdCampaignPreview
+-- Records of InsertionOrderPreview
 -- ----------------------------
-INSERT INTO `AdCampaignPreview` VALUES ('1', null, '21', 'My Media Campaign for XBrand', '2014-09-03 00:00:00', '2017-05-19 00:00:00', 'XBrand', '10101100', '0', '1000000', '0', '100', '0', '0', '2014-09-03 22:42:03', '2014-09-03 22:42:03', '1', '2014-09-03 22:57:27');
+INSERT INTO `InsertionOrderPreview` VALUES ('1', null, '21', 'My Media Campaign for XBrand', '2014-09-03 00:00:00', '2017-05-19 00:00:00', 'XBrand', '10101100', '0', '1000000', '0', '100', '0', '0', '2014-09-03 22:42:03', '2014-09-03 22:42:03', '1', '2014-09-03 22:57:27');
 
 -- ----------------------------
--- Table structure for AdCampaignType
+-- Table structure for InsertionOrderType
 -- ----------------------------
-DROP TABLE IF EXISTS `AdCampaignType`;
-CREATE TABLE `AdCampaignType` (
-  `AdCampaignTypeID` int(11) unsigned NOT NULL,
+DROP TABLE IF EXISTS `InsertionOrderType`;
+CREATE TABLE `InsertionOrderType` (
+  `InsertionOrderTypeID` int(11) unsigned NOT NULL,
   `Description` varchar(255) NOT NULL,
   `DateCreated` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `DateUpdated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`AdCampaignTypeID`),
-  UNIQUE KEY `AdCampaignType_UNIQUE` (`AdCampaignTypeID`)
+  PRIMARY KEY (`InsertionOrderTypeID`),
+  UNIQUE KEY `InsertionOrderType_UNIQUE` (`InsertionOrderTypeID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Records of AdCampaignType
+-- Records of InsertionOrderType
 -- ----------------------------
-INSERT INTO `AdCampaignType` VALUES ('1', 'Any Remnant', '2014-09-03 22:44:24', '2014-09-03 22:44:24');
-INSERT INTO `AdCampaignType` VALUES ('2', 'In House Remnant', '2014-09-03 22:44:24', '2014-09-03 22:44:24');
-INSERT INTO `AdCampaignType` VALUES ('3', 'RTB Remnant', '2014-09-03 22:44:24', '2014-09-03 22:44:24');
-INSERT INTO `AdCampaignType` VALUES ('4', 'Contract', '2014-09-03 22:44:24', '2014-09-03 22:44:24');
+INSERT INTO `InsertionOrderType` VALUES ('1', 'Any Remnant', '2014-09-03 22:44:24', '2014-09-03 22:44:24');
+INSERT INTO `InsertionOrderType` VALUES ('2', 'In House Remnant', '2014-09-03 22:44:24', '2014-09-03 22:44:24');
+INSERT INTO `InsertionOrderType` VALUES ('3', 'RTB Remnant', '2014-09-03 22:44:24', '2014-09-03 22:44:24');
+INSERT INTO `InsertionOrderType` VALUES ('4', 'Contract', '2014-09-03 22:44:24', '2014-09-03 22:44:24');
 
 -- ----------------------------
--- Table structure for AdCampainMarkup
+-- Table structure for InsertionOrderMarkup
 -- ----------------------------
-DROP TABLE IF EXISTS `AdCampainMarkup`;
-CREATE TABLE `AdCampainMarkup` (
-  `AdCampaignID` int(11) NOT NULL,
+DROP TABLE IF EXISTS `InsertionOrderMarkup`;
+CREATE TABLE `InsertionOrderMarkup` (
+  `InsertionOrderID` int(11) NOT NULL,
   `MarkupRate` float NOT NULL,
-  PRIMARY KEY (`AdCampaignID`),
-  UNIQUE KEY `AdCampaignID` (`AdCampaignID`)
+  PRIMARY KEY (`InsertionOrderID`),
+  UNIQUE KEY `InsertionOrderID` (`InsertionOrderID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- ----------------------------
 -- Records of AdCampainMarkup
 -- ----------------------------
-INSERT INTO `AdCampainMarkup` VALUES ('4', '0.4');
+INSERT INTO `InsertionOrderMarkup` VALUES ('4', '0.4');
 
 -- ----------------------------
 -- Table structure for AdTemplates
@@ -530,14 +530,14 @@ INSERT INTO `auth_Users` VALUES ('21', 'suckmedia', 'larry.brin@suckmedianow.com
 DROP TABLE IF EXISTS `BuySideDailyImpressionsByTLD`;
 CREATE TABLE `BuySideDailyImpressionsByTLD` (
   `DailyImpressionsByTLDID` int(11) NOT NULL AUTO_INCREMENT,
-  `AdCampaignBannerID` int(11) NOT NULL,
+  `InsertionOrderLineItemID` int(11) NOT NULL,
   `MDY` char(10) NOT NULL,
   `PublisherTLD` char(100) NOT NULL,
   `Impressions` int(11) NOT NULL,
   `DateCreated` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `DateUpdated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`DailyImpressionsByTLDID`),
-  UNIQUE KEY `RTBBannerID_IDX` (`AdCampaignBannerID`,`MDY`,`PublisherTLD`)
+  UNIQUE KEY `RTBBannerID_IDX` (`InsertionOrderLineItemID`,`MDY`,`PublisherTLD`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- ----------------------------
@@ -551,13 +551,13 @@ DROP TABLE IF EXISTS `BuySideHourlyBidsCounter`;
 CREATE TABLE `BuySideHourlyBidsCounter` (
   `BuySideHourlyBidsCounterID` int(11) NOT NULL AUTO_INCREMENT,
   `BuySidePartnerID` char(100) NOT NULL,
-  `AdCampaignBannerID` int(11) NOT NULL,
+  `InsertionOrderLineItemID` int(11) NOT NULL,
   `MDYH` char(15) NOT NULL,
   `BidsCounter` int(11) NOT NULL,
   `DateCreated` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `DateUpdated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`BuySideHourlyBidsCounterID`),
-  UNIQUE KEY `BuySideHourlyBid_IDX` (`BuySidePartnerID`,`AdCampaignBannerID`,`MDYH`) USING BTREE
+  UNIQUE KEY `BuySideHourlyBid_IDX` (`BuySidePartnerID`,`InsertionOrderLineItemID`,`MDYH`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- ----------------------------
@@ -570,14 +570,14 @@ CREATE TABLE `BuySideHourlyBidsCounter` (
 DROP TABLE IF EXISTS `BuySideHourlyImpressionsByTLD`;
 CREATE TABLE `BuySideHourlyImpressionsByTLD` (
   `BuySideHourlyImpressionsByTLDID` int(11) NOT NULL AUTO_INCREMENT,
-  `AdCampaignBannerID` int(11) NOT NULL,
+  `InsertionOrderLineItemID` int(11) NOT NULL,
   `MDYH` char(15) NOT NULL,
   `PublisherTLD` char(100) NOT NULL,
   `Impressions` int(11) NOT NULL,
   `DateCreated` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `DateUpdated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`BuySideHourlyImpressionsByTLDID`),
-  UNIQUE KEY `AnyBannerID_IDX` (`AdCampaignBannerID`,`MDYH`,`PublisherTLD`)
+  UNIQUE KEY `AnyBannerID_IDX` (`InsertionOrderLineItemID`,`MDYH`,`PublisherTLD`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- ----------------------------
@@ -591,7 +591,7 @@ DROP TABLE IF EXISTS `BuySideHourlyImpressionsCounterCurrentSpend`;
 CREATE TABLE `BuySideHourlyImpressionsCounterCurrentSpend` (
   `BuySideHourlyImpressionsCounterCurrentSpendID` int(11) NOT NULL AUTO_INCREMENT,
   `BuySidePartnerID` char(100) NOT NULL,
-  `AdCampaignBannerID` int(11) NOT NULL,
+  `InsertionOrderLineItemID` int(11) NOT NULL,
   `MDYH` char(15) NOT NULL,
   `ImpressionsCounter` int(11) NOT NULL,
   `CurrentSpendGross` float NOT NULL,
@@ -599,7 +599,7 @@ CREATE TABLE `BuySideHourlyImpressionsCounterCurrentSpend` (
   `DateCreated` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `DateUpdated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`BuySideHourlyImpressionsCounterCurrentSpendID`),
-  UNIQUE KEY `BuySideHourlyIC_IDX` (`BuySidePartnerID`,`AdCampaignBannerID`,`MDYH`) USING BTREE
+  UNIQUE KEY `BuySideHourlyIC_IDX` (`BuySidePartnerID`,`InsertionOrderLineItemID`,`MDYH`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- ----------------------------
@@ -612,7 +612,7 @@ CREATE TABLE `BuySideHourlyImpressionsCounterCurrentSpend` (
 DROP TABLE IF EXISTS `ContractPublisherZoneHourlyImpressions`;
 CREATE TABLE `ContractPublisherZoneHourlyImpressions` (
   `ContractPublisherZoneHourlyImpressionsID` int(11) NOT NULL AUTO_INCREMENT,
-  `AdCampaignBannerID` int(11) NOT NULL,
+  `InsertionOrderLineItemID` int(11) NOT NULL,
   `PublisherAdZoneID` int(11) NOT NULL,
   `MDYH` char(15) NOT NULL,
   `Impressions` bigint(20) NOT NULL,
@@ -621,8 +621,8 @@ CREATE TABLE `ContractPublisherZoneHourlyImpressions` (
   `DateCreated` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `DateUpdated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`ContractPublisherZoneHourlyImpressionsID`),
-  UNIQUE KEY `ContractPublisherZoneHourlyImpression_IDX` (`ContractPublisherZoneHourlyImpressionsID`,`AdCampaignBannerID`,`PublisherAdZoneID`,`MDYH`) USING BTREE,
-  UNIQUE KEY `ContractPublisherZoneHourlyImpressions_IDX` (`AdCampaignBannerID`,`PublisherAdZoneID`,`MDYH`)
+  UNIQUE KEY `ContractPublisherZoneHourlyImpression_IDX` (`ContractPublisherZoneHourlyImpressionsID`,`InsertionOrderLineItemID`,`PublisherAdZoneID`,`MDYH`) USING BTREE,
+  UNIQUE KEY `ContractPublisherZoneHourlyImpressions_IDX` (`InsertionOrderLineItemID`,`PublisherAdZoneID`,`MDYH`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- ----------------------------
@@ -700,15 +700,15 @@ INSERT INTO `IndustryCategories` VALUES ('38', 'Women\'s Interest', null, '1', n
 DROP TABLE IF EXISTS `LinkedBannerToAdZone`;
 CREATE TABLE `LinkedBannerToAdZone` (
   `LinkedBannerToAdZoneID` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `AdCampaignBannerID` int(11) unsigned NOT NULL,
+  `InsertionOrderLineItemID` int(11) unsigned NOT NULL,
   `PublisherAdZoneID` int(11) unsigned NOT NULL,
   `Weight` int(11) NOT NULL DEFAULT '5',
   `DateCreated` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `DateUpdated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`LinkedBannerToAdZoneID`),
   UNIQUE KEY `LinkedBannerToAdZone_UNIQUE` (`LinkedBannerToAdZoneID`),
-  KEY `FK_Publisher_Zone_ID` (`AdCampaignBannerID`),
-  KEY `FK_AdCampaign_Banner_ID` (`PublisherAdZoneID`)
+  KEY `FK_Publisher_Zone_ID` (`InsertionOrderLineItemID`),
+  KEY `FK_InsertionOrder_Banner_ID` (`PublisherAdZoneID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
@@ -721,7 +721,7 @@ CREATE TABLE `LinkedBannerToAdZone` (
 DROP TABLE IF EXISTS `LinkedBannerToAdZonePreview`;
 CREATE TABLE `LinkedBannerToAdZonePreview` (
   `LinkedBannerToAdZonePreviewID` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `AdCampaignBannerPreviewID` int(11) unsigned NOT NULL,
+  `InsertionOrderLineItemPreviewID` int(11) unsigned NOT NULL,
   `PublisherAdZoneID` int(11) unsigned NOT NULL,
   `Weight` int(11) NOT NULL DEFAULT '5',
   `DateCreated` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
@@ -865,7 +865,7 @@ CREATE TABLE `PublisherInfo` (
 -- ----------------------------
 -- Records of PublisherInfo
 -- ----------------------------
-INSERT INTO `PublisherInfo` VALUES ('3', 'Blow Media Now', 'sergey.page@blowmedianow.com', 'blowmedianow.com', 'IAB19', '2014-09-03 21:25:33', '2014-09-03 21:25:33');
+INSERT INTO `PublisherInfo` VALUES ('3', '0', 'Blow Media Now', 'sergey.page@blowmedianow.com', 'blowmedianow.com', 'IAB19', '2014-09-03 21:25:33', '2014-09-03 21:25:33');
 
 -- ----------------------------
 -- Table structure for PublisherMarkup
@@ -1094,37 +1094,37 @@ CREATE VIEW `auth_usersview` AS select `auth_Users`.`user_id` AS `user_id`,`auth
 -- View structure for BidTotalsRollup
 -- ----------------------------
 DROP VIEW IF EXISTS `BidTotalsRollup`;
-CREATE VIEW `BidTotalsRollup` AS select `BuySideHourlyBidsCounter`.`AdCampaignBannerID` AS `AdCampaignBannerID`,sum(`BuySideHourlyBidsCounter`.`BidsCounter`) AS `TotalBids` from `BuySideHourlyBidsCounter` group by `BuySideHourlyBidsCounter`.`AdCampaignBannerID` ;
+CREATE VIEW `BidTotalsRollup` AS select `BuySideHourlyBidsCounter`.`InsertionOrderLineItemID` AS `InsertionOrderLineItemID`,sum(`BuySideHourlyBidsCounter`.`BidsCounter`) AS `TotalBids` from `BuySideHourlyBidsCounter` group by `BuySideHourlyBidsCounter`.`InsertionOrderLineItemID` ;
 
 -- ----------------------------
 -- View structure for buySideHourlyBidsAvarage
 -- ----------------------------
 DROP VIEW IF EXISTS `buySideHourlyBidsAvarage`;
-CREATE VIEW `buySideHourlyBidsAvarage` AS select avg(`BuySideHourlyBidsCounter`.`BidsCounter`) AS `avg_bids`,sum(`BuySideHourlyBidsCounter`.`BidsCounter`) AS `total_bids`,`AdCampaignBanner`.`Name` AS `banner_name`,`AdCampaign`.`Name` AS `Name`,`auth_Users`.`user_login` AS `user_login` from (((`BuySideHourlyBidsCounter` join `AdCampaignBanner` on((`BuySideHourlyBidsCounter`.`AdCampaignBannerID` = `AdCampaignBanner`.`AdCampaignBannerID`))) join `AdCampaign` on((`AdCampaignBanner`.`AdCampaignID` = `AdCampaign`.`AdCampaignID`))) join `auth_Users` on((`auth_Users`.`user_id` = `AdCampaignBanner`.`UserID`))) group by `BuySideHourlyBidsCounter`.`AdCampaignBannerID` order by `BuySideHourlyBidsCounter`.`AdCampaignBannerID` ;
+CREATE VIEW `buySideHourlyBidsAvarage` AS select avg(`BuySideHourlyBidsCounter`.`BidsCounter`) AS `avg_bids`,sum(`BuySideHourlyBidsCounter`.`BidsCounter`) AS `total_bids`,`InsertionOrderLineItem`.`Name` AS `banner_name`,`InsertionOrder`.`Name` AS `Name`,`auth_Users`.`user_login` AS `user_login` from (((`BuySideHourlyBidsCounter` join `InsertionOrderLineItem` on((`BuySideHourlyBidsCounter`.`InsertionOrderLineItemID` = `InsertionOrderLineItem`.`InsertionOrderLineItemID`))) join `InsertionOrder` on((`InsertionOrderLineItem`.`InsertionOrderID` = `InsertionOrder`.`InsertionOrderID`))) join `auth_Users` on((`auth_Users`.`user_id` = `InsertionOrderLineItem`.`UserID`))) group by `BuySideHourlyBidsCounter`.`InsertionOrderLineItemID` order by `BuySideHourlyBidsCounter`.`InsertionOrderLineItemID` ;
 
 -- ----------------------------
 -- View structure for buySideHourlyBidsAvarageAdmin
 -- ----------------------------
 DROP VIEW IF EXISTS `buySideHourlyBidsAvarageAdmin`;
-CREATE VIEW `buySideHourlyBidsAvarageAdmin` AS select `BuySideHourlyBidsCounter`.`BuySidePartnerID` AS `BuySidePartnerID`,avg(`BuySideHourlyBidsCounter`.`BidsCounter`) AS `avg_bids`,sum(`BuySideHourlyBidsCounter`.`BidsCounter`) AS `total_bids`,`AdCampaignBanner`.`Name` AS `banner_name`,`AdCampaign`.`Name` AS `Name`,`auth_Users`.`user_login` AS `user_login` from (((`BuySideHourlyBidsCounter` join `AdCampaignBanner` on((`BuySideHourlyBidsCounter`.`AdCampaignBannerID` = `AdCampaignBanner`.`AdCampaignBannerID`))) join `AdCampaign` on((`AdCampaignBanner`.`AdCampaignID` = `AdCampaign`.`AdCampaignID`))) join `auth_Users` on((`auth_Users`.`user_id` = `AdCampaignBanner`.`UserID`))) group by `BuySideHourlyBidsCounter`.`AdCampaignBannerID`,`BuySideHourlyBidsCounter`.`BuySidePartnerID` order by `BuySideHourlyBidsCounter`.`AdCampaignBannerID` ;
+CREATE VIEW `buySideHourlyBidsAvarageAdmin` AS select `BuySideHourlyBidsCounter`.`BuySidePartnerID` AS `BuySidePartnerID`,avg(`BuySideHourlyBidsCounter`.`BidsCounter`) AS `avg_bids`,sum(`BuySideHourlyBidsCounter`.`BidsCounter`) AS `total_bids`,`InsertionOrderLineItem`.`Name` AS `banner_name`,`InsertionOrder`.`Name` AS `Name`,`auth_Users`.`user_login` AS `user_login` from (((`BuySideHourlyBidsCounter` join `InsertionOrderLineItem` on((`BuySideHourlyBidsCounter`.`InsertionOrderLineItemID` = `InsertionOrderLineItem`.`InsertionOrderLineItemID`))) join `InsertionOrder` on((`InsertionOrderLineItem`.`InsertionOrderID` = `InsertionOrder`.`InsertionOrderID`))) join `auth_Users` on((`auth_Users`.`user_id` = `InsertionOrderLineItem`.`UserID`))) group by `BuySideHourlyBidsCounter`.`InsertionOrderLineItemID`,`BuySideHourlyBidsCounter`.`BuySidePartnerID` order by `BuySideHourlyBidsCounter`.`InsertionOrderLineItemID` ;
 
 -- ----------------------------
 -- View structure for buySideHourlyBidsPerTime
 -- ----------------------------
 DROP VIEW IF EXISTS `buySideHourlyBidsPerTime`;
-CREATE VIEW `buySideHourlyBidsPerTime` AS select `BuySideHourlyBidsCounter`.`BuySidePartnerID` AS `BuySidePartnerID`,`BuySideHourlyBidsCounter`.`MDYH` AS `MDYH`,`BuySideHourlyBidsCounter`.`BidsCounter` AS `BidsCounter`,`BuySideHourlyBidsCounter`.`DateCreated` AS `DateCreated`,`BuySideHourlyBidsCounter`.`DateUpdated` AS `DateUpdated`,`AdCampaign`.`Name` AS `Name` from ((`BuySideHourlyBidsCounter` join `AdCampaignBanner` on((`BuySideHourlyBidsCounter`.`AdCampaignBannerID` = `AdCampaignBanner`.`AdCampaignBannerID`))) join `AdCampaign` on((`AdCampaignBanner`.`AdCampaignID` = `AdCampaign`.`AdCampaignID`))) order by `BuySideHourlyBidsCounter`.`AdCampaignBannerID` ;
+CREATE VIEW `buySideHourlyBidsPerTime` AS select `BuySideHourlyBidsCounter`.`BuySidePartnerID` AS `BuySidePartnerID`,`BuySideHourlyBidsCounter`.`MDYH` AS `MDYH`,`BuySideHourlyBidsCounter`.`BidsCounter` AS `BidsCounter`,`BuySideHourlyBidsCounter`.`DateCreated` AS `DateCreated`,`BuySideHourlyBidsCounter`.`DateUpdated` AS `DateUpdated`,`InsertionOrder`.`Name` AS `Name` from ((`BuySideHourlyBidsCounter` join `InsertionOrderLineItem` on((`BuySideHourlyBidsCounter`.`InsertionOrderLineItemID` = `InsertionOrderLineItem`.`InsertionOrderLineItemID`))) join `InsertionOrder` on((`InsertionOrderLineItem`.`InsertionOrderID` = `InsertionOrder`.`InsertionOrderID`))) order by `BuySideHourlyBidsCounter`.`InsertionOrderLineItemID` ;
 
 -- ----------------------------
 -- View structure for ImpressionAndSpendTotalsRollup
 -- ----------------------------
 DROP VIEW IF EXISTS `ImpressionAndSpendTotalsRollup`;
-CREATE VIEW `ImpressionAndSpendTotalsRollup` AS select `BuySideHourlyImpressionsCounterCurrentSpend`.`AdCampaignBannerID` AS `AdCampaignBannerID`,sum(`BuySideHourlyImpressionsCounterCurrentSpend`.`CurrentSpendGross`) AS `TotalSpendGross`,sum(`BuySideHourlyImpressionsCounterCurrentSpend`.`CurrentSpendNet`) AS `TotalSpendNet`,sum(`BuySideHourlyImpressionsCounterCurrentSpend`.`ImpressionsCounter`) AS `TotalImpressions` from `BuySideHourlyImpressionsCounterCurrentSpend` group by `BuySideHourlyImpressionsCounterCurrentSpend`.`AdCampaignBannerID` ;
+CREATE VIEW `ImpressionAndSpendTotalsRollup` AS select `BuySideHourlyImpressionsCounterCurrentSpend`.`InsertionOrderLineItemID` AS `InsertionOrderLineItemID`,sum(`BuySideHourlyImpressionsCounterCurrentSpend`.`CurrentSpendGross`) AS `TotalSpendGross`,sum(`BuySideHourlyImpressionsCounterCurrentSpend`.`CurrentSpendNet`) AS `TotalSpendNet`,sum(`BuySideHourlyImpressionsCounterCurrentSpend`.`ImpressionsCounter`) AS `TotalImpressions` from `BuySideHourlyImpressionsCounterCurrentSpend` group by `BuySideHourlyImpressionsCounterCurrentSpend`.`InsertionOrderLineItemID` ;
 
 -- ----------------------------
 -- View structure for impressionsCurrentSpendPerTime
 -- ----------------------------
 DROP VIEW IF EXISTS `impressionsCurrentSpendPerTime`;
-CREATE VIEW `impressionsCurrentSpendPerTime` AS select `BuySideHourlyImpressionsCounterCurrentSpend`.`BuySidePartnerID` AS `BuySidePartnerID`,`BuySideHourlyImpressionsCounterCurrentSpend`.`MDYH` AS `MDYH`,`BuySideHourlyImpressionsCounterCurrentSpend`.`ImpressionsCounter` AS `ImpressionsCounter`,`BuySideHourlyImpressionsCounterCurrentSpend`.`CurrentSpendGross` AS `CurrentSpendGross`,`BuySideHourlyImpressionsCounterCurrentSpend`.`CurrentSpendNet` AS `CurrentSpendNet`,round((`BuySideHourlyImpressionsCounterCurrentSpend`.`CurrentSpendNet` / `BuySideHourlyImpressionsCounterCurrentSpend`.`ImpressionsCounter`),7) AS `AverageBidCurrentSpendNet`,round((`BuySideHourlyImpressionsCounterCurrentSpend`.`CurrentSpendGross` / `BuySideHourlyImpressionsCounterCurrentSpend`.`ImpressionsCounter`),7) AS `AverageBidCurrentSpendGross`,`BuySideHourlyImpressionsCounterCurrentSpend`.`DateCreated` AS `DateCreated`,`BuySideHourlyImpressionsCounterCurrentSpend`.`DateUpdated` AS `DateUpdated`,`AdCampaign`.`Name` AS `Name` from ((`BuySideHourlyImpressionsCounterCurrentSpend` join `AdCampaignBanner` on((`BuySideHourlyImpressionsCounterCurrentSpend`.`AdCampaignBannerID` = `AdCampaignBanner`.`AdCampaignBannerID`))) join `AdCampaign` on((`AdCampaignBanner`.`AdCampaignID` = `AdCampaign`.`AdCampaignID`))) order by `BuySideHourlyImpressionsCounterCurrentSpend`.`BuySidePartnerID` ;
+CREATE VIEW `impressionsCurrentSpendPerTime` AS select `BuySideHourlyImpressionsCounterCurrentSpend`.`BuySidePartnerID` AS `BuySidePartnerID`,`BuySideHourlyImpressionsCounterCurrentSpend`.`MDYH` AS `MDYH`,`BuySideHourlyImpressionsCounterCurrentSpend`.`ImpressionsCounter` AS `ImpressionsCounter`,`BuySideHourlyImpressionsCounterCurrentSpend`.`CurrentSpendGross` AS `CurrentSpendGross`,`BuySideHourlyImpressionsCounterCurrentSpend`.`CurrentSpendNet` AS `CurrentSpendNet`,round((`BuySideHourlyImpressionsCounterCurrentSpend`.`CurrentSpendNet` / `BuySideHourlyImpressionsCounterCurrentSpend`.`ImpressionsCounter`),7) AS `AverageBidCurrentSpendNet`,round((`BuySideHourlyImpressionsCounterCurrentSpend`.`CurrentSpendGross` / `BuySideHourlyImpressionsCounterCurrentSpend`.`ImpressionsCounter`),7) AS `AverageBidCurrentSpendGross`,`BuySideHourlyImpressionsCounterCurrentSpend`.`DateCreated` AS `DateCreated`,`BuySideHourlyImpressionsCounterCurrentSpend`.`DateUpdated` AS `DateUpdated`,`InsertionOrder`.`Name` AS `Name` from ((`BuySideHourlyImpressionsCounterCurrentSpend` join `InsertionOrderLineItem` on((`BuySideHourlyImpressionsCounterCurrentSpend`.`InsertionOrderLineItemID` = `InsertionOrderLineItem`.`InsertionOrderLineItemID`))) join `InsertionOrder` on((`InsertionOrderLineItem`.`InsertionOrderID` = `InsertionOrder`.`InsertionOrderID`))) order by `BuySideHourlyImpressionsCounterCurrentSpend`.`BuySidePartnerID` ;
 
 -- ----------------------------
 -- View structure for sellSidePartnerHourlyBidsPerTime
@@ -1136,13 +1136,13 @@ CREATE VIEW `sellSidePartnerHourlyBidsPerTime` AS select `SellSidePartnerHourlyB
 -- View structure for userImpressionsSpend
 -- ----------------------------
 DROP VIEW IF EXISTS `userImpressionsSpend`;
-CREATE VIEW `userImpressionsSpend` AS select round(sum(`BuySideHourlyImpressionsCounterCurrentSpend`.`CurrentSpendGross`),7) AS `TotalSpendGross`,round(sum(`BuySideHourlyImpressionsCounterCurrentSpend`.`CurrentSpendNet`),7) AS `TotalSpendNet`,`AdCampaign`.`Name` AS `Name`,`auth_Users`.`user_login` AS `user_login` from (((`BuySideHourlyImpressionsCounterCurrentSpend` join `AdCampaignBanner` on((`BuySideHourlyImpressionsCounterCurrentSpend`.`AdCampaignBannerID` = `AdCampaignBanner`.`AdCampaignBannerID`))) join `AdCampaign` on((`AdCampaignBanner`.`AdCampaignID` = `AdCampaign`.`AdCampaignID`))) join `auth_Users` on((`auth_Users`.`user_id` = `AdCampaignBanner`.`UserID`))) group by `BuySideHourlyImpressionsCounterCurrentSpend`.`AdCampaignBannerID` order by `auth_Users`.`user_login` ;
+CREATE VIEW `userImpressionsSpend` AS select round(sum(`BuySideHourlyImpressionsCounterCurrentSpend`.`CurrentSpendGross`),7) AS `TotalSpendGross`,round(sum(`BuySideHourlyImpressionsCounterCurrentSpend`.`CurrentSpendNet`),7) AS `TotalSpendNet`,`InsertionOrder`.`Name` AS `Name`,`auth_Users`.`user_login` AS `user_login` from (((`BuySideHourlyImpressionsCounterCurrentSpend` join `InsertionOrderLineItem` on((`BuySideHourlyImpressionsCounterCurrentSpend`.`InsertionOrderLineItemID` = `InsertionOrderLineItem`.`InsertionOrderLineItemID`))) join `InsertionOrder` on((`InsertionOrderLineItem`.`InsertionOrderID` = `InsertionOrder`.`InsertionOrderID`))) join `auth_Users` on((`auth_Users`.`user_id` = `InsertionOrderLineItem`.`UserID`))) group by `BuySideHourlyImpressionsCounterCurrentSpend`.`InsertionOrderLineItemID` order by `auth_Users`.`user_login` ;
 
 -- ----------------------------
 -- View structure for userImpressionsSpendAdmin
 -- ----------------------------
 DROP VIEW IF EXISTS `userImpressionsSpendAdmin`;
-CREATE VIEW `userImpressionsSpendAdmin` AS select `BuySideHourlyImpressionsCounterCurrentSpend`.`BuySidePartnerID` AS `BuySidePartnerID`,round(sum(`BuySideHourlyImpressionsCounterCurrentSpend`.`CurrentSpendGross`),7) AS `TotalSpendGross`,round(sum(`BuySideHourlyImpressionsCounterCurrentSpend`.`CurrentSpendNet`),7) AS `TotalSpendNet`,`AdCampaign`.`Name` AS `Name`,`auth_Users`.`user_login` AS `user_login` from (((`BuySideHourlyImpressionsCounterCurrentSpend` join `AdCampaignBanner` on((`BuySideHourlyImpressionsCounterCurrentSpend`.`AdCampaignBannerID` = `AdCampaignBanner`.`AdCampaignBannerID`))) join `AdCampaign` on((`AdCampaignBanner`.`AdCampaignID` = `AdCampaign`.`AdCampaignID`))) join `auth_Users` on((`auth_Users`.`user_id` = `AdCampaignBanner`.`UserID`))) group by `BuySideHourlyImpressionsCounterCurrentSpend`.`BuySidePartnerID`,`BuySideHourlyImpressionsCounterCurrentSpend`.`AdCampaignBannerID` order by `auth_Users`.`user_login` ;
+CREATE VIEW `userImpressionsSpendAdmin` AS select `BuySideHourlyImpressionsCounterCurrentSpend`.`BuySidePartnerID` AS `BuySidePartnerID`,round(sum(`BuySideHourlyImpressionsCounterCurrentSpend`.`CurrentSpendGross`),7) AS `TotalSpendGross`,round(sum(`BuySideHourlyImpressionsCounterCurrentSpend`.`CurrentSpendNet`),7) AS `TotalSpendNet`,`InsertionOrder`.`Name` AS `Name`,`auth_Users`.`user_login` AS `user_login` from (((`BuySideHourlyImpressionsCounterCurrentSpend` join `InsertionOrderLineItem` on((`BuySideHourlyImpressionsCounterCurrentSpend`.`InsertionOrderLineItemID` = `InsertionOrderLineItem`.`InsertionOrderLineItemID`))) join `InsertionOrder` on((`InsertionOrderLineItem`.`InsertionOrderID` = `InsertionOrder`.`InsertionOrderID`))) join `auth_Users` on((`auth_Users`.`user_id` = `InsertionOrderLineItem`.`UserID`))) group by `BuySideHourlyImpressionsCounterCurrentSpend`.`BuySidePartnerID`,`BuySideHourlyImpressionsCounterCurrentSpend`.`InsertionOrderLineItemID` order by `auth_Users`.`user_login` ;
 
 -- ----------------------------
 -- View structure for PublisherImpressionsAndSpendHourly
@@ -1160,13 +1160,13 @@ CREATE VIEW `PublisherImpressionsAndSpendHourlyTotals` AS select PublisherAdZone
 -- View structure for DemandImpressionsAndSpendHourlyPre
 -- ----------------------------
 DROP VIEW IF EXISTS `DemandImpressionsAndSpendHourlyPre`;
-CREATE VIEW `DemandImpressionsAndSpendHourlyPre` AS select `bshiccs`.`MDYH`, `bshiccs`.`AdCampaignBannerID`, `dci`.`Name` as DemandCustomerName, `dci`.`DemandCustomerInfoID` as DemandCustomerInfoID, `acb`.`Name` as BannerName, sum(`bshiccs`.`ImpressionsCounter`) as `Impressions`, round(sum(`bshiccs`.`CurrentSpendNet`),7) as `Cost`, round(sum(`bshiccs`.`CurrentSpendGross`),7) as `GrossCost`, round(((sum(`bshiccs`.`CurrentSpendNet`) / sum(`bshiccs`.`ImpressionsCounter`)) * 1000),7) AS `CPM`, round(((sum(`bshiccs`.`CurrentSpendGross`) / sum(`bshiccs`.`ImpressionsCounter`)) * 1000),7) AS `GrossCPM`, `bshiccs`.`DateCreated` from `BuySideHourlyImpressionsCounterCurrentSpend` bshiccs inner join `AdCampaignBanner` acb on bshiccs.`AdCampaignBannerID` = acb.`AdCampaignBannerID` inner join `auth_Users` au on au.`user_id` = acb.`UserID` inner join `DemandCustomerInfo` dci on au.`DemandCustomerInfoID` = dci.`DemandCustomerInfoID` group by `bshiccs`.`AdCampaignBannerID`, `bshiccs`.`MDYH` ;
+CREATE VIEW `DemandImpressionsAndSpendHourlyPre` AS select `bshiccs`.`MDYH`, `bshiccs`.`InsertionOrderLineItemID`, `dci`.`Name` as DemandCustomerName, `dci`.`DemandCustomerInfoID` as DemandCustomerInfoID, `acb`.`Name` as BannerName, sum(`bshiccs`.`ImpressionsCounter`) as `Impressions`, round(sum(`bshiccs`.`CurrentSpendNet`),7) as `Cost`, round(sum(`bshiccs`.`CurrentSpendGross`),7) as `GrossCost`, round(((sum(`bshiccs`.`CurrentSpendNet`) / sum(`bshiccs`.`ImpressionsCounter`)) * 1000),7) AS `CPM`, round(((sum(`bshiccs`.`CurrentSpendGross`) / sum(`bshiccs`.`ImpressionsCounter`)) * 1000),7) AS `GrossCPM`, `bshiccs`.`DateCreated` from `BuySideHourlyImpressionsCounterCurrentSpend` bshiccs inner join `InsertionOrderLineItem` acb on bshiccs.`InsertionOrderLineItemID` = acb.`InsertionOrderLineItemID` inner join `auth_Users` au on au.`user_id` = acb.`UserID` inner join `DemandCustomerInfo` dci on au.`DemandCustomerInfoID` = dci.`DemandCustomerInfoID` group by `bshiccs`.`InsertionOrderLineItemID`, `bshiccs`.`MDYH` ;
 
 -- ----------------------------
 -- View structure for DemandImpressionsAndSpendHourly
 -- ----------------------------
 DROP VIEW IF EXISTS `DemandImpressionsAndSpendHourly`;
-CREATE VIEW `DemandImpressionsAndSpendHourly` AS select diashp.MDYH, diashp.AdCampaignBannerID, diashp.DemandCustomerName, diashp.DemandCustomerInfoID, diashp.BannerName, group_concat(distinct `bshibt`.`PublisherTLD` separator ', ') as PublisherTLDs, diashp.Impressions, diashp.Cost, diashp.GrossCost, diashp.CPM, diashp.GrossCPM, diashp.DateCreated from DemandImpressionsAndSpendHourlyPre diashp left outer join `BuySideHourlyImpressionsByTLD` bshibt on diashp.`AdCampaignBannerID` = `bshibt`.`AdCampaignBannerID` and diashp.`MDYH` = `bshibt`.`MDYH` group by `diashp`.`AdCampaignBannerID`, `diashp`.`MDYH` ;
+CREATE VIEW `DemandImpressionsAndSpendHourly` AS select diashp.MDYH, diashp.InsertionOrderLineItemID, diashp.DemandCustomerName, diashp.DemandCustomerInfoID, diashp.BannerName, group_concat(distinct `bshibt`.`PublisherTLD` separator ', ') as PublisherTLDs, diashp.Impressions, diashp.Cost, diashp.GrossCost, diashp.CPM, diashp.GrossCPM, diashp.DateCreated from DemandImpressionsAndSpendHourlyPre diashp left outer join `BuySideHourlyImpressionsByTLD` bshibt on diashp.`InsertionOrderLineItemID` = `bshibt`.`InsertionOrderLineItemID` and diashp.`MDYH` = `bshibt`.`MDYH` group by `diashp`.`InsertionOrderLineItemID`, `diashp`.`MDYH` ;
 
 -- ----------------------------
 -- Function structure for MD5_SPLIT_SALT
