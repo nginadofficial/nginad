@@ -12,9 +12,9 @@ endif;
 ?>
 <div class="steps-container step1">
 <ul class="breadcrumb breadcrumb-heading">
-    <li><a href="/demand/<?php echo $preview_query; ?>">Ad Campaigns</a><span class="divider">/</span></li>
+    <li><a href="/demand/<?php echo $preview_query; ?>">Insertion Orders</a><span class="divider">/</span></li>
     <li><?php echo $bread_crumb_info["BCInsertionOrder"]; ?><span class="divider">/</span></li>
-    <li class="active">Banners</li>
+    <li class="active">Line Items</li>
     </ul>
 
     <div id="selection-results" class="steps-box">
@@ -29,7 +29,7 @@ endif;
 			<?php endif; ?>
            </th>
            <th>
-            Modify Banner
+            Modify Line Item
            </th>
            <th>
             Modify Filter
@@ -75,10 +75,10 @@ endif;
 
             if ($rtb_banner->ImpressionType == 'video'):
 	            $video = "video";
-            	$edit = "Edit Video";
+            	$edit = "Edit Line Item";
             else:
 	            $video = "";
-            	$edit = "Edit Banner";
+            	$edit = "Edit Line Item";
             endif;
     ?>
 
@@ -90,7 +90,7 @@ endif;
             <a href="/demand/editlineitem/<?php echo $banner_id; ?><?php echo $preview_query; ?>"><?php echo $edit; ?></a>
             <hr />
             
-            <a href="javascript:void(0);" onclick="deleteBannerModal('/demand/deletelineitem/<?php echo $banner_id;?><?php echo $preview_query;?>','<?php echo $rtb_banner->Name;?>');">Delete Banner</a>
+            <a href="javascript:void(0);" onclick="deleteBannerModal('/demand/deletelineitem/<?php echo $banner_id;?><?php echo $preview_query;?>','<?php echo $rtb_banner->Name;?>');">Delete Line Item</a>
            </td>
            <td>
             <a href="/demand/deliveryfilter<?php echo $video; ?>/<?php echo $banner_id;?><?php echo $preview_query;?>">Edit Delivery Filter</a>

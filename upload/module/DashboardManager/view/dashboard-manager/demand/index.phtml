@@ -109,10 +109,10 @@ $effective_user_in_dashboard = false;
            -->
           <?php if (($is_admin === true && $effective_id != 0) || $is_admin === false): ?>
            <th>
-            Modify Campaign
+            Modify Insertion Order
            </th>
            <th>
-            Modify Banner
+            Modify Line Item
            </th>
            <?php endif; ?>
            </tr>
@@ -220,14 +220,14 @@ $effective_user_in_dashboard = false;
            </td>
             <?php if (($is_admin === true && $effective_id != 0) || $is_admin === false): ?>
            <td>
-            <a href="/demand/editinsertionorder/<?php echo $campaign_id; ?><?php echo $preview_query; ?>">Edit Ad Campaign</a>
+            <a href="/demand/editinsertionorder/<?php echo $campaign_id; ?><?php echo $preview_query; ?>">Edit Insertion Order</a>
             <hr />
            
-            <a href="javascript:void(0);" onclick="deleteCampaignModal('/demand/deleteinsertionorder/<?php echo $campaign_id; ?><?php echo $preview_query;?>','<?php echo $ad_campaign->Name;?>');">Delete Ad Campaign</a>
+            <a href="javascript:void(0);" onclick="deleteCampaignModal('/demand/deleteinsertionorder/<?php echo $campaign_id; ?><?php echo $preview_query;?>','<?php echo $ad_campaign->Name;?>');">Delete Insertion Order</a>
            </td>
            <td>
-            <a href="/demand/createlineitem/<?php echo $campaign_id; ?><?php echo $preview_query;?>">Create Banner</a>
-            <hr /><a href="/demand/viewlineitem/<?php echo $campaign_id; ?><?php echo $preview_query;?>">View Banners</a>
+            <a href="/demand/createlineitem/<?php echo $campaign_id; ?><?php echo $preview_query;?>">Create Line Item</a>
+            <hr /><a href="/demand/viewlineitem/<?php echo $campaign_id; ?><?php echo $preview_query;?>">View Line Items</a>
            </td>
            <?php endif; ?>
            </tr>
@@ -244,7 +244,7 @@ $effective_user_in_dashboard = false;
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h4 class="modal-title" id="myModalLabel">Delete Campaign</h4>
+        <h4 class="modal-title" id="myModalLabel">Delete Insertion Order</h4>
       </div>
       <div class="modal-body">
       <div id="campaign_alert_msg" class="alert alert-error" style="display: none;">Error</div>

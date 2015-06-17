@@ -166,7 +166,7 @@ function deleteCampaignModal( campaign_id, campaign_name ) {
 	
 	$('#modal_campaign_id').val(campaign_id);
 	$("#campaign_alert_msg").css("display","none");
-	var msg = 'Are you sure you wish to delete the campaign "' + campaign_name + '" ?';
+	var msg = 'Are you sure you wish to delete the insertion order "' + campaign_name + '" ?';
 	$("#DeleteCampaignModal #msg").html(msg);
 	$('#DeleteCampaignModal').modal('show');
 
@@ -202,7 +202,7 @@ function deleteBannerModal( banner_id, banner_name ) {
 	
 	$('#modal_banner_id').val(banner_id);
 	$("#banner_alert_msg").css("display","none");
-	var msg = 'Are you sure you wish to delete the banner "' + banner_name + '" ?';
+	var msg = 'Are you sure you wish to delete the line item "' + banner_name + '" ?';
 	$("#DeleteBannerModal #msg").html(msg);
 	$('#DeleteBannerModal').modal('show');
 
