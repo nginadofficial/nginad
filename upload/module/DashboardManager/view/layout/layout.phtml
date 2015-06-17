@@ -82,12 +82,12 @@ echo $this->doctype(); ?>
     <li class="divider-vertical"></li>
     <?php else:?>
    	<?php if (($user_data != null && $user_data->DemandCustomerInfoID != null)
-   			|| $userRole=='admin' || $userRole=='superadmin'): ?>
+   			|| $userRole=='domain_admin' || $userRole=='super_admin'): ?>
     <li class="<?php if($home_dashboard_view == "demand") echo "active";?>"><a  class="navlink"  href="/demand">Campaign</a></li>
     <li class="divider-vertical"></li>
     <?php endif;?>
     <?php if (($user_data != null && $user_data->PublisherInfoID != null)
-    		|| $userRole=='admin' || $userRole=='superadmin'): ?>
+    		|| $userRole=='domain_admin' || $userRole=='super_admin'): ?>
     <li class="<?php if($home_dashboard_view == "publisher") echo "active";?>"><a class="navlink"   href="/publisher">Websites</a></li>
     <li class="divider-vertical"></li>
     <?php endif;?>
@@ -98,7 +98,7 @@ echo $this->doctype(); ?>
 <a data-toggle="dropdown" class="dropdown-toggle navlink"><?php echo $user_name;?> <span class="caret"></span></a>
 <ul class="dropdown-menu pull-right">
                   <li><a href="/users/account">Account Settings</a></li>
-                  <?php if($userRole=='admin' || $userRole=='superadmin'): ?>
+                  <?php if($userRole=='domain_admin' || $userRole=='super_admin'): ?>
                   <li><a href="/users/publishers">Publisher List</a></li> 
                   <li><a href="/users/customers">Customer List</a></li> 
                   <li><a href="/websites">Websites List</a></li>
