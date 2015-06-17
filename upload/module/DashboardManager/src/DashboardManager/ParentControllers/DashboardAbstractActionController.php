@@ -29,7 +29,13 @@ abstract class DashboardAbstractActionController extends ZendAbstractActionContr
      * Is the logged in (actual/real) user an admin?
      * @var boolean
      */
-    protected $is_admin = false;
+    protected $is_super_admin = false;
+    
+    /**
+     * Is the logged in (actual/real) user a domain admin?
+     * @var boolean
+     */
+    protected $is_domain_admin = false;
     
     /**
      * 
@@ -129,7 +135,8 @@ abstract class DashboardAbstractActionController extends ZendAbstractActionContr
      		return $this->redirect()->toRoute('login');
     	endif;
     	
-    	$this->is_admin = false;
+    	$this->is_super_admin = false;
+    	$this->is_domain_admin = false;
     	$this->user_id_list = $this->user_id_list_publisher = $this->user_id_list_demand_customer = array();
     	$this->PublisherInfoID = $this->auth->getPublisherInfoID();
     	$this->DemandCustomerInfoID = $this->auth->getDemandCustomerInfoID();
@@ -140,9 +147,9 @@ abstract class DashboardAbstractActionController extends ZendAbstractActionContr
     	$this->debug_verbose = $this->config_handle['system']['debug_verbose'];
 
     	// If Administrator, populate and set adminitrator options.
-    	if (strpos($this->auth->getPrimaryRole(), $this->config_handle['roles']['admin']) !== false):
+    	if ($this->auth->isSuperAdmin($this->config_handle)):
 
-            $this->is_admin = true;
+            $this->is_super_admin = true;
     		// Get a list of all members.
     		$auth_Users_list = $this->auth->getRoleUsers($this->config_handle['roles']['member']);
     		 
@@ -176,6 +183,8 @@ abstract class DashboardAbstractActionController extends ZendAbstractActionContr
 				endif;
 
     		endforeach;
+    		
+    	elseif ($this->auth->isDomainAdmin($this->config_handle)):
     		
     	endif;
 
@@ -289,7 +298,7 @@ abstract class DashboardAbstractActionController extends ZendAbstractActionContr
    	protected function ImpersonateUser()
    	{
    	    $this->initialize();
-   	    if ($this->is_admin):
+   	    if ($this->is_super_admin):
    	    
    	    	// TODO: Hummm... ANY admin can login as ANY OTHER admin, even if the pull down does not allow.
    	    	$this->auth->impersonateUserID($this->getRequest()->getQuery('userid'));
@@ -297,7 +306,7 @@ abstract class DashboardAbstractActionController extends ZendAbstractActionContr
    	    endif;
    	    
    	    // If debugging and user has no permission, then die to say so.
-   	    if ($this->debug && !$this->is_admin):
+   	    if ($this->debug && !$this->is_super_admin):
    	    
    	    	die("You do not have permission to access this page");
    	    endif;

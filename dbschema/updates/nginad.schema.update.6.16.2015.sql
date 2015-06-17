@@ -2,6 +2,10 @@
 -- 0 means they signed up via the public portal and do not belong to a demand customer
 ALTER TABLE  `PublisherInfo` ADD  `ParentID` int NOT NULL DEFAULT 0 AFTER  `PublisherInfoID` ;
 
+-- Update the roles to allow for domain admins
+UPDATE rbac_role SET role_name = 'super_admin' WHERE role_id = 1;
+UPDATE rbac_role SET role_name = 'domain_admin' WHERE role_id = 2;
+
 -- rename ad campaigns to IO and rename banner to line item
 -- to satisfy all the 100 year old ad-ops out there urning for the years gone of IOs on fax machines
 

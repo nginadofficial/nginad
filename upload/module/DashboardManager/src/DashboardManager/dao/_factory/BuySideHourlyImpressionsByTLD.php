@@ -80,7 +80,7 @@ class BuySideHourlyImpressionsByTLD extends \_factory\CachedTableRead {
         return $obj_list;
     }
 
-    public function getPerTime($where_params = null, $is_admin = false) {
+    public function getPerTime($where_params = null, $is_super_admin = false) {
 
         $results = $this->select(function (\Zend\Db\Sql\Select $select) use ($where_params) {
             $select->columns(array('InsertionOrderLineItemID', 'PublisherTLD', 'MDYH', 'Impressions', 'DateCreated', 'DateUpdated'));
@@ -100,14 +100,14 @@ class BuySideHourlyImpressionsByTLD extends \_factory\CachedTableRead {
         }
         );
         
-        $headers = $this->getPerTimeHeader($is_admin);
+        $headers = $this->getPerTimeHeader($is_super_admin);
         return $this->prepareList($results, $headers);
 
     }
 
-    public function getPerTimeHeader($is_admin = false) {
+    public function getPerTimeHeader($is_super_admin = false) {
 
-        return ($is_admin) ? array(
+        return ($is_super_admin) ? array(
             'InsertionOrderLineItemID' => '',
             'PublisherTLD' => '',
             'MDYH' => '',
@@ -172,9 +172,9 @@ class BuySideHourlyImpressionsByTLD extends \_factory\CachedTableRead {
         
     }
     
-    public function getUserTLDStatisticHeader($is_admin = false) {
+    public function getUserTLDStatisticHeader($is_super_admin = false) {
 
-        return ($is_admin) ? array(
+        return ($is_super_admin) ? array(
             'PublisherTLD' => 'Publisher TLD',
             'total_impressions' => 'Total impressions',
             'Name' => 'Ad Campaign',

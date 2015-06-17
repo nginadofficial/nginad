@@ -69,7 +69,7 @@ abstract class CachedTableRead extends AbstractTableGateway
     }
     
     // default APC ttl is 15 minutes, 900 seconds
-    public function getPerTimeCached($config, $where_params = null, $time_to_live = 900, $refresh = false, $is_admin = FALSE) {
+    public function getPerTimeCached($config, $where_params = null, $time_to_live = 900, $refresh = false, $is_super_admin = FALSE) {
     
     	$cached_data = \util\CacheSql::get_cached_read_result_apc($config, $where_params, $this->table . '_M');
     	 
@@ -83,7 +83,7 @@ abstract class CachedTableRead extends AbstractTableGateway
     	
     	else:
 
-    		$data = $this->getPerTime($where_params, $is_admin);
+    		$data = $this->getPerTime($where_params, $is_super_admin);
 
                 \util\CacheSql::put_cached_read_result_apc($config, $where_params, $this->table . '_M', $data, $time_to_live);
     	
@@ -92,12 +92,12 @@ abstract class CachedTableRead extends AbstractTableGateway
     	endif;
     }
     
-    public function getPerTimeHeader($is_admin = false){
+    public function getPerTimeHeader($is_super_admin = false){
      
         $metadata = new Metadata($this->adapter);
         $header = $metadata->getColumnNames($this->table);
-//        return ($is_admin) ? $header : array_diff($header, $this->adminFields);
-        return ($is_admin) ? $header : $header;
+//        return ($is_super_admin) ? $header : array_diff($header, $this->adminFields);
+        return ($is_super_admin) ? $header : $header;
         
     }
     
@@ -134,7 +134,7 @@ abstract class CachedTableRead extends AbstractTableGateway
             		$row[$key] = $obj[$key];
                 endif;
             }
-//            $obj = array_intersect_ukey($obj, $this->getPerTimeHeader($is_admin), function ($key1, $key2) { return (int)!($key1 == $key2);});
+//            $obj = array_intersect_ukey($obj, $this->getPerTimeHeader($is_super_admin), function ($key1, $key2) { return (int)!($key1 == $key2);});
             if (!empty($row['MDYH']))
                 $row['MDYH'] = $this->re_normalize_time($row['MDYH']);
             $obj_list[] = $row;

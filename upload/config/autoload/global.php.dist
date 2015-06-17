@@ -28,8 +28,9 @@ return array(
 		),
 		*/
 		'roles' => array(
-				'member' => "member",
-				'admin' => "admin",
+				'member' 		=> "member",
+				'domain_admin' 	=> "domain_admin",
+				'super_admin' 		=> "super_admin",
 		),
 		'settings' => array(
 				'publisher' => array(

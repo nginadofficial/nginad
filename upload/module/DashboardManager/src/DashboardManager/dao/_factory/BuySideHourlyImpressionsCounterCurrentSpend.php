@@ -88,7 +88,7 @@ class BuySideHourlyImpressionsCounterCurrentSpend extends \_factory\CachedTableR
         return $obj_list;
     }
 
-    public function getPerTime($where_params = null, $is_admin = false) {
+    public function getPerTime($where_params = null, $is_super_admin = false) {
         $obj_list = array();
 
         $sql = new Sql($this->adapter);
@@ -109,15 +109,15 @@ class BuySideHourlyImpressionsCounterCurrentSpend extends \_factory\CachedTableR
         $statement = $sql->prepareStatementForSqlObject($select);
         
         $results = $statement->execute();
-        $headers = $this->getPerTimeHeader($is_admin);
+        $headers = $this->getPerTimeHeader($is_super_admin);
 
         return $this->prepareList($results, $headers);
 
     }
 
-    public function getPerTimeHeader($is_admin = false) {
+    public function getPerTimeHeader($is_super_admin = false) {
 
-        return ($is_admin) ? array(
+        return ($is_super_admin) ? array(
             'BuySidePartnerID' => '',
             'MDYH' => '',
             'ImpressionsCounter' => '',
@@ -156,7 +156,7 @@ class BuySideHourlyImpressionsCounterCurrentSpend extends \_factory\CachedTableR
 //        return $obj_list;
 //    }
 
-    public function getUserImpressionsSpend($is_admin = false) {
+    public function getUserImpressionsSpend($is_super_admin = false) {
 
         $sql = new Sql($this->adapter);
         $select = $sql->select();
@@ -166,15 +166,15 @@ class BuySideHourlyImpressionsCounterCurrentSpend extends \_factory\CachedTableR
         $results = $statement->execute();
 
         $obj_list = array();
-        $headers = $this->getUserImpressionsSpendHeaders($is_admin);
+        $headers = $this->getUserImpressionsSpendHeaders($is_super_admin);
         
         return $this->prepareList($results, $headers);
         
     }
 
-    public function getUserImpressionsSpendHeaders($is_admin = false) {
+    public function getUserImpressionsSpendHeaders($is_super_admin = false) {
 
-        return ($is_admin) ? array(
+        return ($is_super_admin) ? array(
             'BuySidePartnerID' => '',
             'TotalSpendGross' => '',
             'TotalSpendNet' => '',

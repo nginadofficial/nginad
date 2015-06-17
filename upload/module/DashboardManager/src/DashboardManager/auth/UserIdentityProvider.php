@@ -248,6 +248,14 @@ class UserIdentityProvider extends AuthenticationService implements IdentityProv
     	return $this->getIdentity()->getPrimaryRole();
     }
     
+    public function isSuperAdmin($config) {
+		return $this->getIdentity()->isSuperAdmin($config);
+	}
+        
+	public function isDomainAdmin($config) {
+		return $this->getIdentity()->isDomainAdmin($config);
+	}
+    
     /**
      * Get the user's PublisherInfoID if one exists
      *

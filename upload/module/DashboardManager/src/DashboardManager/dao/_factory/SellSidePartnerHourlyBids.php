@@ -88,7 +88,7 @@ class SellSidePartnerHourlyBids extends \_factory\CachedTableRead {
         return $obj_list;
     }
 
-    public function getPerTime($where_params = null, $is_admin = 0) {
+    public function getPerTime($where_params = null, $is_super_admin = 0) {
 
         $obj_list = array();
 
@@ -132,7 +132,7 @@ class SellSidePartnerHourlyBids extends \_factory\CachedTableRead {
         $results = $statement->execute();
 
         foreach ($results as $obj):
-            if (!$is_admin) {
+            if (!$is_super_admin) {
                 array_walk($obj, function($item, $key) use (&$obj) {
                     if (array_search($key, $this->adminFields) !== FALSE) {
                         $obj[$key] = FALSE;
@@ -162,11 +162,11 @@ class SellSidePartnerHourlyBids extends \_factory\CachedTableRead {
         return $obj_list;
     }
 
-    public function getPerTimeHeader($is_admin = false) {
+    public function getPerTimeHeader($is_super_admin = false) {
 
         $metadata = new Metadata($this->adapter);
         $header = $metadata->getColumnNames('sellSidePartnerHourlyBidsPerTime');
-        return ($is_admin) ? $header : array_values(array_diff($header, $this->adminFields));
+        return ($is_super_admin) ? $header : array_values(array_diff($header, $this->adminFields));
     }
 
     public function insertSellSidePartnerHourlyBids(\model\SellSidePartnerHourlyBids $SellSidePartnerHourlyBids) {

@@ -43,7 +43,7 @@ class PublisherController extends PublisherAbstractActionController {
 	    
 	    $PublisherWebsiteList = $PublisherWebsiteFactory->get($parameters);
 	    
-	    if ($this->is_admin):
+	    if ($this->is_super_admin):
 	    
 	        $headers = array("#","Domain","Domain Markup","Imps Loss Rate","Domain Owner","Created","Updated","Approval","Actions");
 	        $meta_data = array("WebDomain","DomainMarkupRate","DomainPublisherImpressionsLossRate","DomainOwnerID","DateCreated","DateUpdated","ApprovalFlag");
@@ -101,7 +101,7 @@ class PublisherController extends PublisherAbstractActionController {
 	         'true_user_name' => $this->auth->getUserName(),
 	         'domain_list_raw' => $PublisherWebsiteList,
 	    	 'domain_list' => $this->order_data_table($meta_data, $PublisherWebsiteList, $headers),
-	    	 'is_admin' => $this->is_admin,
+	    	 'is_super_admin' => $this->is_super_admin,
 	    	 'user_id_list' => $this->user_id_list_publisher,
 	    	 'domain_owner' => isset($PublisherInfo->Name) ? $PublisherInfo->Name : "",
 	         'impersonate_id' => $this->ImpersonateID,
@@ -115,8 +115,8 @@ class PublisherController extends PublisherAbstractActionController {
 	    	 'website_impressions_network_loss_rate_list' => isset($website_impressions_network_loss_rate_list) ? $website_impressions_network_loss_rate_list : array()
 	    ));
 
-	    if ($this->is_admin == false
-	    		|| ($this->is_admin == true && $this->PublisherInfoID != null && $this->auth->getEffectiveIdentityID() != 0)):
+	    if ($this->is_super_admin == false
+	    		|| ($this->is_super_admin == true && $this->PublisherInfoID != null && $this->auth->getEffectiveIdentityID() != 0)):
 	    
 	    	$view->header_title = '<a href="/publisher/createdomain">Create New Domain</a>';
 	    else:
@@ -149,7 +149,7 @@ class PublisherController extends PublisherAbstractActionController {
 		if ($initialized !== true) return $initialized;
 	    $PublisherWebsiteID = intval($this->params()->fromRoute('param1', 0));
 
-	    if ($this->is_admin && $PublisherWebsiteID > 0 && ($flag === 2 || $flag === 1 || $flag === 0)):
+	    if ($this->is_super_admin && $PublisherWebsiteID > 0 && ($flag === 2 || $flag === 1 || $flag === 0)):
 
 	    	$PublisherWebsiteFactory = \_factory\PublisherWebsite::get_instance();
 	    	$domain_object = new \model\PublisherWebsite();
@@ -273,7 +273,7 @@ class PublisherController extends PublisherAbstractActionController {
     	            if ($request->getPost('del', 'No') == 'Yes'):
     	            
     	                // Is this user allowed to delete this entry?
-    	                if ($this->is_admin || $deleteCheckResultObj->DomainOwnerID == $this->PublisherInfoID):
+    	                if ($this->is_super_admin || $deleteCheckResultObj->DomainOwnerID == $this->PublisherInfoID):
     	                
     	                   if (intval($PublisherWebsiteFactory->delete_domain($PublisherWebsiteID)) > -1):
 
@@ -414,7 +414,7 @@ class PublisherController extends PublisherAbstractActionController {
         	                $error_msg ="ERROR: A database error has occurred, please contact customer service.";
         	                return array('form' => $form,
         	                    'error_message' => $error_msg,
-        	                    'is_admin' => $this->is_admin,
+        	                    'is_super_admin' => $this->is_super_admin,
         	                    'user_id_list' => $this->user_id_list_publisher,
         	                    'effective_id' => $this->auth->getEffectiveIdentityID(),
         	                    'impersonate_id' => $this->ImpersonateID,
@@ -449,7 +449,7 @@ class PublisherController extends PublisherAbstractActionController {
 	    
 	    return array(
 	        'error_message' => $error_msg,
-	        'is_admin' => $this->is_admin,
+	        'is_super_admin' => $this->is_super_admin,
 	        'user_id_list' => $this->user_id_list_publisher,
 	        'effective_id' => $this->auth->getEffectiveIdentityID(),
 	        'impersonate_id' => $this->ImpersonateID,
@@ -551,7 +551,7 @@ class PublisherController extends PublisherAbstractActionController {
 
 	    return array(
 	    		'error_message' => $error_message,
-	    		'is_admin' => $this->is_admin,
+	    		'is_super_admin' => $this->is_super_admin,
 	    		'user_id_list' => $this->user_id_list_publisher,
 	            'effective_id' => $this->auth->getEffectiveIdentityID(),
 	    		'impersonate_id' => $this->ImpersonateID,
@@ -570,7 +570,7 @@ class PublisherController extends PublisherAbstractActionController {
 		$initialized = $this->initialize();
 		if ($initialized !== true) return $initialized;
 	
-		if ($this->is_admin == false):
+		if ($this->is_super_admin == false):
 			die("You do not have permission to access this page");
 		endif;
 	 
@@ -617,7 +617,7 @@ class PublisherController extends PublisherAbstractActionController {
 		$initialized = $this->initialize();
 		if ($initialized !== true) return $initialized;
 	
-		if ($this->is_admin == false):
+		if ($this->is_super_admin == false):
 			die("You do not have permission to access this page");
 		endif;
 	
@@ -668,7 +668,7 @@ class PublisherController extends PublisherAbstractActionController {
 		$initialized = $this->initialize();
 		if ($initialized !== true) return $initialized;
 		
-		if ($this->is_admin == false):
+		if ($this->is_super_admin == false):
 			die("You do not have permission to access this page");
 		endif;
 	
@@ -719,7 +719,7 @@ class PublisherController extends PublisherAbstractActionController {
 		$initialized = $this->initialize();
 		if ($initialized !== true) return $initialized;
 		
-		if ($this->is_admin == false):
+		if ($this->is_super_admin == false):
 			die("You do not have permission to access this page");
 		endif;
 		

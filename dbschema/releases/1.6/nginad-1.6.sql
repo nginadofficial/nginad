@@ -975,8 +975,8 @@ CREATE TABLE `rbac_role` (
 -- ----------------------------
 -- Records of rbac_role
 -- ----------------------------
-INSERT INTO `rbac_role` VALUES ('1', null, 'superadmin', '2013-11-30 14:48:08', '2013-11-30 14:48:08');
-INSERT INTO `rbac_role` VALUES ('2', '1', 'admin', '2013-11-30 14:48:08', '2013-11-30 14:48:08');
+INSERT INTO `rbac_role` VALUES ('1', null, 'super_admin', '2013-11-30 14:48:08', '2013-11-30 14:48:08');
+INSERT INTO `rbac_role` VALUES ('2', '1', 'domain_admin', '2013-11-30 14:48:08', '2013-11-30 14:48:08');
 INSERT INTO `rbac_role` VALUES ('3', '2', 'member', '2013-11-30 14:48:08', '2013-11-30 14:48:08');
 INSERT INTO `rbac_role` VALUES ('4', '3', 'guest', '2013-11-30 14:48:08', '2013-11-30 14:48:08');
 INSERT INTO `rbac_role` VALUES ('5', '4', 'anonymous', '2013-11-30 14:48:08', '2013-11-30 14:48:08');

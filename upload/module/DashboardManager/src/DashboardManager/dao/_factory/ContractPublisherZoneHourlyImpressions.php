@@ -144,7 +144,7 @@ class ContractPublisherZoneHourlyImpressions extends \_factory\CachedTableRead
             return $obj_list;
     }
     
-    public function getPerTimeHeader($is_admin = false) {
+    public function getPerTimeHeader($is_super_admin = false) {
 
         return array('MDYH', 'Impressions', 'SpendTotalNet', 'DateCreated', 'DateUpdated', 'AdName');
     }

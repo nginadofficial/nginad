@@ -118,7 +118,7 @@ class PublisherImpressionsAndSpendHourly extends \_factory\CachedTableRead {
         return $obj_list;
     }
 
-    public function getPerTimeCustom($where_params = null, $is_admin = 0) {
+    public function getPerTimeCustom($where_params = null, $is_super_admin = 0) {
     
     	$obj_list = array();
     
@@ -167,7 +167,7 @@ class PublisherImpressionsAndSpendHourly extends \_factory\CachedTableRead {
     	$results = $statement->execute();
     
     	foreach ($results as $obj):
-	    	if (!$is_admin):
+	    	if (!$is_super_admin):
 	    		array_walk($obj, function($item, $key) use (&$obj) {
 	    			if (array_search($key, $this->adminFields) !== FALSE):
 	    				$obj[$key] = FALSE;
@@ -193,7 +193,7 @@ class PublisherImpressionsAndSpendHourly extends \_factory\CachedTableRead {
 		    	$obj['Requests'] = \util\NetworkLossCorrection::correctAmountWithNetworkLossCorrectionRateInteger($publisher_impressions_network_loss_rate, $obj['Requests']);
 		    	$obj['Impressions'] = \util\NetworkLossCorrection::correctAmountWithNetworkLossCorrectionRateInteger($publisher_impressions_network_loss_rate, $obj['Impressions']);
 		    	$obj['Revenue'] = \util\NetworkLossCorrection::correctAmountWithNetworkLossCorrectionRateMoney($publisher_impressions_network_loss_rate, $obj['Revenue']);
-		    	if ($is_admin):
+		    	if ($is_super_admin):
 		    		$obj['GrossRevenue'] = \util\NetworkLossCorrection::correctAmountWithNetworkLossCorrectionRateMoney($publisher_impressions_network_loss_rate, $obj['GrossRevenue']);
 				endif;
 		    endif;
@@ -205,7 +205,7 @@ class PublisherImpressionsAndSpendHourly extends \_factory\CachedTableRead {
     	return $obj_list;
     }
     
-    public function getPerTime($where_params = null, $is_admin = 0) {
+    public function getPerTime($where_params = null, $is_super_admin = 0) {
 
         $obj_list = array();
 
@@ -225,7 +225,7 @@ class PublisherImpressionsAndSpendHourly extends \_factory\CachedTableRead {
         $switch_to_custom_threshold = 2 * 86400;
         
         if ($date_span > $switch_to_custom_threshold):
-        	return $this->getPerTimeCustom($where_params, $is_admin);
+        	return $this->getPerTimeCustom($where_params, $is_super_admin);
         endif;
 
         $sql = new Sql($this->adapter);
@@ -255,7 +255,7 @@ class PublisherImpressionsAndSpendHourly extends \_factory\CachedTableRead {
         $results = $statement->execute();
 
         foreach ($results as $obj):
-            if (!$is_admin):
+            if (!$is_super_admin):
                 array_walk($obj, function($item, $key) use (&$obj) {
                     if (array_search($key, $this->adminFields) !== FALSE) {
                         $obj[$key] = FALSE;
@@ -281,7 +281,7 @@ class PublisherImpressionsAndSpendHourly extends \_factory\CachedTableRead {
 	            $obj['Requests'] = \util\NetworkLossCorrection::correctAmountWithNetworkLossCorrectionRateInteger($publisher_impressions_network_loss_rate, $obj['Requests']);
 	            $obj['Impressions'] = \util\NetworkLossCorrection::correctAmountWithNetworkLossCorrectionRateInteger($publisher_impressions_network_loss_rate, $obj['Impressions']);
 	            $obj['Revenue'] = \util\NetworkLossCorrection::correctAmountWithNetworkLossCorrectionRateMoney($publisher_impressions_network_loss_rate, $obj['Revenue']);
-	            if ($is_admin):
+	            if ($is_super_admin):
 	           		$obj['GrossRevenue'] = \util\NetworkLossCorrection::correctAmountWithNetworkLossCorrectionRateMoney($publisher_impressions_network_loss_rate, $obj['GrossRevenue']);
 	            endif;
             endif;
@@ -293,11 +293,11 @@ class PublisherImpressionsAndSpendHourly extends \_factory\CachedTableRead {
         return $obj_list;
     }
 
-    public function getPerTimeHeader($is_admin = false) {
+    public function getPerTimeHeader($is_super_admin = false) {
 
         $metadata = new Metadata($this->adapter);
         $header = $metadata->getColumnNames('PublisherImpressionsAndSpendHourly');
-        return ($is_admin) ? $header : array_values(array_diff($header, $this->adminFields));
+        return ($is_super_admin) ? $header : array_values(array_diff($header, $this->adminFields));
     }
 }
 

@@ -30,7 +30,7 @@ abstract class PublisherAbstractActionController extends DashboardAbstractAction
 		if (!$initialized) return $initialized;
 
 		$route_name = $this->getEvent()->getRouteMatch()->getMatchedRouteName();
-		if (!$this->is_admin &&
+		if (!$this->is_super_admin &&
 			(strpos($route_name, 'publisher') === 0
 			&& $this->PublisherInfoID == null
 			&& $this->DemandCustomerInfoID != null)):

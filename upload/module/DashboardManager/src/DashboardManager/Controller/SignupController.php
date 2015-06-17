@@ -373,7 +373,7 @@ class SignupController extends PublisherAbstractActionController {
 	            'user_identity' => $this->identity(),
 		    	'true_user_name' => $this->auth->getUserName(),
 				'header_title' => 'Account Settings',
-				'is_admin' => $this->is_admin,
+				'is_super_admin' => $this->is_super_admin,
 				'effective_id' => $this->auth->getEffectiveIdentityID(),
 				'impersonate_id' => $this->ImpersonateID
 	    ));
@@ -444,7 +444,7 @@ class SignupController extends PublisherAbstractActionController {
 	            'user_identity' => $this->identity(),
 		    	'true_user_name' => $this->auth->getUserName(),
 				'header_title' => 'Account Settings',
-				'is_admin' => $this->is_admin,
+				'is_super_admin' => $this->is_super_admin,
 				'effective_id' => $this->auth->getEffectiveIdentityID(),
 				'impersonate_id' => $this->ImpersonateID
 	    ));
@@ -462,7 +462,7 @@ class SignupController extends PublisherAbstractActionController {
 		
 		$userData = $authUsersFactory->get_row(array("user_id" => $this->auth->getUserID()));
 		
-		if (!$this->is_admin) :
+		if (!$this->is_super_admin) :
      		return $this->redirect()->toRoute($this->dashboard_home);
 		endif;
 		
@@ -482,7 +482,7 @@ class SignupController extends PublisherAbstractActionController {
 	      	'user_identity' => $this->identity(),
 		  	'true_user_name' => $this->auth->getUserName(),
 			'header_title' => 'Publishers List',
-			'is_admin' => $this->is_admin,
+			'is_super_admin' => $this->is_super_admin,
 			'effective_id' => $this->auth->getEffectiveIdentityID(),
 			'impersonate_id' => $this->ImpersonateID
 	    ));
@@ -501,7 +501,7 @@ class SignupController extends PublisherAbstractActionController {
 		
 		$userData = $authUsersFactory->get_row(array("user_id" => $this->auth->getUserID()));
 
-		if (!$this->is_admin) :
+		if (!$this->is_super_admin) :
 			return $this->redirect()->toRoute($this->dashboard_home);
 		endif;
 		
@@ -521,7 +521,7 @@ class SignupController extends PublisherAbstractActionController {
 	      	'user_identity' => $this->identity(),
 		  	'true_user_name' => $this->auth->getUserName(),
 			'header_title' => 'Demand Customers List',
-			'is_admin' => $this->is_admin,
+			'is_super_admin' => $this->is_super_admin,
 			'effective_id' => $this->auth->getEffectiveIdentityID(),
 			'impersonate_id' => $this->ImpersonateID
 	    ));
@@ -536,7 +536,7 @@ class SignupController extends PublisherAbstractActionController {
 		$initialized = $this->initialize();
 		if ($initialized !== true) return $initialized;
 		
-		if (!$this->is_admin) :
+		if (!$this->is_super_admin) :
 			return $this->redirect()->toRoute($this->dashboard_home);
 		endif;
 		
@@ -559,7 +559,7 @@ class SignupController extends PublisherAbstractActionController {
 		$initialized = $this->initialize();
 		if ($initialized !== true) return $initialized;
 		
-		if (!$this->is_admin) :
+		if (!$this->is_super_admin) :
 			return $this->redirect()->toRoute($this->dashboard_home);
 		endif;
 		
@@ -582,7 +582,7 @@ class SignupController extends PublisherAbstractActionController {
 		$initialized = $this->initialize();
 		if ($initialized !== true) return $initialized;
 		
-		if (!$this->is_admin) :
+		if (!$this->is_super_admin) :
 			return $this->redirect()->toRoute($this->dashboard_home);
 		endif;
 		
@@ -634,7 +634,7 @@ class SignupController extends PublisherAbstractActionController {
 		$initialized = $this->initialize();
 		if ($initialized !== true) return $initialized;
 		
-		if (!$this->is_admin) :
+		if (!$this->is_super_admin) :
 			return $this->redirect()->toRoute($this->dashboard_home);
 		endif;
 		
@@ -686,7 +686,7 @@ class SignupController extends PublisherAbstractActionController {
 		$initialized = $this->initialize();
 		if ($initialized !== true) return $initialized;
 		
-		if (!$this->is_admin) :
+		if (!$this->is_super_admin) :
 			return $this->redirect()->toRoute($this->dashboard_home);
 		endif;
 		
@@ -738,7 +738,7 @@ class SignupController extends PublisherAbstractActionController {
 		$initialized = $this->initialize();
 		if ($initialized !== true) return $initialized;
 		
-		if (!$this->is_admin) :
+		if (!$this->is_super_admin) :
 			return $this->redirect()->toRoute($this->dashboard_home);
 		endif;
 		
@@ -793,7 +793,7 @@ class SignupController extends PublisherAbstractActionController {
 		$initialized = $this->initialize();
 		if ($initialized !== true) return $initialized;
 	
-	    if ($this->is_admin && $user_id > 0 && ($flag === 1 || $flag === 0)):
+	    if ($this->is_super_admin && $user_id > 0 && ($flag === 1 || $flag === 0)):
 	    
 	    	$authUsers = new \model\authUsers();
 			$authUsersFactory = \_factory\authUsers::get_instance();
@@ -862,7 +862,7 @@ class SignupController extends PublisherAbstractActionController {
 	    	$PublisherWebsite->AutoApprove = ($auto_approve_websites == true) ? 1 : 0;
 
 	    	// Disapprove the changes if not admin.
-	    	if ($this->is_admin || $auto_approve_websites == true):
+	    	if ($this->is_super_admin || $auto_approve_websites == true):
 	    		$PublisherWebsite->ApprovalFlag = 1;
 	    	else:
 	    		$PublisherWebsite->ApprovalFlag = 0;
@@ -927,7 +927,7 @@ class SignupController extends PublisherAbstractActionController {
 	      	'user_identity' => $this->identity(),
 		  	'true_user_name' => $this->auth->getUserName(),
 			'header_title' => 'Account Settings',
-			'is_admin' => $this->is_admin,
+			'is_super_admin' => $this->is_super_admin,
 			'effective_id' => $this->auth->getEffectiveIdentityID(),
 			'impersonate_id' => $this->ImpersonateID
 	    ));

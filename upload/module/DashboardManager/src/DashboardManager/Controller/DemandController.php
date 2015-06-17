@@ -35,7 +35,7 @@ class DemandController extends DemandAbstractActionController {
 		$user_markup_rate = $this->config_handle['system']['default_demand_markup_rate'];
 		$campaign_markup_rate_list = array();
 
-		if ($this->is_admin):
+		if ($this->is_super_admin):
 
 		    // admin is logged in as a user, get the markup if any for that user
 		    if ($this->ImpersonateID != 0 && !empty($this->DemandCustomerInfoID)):
@@ -79,9 +79,9 @@ class DemandController extends DemandAbstractActionController {
 	    $params = array();
 	    $params["Active"] = 1;
 	    // $params["Deleted"] = 0;
-	    if ($this->is_admin == true && $this->auth->getEffectiveIdentityID() != 0):
+	    if ($this->is_super_admin == true && $this->auth->getEffectiveIdentityID() != 0):
 	   		$params["UserID"] = $this->auth->getEffectiveUserID();
-	    elseif ($this->is_admin == false):
+	    elseif ($this->is_super_admin == false):
 	    	$params["UserID"] = $this->auth->getUserID();
 	    endif;
 	    
@@ -108,7 +108,7 @@ class DemandController extends DemandAbstractActionController {
 
 	    $view = new ViewModel(array(
 	    		'ad_campaigns' => $ad_campaign_list,
-	    		'is_admin' => strpos($this->auth->getPrimaryRole(), $this->config_handle['roles']['admin']) !== false,
+	    		'is_super_admin' => $this->auth->isSuperAdmin($this->config_handle),
 	    		'user_id_list' => $this->user_id_list_demand_customer,
 	    		'effective_id' => $this->auth->getEffectiveIdentityID(),
 	    		'campaign_markup_rate_list'=>$campaign_markup_rate_list,
@@ -116,14 +116,14 @@ class DemandController extends DemandAbstractActionController {
 	    		'dashboard_view' => 'demand',
 	    		'user_identity' => $this->identity(),
 	    		'true_user_name' => $this->auth->getUserName(),
-				'is_admin' => $this->is_admin,
+				'is_super_admin' => $this->is_super_admin,
 				'effective_id' => $this->auth->getEffectiveIdentityID(),
 				'impersonate_id' => $this->ImpersonateID
 
 	    ));
 	    
-	    if ($this->is_admin == false 
-	    	|| ($this->is_admin == true && $this->DemandCustomerInfoID != null && $this->auth->getEffectiveIdentityID() != 0)):
+	    if ($this->is_super_admin == false 
+	    	|| ($this->is_super_admin == true && $this->DemandCustomerInfoID != null && $this->auth->getEffectiveIdentityID() != 0)):
 	    	
 	    	$view->header_title = '<a href="/demand/createinsertionorder/">Create Insertion Order</a>';
 	    else:
@@ -152,7 +152,7 @@ class DemandController extends DemandAbstractActionController {
 		$initialized = $this->initialize();
 		if ($initialized !== true) return $initialized;
 
-		if (strpos($this->auth->getPrimaryRole(), $this->config_handle['roles']['admin']) === false):
+		if ($this->auth->isSuperAdmin($this->config_handle)):
 			die("You do not have permission to access this page");
 		endif;
 
@@ -203,7 +203,7 @@ class DemandController extends DemandAbstractActionController {
 		$initialized = $this->initialize();
 		if ($initialized !== true) return $initialized;
 
-		if (strpos($this->auth->getPrimaryRole(), $this->config_handle['roles']['admin']) === false):
+		if ($this->auth->isSuperAdmin($this->config_handle)):
 			die("You do not have permission to access this page");
 		endif;
 
@@ -254,7 +254,7 @@ class DemandController extends DemandAbstractActionController {
 		$initialized = $this->initialize();
 		if ($initialized !== true) return $initialized;
 
-		if (strpos($this->auth->getPrimaryRole(), $this->config_handle['roles']['admin']) === false):
+		if ($this->auth->isSuperAdmin($this->config_handle)):
 			die("You do not have permission to access this page");
 		endif;
 
@@ -340,7 +340,7 @@ class DemandController extends DemandAbstractActionController {
 		$initialized = $this->initialize();
 		if ($initialized !== true) return $initialized;
 
-		if (strpos($this->auth->getPrimaryRole(), $this->config_handle['roles']['admin']) === false):
+		if ($this->auth->isSuperAdmin($this->config_handle)):
 			die("You do not have permission to access this page");
 		endif;
 
@@ -1016,7 +1016,7 @@ class DemandController extends DemandAbstractActionController {
 				'user_identity' => $this->identity(),
 				'true_user_name' => $this->auth->getUserName(),
 				'header_title' => 'Edit Delivery Filter',
-				'is_admin' => $this->is_admin,
+				'is_super_admin' => $this->is_super_admin,
 				'effective_id' => $this->auth->getEffectiveIdentityID(),
 				'impersonate_id' => $this->ImpersonateID,
 				
@@ -1237,7 +1237,7 @@ class DemandController extends DemandAbstractActionController {
     			'user_identity' => $this->identity(),
     			'true_user_name' => $this->auth->getUserName(),
 				'header_title' => 'Edit Delivery Filter',
-				'is_admin' => $this->is_admin,
+				'is_super_admin' => $this->is_super_admin,
 				'effective_id' => $this->auth->getEffectiveIdentityID(),
 				'impersonate_id' => $this->ImpersonateID
 		));
@@ -1332,7 +1332,7 @@ class DemandController extends DemandAbstractActionController {
 				'user_identity' => $this->identity(),
 				'true_user_name' => $this->auth->getUserName(),
 				'header_title' => '<a href="/demand/createexclusiveinclusion/' . $rtb_banner_id . $this->preview_query . '">Create Domain Exclusive Inclusion</a>',
-				'is_admin' => $this->is_admin,
+				'is_super_admin' => $this->is_super_admin,
 				'effective_id' => $this->auth->getEffectiveIdentityID(),
 				'impersonate_id' => $this->ImpersonateID
 		));
@@ -1539,7 +1539,7 @@ class DemandController extends DemandAbstractActionController {
     			'user_identity' => $this->identity(),
 				'true_user_name' => $this->auth->getUserName(),
 				'header_title' => 'Create Domain Exclusive Inclusion',
-				'is_admin' => $this->is_admin,
+				'is_super_admin' => $this->is_super_admin,
 				'effective_id' => $this->auth->getEffectiveIdentityID(),
 				'impersonate_id' => $this->ImpersonateID
 		));
@@ -1693,7 +1693,7 @@ class DemandController extends DemandAbstractActionController {
     			'user_identity' => $this->identity(),
 				'true_user_name' => $this->auth->getUserName(),
 				'header_title' => '<a href="/demand/createdomainexclusion/' . $rtb_banner_id . $this->preview_query . '">Create Domain Exclusion</a>',
-				'is_admin' => $this->is_admin,
+				'is_super_admin' => $this->is_super_admin,
 				'effective_id' => $this->auth->getEffectiveIdentityID(),
 				'impersonate_id' => $this->ImpersonateID
 		));
@@ -1902,7 +1902,7 @@ class DemandController extends DemandAbstractActionController {
     			'user_identity' => $this->identity(),
 				'true_user_name' => $this->auth->getUserName(),
 				'header_title' => 'Create Domain Exclusion',
-				'is_admin' => $this->is_admin,
+				'is_super_admin' => $this->is_super_admin,
 				'effective_id' => $this->auth->getEffectiveIdentityID(),
 				'impersonate_id' => $this->ImpersonateID
 		));
@@ -2145,7 +2145,7 @@ class DemandController extends DemandAbstractActionController {
 	    		'user_identity' => $this->identity(),
 				'true_user_name' => $this->auth->getUserName(),
 				'header_title' => '<a href="/demand/createlineitem/' . $ad_campaign_id . $this->preview_query . '">Create New Line Item</a>',
-				'is_admin' => $this->is_admin,
+				'is_super_admin' => $this->is_super_admin,
 				'effective_id' => $this->auth->getEffectiveIdentityID(),
 				'impersonate_id' => $this->ImpersonateID
 		));
@@ -2205,7 +2205,7 @@ class DemandController extends DemandAbstractActionController {
 	    		'user_identity' 			=> $this->identity(),
 	    		'true_user_name' => $this->auth->getUserName(),
 				'header_title' => 'Create Line Item',
-				'is_admin' => $this->is_admin,
+				'is_super_admin' => $this->is_super_admin,
 				'effective_id' => $this->auth->getEffectiveIdentityID(),
 				'impersonate_id' => $this->ImpersonateID,
         		
@@ -2327,7 +2327,7 @@ class DemandController extends DemandAbstractActionController {
 		$bannername = $this->getRequest()->getPost('bannername');
 		$startdate = $this->getRequest()->getPost('startdate');
 		$enddate = $this->getRequest()->getPost('enddate');
-		if ($this->is_admin):
+		if ($this->is_super_admin):
 			$adcampaigntype 		= $this->getRequest()->getPost('adcampaigntype');
 			$linkedzones 			= $this->getRequest()->getPost('linkedzones');
 		endif;
@@ -2395,7 +2395,7 @@ class DemandController extends DemandAbstractActionController {
 		$BannerPreview->InsertionOrderPreviewID       = $campaign_preview_id;
 		$BannerPreview->StartDate                 = date("Y-m-d H:i:s", strtotime($startdate));
 		$BannerPreview->EndDate                   = date("Y-m-d H:i:s", strtotime($enddate));
-		if ($this->is_admin || $banner_preview_id == null):
+		if ($this->is_super_admin || $banner_preview_id == null):
 			$BannerPreview->InsertionOrderTypeID      = $adcampaigntype;
 		endif;
 		
@@ -2465,7 +2465,7 @@ class DemandController extends DemandAbstractActionController {
 			
 		endif;
 		
-		if ($this->is_admin):
+		if ($this->is_super_admin):
 		
 			$LinkedBannerToAdZonePreviewFactory = \_factory\LinkedBannerToAdZonePreview::get_instance();
 			$LinkedBannerToAdZonePreviewFactory->deleteLinkedBannerToAdZonePreview($BannerPreview->InsertionOrderLineItemPreviewID);
@@ -2679,7 +2679,7 @@ class DemandController extends DemandAbstractActionController {
 	    		'user_identity' => $this->identity(),
 				'true_user_name' => $this->auth->getUserName(),
 				'header_title' => 'Edit Insertion Order',
-				'is_admin' => $this->is_admin,
+				'is_super_admin' => $this->is_super_admin,
 				'effective_id' => $this->auth->getEffectiveIdentityID(),
 				'impersonate_id' => $this->ImpersonateID,
 				'ImpressionType' => $ImpressionType,
@@ -2727,7 +2727,7 @@ class DemandController extends DemandAbstractActionController {
 		$initialized = $this->initialize();
 		if ($initialized !== true) return $initialized;
 		
-		if (!$this->is_admin):
+		if (!$this->is_super_admin):
 			$data = array(
 					'success' => false,
 					'linked_ad_zones' => "", 
@@ -3027,7 +3027,7 @@ class DemandController extends DemandAbstractActionController {
 	    		'user_identity' => $this->identity(),
 	    		'true_user_name' => $this->auth->getUserName(),
 				'header_title' => 'Edit Insertion Order',
-				'is_admin' => $this->is_admin,
+				'is_super_admin' => $this->is_super_admin,
 				'effective_id' => $this->auth->getEffectiveIdentityID(),
 				'impersonate_id' => $this->ImpersonateID
 		));
@@ -3047,7 +3047,7 @@ class DemandController extends DemandAbstractActionController {
 				'user_identity' => $this->identity(),
 	    		'true_user_name' => $this->auth->getUserName(),
 				'header_title' => 'Create New Insertion Order',
-				'is_admin' => $this->is_admin,
+				'is_super_admin' => $this->is_super_admin,
 				'effective_id' => $this->auth->getEffectiveIdentityID(),
 				'impersonate_id' => $this->ImpersonateID
 		));
@@ -3140,7 +3140,7 @@ class DemandController extends DemandAbstractActionController {
 	    $InsertionOrderPreviewFactory = \_factory\InsertionOrderPreview::get_instance();
 	    $new_campaign_preview_id = $InsertionOrderPreviewFactory->saveInsertionOrderPreview($InsertionOrderPreview);
 
-	    if (!$this->is_admin && $new_campaign_preview_id !== null && $this->config_handle['mail']['subscribe']['campaigns'] === true):
+	    if (!$this->is_super_admin && $new_campaign_preview_id !== null && $this->config_handle['mail']['subscribe']['campaigns'] === true):
 	    
 		    // if this ad campaign was not created/edited by the admin, then send out a notification email
 		    $message = '<b>NginAd Demand Customer Campaign Added by ' . $this->true_user_name . '.</b><br /><br />';

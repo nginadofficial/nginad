@@ -1,6 +1,6 @@
 <?php echo $menu_tpl; ?>
 <div id="report_list">
-<?php if ($is_admin): ?>
+<?php if ($is_super_admin): ?>
 <div id="impressions_by_user_tld_area">
     <h3>Total impressions by user and TLD     
     <input style="margin-left: 20px;" id="download_excel_btn" class="btn report_btn" data-refresh="0" data-excel="1" data-action="getUserTLDStatistic" data-tab="1" value="Download Excel" type="button" />

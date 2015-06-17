@@ -24,7 +24,7 @@ abstract class DemandAbstractActionController extends DashboardAbstractActionCon
 		if (!$initialized) return $initialized;
 		
 		$route_name = $this->getEvent()->getRouteMatch()->getMatchedRouteName();
-		if (!$this->is_admin &&
+		if (!$this->is_super_admin &&
 			(strpos($route_name, 'demand') === 0
 			&& $this->DemandCustomerInfoID == null
 			&& $this->PublisherInfoID != null)):

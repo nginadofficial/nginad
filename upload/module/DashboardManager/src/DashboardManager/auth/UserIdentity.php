@@ -90,11 +90,15 @@ implements IdentityInterface
          */
         protected $DemandCustomerInfoID;
         
-        /**
-         * 
-         * @var string|array
-         */
-        protected $AdminRolesConfig;
+        /*
+        * @var boolean
+        */
+        protected $AdminRoleSuperAdmin = false;
+        
+        /*
+         * @var boolean
+        */
+        protected $AdminRoleDomainAdmin = false;
         
         /**
          * 
@@ -147,7 +151,7 @@ implements IdentityInterface
         {
             if ($config !== null):
             
-                $this->AdminRolesConfig = $config['roles']['admin'];
+                $this->AdminRoleSuperAdmin = $this->isSuperAdmin($config);
                 $this->debug = $config['system']['debug'];
                 $this->debug_verbose = $config['system']['debug_verbose'];
             endif;
@@ -175,7 +179,7 @@ implements IdentityInterface
                 $this->PublisherInfoID = intval($userDetails->PublisherInfoID);
                 $this->DemandCustomerInfoID = intval($userDetails->DemandCustomerInfoID);
                 
-                if (strpos($this->getPrimaryRole(), $this->AdminRolesConfig) !== false):
+                if ($this->getPrimaryRole() === $this->AdminRolesConfig):
                 
                     $this->TrueIdentityAdmin = true;
                 
@@ -305,7 +309,7 @@ implements IdentityInterface
                         $this->ImpersonateIdentityID . "</div>\n";
             endif;
             
-            if (strpos($this->getPrimaryRole(), $this->AdminRolesConfig) !== false &&
+            if ($this->AdminRoleSuperAdmin &&
                     $this->ImpersonateIdentityID != null &&
                     $this->ImpersonateIdentityID != 0):
                     
@@ -335,6 +339,16 @@ implements IdentityInterface
         public function getPrimaryRole() {
                 $roles = $this->getRoles();
                 return $roles[0];
+        }
+        
+        public function isSuperAdmin($config) {
+        	$roles = $this->getRoles();
+        	return $roles[0] == $config['roles']['super_admin'];
+        }
+        
+        public function isDomainAdmin($config) {
+        	$roles = $this->getRoles();
+        	return $roles[0] == $config['roles']['domain_admin'];
         }
 	
 	/**

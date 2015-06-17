@@ -130,7 +130,7 @@ echo $this->doctype(); ?>
                 echo "<img src='/images/man-icon.png' /> " . $child->true_user_name;
             else:
                 echo "<img src='/images/man-icon.png' /> " . $child->user_id_list[intval($child->effective_id)];
-            	if ($child->is_admin === true):
+            	if ($child->is_super_admin === true):
             		echo " (" . $child->effective_id . ")";
             	endif;
             endif;

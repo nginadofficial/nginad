@@ -138,7 +138,7 @@ class ZoneController extends PublisherAbstractActionController {
                 $ZoneList = array();
             }
         endif;
-        if ($this->is_admin):
+        if ($this->is_super_admin):
         
             $headers = array("#","Ad Zone Name","Status","Space Size","Floor Price","Total Requests","Impressions Filled","Total Revenue","Created","Updated","Action");
             $meta_data = array("AdName","AdStatus","AutoApprove","AdTemplateID","FloorPrice","TotalRequests","TotalImpressionsFilled","TotalAmount","DateCreated","DateUpdated");
@@ -155,7 +155,7 @@ class ZoneController extends PublisherAbstractActionController {
         	'true_user_name' => $this->true_user_name,
             'zone_list_raw' => $ZoneList,
             'zone_list' => $this->order_data_table($meta_data,$ZoneList,$headers),
-            'is_admin' => $this->is_admin,
+            'is_super_admin' => $this->is_super_admin,
             'user_id_list' => $this->user_id_list_publisher,
             'impersonate_id' => $this->ImpersonateID,
             'effective_id' => $this->EffectiveID,
@@ -298,14 +298,14 @@ class ZoneController extends PublisherAbstractActionController {
 				$ad->AutoApprove = ($auto_approve_zones == true) ? 1 : 0;
 				
 				// Disapprove the changes if not admin.
-				if ($this->is_admin || $auto_approve_zones == true):
+				if ($this->is_super_admin || $auto_approve_zones == true):
 					$ad->AdStatus = 1;
 				else:
 					$ad->AdStatus = 0;
 				endif;
 				
 				// only the admin can create direct contracts between publishers and demand customers
-				if ($this->is_admin):
+				if ($this->is_super_admin):
 					$publisher_ad_zone_type_id = $request->getPost("PublisherAdZoneTypeID");
 					$linkedbanners = $this->getRequest()->getPost('linkedbanners');
 				endif;
@@ -353,7 +353,7 @@ class ZoneController extends PublisherAbstractActionController {
 	                    endif;
 
 	                    // only the admin can create direct contracts between publishers and demand customers
-	                    if ($this->is_admin):
+	                    if ($this->is_super_admin):
 	                    
 	                    	$InsertionOrderLineItemFactory = \_factory\InsertionOrderLineItem::get_instance();
 		                    $LinkedBannerToAdZoneFactory = \_factory\LinkedBannerToAdZone::get_instance();
@@ -459,7 +459,7 @@ class ZoneController extends PublisherAbstractActionController {
         
         return array(
         		'error_message' => $error_message,
-        		'is_admin' => $this->is_admin,
+        		'is_super_admin' => $this->is_super_admin,
         		'user_id_list' => $this->user_id_list_publisher,
         		'effective_id' => $this->EffectiveID,
         		'impersonate_id' => $this->ImpersonateID,
@@ -621,7 +621,7 @@ class ZoneController extends PublisherAbstractActionController {
             			if ($validate):
             				
             				// only the admin can change the ad zone type
-            				if ($this->is_admin):
+            				if ($this->is_super_admin):
 	            				$publisher_ad_zone_type_id 				= $request->getPost("PublisherAdZoneTypeID");
 	            				$linkedbanners 							= $request->getPost('linkedbanners');
 	            				$editResultObj->PublisherAdZoneTypeID	= $publisher_ad_zone_type_id;
@@ -641,7 +641,7 @@ class ZoneController extends PublisherAbstractActionController {
 							$editResultObj->AutoApprove = ($auto_approve_zones == true) ? 1 : 0;
 							
                     	    // Disapprove the changes if not admin.
-                            if ($this->is_admin || $auto_approve_zones == true):
+                            if ($this->is_super_admin || $auto_approve_zones == true):
                                 $editResultObj->AdStatus = 1;
                             else:
                             	$editResultObj->AdStatus = 0;
@@ -727,7 +727,7 @@ class ZoneController extends PublisherAbstractActionController {
 	                				
                 				endif;
                 				
-                				if ($this->is_admin):
+                				if ($this->is_super_admin):
 	                				$LinkedBannerToAdZoneFactory = \_factory\LinkedBannerToAdZone::get_instance();
 	                				$LinkedBannerToAdZoneFactory->deleteLinkedBannerToAdZoneByPublisherAdZoneID($editResultObj->PublisherAdZoneID);
 	
@@ -832,7 +832,7 @@ class ZoneController extends PublisherAbstractActionController {
         
         return array(
         		'error_message' => $error_message,
-        		'is_admin' => $this->is_admin,
+        		'is_super_admin' => $this->is_super_admin,
         		'user_id_list' => $this->user_id_list_publisher,
         		'effective_id' => $this->EffectiveID,
         		'impersonate_id' => $this->ImpersonateID,
@@ -908,7 +908,7 @@ class ZoneController extends PublisherAbstractActionController {
             		    if ($request->getPost('del', 'No') == 'Yes'):
             		    
             		    	// Is this user allowed to delete this entry?
-            		    	if ($this->is_admin || $DomainObj->DomainOwnerID == $this->PublisherInfoID):
+            		    	if ($this->is_super_admin || $DomainObj->DomainOwnerID == $this->PublisherInfoID):
             		    	
             		    		if (intval($PublisherAdZoneFactory->delete_zone(intval($deleteCheckResultObj->PublisherAdZoneID))) > -1):
 
@@ -973,7 +973,7 @@ class ZoneController extends PublisherAbstractActionController {
         $DomainID = intval($this->params()->fromRoute('param1', 0));
         $PublisherAdZoneID = intval($this->params()->fromRoute('id',0));
         
-        if ($this->is_admin && $DomainID > 0 && $PublisherAdZoneID > 0 && ($flag === 0 || $flag === 1 || $flag === 2)):
+        if ($this->is_super_admin && $DomainID > 0 && $PublisherAdZoneID > 0 && ($flag === 0 || $flag === 1 || $flag === 2)):
         
             $DomainObj = $this->get_domain_data($DomainID, $this->PublisherInfoID);
             
@@ -1208,7 +1208,7 @@ class ZoneController extends PublisherAbstractActionController {
 		$initialized = $this->initialize();
 		if ($initialized !== true) return $initialized;
 		
-		if (!$this->is_admin):
+		if (!$this->is_super_admin):
 			$data = array(
 					'success' => false,
 					'linked_ad_zones' => "", 

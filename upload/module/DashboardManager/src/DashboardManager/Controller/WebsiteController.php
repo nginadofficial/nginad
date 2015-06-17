@@ -33,7 +33,7 @@ class WebsiteController extends PublisherAbstractActionController {
     	
     	if (!$this->auth->hasIdentity()):
     		return $this->redirect()->toRoute('login');
-		elseif (!$this->is_admin):
+		elseif (!$this->is_super_admin):
 			return $this->redirect()->toRoute('publisher');
 		endif;
 	    
@@ -52,7 +52,7 @@ class WebsiteController extends PublisherAbstractActionController {
 	      	'user_identity' => $this->identity(),
 		  	'true_user_name' => $this->auth->getUserName(),
 			'header_title' => 'New Websites for Approval',
-			'is_admin' => $this->is_admin,
+			'is_super_admin' => $this->is_super_admin,
 			'effective_id' => $this->auth->getEffectiveIdentityID(),
 			'impersonate_id' => $this->ImpersonateID
 	    ));
@@ -69,7 +69,7 @@ class WebsiteController extends PublisherAbstractActionController {
     	
     	if (!$this->auth->hasIdentity()):
     		return $this->redirect()->toRoute('login');
-		elseif (!$this->is_admin):
+		elseif (!$this->is_super_admin):
 			return $this->redirect()->toRoute('publisher');
 		endif;
     	
@@ -176,7 +176,7 @@ class WebsiteController extends PublisherAbstractActionController {
     	
     	if (!$this->auth->hasIdentity()):
     		return $this->redirect()->toRoute('login');
-		elseif (!$this->is_admin):
+		elseif (!$this->is_super_admin):
 			return $this->redirect()->toRoute('publisher');
 		endif;
     	
@@ -199,7 +199,7 @@ class WebsiteController extends PublisherAbstractActionController {
 	      	'user_identity' => $this->identity(),
 		  	'true_user_name' => $this->auth->getUserName(),
 			'header_title' => 'Websites',
-			'is_admin' => $this->is_admin,
+			'is_super_admin' => $this->is_super_admin,
 			'effective_id' => $this->auth->getEffectiveIdentityID(),
 			'impersonate_id' => $this->ImpersonateID
 	    ));

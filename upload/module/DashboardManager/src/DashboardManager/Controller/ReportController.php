@@ -29,7 +29,7 @@ class ReportController extends PublisherAbstractActionController {
 		
 		$extra_params = array();
 		
-        if ($this->is_admin):
+        if ($this->is_super_admin):
             $this->adminFunctionsSufix = 'Admin';
             $user_role = 1;
             // admin is logged in as a user, get the stats for just that user
@@ -67,14 +67,14 @@ class ReportController extends PublisherAbstractActionController {
             'menu_tpl' => $menu_tpl,
             
             'impressions' => $stats['data'],
-            'impressions_header' => $impression->getPerTimeHeader($this->is_admin),
+            'impressions_header' => $impression->getPerTimeHeader($this->is_super_admin),
         	'totals' => $stats['totals'],
         		
             'user_id_list' => $this->user_id_list,
             'user_identity' => $this->identity(),
             'true_user_name' => $this->auth->getUserName(),
             'header_title' => 'Reports',
-            'is_admin' => $this->is_admin,
+            'is_super_admin' => $this->is_super_admin,
             'effective_id' => $this->auth->getEffectiveIdentityID(),
             'impersonate_id' => $this->ImpersonateID
         );
@@ -90,7 +90,7 @@ class ReportController extends PublisherAbstractActionController {
     
     	$extra_params = $extra_params_user = array();
     	
-    	if ($this->is_admin):
+    	if ($this->is_super_admin):
     		$this->adminFunctionsSufix = 'Admin';
     		$user_role = 1;
     		// admin is logged in as a user, get the stats for just that user
@@ -127,13 +127,13 @@ class ReportController extends PublisherAbstractActionController {
     			'action' => 'demandindex',
     			'menu_tpl' => $menu_tpl,
     			'impressions' => $stats['data'],
-    			'impressions_header' => $impression->getPerTimeHeader($this->is_admin),
+    			'impressions_header' => $impression->getPerTimeHeader($this->is_super_admin),
     			'totals' => $stats['totals'],
     			'user_id_list' => $this->user_id_list,
     			'user_identity' => $this->identity(),
     			'true_user_name' => $this->auth->getUserName(),
     			'header_title' => 'Reports',
-    			'is_admin' => $this->is_admin,
+    			'is_super_admin' => $this->is_super_admin,
     			'effective_id' => $this->auth->getEffectiveIdentityID(),
     			'impersonate_id' => $this->ImpersonateID
     	);
@@ -149,7 +149,7 @@ class ReportController extends PublisherAbstractActionController {
     
     	$extra_params = $extra_params_user = array();
     	 
-    	if (!$this->is_admin):
+    	if (!$this->is_super_admin):
     		return $this->redirect()->toUrl('report/');
     	else:	
 	    	$this->adminFunctionsSufix = 'Admin';
@@ -189,7 +189,7 @@ class ReportController extends PublisherAbstractActionController {
     			'user_identity' => $this->identity(),
     			'true_user_name' => $this->auth->getUserName(),
     			'header_title' => 'Reports',
-    			'is_admin' => $this->is_admin,
+    			'is_super_admin' => $this->is_super_admin,
     			'effective_id' => $this->auth->getEffectiveIdentityID(),
     			'impersonate_id' => $this->ImpersonateID
     	);
@@ -203,7 +203,7 @@ class ReportController extends PublisherAbstractActionController {
 		$initialized = $this->initialize();
 		if ($initialized !== true) return $initialized;
 
-        if ($this->is_admin):
+        if ($this->is_super_admin):
             $this->EffectiveID;
             $this->adminFunctionsSufix = 'Admin';
             $user_role = 1;
@@ -236,12 +236,12 @@ class ReportController extends PublisherAbstractActionController {
             'menu_tpl' => $menu_tpl,
             'incoming_bids' => $stats['data'],
         	'totals' => $stats['totals'],
-            'incoming_bids_header' => $incoming_bid->getPerTimeHeader($this->is_admin),
+            'incoming_bids_header' => $incoming_bid->getPerTimeHeader($this->is_super_admin),
             'user_id_list' => $this->user_id_list,
             'user_identity' => $this->identity(),
             'true_user_name' => $this->auth->getUserName(),
             'header_title' => 'Reports',
-            'is_admin' => $this->is_admin,
+            'is_super_admin' => $this->is_super_admin,
             'effective_id' => $this->auth->getEffectiveIdentityID(),
             'impersonate_id' => $this->ImpersonateID
         ));
@@ -254,7 +254,7 @@ class ReportController extends PublisherAbstractActionController {
 		$initialized = $this->initialize();
 		if ($initialized !== true) return $initialized;
 
-        if ($this->is_admin):
+        if ($this->is_super_admin):
             $this->EffectiveID;
             $this->adminFunctionsSufix = 'Admin';
             $user_role = 1;
@@ -289,12 +289,12 @@ class ReportController extends PublisherAbstractActionController {
             'menu_tpl' => $menu_tpl,
             'outgoing_bids' => $stats['data'],
         	'totals' => $stats['totals'],
-            'outgoing_bids_header' => $outgoing_bid->getPerTimeHeader($this->is_admin),
+            'outgoing_bids_header' => $outgoing_bid->getPerTimeHeader($this->is_super_admin),
             'user_id_list' => $this->user_id_list,
             'user_identity' => $this->identity(),
             'true_user_name' => $this->auth->getUserName(),
             'header_title' => 'Reports',
-            'is_admin' => $this->is_admin,
+            'is_super_admin' => $this->is_super_admin,
             'effective_id' => $this->auth->getEffectiveIdentityID(),
             'impersonate_id' => $this->ImpersonateID
         ));
@@ -305,7 +305,7 @@ class ReportController extends PublisherAbstractActionController {
         
 		$initialized = $this->initialize();
 		if ($initialized !== true) return $initialized;
-        if ($this->is_admin):
+        if ($this->is_super_admin):
             $this->EffectiveID;
             $this->adminFunctionsSufix = 'Admin';
             $user_role = 1;
@@ -337,14 +337,14 @@ class ReportController extends PublisherAbstractActionController {
             'dashboard_view' => 'report',
             'menu_tpl' => $menu_tpl,
             'action' => 'contractImpressions',
-        	'impressions_header' => $impression->getPerTimeHeader($this->is_admin),
+        	'impressions_header' => $impression->getPerTimeHeader($this->is_super_admin),
             'impressions' => $stats['data'],
         	'totals' 	=> $stats['totals'],
             'user_id_list' => $this->user_id_list,
             'user_identity' => $this->identity(),
             'true_user_name' => $this->auth->getUserName(),
             'header_title' => 'Reports',
-            'is_admin' => $this->is_admin,
+            'is_super_admin' => $this->is_super_admin,
             'effective_id' => $this->auth->getEffectiveIdentityID(),
             'impersonate_id' => $this->ImpersonateID
         ));
@@ -356,7 +356,7 @@ class ReportController extends PublisherAbstractActionController {
 		$initialized = $this->initialize();
 		if ($initialized !== true) return $initialized;
 
-        if ($this->is_admin):
+        if ($this->is_super_admin):
             $this->EffectiveID;
             $this->adminFunctionsSufix = 'Admin';
             $user_role = 1;
@@ -387,10 +387,10 @@ class ReportController extends PublisherAbstractActionController {
             'action' => 'spend',
             'menu_tpl' => $menu_tpl,
             'impressions_spend' => (array) json_decode($this->getImpressionsCurrentSpendPerTimeAction()),
-            'impressions_spend_header' => $impression_spend->getPerTimeHeader($this->is_admin),
-            'user_spend_statistic' => $impression_spend->getUserImpressionsSpend($this->is_admin),
-            'user_spend_statistic_header' => $impression_spend->getUserImpressionsSpendHeaders($this->is_admin),
-            'is_admin' => $this->is_admin,
+            'impressions_spend_header' => $impression_spend->getPerTimeHeader($this->is_super_admin),
+            'user_spend_statistic' => $impression_spend->getUserImpressionsSpend($this->is_super_admin),
+            'user_spend_statistic_header' => $impression_spend->getUserImpressionsSpendHeaders($this->is_super_admin),
+            'is_super_admin' => $this->is_super_admin,
             'user_id_list' => $this->user_id_list,
             'user_identity' => $this->identity(),
             'true_user_name' => $this->auth->getUserName(),
@@ -413,7 +413,7 @@ class ReportController extends PublisherAbstractActionController {
 		$initialized = $this->initialize();
 		if ($initialized !== true) return $initialized;
 
-        if ($this->is_admin):
+        if ($this->is_super_admin):
             $this->EffectiveID;
             $this->adminFunctionsSufix = 'Admin';
             $user_role = 1;
@@ -444,7 +444,7 @@ class ReportController extends PublisherAbstractActionController {
             'user_identity' => $this->identity(),
             'true_user_name' => $this->auth->getUserName(),
             'header_title' => 'Reports',
-            'is_admin' => $this->is_admin,
+            'is_super_admin' => $this->is_super_admin,
             'effective_id' => $this->auth->getEffectiveIdentityID(),
             'impersonate_id' => $this->ImpersonateID
         ));
@@ -458,7 +458,7 @@ class ReportController extends PublisherAbstractActionController {
 		$initialized = $this->initialize();
 		if ($initialized !== true) return $initialized;
 
-        if ($this->is_admin):
+        if ($this->is_super_admin):
             $this->EffectiveID;
             $this->adminFunctionsSufix = 'Admin';
             $user_role = 1;
@@ -508,7 +508,7 @@ class ReportController extends PublisherAbstractActionController {
             'user_identity' => $this->identity(),
             'true_user_name' => $this->auth->getUserName(),
             'header_title' => 'Reports',
-            'is_admin' => $this->is_admin,
+            'is_super_admin' => $this->is_super_admin,
             'effective_id' => $this->auth->getEffectiveIdentityID(),
             'impersonate_id' => $this->ImpersonateID
         ));
@@ -522,7 +522,7 @@ class ReportController extends PublisherAbstractActionController {
     	
     	$extra_params_user = array();
     	
-    	if (!$this->is_admin):
+    	if (!$this->is_super_admin):
     		$user_role = 1;
     		die("bad request");
     	endif;
@@ -542,7 +542,7 @@ class ReportController extends PublisherAbstractActionController {
     	 
     	$extra_params_user = array();
     	 
-    	if (!$this->is_admin):
+    	if (!$this->is_super_admin):
     		$user_role = 1;
     		die("bad request");
     	endif;
@@ -564,7 +564,7 @@ class ReportController extends PublisherAbstractActionController {
     
     public function getUserImpressionsSpendAction() {
 
-    	if (!$this->is_admin):
+    	if (!$this->is_super_admin):
     		die("bad request");
     	endif;
     	
@@ -578,7 +578,7 @@ class ReportController extends PublisherAbstractActionController {
 
     public function getAverageIncomingBidsAction() {
 
-    	if (!$this->is_admin):
+    	if (!$this->is_super_admin):
     		die("bad request");
     	endif;
     	
@@ -600,7 +600,7 @@ class ReportController extends PublisherAbstractActionController {
     	if ($this->DemandCustomerInfoID != null):
     		$user_role = 2;
     		$extra_params = array('DemandCustomerInfoID' => $this->DemandCustomerInfoID);
-    	elseif (!$this->is_admin):
+    	elseif (!$this->is_super_admin):
     		die("bad request");
     	endif;
     	
@@ -619,7 +619,7 @@ class ReportController extends PublisherAbstractActionController {
     	if ($this->DemandCustomerInfoID != null):
     		$user_role = 2;
     		$extra_params = array('DemandCustomerInfoID' => $this->DemandCustomerInfoID);
-    	elseif (!$this->is_admin):
+    	elseif (!$this->is_super_admin):
     		die("bad request");
     	endif;
     
@@ -627,7 +627,7 @@ class ReportController extends PublisherAbstractActionController {
     
     	$stats	= json_decode($this->getPerTime($impression, $extra_params), TRUE);
     	 
-    	$impression_headers = $impression->getPerTimeHeader($this->is_admin);
+    	$impression_headers = $impression->getPerTimeHeader($this->is_super_admin);
     
     	$dates = $this->getDatesForExcelReport();
     	 
@@ -646,7 +646,7 @@ class ReportController extends PublisherAbstractActionController {
     	if ($this->PublisherInfoID != null):
     		$user_role = 2;
     		$extra_params = array('PublisherInfoID' => $this->PublisherInfoID);
-    	elseif (!$this->is_admin):
+    	elseif (!$this->is_super_admin):
     		die("bad request");
     	endif;
     	
@@ -665,7 +665,7 @@ class ReportController extends PublisherAbstractActionController {
     	if ($this->PublisherInfoID != null):
     		$user_role = 2;
     		$extra_params = array('PublisherInfoID' => $this->PublisherInfoID);
-    	elseif (!$this->is_admin):
+    	elseif (!$this->is_super_admin):
     		die("bad request");
     	endif;
 
@@ -673,7 +673,7 @@ class ReportController extends PublisherAbstractActionController {
     	 
     	$stats	= json_decode($this->getPerTime($impression, $extra_params), TRUE);
     	
-    	$impression_headers = $impression->getPerTimeHeader($this->is_admin);
+    	$impression_headers = $impression->getPerTimeHeader($this->is_super_admin);
     	 
     	$dates = $this->getDatesForExcelReport();
     	
@@ -687,7 +687,7 @@ class ReportController extends PublisherAbstractActionController {
     	$initialized = $this->initialize();
     	if ($initialized !== true) return $initialized;
     	
-    	if (!$this->is_admin):
+    	if (!$this->is_super_admin):
     		die("bad request");
     	endif;
     	
@@ -701,7 +701,7 @@ class ReportController extends PublisherAbstractActionController {
     	$initialized = $this->initialize();
     	if ($initialized !== true) return $initialized;
     	 
-    	if (!$this->is_admin):
+    	if (!$this->is_super_admin):
     		die("bad request");
     	endif;
     	
@@ -709,7 +709,7 @@ class ReportController extends PublisherAbstractActionController {
     	$extra_params = array();
     	$stats	= json_decode($this->getPerTime($incoming_bid, $extra_params), TRUE);
     	
-    	$incoming_bid_headers = $incoming_bid->getPerTimeHeader($this->is_admin);
+    	$incoming_bid_headers = $incoming_bid->getPerTimeHeader($this->is_super_admin);
     	
     	$dates = $this->getDatesForExcelReport();
     	 
@@ -723,7 +723,7 @@ class ReportController extends PublisherAbstractActionController {
     	$initialized = $this->initialize();
     	if ($initialized !== true) return $initialized;
     	
-    	if (!$this->is_admin):
+    	if (!$this->is_super_admin):
     		die("bad request");
     	endif;
     	
@@ -737,7 +737,7 @@ class ReportController extends PublisherAbstractActionController {
     	$initialized = $this->initialize();
     	if ($initialized !== true) return $initialized;
     	 
-    	if (!$this->is_admin):
+    	if (!$this->is_super_admin):
     		die("bad request");
     	endif;
     	 
@@ -745,7 +745,7 @@ class ReportController extends PublisherAbstractActionController {
     	$extra_params = array();
     	$stats	= json_decode($this->getPerTime($outgoing_bid, $extra_params), TRUE);
     	
-    	$outgoing_bid_headers = $outgoing_bid->getPerTimeHeader($this->is_admin);
+    	$outgoing_bid_headers = $outgoing_bid->getPerTimeHeader($this->is_super_admin);
     	
     	$dates = $this->getDatesForExcelReport();
     	 
@@ -759,7 +759,7 @@ class ReportController extends PublisherAbstractActionController {
     	$initialized = $this->initialize();
     	if ($initialized !== true) return $initialized;
     	
-    	if (!$this->is_admin):
+    	if (!$this->is_super_admin):
     		die("bad request");
     	endif;
     	
@@ -773,14 +773,14 @@ class ReportController extends PublisherAbstractActionController {
     	$initialized = $this->initialize();
     	if ($initialized !== true) return $initialized;
     	 
-    	if (!$this->is_admin):
+    	if (!$this->is_super_admin):
     		die("bad request");
     	endif;
     	 
     	$impressions = \_factory\ContractPublisherZoneHourlyImpressions::get_instance();
     	$stats	= json_decode($this->getPerTime($impressions), TRUE);
     	 
-    	$impressions_headers = $impressions->getPerTimeHeader($this->is_admin);
+    	$impressions_headers = $impressions->getPerTimeHeader($this->is_super_admin);
     	 
     	$dates = $this->getDatesForExcelReport();
     	
@@ -795,7 +795,7 @@ class ReportController extends PublisherAbstractActionController {
     	$initialized = $this->initialize();
     	if ($initialized !== true) return $initialized;
     	
-    	if (!$this->is_admin):
+    	if (!$this->is_super_admin):
     		die("bad request");
     	endif;
     	
@@ -901,7 +901,7 @@ class ReportController extends PublisherAbstractActionController {
 		$initialized = $this->initialize();
 		if ($initialized !== true) return $initialized;
 
-        if ($this->is_admin):
+        if ($this->is_super_admin):
             $this->adminFunctionsSufix = 'Admin';
         endif;
 
@@ -959,7 +959,7 @@ class ReportController extends PublisherAbstractActionController {
             $refresh = false;
         endif;
 
-        $stats_data 	= $obj->getPerTimeCached($this->config_handle, $where_params, 900, $refresh, $this->is_admin);
+        $stats_data 	= $obj->getPerTimeCached($this->config_handle, $where_params, 900, $refresh, $this->is_super_admin);
         $totals_data 	= $this->createTotals($stats_data);
         
         $data = array(
