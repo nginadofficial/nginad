@@ -422,6 +422,8 @@ $().ready(function() {
 		errorClass: 'cdn_form_error',
 		highlight: function(element, errorClass, validClass) {
 			$(element).parent().addClass("error");
+			$("#submitbutton").prop("disabled", false);
+			$("#cdn_form_msg").html("Required fields are missing.");
 		},
 		unhighlight: function(element, errorClass, validClass) {
 			$(element).parent().removeClass("error");
@@ -480,6 +482,8 @@ $().ready(function() {
 		errorClass: 'cdn_form_error',
 		highlight: function(element, errorClass, validClass) {
 			$(element).parent().addClass("error");
+			$("#submitbutton").prop("disabled", false);
+			$("#cdn_form_msg").html("Required fields are missing.");
 		},
 		unhighlight: function(element, errorClass, validClass) {
 			$(element).parent().removeClass("error");
@@ -510,6 +514,8 @@ $().ready(function() {
 		errorClass: 'cdn_form_error',
 		highlight: function(element, errorClass, validClass) {
 			$(element).parent().addClass("error");
+			$("#submitbutton").prop("disabled", false);
+			$("#cdn_form_msg").html("Required fields are missing.");
 		},
 		unhighlight: function(element, errorClass, validClass) {
 			$(element).parent().removeClass("error");
@@ -536,6 +542,8 @@ $().ready(function() {
 		errorClass: 'cdn_form_error',
 		highlight: function(element, errorClass, validClass) {
 			$(element).parent().addClass("error");
+			$("#submitbutton").prop("disabled", false);
+			$("#cdn_form_msg").html("Required fields are missing.");
 		},
 		unhighlight: function(element, errorClass, validClass) {
 			$(element).parent().removeClass("error");
@@ -566,6 +574,8 @@ $().ready(function() {
 		errorClass: 'cdn_form_error',
 		highlight: function(element, errorClass, validClass) {
 			$(element).parent().addClass("error");
+			$("#submitbutton").prop("disabled", false);
+			$("#cdn_form_msg").html("Required fields are missing.");
 		},
 		unhighlight: function(element, errorClass, validClass) {
 			$(element).parent().removeClass("error");
@@ -613,6 +623,8 @@ $().ready(function() {
 		errorClass: 'cdn_form_error',
 		highlight: function(element, errorClass, validClass) {
 			$(element).parent().addClass("error");
+			$("#submitbutton").prop("disabled", false);
+			$("#cdn_form_msg").html("Required fields are missing.");
 		},
 		unhighlight: function(element, errorClass, validClass) {
 			$(element).parent().removeClass("error");
@@ -669,6 +681,8 @@ $().ready(function() {
 		errorClass: 'cdn_form_error',
 		highlight: function(element, errorClass, validClass) {
 			$(element).parent().addClass("error");
+			$("#submitbutton").prop("disabled", false);
+			$("#cdn_form_msg").html("Required fields are missing.");
 		},
 		unhighlight: function(element, errorClass, validClass) {
 			$(element).parent().removeClass("error");
@@ -734,6 +748,8 @@ $().ready(function() {
 		errorClass: 'cdn_form_error',
 		highlight: function(element, errorClass, validClass) {
 			$(element).parent().addClass("error");
+			$("#submitbutton").prop("disabled", false);
+			$("#cdn_form_msg").html("Required fields are missing.");
 		},
 		unhighlight: function(element, errorClass, validClass) {
 			$(element).parent().removeClass("error");
@@ -768,6 +784,8 @@ $().ready(function() {
 		errorClass: 'cdn_form_error',
 		highlight: function(element, errorClass, validClass) {
 			$(element).parent().addClass("error");
+			$("#submitbutton").prop("disabled", false);
+			$("#cdn_form_msg").html("Required fields are missing.");
 		},
 		unhighlight: function(element, errorClass, validClass) {
 			$(element).parent().removeClass("error");
@@ -792,6 +810,8 @@ $().ready(function() {
 		errorClass: 'cdn_form_error',
 		highlight: function(element, errorClass, validClass) {
 			$(element).parent().addClass("error");
+			$("#submitbutton").prop("disabled", false);
+			$("#cdn_form_msg").html("Required fields are missing.");
 		},
 		unhighlight: function(element, errorClass, validClass) {
 			$(element).parent().removeClass("error");
@@ -830,6 +850,8 @@ $().ready(function() {
 		errorClass: 'cdn_form_error',
 		highlight: function(element, errorClass, validClass) {
 			$(element).parent().addClass("error");
+			$("#submitbutton").prop("disabled", false);
+			$("#cdn_form_msg").html("Required fields are missing.");
 		},
 		unhighlight: function(element, errorClass, validClass) {
 			$(element).parent().removeClass("error");
@@ -862,6 +884,8 @@ $().ready(function() {
 		errorClass: 'cdn_form_error',
 		highlight: function(element, errorClass, validClass) {
 			$(element).parent().addClass("error");
+			$("#submitbutton").prop("disabled", false);
+			$("#cdn_form_msg").html("Required fields are missing.");
 		},
 		unhighlight: function(element, errorClass, validClass) {
 			$(element).parent().removeClass("error");
