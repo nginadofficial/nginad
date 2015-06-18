@@ -175,8 +175,9 @@ abstract class DashboardAbstractActionController extends ZendAbstractActionContr
 				if ($auth_User->DemandCustomerInfoID != null):
 					
 					$this->user_id_list_demand_customer[$auth_User->user_id] = $auth_User->user_login;
-					
+				
 					if ($auth_User->user_id == $this->EffectiveID):
+					
 						$this->DemandCustomerInfoID = intval($auth_User->DemandCustomerInfoID);
 					endif;	
 				
@@ -186,6 +187,29 @@ abstract class DashboardAbstractActionController extends ZendAbstractActionContr
     		
     	elseif ($this->auth->isDomainAdmin($this->config_handle)):
     		
+	    	$auth_Users_list = $this->auth->getDomainPublisherUsers($this->getUserID());
+	    	 
+	    	foreach ($auth_Users_list as $auth_User):
+	    	
+		    	// skip disabled users
+		    	if ($auth_User->user_enabled != 1):
+		    		continue;
+		    	endif;
+		    	
+		    	$this->user_id_list[$auth_User->user_id] = $auth_User->user_login;
+		    	 
+		    	if ($auth_User->PublisherInfoID != null):
+			    		
+			    	$this->user_id_list_publisher[$auth_User->user_id] = $auth_User->user_login;
+			    		
+			    	if ($auth_User->user_id == $this->EffectiveID):
+			    		$this->PublisherInfoID = intval($auth_User->PublisherInfoID);
+			    	endif;
+		    	
+	    		endif;
+	    	
+	    	endforeach;
+    	
     	endif;
 
     	if ($this->PublisherInfoID != null):

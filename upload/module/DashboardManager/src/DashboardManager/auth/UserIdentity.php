@@ -49,12 +49,6 @@ implements IdentityInterface
         protected $TrueIdentityName;
         
         /**
-         * 
-         * @var boolean
-         */
-        protected $TrueIdentityAdmin;
-        
-        /**
          * This variable contains a class object of the DB row result
          * of the authenticated user, without any sensitive credential
          * information.
@@ -152,6 +146,7 @@ implements IdentityInterface
             if ($config !== null):
             
                 $this->AdminRoleSuperAdmin = $this->isSuperAdmin($config);
+            	$this->AdminRoleDomainAdmin = $this->isDomainAdmin($config);
                 $this->debug = $config['system']['debug'];
                 $this->debug_verbose = $config['system']['debug_verbose'];
             endif;
@@ -179,16 +174,7 @@ implements IdentityInterface
                 $this->PublisherInfoID = intval($userDetails->PublisherInfoID);
                 $this->DemandCustomerInfoID = intval($userDetails->DemandCustomerInfoID);
                 
-                if ($this->getPrimaryRole() === $this->AdminRolesConfig):
-                
-                    $this->TrueIdentityAdmin = true;
-                
-                else: 
-                
-                    $this->TrueIdentityAdmin = false;
-                endif;
-                
-                $this->setImpersonatedIdentityID(0,null); // Initialize the value.
+                $this->setImpersonatedIdentityID(0, $config); // Initialize the value.
                 
             endif;
             
@@ -230,16 +216,6 @@ implements IdentityInterface
         {
                 return $this->TrueIdentityID;
         }
-
-        /**
-         * Is the logged in user an administrator or has the status/privileges.
-         * 
-         * @return boolean TRUE if the user has the administrator status or privileges. FALSE otherwise.
-         */
-        public function getIsAdmin()
-        {
-                return $this->TrueIdentityAdmin;
-        }
         
         /**
          * This will have the current user impersonate another user of the given ID,
@@ -249,7 +225,7 @@ implements IdentityInterface
          * @param integer $identity The user ID number of the user to be impersonated.
          * @return integer|NULL Returns the identity that was finally applied.
          */
-        public function setImpersonatedIdentityID($identity)
+        public function setImpersonatedIdentityID($identity, $config)
         {
             
             if (!is_int($identity)): // Don't change anything if it is not an integer!
@@ -260,9 +236,10 @@ implements IdentityInterface
                     return $this->ImpersonateIdentityID;
                 endif;
             endif;
+
             
-            if ($this->TrueIdentityAdmin):
-            
+            if ($this->isSuperAdmin($config)):
+
                 if ($this->debug && $this->debug_verbose):
                 
                 	echo "\n<div style=\"font-size: 75%;\"><a style=\"font-weight: bold;\">Setting Impersonation to User ID:</a> " .
@@ -270,6 +247,21 @@ implements IdentityInterface
                 endif;
             	$this->ImpersonateIdentityID = $identity; //Initialize the value.
             
+            elseif ($this->isDomainAdmin($config)):
+
+                if ($this->debug && $this->debug_verbose):
+                
+                	echo "\n<div style=\"font-size: 75%;\"><a style=\"font-weight: bold;\">Setting Impersonation to User ID:</a> " .
+                			$identity . "</div>\n";
+                endif;
+                /*
+                 * Since this is a domain admin, we have to verify that the
+                 * new user actually was created by this admin, and does 
+                 * not belong to somebody else.
+                 */
+                if (\util\AuthHelper::domain_user_authorized($this->getUserID(), $identity)):
+            		$this->ImpersonateIdentityID = $identity; //Initialize the value.
+            	endif;
             else:
             
             	$this->ImpersonateIdentityID = null; // null the value.
@@ -319,6 +311,20 @@ implements IdentityInterface
                                     $this->ImpersonateIdentityID . "</div>\n";
                         endif; 
                         return $this->ImpersonateIdentityID;
+                    
+            elseif ($this->AdminRoleDomainAdmin &&
+                    $this->ImpersonateIdentityID != null &&
+                    $this->ImpersonateIdentityID != 0):
+                    
+                        if ($this->debug):
+                        
+                            echo "\n<div style=\"font-weight: bold; font-size: 75%;\">Impersonated User ID: " . 
+                                    $this->ImpersonateIdentityID . "</div>\n";
+                        endif; 
+                        
+                        if (\util\AuthHelper::domain_user_authorized($this->TrueIdentityID, $this->ImpersonateIdentityID)):
+                        	return $this->ImpersonateIdentityID;
+                        endif;
                     
             else: 
             

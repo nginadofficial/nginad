@@ -231,7 +231,7 @@ class UserIdentityProvider extends AuthenticationService implements IdentityProv
      */
     public function impersonateUserID($id)
     {
-        $result = $this->getIdentity()->setImpersonatedIdentityID($id);
+        $result = $this->getIdentity()->setImpersonatedIdentityID($id, $this->ConfigHandle);
         $this->getStorage()->save();
         
         return $result;
@@ -341,10 +341,13 @@ class UserIdentityProvider extends AuthenticationService implements IdentityProv
      * 
      * @return bool TRUE if user has administrator status, FALSE otherwise.
      */
-    public function getIsAdmin()
-    {
-    	return $this->getIdentity()->getIsAdmin();
-    }
+     public function getIsSuperAdmin($config) {
+       	return $this->getIdentity()->isSuperAdmin();
+     }
+        
+     public function getIsDomainAdmin($config) {
+        return $this->getIdentity()->isDomainAdmin();
+     }
     
     /**
      * Obtain the role ID number given the role name.
@@ -376,6 +379,28 @@ class UserIdentityProvider extends AuthenticationService implements IdentityProv
         $auth_Users_list = $authUsersFactory->get($params);
         
         return $auth_Users_list;
+    }
+    
+    public function getDomainPublisherUsers($parent_id)
+    {
+    	
+    	$PublisherInfoFactory 	= \_factory\PublisherInfo::get_instance();
+    	$params = array();
+    	$params["ParentID"] 	= $parent_id;
+    	$PublisherInfo_list = $PublisherInfoFactory->get($params);
+    	
+    	$auth_Users_list = array();
+    	$authUsersFactory = \_factory\authUsers::get_instance();
+    	
+    	foreach ($PublisherInfo_list as $PublisherInfo):
+    	
+	    	$params = array();
+	    	$params["PublisherInfoID"] = $PublisherInfo->PublisherInfoID; 
+	    	$auth_Users_list[] = $authUsersFactory->get_row($params);
+	    	
+    	endforeach;
+    
+    	return $auth_Users_list;
     }
     
 }
