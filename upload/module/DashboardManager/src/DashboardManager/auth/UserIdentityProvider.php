@@ -384,21 +384,11 @@ class UserIdentityProvider extends AuthenticationService implements IdentityProv
     public function getDomainPublisherUsers($parent_id)
     {
     	
-    	$PublisherInfoFactory 	= \_factory\PublisherInfo::get_instance();
-    	$params = array();
-    	$params["ParentID"] 	= $parent_id;
-    	$PublisherInfo_list = $PublisherInfoFactory->get($params);
-    	
     	$auth_Users_list = array();
     	$authUsersFactory = \_factory\authUsers::get_instance();
-    	
-    	foreach ($PublisherInfo_list as $PublisherInfo):
-    	
-	    	$params = array();
-	    	$params["PublisherInfoID"] = $PublisherInfo->PublisherInfoID; 
-	    	$auth_Users_list[] = $authUsersFactory->get_row($params);
-	    	
-    	endforeach;
+    	$params = array();
+    	$params["parent_id"] 	= $parent_id;
+    	$auth_Users_list 		= $authUsersFactory->get($params);
     
     	return $auth_Users_list;
     }

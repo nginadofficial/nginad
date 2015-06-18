@@ -491,6 +491,7 @@ INSERT INTO `AdType` VALUES ('4', 'Flash', 'Flash Based', '2014-01-28 23:20:00',
 DROP TABLE IF EXISTS `auth_Users`;
 CREATE TABLE `auth_Users` (
   `user_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `parent_id` int(10) NOT NULL DEFAULT '0',
   `user_login` varchar(50) NOT NULL,
   `user_email` varchar(255) NOT NULL DEFAULT '',
   `user_password` varchar(255) NOT NULL,
@@ -520,9 +521,9 @@ CREATE TABLE `auth_Users` (
 -- ----------------------------
 -- Records of auth_Users
 -- ----------------------------
-INSERT INTO `auth_Users` VALUES ('1', 'admin', 'admin@localhost', '86a65acd94b33daa87c1c6a2d1408593', null, null, null, null, '1', '1', '1', null, null, '2013-11-06 09:24:00', '2013-11-06 09:25:07', '2013-11-06 09:25:07', null, '1');
-INSERT INTO `auth_Users` VALUES ('20', 'blowmedia', 'sergey.page@blowmedianow.com', '86a65acd94b33daa87c1c6a2d1408593', null, null, null, null, '1', '1', '1', '3', null, '2014-09-03 21:25:33', '2014-09-03 21:25:33', '2013-11-06 09:25:07', null, '3');
-INSERT INTO `auth_Users` VALUES ('21', 'suckmedia', 'larry.brin@suckmedianow.com', '86a65acd94b33daa87c1c6a2d1408593', null, null, null, null, '1', '1', '1', null, '18', '2014-09-03 21:32:24', '2014-09-03 21:32:24', '2013-11-06 09:25:07', null, '2');
+INSERT INTO `auth_Users` VALUES ('1', '0', 'admin', 'admin@localhost', '86a65acd94b33daa87c1c6a2d1408593', null, null, null, null, '1', '1', '1', null, null, '2013-11-06 09:24:00', '2013-11-06 09:25:07', '2013-11-06 09:25:07', null, '1');
+INSERT INTO `auth_Users` VALUES ('20', '0', 'blowmedia', 'sergey.page@blowmedianow.com', '86a65acd94b33daa87c1c6a2d1408593', null, null, null, null, '1', '1', '1', '3', null, '2014-09-03 21:25:33', '2014-09-03 21:25:33', '2013-11-06 09:25:07', null, '3');
+INSERT INTO `auth_Users` VALUES ('21', '0', 'suckmedia', 'larry.brin@suckmedianow.com', '86a65acd94b33daa87c1c6a2d1408593', null, null, null, null, '1', '1', '1', null, '18', '2014-09-03 21:32:24', '2014-09-03 21:32:24', '2013-11-06 09:25:07', null, '2');
 
 -- ----------------------------
 -- Table structure for BuySideDailyImpressionsByTLD
@@ -852,7 +853,6 @@ INSERT INTO `PublisherAdZoneType` VALUES ('4', 'Contract', '2014-08-17 12:16:21'
 DROP TABLE IF EXISTS `PublisherInfo`;
 CREATE TABLE `PublisherInfo` (
   `PublisherInfoID` int(11) NOT NULL AUTO_INCREMENT,
-  `ParentID` int NOT NULL DEFAULT 0,
   `Name` varchar(255) NOT NULL,
   `Email` varchar(255) NOT NULL,
   `Domain` varchar(255) NOT NULL,
@@ -865,7 +865,7 @@ CREATE TABLE `PublisherInfo` (
 -- ----------------------------
 -- Records of PublisherInfo
 -- ----------------------------
-INSERT INTO `PublisherInfo` VALUES ('3', '0', 'Blow Media Now', 'sergey.page@blowmedianow.com', 'blowmedianow.com', 'IAB19', '2014-09-03 21:25:33', '2014-09-03 21:25:33');
+INSERT INTO `PublisherInfo` VALUES ('3', 'Blow Media Now', 'sergey.page@blowmedianow.com', 'blowmedianow.com', 'IAB19', '2014-09-03 21:25:33', '2014-09-03 21:25:33');
 
 -- ----------------------------
 -- Table structure for PublisherMarkup

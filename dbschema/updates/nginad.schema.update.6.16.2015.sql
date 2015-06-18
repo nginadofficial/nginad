@@ -1,6 +1,6 @@
 -- Private exchange publishers
 -- 0 means they signed up via the public portal and do not belong to a demand customer
-ALTER TABLE  `PublisherInfo` ADD  `ParentID` int NOT NULL DEFAULT 0 AFTER  `PublisherInfoID` ;
+ALTER TABLE  `auth_Users` ADD  `parent_id` int NOT NULL DEFAULT 0 AFTER  `user_id` ;
 
 -- Update the roles to allow for domain admins
 UPDATE rbac_role SET role_name = 'super_admin' WHERE role_id = 1;
