@@ -87,8 +87,12 @@ echo $this->doctype(); ?>
     <li class="divider-vertical"></li>
     <?php endif;?>
     <?php if (($user_data != null && $user_data->PublisherInfoID != null)
-    		|| $userRole=='domain_admin' || $userRole=='super_admin'): ?>
+    		|| $userRole=='super_admin'): ?>
     <li class="<?php if($home_dashboard_view == "publisher") echo "active";?>"><a class="navlink"   href="/publisher">Websites</a></li>
+    <li class="divider-vertical"></li>
+    <?php endif;?>
+    <?php if ($userRole=='domain_admin'): ?>
+    <li class="<?php if($home_dashboard_view == "publisher") echo "active";?>"><a class="navlink"   href="private-exchange/publishers/websites">Websites</a></li>
     <li class="divider-vertical"></li>
     <?php endif;?>
     <li class="<?php if($home_dashboard_view == "report") echo "active";?>"><a class="navlink"   href="/report">Report</a></li>
@@ -99,10 +103,13 @@ echo $this->doctype(); ?>
 <ul class="dropdown-menu pull-right">
                   <li><a href="/users/account">Account Settings</a></li>
                   <?php if($userRole=='domain_admin'): ?>
-                  <li><a href="/users/publishers/add">Add Publisher</a></li> 
+                  <li><a href="/private-exchange/publishers/add">Add Publisher</a></li> 
                   <?php endif;?>
-                  <?php if($userRole=='domain_admin' || $userRole=='super_admin'): ?>
+                  <?php if($userRole=='super_admin'): ?>
                   <li><a href="/users/publishers">Publisher List</a></li> 
+                  <?php endif;?>
+                  <?php if($userRole=='domain_admin'): ?>
+                  <li><a href="/private-exchange/publishers/list">Publisher List</a></li> 
                   <?php endif;?>
                   <?php if($userRole=='super_admin'): ?>
                   <li><a href="/users/customers">Customer List</a></li> 

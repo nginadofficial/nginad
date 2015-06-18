@@ -1,0 +1,70 @@
+<?php
+$this->headScript()->prependFile($this->basePath() . '/js/script.js');
+$this->headScript()->prependFile($this->basePath() . '/js/signup.js');
+?>
+<?php 
+    if(isset($error_msg) && $error_msg != null):
+    
+	    echo '<div id="cdn_form_error" class="alert alert-error" style="margin: 5px;">'.$error_msg.'</div>';
+    endif;
+    if(isset($success_msg) && $success_msg != null):
+    
+	    echo '<div id="cdn_form_success" class="alert alert-success" style="margin: 5px;">Account created successfully. You will receive a welcome email when your account is approved by our Ad Operations Team</div>';
+    endif;
+?>
+<div id="cdn_form_dynamic_msg" class="alert alert-error" style="margin: 5px; display:none;"></div>
+<div id="cdn_form_msg" class="alert alert-error" style="margin: 5px; display:none;"></div>
+<div class="left">
+	<form id="signupform" name="signupform" class="form-horizontal form-top-magin" method="post" action="/signup/newuser">
+	<div class="control-group">
+	    <label for="Name" class="control-label">Publisher Name</label>
+	    <div class="controls">
+	    <input type="text" value="" maxlength="100" name="Name" id="Name" placeholder="Name">    </div>
+	</div>
+	<div class="control-group">
+	    <label for="Email" class="control-label">Email</label>
+	    <div class="controls">
+	    <input type="text" value="" maxlength="50" name="Email" id="Email" placeholder="me@example.com">
+	    </div>
+	</div>
+	<div class="control-group">
+	    <label for="Username" class="control-label">Username</label>
+	    <div class="controls">
+	    	<input type="text" value="" maxlength="50" name="user_login" id="user_login" placeholder="username">
+	    </div>
+	</div>
+	<div class="control-group">
+	    <label for="Domain" class="control-label">Website</label>
+	    <div class="controls">
+	    <input type="text" value="" maxlength="50" name="Domain" id="Domain" placeholder="example.com">    </div>
+	</div>
+	<div class="control-group">
+	    <label for="IABCategory" class="control-label">IABCategory</label>
+	    <div class="controls">
+	    <select id="IABCategory" name="IABCategory">
+	     <?php 
+	     foreach($vertical_map as $key=>$value): 
+		 	echo '<option value="'. $key .'">'. $value .'</option>';
+		 endforeach;
+		 ?>
+		</select>
+		</div>
+	    </div> 
+	    <div class="control-group">
+	    <label for="password" class="control-label">Password</label>
+	    <div class="controls">
+	    <input type="password" value=""  name="Password" id="Password">    </div>
+		</div> 
+		<div class="control-group">
+	    <label for="Confirm_password" class="control-label">Confirm Password</label>
+	    <div class="controls">
+	    <input type="Password" value=""  name="Confirm_password" id="Confirm_password">    </div>
+		</div> 
+	    <div class="controls">
+	    <button name="b1" type="button" class="btn btn-primary btn-margin signupform" id="submitbutton" >Create Account</button>
+	    </div>
+	</form>
+</div>
+<div class="right">
+	<!-- <img src="/images/larry.nginad.jpg" /> -->
+</div>

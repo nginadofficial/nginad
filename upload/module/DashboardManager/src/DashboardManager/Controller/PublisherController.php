@@ -127,6 +127,102 @@ class PublisherController extends PublisherAbstractActionController {
 	    
 	}
 	
+	public function pxpublishersAction()
+	{
+		$initialized = $this->initialize();
+		if ($initialized !== true) return $initialized;
+		 
+		if (!$this->is_domain_admin):
+			die("Not Authorized: CODE 102");
+		endif;		
+		
+		//Pull list of websites.
+		$PublisherWebsiteFactory = \_factory\PublisherWebsite::get_instance();
+		$parameters = array(); // Set the parameters to empty first.
+	
+		$parameters['DomainOwnerID'] = $this->PublisherInfoID;
+		 
+		$publisher_markup_rate = $this->config_handle['system']['default_publisher_markup_rate'];
+		$publisher_impressions_network_loss_rate = $this->config_handle['system']['default_publisher_impressions_network_loss_rate'];
+		 
+		$PublisherWebsiteList = $PublisherWebsiteFactory->get($parameters);
+		 
+		$headers = array("#","Domain","Domain Markup","Imps Loss Rate","Domain Owner","Created","Updated","Approval","Actions");
+		$meta_data = array("WebDomain","DomainMarkupRate","DomainPublisherImpressionsLossRate","DomainOwnerID","DateCreated","DateUpdated","ApprovalFlag");
+			 
+		// admin is logged in as a user, get the markup if any for that user
+		if ($this->ImpersonateID != 0 && !empty($this->PublisherInfoID)):
+		
+			$publisher_markup = \util\Markup::getMarkupForPublisher($this->PublisherInfoID, $this->config_handle, false);
+			if ($publisher_markup != null):
+				$publisher_markup_rate = $publisher_markup->MarkupRate;
+			endif;
+			
+			$publisher_impressions_network_loss = \util\NetworkLossCorrection::getNetworkLossCorrectionRateForPublisher($this->PublisherInfoID, $this->config_handle, false);
+			if ($publisher_impressions_network_loss != null):
+				$publisher_impressions_network_loss_rate = $publisher_impressions_network_loss->CorrectionRate;
+			endif;
+		
+		endif;
+	
+		foreach ($PublisherWebsiteList as $PublisherWebsite):
+		
+			$website_markup = \util\Markup::getMarkupForPublisherWebsite($PublisherWebsite->PublisherWebsiteID, $this->config_handle, false);
+			 
+			if ($website_markup != null):
+				$website_markup_rate_list[$PublisherWebsite->PublisherWebsiteID] = $website_markup->MarkupRate * 100;
+			else:
+				$website_markup_rate_list[$PublisherWebsite->PublisherWebsiteID] = $publisher_markup_rate * 100;
+			endif;
+				
+			$website_impressions_network_loss = \util\NetworkLossCorrection::getNetworkLossCorrectionRateForPublisherWebsite($PublisherWebsite->PublisherWebsiteID, $this->config_handle, false);
+		
+			if ($website_impressions_network_loss != null):
+				$website_impressions_network_loss_rate_list[$PublisherWebsite->PublisherWebsiteID] = $website_impressions_network_loss->CorrectionRate * 100;
+			else:
+				$website_impressions_network_loss_rate_list[$PublisherWebsite->PublisherWebsiteID] = $publisher_impressions_network_loss_rate * 100;
+			endif;
+		 
+		endforeach;
+		 
+		$PublisherInfoFactory = \_factory\PublisherInfo::get_instance();
+		$params = array();
+		$params["PublisherInfoID"] = $this->PublisherInfoID;
+		$PublisherInfo = $PublisherInfoFactory->get_row($params);
+		 
+		$publisher_markup_rate *= 100;
+		$publisher_impressions_network_loss_rate *= 100;
+		 
+		$view = new ViewModel(array(
+				'true_user_name' => $this->auth->getUserName(),
+				'domain_list_raw' => $PublisherWebsiteList,
+				'domain_list' => $this->order_data_table($meta_data, $PublisherWebsiteList, $headers),
+				'is_super_admin' => $this->is_super_admin,
+				'user_id_list' => $this->user_id_list_publisher,
+				'domain_owner' => isset($PublisherInfo->Name) ? $PublisherInfo->Name : "",
+				'impersonate_id' => $this->ImpersonateID,
+				'effective_id' => $this->auth->getEffectiveIdentityID(),
+				'publisher_info_id' => $this->PublisherInfoID,
+				'dashboard_view' => 'publisher',
+				'user_identity' => $this->identity(),
+				'publisher_markup_rate' => $publisher_markup_rate,
+				'publisher_impressions_network_loss_rate' => $publisher_impressions_network_loss_rate,
+				'website_markup_rate_list' => isset($website_markup_rate_list) ? $website_markup_rate_list : array(),
+				'website_impressions_network_loss_rate_list' => isset($website_impressions_network_loss_rate_list) ? $website_impressions_network_loss_rate_list : array()
+		));
+	
+		if ($this->is_super_admin == false
+		|| ($this->is_super_admin == true && $this->PublisherInfoID != null && $this->auth->getEffectiveIdentityID() != 0)):
+		 
+			$view->header_title = '<a href="/publisher/createdomain">Create New Domain</a>';
+		else:
+			$view->header_title = '&nbsp;';
+		endif;
+		 
+		return $view;
+		 
+	}
+	
 	/**
 	 * Allows an administrator to "login as another user", to impersonate a lower user to manage another user's objects.
 	 * @return Ambigous <\Zend\Http\Response, \Zend\Stdlib\ResponseInterface>

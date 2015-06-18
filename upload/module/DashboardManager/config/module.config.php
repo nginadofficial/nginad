@@ -48,6 +48,27 @@ return array(
             				),
             		),
             ),
+            'pxpublishers' => array(
+            		'type'    => 'segment',
+            		'options' => array(
+            				'route'    =>  '/private-exchange/publishers/websites[/]',
+            				'defaults' => array(
+            						'controller' => 'DashboardManager\Controller\Publisher',
+            						'action'     => 'pxpublishers',
+            				),
+            		),
+            ),
+            'pxnewpublisher' => array(
+            		'type'    => 'segment',
+            		'options' => array(
+            				'route'    =>  '/private-exchange/publishers/add[/[:param1[/]]]',
+            				'defaults' => array(
+            						'controller' => 'DashboardManager\Controller\Signup',
+            						'action'     => 'pxnewpublisher',
+            				),
+            		),
+            ),
+
             'company' => array(
             		'type'    => 'segment',
             		'options' => array(

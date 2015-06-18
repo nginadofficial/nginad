@@ -304,6 +304,32 @@ class SignupController extends PublisherAbstractActionController {
 		
 	}
 	
+	// user account view and update
+	public function pxnewpublisherAction() {
+	
+	
+		$initialized = $this->initialize();
+		if ($initialized !== true) return $initialized;
+		$success_msg = null;
+
+		$userData = array();
+		$view = new ViewModel(array(
+				'dashboard_view' => 'account',
+				'user_identity' => $this->identity(),
+				'success_msg' => $success_msg,
+				'user_tab' => 'profile',
+				'user_data' => $userData,
+				'user_id_list' => $this->user_id_list,
+				'user_identity' => $this->identity(),
+				'true_user_name' => $this->auth->getUserName(),
+				'header_title' => 'Add New Private Exchange Publisher',
+				'is_super_admin' => $this->is_super_admin,
+				'effective_id' => $this->auth->getEffectiveIdentityID(),
+				'impersonate_id' => $this->ImpersonateID
+		));
+		 
+		return $view->setTemplate('dashboard-manager/signup/px-add-publisher.phtml');
+	}
 	
 	// user account view and update
 	public function accountAction() {
