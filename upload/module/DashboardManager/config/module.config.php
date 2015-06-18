@@ -61,14 +61,24 @@ return array(
             'pxnewpublisher' => array(
             		'type'    => 'segment',
             		'options' => array(
-            				'route'    =>  '/private-exchange/publishers/add[/[:param1[/]]]',
+            				'route'    =>  '/private-exchange/publishers/add[/]',
             				'defaults' => array(
             						'controller' => 'DashboardManager\Controller\Signup',
             						'action'     => 'pxnewpublisher',
             				),
             		),
             ),
-
+            'pxnewpublisheradd' => array(
+            		'type'    => 'segment',
+            		'options' => array(
+            				'route'    =>  '/private-exchange/publishers/new[/]',
+            				'defaults' => array(
+            						'__NAMESPACE__' => 'DashboardManager\Controller',
+            						'controller' => 'DashboardManager\Controller\Signup',
+            						'action'     => 'pxnewuser',
+            				),
+            		),
+            ),
             'company' => array(
             		'type'    => 'segment',
             		'options' => array(
@@ -141,15 +151,7 @@ return array(
             			     		),
             			     ),
             		    ),
-            		    
-
-            		    
             		),
-            		
-            		
-            		
-            		
-            		
             ),
             'signup' => array(
             		'type'    => 'segment',

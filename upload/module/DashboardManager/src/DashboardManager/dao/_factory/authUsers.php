@@ -100,6 +100,7 @@ class authUsers extends \_factory\CachedTableRead
     public function saveUser(\model\authUsers $authUsers) {
     	
     	$data['user_id'] 			= $authUsers->user_id;
+    	$data['parent_id'] 			= $authUsers->parent_id;
     	$data['user_description'] 	= $authUsers->user_description;
     	$data['user_fullname'] 		= $authUsers->user_fullname;
     	$data['user_login']    	  	= $authUsers->user_login;

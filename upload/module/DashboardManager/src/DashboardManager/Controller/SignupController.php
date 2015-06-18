@@ -194,6 +194,115 @@ class SignupController extends PublisherAbstractActionController {
 	    return $view;
 	}
 	
+	public function pxnewuserAction() {
+	
+		$request = $this->getRequest();
+		if (!$request->isPost()):
+			return $this->redirect()->toRoute('pxnewpublisher');
+		endif;
+
+		$initialized = $this->initialize();
+		if ($initialized !== true) return $initialized;
+	
+		$config = $this->getServiceLocator()->get('Config');
+	
+		$Name	     = $request->getPost('Name');
+		$Email		 = $request->getPost('Email');
+		$Domain		 = $request->getPost('Domain');
+		$IABCategory = $request->getPost('IABCategory');
+		$Password	 = $request->getPost('Password');
+		$user_login	 = $request->getPost('user_login');
+	
+		$Password = str_replace(array("'",";"), array("",""), $Password);
+	
+		if (preg_match('/[^-_. 0-9A-Za-z]/', $Name)
+			|| !filter_var($Email, FILTER_VALIDATE_EMAIL)
+			|| empty($Domain)|| preg_match('/[^-_. 0-9A-Za-z]/', $Domain)
+			|| empty($IABCategory) || preg_match('/[^-_. 0-9A-Za-z]/', $IABCategory)
+			|| empty($Password)
+			|| !ctype_alnum($user_login)):
+			
+			die("Invalid Registration Data");
+		endif;
+	
+		$PublisherInfo = new \model\PublisherInfo();
+		$PublisherInfoFactory = \_factory\PublisherInfo::get_instance();
+	
+		$PublisherInfo->Name		    = 	$Name;
+		$PublisherInfo->Email			=	$Email;
+		$PublisherInfo->Domain			=	$Domain;
+		$PublisherInfo->IABCategory		=	$IABCategory;
+		$PublisherInfo->DateCreated		=	date("Y-m-d H:i:s");
+	
+		$error_msg = null;
+		$success_msg = null;
+	
+	
+		$authUsers = new \model\authUsers();
+		$authUsersFactory = \_factory\authUsers::get_instance();
+	
+	
+		// Check if an entry exists with the same name. A NULL means there is no duplicate.
+		if ($PublisherInfoFactory->get_row(array("Email" => $PublisherInfo->Email)) === null && $authUsersFactory->get_row(array("user_login" => $user_login)) === null):
+		 
+			$lastInsertID = $PublisherInfoFactory->savePublisherInfo($PublisherInfo);
+				
+			$authUsers->PublisherInfoID  			= $lastInsertID;
+			$authUsers->parent_id					= $this->auth->getUserID();
+			$authUsers->user_login		 			= $user_login;
+			$authUsers->user_email		 			= $Email;
+			$authUsers->user_password	 			= \util\Password::md5_split_salt($Password);
+			$authUsers->user_role		 			= 3; //role as member
+			$authUsers->user_enabled     			= 0;
+			$authUsers->user_verified    			= 0;
+			$authUsers->user_agreement_accepted	   	= 0;
+			$authUsers->create_date	   	 			= date("Y-m-d H:i:s");
+				
+			$authUsersFactory->saveUser($authUsers);
+			$success_msg = 1;
+				
+			if ($config['mail']['subscribe']['signups'] === true):
+				
+				$iab_cat = isset(\util\DeliveryFilterOptions::$vertical_map[$IABCategory]) ? \util\DeliveryFilterOptions::$vertical_map[$IABCategory] : "N/A";
+			
+				$message = '<b>New NginAd Publisher Registered.</b><br /><br />';
+				$message = $message.'<table border="0" width="10%">';
+				$message = $message.'<tr><td><b>Login: </b></td><td>'.$user_login.'</td></tr>';
+				$message = $message.'<tr><td><b>Name: </b></td><td>'.$Name.'</td></tr>';
+				$message = $message.'<tr><td><b>Email: </b></td><td>'.$Email.'</td></tr>';
+				$message = $message.'<tr><td><b>Domain: </b></td><td>'.$Domain.'</td></tr>';
+				$message = $message.'<tr><td><b>IABCategory: </b></td><td>'.$iab_cat.'</td></tr>';
+				$message = $message.'</table>';
+			
+				$subject = "New Private Exchange Publisher Registered: " . $user_login;
+			
+				$transport = $this->getServiceLocator()->get('mail.transport');
+			
+				$text = new Mime\Part($message);
+				$text->type = Mime\Mime::TYPE_HTML;
+				$text->charset = 'utf-8';
+			
+				$mimeMessage = new Mime\Message();
+				$mimeMessage->setParts(array($text));
+				$zf_message = new Message();
+			
+				$zf_message->addTo($config['mail']['admin-email']['email'], $config['mail']['admin-email']['name'])
+				->addFrom($config['mail']['reply-to']['email'], $config['mail']['reply-to']['name'])
+				->setSubject($subject)
+				->setBody($mimeMessage);
+				$transport->send($zf_message);
+			endif;
+		else:
+			$error_msg = "ERROR: A duplicate Account may exist. Please try another.";
+		endif;
+	
+		return $this->redirect()->toRoute('pxpublishers',
+				array(
+						'error_msg' => $error_msg
+				)
+				);
+	
+	}
 	
 	public function newuserAction() {
 		
@@ -246,6 +355,7 @@ class SignupController extends PublisherAbstractActionController {
 			$lastInsertID = $PublisherInfoFactory->savePublisherInfo($PublisherInfo);
 			
 			$authUsers->PublisherInfoID  			= $lastInsertID;
+			$authUsers->parent_id					= 0;
 			$authUsers->user_login		 			= $user_login;
 			$authUsers->user_email		 			= $Email;
 			$authUsers->user_password	 			= \util\Password::md5_split_salt($Password);
@@ -319,6 +429,7 @@ class SignupController extends PublisherAbstractActionController {
 				'success_msg' => $success_msg,
 				'user_tab' => 'profile',
 				'user_data' => $userData,
+				'vertical_map' => \util\DeliveryFilterOptions::$vertical_map,
 				'user_id_list' => $this->user_id_list,
 				'user_identity' => $this->identity(),
 				'true_user_name' => $this->auth->getUserName(),

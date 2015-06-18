@@ -12,6 +12,7 @@ namespace model;
 class authUsers {
 	
     public $user_id;
+    public $parent_id;
     public $user_login;
     public $user_email;
     public $user_password;
