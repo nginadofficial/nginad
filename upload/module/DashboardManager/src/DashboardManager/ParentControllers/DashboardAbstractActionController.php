@@ -324,7 +324,7 @@ abstract class DashboardAbstractActionController extends ZendAbstractActionContr
    	protected function ImpersonateUser()
    	{
    	    $this->initialize();
-   	    if ($this->is_super_admin):
+   	    if ($this->is_super_admin || $this->is_domain_admin):
    	    
    	    	// TODO: Hummm... ANY admin can login as ANY OTHER admin, even if the pull down does not allow.
    	    	$this->auth->impersonateUserID($this->getRequest()->getQuery('userid'));

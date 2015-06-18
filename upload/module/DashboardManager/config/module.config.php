@@ -68,6 +68,16 @@ return array(
             				),
             		),
             ),
+            'pxloginaspublisher' => array(
+            		'type'    => 'segment',
+            		'options' => array(
+            				'route'    =>  '/private-exchange/publishers/loginasdomain[/]',
+            				'defaults' => array(
+            						'controller' => 'DashboardManager\Controller\Publisher',
+            						'action'     => 'loginasdomain',
+            				),
+            		),
+            ),
             'pxnewpublisheradd' => array(
             		'type'    => 'segment',
             		'options' => array(

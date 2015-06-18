@@ -234,6 +234,16 @@ class PublisherController extends PublisherAbstractActionController {
 	}
 	
 	/**
+	 * Allows a domain admin to "login as another user", to impersonate a lower user to manage another user's objects.
+	 * @return Ambigous <\Zend\Http\Response, \Zend\Stdlib\ResponseInterface>
+	 */
+	public function loginasdomainAction()
+	{
+		$this->ImpersonateUser();
+		return $this->redirect()->toRoute('pxpublishers');
+	}
+	
+	/**
 	 * Toggle the approval given the supplied flag to toggle.
 	 * 
 	 * @param integer $flag 0 = Pending | 1 = Approved
