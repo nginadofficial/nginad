@@ -113,7 +113,7 @@ class DemandController extends DemandAbstractActionController {
 	    		'effective_id' => $this->auth->getEffectiveIdentityID(),
 	    		'campaign_markup_rate_list'=>$campaign_markup_rate_list,
 	    		'user_markup_rate' => $user_markup_rate,
-	    		'dashboard_view' => 'demand',
+	    		'dashboard_view' => 'private-exchange',
 	    		'user_identity' => $this->identity(),
 	    		'true_user_name' => $this->auth->getUserName(),
 				'is_super_admin' => $this->is_super_admin,
@@ -125,7 +125,7 @@ class DemandController extends DemandAbstractActionController {
 	    if ($this->is_super_admin == false 
 	    	|| ($this->is_super_admin == true && $this->DemandCustomerInfoID != null && $this->auth->getEffectiveIdentityID() != 0)):
 	    	
-	    	$view->header_title = '<a href="/demand/createinsertionorder/">Create Insertion Order</a>';
+	    	$view->header_title = '<a href="/private-exchange/createinsertionorder/">Create Insertion Order</a>';
 	    else:
 	   		$view->header_title = '&nbsp;';
 	    endif;
@@ -140,7 +140,7 @@ class DemandController extends DemandAbstractActionController {
 	public function loginasAction()
 	{
 	    $this->ImpersonateUser();
-		return $this->redirect()->toRoute('demand');
+		return $this->redirect()->toRoute('private-exchange');
 	}
 
 	/**
@@ -190,7 +190,7 @@ class DemandController extends DemandAbstractActionController {
 	
 			endif;
 
-		return $this->redirect()->toRoute('demand');
+		return $this->redirect()->toRoute('private-exchange');
 
 	}
 
@@ -241,7 +241,7 @@ class DemandController extends DemandAbstractActionController {
 	
 			endif;
 
-		return $this->redirect()->toRoute('demand');
+		return $this->redirect()->toRoute('private-exchange');
 
 	}
 
@@ -274,7 +274,7 @@ class DemandController extends DemandAbstractActionController {
 		$InsertionOrder = $InsertionOrderFactory->get_row($params);
 		
 		if ($InsertionOrder == null):
-			return $this->redirect()->toRoute('demand');
+			return $this->redirect()->toRoute('private-exchange');
 		endif;
 		
         $authUsersFactory = \_factory\authUsers::get_instance();
@@ -304,7 +304,7 @@ class DemandController extends DemandAbstractActionController {
 			$transport->send($zf_message);
 		endif;
 		
-		return $this->redirect()->toRoute('demand');
+		return $this->redirect()->toRoute('private-exchange');
 
 	}
 
@@ -327,7 +327,7 @@ class DemandController extends DemandAbstractActionController {
 		// set the preview campaigns and its elements to inactive and mark the date and time they went live
 		\transformation\TransformPreview::deletePreviewModeCampaign($id, $this->auth, false);
 
-		return $this->redirect()->toRoute('demand');
+		return $this->redirect()->toRoute('private-exchange');
 
 	}
 
@@ -391,7 +391,7 @@ class DemandController extends DemandAbstractActionController {
 			$transport->send($zf_message);
 		endif;
 		
-		return $this->redirect()->toRoute('demand');
+		return $this->redirect()->toRoute('private-exchange');
 
 	}
 
@@ -476,7 +476,7 @@ class DemandController extends DemandAbstractActionController {
 		$success = true;
 		$data = array(
 		     'success' => $success,
-			 'location' => '/demand/viewlineitem/',
+			 'location' => '/private-exchange/viewlineitem/',
 			 'previewid' => $InsertionOrderLineItemPreview->InsertionOrderPreviewID,
 		     'data' => array('error_msg' => $error_msg)
 	   	);
@@ -652,10 +652,10 @@ class DemandController extends DemandAbstractActionController {
 	
 		$InsertionOrderLineItemPreview = $InsertionOrderLineItemPreviewFactory->get_row($params);
 	
-		$refresh_url = "/demand/viewlineitem/" . $InsertionOrderLineItemPreview->InsertionOrderPreviewID . "?ispreview=true";
+		$refresh_url = "/private-exchange/viewlineitem/" . $InsertionOrderLineItemPreview->InsertionOrderPreviewID . "?ispreview=true";
 		$viewModel = new ViewModel(array('refresh_url' => $refresh_url));
 	
-		return $viewModel->setTemplate('dashboard-manager/demand/interstitial.phtml');
+		return $viewModel->setTemplate('dashboard-manager/private-exchange/interstitial.phtml');
 	}
 	
 	/**
@@ -812,10 +812,10 @@ class DemandController extends DemandAbstractActionController {
 
 		$InsertionOrderLineItemPreview = $InsertionOrderLineItemPreviewFactory->get_row($params);
 
-		$refresh_url = "/demand/viewlineitem/" . $InsertionOrderLineItemPreview->InsertionOrderPreviewID . "?ispreview=true";
+		$refresh_url = "/private-exchange/viewlineitem/" . $InsertionOrderLineItemPreview->InsertionOrderPreviewID . "?ispreview=true";
 		$viewModel = new ViewModel(array('refresh_url' => $refresh_url));
 
-		return $viewModel->setTemplate('dashboard-manager/demand/interstitial.phtml');
+		return $viewModel->setTemplate('dashboard-manager/private-exchange/interstitial.phtml');
 	}
 
 	public function deliveryfiltervideoAction() {
@@ -1331,7 +1331,7 @@ class DemandController extends DemandAbstractActionController {
     			'center_class' => 'centerj',
 				'user_identity' => $this->identity(),
 				'true_user_name' => $this->auth->getUserName(),
-				'header_title' => '<a href="/demand/createexclusiveinclusion/' . $rtb_banner_id . $this->preview_query . '">Create Domain Exclusive Inclusion</a>',
+				'header_title' => '<a href="/private-exchange/createexclusiveinclusion/' . $rtb_banner_id . $this->preview_query . '">Create Domain Exclusive Inclusion</a>',
 				'is_super_admin' => $this->is_super_admin,
 				'effective_id' => $this->auth->getEffectiveIdentityID(),
 				'impersonate_id' => $this->ImpersonateID
@@ -1471,7 +1471,7 @@ class DemandController extends DemandAbstractActionController {
 
 		  $data = array(
 		     'success' => $success,
-		  	 'location' => '/demand/viewexclusiveinclusion/',
+		  	 'location' => '/private-exchange/viewexclusiveinclusion/',
 		  	 'previewid' => $banner_preview_id,
 		     'data' => array('error_msg' => $error_msg)
 	   	  );
@@ -1596,10 +1596,10 @@ class DemandController extends DemandAbstractActionController {
 		$InsertionOrderLineItemDomainExclusiveInclusionPreviewFactory = \_factory\InsertionOrderLineItemDomainExclusiveInclusionPreview::get_instance();
 		$InsertionOrderLineItemDomainExclusiveInclusionPreviewFactory->saveInsertionOrderLineItemDomainExclusiveInclusionPreview($BannerDomainExclusiveInclusionPreview);
 
-		$refresh_url = "/demand/viewexclusiveinclusion/" . $banner_preview_id . "?ispreview=true";
+		$refresh_url = "/private-exchange/viewexclusiveinclusion/" . $banner_preview_id . "?ispreview=true";
 		$viewModel = new ViewModel(array('refresh_url' => $refresh_url));
 
-		return $viewModel->setTemplate('dashboard-manager/demand/interstitial.phtml');
+		return $viewModel->setTemplate('dashboard-manager/private-exchange/interstitial.phtml');
 
 	}
 
@@ -1692,7 +1692,7 @@ class DemandController extends DemandAbstractActionController {
     			'center_class' => 'centerj',
     			'user_identity' => $this->identity(),
 				'true_user_name' => $this->auth->getUserName(),
-				'header_title' => '<a href="/demand/createdomainexclusion/' . $rtb_banner_id . $this->preview_query . '">Create Domain Exclusion</a>',
+				'header_title' => '<a href="/private-exchange/createdomainexclusion/' . $rtb_banner_id . $this->preview_query . '">Create Domain Exclusion</a>',
 				'is_super_admin' => $this->is_super_admin,
 				'effective_id' => $this->auth->getEffectiveIdentityID(),
 				'impersonate_id' => $this->ImpersonateID
@@ -1834,7 +1834,7 @@ class DemandController extends DemandAbstractActionController {
 
 		$data = array(
 		         'success' => $success,
-				 'location' => '/demand/viewdomainexclusion/',
+				 'location' => '/private-exchange/viewdomainexclusion/',
 				 'previewid' => $banner_preview_id,
 		         'data' => array('error_msg' => $error_msg)
 	   		   );
@@ -1959,10 +1959,10 @@ class DemandController extends DemandAbstractActionController {
 		$InsertionOrderLineItemDomainExclusionPreviewFactory = \_factory\InsertionOrderLineItemDomainExclusionPreview::get_instance();
 		$InsertionOrderLineItemDomainExclusionPreviewFactory->saveInsertionOrderLineItemDomainExclusionPreview($BannerDomainExclusionPreview);
 
-		$refresh_url = "/demand/viewdomainexclusion/" . $banner_preview_id . "?ispreview=true";
+		$refresh_url = "/private-exchange/viewdomainexclusion/" . $banner_preview_id . "?ispreview=true";
 		$viewModel = new ViewModel(array('refresh_url' => $refresh_url));
 
-		return $viewModel->setTemplate('dashboard-manager/demand/interstitial.phtml');
+		return $viewModel->setTemplate('dashboard-manager/private-exchange/interstitial.phtml');
 
 	}
 
@@ -2065,17 +2065,17 @@ class DemandController extends DemandAbstractActionController {
 
 		$data = array(
 	        'success' => $success,
-			'location' => '/demand/viewlineitem/',
+			'location' => '/private-exchange/viewlineitem/',
 			'previewid' => $campaign_preview_id,
 	        'data' => array('error_msg' => $error_msg)
    		 );
    		 
         return $this->getResponse()->setContent(json_encode($data));
 		
-		/*$refresh_url = "/demand/viewlineitem/" . $campaign_preview_id . "?ispreview=true";
+		/*$refresh_url = "/private-exchange/viewlineitem/" . $campaign_preview_id . "?ispreview=true";
 		$viewModel = new ViewModel(array('refresh_url' => $refresh_url));
 
-		return $viewModel->setTemplate('dashboard-manager/demand/interstitial.phtml');*/
+		return $viewModel->setTemplate('dashboard-manager/private-exchange/interstitial.phtml');*/
 
 	}
 
@@ -2144,7 +2144,7 @@ class DemandController extends DemandAbstractActionController {
 				'user_id_list' => $this->user_id_list_demand_customer,
 	    		'user_identity' => $this->identity(),
 				'true_user_name' => $this->auth->getUserName(),
-				'header_title' => '<a href="/demand/createlineitem/' . $ad_campaign_id . $this->preview_query . '">Create New Line Item</a>',
+				'header_title' => '<a href="/private-exchange/createlineitem/' . $ad_campaign_id . $this->preview_query . '">Create New Line Item</a>',
 				'is_super_admin' => $this->is_super_admin,
 				'effective_id' => $this->auth->getEffectiveIdentityID(),
 				'impersonate_id' => $this->ImpersonateID
@@ -2488,10 +2488,10 @@ class DemandController extends DemandAbstractActionController {
 			
 		endif;
 
-		$refresh_url = "/demand/viewlineitem/" . $BannerPreview->InsertionOrderPreviewID . "?ispreview=true";
+		$refresh_url = "/private-exchange/viewlineitem/" . $BannerPreview->InsertionOrderPreviewID . "?ispreview=true";
 		$viewModel = new ViewModel(array('refresh_url' => $refresh_url));
 
-		return $viewModel->setTemplate('dashboard-manager/demand/interstitial.phtml');
+		return $viewModel->setTemplate('dashboard-manager/private-exchange/interstitial.phtml');
 
 	}
 
@@ -2941,10 +2941,10 @@ class DemandController extends DemandAbstractActionController {
    		 
          return $this->getResponse()->setContent(json_encode($data));
 		
-		/*$refresh_url = "/demand/?ispreview=true";
+		/*$refresh_url = "/private-exchange/?ispreview=true";
 		$viewModel = new ViewModel(array('refresh_url' => $refresh_url));
 
-		return $viewModel->setTemplate('dashboard-manager/demand/interstitial.phtml');*/
+		return $viewModel->setTemplate('dashboard-manager/private-exchange/interstitial.phtml');*/
 
 	}
 
@@ -3176,10 +3176,10 @@ class DemandController extends DemandAbstractActionController {
 		    
 	    endif;
 	    
-		$refresh_url = "/demand/?ispreview=true";
+		$refresh_url = "/private-exchange/?ispreview=true";
 		$viewModel = new ViewModel(array('refresh_url' => $refresh_url));
 
-		return $viewModel->setTemplate('dashboard-manager/demand/interstitial.phtml');
+		return $viewModel->setTemplate('dashboard-manager/private-exchange/interstitial.phtml');
 
 	}
 
@@ -3275,7 +3275,7 @@ class DemandController extends DemandAbstractActionController {
 
 		$InsertionOrder = $InsertionOrderFactory->get_row($params);
 
-		return array("BCInsertionOrder"=>'<a href="/demand/viewlineitem/' . $InsertionOrder->InsertionOrderID . '">' . $InsertionOrder->Name . "</a>");
+		return array("BCInsertionOrder"=>'<a href="/private-exchange/viewlineitem/' . $InsertionOrder->InsertionOrderID . '">' . $InsertionOrder->Name . "</a>");
 
 	}
 
@@ -3292,7 +3292,7 @@ class DemandController extends DemandAbstractActionController {
 
 		$InsertionOrderPreview = $InsertionOrderPreviewFactory->get_row($params);
 
-		return array("BCInsertionOrder"=>'<a href="/demand/viewlineitem/' . $InsertionOrderPreview->InsertionOrderPreviewID . '?ispreview=true">' . $InsertionOrderPreview->Name . "</a>");
+		return array("BCInsertionOrder"=>'<a href="/private-exchange/viewlineitem/' . $InsertionOrderPreview->InsertionOrderPreviewID . '?ispreview=true">' . $InsertionOrderPreview->Name . "</a>");
 
 	}
 

@@ -12,7 +12,7 @@ endif;
 ?>
 <div class="steps-container step1">
 <ul class="breadcrumb breadcrumb-heading">
-    <li><a href="/demand/<?php echo $preview_query; ?>">Insertion Orders</a><span class="divider">/</span></li>
+    <li><a href="/private-exchange/<?php echo $preview_query; ?>">Insertion Orders</a><span class="divider">/</span></li>
     <li><?php echo $bread_crumb_info["BCInsertionOrder"]; ?><span class="divider">/</span></li>
     <li class="active">Line Items</li>
     </ul>
@@ -87,24 +87,24 @@ endif;
             <?php echo $banner_id; ?>
            </td>
            <td>
-            <a href="/demand/editlineitem/<?php echo $banner_id; ?><?php echo $preview_query; ?>"><?php echo $edit; ?></a>
+            <a href="/private-exchange/editlineitem/<?php echo $banner_id; ?><?php echo $preview_query; ?>"><?php echo $edit; ?></a>
             <hr />
             
             <a href="javascript:void(0);" onclick="deleteBannerModal('/demand/deletelineitem/<?php echo $banner_id;?><?php echo $preview_query;?>','<?php echo $rtb_banner->Name;?>');">Delete Line Item</a>
            </td>
            <td>
-            <a href="/demand/deliveryfilter<?php echo $video; ?>/<?php echo $banner_id;?><?php echo $preview_query;?>">Edit Delivery Filter</a>
+            <a href="/private-exchange/deliveryfilter<?php echo $video; ?>/<?php echo $banner_id;?><?php echo $preview_query;?>">Edit Delivery Filter</a>
             <hr />
             
             <a href="javascript:void(0);" onclick="deleteDeliveryFilterModal('/demand/deletedeliveryfilter/<?php echo $banner_id;?><?php echo $preview_query;?>','<?php echo $rtb_banner->Name;?>');">Delete Delivery Filter</a>
            </td>
            <td>
-            <a href="/demand/createdomainexclusion/<?php echo $banner_id;?><?php echo $preview_query;?>">Create Domain Exclusion</a>
-            <hr /><a href="/demand/viewdomainexclusion/<?php echo $banner_id;?><?php echo $preview_query;?>">View Domain Exclusions</a>
+            <a href="/private-exchange/createdomainexclusion/<?php echo $banner_id;?><?php echo $preview_query;?>">Create Domain Exclusion</a>
+            <hr /><a href="/private-exchange/viewdomainexclusion/<?php echo $banner_id;?><?php echo $preview_query;?>">View Domain Exclusions</a>
            </td>
            <td>
-            <a href="/demand/createexclusiveinclusion/<?php echo $banner_id;?><?php echo $preview_query; ?>">Create Exclusive Inclusion</a>
-            <hr /><a href="/demand/viewexclusiveinclusion/<?php echo $banner_id;?><?php echo $preview_query;?>">View Exclusive Inclusion</a>
+            <a href="/private-exchange/createexclusiveinclusion/<?php echo $banner_id;?><?php echo $preview_query; ?>">Create Exclusive Inclusion</a>
+            <hr /><a href="/private-exchange/viewexclusiveinclusion/<?php echo $banner_id;?><?php echo $preview_query;?>">View Exclusive Inclusion</a>
            </td>
            <td>
             <?php echo $rtb_banner->Name; ?>

@@ -34,7 +34,7 @@ abstract class PublisherAbstractActionController extends DashboardAbstractAction
 			(strpos($route_name, 'publisher') === 0
 			&& $this->PublisherInfoID == null
 			&& $this->DemandCustomerInfoID != null)):
-			return $this->redirect()->toRoute('demand');
+			return $this->redirect()->toRoute('private-exchange');
 		endif;
 		
 		return $initialized;

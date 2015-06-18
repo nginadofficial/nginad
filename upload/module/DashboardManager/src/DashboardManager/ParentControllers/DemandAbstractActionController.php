@@ -25,7 +25,7 @@ abstract class DemandAbstractActionController extends DashboardAbstractActionCon
 		
 		$route_name = $this->getEvent()->getRouteMatch()->getMatchedRouteName();
 		if (!$this->is_super_admin &&
-			(strpos($route_name, 'demand') === 0
+			(strpos($route_name, 'private-exchange') === 0
 			&& $this->DemandCustomerInfoID == null
 			&& $this->PublisherInfoID != null)):
 			return $this->redirect()->toRoute('publisher');

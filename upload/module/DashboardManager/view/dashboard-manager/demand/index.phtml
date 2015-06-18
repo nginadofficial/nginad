@@ -136,8 +136,8 @@ $effective_user_in_dashboard = false;
            </td>
            <?php if (isset($ad_campaign->InsertionOrderPreviewID)): ?>
            <td>
-              <a href="/demand/approvecampaign/<?php echo $ad_campaign->InsertionOrderPreviewID;?>" onclick="return confirm('Are you sure?');">APPROVE CAMPAIGN CHANGES</a>
-              <hr /><a href="/demand/rejectcampaign/<?php echo $ad_campaign->InsertionOrderPreviewID; ?>" onclick="return confirm('Are you sure?');">REJECT CAMPAIGN CHANGES</a>
+              <a href="/private-exchange/approvecampaign/<?php echo $ad_campaign->InsertionOrderPreviewID;?>" onclick="return confirm('Are you sure?');">APPROVE CAMPAIGN CHANGES</a>
+              <hr /><a href="/private-exchange/rejectcampaign/<?php echo $ad_campaign->InsertionOrderPreviewID; ?>" onclick="return confirm('Are you sure?');">REJECT CAMPAIGN CHANGES</a>
            </td>
            <?php else: ?>
            <td>
@@ -171,12 +171,12 @@ $effective_user_in_dashboard = false;
             <?php elseif (isset($ad_campaign->Deleted) && $ad_campaign->Deleted == 1): ?>
             	<?php echo '<span style="color:red; font-weight: bold;">DELETED</span>'; ?>
             	<?php if ($is_super_admin === false): ?>
-            		<hr /><a href="/demand/cancelcampaign/<?php echo $ad_campaign->InsertionOrderPreviewID; ?>" onclick="return confirm('Are you sure?');">CANCEL CAMPAIGN CHANGES</a>
+            		<hr /><a href="/private-exchange/cancelcampaign/<?php echo $ad_campaign->InsertionOrderPreviewID; ?>" onclick="return confirm('Are you sure?');">CANCEL CAMPAIGN CHANGES</a>
             	<?php endif; ?>
             <?php else: ?>
             	<?php echo '<span style="color:brown; font-weight: bold;">PENDING APPROVAL</span>'; ?>
             	<?php if ($is_super_admin === false): ?>
-            		<hr /><a href="/demand/cancelcampaign/<?php echo $ad_campaign->InsertionOrderPreviewID; ?>" onclick="return confirm('Are you sure?');">CANCEL CAMPAIGN CHANGES</a>
+            		<hr /><a href="/private-exchange/cancelcampaign/<?php echo $ad_campaign->InsertionOrderPreviewID; ?>" onclick="return confirm('Are you sure?');">CANCEL CAMPAIGN CHANGES</a>
             	<?php endif; ?>
             <?php endif; ?>
            </td>
@@ -220,14 +220,14 @@ $effective_user_in_dashboard = false;
            </td>
             <?php if (($is_super_admin === true && $effective_id != 0) || $is_super_admin === false): ?>
            <td>
-            <a href="/demand/editinsertionorder/<?php echo $campaign_id; ?><?php echo $preview_query; ?>">Edit Insertion Order</a>
+            <a href="/private-exchange/editinsertionorder/<?php echo $campaign_id; ?><?php echo $preview_query; ?>">Edit Insertion Order</a>
             <hr />
            
             <a href="javascript:void(0);" onclick="deleteCampaignModal('/demand/deleteinsertionorder/<?php echo $campaign_id; ?><?php echo $preview_query;?>','<?php echo $ad_campaign->Name;?>');">Delete Insertion Order</a>
            </td>
            <td>
-            <a href="/demand/createlineitem/<?php echo $campaign_id; ?><?php echo $preview_query;?>">Create Line Item</a>
-            <hr /><a href="/demand/viewlineitem/<?php echo $campaign_id; ?><?php echo $preview_query;?>">View Line Items</a>
+            <a href="/private-exchange/createlineitem/<?php echo $campaign_id; ?><?php echo $preview_query;?>">Create Line Item</a>
+            <hr /><a href="/private-exchange/viewlineitem/<?php echo $campaign_id; ?><?php echo $preview_query;?>">View Line Items</a>
            </td>
            <?php endif; ?>
            </tr>

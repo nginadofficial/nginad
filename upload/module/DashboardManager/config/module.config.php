@@ -190,10 +190,10 @@ return array(
                             ),
                     ),
             ),
-            'demand' => array(
+            'private-exchange' => array(
             		'type'    => 'segment',
             		'options' => array(
-            				'route'    =>  '/demand[/[:action[/[:param1[/]]]]]',
+            				'route'    =>  '/private-exchange[/[:action[/[:param1[/]]]]]',
             				'constraints' => array(
             						'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
             						'param1'     => '[0-9]+',
@@ -338,7 +338,7 @@ return array(
         'template_path_stack' => array(
                     __DIR__ . '/../view',
 //            'manager' => __DIR__ . '/../view',
-//            'demand' => __DIR__ . '/../view',
+//            'private-exchange' => __DIR__ . '/../view',
         ),
     )
 );

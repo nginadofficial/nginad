@@ -12,7 +12,7 @@ $is_company = strpos(strtolower($request_path), "/company") === 0;
 $is_legal = strpos(strtolower($request_path), "/legal") === 0;
 $is_users = strpos(strtolower($request_path), "/users") === 0;
 $is_signup = strpos(strtolower($request_path), "/signup") === 0;
-$is_manager = strpos(strtolower($request_path), "/demand") === 0;
+$is_manager = strpos(strtolower($request_path), "/private-exchange") === 0;
 $is_publisher = strpos(strtolower($request_path), "/publisher") === 0;
 $is_website = strpos(strtolower($request_path), "/websites") === 0;
 $is_maintenance = strpos(strtolower($request_path), "/maintenance") === 0;

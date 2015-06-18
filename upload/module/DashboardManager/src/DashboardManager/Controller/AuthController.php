@@ -64,7 +64,7 @@ class AuthController extends ZendAbstractActionController {
     		if ($this->getAuthService()->getPublisherInfoID() != null):
     			return $this->redirect()->toRoute('publisher');
     		else:
-    			return $this->redirect()->toRoute('demand');
+    			return $this->redirect()->toRoute('private-exchange');
     		endif;
     	endif;
 
@@ -132,7 +132,7 @@ class AuthController extends ZendAbstractActionController {
    			 	$user_session->message = 'Invalid username or password.';
                 return $this->redirect()->toRoute($redirect);
    			else:
-   				$redirect = 'demand';
+   				$redirect = 'private-exchange';
 	   			if ($this->getAuthService()->getPublisherInfoID() != null):
 	   				$redirect = 'publisher';
 	   			endif;
@@ -154,7 +154,7 @@ class AuthController extends ZendAbstractActionController {
     
     	$redirect = intval($this->params()->fromRoute('param1', null));
     	
-    	if ($redirect != 'demand'):
+    	if ($redirect != 'private-exchange'):
     		$redirect = 'publisher';
     	endif;
     	
@@ -185,7 +185,7 @@ class AuthController extends ZendAbstractActionController {
 	    	
 	    	$result = $auth_service_trusted->authenticateTrusted($userDetails);
 	    	$authUsersFactory->saveUser($auth_User);
-    		return $this->redirect()->toRoute('demand');
+    		return $this->redirect()->toRoute('private-exchange');
     	else:
     		return $this->redirect()->toRoute('login');
     	endif;

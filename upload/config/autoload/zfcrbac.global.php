@@ -53,7 +53,7 @@ return [
 	       'ZfcRbac\Guard\RouteGuard' => [
     	           'manager' => ['member'],
     	           'login/*' => ['guest'],
-    	           'demand' => ['demand'],
+    	           'private-exchange' => ['private-exchange'],
     	           'delivery' => ['guest'],
     	           'success' => ['guest'],
     	           'home' => ['guest'],
@@ -104,10 +104,10 @@ return [
                     'permissions' => ['insert','edit','read','delete','view'],
                 ],
                 'member' => [
-                    'children'    => ['publisher','demand'],
+                    'children'    => ['publisher','private-exchange'],
                     'permissions' => ['insert','edit','read'],
                 ],
-                'demand' => [
+                'private-exchange' => [
                     'children'    => ['guest'],
                     'permissions' => ['insert','edit','read'],
                 ],
