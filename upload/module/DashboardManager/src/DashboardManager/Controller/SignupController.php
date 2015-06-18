@@ -253,9 +253,9 @@ class SignupController extends PublisherAbstractActionController {
 			$authUsers->user_email		 			= $Email;
 			$authUsers->user_password	 			= \util\Password::md5_split_salt($Password);
 			$authUsers->user_role		 			= 3; //role as member
-			$authUsers->user_enabled     			= 0;
-			$authUsers->user_verified    			= 0;
-			$authUsers->user_agreement_accepted	   	= 0;
+			$authUsers->user_enabled     			= 1;
+			$authUsers->user_verified    			= 1;
+			$authUsers->user_agreement_accepted	   	= 1;
 			$authUsers->create_date	   	 			= date("Y-m-d H:i:s");
 				
 			$authUsersFactory->saveUser($authUsers);

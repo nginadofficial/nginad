@@ -197,7 +197,7 @@ class PublisherController extends PublisherAbstractActionController {
 				'true_user_name' => $this->auth->getUserName(),
 				'domain_list_raw' => $PublisherWebsiteList,
 				'domain_list' => $this->order_data_table($meta_data, $PublisherWebsiteList, $headers),
-				'is_super_admin' => $this->is_super_admin,
+				'is_domain_admin' => $this->is_domain_admin,
 				'user_id_list' => $this->user_id_list_publisher,
 				'domain_owner' => isset($PublisherInfo->Name) ? $PublisherInfo->Name : "",
 				'impersonate_id' => $this->ImpersonateID,
@@ -211,8 +211,8 @@ class PublisherController extends PublisherAbstractActionController {
 				'website_impressions_network_loss_rate_list' => isset($website_impressions_network_loss_rate_list) ? $website_impressions_network_loss_rate_list : array()
 		));
 	
-		if ($this->is_super_admin == false
-		|| ($this->is_super_admin == true && $this->PublisherInfoID != null && $this->auth->getEffectiveIdentityID() != 0)):
+		if ($this->is_domain_admin == false
+		|| ($this->is_domain_admin == true && $this->PublisherInfoID != null && $this->auth->getEffectiveIdentityID() != 0)):
 		 
 			$view->header_title = '<a href="/publisher/createdomain">Create New Domain</a>';
 		else:
