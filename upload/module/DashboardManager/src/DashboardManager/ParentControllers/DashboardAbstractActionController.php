@@ -187,7 +187,7 @@ abstract class DashboardAbstractActionController extends ZendAbstractActionContr
     		
     	elseif ($this->auth->isDomainAdmin($this->config_handle)):
     		
-	    	$auth_Users_list = $this->auth->getDomainPublisherUsers($this->getUserID());
+	    	$auth_Users_list = $this->auth->getDomainPublisherUsers($this->auth->getUserID());
 	    	 
 	    	foreach ($auth_Users_list as $auth_User):
 	    	

@@ -6,6 +6,9 @@ ALTER TABLE  `PublisherInfo` ADD  `ParentID` int NOT NULL DEFAULT 0 AFTER  `Publ
 UPDATE rbac_role SET role_name = 'super_admin' WHERE role_id = 1;
 UPDATE rbac_role SET role_name = 'domain_admin' WHERE role_id = 2;
 
+-- demand users are now user_role id 2 - domain_admins
+UPDATE auth_Users SET user_role = 2 WHERE DemandCustomerInfoID IS NOT NULL;
+
 -- rename ad campaigns to IO and rename banner to line item
 -- to satisfy all the 100 year old ad-ops out there urning for the years gone of IOs on fax machines
 

@@ -247,7 +247,7 @@ implements IdentityInterface
                 endif;
             	$this->ImpersonateIdentityID = $identity; //Initialize the value.
             
-            elseif ($this->isDomainAdmin($config)):
+            elseif ($this->isDomainAdmin($config) && $identity != 0):
 
                 if ($this->debug && $this->debug_verbose):
                 

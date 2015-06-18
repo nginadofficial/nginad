@@ -100,7 +100,11 @@ echo $this->doctype(); ?>
                   <li><a href="/users/account">Account Settings</a></li>
                   <?php if($userRole=='domain_admin' || $userRole=='super_admin'): ?>
                   <li><a href="/users/publishers">Publisher List</a></li> 
+                  <?php endif;?>
+                  <?php if($userRole=='super_admin'): ?>
                   <li><a href="/users/customers">Customer List</a></li> 
+                  <?php endif;?>
+                  <?php if($userRole=='domain_admin' || $userRole=='super_admin'): ?>
                   <li><a href="/websites">Websites List</a></li>
                   <?php endif;?>
                   <li><a href="<?php echo $this->url('login/process', array('action'=>'logout')); ?>">Logout</a></li>

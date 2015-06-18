@@ -16,15 +16,15 @@ class AuthHelper {
 		$params["user_id"] 		= $child_id;
 		$authUserChild		 	= $authUsersFactory->get_row($params);
 		
-		if ($authUserChild->PublisherInfoID != null):
+		if (isset($authUserChild->PublisherInfoID) && $authUserChild->PublisherInfoID != null):
 			
 			$PublisherInfoFactory 		= \_factory\PublisherInfo::get_instance();
 			$params = array();
 			$params["ParentID"] 		= $parent_id;
 			$params["PublisherInfoID"] 	= $authUserChild->PublisherInfoID;
-			$PublisherInfo_list 		= $PublisherInfoFactory->get_row($params);
+			$PublisherInfo	 		= $PublisherInfoFactory->get_row($params);
 				
-			if ($authUserChild->PublisherInfoID !== null):
+			if ($PublisherInfo !== null):
 				return true;
 			endif;
 			
