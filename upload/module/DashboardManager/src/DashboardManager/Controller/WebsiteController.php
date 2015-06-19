@@ -169,6 +169,104 @@ class WebsiteController extends PublisherAbstractActionController {
 		
 	}
 	
+	public function websitelist() {
+	
+		$initialized = $this->initialize();
+		if ($initialized !== true) return $initialized;
+    	
+    	if (!$this->auth->hasIdentity()):
+    		return $this->redirect()->toRoute('login');
+		elseif (!$this->is_domain_admin):
+			return $this->redirect()->toRoute('publisher');
+		endif;
+    	
+		$publisher_id = intval($this->params()->fromRoute('param1', 0));
+
+		$PublisherWebsiteFactory = \_factory\PublisherWebsite::get_instance();
+	    $PublisherInfoFactory = \_factory\PublisherInfo::get_instance();
+	    
+	    $orders = 'DateCreated DESC'; 	    
+	    $params = array();
+	    $params["DomainOwnerID"] = $publisher_id;
+	    $pending_list = $PublisherWebsiteFactory->get($params, $orders);
+	    
+	    $view = new ViewModel(array(
+	    	'dashboard_view' => 'account',
+	    	'pending_list' => $pending_list,
+	    	'PublisherInfoFactory' => $PublisherInfoFactory,
+	    	'vertical_map' => \util\DeliveryFilterOptions::$vertical_map,
+	       	'user_id_list' => $this->user_id_list,
+	      	'user_identity' => $this->identity(),
+		  	'true_user_name' => $this->auth->getUserName(),
+			'header_title' => 'Private Exchange Publisher Websites',
+			'is_domain_admin' => $this->is_domain_admin,
+			'effective_id' => $this->auth->getEffectiveIdentityID(),
+			'impersonate_id' => $this->ImpersonateID
+	    ));
+   
+	    return $view;
+	
+	}
+	
+	public function pxlistAction() {
+	
+		$initialized = $this->initialize();
+		if ($initialized !== true) return $initialized;
+		 
+		if (!$this->auth->hasIdentity()):
+			return $this->redirect()->toRoute('login');
+		elseif (!$this->is_domain_admin):
+			return $this->redirect()->toRoute('publisher');
+		endif;
+		 
+		$publisher_id = intval($this->params()->fromRoute('param1', 0));
+	
+		$PublisherInfoFactory = \_factory\PublisherInfo::get_instance();
+		$params = array();
+		$params["PublisherInfoID"] = $publisher_id;
+		$PublisherInfo = $PublisherInfoFactory->get_row($params);
+		
+		if (!$PublisherInfo):
+			die("Publisher Not Found: CODE 103");
+		endif;
+		
+		$authUsersFactory 			= \_factory\authUsers::get_instance();
+		$params = array();
+		$params["PublisherInfoID"] 	= $PublisherInfo->PublisherInfoID;
+		$authUserChild		 		= $authUsersFactory->get_row($params);
+		
+		if (!$authUserChild):
+			die("Publisher Not Found: CODE 104");
+		endif;
+		
+		if (!\util\AuthHelper::domain_user_authorized($this->auth->getUserID(), $authUserChild->user_id)):
+			die("Not Authorized: CODE 105");
+		endif;
+		
+		$PublisherWebsiteFactory = \_factory\PublisherWebsite::get_instance();
+		$orders = 'DateCreated DESC';
+		$params = array();
+		$params["DomainOwnerID"] = $publisher_id;
+		$pending_list = $PublisherWebsiteFactory->get($params, $orders);
+		 
+		$view = new ViewModel(array(
+				'dashboard_view' => 'account',
+				'pending_list' => $pending_list,
+				'PublisherInfoFactory' => $PublisherInfoFactory,
+				'vertical_map' => \util\DeliveryFilterOptions::$vertical_map,
+				'user_id_list' => $this->user_id_list,
+				'user_identity' => $this->identity(),
+				'true_user_name' => $this->auth->getUserName(),
+				'header_title' => 'Private Exchange Publisher Websites',
+				'is_domain_admin' => $this->is_domain_admin,
+				'effective_id' => $this->auth->getEffectiveIdentityID(),
+				'impersonate_id' => $this->ImpersonateID
+		));
+		 
+		return $view;
+	
+	}
+	
 	public function listAction() {
 	
 		$initialized = $this->initialize();

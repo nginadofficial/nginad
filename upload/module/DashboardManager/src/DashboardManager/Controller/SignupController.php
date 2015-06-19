@@ -589,6 +589,56 @@ class SignupController extends PublisherAbstractActionController {
 	  return $view->setTemplate('dashboard-manager/auth/changepassword.phtml');
 	}
 
+	public function publishersdomainAction() {
+	
+		$initialized = $this->initialize();
+		if ($initialized !== true) return $initialized;
+	
+		$authUsers = new \model\authUsers();
+		$authUsersFactory = \_factory\authUsers::get_instance();
+	
+		$userData = $authUsersFactory->get_row(array("user_id" => $this->auth->getUserID()));
+
+		if (!$this->is_domain_admin) :
+			return $this->redirect()->toRoute($this->dashboard_home);
+		endif;
+	
+		/*
+		 * Only get publishers created by the domain admin 
+		 * for the private exchange
+		 */
+		
+		$childAccountData = $authUsersFactory->get(array("parent_id" => $this->auth->getUserID()));
+		$PublisherInfo = new \model\PublisherInfo();
+		$PublisherInfoFactory = \_factory\PublisherInfo::get_instance();
+		
+		$userDetail = array();
+		
+		foreach ($childAccountData as $childAccount):
+			
+			$userDetail[] = $PublisherInfoFactory->get_row(array("PublisherInfoID" => $childAccount->PublisherInfoID));
+			
+		endforeach;
+		
+		$view = new ViewModel(array(
+				'dashboard_view' => 'account',
+				'user_detail' => $userDetail,
+				'authUsersFactory' => $authUsersFactory,
+				'user_type' => 'publisher',
+				'user_id' => $this->auth->getUserID(),
+				'user_id_list' => $this->user_id_list,
+				'user_identity' => $this->identity(),
+				'true_user_name' => $this->auth->getUserName(),
+				'header_title' => 'Private Exchange Publishers List',
+				'is_domain_admin' => $this->is_domain_admin,
+				'effective_id' => $this->auth->getEffectiveIdentityID(),
+				'impersonate_id' => $this->ImpersonateID
+		));
+		 
+		return $view->setTemplate('dashboard-manager/auth/publishersdomain.phtml');
+	
+	}
+	
 	public function publishersAction() {
 		
 		$initialized = $this->initialize();

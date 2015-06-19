@@ -141,57 +141,16 @@ class PublisherController extends PublisherAbstractActionController {
 		$parameters = array(); // Set the parameters to empty first.
 	
 		$parameters['DomainOwnerID'] = $this->PublisherInfoID;
-		 
-		$publisher_markup_rate = $this->config_handle['system']['default_publisher_markup_rate'];
-		$publisher_impressions_network_loss_rate = $this->config_handle['system']['default_publisher_impressions_network_loss_rate'];
-		 
+
 		$PublisherWebsiteList = $PublisherWebsiteFactory->get($parameters);
 		 
-		$headers = array("#","Domain","Domain Markup","Imps Loss Rate","Domain Owner","Created","Updated","Approval","Actions");
-		$meta_data = array("WebDomain","DomainMarkupRate","DomainPublisherImpressionsLossRate","DomainOwnerID","DateCreated","DateUpdated","ApprovalFlag");
-			 
-		// admin is logged in as a user, get the markup if any for that user
-		if ($this->ImpersonateID != 0 && !empty($this->PublisherInfoID)):
-		
-			$publisher_markup = \util\Markup::getMarkupForPublisher($this->PublisherInfoID, $this->config_handle, false);
-			if ($publisher_markup != null):
-				$publisher_markup_rate = $publisher_markup->MarkupRate;
-			endif;
-			
-			$publisher_impressions_network_loss = \util\NetworkLossCorrection::getNetworkLossCorrectionRateForPublisher($this->PublisherInfoID, $this->config_handle, false);
-			if ($publisher_impressions_network_loss != null):
-				$publisher_impressions_network_loss_rate = $publisher_impressions_network_loss->CorrectionRate;
-			endif;
-		
-		endif;
-	
-		foreach ($PublisherWebsiteList as $PublisherWebsite):
-		
-			$website_markup = \util\Markup::getMarkupForPublisherWebsite($PublisherWebsite->PublisherWebsiteID, $this->config_handle, false);
-			 
-			if ($website_markup != null):
-				$website_markup_rate_list[$PublisherWebsite->PublisherWebsiteID] = $website_markup->MarkupRate * 100;
-			else:
-				$website_markup_rate_list[$PublisherWebsite->PublisherWebsiteID] = $publisher_markup_rate * 100;
-			endif;
-				
-			$website_impressions_network_loss = \util\NetworkLossCorrection::getNetworkLossCorrectionRateForPublisherWebsite($PublisherWebsite->PublisherWebsiteID, $this->config_handle, false);
-		
-			if ($website_impressions_network_loss != null):
-				$website_impressions_network_loss_rate_list[$PublisherWebsite->PublisherWebsiteID] = $website_impressions_network_loss->CorrectionRate * 100;
-			else:
-				$website_impressions_network_loss_rate_list[$PublisherWebsite->PublisherWebsiteID] = $publisher_impressions_network_loss_rate * 100;
-			endif;
-		 
-		endforeach;
+		$headers = array("#","Domain","Domain Owner","Created","Updated","Approval","Actions");
+		$meta_data = array("WebDomain","DomainOwnerID","DateCreated","DateUpdated","ApprovalFlag");
 		 
 		$PublisherInfoFactory = \_factory\PublisherInfo::get_instance();
 		$params = array();
 		$params["PublisherInfoID"] = $this->PublisherInfoID;
 		$PublisherInfo = $PublisherInfoFactory->get_row($params);
-		 
-		$publisher_markup_rate *= 100;
-		$publisher_impressions_network_loss_rate *= 100;
 		 
 		$view = new ViewModel(array(
 				'true_user_name' => $this->auth->getUserName(),
@@ -205,10 +164,6 @@ class PublisherController extends PublisherAbstractActionController {
 				'publisher_info_id' => $this->PublisherInfoID,
 				'dashboard_view' => 'publisher',
 				'user_identity' => $this->identity(),
-				'publisher_markup_rate' => $publisher_markup_rate,
-				'publisher_impressions_network_loss_rate' => $publisher_impressions_network_loss_rate,
-				'website_markup_rate_list' => isset($website_markup_rate_list) ? $website_markup_rate_list : array(),
-				'website_impressions_network_loss_rate_list' => isset($website_impressions_network_loss_rate_list) ? $website_impressions_network_loss_rate_list : array()
 		));
 	
 		if ($this->is_domain_admin == false

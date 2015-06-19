@@ -23,7 +23,7 @@ $effective_user_in_dashboard = false;
     			 <form name="loginas" id="loginas" action="/private-exchange/publishers/loginasdomain" class="forms pull-left" style="margin-top: 10px;">
     			<span style="font-size: 12px; font-weight: bold;">LOG IN AS USER</span>	
     			 	<select name="userid" onchange="submitForm();">
-    			 		<option value="0">Admin (<?php echo $true_user_name; ?>)</option>
+    			 		<option value="0">PX Admin (<?php echo $true_user_name; ?>)</option>
     					<?php foreach ($user_id_list as $user_info_id => $user_info_name): ?>
     						<option <?php 
 							if ($user_info_id == $effective_id): 
@@ -36,35 +36,6 @@ $effective_user_in_dashboard = false;
     	<?php endif; ?>    		
     	</div>
 <div id="main-container">
-<div class="pull-left" style="margin: 10px 0 0 10px;">
-			<?php if ($effective_id != 0 && $effective_user_in_dashboard === true): ?>
-					<div>
-					<form name="changepublishermarkup" id="changepublishermarkup" action="/publisher/changepublishermarkup"class="forms pull-right" >
-						<input type="hidden" name="markuppublisherinfoid" value="<?php echo $publisher_info_id;?>" />
-				
-					<span style="font-size: 12px; font-weight: bold;">Publisher Markup Rate:</span>	 <input type="text"  style="text-align: right" name="publisher-markup" class="span1" value="<?php echo $publisher_markup_rate;?>">%
-						<div style="display: inline;">
-							<input type="submit" name="publisher-markup-submit" class="btn actv  btn-small" value="Change Publisher Markup" style="width: 180px; margin-left: 8px; margin-bottom: 10px;" />
-							<span style="cursor: pointer;" title="The Rate that the Impressions Will be Marked up from the Bid Price and Floor Prices (Your Profit)"><img style="border: 0; margin-bottom: 10px;" src="/images/tooltip.jpg" /></span>
-						</div>
-					
-					</form>
-					</div>
-					<div style="position: relative;">
-					<form name="changepublisherimpressionsnetworkloss" id="changepublisherimpressionsnetworkloss" action="/publisher/changepublisherimpressionsnetworkloss"class="forms pull-right" >
-						<input type="hidden" name="networkimpressionslosspublisherinfoid" value="<?php echo $publisher_info_id;?>" />
-				
-					<span style="font-size: 12px; font-weight: bold;">Publisher Impressions Network Loss Rate:</span>	 <input type="text"  style="text-align: right" name="publisher-impressions-network-loss" class="span1" value="<?php echo $publisher_impressions_network_loss_rate;?>">%
-						
-						<div style="display: inline;">
-							<input type="submit" name="publisher-impressions-network-loss-submit" class="btn actv  btn-small" value="Change Network Loss Rate" style="width: 180px; margin-left: 8px; margin-bottom: 10px;" />
-							<span style="cursor: pointer;" title="Harmonizes lost impressions due to client network issues so SSPs numbers match the numbers in NginAd Reports"><img style="border: 0; margin-bottom: 10px;" src="/images/tooltip.jpg" /></span>
-						</div>
-					</form>
-					</div>
-
-			<?php endif; ?>
-	</div>
     <div class="formbox">      
     	<br clear="all"/>
     <div id="selection-results" class="steps-box">
@@ -102,41 +73,7 @@ $effective_user_in_dashboard = false;
                                     case "WebDomain":
                                         echo $data . " (" . $domain_id .")";
                                         break; 
-                                    case "DomainMarkupRate":
-                                    	if ($is_domain_admin === true && $effective_id != 0):
-							           		if (isset($domain_id) && $domain_id != null && isset($website_markup_rate_list[$domain_id])): ?>
-												<form name="change-domain-markup-<?php echo $domain_id;?>" class="change-domain-markup" action="/publisher/changedomainmarkup">
-													<input type="hidden" name="markupdomainid" value="<?php echo $domain_id;?>" />
-													<div style="float: right;">
-														<input type="text" style="text-align: right" name="domain-markup" class="input-mini" value="<?php echo $website_markup_rate_list[$domain_id];?>">%
-													</div>
-													<div>
-														<input type="submit" name="domain-markup-submit" class="btn btn-warning btn-mini" value="Update Markup" style="" />
-													</div>
-												</form>
-											<?php else: ?>
-												NOT AVAILABLE
-											<?php endif; 
-										endif;
-                                        break;
-                                   	case "DomainPublisherImpressionsLossRate":
-                                  		if ($is_domain_admin === true && $effective_id != 0):
-                                      		if (isset($domain_id) && $domain_id != null && isset($website_markup_rate_list[$domain_id])): ?>
-                                        		<form name="change-impressions-network-loss-<?php echo $domain_id;?>" class="change-impressions-network-loss" action="/publisher/changedomainimpressionsnetworkloss">
-                                        			<input type="hidden" name="impressionsnetworklossdomainid" value="<?php echo $domain_id;?>" />
-                                        			<div style="float: right;">
-                                        				<input type="text" style="text-align: right" name="domain-impressions-network-loss" class="input-mini" value="<?php echo $website_impressions_network_loss_rate_list[$domain_id];?>">%
-                                        			</div>
-                                        			<div>
-                                        				<input type="submit" name="domain-impressions-network-loss-submit" class="btn btn-warning btn-mini" value="Update Loss Rate" style="" />
-                                        			</div>
-                                        		</form>
-                                        	<?php else: ?>
-                                        		NOT AVAILABLE
-                                        	<?php endif; 
-                                        endif;
-                                      	break;
-                                	case "DomainOwnerID":
+                                    case "DomainOwnerID":
                                 	    echo $domain_owner . " (" . $data . ")";
                                         break;
                                 	case "ApprovalFlag":

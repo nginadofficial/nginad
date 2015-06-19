@@ -1,0 +1,137 @@
+<?php
+$this->headScript()->prependFile($this->basePath() . '/js/script.js');
+?>
+<div class="steps-container step1">
+    <div id="selection-results" class="steps-box">
+   <div class="formbox">  
+          <table class="table table-striped table-bordered table-margin">
+            <tr>
+           <th>
+				Publisher ID
+           </th>
+           <th>
+                Publisher Name
+           </th>
+           <th>
+                Publisher Username
+           </th>
+           <th>
+            	Email	
+           </th>
+            <th>
+            	Date Created
+           </th>
+           <th>
+           	    Websites
+           </th>
+           <th>
+           	    Approval
+           </th>
+           </tr>
+
+    	   <?php 
+    	   foreach ($user_detail as $user_data) :  
+    	   		$userData = $authUsersFactory->get_row(array("PublisherInfoID" => $user_data->PublisherInfoID));
+    	   		$approval = false;
+    	   		// fixes bad auth_User data from previous signup bug which was fixed in 1.4
+    	   		if (!is_object($userData)):
+    	   			continue;
+    	   		endif;
+    	   		if(isset($userData) && $userData->user_enabled == 1 && $userData->user_verified == 1):
+    	   			$approval = true;
+    	   		endif;
+    	   ?>
+
+           <tr>
+           <td>
+            <?php echo $user_data->PublisherInfoID; ?>
+           </td>
+           <td>
+            <?php echo $user_data->Name; ?>
+           </td>
+           <td>
+            <?php echo $userData->user_login; ?>
+           </td>
+           <td>
+            <?php echo $user_data->Email; ?>
+           </td>
+           <td>
+            <?php echo $user_data->DateCreated; ?>
+           </td>
+           <td>
+           <?php if($approval==true): ?>
+           	<a href="/private-exchange/websites/list/<?php echo $user_data->PublisherInfoID;?>" style="color:#0088cc;">View</a>
+           <?php else: 
+           	echo $user_data->Domain;
+           endif;?>
+           </td>
+           <td>
+              	 <?php if($approval==true): ?>
+              	  <span class="label label-success">Approved</span>
+              	 <?php else: ?>
+              	 <a href="javascript:void(0);" onclick="userAcceptModal(<?php echo $user_data->PublisherInfoID;?>,'<?php echo $user_data->Name;?>');">Approve</a>
+              	 &nbsp;|&nbsp;
+              	 <a href="javascript:void(0);" onclick="userRejectionModal(<?php echo $user_data->PublisherInfoID;?>,'<?php echo $user_data->Name;?>');">Reject</a>
+              	 <?php endif; ?>
+              	 
+           </td>
+           </tr>
+    <?php endforeach; ?>
+    </table>
+    </div>
+    </div>
+</div>
+<div style="clear:both"></div>
+
+<input  type="hidden" name="user_type" id="user_type" value="<?php echo $user_type;?>" />
+<!-- Publisher Accept Modal -->
+<div class="modal fade" id="UserAcceptModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="myModalLabel">Publisher Accept.</h4>
+      </div>
+      <div class="modal-body">
+      <div id="user_accept_alert_msg" class="alert alert-success" style="display: none;">Error</div>
+		<div class="control-group">
+		    <label for="desc" class="control-label" id="msg"></label>
+	    </div>
+      </div>
+      <div class="modal-footer">
+      <button type="button" data-loading-text="Processing..." id="user_accept_yes_btn" class="btn btn-primary" onclick="userAcceptConfirm();">Approve</button>
+        <button type="button" class="btn btn-default" id="user_accept_no_btn" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Publisher Accept Modal -->
+
+
+<!-- Publisher Rejection Modal -->
+<input type="hidden" name="modal_user_id" id="modal_user_id" value="0" />
+<div class="modal fade" id="UserRejectionModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="myModalLabel">Publisher Rejection</h4>
+      </div>
+      <div class="modal-body">
+      <div id="user_rejection_alert_msg" class="alert alert-success" style="display: none;">Error</div>
+		<div class="control-group">
+		    <label for="desc" class="control-label" id="msg"></label>
+	    </div>
+		<div class="control-group">
+		    <label for="desc" class="control-label">Reason for Rejection:</label>
+		    <div class="controls">
+		    <textarea  id="description" name="description" style="width: 500px;height:130px;"></textarea>    </div>
+	    </div>
+	<!--<h5 style="color: #b94a48;">This action is IMMEDIATE and NOT REVERSABLE!</h5>-->
+      </div>
+      <div class="modal-footer">
+      <button type="button" data-loading-text="Processing..." id="user_rejection_yes_btn" class="btn btn-primary" onclick="userRejectionConfirm();">Yes</button>
+        <button type="button" class="btn btn-default" id="user_rejection_no_btn" data-dismiss="modal">No</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Publisher Rejection Modal -->

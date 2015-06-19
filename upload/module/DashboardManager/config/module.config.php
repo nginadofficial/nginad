@@ -58,6 +58,16 @@ return array(
             				),
             		),
             ),
+            'pxpublisherslist' => array(
+            		'type'    => 'segment',
+            		'options' => array(
+            				'route'    =>  '/private-exchange/websites/list/[:param1[/]]',
+            				'defaults' => array(
+            						'controller' => 'DashboardManager\Controller\Website',
+            						'action'     => 'pxlist',
+            				),
+            		),
+            ),
             'pxnewpublisher' => array(
             		'type'    => 'segment',
             		'options' => array(
@@ -75,6 +85,16 @@ return array(
             				'defaults' => array(
             						'controller' => 'DashboardManager\Controller\Publisher',
             						'action'     => 'loginasdomain',
+            				),
+            		),
+            ),
+            'pxpublisherlist' => array(
+            		'type'    => 'segment',
+            		'options' => array(
+            				'route'    =>  '/private-exchange/publishers/list[/]',
+            				'defaults' => array(
+            						'controller' => 'DashboardManager\Controller\Signup',
+            						'action'     => 'publishersdomain',
             				),
             		),
             ),
