@@ -120,7 +120,7 @@ class WebsiteController extends PublisherAbstractActionController {
     	
     	if (!$this->auth->hasIdentity()):
     		return $this->redirect()->toRoute('login');
-		elseif (!$this->is_super_admin):
+		elseif (!$this->is_super_admin && !$this->is_domain_admin):
 			return $this->redirect()->toRoute('publisher');
 		endif;
     	
@@ -150,6 +150,13 @@ class WebsiteController extends PublisherAbstractActionController {
 	    		$PublisherWebsite = $PublisherWebsiteFactory->get_row_object($params);
 	    		$params = array();
 	    		$params["PublisherInfoID"] = $PublisherWebsite->DomainOwnerID;
+	    		
+	    		if ($this->is_domain_admin == true):
+	    			if (!\util\AuthHelper::domain_user_authorized_publisher($this->auth->getUserID(), $PublisherWebsite->DomainOwnerID)):
+	    				continue;
+	    			endif;
+				endif;	    	
+	    			
 	    		$publisher_obj = $PublisherInfoFactory->get_row_object($params);
 	    		$PublisherWebsite->DateUpdated = date("Y-m-d H:i:s");
 	    		if($q == 0):

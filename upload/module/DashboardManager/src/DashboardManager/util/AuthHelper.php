@@ -25,4 +25,21 @@ class AuthHelper {
 		
 	}
 	
+	public static function domain_user_authorized_publisher($parent_id, $publisher_info_id) {
+		
+		$auth_Users_list 				= array();
+		$authUsersFactory 				= \_factory\authUsers::get_instance();
+		$params = array();
+		$params["PublisherInfoID"] 		= $publisher_info_id;
+		$params["parent_id"] 			= $parent_id;
+		$authUserChild		 			= $authUsersFactory->get_row($params);
+	
+		if ($authUserChild !== null):
+			return true;
+		endif;
+	
+		die("You are not authorized to perform this action: CODE 101");
+	
+	}
+	
 }

@@ -487,8 +487,11 @@ class PublisherController extends PublisherAbstractActionController {
         	                );
         	            }
         	            
-        	            return $this->redirect()->toRoute('publisher');
-    	            
+        	            if ($this->is_domain_admin):
+        	            	return $this->redirect()->toRoute('pxpublishers');
+        	            else:
+        	            	return $this->redirect()->toRoute('publisher');
+    	            	endif;
     	            else: 
     	            
     	                $error_msg = "ERROR: You do not have permission to create an entry as this user.";
@@ -575,8 +578,12 @@ class PublisherController extends PublisherAbstractActionController {
 	            		$editResultObj->IABCategory = $iab_category;
  
 	                    try {
-        	            $PublisherWebsiteFactory->save_domain($editResultObj);
-        	            	return $this->redirect()->toRoute('publisher');
+	        	            $PublisherWebsiteFactory->save_domain($editResultObj);
+	        	            if ($this->is_domain_admin):
+	        	            	return $this->redirect()->toRoute('pxpublishers');
+	        	            else:
+	        	            	return $this->redirect()->toRoute('publisher');
+	    	            	endif;
         	            }
         	            catch(\Zend\Db\Adapter\Exception\InvalidQueryException $e) {
         	                $error_msg ="ERROR: A database error has occurred, please contact customer service.";
@@ -600,14 +607,22 @@ class PublisherController extends PublisherAbstractActionController {
     	    else:
     	    
     	        $error_message = "ERROR: The specified domain entry ID was not found or you do not have permission to edit this entry.";
-    	        return $this->redirect()->toRoute('publisher');
+        	    if ($this->is_domain_admin):
+        	  		return $this->redirect()->toRoute('pxpublishers');
+        	    else:
+        	    	return $this->redirect()->toRoute('publisher');
+    	        endif;
     	    endif;
     	   
 	    
 	    else: 
 	    
 	        $error_message = "An invalid domain entry ID was provided.";
-	        return $this->redirect()->toRoute('publisher');
+        	if ($this->is_domain_admin):
+        		return $this->redirect()->toRoute('pxpublishers');
+        	else:
+        	  	return $this->redirect()->toRoute('publisher');
+    	  	endif;
 	    endif;
 
 	    return array(
@@ -669,7 +684,11 @@ class PublisherController extends PublisherAbstractActionController {
 	
 		endif;
 	
-		return $this->redirect()->toRoute('publisher');
+		if ($this->is_domain_admin):
+        	return $this->redirect()->toRoute('pxpublishers');
+		else:
+        	return $this->redirect()->toRoute('publisher');
+   		endif;
 	
 	}
 	
@@ -716,8 +735,11 @@ class PublisherController extends PublisherAbstractActionController {
 	
 		endif;
 	
-		return $this->redirect()->toRoute('publisher');
-	
+      	if ($this->is_domain_admin):
+        	return $this->redirect()->toRoute('pxpublishers');
+ 		else:
+        	return $this->redirect()->toRoute('publisher');
+    	endif;
 	}
 	
 	/**
@@ -767,7 +789,11 @@ class PublisherController extends PublisherAbstractActionController {
 	
 		endif;
 	
-		return $this->redirect()->toRoute('publisher');
+		if ($this->is_domain_admin):
+        	return $this->redirect()->toRoute('pxpublishers');
+       	else:
+       		return $this->redirect()->toRoute('publisher');
+    	endif;
 	
 	}
 	
@@ -818,7 +844,11 @@ class PublisherController extends PublisherAbstractActionController {
 		
 		endif;
 		
-		return $this->redirect()->toRoute('publisher');
+  		if ($this->is_domain_admin):
+       		return $this->redirect()->toRoute('pxpublishers');
+       	else:
+     		return $this->redirect()->toRoute('publisher');
+    	endif;
 	
 	}
 	
