@@ -1127,7 +1127,7 @@ function web_appr_denie_confirm() {
 				}
 				$("#sites_row_"+id_array[key]).remove();	
 			}
-			//window.location.reload();
+			window.location.reload();
 		}
 	},'json');
 }

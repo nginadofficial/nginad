@@ -53,7 +53,14 @@ $this->headScript()->prependFile($this->basePath() . '/js/script.js');
            </td>
            <td>
 			<input type="checkbox" id="approve_denied<?php echo $i;?>" name="approve_denied_website" value="<?php echo $website->PublisherWebsiteID;?>" />
-              	 
+           <?php if($website->ApprovalFlag == 0): 
+           			echo '<span style="margin-left: 20px;" class="label label-info">Waiting for Approval</span>';
+           		 elseif($website->ApprovalFlag == 1):
+           		 	echo '<span style="margin-left: 20px;" class="label label-success">Approved</span>';
+           		 else:
+           		 	echo '<span style="margin-left: 20px;" class="label label-important">Denied</span>';	
+                 endif;
+           ?>
            </td>
            </tr>
     <?php 

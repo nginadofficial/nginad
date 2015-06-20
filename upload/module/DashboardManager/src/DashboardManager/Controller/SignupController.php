@@ -723,7 +723,7 @@ class SignupController extends PublisherAbstractActionController {
 		$initialized = $this->initialize();
 		if ($initialized !== true) return $initialized;
 		
-		if (!$this->is_super_admin) :
+		if (!$this->is_super_admin && !$this->is_domain_admin):
 			return $this->redirect()->toRoute($this->dashboard_home);
 		endif;
 		
@@ -732,6 +732,13 @@ class SignupController extends PublisherAbstractActionController {
 			$user_id = $request->getPost('user_id');
 	    	$description = $request->getPost('description');
 	    	$user_type = $request->getPost('user_type');
+	    	
+	    	if ($this->is_domain_admin):
+		    	if (!\util\AuthHelper::domain_user_authorized_publisher($this->auth->getUserID(), $user_id)):
+		    		die("Not Authorized");
+		    	endif;
+	    	endif;
+	    	
 	    	if($user_type == 'publisher'):
 	    		return $this->rejectpublisherAction($user_id, $description, $user_type);
 	    	endif;
@@ -746,7 +753,7 @@ class SignupController extends PublisherAbstractActionController {
 		$initialized = $this->initialize();
 		if ($initialized !== true) return $initialized;
 		
-		if (!$this->is_super_admin) :
+		if (!$this->is_super_admin && !$this->is_domain_admin):
 			return $this->redirect()->toRoute($this->dashboard_home);
 		endif;
 		
@@ -754,6 +761,13 @@ class SignupController extends PublisherAbstractActionController {
 		if ($request->isPost()):
 			$user_id = $request->getPost('user_id');
 	    	$user_type = $request->getPost('user_type');
+	    	
+	    	if ($this->is_domain_admin):
+	    		if (!\util\AuthHelper::domain_user_authorized_publisher($this->auth->getUserID(), $user_id)):
+	    			die("Not Authorized");
+	    		endif;
+	    	endif;
+	    	
 	    	if($user_type == 'publisher'):
 	    		return $this->acceptpublisherAction($user_id, $user_type);
 	    	endif;
@@ -769,8 +783,14 @@ class SignupController extends PublisherAbstractActionController {
 		$initialized = $this->initialize();
 		if ($initialized !== true) return $initialized;
 		
-		if (!$this->is_super_admin) :
+		if (!$this->is_super_admin && !$this->is_domain_admin) :
 			return $this->redirect()->toRoute($this->dashboard_home);
+		endif;
+		
+		if ($this->is_domain_admin):
+			if (!\util\AuthHelper::domain_user_authorized_publisher($this->auth->getUserID(), $publisher_id)):
+				die("Not Authorized");
+			endif;
 		endif;
 		
 		$msg = null;
@@ -779,6 +799,7 @@ class SignupController extends PublisherAbstractActionController {
 		
 			$publisher_obj = $PublisherInfoFactory->get_row_object(array('PublisherInfoID'=>$publisher_id));
 	        $bol = $this->userApprovalToggle(0, $publisher_id, $user_type);
+
 	        if($bol == true):
 	          
 	          $message = '<b>Publisher Rejected.<b><br />';
@@ -821,8 +842,14 @@ class SignupController extends PublisherAbstractActionController {
 		$initialized = $this->initialize();
 		if ($initialized !== true) return $initialized;
 		
-		if (!$this->is_super_admin) :
+		if (!$this->is_super_admin && !$this->is_domain_admin) :
 			return $this->redirect()->toRoute($this->dashboard_home);
+		endif;
+		
+		if ($this->is_domain_admin):
+			if (!\util\AuthHelper::domain_user_authorized_publisher($this->auth->getUserID(), $publisher_id)):
+				die("Not Authorized");
+			endif;
 		endif;
 		
 		$msg = null;
@@ -980,8 +1007,15 @@ class SignupController extends PublisherAbstractActionController {
 		$initialized = $this->initialize();
 		if ($initialized !== true) return $initialized;
 	
-	    if ($this->is_super_admin && $user_id > 0 && ($flag === 1 || $flag === 0)):
+	    if (($this->is_super_admin || $this->is_domain_admin)
+	    	&& $user_id > 0 && ($flag === 1 || $flag === 0)):
 	    
+	    	if ($this->is_domain_admin):
+		    	if (!\util\AuthHelper::domain_user_authorized_publisher($this->auth->getUserID(), $user_id)):
+		    		die("Not Authorized");
+		    	endif;
+	    	endif;
+	    	
 	    	$authUsers = new \model\authUsers();
 			$authUsersFactory = \_factory\authUsers::get_instance();
 			
@@ -1004,12 +1038,14 @@ class SignupController extends PublisherAbstractActionController {
     		endif;
     		if($flag === 0):
     		  if($user_type=='publisher'):
-    			$PublisherInfoFactory->deletePublisherInfo($user_id);
+    			//$PublisherInfoFactory->deletePublisherInfo($user_id);
+    			;
     		  endif;
     		  if($user_type=='customer'):
-    			$DemandCustomerFactory->deleteCustomerInfo($user_id);
+    			//$DemandCustomerFactory->deleteCustomerInfo($user_id);
+    			;
     		  endif;		
-    		    $authUsersFactory->delete_user($authUsers->user_id);
+    		    $authUsersFactory->deactivate_user($authUsers->user_id);
     			return true;
     		endif;
     	endif;	

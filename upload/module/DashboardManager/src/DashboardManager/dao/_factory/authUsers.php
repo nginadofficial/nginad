@@ -137,5 +137,32 @@ class authUsers extends \_factory\CachedTableRead
     public function delete_user($user_id) {
     	return $this->delete(array('user_id' => $user_id));
     }
+    
+    public function deactivate_user($user_id) {
+    	$authUser = $this->get_row(array('user_id' => $user_id));
+    	if ($authUser != null):
+    	
+	    	$authUser->user_enabled = 0;
+	    	// get array of data
+	    	$data = $authUser->getArrayCopy();
+	    	
+	    	$this->update($data, array('user_id' => $user_id));
+	    	
+    	endif;
+    }
+    
+    public function activate_user($user_id) {
+    	$authUser = $this->get_row(array('user_id' => $user_id));
+    	if ($authUser != null):
+	    	 
+	    	$authUser->user_enabled = 0;
+    		$authUser->user_verified = 0;
+	    	// get array of data
+	    	$data = $authUser->getArrayCopy();
+	    
+	    	$this->update($data, array('user_id' => $user_id));
+	    
+    	endif;
+    }
 
 };
