@@ -143,10 +143,8 @@ implements IdentityInterface
          */
         public function setIdentityInfo(stdClass $userDetails, $config = null)
         {
+        
             if ($config !== null):
-            
-                $this->AdminRoleSuperAdmin = $this->isSuperAdmin($config);
-            	$this->AdminRoleDomainAdmin = $this->isDomainAdmin($config);
                 $this->debug = $config['system']['debug'];
                 $this->debug_verbose = $config['system']['debug_verbose'];
             endif;
@@ -173,6 +171,8 @@ implements IdentityInterface
                 $this->TrueIdentityName = $userDetails->user_login;
                 $this->PublisherInfoID = intval($userDetails->PublisherInfoID);
                 $this->DemandCustomerInfoID = intval($userDetails->DemandCustomerInfoID);
+                $this->AdminRoleSuperAdmin = $this->isSuperAdmin($config);
+                $this->AdminRoleDomainAdmin = $this->isDomainAdmin($config);
                 
                 $this->setImpersonatedIdentityID(0, $config); // Initialize the value.
                 

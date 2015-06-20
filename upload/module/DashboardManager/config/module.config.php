@@ -68,6 +68,16 @@ return array(
             				),
             		),
             ),
+            'pxwebsitelist' => array(
+            		'type'    => 'segment',
+            		'options' => array(
+            				'route'    =>  '/private-exchange/publisher/websites[/]',
+            				'defaults' => array(
+            						'controller' => 'DashboardManager\Controller\Website',
+            						'action'     => 'pxwebsitelist',
+            				),
+            		),
+            ),
             'pxnewpublisher' => array(
             		'type'    => 'segment',
             		'options' => array(

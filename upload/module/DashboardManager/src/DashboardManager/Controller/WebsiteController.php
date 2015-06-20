@@ -60,6 +60,57 @@ class WebsiteController extends PublisherAbstractActionController {
 	    return $view;
 	}
 	
+	/**
+	 * Display the Private Exchange Publisher websites index page.
+	 *
+	 * @return \Zend\View\Model\ViewModel
+	 */
+	public function pxwebsitelistAction()
+	{
+		$initialized = $this->initialize();
+		if ($initialized !== true) return $initialized;
+		 
+		if (!$this->auth->hasIdentity()):
+			return $this->redirect()->toRoute('login');
+		elseif (!$this->is_domain_admin):
+			return $this->redirect()->toRoute('publisher');
+		endif;
+		
+		$authUsersFactory 			= \_factory\authUsers::get_instance();
+		$params = array();
+		$params["parent_id"] 		= $this->auth->getUserID();
+		$authUserChildlist		 	= $authUsersFactory->get($params);
+		
+		$PublisherWebsiteFactory = \_factory\PublisherWebsite::get_instance();
+		$PublisherInfoFactory = \_factory\PublisherInfo::get_instance();
+		
+		$pending_list = array();
+		
+		foreach ($authUserChildlist as $authUserChild):
+			$orders = 'DateCreated DESC';
+			$params = array();
+			$params["DomainOwnerID"] = $authUserChild->PublisherInfoID;
+			$websites_list = $PublisherWebsiteFactory->get($params, $orders);
+			$pending_list = array_merge($pending_list, $websites_list);
+			
+		endforeach;
+		
+		$view = new ViewModel(array(
+				'dashboard_view' => 'account',
+				'pending_list' => $pending_list,
+				'PublisherInfoFactory' => $PublisherInfoFactory,
+				'vertical_map' => \util\DeliveryFilterOptions::$vertical_map,
+				'user_id_list' => $this->user_id_list,
+				'user_identity' => $this->identity(),
+				'true_user_name' => $this->auth->getUserName(),
+				'header_title' => 'New Websites for Approval',
+				'is_super_admin' => $this->is_super_admin,
+				'effective_id' => $this->auth->getEffectiveIdentityID(),
+				'impersonate_id' => $this->ImpersonateID
+		));
+		 
+		return $view;
+	}
 	
 	// publishers websites approved/denied by admin
 	public function approvedeniedAction() {
@@ -246,9 +297,9 @@ class WebsiteController extends PublisherAbstractActionController {
 		$PublisherWebsiteFactory = \_factory\PublisherWebsite::get_instance();
 		$orders = 'DateCreated DESC';
 		$params = array();
-		$params["DomainOwnerID"] = $publisher_id;
+		$params["DomainOwnerID"] = $PublisherInfo->PublisherInfoID;
 		$pending_list = $PublisherWebsiteFactory->get($params, $orders);
-		 
+		
 		$view = new ViewModel(array(
 				'dashboard_view' => 'account',
 				'pending_list' => $pending_list,

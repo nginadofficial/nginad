@@ -1,0 +1,91 @@
+<?php
+$this->headScript()->prependFile($this->basePath() . '/js/script.js');
+?>
+<div class="steps-container step1">
+    <div id="selection-results" class="steps-box">
+    <div class="formbox">  
+    <div style="margin-bottom: 5px;">
+    <button class="btn btn-info" type="button" onclick="websites_approve();">Approve</button>
+	<button class="btn btn-warning" type="button" onclick="websites_denied();">Deny</button></div>
+    
+        <table class="table table-striped table-bordered table-margin">
+            <tr>
+           <th>
+				#
+           </th>
+           <th>
+                Website
+           </th>
+           <th>
+            	IAB Category	
+           </th>
+           <th>
+            	Publisher	
+           </th>
+            <th>
+            	Date Created
+           </th>
+           <th>
+           	    Approve / Deny
+           </th>
+           </tr>
+
+    	   <?php 
+    	   $i=1;
+    	   foreach ($pending_list as $website):
+    	   		$userData = $PublisherInfoFactory->get_row(array("PublisherInfoID" => $website->DomainOwnerID));
+    	   ?>   
+           <tr id="sites_row_<?php echo $website->PublisherWebsiteID;?>">
+           <td>
+            <?php echo $i; ?>
+           </td>
+           <td id="wb_site_<?php echo $website->PublisherWebsiteID;?>">
+            <?php echo $website->WebDomain; ?>
+            </td>
+           <td>
+            <?php echo $vertical_map[$website->IABCategory]; ?>
+           </td>
+           <td>
+            <?php echo $userData->Name; ?>
+           </td>
+           <td>
+            <?php echo $website->DateCreated; ?>
+           </td>
+           <td>
+			<input type="checkbox" id="approve_denied<?php echo $i;?>" name="approve_denied_website" value="<?php echo $website->PublisherWebsiteID;?>" />
+              	 
+           </td>
+           </tr>
+    <?php 
+    	 $i++;
+    	endforeach;
+    ?>
+    </table>
+    </div>
+    </div>
+</div>
+<div style="clear:both"></div>
+
+<input type="hidden" name="web_approvel_denied" id="web_approvel_denied" value="0" />
+<input type="hidden" name="web_approvel_denied_names" id="web_approvel_denied_ids" value="" />
+
+<!-- Website Approval/Denied Modal -->
+<div class="modal fade" id="WebsiteApprovalModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="myModalLabel"></h4>
+      </div>
+      <div class="modal-body">
+      <div id="website_approval_alert_msg" class="alert alert-success" style="display: none;"></div>
+		<div class="control-group" id="msg">
+	    </div>
+      </div>
+      <div class="modal-footer">
+      <button type="button" data-loading-text="Processing..." id="website_approval_yes_btn" class="btn btn-primary" onclick="web_appr_denie_confirm();">Approve</button>
+      <button type="button" class="btn btn-default" id="website_approval_no_btn" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Website Approval/Denied Modal -->
