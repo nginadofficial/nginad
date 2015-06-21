@@ -443,7 +443,7 @@ class PublisherController extends PublisherAbstractActionController {
 	            $domain->IABCategory = $iab_category;
 	            $domain->DomainOwnerID = $domain_owner_id;
 	            $auto_approve_websites = $this->config_handle['settings']['publisher']['auto_approve_websites'];
-	            if ($auto_approve_websites == true):
+	            if ($this->is_super_admin || $this->is_domain_admin || $auto_approve_websites == true):
 	            	$domain->ApprovalFlag = 1;
 	            endif;
 	            // Check if an entry exists with the same name. A NULL means there is no duplicate.

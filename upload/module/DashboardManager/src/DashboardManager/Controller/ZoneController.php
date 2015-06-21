@@ -299,7 +299,7 @@ class ZoneController extends PublisherAbstractActionController {
 				$ad->AutoApprove = ($auto_approve_zones == true) ? 1 : 0;
 				
 				// Disapprove the changes if not admin.
-				if ($this->is_super_admin || $auto_approve_zones == true):
+				if ($this->is_super_admin || $this->is_domain_admin || $auto_approve_zones == true):
 					$ad->AdStatus = 1;
 				else:
 					$ad->AdStatus = 0;
