@@ -163,7 +163,7 @@ $effective_user_in_dashboard = false;
                                 	    	$is_rejected = true;
                                 	    endif;
                                 	    
-                                	    if($is_super_admin):
+                                	    if($is_super_admin || $is_domain_admin):
                                 	        echo $admin_approval[intval($data)];
                                 	    else:
                                 	        echo $approval[intval($data)];

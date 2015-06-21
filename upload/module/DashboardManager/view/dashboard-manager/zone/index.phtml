@@ -81,7 +81,7 @@ function submitForm() {
                                 	    	$is_rejected = true;
                                 	    endif;
                                 	    
-                                	    if($is_super_admin)
+                                	    if($is_super_admin || $is_domain_admin)
                                 	        echo '<td>' . $admin_approval[intval($data)] . '</td>';
                                 	    else
                                 	        echo '<td>' . $approval[intval($data)] . '</td>';
@@ -114,7 +114,7 @@ function submitForm() {
                                 endswitch;
                             endforeach; ?>
                     <td>
-                    <?php if ($is_super_admin === true || $is_rejected !== true): ?>
+                    <?php if ($is_super_admin === true || $is_domain_admin === true || $is_rejected !== true): ?>
                     	<a href="/publisher/zone/<?php echo $domain_id;?>/edit/<?php echo $ad_id;?>">Edit 
 
 Zone</a>&nbsp;&nbsp;&nbsp;

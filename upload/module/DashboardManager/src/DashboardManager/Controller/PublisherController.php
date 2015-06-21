@@ -62,7 +62,12 @@ class PublisherController extends PublisherAbstractActionController {
 		        endif;
 		        
 	        endif;
-	        
+
+	    elseif ($this->is_domain_admin):
+	    
+		    $headers = array("#","Domain","Domain Owner","Created","Updated","Approval","Actions");
+		    $meta_data = array("WebDomain","DomainOwnerID","DateCreated","DateUpdated","ApprovalFlag");
+		     
 	    else:
 	    
 	        $headers = array("#","Domain","Created","Updated","Approval","Actions");
@@ -102,6 +107,7 @@ class PublisherController extends PublisherAbstractActionController {
 	         'domain_list_raw' => $PublisherWebsiteList,
 	    	 'domain_list' => $this->order_data_table($meta_data, $PublisherWebsiteList, $headers),
 	    	 'is_super_admin' => $this->is_super_admin,
+	    	 'is_domain_admin' => $this->is_domain_admin,
 	    	 'user_id_list' => $this->user_id_list_publisher,
 	    	 'domain_owner' => isset($PublisherInfo->Name) ? $PublisherInfo->Name : "",
 	         'impersonate_id' => $this->ImpersonateID,
@@ -210,8 +216,8 @@ class PublisherController extends PublisherAbstractActionController {
 		if ($initialized !== true) return $initialized;
 	    $PublisherWebsiteID = intval($this->params()->fromRoute('param1', 0));
 
-	    if ($this->is_super_admin && $PublisherWebsiteID > 0 && ($flag === 2 || $flag === 1 || $flag === 0)):
-
+	    if (($this->is_super_admin || $this->is_domain_admin) && $PublisherWebsiteID > 0 && ($flag === 2 || $flag === 1 || $flag === 0)):
+		    
 	    	$PublisherWebsiteFactory = \_factory\PublisherWebsite::get_instance();
 	    	$domain_object = new \model\PublisherWebsite();
 	    	$request = $this->getRequest();
@@ -221,6 +227,12 @@ class PublisherController extends PublisherAbstractActionController {
 	    	// Make sure entry exists.
 	    	if (intval($domain_object->PublisherWebsiteID) == $PublisherWebsiteID):
 
+		    	if ($this->is_domain_admin):
+			    	if (!\util\AuthHelper::domain_user_authorized_publisher($this->auth->getUserID(), $domain_object->DomainOwnerID)):
+			    		die("Not Authorized");
+			    	endif;
+		    	endif;
+		    	
 		    	$domain_object->AutoApprove = 0;
 	    	
 	    		$domain_object->ApprovalFlag = $flag;
@@ -473,7 +485,7 @@ class PublisherController extends PublisherAbstractActionController {
         	            }
         	            catch(\Zend\Db\Adapter\Exception\InvalidQueryException $e) {
         	                $error_msg ="ERROR: A database error has occurred, please contact customer service.";
-        	                return array('form' => $form,
+        	                return array(
         	                    'error_message' => $error_msg,
         	                    'is_super_admin' => $this->is_super_admin,
         	                    'user_id_list' => $this->user_id_list_publisher,

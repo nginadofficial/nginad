@@ -138,7 +138,7 @@ class ZoneController extends PublisherAbstractActionController {
                 $ZoneList = array();
             }
         endif;
-        if ($this->is_super_admin):
+        if ($this->is_super_admin || $this->is_domain_admin):
         
             $headers = array("#","Ad Zone Name","Status","Space Size","Floor Price","Total Requests","Impressions Filled","Total Revenue","Created","Updated","Action");
             $meta_data = array("AdName","AdStatus","AutoApprove","AdTemplateID","FloorPrice","TotalRequests","TotalImpressionsFilled","TotalAmount","DateCreated","DateUpdated");
@@ -156,6 +156,7 @@ class ZoneController extends PublisherAbstractActionController {
             'zone_list_raw' => $ZoneList,
             'zone_list' => $this->order_data_table($meta_data,$ZoneList,$headers),
             'is_super_admin' => $this->is_super_admin,
+        	'is_domain_admin' => $this->is_domain_admin,
             'user_id_list' => $this->user_id_list_publisher,
             'impersonate_id' => $this->ImpersonateID,
             'effective_id' => $this->EffectiveID,
@@ -973,7 +974,7 @@ class ZoneController extends PublisherAbstractActionController {
         $DomainID = intval($this->params()->fromRoute('param1', 0));
         $PublisherAdZoneID = intval($this->params()->fromRoute('id',0));
         
-        if ($this->is_super_admin && $DomainID > 0 && $PublisherAdZoneID > 0 && ($flag === 0 || $flag === 1 || $flag === 2)):
+        if (($this->is_super_admin || $this->is_domain_admin) && $DomainID > 0 && $PublisherAdZoneID > 0 && ($flag === 0 || $flag === 1 || $flag === 2)):
         
             $DomainObj = $this->get_domain_data($DomainID, $this->PublisherInfoID);
             
@@ -982,6 +983,12 @@ class ZoneController extends PublisherAbstractActionController {
             	$error_message = "An invalid publishing web domain was specified for the specified user.";
             
             else: 
+            
+	            if ($this->is_domain_admin):
+		            if (!\util\AuthHelper::domain_user_authorized_publisher($this->auth->getUserID(), $DomainObj->DomainOwnerID)):
+		         	   die("Not Authorized");
+		            endif;
+	            endif;
             
                 $PublisherAdZoneFactory = \_factory\PublisherAdZone::get_instance();
                 $AdObject = new \model\PublisherAdZone();
