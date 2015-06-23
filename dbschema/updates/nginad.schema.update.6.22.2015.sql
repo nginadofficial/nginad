@@ -1,6 +1,22 @@
 -- build the new tables which will hold the PMP deals
 
 -- ----------------------------
+-- Table structure for PmpDealPublisherInfoToPrivateExchangeDomainAdmin
+-- ----------------------------
+DROP TABLE IF EXISTS `PmpDealPublisherInfoToPrivateExchangeDomainAdmin`;
+CREATE TABLE `PmpDealPublisherInfoToPrivateExchangeDomainAdmin` (
+  `PmpDealPublisherInfoToPrivateExchangeDomainAdminID` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `PublisherInfoID` int(11) unsigned NOT NULL,
+  `PrivateExchangeDomainAdminID` int(11) unsigned NOT NULL,
+  `DateCreated` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `DateUpdated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`PmpDealPublisherInfoToPrivateExchangeDomainAdminID`),
+  UNIQUE KEY `PmpDealPublisherInfoToPrivateExchangeDomainAdmin_UNIQUE` (`PmpDealPublisherInfoToPrivateExchangeDomainAdminID`),
+  KEY `FK_Publisher_Info_ID` (`PublisherInfoID`),
+  KEY `FK_PrivateExchangeDomainAdmin_ID` (`PrivateExchangeDomainAdminID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
 -- Table structure for PmpDealPublisherWebsiteToPrivateExchangeDomainAdmin
 -- ----------------------------
 DROP TABLE IF EXISTS `PmpDealPublisherWebsiteToPrivateExchangeDomainAdmin`;
