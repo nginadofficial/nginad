@@ -13,6 +13,7 @@ class PmpDealPublisherWebsiteToInsertionOrder {
     public $PmpDealPublisherWebsiteToInsertionOrderID;
     public $PublisherWebsiteID;
     public $InsertionOrderID;
+    public $Enabled;
     public $DateCreated;
     public $DateUpdated;
 }

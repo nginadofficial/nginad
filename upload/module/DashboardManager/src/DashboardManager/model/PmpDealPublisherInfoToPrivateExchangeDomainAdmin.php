@@ -13,6 +13,7 @@ class PmpDealPublisherInfoToPrivateExchangeDomainAdmin {
     public $PmpDealPublisherInfoToPrivateExchangeDomainAdminID;
     public $PublisherInfoID;
     public $PrivateExchangeDomainAdminID;
+    public $Enabled;
     public $DateCreated;
     public $DateUpdated;
 }

@@ -13,6 +13,7 @@ class PmpDealPublisherAdZoneToInsertionOrderPreview {
     public $PmpDealPublisherAdZoneToInsertionOrderPreviewID;
     public $PublisherAdZoneID;
     public $InsertionOrderPreviewID;
+    public $Enabled;
     public $DateCreated;
     public $DateUpdated;
 }

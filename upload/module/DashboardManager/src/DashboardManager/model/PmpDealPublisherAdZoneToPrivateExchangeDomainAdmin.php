@@ -13,6 +13,7 @@ class PmpDealPublisherAdZoneToPrivateExchangeDomainAdmin {
     public $PmpDealPublisherAdZoneToPrivateExchangeDomainAdminID;
     public $PublisherAdZoneID;
     public $PrivateExchangeDomainAdminID;
+    public $Enabled;
     public $DateCreated;
     public $DateUpdated;
 }

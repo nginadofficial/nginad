@@ -13,6 +13,7 @@ class PmpDealPublisherWebsiteToInsertionOrderLineItemPreview {
     public $PmpDealPublisherWebsiteToInsertionOrderLineItemPreviewID;
     public $PublisherWebsiteID;
     public $InsertionOrderLineItemPreviewID;
+    public $Enabled;
     public $DateCreated;
     public $DateUpdated;
 }
