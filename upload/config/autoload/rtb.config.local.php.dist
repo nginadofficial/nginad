@@ -34,9 +34,9 @@ return array (
 					// actual buyer_id and secret_key
 					'GenericBuysidePartner' => array(
 							'module_name' 		=> 'GenericBuysidePartner',
-							'partner_name' 		=> 'My First Sample Generic OpenRTB DSP Partner',
+							'partner_name' 		=> 'My First Sample Generic OpenRTB SSP Partner',
 							/*
-							 * buyer_id can be used by the DSP partner in two ways
+							 * buyer_id can be used by the SSP partner in two ways
 							 * 1. As a GET parameter.
 							 * Ex: http://server.nginad.com/bid?rtb_seat_id=0001&secret_key=nginad
 							 * 2. As a subdomain
@@ -46,23 +46,23 @@ return array (
 							'secret_key'		=> 'nginad',   // change this key to your own
 							/*
 							 * This is YOUR seat_id that you are sending back to the partner
-							 * in RTB bid responses to your DSPs
+							 * in RTB bid responses to your SSPs
 							 */
 							'response_seat_id'	=> '8181'
 					),
 					/*
-					 * Fidelity RTB DSP integration
+					 * Fidelity RTB SSP integration
 					 * 
 					 * http://server.nginad.com/bid?rtb_seat_id=9876&secret_key=fid1234y
 					 */
-					'Fidelity DSP' => array(
+					'Fidelity SSP' => array(
 							'module_name' 		=> 'FidelityBuysidePartner',
-							'partner_name' 		=> 'Fidelity OpenRTB DSP Partner',
+							'partner_name' 		=> 'Fidelity OpenRTB SSP Partner',
 							'buyer_id'			=> '9876',
 							'secret_key'		=> 'fid1234y',   // change this key to your own
 							/*
 							 * This is YOUR seat_id that you are sending back to the partner
-							 * in RTB bid responses to your DSPs
+							 * in RTB bid responses to your SSPs
 							 */
 							'response_seat_id'	=> '9874'
 									
@@ -78,9 +78,9 @@ return array (
 					/*
 					 * 
 					 * 
-					'Sample DSP Partner 3' => array(
+					'Sample SSP Partner 3' => array(
 						'module_name' 		=> 'ProprietaryRTBPartner',
-						'partner_name' 		=> 'My First Sample Custom non-OpenRTB, Proprietary RTB DSP Partner',
+						'partner_name' 		=> 'My First Sample Custom non-OpenRTB, Proprietary RTB SSP Partner',
 						'buyer_id'			=> '0003'
 						'secret_key'		=> 'nginad'   // change this key to your own
 					
@@ -119,14 +119,14 @@ return array (
 						
 					/*
 					 * As you grow your RTB ad traffic network you will
-					 * get more SSPs to sell traffic to.
-					 * You must add a new entry for each SSP partner you sign up with.
+					 * get more DSPs to sell traffic to.
+					 * You must add a new entry for each DSP partner you sign up with.
 					 *
 					 * If the sell side partner does not have any OpenRTB extensions
 					 * and they use OpenRTB, you can simply use the existing
 					 * sell side module GenericSellsidePartner
 					 */
-					'Sample SSP Partner 2' => array(
+					'Sample DSP Partner 2' => array(
 							'class_name' 		=> 'GenericSellsidePartner',
 							'partner_id'		=> '0002',
 							'ping_enabled'		=> false,
