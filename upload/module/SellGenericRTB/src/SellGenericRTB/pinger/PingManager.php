@@ -69,7 +69,7 @@ class PingManager {
 			
 			/*
 			 * First treat this bid request JSON as if it came in 
-			 * from a regular remote buy side partner (DSP)
+			 * from a regular remote buy side partner (SSP)
 			 */
 			
 			\buyloopbackpartner\LoopbackPartnerInit::init();

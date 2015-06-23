@@ -27,7 +27,7 @@ class CheckPublisherScore {
 			/*
 			 * No publisher url or ad source page to check.
 			 * This will never happen for a dashboard publisher
-			 * but could happen for a DSP impression
+			 * but could happen for a SSP impression
 			 */ 
 			return true;
 		endif;

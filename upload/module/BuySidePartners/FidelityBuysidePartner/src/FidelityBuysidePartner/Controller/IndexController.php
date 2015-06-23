@@ -68,7 +68,7 @@ class IndexController extends AbstractActionController
         	
         	if ($FidelityBuysidePartnerBid->had_bid_response === false):
         		/*
-        		 * DSP must provide access to a test server that supports the URL parameters testbid=bid and testbid=nobid. 
+        		 * SSP must provide access to a test server that supports the URL parameters testbid=bid and testbid=nobid. 
         		 * In the first case a test bid has to be returned to our test bid request, in the latter case a “no bid” 
         		 * response has to be returned (normally represented by an HTTP return code 204, see OpenRTB specification).
         		 */

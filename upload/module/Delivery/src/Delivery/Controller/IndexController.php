@@ -741,7 +741,7 @@ class IndexController extends AbstractActionController
     	$check_log_file_dir = "logs/" . $vendor . "_logs/";
     	
     	if (!file_exists($check_log_file_dir)):
-    		die("DSP Not Registered on this instance of NginAd OpenRTB Server");
+    		die("SSP Not Registered on this instance of NginAd OpenRTB Server");
     	endif;
     	
     	if ($winbid == '${AUCTION_PRICE}') $winbid = 'na';

@@ -224,7 +224,7 @@ class OpenRTBParser {
 	        		$ad_impression,
 	        		"instl");
 	        
-	        // Parse DSP tag id DOM parent of RTB Auction Ad Zone in Publisher web page
+	        // Parse SSP tag id DOM parent of RTB Auction Ad Zone in Publisher web page
 	        
 	        \util\ParseHelper::parse_item(
 	        		$RtbBidRequestImp,
