@@ -101,14 +101,14 @@ class PmpDealPublisherAdZoneToPrivateExchangeDomainAdmin extends \_factory\Cache
     			'DateUpdated'           			=> $PmpDealPublisherAdZoneToPrivateExchangeDomainAdmin->DateUpdated
     	);
     	
-    	$pmp_deal_publisher_website_to_private_exchange_domain_admin_id = (int)$PmpDealPublisherAdZoneToPrivateExchangeDomainAdmin->PmpDealPublisherAdZoneToPrivateExchangeDomainAdminID;
-    	if ($pmp_deal_publisher_website_to_private_exchange_domain_admin_id === 0):
+    	$pmp_deal_publisher_ad_zone_to_private_exchange_domain_admin_id = (int)$PmpDealPublisherAdZoneToPrivateExchangeDomainAdmin->PmpDealPublisherAdZoneToPrivateExchangeDomainAdminID;
+    	if ($pmp_deal_publisher_ad_zone_to_private_exchange_domain_admin_id === 0):
 	    	$data['DateCreated'] 				= $PmpDealPublisherAdZoneToPrivateExchangeDomainAdmin->DateCreated;
 	    	$this->insert($data);
 	    	return $this->getLastInsertValue();
     	else:
-	    	$this->update($data, array('PmpDealPublisherAdZoneToPrivateExchangeDomainAdminID' => $pmp_deal_publisher_website_to_private_exchange_domain_admin_id));
-	    	return $pmp_deal_publisher_website_to_private_exchange_domain_admin_id;
+	    	$this->update($data, array('PmpDealPublisherAdZoneToPrivateExchangeDomainAdminID' => $pmp_deal_publisher_ad_zone_to_private_exchange_domain_admin_id));
+	    	return $pmp_deal_publisher_ad_zone_to_private_exchange_domain_admin_id;
     	endif;
     }
 };
