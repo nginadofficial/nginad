@@ -13,7 +13,7 @@ use Zend\Db\TableGateway\AbstractTableGateway;
 use Zend\Db\TableGateway\Feature;
 
 
-class PmpDealPublisherWebsiteToPublisherInfo extends \_factory\CachedTableRead
+class PmpDealPublisherWebsiteToPrivateExchangeDomainAdmin extends \_factory\CachedTableRead
 {
 
 	static protected $instance = null;
@@ -21,7 +21,7 @@ class PmpDealPublisherWebsiteToPublisherInfo extends \_factory\CachedTableRead
 	public static function get_instance() {
 
 		if (self::$instance == null):
-			self::$instance = new \_factory\PmpDealPublisherWebsiteToPublisherInfo();
+			self::$instance = new \_factory\PmpDealPublisherWebsiteToPrivateExchangeDomainAdmin();
 		endif;
 		return self::$instance;
 	}
@@ -29,7 +29,7 @@ class PmpDealPublisherWebsiteToPublisherInfo extends \_factory\CachedTableRead
 
     function __construct() {
 
-            $this->table = 'PmpDealPublisherWebsiteToPublisherInfo';
+            $this->table = 'PmpDealPublisherWebsiteToPrivateExchangeDomainAdmin';
             $this->featureSet = new Feature\FeatureSet();
             $this->featureSet->addFeature(new Feature\GlobalAdapterFeature());
             $this->initialize();
@@ -53,7 +53,7 @@ class PmpDealPublisherWebsiteToPublisherInfo extends \_factory\CachedTableRead
         	);
         	endforeach;
         	$select->limit(1, 0);
-        	$select->order('PmpDealPublisherWebsiteToPublisherInfoID');
+        	$select->order('PmpDealPublisherWebsiteToPrivateExchangeDomainAdminID');
 
         }
         	);
@@ -83,7 +83,7 @@ class PmpDealPublisherWebsiteToPublisherInfo extends \_factory\CachedTableRead
         		);
         		endforeach;
         		//$select->limit(10, 0);
-        		$select->order('PmpDealPublisherWebsiteToPublisherInfoID');
+        		$select->order('PmpDealPublisherWebsiteToPrivateExchangeDomainAdminID');
 
         	}
     	);
@@ -95,21 +95,21 @@ class PmpDealPublisherWebsiteToPublisherInfo extends \_factory\CachedTableRead
     		return $obj_list;
     }
     
-    public function savePmpDealPublisherWebsiteToPublisherInfo(\model\PmpDealPublisherWebsiteToPublisherInfo $PmpDealPublisherWebsiteToPublisherInfo) {
+    public function savePmpDealPublisherWebsiteToPrivateExchangeDomainAdmin(\model\PmpDealPublisherWebsiteToPrivateExchangeDomainAdmin $PmpDealPublisherWebsiteToPrivateExchangeDomainAdmin) {
     	$data = array(
-    			'PublisherInfoID'			=> $PmpDealPublisherWebsiteToPublisherInfo->PublisherInfoID,
-    			'PublisherWebsiteID'		=> $PmpDealPublisherWebsiteToPublisherInfo->PublisherWebsiteID,
-    			'DateUpdated'           	=> $PmpDealPublisherWebsiteToPublisherInfo->DateUpdated
+    			'PrivateExchangeDomainAdminID'		=> $PmpDealPublisherWebsiteToPrivateExchangeDomainAdmin->PrivateExchangeDomainAdminID,
+    			'PublisherWebsiteID'				=> $PmpDealPublisherWebsiteToPrivateExchangeDomainAdmin->PublisherWebsiteID,
+    			'DateUpdated'           			=> $PmpDealPublisherWebsiteToPrivateExchangeDomainAdmin->DateUpdated
     	);
     	
-    	$pmp_deal_publisher_website_to_publisher_info_id = (int)$PmpDealPublisherWebsiteToPublisherInfo->PmpDealPublisherWebsiteToPublisherInfoID;
-    	if ($pmp_deal_publisher_website_to_publisher_info_id === 0):
-	    	$data['DateCreated'] 				= $PmpDealPublisherWebsiteToPublisherInfo->DateCreated;
+    	$pmp_deal_publisher_website_to_private_exchange_domain_admin_id = (int)$PmpDealPublisherWebsiteToPrivateExchangeDomainAdmin->PmpDealPublisherWebsiteToPrivateExchangeDomainAdminID;
+    	if ($pmp_deal_publisher_website_to_private_exchange_domain_admin_id === 0):
+	    	$data['DateCreated'] 				= $PmpDealPublisherWebsiteToPrivateExchangeDomainAdmin->DateCreated;
 	    	$this->insert($data);
 	    	return $this->getLastInsertValue();
     	else:
-	    	$this->update($data, array('PmpDealPublisherWebsiteToPublisherInfoID' => $pmp_deal_publisher_website_to_publisher_info_id));
-	    	return $pmp_deal_publisher_website_to_publisher_info_id;
+	    	$this->update($data, array('PmpDealPublisherWebsiteToPrivateExchangeDomainAdminID' => $pmp_deal_publisher_website_to_private_exchange_domain_admin_id));
+	    	return $pmp_deal_publisher_website_to_private_exchange_domain_admin_id;
     	endif;
     }
 };

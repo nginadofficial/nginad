@@ -9,10 +9,10 @@
 
 namespace model;
 
-class PmpDealPublisherWebsiteToPublisherInfo {
-    public $PmpDealPublisherWebsiteToPublisherInfoID;
+class PmpDealPublisherWebsiteToPrivateExchangeDomainAdmin {
+    public $PmpDealPublisherWebsiteToPrivateExchangeDomainAdminID;
     public $PublisherWebsiteID;
-    public $PublisherInfoID;
+    public $PrivateExchangeDomainAdminID;
     public $DateCreated;
     public $DateUpdated;
 }

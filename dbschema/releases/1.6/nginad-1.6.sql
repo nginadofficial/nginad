@@ -1078,19 +1078,19 @@ CREATE TABLE `PublisherHourlyBids` (
 -- build the new tables which will hold the PMP deals
 
 -- ----------------------------
--- Table structure for PmpDealPublisherDomainToPublisherInfo
+-- Table structure for PmpDealPublisherWebsiteToPrivateExchangeDomainAdmin
 -- ----------------------------
-DROP TABLE IF EXISTS `PmpDealPublisherWebsiteToPublisherInfo`;
-CREATE TABLE `PmpDealPublisherWebsiteToPublisherInfo` (
-  `PmpDealPublisherWebsiteToPublisherInfoID` int(11) unsigned NOT NULL AUTO_INCREMENT,
+DROP TABLE IF EXISTS `PmpDealPublisherWebsiteToPrivateExchangeDomainAdmin`;
+CREATE TABLE `PmpDealPublisherWebsiteToPrivateExchangeDomainAdmin` (
+  `PmpDealPublisherWebsiteToPrivateExchangeDomainAdminID` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `PublisherWebsiteID` int(11) unsigned NOT NULL,
-  `PublisherInfoID` int(11) unsigned NOT NULL,
+  `PrivateExchangeDomainAdminID` int(11) unsigned NOT NULL,
   `DateCreated` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `DateUpdated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`PmpDealPublisherWebsiteToPublisherInfoID`),
-  UNIQUE KEY `PmpDealPublisherWebsiteToPublisherInfo_UNIQUE` (`PmpDealPublisherWebsiteToPublisherInfoID`),
+  PRIMARY KEY (`PmpDealPublisherWebsiteToPrivateExchangeDomainAdminID`),
+  UNIQUE KEY `PmpDealPublisherWebsiteToPrivateExchangeDomainAdmin_UNIQUE` (`PmpDealPublisherWebsiteToPrivateExchangeDomainAdminID`),
   KEY `FK_Publisher_Website_ID` (`PublisherWebsiteID`),
-  KEY `FK_PublisherInfo_ID` (`PublisherInfoID`)
+  KEY `FK_PrivateExchangeDomainAdmin_ID` (`PrivateExchangeDomainAdminID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
@@ -1126,19 +1126,19 @@ CREATE TABLE `PmpDealPublisherWebsiteToInsertionOrderLineItem` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Table structure for PmpDealPublisherDomainToPublisherInfo
+-- Table structure for PmpDealPublisherAdZoneToPrivateExchangeDomainAdmin
 -- ----------------------------
-DROP TABLE IF EXISTS `PmpDealPublisherAdZoneToPublisherInfo`;
-CREATE TABLE `PmpDealPublisherAdZoneToPublisherInfo` (
-  `PmpDealPublisherAdZoneToPublisherInfoID` int(11) unsigned NOT NULL AUTO_INCREMENT,
+DROP TABLE IF EXISTS `PmpDealPublisherAdZoneToPrivateExchangeDomainAdmin`;
+CREATE TABLE `PmpDealPublisherAdZoneToPrivateExchangeDomainAdmin` (
+  `PmpDealPublisherAdZoneToPrivateExchangeDomainAdminID` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `PublisherAdZoneID` int(11) unsigned NOT NULL,
-  `PublisherInfoID` int(11) unsigned NOT NULL,
+  `PrivateExchangeDomainAdminID` int(11) unsigned NOT NULL,
   `DateCreated` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `DateUpdated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`PmpDealPublisherAdZoneToPublisherInfoID`),
-  UNIQUE KEY `PmpDealPublisherAdZoneToPublisherInfo_UNIQUE` (`PmpDealPublisherAdZoneToPublisherInfoID`),
+  PRIMARY KEY (`PmpDealPublisherAdZoneToPrivateExchangeDomainAdminID`),
+  UNIQUE KEY `PmpDealPublisherAdZoneToPrivateExchangeDomainAdmin_UNIQUE` (`PmpDealPublisherAdZoneToPrivateExchangeDomainAdminID`),
   KEY `FK_Publisher_AdZone_ID` (`PublisherAdZoneID`),
-  KEY `FK_PublisherInfo_ID` (`PublisherInfoID`)
+  KEY `FK_PrivateExchangeDomainAdmin_ID` (`PrivateExchangeDomainAdminID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------

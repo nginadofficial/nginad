@@ -12,8 +12,7 @@ namespace _factory;
 use Zend\Db\TableGateway\AbstractTableGateway;
 use Zend\Db\TableGateway\Feature;
 
-
-class PmpDealPublisherAdZoneToPublisherInfo extends \_factory\CachedTableRead
+class PmpDealPublisherAdZoneToPrivateExchangeDomainAdmin extends \_factory\CachedTableRead
 {
 
 	static protected $instance = null;
@@ -21,7 +20,7 @@ class PmpDealPublisherAdZoneToPublisherInfo extends \_factory\CachedTableRead
 	public static function get_instance() {
 
 		if (self::$instance == null):
-			self::$instance = new \_factory\PmpDealPublisherAdZoneToPublisherInfo();
+			self::$instance = new \_factory\PmpDealPublisherAdZoneToPrivateExchangeDomainAdmin();
 		endif;
 		return self::$instance;
 	}
@@ -29,7 +28,7 @@ class PmpDealPublisherAdZoneToPublisherInfo extends \_factory\CachedTableRead
 
     function __construct() {
 
-            $this->table = 'PmpDealPublisherAdZoneToPublisherInfo';
+            $this->table = 'PmpDealPublisherAdZoneToPrivateExchangeDomainAdmin';
             $this->featureSet = new Feature\FeatureSet();
             $this->featureSet->addFeature(new Feature\GlobalAdapterFeature());
             $this->initialize();
@@ -53,7 +52,7 @@ class PmpDealPublisherAdZoneToPublisherInfo extends \_factory\CachedTableRead
         	);
         	endforeach;
         	$select->limit(1, 0);
-        	$select->order('PmpDealPublisherAdZoneToPublisherInfoID');
+        	$select->order('PmpDealPublisherAdZoneToPrivateExchangeDomainAdminID');
 
         }
         	);
@@ -83,7 +82,7 @@ class PmpDealPublisherAdZoneToPublisherInfo extends \_factory\CachedTableRead
         		);
         		endforeach;
         		//$select->limit(10, 0);
-        		$select->order('PmpDealPublisherAdZoneToPublisherInfoID');
+        		$select->order('PmpDealPublisherAdZoneToPrivateExchangeDomainAdminID');
 
         	}
     	);
@@ -95,21 +94,21 @@ class PmpDealPublisherAdZoneToPublisherInfo extends \_factory\CachedTableRead
     		return $obj_list;
     }
     
-    public function savePmpDealPublisherAdZoneToPublisherInfo(\model\PmpDealPublisherAdZoneToPublisherInfo $PmpDealPublisherAdZoneToPublisherInfo) {
+    public function savePmpDealPublisherAdZoneToPrivateExchangeDomainAdmin(\model\PmpDealPublisherAdZoneToPrivateExchangeDomainAdmin $PmpDealPublisherAdZoneToPrivateExchangeDomainAdmin) {
     	$data = array(
-    			'PublisherInfoID'			=> $PmpDealPublisherAdZoneToPublisherInfo->PublisherInfoID,
-    			'PublisherAdZoneID'			=> $PmpDealPublisherAdZoneToPublisherInfo->PublisherAdZoneID,
-    			'DateUpdated'           	=> $PmpDealPublisherAdZoneToPublisherInfo->DateUpdated
+    			'PrivateExchangeDomainAdminID'		=> $PmpDealPublisherAdZoneToPrivateExchangeDomainAdmin->PrivateExchangeDomainAdminID,
+    			'PublisherAdZoneID'					=> $PmpDealPublisherAdZoneToPrivateExchangeDomainAdmin->PublisherAdZoneID,
+    			'DateUpdated'           			=> $PmpDealPublisherAdZoneToPrivateExchangeDomainAdmin->DateUpdated
     	);
     	
-    	$pmp_deal_publisher_ad_zone_to_publisher_info_id = (int)$PmpDealPublisherAdZoneToPublisherInfo->PmpDealPublisherAdZoneToPublisherInfoID;
-    	if ($pmp_deal_publisher_ad_zone_to_publisher_info_id === 0):
-	    	$data['DateCreated'] 				= $PmpDealPublisherAdZoneToPublisherInfo->DateCreated;
+    	$pmp_deal_publisher_website_to_private_exchange_domain_admin_id = (int)$PmpDealPublisherAdZoneToPrivateExchangeDomainAdmin->PmpDealPublisherAdZoneToPrivateExchangeDomainAdminID;
+    	if ($pmp_deal_publisher_website_to_private_exchange_domain_admin_id === 0):
+	    	$data['DateCreated'] 				= $PmpDealPublisherAdZoneToPrivateExchangeDomainAdmin->DateCreated;
 	    	$this->insert($data);
 	    	return $this->getLastInsertValue();
     	else:
-	    	$this->update($data, array('PmpDealPublisherAdZoneToPublisherInfoID' => $pmp_deal_publisher_ad_zone_to_publisher_info_id));
-	    	return $pmp_deal_publisher_ad_zone_to_publisher_info_id;
+	    	$this->update($data, array('PmpDealPublisherAdZoneToPrivateExchangeDomainAdminID' => $pmp_deal_publisher_website_to_private_exchange_domain_admin_id));
+	    	return $pmp_deal_publisher_website_to_private_exchange_domain_admin_id;
     	endif;
     }
 };

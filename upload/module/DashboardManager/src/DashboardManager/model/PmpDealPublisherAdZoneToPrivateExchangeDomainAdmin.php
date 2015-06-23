@@ -9,10 +9,10 @@
 
 namespace model;
 
-class PmpDealPublisherAdZoneToPublisherInfo {
-    public $PmpDealPublisherAdZoneToPublisherInfoID;
+class PmpDealPublisherAdZoneToPrivateExchangeDomainAdmin {
+    public $PmpDealPublisherAdZoneToPrivateExchangeDomainAdminID;
     public $PublisherAdZoneID;
-    public $PublisherInfoID;
+    public $PrivateExchangeDomainAdminID;
     public $DateCreated;
     public $DateUpdated;
 }
