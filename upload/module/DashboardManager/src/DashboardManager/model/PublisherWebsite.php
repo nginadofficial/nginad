@@ -16,6 +16,7 @@ class PublisherWebsite
     public $DomainOwnerID;
     public $AutoApprove;
     public $ApprovalFlag;
+    public $VisibilityTypeID;
     public $IABCategory;
     public $IABSubCategory;
     public $Description;

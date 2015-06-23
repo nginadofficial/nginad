@@ -18,7 +18,7 @@ class PublisherAdZone  implements InputFilterAwareInterface
 {
     public $PublisherAdZoneID;
     public $PublisherWebsiteID;
-    public $PublisherAdZoneTypeID;
+    public $VisibilityTypeID;
     public $ImpressionType;
     public $AdName;
     public $Description;

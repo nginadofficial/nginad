@@ -96,7 +96,8 @@ class InsertionOrderPreview extends AbstractTableGateway
     	        'Active'               => $InsertionOrderPreview->Active,
     	        'DateUpdated'          => $InsertionOrderPreview->DateUpdated,
     			'ChangeWentLive'       => $InsertionOrderPreview->ChangeWentLive,
-    			'WentLiveDate'         => $InsertionOrderPreview->WentLiveDate
+    			'WentLiveDate'         => $InsertionOrderPreview->WentLiveDate,
+    			'VisibilityTypeID' 	   => $InsertionOrder->VisibilityTypeID
     	);
 
     	$ad_campaign_preview_id = (int)$InsertionOrderPreview->InsertionOrderPreviewID;

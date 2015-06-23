@@ -165,9 +165,10 @@ class PublisherWebsite extends \_factory\CachedTableRead
    		$data['AutoApprove'] = intval($rawData->AutoApprove);
    	endif;
    	
-   	$data['IABCategory'] 	= $rawData->IABCategory;
-   	$data['IABSubCategory'] = $rawData->IABSubCategory;
-   	$data['Description'] 	= $rawData->Description;
+   	$data['IABCategory'] 		= $rawData->IABCategory;
+   	$data['IABSubCategory'] 	= $rawData->IABSubCategory;
+   	$data['Description'] 		= $rawData->Description;
+   	$data['VisibilityTypeID'] 	= $rawData->VisibilityTypeID;
    	
    	$data['DateUpdated'] = date('Y-m-d H:i:s');
    	if (intval($rawData->PublisherWebsiteID) > 0):

@@ -84,7 +84,7 @@ class InsertionOrderLineItem extends \_factory\CachedTableRead
     public function saveInsertionOrderLineItem(\model\InsertionOrderLineItem $Banner) {
     	$data = array(
     			'InsertionOrderID'         => $Banner->InsertionOrderID,
-    			'InsertionOrderTypeID'	   => $Banner->InsertionOrderTypeID,
+    			'VisibilityTypeID' 	   => $Banner->VisibilityTypeID,
     			'Name'                 => $Banner->Name,
     			'ImpressionType'       => $Banner->ImpressionType,
     			// convert to MySQL DateTime

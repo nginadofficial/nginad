@@ -1,3 +1,31 @@
+-- Private exchange publishers add website and ad zone visibility flags
+-- Do they want the website or ad zone to be available in the platform connection?
+-- Do they want the website and ad zone to be available to SSPs being pinged with RTB requests?
+ALTER TABLE  `PublisherWebsite` ADD  `VisibilityTypeID` int NOT NULL DEFAULT 0 AFTER  `ApprovalFlag` ;
+ALTER TABLE  `PublisherAdZone` CHANGE `PublisherAdZoneTypeID` `VisibilityTypeID` int NOT NULL DEFAULT 1;
+ALTER TABLE  `InsertionOrder` ADD  `VisibilityTypeID` int NOT NULL DEFAULT 0 AFTER  `UserID` ;
+ALTER TABLE  `InsertionOrderLineItem` CHANGE `InsertionOrderTypeID` `VisibilityTypeID` int NOT NULL DEFAULT 1;
+
+-- ----------------------------
+-- Table structure for VisibilityType
+-- ----------------------------
+DROP TABLE IF EXISTS `VisibilityType`;
+CREATE TABLE `VisibilityType` (
+  `VisibilityTypeID` int(11) unsigned NOT NULL,
+  `Description` varchar(255) NOT NULL,
+  `DateCreated` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `DateUpdated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`VisibilityTypeID`),
+  UNIQUE KEY `VisibilityType_UNIQUE` (`VisibilityTypeID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of PublisherAdZoneType
+-- ----------------------------
+INSERT INTO `VisibilityType` VALUES ('1', 'Public Deal', '2014-08-17 12:16:21', '2014-08-17 12:16:21');
+INSERT INTO `VisibilityType` VALUES ('2', 'Platform Connection', '2014-08-17 12:16:21', '2014-08-17 12:16:21');
+INSERT INTO `VisibilityType` VALUES ('3', 'Private Exchange', '2014-08-17 12:16:21', '2014-08-17 12:16:21');
+
 -- build the new tables which will hold the PMP deals
 
 -- ----------------------------

@@ -197,7 +197,7 @@ class PublisherAdZone extends \_factory\CachedTableRead
     // We must enforce data integrity!
     $data['PublisherAdZoneID'] = intval(abs($rawData->PublisherAdZoneID));
     $data['PublisherWebsiteID'] = intval(abs($rawData->PublisherWebsiteID));
-    $data['PublisherAdZoneTypeID'] = intval(abs($rawData->PublisherAdZoneTypeID));
+    $data['VisibilityTypeID'] = intval(abs($rawData->VisibilityTypeID));
    	$data['AdOwnerID'] = intval(abs($rawData->AdOwnerID));
    	$data['AdName'] = substr($rawData->AdName,0,100);
    	$data['Description'] = $rawData->Description;
