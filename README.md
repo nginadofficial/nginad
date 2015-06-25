@@ -17,6 +17,12 @@ oral surgery #1 and #16, so it's likely there will be no further commits until t
 The ETA on the 1.6 version being complete and tagged in master is 1 week at this point due to delays.
 We had a 24 hour power loss in El Monte, California yesterday for instance: http://imagizer.imageshack.us/a/img905/2708/PFHmAX.png
 
+Here is the comp on the new NginAd 1.6 Private Exchange SSP channel selector:
+http://imageshack.com/a/img540/51/2lcR85.jpg
+
+Note that the IFrame lightbox popup to SiteScout is just an example, the RTB channel selector lightbox will 
+be comprised of the actual incoming SSP channels via OpenRTB
+
 June 6, 2015
 ------------------
 
