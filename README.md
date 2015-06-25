@@ -1,6 +1,22 @@
 nginad
 =======
 
+June 25, 2015
+------------------
+
+DO NOT CHECK OUT NGINAD FROM MASTER!
+
+Master is now the development branch for NginAd 1.6!
+This is the last time master will be used as a development branch, promised!
+
+If you need to use NginAd, please check out the 1.5.2 tag here:
+https://github.com/cdnpal/nginad/releases/tag/1.5.2
+
+Also note that today at 1:30PM PST the lead developer Chris Gu is having double extraction 
+oral surgery #1 and #16, so it's likely there will be no further commits until tomorrow.
+The ETA on the 1.6 version being complete and tagged in master is 1 week at this point due to delays.
+We had a 24 hour power loss in El Monte, California yesterday for instance: http://imagizer.imageshack.us/a/img905/2708/PFHmAX.png
+
 June 6, 2015
 ------------------
 

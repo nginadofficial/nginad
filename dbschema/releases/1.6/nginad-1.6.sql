@@ -1145,6 +1145,72 @@ CREATE TABLE `PmpDealPublisherWebsiteToInsertionOrderLineItemPreview` (
   KEY `FK_InsertionOrderLineItem_ID` (`InsertionOrderLineItemPreviewID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+
+
+-- ----------------------------
+-- Table structure for SspRtbChannelToInsertionOrder
+-- ----------------------------
+DROP TABLE IF EXISTS `SspRtbChannelToInsertionOrder`;
+CREATE TABLE `SspRtbChannelToInsertionOrder` (
+  `SspRtbChannelToInsertionOrderID` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `SspPublisherChannelID` int(11) unsigned NOT NULL,
+  `InsertionOrderID` int(11) unsigned NOT NULL,
+  `Enabled` int(4) unsigned NOT NULL DEFAULT 0,
+  `DateCreated` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `DateUpdated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`SspRtbChannelToInsertionOrderID`),
+  UNIQUE KEY `SspRtbChannelToIO_UNIQUE` (`SspRtbChannelToInsertionOrderID`),
+  KEY `FK_InsertionOrder_ID` (`InsertionOrderID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Table structure for SspRtbChannelToInsertionOrderLineItem
+-- ----------------------------
+DROP TABLE IF EXISTS `SspRtbChannelToInsertionOrderLineItem`;
+CREATE TABLE `SspRtbChannelToInsertionOrderLineItem` (
+  `SspRtbChannelToInsertionOrderLineItemID` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `SspPublisherChannelID` int(11) unsigned NOT NULL,
+  `InsertionOrderLineItemID` int(11) unsigned NOT NULL,
+  `Enabled` int(4) unsigned NOT NULL DEFAULT 0,
+  `DateCreated` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `DateUpdated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`SspRtbChannelToInsertionOrderLineItemID`),
+  UNIQUE KEY `SspRtbChannelToIOLineItem_UNIQUE` (`SspRtbChannelToInsertionOrderLineItemID`),
+  KEY `FK_InsertionOrderLineItem_ID` (`InsertionOrderLineItemID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Table structure for SspRtbChannelToInsertionOrderPreview
+-- ----------------------------
+DROP TABLE IF EXISTS `SspRtbChannelToInsertionOrderPreview`;
+CREATE TABLE `SspRtbChannelToInsertionOrderPreview` (
+  `SspRtbChannelToInsertionOrderPreviewID` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `SspPublisherChannelID` int(11) unsigned NOT NULL,
+  `InsertionOrderPreviewID` int(11) unsigned NOT NULL,
+  `Enabled` int(4) unsigned NOT NULL DEFAULT 0,
+  `DateCreated` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `DateUpdated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`SspRtbChannelToInsertionOrderPreviewID`),
+  UNIQUE KEY `SspRtbChannelToIOPreview_UNIQUE` (`SspRtbChannelToInsertionOrderPreviewID`),
+  KEY `FK_InsertionOrder_ID` (`InsertionOrderPreviewID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Table structure for SspRtbChannelToInsertionOrderLineItemPreview
+-- ----------------------------
+DROP TABLE IF EXISTS `SspRtbChannelToInsertionOrderLineItemPreview`;
+CREATE TABLE `SspRtbChannelToInsertionOrderLineItemPreview` (
+  `SspRtbChannelToInsertionOrderLineItemPreviewID` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `SspPublisherChannelID` int(11) unsigned NOT NULL,
+  `InsertionOrderLineItemPreviewID` int(11) unsigned NOT NULL,
+  `Enabled` int(4) unsigned NOT NULL DEFAULT 0,
+  `DateCreated` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `DateUpdated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`SspRtbChannelToInsertionOrderLineItemPreviewID`),
+  UNIQUE KEY `SspRtbChannelToIOLineItemPreview_UNIQUE` (`SspRtbChannelToInsertionOrderLineItemPreviewID`),
+  KEY `FK_InsertionOrderLineItem_ID` (`InsertionOrderLineItemPreviewID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 -- ----------------------------
 -- Table structure for VisibilityType
 -- ----------------------------
