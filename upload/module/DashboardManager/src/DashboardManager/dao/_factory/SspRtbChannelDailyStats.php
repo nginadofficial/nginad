@@ -102,8 +102,8 @@ class SspRtbChannelDailyStats extends \_factory\CachedTableRead
     			'AuctionBidsCounter'   				=> $SspRtbChannelDailyStats->AuctionBidsCounter
     	);
 
-    	$buyside_hourly_bids_counter_id = (int)$SspRtbChannelDailyStats->SspRtbChannelDailyStatsID;
-    	$this->update($data, array('SspRtbChannelDailyStatsID' => $buyside_hourly_bids_counter_id));
+    	$private_exchange_rtb_channel_daily_stats_id = (int)$SspRtbChannelDailyStats->SspRtbChannelDailyStatsID;
+    	$this->update($data, array('SspRtbChannelDailyStatsID' => $private_exchange_rtb_channel_daily_stats_id));
     }
     
     public function incrementSspRtbChannelDailyStatsCached($config, $buyside_partner_name, $rtb_channel_site_id, $impressions_offered_counter, $auction_bids_counter) {

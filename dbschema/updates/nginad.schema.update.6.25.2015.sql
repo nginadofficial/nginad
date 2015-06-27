@@ -20,3 +20,22 @@ CREATE TABLE `SspRtbChannelDailyStats` (
   PRIMARY KEY (`SspRtbChannelDailyStatsID`),
   UNIQUE KEY `SspRtbChannelDailyStats_UNIQUE` (`SspRtbChannelDailyStatsID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `PrivateExchangeRtbChannelDailyStats`;
+CREATE TABLE `PrivateExchangeRtbChannelDailyStats` (
+  `PrivateExchangeRtbChannelDailyStatsID` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `PublisherWebsiteID` int(11) unsigned NOT NULL,
+  `MDYH` char(15) NOT NULL,
+  `ImpressionsOfferedCounter` int(11) unsigned NOT NULL DEFAULT 0,
+  `AuctionBidsCounter` int(11) unsigned NOT NULL DEFAULT 0,
+  `DateCreated` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `DateUpdated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`PrivateExchangeRtbChannelDailyStatsID`),
+  UNIQUE KEY `PrivateExchangeRtbChannelDailyStats_UNIQUE` (`PrivateExchangeRtbChannelDailyStatsID`),
+  KEY `FK_Publisher_Website_ID` (`PublisherWebsiteID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+
+
