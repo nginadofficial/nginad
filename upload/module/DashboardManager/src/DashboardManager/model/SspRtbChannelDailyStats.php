@@ -11,7 +11,7 @@ namespace model;
 
 class SspRtbChannelDailyStats {
 	public $SspRtbChannelDailyStatsID;
-	public $BuySidePartnerID;
+	public $BuySidePartnerName;
 	public $SspRtbChannelSiteID;
 	public $MDYH;
     public $ImpressionsOfferedCounter;

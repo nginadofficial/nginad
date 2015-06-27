@@ -459,6 +459,39 @@ class CachedStatsWrites {
 	
 	}
 	
+	
+	public static function increment_cached_write_result_ssp_rtb_channel_stats($config, $params, $class_name, $impressions_offered_counter, $auction_bids_counter) {
+	
+		$current = \util\CacheSql::get_cached_read_result_apc($config, $params, $class_name);
+	
+		if ($current !== null):
+		
+			$existing_impressions_offered_counter = intval($current["impressions_offered_counter"]);
+			$impressions_offered_counter_value += $existing_impressions_offered_counter;
+		
+			$existing_auction_bids_counter = floatval($current["auction_bids_counter"]);
+			$auction_bids_counter_value += $existing_auction_bids_counter;
+
+		endif;
+	
+		// cache up to 1 hour, the write the the db should occur before that.
+		\util\CacheSql::put_cached_read_result_apc($config, $params, $class_name, array("auction_bids_counter"=>intval($auction_bids_counter_value), "impressions_offered_counter"=>intval($impressions_offered_counter_value)), 3600);
+	
+		$timer_name = 'write_timer';
+		$write_timer = \util\CacheSql::get_cached_read_result_apc($config, $params, $class_name . $timer_name);
+	
+		if ($write_timer == null):
+	
+			/*
+			 * 60 second write timer, when the apc cache value is gone the
+			* contents are written the DB and the apc value is cleared
+			*/
+			\util\CacheSql::put_cached_read_result_apc($config, $params, $class_name . $timer_name, array($timer_name=>true), 60);
+		endif;
+	
+	}
+	
+	
 	public static function increment_cached_write_result_impressions_spend_apc($config, $params, $class_name, $impressions_value, $spend_value_gross, $spend_value_net) {
 	
 		$current = \util\CacheSql::get_cached_read_result_apc($config, $params, $class_name);

@@ -275,6 +275,25 @@ abstract class RtbBuyV22Bid extends RtbBuyBid {
 		
 		$this->RtbBidResponse = $RtbBidResponse;
 	
+		/*
+		 * CREATE AN HOURLY TALLY OF INCOMING RTB BIDS
+		 * FROM BOTH LOCAL PUBS AND REMOTE SSP RTB SITE ID 
+		 * CHANNELS IN ORDER TO PROVIDE THE SITE SCOUT
+		 * RTB CHANNEL CHOOSER FUNCTIONALITY IN AN EXCEL LIKE
+		 * GRID LAYOUT WITH THE DAILY IMPS IN A SORTABLE COLUMN
+		*/
+		
+		$SspRtbChannelDailyStatsFactory = \_factory\SspRtbChannelDailyStats::get_instance();
+		
+		// TODO
+	
+		$buyside_partner_name 			= "PARTNER_NAME_HERE";
+		$rtb_channel_site_id 			= "RTB_CHANNEL_SITE_ID_HERE";
+		$impressions_offered_counter 	= "IMPS_OFFERED_NUM_HERE";
+		$auction_bids_counter 			= "RESPONSE_BIDS_NUM_HERE";
+		
+		$SspRtbChannelDailyStatsFactory->incrementSspRtbChannelDailyStatsCached($this->config, $buyside_partner_name, $rtb_channel_site_id, $impressions_offered_counter, $auction_bids_counter);
+
 	}
 	
 }
