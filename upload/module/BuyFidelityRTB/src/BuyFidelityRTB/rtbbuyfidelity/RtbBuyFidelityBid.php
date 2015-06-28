@@ -351,7 +351,7 @@ abstract class RtbBuyFidelityBid extends \rtbbuy\RtbBuyBid {
 
 	}
 	
-	private function logImpressionsStatisticsData($tld, $total_bids) {
+	protected function logImpressionsStatisticsData($tld, $total_bids) {
 		
 		if ($this->RtbBidRequest != null):
 			/*
@@ -363,8 +363,7 @@ abstract class RtbBuyFidelityBid extends \rtbbuy\RtbBuyBid {
 			*/
 
 			$buyside_partner_name 			= $this->rtb_provider;
-			$rtb_channel_site_id 			= 'N/A';
-			$publisher_website_id			= 0;
+			$rtb_channel_site_id 			= "N/A";
 			$rtb_channel_site_name			= "N/A";
 			$rtb_channel_site_domain		= $tld;
 			$impressions_offered_counter 	= 0;
@@ -381,8 +380,11 @@ abstract class RtbBuyFidelityBid extends \rtbbuy\RtbBuyBid {
 			endif;
 				
 			if ($this->is_local_request === true):
+				/*
+				 * In the local context, $rtb_channel_site_id is the PublisherWebsiteID
+				 */
 				$PrivateExchangeRtbChannelDailyStatsFactory = \_factory\PrivateExchangeRtbChannelDailyStats::get_instance();
-				$PrivateExchangeRtbChannelDailyStatsFactory->incrementPrivateExchangeRtbChannelDailyStatsCached($this->config, $publisher_website_id, $impressions_offered_counter, $auction_bids_counter);
+				$PrivateExchangeRtbChannelDailyStatsFactory->incrementPrivateExchangeRtbChannelDailyStatsCached($this->config, $rtb_channel_site_id, $impressions_offered_counter, $auction_bids_counter);
 			else:
 				$SspRtbChannelDailyStatsFactory = \_factory\SspRtbChannelDailyStats::get_instance();
 				$SspRtbChannelDailyStatsFactory->incrementSspRtbChannelDailyStatsCached($this->config, $buyside_partner_name, $rtb_channel_site_id, $impressions_offered_counter, $auction_bids_counter);
