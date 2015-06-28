@@ -98,11 +98,6 @@ class OpenRTBWorkflow
 		        	if (\buyrtbfidelity\workflows\tasklets\common\adcampaignbanner\CheckBannerDate::execute($logger, $this, $RtbBidRequest, $RtbBidRequestImp, $InsertionOrderLineItem) === false):
 		        		continue;
 		        	endif;
-	            
-	            	// Check to see if this AdCampaginBanner is associated to a contract zone.
-		        	if (\buyrtbfidelity\workflows\tasklets\common\adcampaignbanner\CheckIsContract::execute($logger, $this, $RtbBidRequest, $RtbBidRequestImp, $InsertionOrderLineItem) === false):
-		        		continue;
-		        	endif;
 	            	
 		        	// Check impression price floor
 		        	if (\buyrtbfidelity\workflows\tasklets\common\adcampaignbanner\CheckPriceFloor::execute($logger, $this, $RtbBidRequest, $RtbBidRequestImp, $InsertionOrderLineItem, $markup_rate) === false):

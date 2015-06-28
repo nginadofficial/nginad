@@ -165,182 +165,152 @@ class IndexController extends AbstractActionController
     	
 	    $banner_request["ImpressionType"] = $PublisherAdZone->ImpressionType;
 	    
-    	/*
-    	 * Is this ad zone linked to one or more contract banners?
-    	 * If so forward the request to the contract banner
-    	 * display probability logic.
-    	 */
-    	if ($PublisherAdZone->PublisherAdZoneTypeID == AD_TYPE_CONTRACT):
-    		
-	    	$LinkedBannerToAdZoneFactory = \_factory\LinkedBannerToAdZone::get_instance();
-	    	
-	    	$params = array();
-	    	$params["PublisherAdZoneID"] 	= $banner_request["publisher_banner_id"];
-	    	$LinkedBannerToAdZoneList 		= $LinkedBannerToAdZoneFactory->get_cached($config, $params);
-	    	
-	    	if ($LinkedBannerToAdZoneList != null && count($LinkedBannerToAdZoneList) > 0):
-    			$this->process_contract_zone_tag($config, $banner_request, $LinkedBannerToAdZoneList);
-	    	else:
-	    		return;
-    		endif;
-    		
-    	else:
 
-	 		$banner_request = $this->build_request_array($config, $banner_request);   	
+	 	$banner_request = $this->build_request_array($config, $banner_request);   	
 	
-	 		$RtbSellV22Bid = new \rtbsellv22\RtbSellV22Bid();
+	 	$RtbSellV22Bid = new \rtbsellv22\RtbSellV22Bid();
 	 		
-	 		$RtbSellV22Bid->create_rtb_request_from_publisher_display_impression($config, $banner_request);
+	 	$RtbSellV22Bid->create_rtb_request_from_publisher_display_impression($config, $banner_request);
 	 		
-	 		$bid_request = $RtbSellV22Bid->build_rtb_bid_request();
-	 		
-	 		$PingManager = new \pinger\PingManager($config, $bid_request, $PublisherAdZone->AdOwnerID, $PublisherAdZone->PublisherWebsiteID, $PublisherAdZone->FloorPrice, $banner_request["PublisherAdZoneID"], $banner_request["AdName"], $banner_request["WebDomain"], $banner_request["ImpressionType"]);
+	 	$bid_request = $RtbSellV22Bid->build_rtb_bid_request();
 	 	
-	 		if ($PublisherAdZone->PublisherAdZoneTypeID == AD_TYPE_IN_HOUSE_REMNANT 
-	 				|| $PublisherAdZone->PublisherAdZoneTypeID == AD_TYPE_ANY_REMNANT):
-	 			$PingManager->set_up_local_demand_ping_clients();	 		
-	 		endif;
-	 		
-	 		if ($PublisherAdZone->PublisherAdZoneTypeID == AD_TYPE_RTB_REMNANT
-	 				|| $PublisherAdZone->PublisherAdZoneTypeID == AD_TYPE_ANY_REMNANT):
-	 			$PingManager->set_up_remote_rtb_ping_clients();
-	 		endif;
+	 	$PingManager = new \pinger\PingManager($config, $bid_request, $PublisherAdZone->AdOwnerID, $PublisherAdZone->PublisherWebsiteID, $PublisherAdZone->FloorPrice, $banner_request["PublisherAdZoneID"], $banner_request["AdName"], $banner_request["WebDomain"], $banner_request["ImpressionType"]);
+	 	
+	 	$PingManager->set_up_local_demand_ping_clients();	 		
+	 	$PingManager->set_up_remote_rtb_ping_clients();
 
-	 		$PingManager->ping_rtb_ping_clients();
-	 		
-	 		$AuctionPopo   		= $PingManager->process_rtb_ping_responses();
+	 	$PingManager->ping_rtb_ping_clients();
+	 	
+	 	$AuctionPopo   		= $PingManager->process_rtb_ping_responses();
 
-	 		$auction_was_won 	= $AuctionPopo->auction_was_won;
-	 		
-	 		$winning_ad_tag 	= $AuctionPopo->winning_ad_tag;
+	 	$auction_was_won 	= $AuctionPopo->auction_was_won;
+	 	
+	 	$winning_ad_tag 	= $AuctionPopo->winning_ad_tag;
 
-	 		/*
-	 		 * Auction stats should be published to the database
-	 		 * regardless of whether there was a winning bid or not.
-	 		 */
-	 		$PingManager->process_rtb_ping_statistics($AuctionPopo);
+	 	/*
+	 	 * Auction stats should be published to the database
+	 	 * regardless of whether there was a winning bid or not.
+	 	 */
+	 	$PingManager->process_rtb_ping_statistics($AuctionPopo);
 	 		
-	 		/*
-	 		 * The RTB auction may not have been won because
-	 		 * a floor price wasn't met or there simply may not 
-	 		 * have been a valid bid on the auction.
-	 		 * 
-	 		 * Try to set the tag to the publisher's passback tag 
-	 		 * if one exists and if not show the default ad
-	 		 */
-	 		if ($auction_was_won === false):
-	 			if ($PublisherAdZone->PassbackAdTag != null 
-	 			&& !empty($PublisherAdZone->PassbackAdTag)):
+	 	/*
+	   	 * The RTB auction may not have been won because
+	 	 * a floor price wasn't met or there simply may not 
+	 	 * have been a valid bid on the auction.
+	 	 * 
+	 	 * Try to set the tag to the publisher's passback tag 
+	 	 * if one exists and if not show the default ad
+	 	 */
+	 	if ($auction_was_won === false):
+	 		if ($PublisherAdZone->PassbackAdTag != null 
+	 		&& !empty($PublisherAdZone->PassbackAdTag)):
 	 			
-	 				$winning_ad_tag = $PublisherAdZone->PassbackAdTag;
-	 			else:	
-	 				return;
-	 			endif;
-	 		else: 
-		 		/*
-		 		 * Process the macro replacements in the winning Ad tag:
-		 		 *
-		 		 * NGINCLKTRK: The click tracking URL, TBD, generic click tracking not yet implemented.
-		 		 * Try implementing your own custom CTR rate tracking
-		 		 *
-		 		 * NGINWBIDPRC: The winning bid price expressed as CPM.
-		 		 * If this was a 2nd price auction, the value would be the second price expressed as CPM
-		 		 */
-		 		
-		 		$winning_ad_tag = str_replace("{NGINCLKTRK}", "", $winning_ad_tag);
-		 		$winning_ad_tag = str_replace("{NGINWBIDPRC}", $AuctionPopo->winning_bid_price, $winning_ad_tag);
-		 		
+	 			$winning_ad_tag = $PublisherAdZone->PassbackAdTag;
+	 		else:	
+	 			return;
 	 		endif;
+	 	else: 
+		 	/*
+		 	* Process the macro replacements in the winning Ad tag:
+		 	*
+		 	* NGINCLKTRK: The click tracking URL, TBD, generic click tracking not yet implemented.
+		 	* Try implementing your own custom CTR rate tracking
+		 	*
+		 	* NGINWBIDPRC: The winning bid price expressed as CPM.
+		 	* If this was a 2nd price auction, the value would be the second price expressed as CPM
+		 	*/
+		 		
+		 	$winning_ad_tag = str_replace("{NGINCLKTRK}", "", $winning_ad_tag);
+		 	$winning_ad_tag = str_replace("{NGINWBIDPRC}", $AuctionPopo->winning_bid_price, $winning_ad_tag);
+		 		
+	 	endif;
 	 		
-	 		// now output the logs to the log file
+	 	// now output the logs to the log file
 	
-	 		\rtbsellv22\RtbSellV22Logger::get_instance()->output_log();
+	 	\rtbsellv22\RtbSellV22Logger::get_instance()->output_log();
 	 		
 	 		
-	 		$tracker_url = "";
+	 	$tracker_url = "";
 	 		
-	 		if ($banner_request["ImpressionType"] == 'video' && \util\ParseHelper::isVastURL($winning_ad_tag) === true && $AuctionPopo->auction_was_won):
+	 	if ($banner_request["ImpressionType"] == 'video' && \util\ParseHelper::isVastURL($winning_ad_tag) === true && $AuctionPopo->auction_was_won):
 	 		
-		 		$encryption_key 				= $config['settings']['rtb']['encryption_key'];
-		 		$params = array();
-		 		$params["winning_price"]		= $AuctionPopo->winning_bid_price;
-		 		$params["auction_timestamp"] 	= time();
+		 	$encryption_key 				= $config['settings']['rtb']['encryption_key'];
+		 	$params = array();
+		 	$params["winning_price"]		= $AuctionPopo->winning_bid_price;
+		 	$params["auction_timestamp"] 	= time();
 		 		
-		 		$vast_auction_param 	= $this->encrypt_vast_auction_params($encryption_key, $params);
-		 		$vast_publisher_param 	= $this->encrypt_vast_auction_params($encryption_key, $AuctionPopo->vast_publisher_imp_obj);
+		 	$vast_auction_param 	= $this->encrypt_vast_auction_params($encryption_key, $params);
+		 	$vast_publisher_param 	= $this->encrypt_vast_auction_params($encryption_key, $AuctionPopo->vast_publisher_imp_obj);
 		 			
-		 		$tracker_url = $this->get_vast_tracker_url($config, $vast_auction_param, $vast_publisher_param);
-		 		$banner_request["tracker_url"] = $tracker_url;
+		 	$tracker_url = $this->get_vast_tracker_url($config, $vast_auction_param, $vast_publisher_param);
+		 	$banner_request["tracker_url"] = $tracker_url;
 		 		
-	 		endif;
+	 	endif;
 	 		
-	 		if ($AuctionPopo->loopback_demand_partner_won === true):
+	 	if ($AuctionPopo->loopback_demand_partner_won === true):
 	 			
-	 			$banner_request["demand_banner_id"] = $AuctionPopo->loopback_demand_partner_ad_campaign_banner_id;
-	 			$banner_request["winning_partner_id"] = $AuctionPopo->winning_partner_id;
-	 			$banner_request["winning_seat"] = $AuctionPopo->winning_seat;
-	 			$this->process_demand_tag($config, $banner_request);
+	 		$banner_request["demand_banner_id"] = $AuctionPopo->loopback_demand_partner_ad_campaign_banner_id;
+	 		$banner_request["winning_partner_id"] = $AuctionPopo->winning_partner_id;
+	 		$banner_request["winning_seat"] = $AuctionPopo->winning_seat;
+	 		$this->process_demand_tag($config, $banner_request);
 	 			
-	 			/* 
-	 			 * If this is a local auction we don't need to worry about
-	 			 * firing off notice urls
-	 			 */
+	 		/* 
+	 		 * If this is a local auction we don't need to worry about
+	 		 * firing off notice urls
+	 		 */
 	 			
-	 		else:
+	 	else:
 		 		
 
-	 			if ($banner_request["ImpressionType"] == 'video'):
-		 			header("Content-type: text/xml");
-	 				if(\util\ParseHelper::isVastURL($winning_ad_tag) === true):
-	 					echo $this->get_vast_wrapper_xml($config, $winning_ad_tag, $tracker_url);
-	 				else:
-	 					echo $winning_ad_tag;
-	 				endif;
-
+	 		if ($banner_request["ImpressionType"] == 'video'):
+		 		header("Content-type: text/xml");
+	 			if(\util\ParseHelper::isVastURL($winning_ad_tag) === true):
+	 				echo $this->get_vast_wrapper_xml($config, $winning_ad_tag, $tracker_url);
 	 			else:
-	 			
-	 				// credit publisher account here
-		 		
-		 			header("Content-type: application/javascript");
-			 		$output = "document.write(" . json_encode($winning_ad_tag) . ");";
-			 		echo $output;
+	 				echo $winning_ad_tag;
 	 			endif;
+
+	 		else:
+	 			
+	 			// credit publisher account here
+		 		
+		 		header("Content-type: application/javascript");
+			 	$output = "document.write(" . json_encode($winning_ad_tag) . ");";
+			 	echo $output;
+	 		endif;
 			 		
 	 			
-	 			if (!empty($AuctionPopo->nurl)):
-		 			/*
-		 			 * If this is a remote RTB auction we do need to worry about
-		 			 * firing off notice urls
-		 			 *
-	    			 * If safe_mode is off we can fire off an asynchronous CURL
-	    			 * call which will not block. Otherwise we are stuck
-	    			 * with curl call with a timeout.
-	    			 * 
-	    			 * curl must also be on the path
-		 			 */
+	 		if (!empty($AuctionPopo->nurl)):
+		 		/*
+		 		 * If this is a remote RTB auction we do need to worry about
+		 		 * firing off notice urls
+		 		 *
+	    		 * If safe_mode is off we can fire off an asynchronous CURL
+	    		 * call which will not block. Otherwise we are stuck
+	    		 * with curl call with a timeout.
+	    		 * 
+	    		 * curl must also be on the path
+		 		 */
 		 			
-		 			// clear output buffer
-		 			ob_end_flush();
+		 		// clear output buffer
+		 		ob_end_flush();
 		 			
-		 			// check if curl is installed
-		 			$has_curl_on_path = $config['settings']['shell']['has_curl_on_path'];
+		 		// check if curl is installed
+		 		$has_curl_on_path = $config['settings']['shell']['has_curl_on_path'];
 		 			
-		 			if(!ini_get('safe_mode') && $has_curl_on_path):
+		 		if(!ini_get('safe_mode') && $has_curl_on_path):
 		 				
-		 				exec('bash -c "exec nohup setsid curl \'' . $AuctionPopo->nurl . '\' > /dev/null 2>&1 &"');
+		 			exec('bash -c "exec nohup setsid curl \'' . $AuctionPopo->nurl . '\' > /dev/null 2>&1 &"');
 		 				
-		 			else: 
+		 		else: 
 		 				
-		 				\util\WorkflowHelper::get_ping_notice_url_curl_request($AuctionPopo->nurl);
+		 			\util\WorkflowHelper::get_ping_notice_url_curl_request($AuctionPopo->nurl);
 		 				
-		 			endif;
-	 			endif;
+		 		endif;
+	 		endif;
 	 			
-		 	endif;
+		 endif;
 
-	 		
- 		endif;
- 		
  		exit;
     }
     

@@ -160,15 +160,15 @@ class PrivateExchangeRtbChannelDailyStats extends \_factory\CachedTableRead
     	
     	if ($PrivateExchangeRtbChannelDailyStats != null):
     	
-	    	$private_exchange_rtb_channel_daily_stats->BuySideHourlyBidsCounterID = $PrivateExchangeRtbChannelDailyStats->PrivateExchangeRtbChannelDailyStatsID;
-	    	$private_exchange_rtb_channel_daily_stats->BidsCounter = $PrivateExchangeRtbChannelDailyStats->ImpressionsOfferedCounter + $impressions_offered_counter;
-	    	$private_exchange_rtb_channel_daily_stats->BidsCounter = $PrivateExchangeRtbChannelDailyStats->AuctionBidsCounter + $auction_bids_counter;
+	    	$private_exchange_rtb_channel_daily_stats->PrivateExchangeRtbChannelDailyStatsID = $PrivateExchangeRtbChannelDailyStats->PrivateExchangeRtbChannelDailyStatsID;
+	    	$private_exchange_rtb_channel_daily_stats->ImpressionsOfferedCounter = $PrivateExchangeRtbChannelDailyStats->ImpressionsOfferedCounter + $impressions_offered_counter;
+	    	$private_exchange_rtb_channel_daily_stats->AuctionBidsCounter = $PrivateExchangeRtbChannelDailyStats->AuctionBidsCounter + $auction_bids_counter;
 	    	$PrivateExchangeRtbChannelDailyStatsFactory->updatePrivateExchangeRtbChannelDailyStats($private_exchange_rtb_channel_daily_stats);
     	else:
     	
 	    	$private_exchange_rtb_channel_daily_stats->MDYH = $current_hour;
-	    	$private_exchange_rtb_channel_daily_stats->BidsCounter = $impressions_offered_counter;
-	    	$private_exchange_rtb_channel_daily_stats->BidsCounter = $auction_bids_counter;
+	    	$private_exchange_rtb_channel_daily_stats->ImpressionsOfferedCounter = $impressions_offered_counter;
+	    	$private_exchange_rtb_channel_daily_stats->AuctionBidsCounter = $auction_bids_counter;
 	    	$private_exchange_rtb_channel_daily_stats->DateCreated = date("Y-m-d H:i:s");
 	    	$PrivateExchangeRtbChannelDailyStatsFactory->insertPrivateExchangeRtbChannelDailyStats($private_exchange_rtb_channel_daily_stats);
     	endif;

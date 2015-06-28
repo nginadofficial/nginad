@@ -87,11 +87,6 @@ class OpenRTBWorkflow
 		        	if (\buyrtb\workflows\tasklets\common\adcampaignbanner\CheckBannerDate::execute($logger, $this, $RtbBidRequest, $RtbBidRequestImp, $InsertionOrderLineItem) === false):
 		        		continue;
 		        	endif;
-	            
-	            	// Check to see if this AdCampaginBanner is associated to a contract zone.
-		        	if (\buyrtb\workflows\tasklets\common\adcampaignbanner\CheckIsContract::execute($logger, $this, $RtbBidRequest, $RtbBidRequestImp, $InsertionOrderLineItem) === false):
-		        		continue;
-		        	endif;
 	            	
 		        	// Check impression price floor
 		        	if (\buyrtb\workflows\tasklets\common\adcampaignbanner\CheckPriceFloor::execute($logger, $this, $RtbBidRequest, $RtbBidRequestImp, $InsertionOrderLineItem, $markup_rate) === false):
@@ -152,7 +147,7 @@ class OpenRTBWorkflow
 	            											"currency" => $currency,
 	            											"impid" => $RtbBidRequestImp->id,
 	            											"InsertionOrderLineItem" => $InsertionOrderLineItem);
-	
+	            	
 	        	endforeach;
         	
         	endforeach;
@@ -180,7 +175,7 @@ class OpenRTBWorkflow
 	    	endif;
 	    	 
     	endif;
-    	
+
     	return $InsertionOrderLineItem_Match_List;
 
     }

@@ -164,15 +164,15 @@ class SspRtbChannelDailyStats extends \_factory\CachedTableRead
     	
     	if ($SspRtbChannelDailyStats != null):
     	
-	    	$ssp_rtb_channel_daily_stats->BuySideHourlyBidsCounterID = $SspRtbChannelDailyStats->SspRtbChannelDailyStatsID;
-	    	$ssp_rtb_channel_daily_stats->BidsCounter = $SspRtbChannelDailyStats->ImpressionsOfferedCounter + $impressions_offered_counter;
-	    	$ssp_rtb_channel_daily_stats->BidsCounter = $SspRtbChannelDailyStats->AuctionBidsCounter + $auction_bids_counter;
+	    	$ssp_rtb_channel_daily_stats->SspRtbChannelDailyStatsID = $SspRtbChannelDailyStats->SspRtbChannelDailyStatsID;
+	    	$ssp_rtb_channel_daily_stats->ImpressionsOfferedCounter = $SspRtbChannelDailyStats->ImpressionsOfferedCounter + $impressions_offered_counter;
+	    	$ssp_rtb_channel_daily_stats->AuctionBidsCounter = $SspRtbChannelDailyStats->AuctionBidsCounter + $auction_bids_counter;
 	    	$SspRtbChannelDailyStatsFactory->updateSspRtbChannelDailyStats($ssp_rtb_channel_daily_stats);
     	else:
     	
 	    	$ssp_rtb_channel_daily_stats->MDYH = $current_hour;
-	    	$ssp_rtb_channel_daily_stats->BidsCounter = $impressions_offered_counter;
-	    	$ssp_rtb_channel_daily_stats->BidsCounter = $auction_bids_counter;
+	    	$ssp_rtb_channel_daily_stats->ImpressionsOfferedCounter = $impressions_offered_counter;
+	    	$ssp_rtb_channel_daily_stats->AuctionBidsCounter = $auction_bids_counter;
 	    	$ssp_rtb_channel_daily_stats->DateCreated = date("Y-m-d H:i:s");
 	    	$SspRtbChannelDailyStatsFactory->insertSspRtbChannelDailyStats($ssp_rtb_channel_daily_stats);
     	endif;
