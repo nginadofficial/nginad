@@ -14,7 +14,9 @@ CREATE TABLE `SspRtbChannelDailyStats` (
   `SspRtbChannelSiteID` char(100) NOT NULL,
   `SspRtbChannelSiteName` char(100) NOT NULL,
   `SspRtbChannelSiteDomain` char(100) NOT NULL,
+  `SspRtbChannelSiteIABCategory` char(8) NOT NULL,
   `SspRtbChannelPublisherName` char(100) NOT NULL,
+  `MDY` char(15) NOT NULL,
   `MDYH` char(15) NOT NULL,
   `ImpressionsOfferedCounter` int(11) unsigned NOT NULL DEFAULT 0,
   `AuctionBidsCounter` int(11) unsigned NOT NULL DEFAULT 0,
@@ -28,6 +30,7 @@ DROP TABLE IF EXISTS `PrivateExchangeRtbChannelDailyStats`;
 CREATE TABLE `PrivateExchangeRtbChannelDailyStats` (
   `PrivateExchangeRtbChannelDailyStatsID` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `PublisherWebsiteID` int(11) unsigned NOT NULL,
+  `MDY` char(15) NOT NULL,
   `MDYH` char(15) NOT NULL,
   `ImpressionsOfferedCounter` int(11) unsigned NOT NULL DEFAULT 0,
   `AuctionBidsCounter` int(11) unsigned NOT NULL DEFAULT 0,
@@ -38,7 +41,17 @@ CREATE TABLE `PrivateExchangeRtbChannelDailyStats` (
   KEY `FK_Publisher_Website_ID` (`PublisherWebsiteID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+-- ----------------------------
+-- View structure for PrivateExchangeRtbChannelDailyStatsRollUp
+-- ----------------------------
+DROP VIEW IF EXISTS `PrivateExchangeRtbChannelDailyStatsRollUp`;
+CREATE VIEW `PrivateExchangeRtbChannelDailyStatsRollUp` AS select `percds`.`PublisherWebsiteID` AS `PublisherWebsiteID`, `percds`.`MDY` AS `MDY`, `pw`.`WebDomain` AS `WebDomain`, `pw`.`IABCategory` AS `IABCategory`, `pi`.`Name` AS `PublisherName`, sum(`percds`.`ImpressionsOfferedCounter`) AS `ImpressionsOfferedCounter`, sum(`percds`.`AuctionBidsCounter`) AS `AuctionBidsCounter` from `PrivateExchangeRtbChannelDailyStats` `percds` join `PublisherWebsite` `pw` on`percds`.`PublisherWebsiteID` = `pw`.`PublisherWebsiteID` join `PublisherInfo` `pi` on`pi`.`PublisherInfoID` = `pw`.`DomainOwnerID` group by `percds`.`MDY`, `percds`.`PublisherWebsiteID` order by `ImpressionsOfferedCounter` ;
 
+-- ----------------------------
+-- View structure for SspRtbChannelDailyStatsRollUp
+-- ----------------------------
+DROP VIEW IF EXISTS `SspRtbChannelDailyStatsRollUp`;
+CREATE VIEW `SspRtbChannelDailyStatsRollUp` AS select `srcds`.`SspRtbChannelSiteID` AS `SspRtbChannelSiteID`, `srcds`.`MDY` AS `MDY`, `srcds`.`SspRtbChannelSiteDomain` AS `WebDomain`, `srcds`.`SspRtbChannelSiteIABCategory` AS `SspRtbChannelSiteIABCategory`, `srcds`.`SspRtbChannelPublisherName` AS `PublisherName`, sum(`srcds`.`ImpressionsOfferedCounter`) AS `ImpressionsOfferedCounter`, sum(`srcds`.`AuctionBidsCounter`) AS `AuctionBidsCounter` from `SspRtbChannelDailyStats` `srcds` group by `srcds`.`MDY`, `srcds`.`SspRtbChannelSiteID` order by `ImpressionsOfferedCounter` ;
 
 
 

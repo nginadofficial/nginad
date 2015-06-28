@@ -86,6 +86,7 @@ class PrivateExchangeRtbChannelDailyStats extends \_factory\CachedTableRead
     public function insertPrivateExchangeRtbChannelDailyStats(\model\PrivateExchangeRtbChannelDailyStats $PrivateExchangeRtbChannelDailyStats) {
     	$data = array(
     			'PublisherWebsiteID'   				=> $PrivateExchangeRtbChannelDailyStats->PublisherWebsiteID,
+    			'MDY'   							=> $PrivateExchangeRtbChannelDailyStats->MDY,
     			'MDYH'   							=> $PrivateExchangeRtbChannelDailyStats->MDYH,
     			'ImpressionsOfferedCounter'   		=> $PrivateExchangeRtbChannelDailyStats->ImpressionsOfferedCounter,
     			'AuctionBidsCounter'   				=> $PrivateExchangeRtbChannelDailyStats->AuctionBidsCounter,
@@ -148,7 +149,8 @@ class PrivateExchangeRtbChannelDailyStats extends \_factory\CachedTableRead
     	
     	$PrivateExchangeRtbChannelDailyStatsFactory = \_factory\PrivateExchangeRtbChannelDailyStats::get_instance();
     	
-    	$current_hour = date("m/d/Y H");
+    	$current_hour 	= date("m/d/Y H");
+    	$current_day 	= date("m/d/Y");
     	
     	$params = array();
     	$params["PublisherWebsiteID"] 	= $publisher_website_id;
@@ -167,6 +169,7 @@ class PrivateExchangeRtbChannelDailyStats extends \_factory\CachedTableRead
     	else:
     	
 	    	$private_exchange_rtb_channel_daily_stats->MDYH = $current_hour;
+    		$private_exchange_rtb_channel_daily_stats->MDY 	= $current_day;
 	    	$private_exchange_rtb_channel_daily_stats->ImpressionsOfferedCounter = $impressions_offered_counter;
 	    	$private_exchange_rtb_channel_daily_stats->AuctionBidsCounter = $auction_bids_counter;
 	    	$private_exchange_rtb_channel_daily_stats->DateCreated = date("Y-m-d H:i:s");

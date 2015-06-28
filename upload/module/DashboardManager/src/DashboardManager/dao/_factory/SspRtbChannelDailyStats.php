@@ -88,8 +88,10 @@ class SspRtbChannelDailyStats extends \_factory\CachedTableRead
     			'BuySidePartnerName'      			=> $SspRtbChannelDailyStats->BuySidePartnerName,
     			'SspRtbChannelSiteID'   			=> $SspRtbChannelDailyStats->SspRtbChannelSiteID,
     			'SspRtbChannelSiteName'   			=> $SspRtbChannelDailyStats->SspRtbChannelSiteName,
-    			'SspRtbChannelPublisherName'   		=> $SspRtbChannelDailyStats->SspRtbChannelPublisherName,
     			'SspRtbChannelSiteDomain'   		=> $SspRtbChannelDailyStats->SspRtbChannelSiteDomain,
+    			'SspRtbChannelSiteIABCategory'   	=> $SspRtbChannelDailyStats->SspRtbChannelSiteIABCategory,
+    			'SspRtbChannelPublisherName'   		=> $SspRtbChannelDailyStats->SspRtbChannelPublisherName,
+    			'MDY'   							=> $SspRtbChannelDailyStats->MDY,
     			'MDYH'   							=> $SspRtbChannelDailyStats->MDYH,
     			'ImpressionsOfferedCounter'   		=> $SspRtbChannelDailyStats->ImpressionsOfferedCounter,
     			'AuctionBidsCounter'   				=> $SspRtbChannelDailyStats->AuctionBidsCounter,
@@ -109,7 +111,7 @@ class SspRtbChannelDailyStats extends \_factory\CachedTableRead
     	$this->update($data, array('SspRtbChannelDailyStatsID' => $private_exchange_rtb_channel_daily_stats_id));
     }
     
-    public function incrementSspRtbChannelDailyStatsCached($config, $buyside_partner_name, $rtb_channel_site_id, $rtb_channel_site_name, $rtb_channel_site_domain, $rtb_channel_publisher_name, $impressions_offered_counter, $auction_bids_counter) {
+    public function incrementSspRtbChannelDailyStatsCached($config, $buyside_partner_name, $rtb_channel_site_id, $rtb_channel_site_name, $rtb_channel_site_domain, $rtb_channel_site_iab_category, $rtb_channel_publisher_name, $impressions_offered_counter, $auction_bids_counter) {
     	
     	$params = array();
     	$params["BuySidePartnerName"] 			= $buyside_partner_name;
@@ -135,7 +137,7 @@ class SspRtbChannelDailyStats extends \_factory\CachedTableRead
 		    	$bucket_auction_bids_counter 			= $current["auction_bids_counter"];
 
 		    	// write out values
-		    	$this->incrementSspRtbChannelDailyStats($config, $buyside_partner_name, $rtb_channel_site_id, $rtb_channel_site_name, $rtb_channel_site_domain, $rtb_channel_publisher_name, $bucket_impressions_offered_counter, $bucket_auction_bids_counter);
+		    	$this->incrementSspRtbChannelDailyStats($config, $buyside_partner_name, $rtb_channel_site_id, $rtb_channel_site_name, $rtb_channel_site_domain, $rtb_channel_site_iab_category, $rtb_channel_publisher_name, $bucket_impressions_offered_counter, $bucket_auction_bids_counter);
 
 		    endif;
 		    
@@ -149,11 +151,12 @@ class SspRtbChannelDailyStats extends \_factory\CachedTableRead
     	
     }
 
-    public function incrementSspRtbChannelDailyStats($config, $buyside_partner_name, $rtb_channel_site_id, $rtb_channel_site_name, $rtb_channel_site_domain, $rtb_channel_publisher_name, $impressions_offered_counter, $auction_bids_counter) {
+    public function incrementSspRtbChannelDailyStats($config, $buyside_partner_name, $rtb_channel_site_id, $rtb_channel_site_name, $rtb_channel_site_domain, $rtb_channel_site_iab_category, $rtb_channel_publisher_name, $impressions_offered_counter, $auction_bids_counter) {
     	
     	$SspRtbChannelDailyStatsFactory = \_factory\SspRtbChannelDailyStats::get_instance();
     	
-    	$current_hour = date("m/d/Y H");
+    	$current_hour 	= date("m/d/Y H");
+    	$current_day 	= date("m/d/Y");
     	
     	$params = array();
     	$params["BuySidePartnerName"] 	= $buyside_partner_name;
@@ -162,11 +165,12 @@ class SspRtbChannelDailyStats extends \_factory\CachedTableRead
     	$SspRtbChannelDailyStats 		= $SspRtbChannelDailyStatsFactory->get_row($params);
     	
     	$ssp_rtb_channel_daily_stats = new \model\SspRtbChannelDailyStats();
-    	$ssp_rtb_channel_daily_stats->BuySidePartnerName 			= $buyside_partner_name;
-    	$ssp_rtb_channel_daily_stats->SspRtbChannelSiteID 			= $rtb_channel_site_id;
-    	$ssp_rtb_channel_daily_stats->SspRtbChannelSiteName 		= $rtb_channel_site_name;
-    	$ssp_rtb_channel_daily_stats->SspRtbChannelSiteDomain 		= $rtb_channel_site_domain;
-    	$ssp_rtb_channel_daily_stats->SspRtbChannelPublisherName 	= $rtb_channel_publisher_name;
+    	$ssp_rtb_channel_daily_stats->BuySidePartnerName 				= $buyside_partner_name;
+    	$ssp_rtb_channel_daily_stats->SspRtbChannelSiteID 				= $rtb_channel_site_id;
+    	$ssp_rtb_channel_daily_stats->SspRtbChannelSiteName 			= $rtb_channel_site_name;
+    	$ssp_rtb_channel_daily_stats->SspRtbChannelSiteDomain 			= $rtb_channel_site_domain;
+    	$ssp_rtb_channel_daily_stats->SspRtbChannelSiteIABCategory 		= $rtb_channel_site_iab_category;
+    	$ssp_rtb_channel_daily_stats->SspRtbChannelPublisherName 		= $rtb_channel_publisher_name;
     	
     	if ($SspRtbChannelDailyStats != null):
     	
@@ -176,7 +180,8 @@ class SspRtbChannelDailyStats extends \_factory\CachedTableRead
 	    	$SspRtbChannelDailyStatsFactory->updateSspRtbChannelDailyStats($ssp_rtb_channel_daily_stats);
     	else:
     	
-	    	$ssp_rtb_channel_daily_stats->MDYH = $current_hour;
+	    	$ssp_rtb_channel_daily_stats->MDYH 	= $current_hour;
+    		$ssp_rtb_channel_daily_stats->MDY 	= $current_day;
 	    	$ssp_rtb_channel_daily_stats->ImpressionsOfferedCounter = $impressions_offered_counter;
 	    	$ssp_rtb_channel_daily_stats->AuctionBidsCounter = $auction_bids_counter;
 	    	$ssp_rtb_channel_daily_stats->DateCreated = date("Y-m-d H:i:s");

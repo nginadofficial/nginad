@@ -334,15 +334,18 @@ abstract class RtbBuyFidelityBid extends \rtbbuy\RtbBuyBid {
 				
 			// implement Rubicon Project's empty bid with $0.00 CPM here
 			// also add the rejection code
-			$RtbBidResponseSeatBid								= new \model\openrtb\RtbBidResponseSeatBid();
-			$RtbBidResponseBid									= new \model\openrtb\RtbBidResponseBid();
-			$RtbBidResponseBid->price 							= 0;
-			$RtbBidResponseSeatBid->RtbBidResponseBidList[] 	= $RtbBidResponseBid;
-			$RtbBidResponse->RtbBidResponseSeatBidList[] 		= $RtbBidResponseSeatBid;
 			unset($RtbBidResponse->id);
 			unset($RtbBidResponse->cur);
 			if ($this->no_bid_reason != null):
-				$RtbBidResponse->nbr 							= $this->no_bid_reason;
+				$RtbBidResponse->nbr 								= $this->no_bid_reason;
+				unset($RtbBidResponseBid->price);
+				unset($RtbBidResponse->RtbBidResponseSeatBidList);
+			else:
+				$RtbBidResponseSeatBid								= new \model\openrtb\RtbBidResponseSeatBid();
+				$RtbBidResponseBid									= new \model\openrtb\RtbBidResponseBid();
+				$RtbBidResponseBid->price 							= 0;
+				$RtbBidResponseSeatBid->RtbBidResponseBidList[] 	= $RtbBidResponseBid;
+				$RtbBidResponse->RtbBidResponseSeatBidList[] 		= $RtbBidResponseSeatBid;
 			endif;
 			
 		endif;
@@ -364,25 +367,59 @@ abstract class RtbBuyFidelityBid extends \rtbbuy\RtbBuyBid {
 			* GRID LAYOUT WITH THE DAILY IMPS IN A SORTABLE COLUMN
 			*/
 
-			$buyside_partner_name 			= $this->rtb_ssp_friendly_name;;
-			$rtb_channel_site_id 			= "N/A";
-			$rtb_channel_site_name			= "N/A";
-			$rtb_channel_publisher_name		= "N/A";
-			$rtb_channel_site_domain		= $tld;
-			$impressions_offered_counter 	= 0;
-			$auction_bids_counter 			= $total_bids;
+			$buyside_partner_name 				= $this->rtb_ssp_friendly_name;;
+			$rtb_channel_site_id 				= "N/A";
+			$rtb_channel_site_name				= "N/A";
+			$rtb_channel_publisher_name			= "N/A";
+			$rtb_channel_site_domain			= $tld;
+			$rtb_channel_site_iab_category		= null;
+			$impressions_offered_counter 		= 0;
+			$auction_bids_counter 				= $total_bids;
 				
 			if (isset($this->RtbBidRequest->RtbBidRequestSite->id)):
 				$rtb_channel_site_id = $this->RtbBidRequest->RtbBidRequestSite->id;
+			elseif (isset($this->RtbBidRequest->RtbBidRequestApp->id)):
+				$rtb_channel_site_id = $this->RtbBidRequest->RtbBidRequestApp->id;
 			endif;
 			if (isset($this->RtbBidRequest->RtbBidRequestSite->name)):
 				$rtb_channel_site_name = $this->RtbBidRequest->RtbBidRequestSite->name;
-			endif;
-			if (isset($this->RtbBidRequest->RtbBidRequestImpList) && is_array($this->RtbBidRequest->RtbBidRequestImpList)):
-				$impressions_offered_counter = count($this->RtbBidRequest->RtbBidRequestImpList);
+			elseif (isset($this->RtbBidRequest->RtbBidRequestApp->name)):
+				$rtb_channel_site_name = $this->RtbBidRequest->RtbBidRequestApp->name;
 			endif;
 			if (isset($this->RtbBidRequest->RtbBidRequestSite->RtbBidRequestPublisher->name)):
 				$rtb_channel_publisher_name = $this->RtbBidRequest->RtbBidRequestSite->RtbBidRequestPublisher->name;
+			elseif (isset($this->RtbBidRequest->RtbBidRequestApp->RtbBidRequestPublisher->name)):
+				$rtb_channel_publisher_name = $this->RtbBidRequest->RtbBidRequestApp->RtbBidRequestPublisher->name;
+			endif;
+			
+			if (isset($this->RtbBidRequest->RtbBidRequestSite->cat[0])):
+				$rtb_channel_site_iab_category = $this->RtbBidRequest->RtbBidRequestSite->cat[0];
+			elseif (isset($this->RtbBidRequest->RtbBidRequestApp->cat[0])):
+				$rtb_channel_site_iab_category = $this->RtbBidRequest->RtbBidRequestApp->cat[0];
+			endif;
+			
+			if ($rtb_channel_site_iab_category === null && isset($this->RtbBidRequest->RtbBidRequestSite->sectioncat[0])):
+				$rtb_channel_site_iab_category = $this->RtbBidRequest->RtbBidRequestSite->sectioncat[0];
+			elseif ($rtb_channel_site_iab_category === null && isset($this->RtbBidRequest->RtbBidRequestApp->sectioncat[0])):
+				$rtb_channel_site_iab_category = $this->RtbBidRequest->RtbBidRequestApp->sectioncat[0];
+			endif;
+			
+			if ($rtb_channel_site_iab_category === null && isset($this->RtbBidRequest->RtbBidRequestSite->pagecat[0])):
+				$rtb_channel_site_iab_category = $this->RtbBidRequest->RtbBidRequestSite->pagecat[0];
+			elseif ($rtb_channel_site_iab_category === null && isset($this->RtbBidRequest->RtbBidRequestApp->pagecat[0])):
+				$rtb_channel_site_iab_category = $this->RtbBidRequest->RtbBidRequestApp->pagecat[0];
+			endif;
+			
+			if ($rtb_channel_site_iab_category !== null):
+				$rtb_channel_site_iab_category = array_search($rtb_channel_site_iab_category,
+											\buyrtbfidelity\parsers\openrtb\parselets\common\ParseWebsite::$vertical_map);
+			endif;
+			if ($rtb_channel_site_iab_category === null || $rtb_channel_site_iab_category === false):
+					$rtb_channel_site_iab_category = "N/A";
+			endif;
+			
+			if (isset($this->RtbBidRequest->RtbBidRequestImpList) && is_array($this->RtbBidRequest->RtbBidRequestImpList)):
+				$impressions_offered_counter = count($this->RtbBidRequest->RtbBidRequestImpList);
 			endif;
 				
 			if ($this->is_local_request === true):
@@ -393,7 +430,7 @@ abstract class RtbBuyFidelityBid extends \rtbbuy\RtbBuyBid {
 				$PrivateExchangeRtbChannelDailyStatsFactory->incrementPrivateExchangeRtbChannelDailyStatsCached($this->config, $rtb_channel_site_id, $impressions_offered_counter, $auction_bids_counter);
 			else:
 				$SspRtbChannelDailyStatsFactory = \_factory\SspRtbChannelDailyStats::get_instance();
-				$SspRtbChannelDailyStatsFactory->incrementSspRtbChannelDailyStatsCached($this->config, $buyside_partner_name, $rtb_channel_site_id, $rtb_channel_site_name, $rtb_channel_site_domain, $rtb_channel_publisher_name, $impressions_offered_counter, $auction_bids_counter);
+				$SspRtbChannelDailyStatsFactory->incrementSspRtbChannelDailyStatsCached($this->config, $buyside_partner_name, $rtb_channel_site_id, $rtb_channel_site_name, $rtb_channel_site_domain, $rtb_channel_site_iab_category, $rtb_channel_publisher_name, $impressions_offered_counter, $auction_bids_counter);
 			endif;
 			
 		endif;

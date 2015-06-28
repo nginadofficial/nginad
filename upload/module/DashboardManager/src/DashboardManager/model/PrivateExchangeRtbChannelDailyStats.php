@@ -12,6 +12,7 @@ namespace model;
 class PrivateExchangeRtbChannelDailyStats {
 	public $PrivateExchangeRtbChannelDailyStatsID;
 	public $PublisherWebsiteID;
+	public $MDY;
 	public $MDYH;
     public $ImpressionsOfferedCounter;
     public $AuctionBidsCounter;
