@@ -126,11 +126,11 @@ class PrivateExchangeRtbChannelDailyStats extends \_factory\CachedTableRead
 
     		if ($current != null):
     		
-	    		$impressions_offered_counter 	= $current["impressions_offered_counter"];
-		    	$auction_bids_counter 			= $current["auction_bids_counter"];
+	    		$bucket_impressions_offered_counter 	= $current["impressions_offered_counter"];
+		    	$bucket_auction_bids_counter 			= $current["auction_bids_counter"];
 
 		    	// write out values
-		    	$this->incrementPrivateExchangeRtbChannelDailyStats($config, $publisher_website_id, $impressions_offered_counter, $auction_bids_counter);
+		    	$this->incrementPrivateExchangeRtbChannelDailyStats($config, $publisher_website_id, $bucket_impressions_offered_counter, $bucket_auction_bids_counter);
 
 		    endif;
 		    

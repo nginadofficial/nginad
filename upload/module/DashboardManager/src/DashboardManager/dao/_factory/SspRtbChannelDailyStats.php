@@ -131,11 +131,11 @@ class SspRtbChannelDailyStats extends \_factory\CachedTableRead
 
     		if ($current != null):
     		
-	    		$impressions_offered_counter 	= $current["impressions_offered_counter"];
-		    	$auction_bids_counter 			= $current["auction_bids_counter"];
+	    		$bucket_impressions_offered_counter 	= $current["impressions_offered_counter"];
+		    	$bucket_auction_bids_counter 			= $current["auction_bids_counter"];
 
 		    	// write out values
-		    	$this->incrementSspRtbChannelDailyStats($config, $buyside_partner_name, $rtb_channel_site_id, $rtb_channel_site_name, $rtb_channel_site_domain, $rtb_channel_publisher_name, $impressions_offered_counter, $auction_bids_counter);
+		    	$this->incrementSspRtbChannelDailyStats($config, $buyside_partner_name, $rtb_channel_site_id, $rtb_channel_site_name, $rtb_channel_site_domain, $rtb_channel_publisher_name, $bucket_impressions_offered_counter, $bucket_auction_bids_counter);
 
 		    endif;
 		    
