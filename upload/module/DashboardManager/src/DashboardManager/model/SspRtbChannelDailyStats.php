@@ -13,6 +13,9 @@ class SspRtbChannelDailyStats {
 	public $SspRtbChannelDailyStatsID;
 	public $BuySidePartnerName;
 	public $SspRtbChannelSiteID;
+	public $SspRtbChannelSiteName;
+	public $SspRtbChannelSiteDomain;
+	public $SspRtbChannelPublisherName;
 	public $MDYH;
     public $ImpressionsOfferedCounter;
     public $AuctionBidsCounter;

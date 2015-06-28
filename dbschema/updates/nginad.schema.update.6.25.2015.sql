@@ -10,8 +10,11 @@
 DROP TABLE IF EXISTS `SspRtbChannelDailyStats`;
 CREATE TABLE `SspRtbChannelDailyStats` (
   `SspRtbChannelDailyStatsID` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `BuySidePartnerName` char(100) unsigned NOT NULL,
-  `SspRtbChannelSiteID` char(100) unsigned NOT NULL,
+  `BuySidePartnerName` char(100) NOT NULL,
+  `SspRtbChannelSiteID` char(100) NOT NULL,
+  `SspRtbChannelSiteName` char(100) NOT NULL,
+  `SspRtbChannelSiteDomain` char(100) NOT NULL,
+  `SspRtbChannelPublisherName` char(100) NOT NULL,
   `MDYH` char(15) NOT NULL,
   `ImpressionsOfferedCounter` int(11) unsigned NOT NULL DEFAULT 0,
   `AuctionBidsCounter` int(11) unsigned NOT NULL DEFAULT 0,

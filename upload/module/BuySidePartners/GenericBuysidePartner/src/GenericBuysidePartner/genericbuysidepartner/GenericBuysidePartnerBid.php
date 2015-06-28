@@ -14,5 +14,7 @@ class GenericBuysidePartnerBid extends \rtbbuyv22\RtbBuyV22Bid
 
 	protected $rtb_provider = "GenericBuysidePartner";
 	
+	protected $rtb_ssp_friendly_name 	= "NginAd RTB Partner";
+	
 }
 

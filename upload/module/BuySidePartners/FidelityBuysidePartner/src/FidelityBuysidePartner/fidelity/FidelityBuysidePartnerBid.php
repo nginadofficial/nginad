@@ -12,7 +12,9 @@ namespace buyfidelitybuysidepartner;
 class FidelityBuysidePartnerBid extends \rtbbuyfidelity\RtbBuyFidelityBid 
 {
 
-	protected $rtb_provider = "FidelityBuysidePartner";
+	protected $rtb_provider 			= "FidelityBuysidePartner";
+	
+	protected $rtb_ssp_friendly_name 	= "Fidelity Media";
 	
 }
 

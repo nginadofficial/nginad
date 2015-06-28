@@ -17,6 +17,8 @@ abstract class RtbBuyFidelityBid extends \rtbbuy\RtbBuyBid {
 	public $had_bid_response = false;
 
 	protected $rtb_provider = "none";
+	
+	protected $rtb_ssp_friendly_name = "none";
 
 	// will be used for stats
 	public $rtb_seat_id = null;
@@ -362,9 +364,10 @@ abstract class RtbBuyFidelityBid extends \rtbbuy\RtbBuyBid {
 			* GRID LAYOUT WITH THE DAILY IMPS IN A SORTABLE COLUMN
 			*/
 
-			$buyside_partner_name 			= $this->rtb_provider;
+			$buyside_partner_name 			= $this->rtb_ssp_friendly_name;;
 			$rtb_channel_site_id 			= "N/A";
 			$rtb_channel_site_name			= "N/A";
+			$rtb_channel_publisher_name		= "N/A";
 			$rtb_channel_site_domain		= $tld;
 			$impressions_offered_counter 	= 0;
 			$auction_bids_counter 			= $total_bids;
@@ -378,6 +381,9 @@ abstract class RtbBuyFidelityBid extends \rtbbuy\RtbBuyBid {
 			if (isset($this->RtbBidRequest->RtbBidRequestImpList) && is_array($this->RtbBidRequest->RtbBidRequestImpList)):
 				$impressions_offered_counter = count($this->RtbBidRequest->RtbBidRequestImpList);
 			endif;
+			if (isset($this->RtbBidRequest->RtbBidRequestSite->RtbBidRequestPublisher->name)):
+				$rtb_channel_publisher_name = $this->RtbBidRequest->RtbBidRequestSite->RtbBidRequestPublisher->name;
+			endif;
 				
 			if ($this->is_local_request === true):
 				/*
@@ -387,7 +393,7 @@ abstract class RtbBuyFidelityBid extends \rtbbuy\RtbBuyBid {
 				$PrivateExchangeRtbChannelDailyStatsFactory->incrementPrivateExchangeRtbChannelDailyStatsCached($this->config, $rtb_channel_site_id, $impressions_offered_counter, $auction_bids_counter);
 			else:
 				$SspRtbChannelDailyStatsFactory = \_factory\SspRtbChannelDailyStats::get_instance();
-				$SspRtbChannelDailyStatsFactory->incrementSspRtbChannelDailyStatsCached($this->config, $buyside_partner_name, $rtb_channel_site_id, $impressions_offered_counter, $auction_bids_counter);
+				$SspRtbChannelDailyStatsFactory->incrementSspRtbChannelDailyStatsCached($this->config, $buyside_partner_name, $rtb_channel_site_id, $rtb_channel_site_name, $rtb_channel_site_domain, $rtb_channel_publisher_name, $impressions_offered_counter, $auction_bids_counter);
 			endif;
 			
 		endif;

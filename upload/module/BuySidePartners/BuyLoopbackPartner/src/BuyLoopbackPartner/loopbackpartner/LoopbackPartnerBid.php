@@ -11,7 +11,9 @@ namespace buyloopbackpartner;
 
 class LoopbackPartnerBid extends \rtbbuyv22\RtbBuyV22Bid 
 {
-	protected $rtb_provider = "BuyLoopbackPartner";
+	protected $rtb_provider 			= "BuyLoopbackPartner";
+	
+	protected $rtb_ssp_friendly_name 	= "NginAd Platform Connection";
 	
 }
 
