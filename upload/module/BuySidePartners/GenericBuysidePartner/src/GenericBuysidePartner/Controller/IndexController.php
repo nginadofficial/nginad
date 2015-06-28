@@ -66,7 +66,7 @@ class IndexController extends AbstractActionController
         } catch (Exception $e) {
             \buygenericbuysidepartner\GenericBuysidePartnerLogger::get_instance()->log[] = "BID EXCEPTION: ID: " . $request_id . " MESSAGE: " . $e->getMessage();
             header("Content-type: application/json");
-            echo '{"seatbid":[{"bid":[{"price":0}]}],"nbr":2}';
+            echo '{"nbr":2}';
         }
         
         if (\buygenericbuysidepartner\GenericBuysidePartnerLogger::get_instance()->setting_only_log_bids == false):

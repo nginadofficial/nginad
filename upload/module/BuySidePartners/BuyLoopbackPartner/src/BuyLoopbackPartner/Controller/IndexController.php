@@ -66,7 +66,7 @@ class IndexController extends AbstractActionController
         } catch (Exception $e) {
             \buyloopbackpartner\LoopbackPartnerLogger::get_instance()->log[] = "BID EXCEPTION: ID: " . $request_id . " MESSAGE: " . $e->getMessage();
             header("Content-type: application/json");
-            echo '{"seatbid":[{"bid":[{"price":0}]}],"nbr":2}';
+            echo '{"nbr":2}';
         }
         if (\buyloopbackpartner\LoopbackPartnerLogger::get_instance()->setting_only_log_bids == false):
             \buyloopbackpartner\LoopbackPartnerLogger::get_instance()->output_log();

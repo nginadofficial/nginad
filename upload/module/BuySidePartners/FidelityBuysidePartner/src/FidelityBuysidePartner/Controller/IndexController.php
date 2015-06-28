@@ -87,7 +87,7 @@ class IndexController extends AbstractActionController
         	\buyfidelitybuysidepartner\FidelityBuysidePartnerLogger::get_instance()->output_auction_results($request_id, true, 0, $e->getMessage());
             \buyfidelitybuysidepartner\FidelityBuysidePartnerLogger::get_instance()->log[] = "BID EXCEPTION: ID: " . $request_id . " MESSAGE: " . $e->getMessage();
             header("Content-type: application/json");
-            echo '{"seatbid":[{"bid":[{"price":0}]}],"nbr":2}';
+            echo '{"nbr":2}';
         }
         
         if (\buyfidelitybuysidepartner\FidelityBuysidePartnerLogger::get_instance()->setting_only_log_bids == false):
