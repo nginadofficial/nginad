@@ -277,6 +277,8 @@ abstract class RtbBuyFidelityBid extends \rtbbuy\RtbBuyBid {
 		$RtbBidResponse->RtbBidResponseSeatBidList = array();
 		
 		$currency = null;
+		
+		$total_bids = 0;
 
 		foreach ($this->InsertionOrderLineItem_Match_List as $user_id => $InsertionOrderLineItemObjList):
 		
@@ -311,7 +313,8 @@ abstract class RtbBuyFidelityBid extends \rtbbuy\RtbBuyBid {
 				$this->had_bid_response = true;
 				
 				$RtbBidResponseSeatBid->RtbBidResponseBidList[] = $RtbBidResponseBid;
-					
+				$total_bids++;
+				
 			endforeach;
 			
 			$RtbBidResponseSeatBid->seat						= $user_id;
@@ -342,28 +345,50 @@ abstract class RtbBuyFidelityBid extends \rtbbuy\RtbBuyBid {
 			
 		endif;
 		
-		$this->RtbBidResponse = $RtbBidResponse;
+			$this->RtbBidResponse = $RtbBidResponse;
 	
-		/*
-		 * CREATE AN HOURLY TALLY OF INCOMING RTB BIDS
-		* FROM BOTH LOCAL PUBS AND REMOTE SSP RTB SITE ID
-		* CHANNELS IN ORDER TO PROVIDE THE SITE SCOUT
-		* RTB CHANNEL CHOOSER FUNCTIONALITY IN AN EXCEL LIKE
-		* GRID LAYOUT WITH THE DAILY IMPS IN A SORTABLE COLUMN
-		*/
+		$this->logImpressionsStatisticsData($tld, $total_bids);
+
+	}
+	
+	private function logImpressionsStatisticsData($tld, $total_bids) {
 		
-		$SspRtbChannelDailyStatsFactory = \_factory\SspRtbChannelDailyStats::get_instance();
-		
-		// TODO
-		
-		$buyside_partner_name 			= "PARTNER_NAME_HERE";
-		$rtb_channel_site_id 			= "RTB_CHANNEL_SITE_ID_HERE";
-		$impressions_offered_counter 	= "IMPS_OFFERED_NUM_HERE";
-		$auction_bids_counter 			= "RESPONSE_BIDS_NUM_HERE";
-		
-		$SspRtbChannelDailyStatsFactory->incrementSspRtbChannelDailyStatsCached($this->config, $buyside_partner_name, $rtb_channel_site_id, $impressions_offered_counter, $auction_bids_counter);
-		
-		
+		if ($this->RtbBidRequest != null):
+			/*
+			 * CREATE AN HOURLY TALLY OF INCOMING RTB BIDS
+			* FROM BOTH LOCAL PUBS AND REMOTE SSP RTB SITE ID
+			* CHANNELS IN ORDER TO PROVIDE THE SITE SCOUT
+			* RTB CHANNEL CHOOSER FUNCTIONALITY IN AN EXCEL LIKE
+			* GRID LAYOUT WITH THE DAILY IMPS IN A SORTABLE COLUMN
+			*/
+
+			$buyside_partner_name 			= $this->rtb_provider;
+			$rtb_channel_site_id 			= 'N/A';
+			$publisher_website_id			= 0;
+			$rtb_channel_site_name			= "N/A";
+			$rtb_channel_site_domain		= $tld;
+			$impressions_offered_counter 	= 0;
+			$auction_bids_counter 			= $total_bids;
+				
+			if (isset($this->RtbBidRequest->RtbBidRequestSite->id)):
+				$rtb_channel_site_id = $this->RtbBidRequest->RtbBidRequestSite->id;
+			endif;
+			if (isset($this->RtbBidRequest->RtbBidRequestSite->name)):
+				$rtb_channel_site_name = $this->RtbBidRequest->RtbBidRequestSite->name;
+			endif;
+			if (isset($this->RtbBidRequest->RtbBidRequestImpList) && is_array($this->RtbBidRequest->RtbBidRequestImpList)):
+				$impressions_offered_counter = count($this->RtbBidRequest->RtbBidRequestImpList);
+			endif;
+				
+			if ($this->is_local_request === true):
+				$PrivateExchangeRtbChannelDailyStatsFactory = \_factory\PrivateExchangeRtbChannelDailyStats::get_instance();
+				$PrivateExchangeRtbChannelDailyStatsFactory->incrementPrivateExchangeRtbChannelDailyStatsCached($this->config, $publisher_website_id, $impressions_offered_counter, $auction_bids_counter);
+			else:
+				$SspRtbChannelDailyStatsFactory = \_factory\SspRtbChannelDailyStats::get_instance();
+				$SspRtbChannelDailyStatsFactory->incrementSspRtbChannelDailyStatsCached($this->config, $buyside_partner_name, $rtb_channel_site_id, $impressions_offered_counter, $auction_bids_counter);
+			endif;
+			
+		endif;
 	}
 	
 }
