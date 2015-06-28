@@ -11,7 +11,7 @@ namespace _factory;
 
 use Zend\Db\TableGateway\Feature;
 
-class SspRtbChannelDailyStatsRollUp extends \_factory\CachedTableRead
+class PrivateExchangeRtbChannelDailyStatsRollUp extends \_factory\CachedTableRead
 {
 
     static protected $instance = null;
@@ -19,14 +19,14 @@ class SspRtbChannelDailyStatsRollUp extends \_factory\CachedTableRead
     public static function get_instance() {
 
             if (self::$instance == null):
-                    self::$instance = new \_factory\SspRtbChannelDailyStatsRollUp();
+                    self::$instance = new \_factory\PrivateExchangeRtbChannelDailyStatsRollUp();
             endif;
             return self::$instance;
     }
     
     function __construct() {
 
-            $this->table = 'SspRtbChannelDailyStatsRollUp';
+            $this->table = 'PrivateExchangeRtbChannelDailyStatsRollUp';
             $this->featureSet = new Feature\FeatureSet();
             $this->featureSet->addFeature(new Feature\GlobalAdapterFeature());
             $this->initialize();
