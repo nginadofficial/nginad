@@ -12,11 +12,30 @@ class ServicesController extends DemandAbstractActionController {
 		if ($initialized !== true) return $initialized;
 	
 		
-		
-		$data = array("foo" => "bar");
+		$SspRtbChannelDailyStatsRollUpFactory = \_factory\SspRtbChannelDailyStatsRollUp::get_instance();
+		$params = array();
+		$SspRtbChannelDailyStatsRollUpList = $SspRtbChannelDailyStatsRollUpFactory->get($params);
 
+		$data = array();
+		
+		foreach ($SspRtbChannelDailyStatsRollUpList as $SspRtbChannelDailyStatsRollUp):
+			
+			$row = array(
+					" " => '<input type="checkbox" name="ckssp" value="1" />',
+					"Site ID" => $SspRtbChannelDailyStatsRollUp->SspRtbChannelSiteID,
+					"Domain Name" => $SspRtbChannelDailyStatsRollUp->WebDomain,
+					"Daily Impressions" => $SspRtbChannelDailyStatsRollUp->ImpressionsOfferedCounter,
+					"Average CPM" => $SspRtbChannelDailyStatsRollUp->BidTotalAverage,
+					"Floor" => $SspRtbChannelDailyStatsRollUp->BidFloor,
+					"Exchange" => "adx"
+			);
+		
+			$data[] = $row;
+			
+		endforeach;
+		
 		$this->setJsonHeader();
-		return $this->getResponse()->setContent(json_encode($data));
+		return $this->getResponse()->setContent(json_encode(array("data"=>$data)));
 	
 	}
 	

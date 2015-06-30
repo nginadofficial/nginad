@@ -10,7 +10,7 @@ function ShowChooserSsp () {
 	if (datatable === null) {
 		datatable = $('#example').dataTable( {
 			// "lengthMenu": [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]],
-			"ajax": "/data/objects.txt",
+			"ajax": "/directory/ssp",
 			"columns": [
 				{ "data": " " },
 				{ "data": "Site ID" },
@@ -23,7 +23,7 @@ function ShowChooserSsp () {
 		} );
 	} else {
 		$('#example').dataTable().api().clear();
-		$('#example').dataTable().api().ajax.url( '/data/objects.txt' ).load();
+		$('#example').dataTable().api().ajax.url( '/directory/ssp' ).load();
 	}
 	
 	
