@@ -48,6 +48,16 @@ return array(
             				),
             		),
             ),
+            'sspdirectory' => array(
+            		'type'    => 'segment',
+            		'options' => array(
+            				'route'    =>  '/sspdirectory[/[:action[/[:param1[/]]]]]',
+            				'defaults' => array(
+            						'controller' => 'DashboardManager\Controller\Services',
+            						'action'     => 'sspdirectory',
+            				),
+            		),
+            ),
             'pxpublishers' => array(
             		'type'    => 'segment',
             		'options' => array(
@@ -382,7 +392,8 @@ return array(
             'DashboardManager\Controller\Success' => 'DashboardManager\Controller\SuccessController',
             'DashboardManager\Controller\Report' => 'DashboardManager\Controller\ReportController',
             'DashboardManager\Controller\Zone' => 'DashboardManager\Controller\ZoneController',
-            'DashboardManager\Controller\Website' => 'DashboardManager\Controller\WebsiteController'
+            'DashboardManager\Controller\Website' => 'DashboardManager\Controller\WebsiteController',
+        	'DashboardManager\Controller\Services' => 'DashboardManager\Controller\ServicesController'
         ),
     ),
     'view_manager' => array(
