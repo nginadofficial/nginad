@@ -76,6 +76,7 @@ class SignupController extends PublisherAbstractActionController {
 			);
 		endif;
 		
+		$this->setJsonHeader();
 		return $this->getResponse()->setContent(json_encode($data));
 	}
 	
@@ -833,6 +834,7 @@ class SignupController extends PublisherAbstractActionController {
 	        'data' => array('msg' => $msg)
    		 );
 
+		$this->setJsonHeader();
         return $this->getResponse()->setContent(json_encode($data));
 	}
 	
@@ -891,6 +893,7 @@ class SignupController extends PublisherAbstractActionController {
 	        'data' => array('msg' => $msg)
    		 );
 
+		$this->setJsonHeader();
         return $this->getResponse()->setContent(json_encode($data));
 	}
 	
@@ -943,6 +946,7 @@ class SignupController extends PublisherAbstractActionController {
 	        'data' => array('msg' => $msg)
    		 );
 
+		$this->setJsonHeader();
         return $this->getResponse()->setContent(json_encode($data));
 	}
 	
@@ -995,6 +999,7 @@ class SignupController extends PublisherAbstractActionController {
 	        'data' => array('msg' => $msg)
    		 );
 
+		$this->setJsonHeader();
         return $this->getResponse()->setContent(json_encode($data));
 	}
 	
@@ -1205,6 +1210,7 @@ class SignupController extends PublisherAbstractActionController {
 	        'data' => array('msg' => $msg)
    		 );
 
+		$this->setJsonHeader();
         return $this->getResponse()->setContent(json_encode($data));
 	} 
 	

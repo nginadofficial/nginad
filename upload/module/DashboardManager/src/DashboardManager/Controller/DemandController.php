@@ -417,6 +417,7 @@ class DemandController extends DemandAbstractActionController {
 					'data' => array('error_msg' => $error_msg)
 			);
 			
+			$this->setJsonHeader();
 			return $this->getResponse()->setContent(json_encode($data));
 		endif;
 
@@ -445,6 +446,7 @@ class DemandController extends DemandAbstractActionController {
 						'data' => array('error_msg' => 'id not found')
 				);
 				
+				$this->setJsonHeader();
 				return $this->getResponse()->setContent(json_encode($data));
 			endif;
 		
@@ -458,7 +460,8 @@ class DemandController extends DemandAbstractActionController {
 		       'success' => $success,
 		       'data' => array('error_msg' => $response['error'])
 	   		);
-	   		
+			
+			$this->setJsonHeader();
 	   	   return $this->getResponse()->setContent(json_encode($data));
 		endif;
 		
@@ -481,6 +484,7 @@ class DemandController extends DemandAbstractActionController {
 		     'data' => array('error_msg' => $error_msg)
 	   	);
    		 
+		$this->setJsonHeader();
         return $this->getResponse()->setContent(json_encode($data));
 
 	}
@@ -1357,6 +1361,7 @@ class DemandController extends DemandAbstractActionController {
 	         'data' => array('error_msg' => $error_msg)
    		   );
    		 
+		  $this->setJsonHeader();
           return $this->getResponse()->setContent(json_encode($data));
 		endif;
 
@@ -1385,7 +1390,8 @@ class DemandController extends DemandAbstractActionController {
 		         'success' => $success,
 		         'data' => array('error_msg' => $error_msg)
 	   		   );
-   		 
+			    
+			    $this->setJsonHeader();
           		return $this->getResponse()->setContent(json_encode($data));
 			endif;
 
@@ -1401,6 +1407,7 @@ class DemandController extends DemandAbstractActionController {
 			       'data' => array('error_msg' => $response['error'])
 		   		);
 		   		
+				$this->setJsonHeader();
 		   	   return $this->getResponse()->setContent(json_encode($data));
 			endif;
 			
@@ -1422,6 +1429,7 @@ class DemandController extends DemandAbstractActionController {
 			       'data' => array('error_msg' => $return_val['error'])
 		   		);
    		
+			   $this->setJsonHeader();
 		   	   return $this->getResponse()->setContent(json_encode($data));
 			endif;
 			
@@ -1444,7 +1452,7 @@ class DemandController extends DemandAbstractActionController {
 		         'success' => $success,
 		         'data' => array('error_msg' => $error_msg)
 	   		   );
-   		 
+			    $this->setJsonHeader();
           		return $this->getResponse()->setContent(json_encode($data));
 			endif;
 
@@ -1460,7 +1468,8 @@ class DemandController extends DemandAbstractActionController {
 			       'success' => $success,
 			       'data' => array('error_msg' => $response['error'])
 		   		);
-		   		
+				
+			   $this->setJsonHeader();
 		   	   return $this->getResponse()->setContent(json_encode($data));
 			endif;
 
@@ -1476,6 +1485,7 @@ class DemandController extends DemandAbstractActionController {
 		     'data' => array('error_msg' => $error_msg)
 	   	  );
    		 
+		$this->setJsonHeader();
       	return $this->getResponse()->setContent(json_encode($data));
 	}
 
@@ -1716,7 +1726,8 @@ class DemandController extends DemandAbstractActionController {
 	         'success' => $success,
 	         'data' => array('error_msg' => $error_msg)
    		   );
-   		 
+
+		   $this->setJsonHeader();
            return $this->getResponse()->setContent(json_encode($data));
 		endif;
 
@@ -1746,6 +1757,7 @@ class DemandController extends DemandAbstractActionController {
 		         'data' => array('error_msg' => $error_msg)
 	   		   );
 	   		 
+			    $this->setJsonHeader();
 	           return $this->getResponse()->setContent(json_encode($data));
 				
 			endif;
@@ -1763,6 +1775,7 @@ class DemandController extends DemandAbstractActionController {
 			       'data' => array('error_msg' => $response['error'])
 		   		);
 		   		
+			   $this->setJsonHeader();
 		   	   return $this->getResponse()->setContent(json_encode($data));
 			endif;
 			
@@ -1784,6 +1797,7 @@ class DemandController extends DemandAbstractActionController {
 			       'data' => array('error_msg' => $return_val['error'])
 		   		);
    		
+			   $this->setJsonHeader();
 		   	   return $this->getResponse()->setContent(json_encode($data));
 			endif;
 			
@@ -1807,6 +1821,7 @@ class DemandController extends DemandAbstractActionController {
 		         'data' => array('error_msg' => $error_msg)
 	   		   );
 	   		 
+			    $this->setJsonHeader();
 	           return $this->getResponse()->setContent(json_encode($data));
 			endif;
 
@@ -1825,6 +1840,7 @@ class DemandController extends DemandAbstractActionController {
 			       'data' => array('error_msg' => $response['error'])
 		   		);
 		   		
+			   $this->setJsonHeader();
 		   	   return $this->getResponse()->setContent(json_encode($data));
 			endif;
 
@@ -1838,7 +1854,8 @@ class DemandController extends DemandAbstractActionController {
 				 'previewid' => $banner_preview_id,
 		         'data' => array('error_msg' => $error_msg)
 	   		   );
-	   		 
+
+		$this->setJsonHeader();
 	    return $this->getResponse()->setContent(json_encode($data));
 	    
 	}
@@ -1992,6 +2009,7 @@ class DemandController extends DemandAbstractActionController {
 	         'data' => array('error_msg' => $error_msg)
    		  );
    		 
+		  $this->setJsonHeader();
           return $this->getResponse()->setContent(json_encode($data));
 		endif;
 
@@ -2019,7 +2037,8 @@ class DemandController extends DemandAbstractActionController {
 			       'success' => $success,
 			       'data' => array('error_msg' => $return_val['error'])
 		   		);
-   		
+				
+			   $this->setJsonHeader();
 		   	   return $this->getResponse()->setContent(json_encode($data));
 			endif;
 			
@@ -2038,6 +2057,7 @@ class DemandController extends DemandAbstractActionController {
 		       'data' => array('error_msg' => $response['error'])
 	   		);
 	   		
+		   $this->setJsonHeader();
 	   	   return $this->getResponse()->setContent(json_encode($data));
 		endif;
 
@@ -2056,6 +2076,7 @@ class DemandController extends DemandAbstractActionController {
 	         'data' => array('error_msg' => $error_msg)
    		  );
    		 
+		  $this->setJsonHeader();
           return $this->getResponse()->setContent(json_encode($data));
 		endif;
 
@@ -2069,7 +2090,8 @@ class DemandController extends DemandAbstractActionController {
 			'previewid' => $campaign_preview_id,
 	        'data' => array('error_msg' => $error_msg)
    		 );
-   		 
+
+		$this->setJsonHeader();
         return $this->getResponse()->setContent(json_encode($data));
 		
 		/*$refresh_url = "/private-exchange/viewlineitem/" . $campaign_preview_id . "?ispreview=true";
@@ -2721,6 +2743,7 @@ class DemandController extends DemandAbstractActionController {
 					'linked_ad_zones' => "", 
 					'complete_zone_list' => array()
 			);
+			$this->setJsonHeader();
 			return $this->getResponse()->setContent(json_encode($data));
 		endif;
 	
@@ -2733,6 +2756,7 @@ class DemandController extends DemandAbstractActionController {
 					'linked_ad_zones' => "", 
 					'complete_zone_list' => array()
 			);
+			$this->setJsonHeader();
 			return $this->getResponse()->setContent(json_encode($data));
 		endif;
 
@@ -2820,6 +2844,7 @@ class DemandController extends DemandAbstractActionController {
 				'complete_zone_list' => $complete_zone_list
 		);
 		
+		$this->setJsonHeader();
 		return $this->getResponse()->setContent(json_encode($data));
 
 	}
@@ -2850,6 +2875,7 @@ class DemandController extends DemandAbstractActionController {
 	        'data' => array('error_msg' => $error_msg)
    		 );
    		 
+		 $this->setJsonHeader();
          return $this->getResponse()->setContent(json_encode($data));
 		endif;
 
@@ -2877,6 +2903,7 @@ class DemandController extends DemandAbstractActionController {
 			       'data' => array('error_msg' => $return_val['error'])
 		   		);
    		
+			   $this->setJsonHeader();
 		   	   return $this->getResponse()->setContent(json_encode($data));
 			endif;
 
@@ -2896,6 +2923,7 @@ class DemandController extends DemandAbstractActionController {
 		       'data' => array('error_msg' => $response['error'])
 	   		);
 	   		
+		   $this->setJsonHeader();
 	   	   return $this->getResponse()->setContent(json_encode($data));
 		endif;
 
@@ -2914,6 +2942,7 @@ class DemandController extends DemandAbstractActionController {
 	        'data' => array('error_msg' => $error_msg)
    		 );
    		 
+		 $this->setJsonHeader();
          return $this->getResponse()->setContent(json_encode($data));
 		endif;
 
@@ -2939,6 +2968,7 @@ class DemandController extends DemandAbstractActionController {
 	        'data' => array('error_msg' => $error_msg)
    		 );
    		 
+		 $this->setJsonHeader();
          return $this->getResponse()->setContent(json_encode($data));
 		
 		/*$refresh_url = "/private-exchange/?ispreview=true";

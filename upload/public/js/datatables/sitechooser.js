@@ -17,6 +17,7 @@ function ShowChooserSsp () {
 				{ "data": "Domain Name" },
 				{ "data": "Daily Impressions" },
 				{ "data": "Average CPM" },
+				{ "data": "Floor" },
 				{ "data": "Exchange" }
 			]
 		} );

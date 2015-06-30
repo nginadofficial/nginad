@@ -402,6 +402,7 @@ class PublisherController extends PublisherAbstractActionController {
 	        'data' => array('error_msg' => $error_message)
    		 );
    		 
+	     $this->setJsonHeader();
          return $this->getResponse()->setContent(json_encode($data));
 	}
 	

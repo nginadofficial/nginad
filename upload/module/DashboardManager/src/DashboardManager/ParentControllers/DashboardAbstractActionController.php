@@ -122,6 +122,14 @@ abstract class DashboardAbstractActionController extends ZendAbstractActionContr
     }
     
     /**
+     * Sets the JSON MIME TYPE
+     * @return
+     */
+    public function setJsonHeader() {
+    	header('Content-Type: application/json');
+    }
+    
+    /**
      * Set and update common user status function that must be loaded after each Controller Action.
      */
     protected function initialize()

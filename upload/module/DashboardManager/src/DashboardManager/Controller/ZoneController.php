@@ -959,6 +959,7 @@ class ZoneController extends PublisherAbstractActionController {
 	        'data' => array('error_msg' => $error_message)
    		 );
    		 
+         $this->setJsonHeader();
          return $this->getResponse()->setContent(json_encode($data));
         
     }
@@ -1108,6 +1109,7 @@ class ZoneController extends PublisherAbstractActionController {
 	    			'data' => array('tag' => htmlentities($effective_tag))
 	    	);
 	    	
+	    	$this->setJsonHeader();
 	    	return $this->getResponse()->setContent(json_encode($data));
 	    	
 	    endif;
@@ -1171,6 +1173,7 @@ class ZoneController extends PublisherAbstractActionController {
 	        'data' => array('tag' => htmlentities($effective_tag))
    		 );
           
+          $this->setJsonHeader();
           return $this->getResponse()->setContent(json_encode($data));
 
         endif;
@@ -1209,6 +1212,7 @@ class ZoneController extends PublisherAbstractActionController {
 					'linked_ad_zones' => "", 
 					'complete_zone_list' => array()
 			);
+			$this->setJsonHeader();
 			return $this->getResponse()->setContent(json_encode($data));
 		endif;
 	
@@ -1221,6 +1225,7 @@ class ZoneController extends PublisherAbstractActionController {
 					'linked_ad_zones' => "", 
 					'complete_zone_list' => array()
 			);
+			$this->setJsonHeader();
 			return $this->getResponse()->setContent(json_encode($data));
 		endif;
 
@@ -1242,6 +1247,7 @@ class ZoneController extends PublisherAbstractActionController {
 		     			'linked_ad_zones' => "",
 		     			'complete_zone_list' => array()
 		     	);
+		     	$this->setJsonHeader();
 		     	return $this->getResponse()->setContent(json_encode($data));
 	     	endif;
 	     	
@@ -1288,7 +1294,7 @@ class ZoneController extends PublisherAbstractActionController {
      			'linked_ad_banners' => implode(',', $linked_banner_list),
      			'complete_banner_list' => $complete_banner_list
      	);
-     
+     	$this->setJsonHeader();
      	return $this->getResponse()->setContent(json_encode($data));
      
      }

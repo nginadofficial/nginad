@@ -202,6 +202,7 @@ class WebsiteController extends PublisherAbstractActionController {
 		        'data' => array('msg' => $msg)
 	   		 );
 
+		$this->setJsonHeader();
         return $this->getResponse()->setContent(json_encode($data));
 	}
 	

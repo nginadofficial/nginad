@@ -532,6 +532,7 @@ class ReportController extends PublisherAbstractActionController {
         $data = array(
             'data' => $impression->getUserTLDStatistic($extra_params_user),
         );
+        $this->setJsonHeader();
         return $this->getResponse()->setContent(json_encode($data));
     }
     
@@ -573,6 +574,7 @@ class ReportController extends PublisherAbstractActionController {
         $data = array(
             'data' => $impression_spend->getUserImpressionsSpend(),
         );
+        $this->setJsonHeader();
         return $this->getResponse()->setContent(json_encode($data));
     }
 
@@ -587,6 +589,7 @@ class ReportController extends PublisherAbstractActionController {
         $data = array(
             'data' => $incoming_bid->getAverage(),
         );
+        $this->setJsonHeader();
         return $this->getResponse()->setContent(json_encode($data));
     }
 
@@ -604,6 +607,7 @@ class ReportController extends PublisherAbstractActionController {
     		die("bad request");
     	endif;
     	
+    	$this->setJsonHeader();
         return $this->getResponse()->setContent(
         		$this->getPerTime(\_factory\DemandImpressionsAndSpendHourly::get_instance(), $extra_params)
         );
@@ -650,6 +654,7 @@ class ReportController extends PublisherAbstractActionController {
     		die("bad request");
     	endif;
     	
+    	$this->setJsonHeader();
     	return $this->getResponse()->setContent(
         		$this->getPerTime(\_factory\PublisherImpressionsAndSpendHourly::get_instance($this->config_handle), $extra_params)
     	);
@@ -691,6 +696,7 @@ class ReportController extends PublisherAbstractActionController {
     		die("bad request");
     	endif;
     	
+    	$this->setJsonHeader();
     	return $this->getResponse()->setContent(
         		$this->getPerTime(\_factory\BuySideHourlyBidsCounter::get_instance())
     	);
@@ -727,6 +733,7 @@ class ReportController extends PublisherAbstractActionController {
     		die("bad request");
     	endif;
     	
+    	$this->setJsonHeader();
     	return $this->getResponse()->setContent(
         		$this->getPerTime(\_factory\SellSidePartnerHourlyBids::get_instance())
     	);
@@ -763,6 +770,7 @@ class ReportController extends PublisherAbstractActionController {
     		die("bad request");
     	endif;
     	
+    	$this->setJsonHeader();
     	return $this->getResponse()->setContent(
         		$this->getPerTime(\_factory\ContractPublisherZoneHourlyImpressions::get_instance())
     	);
@@ -799,6 +807,7 @@ class ReportController extends PublisherAbstractActionController {
     		die("bad request");
     	endif;
     	
+    	$this->setJsonHeader();
     	return $this->getResponse()->setContent(
         		$this->getPerTime(\_factory\BuySideHourlyImpressionsCounterCurrentSpend::get_instance())
     	);
