@@ -1,7 +1,11 @@
 <?php
 $this->headScript()->appendFile($this->basePath() . '/js/3rdparty/jquery-ui-1.9.2.custom.min.js');
+$this->headLink()->appendStylesheet($this->basePath() . '/css/datatables/sitechooser.css');
+$this->headLink()->appendStylesheet($this->basePath() . '/css/datatables/jquery.dataTables.css');
 $this->headLink()->appendStylesheet($this->basePath() . '/css/jquery-ui/smoothness/jquery-ui-1.9.2.custom.min.css');
 $this->headScript()->appendFile($this->basePath() . '/js/script.js');
+$this->headScript()->appendFile($this->basePath() . '/js/datatables/jquery.dataTables.js');
+$this->headScript()->appendFile($this->basePath() . '/js/datatables/sitechooser.js');
 
 $preview_query = $ispreview == true ? "?ispreview=true" : "";
 
@@ -60,9 +64,10 @@ $(function() {
 <input type="hidden" name="ispreview" value="<?php echo $ispreview;?>">
 
 <fieldset>
+<div class="span7">
     <div class="control-group">
-	<label for="campaignname" >Order Name</label>
-   	<input type="text" class="input-medium" name="campaignname" value="<?php echo $campaignname;?>">
+		<label for="campaignname" >Order Name</label>
+   		<input type="text" class="input-medium" name="campaignname" value="<?php echo $campaignname;?>">
     </div>
     
 	<div class="control-group">
@@ -101,12 +106,97 @@ $(function() {
 	  <label for="enddate" >Maximum Spend: <span class="hlp"><small><i>(Maximum campaign $$$ spent before the bids stop)</i></small></span></label>
     <div class="input-prepend">
 	<span class="add-on">$</span>
-    <input type="text" value="<?php echo $maxspend;?>" class="input-mini" maxlength="20" id="maxspend" name="maxspend">    </div>
+    <input type="text" value="<?php echo $maxspend;?>" class="input-mini" maxlength="20" id="maxspend" name="maxspend">    
     </div>
   </div>
+  </div>
+  <div class="span7">
+  <div class="inventory-container">
+  	<h4 class="no-pad">Private Exchange Inventory Feeds</h4>
+  	<div>
+  	<input type="button" class="btn btn-primary btn-margin" name="AddPcFeed" value="Add" />
+  	<input type="button" class="btn btn-primary btn-margin next" name="RemovePcFeed" value="Remove" />
+  	</div>
+  	<div>
+  	<select id="pc-feeds" name="pc-feeds[]" multiple="multiple" class="zone-txtarea inventory-select">
+     	<option value="">My Publisher 1 - some-domain1.com</option>
+	</select>
+  	</div>
+  </div>
   
+  <div class="inventory-container top-pad">
+  	<h4 class="no-pad">Platform Connection Inventory Feeds</h4>
+  	<div>
+  	<input type="button" class="btn btn-primary btn-margin" name="AddPcFeed" value="Add" />
+  	<input type="button" class="btn btn-primary btn-margin next" name="RemovePcFeed" value="Remove" />
+  	</div>
+  	<div>
+  	<select id="pc-feeds" name="pc-feeds[]" multiple="multiple" class="zone-txtarea inventory-select">
+     	<option value="">Ad Network 2 - Publisher 1 - example.com</option>
+	</select>
+  	</div>
+  </div>
+  
+  <div class="inventory-container top-pad">
+  	<h4 class="no-pad">SSP RTB Publisher Inventory Feeds</h4>
+  	<div>
+  	<input type="button" class="btn btn-primary btn-margin" name="AddSspFeed" value="Add" onclick="ShowChooserSsp();" />
+  	<input type="button" class="btn btn-primary btn-margin next" name="RemoveSspFeed" value="Remove" />
+  	</div>
+  	<div>
+  	<select id="ssp-feeds" name="ssp-feeds[]" multiple="multiple" class="zone-txtarea inventory-select">
+     	<option value="">MediaShakers - News Vertical - ATF ROW</option>
+	</select>
+  	</div>
+  </div>
+  
+  </div>
+  <div class="span12">
     <div class="control-group">
      <input type="submit" class="btn btn-primary btn-margin" name="B1" value="Edit Campaign" />
     </div>
+     </div>
 </fieldset>
 </form>
+
+
+<!-- Invocation Code Modal -->
+<div class="modal fade" id="InvocationCodeModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="myModalLabel">Site Chooser</h4>
+        <button type="button" class="btn" data-dismiss="modal" style="position: absolute; right: 15px; top: 15px">Close</button>
+     	<button type="button" class="btn btn-default" data-dismiss="modal" style="position: absolute; right: 100px; top: 15px">Add To Insertion Order</button>
+      </div>
+      <div class="modal-body">
+        <div>
+			<table id="example" class="display compact" cellspacing="0" width="100%">
+				<thead>
+					<tr>
+						<th> </th>
+						<th>Site ID</th>
+						<th>Domain Name</th>
+						<th>Daily Impressions</th>
+						<th>Average CPM</th>
+						<th>Exchange</th>
+					</tr>
+				</thead>
+
+				<tfoot>
+					<tr>
+						<th> </th>
+						<th>Site ID</th>
+						<th>Domain Name</th>
+						<th>Daily Impressions</th>
+						<th>Average CPM</th>
+						<th>Exchange</th>
+					</tr>
+				</tfoot>
+			</table>
+	</div>				
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Invocation Code Modal -->
