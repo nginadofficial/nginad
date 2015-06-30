@@ -485,7 +485,7 @@ class CachedStatsWrites {
 				array(
 						"auction_bids_counter"=>intval($auction_bids_counter_value), 
 						"impressions_offered_counter"=>intval($impressions_offered_counter_value),
-						"spend_offered_in_bids"=>intval($spend_offered_in_bids_value),
+						"spend_offered_in_bids"=>floatval($spend_offered_in_bids_value),
 					), 
 				3600
 		);

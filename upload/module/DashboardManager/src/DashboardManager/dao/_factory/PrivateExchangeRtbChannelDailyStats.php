@@ -111,7 +111,7 @@ class PrivateExchangeRtbChannelDailyStats extends \_factory\CachedTableRead
     
     public function incrementPrivateExchangeRtbChannelDailyStatsCached($config, $method_params) {
     	
-    	$publisher_website_id = $method_params["publisher_website_id"];
+    	$publisher_website_id = $method_params["publisher_website_id"] = $method_params["rtb_channel_site_id"];
     	$impressions_offered_counter = $method_params["impressions_offered_counter"];
     	$auction_bids_counter = $method_params["auction_bids_counter"];
     	$spend_offered_in_bids = $method_params["spend_offered_in_bids"];
