@@ -215,6 +215,7 @@ abstract class RtbBuyV22Bid extends RtbBuyBid {
 		$currency = null;
 
 		$total_bids = 0;
+		$spend_offered_in_bids = 0;
 		
 		foreach ($this->InsertionOrderLineItem_Match_List as $user_id => $InsertionOrderLineItemObjList):
 			
@@ -246,6 +247,7 @@ abstract class RtbBuyV22Bid extends RtbBuyBid {
 				$this->had_bid_response = true;
 
 				$RtbBidResponseSeatBid->RtbBidResponseBidList[] = $RtbBidResponseBid;
+				$spend_offered_in_bids += floatval($InsertionOrderLineItem->BidAmount / 1000);
 				$total_bids++;
 				
 			endforeach;
@@ -283,11 +285,11 @@ abstract class RtbBuyV22Bid extends RtbBuyBid {
 		
 		$this->RtbBidResponse = $RtbBidResponse;
 	
-		$this->logImpressionsStatisticsData($tld, $total_bids);
+		$this->logImpressionsStatisticsData($tld, $total_bids, $spend_offered_in_bids);
 
 	}
 	
-	protected function logImpressionsStatisticsData($tld, $total_bids) {
+	protected function logImpressionsStatisticsData($tld, $total_bids, $spend_offered_in_bids) {
 		
 		if ($this->RtbBidRequest != null):
 			/*
@@ -352,16 +354,39 @@ abstract class RtbBuyV22Bid extends RtbBuyBid {
 			if (isset($this->RtbBidRequest->RtbBidRequestImpList) && is_array($this->RtbBidRequest->RtbBidRequestImpList)):
 				$impressions_offered_counter = count($this->RtbBidRequest->RtbBidRequestImpList);
 			endif;
-
+			
+			$floor_price_if_any = 0;
+			
+			if (isset($this->RtbBidRequest->RtbBidRequestImpList) && is_array($this->RtbBidRequest->RtbBidRequestImpList)):
+				foreach ($this->RtbBidRequest->RtbBidRequestImpList as $RtbBidRequestImp):
+					if (isset($RtbBidRequestImp->bidfloor) && $RtbBidRequestImp->bidfloor > $floor_price_if_any):
+						$floor_price_if_any = floatval($RtbBidRequestImp->bidfloor);
+					endif;
+				endforeach;
+			endif;
+			
+			$method_params = array(
+					"buyside_partner_name" 			=> $buyside_partner_name,
+					"rtb_channel_site_id" 			=> $rtb_channel_site_id,
+					"rtb_channel_site_name" 		=> $rtb_channel_site_name,
+					"rtb_channel_site_domain" 		=> $rtb_channel_site_domain,
+					"rtb_channel_site_iab_category" => $rtb_channel_site_iab_category,
+					"rtb_channel_publisher_name" 	=> $rtb_channel_publisher_name,
+					"impressions_offered_counter" 	=> $impressions_offered_counter,
+					"auction_bids_counter" 			=> $auction_bids_counter,
+					"spend_offered_in_bids" 		=> $spend_offered_in_bids,
+					"floor_price_if_any" 			=> $floor_price_if_any,
+			);
+			
 			if ($this->is_local_request === true):
 				/*
 				 * In the local context, $rtb_channel_site_id is the PublisherWebsiteID
 				 */
 				$PrivateExchangeRtbChannelDailyStatsFactory = \_factory\PrivateExchangeRtbChannelDailyStats::get_instance();
-				$PrivateExchangeRtbChannelDailyStatsFactory->incrementPrivateExchangeRtbChannelDailyStatsCached($this->config, $rtb_channel_site_id, $impressions_offered_counter, $auction_bids_counter);
+				$PrivateExchangeRtbChannelDailyStatsFactory->incrementPrivateExchangeRtbChannelDailyStatsCached($this->config, $method_params);
 			else:
 				$SspRtbChannelDailyStatsFactory = \_factory\SspRtbChannelDailyStats::get_instance();
-				$SspRtbChannelDailyStatsFactory->incrementSspRtbChannelDailyStatsCached($this->config, $buyside_partner_name, $rtb_channel_site_id, $rtb_channel_site_name, $rtb_channel_site_domain, $rtb_channel_site_iab_category, $rtb_channel_publisher_name, $impressions_offered_counter, $auction_bids_counter);
+				$SspRtbChannelDailyStatsFactory->incrementSspRtbChannelDailyStatsCached($this->config, $method_params);
 			endif;
 			
 		endif;
