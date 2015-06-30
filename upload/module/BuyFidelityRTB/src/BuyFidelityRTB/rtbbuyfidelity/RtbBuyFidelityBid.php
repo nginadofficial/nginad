@@ -414,7 +414,7 @@ abstract class RtbBuyFidelityBid extends \rtbbuy\RtbBuyBid {
 			
 			if ($rtb_channel_site_iab_category !== null):
 				$rtb_channel_site_iab_category = array_search($rtb_channel_site_iab_category,
-											\buyrtb\parsers\openrtb\parselets\common\ParseWebsite::$vertical_map);
+											\buyrtbfidelity\parsers\openrtb\parselets\common\ParseWebsite::$vertical_map);
 			endif;
 			if ($rtb_channel_site_iab_category === null || $rtb_channel_site_iab_category === false):
 					$rtb_channel_site_iab_category = "N/A";
