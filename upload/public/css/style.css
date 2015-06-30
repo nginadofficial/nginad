@@ -806,3 +806,26 @@ padding:0;
 .qtip-content {
     font-size:12px;
 }
+
+.inventory-chooser {
+	padding-top: 10px; 
+	padding-left: 10px;
+}
+
+h4.no-pad {
+	padding: 0px;
+}
+
+.inventory-select {
+	min-width: 330px;
+	min-height: 100px;
+	margin-top: 10px;
+}
+
+input.next {
+	margin-left: 10px;
+}
+
+.top-pad {
+	margin-top: 20px;
+}

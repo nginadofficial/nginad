@@ -1,0 +1,8 @@
+#InvocationCodeModal {
+    margin-left: -425px;
+    width: 850px;
+}
+
+#InvocationCodeModal .modal-body {
+	max-height: 600px;
+}
