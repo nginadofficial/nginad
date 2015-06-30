@@ -48,13 +48,18 @@ return array(
             				),
             		),
             ),
-            'sspdirectory' => array(
+            'pxsspdirectory' => array(
             		'type'    => 'segment',
             		'options' => array(
-            				'route'    =>  '/sspdirectory[/[:action[/[:param1[/]]]]]',
+            				'route'    =>  '/directory[/[:action[/[:param1[/]]]]]',
+            				'constraints' => array(
+            						'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+            						'param1'     => '[0-9]+',
+            				),
             				'defaults' => array(
+            						'__NAMESPACE__' => 'DashboardManager\Controller',
             						'controller' => 'DashboardManager\Controller\Services',
-            						'action'     => 'sspdirectory',
+            						'action'     => 'ssp',
             				),
             		),
             ),

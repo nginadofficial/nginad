@@ -6,7 +6,7 @@ use DashboardManager\ParentControllers\DemandAbstractActionController;
 
 class ServicesController extends DemandAbstractActionController {
 	
-	public function sspdirectoryAction() {
+	public function sspAction() {
 	
 		$initialized = $this->initialize();
 		if ($initialized !== true) return $initialized;
