@@ -21,6 +21,8 @@ class SspRtbChannelDailyStats {
 	public $MDYH;
     public $ImpressionsOfferedCounter;
     public $AuctionBidsCounter;
+    public $BidTotalAmount;
+    public $BidFloor;
     public $DateCreated;
     public $DateUpdated;
 }

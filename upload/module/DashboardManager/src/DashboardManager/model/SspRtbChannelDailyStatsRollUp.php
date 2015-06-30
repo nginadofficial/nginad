@@ -15,6 +15,8 @@ class SspRtbChannelDailyStatsRollUp {
 	public $WebDomain;
 	public $IABCategory;
 	public $PublisherName;
+	public $BidTotalAverage;
+	public $BidFloor;
 	public $ImpressionsOfferedCounter;
 	public $AuctionBidsCounter;
 }

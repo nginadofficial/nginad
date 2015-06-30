@@ -20,6 +20,8 @@ CREATE TABLE `SspRtbChannelDailyStats` (
   `MDYH` char(15) NOT NULL,
   `ImpressionsOfferedCounter` int(11) unsigned NOT NULL DEFAULT 0,
   `AuctionBidsCounter` int(11) unsigned NOT NULL DEFAULT 0,
+  `BidTotalAmount` float NOT NULL DEFAULT 0,
+  `BidFloor` float NOT NULL DEFAULT 0,
   `DateCreated` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `DateUpdated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`SspRtbChannelDailyStatsID`),
@@ -34,6 +36,8 @@ CREATE TABLE `PrivateExchangeRtbChannelDailyStats` (
   `MDYH` char(15) NOT NULL,
   `ImpressionsOfferedCounter` int(11) unsigned NOT NULL DEFAULT 0,
   `AuctionBidsCounter` int(11) unsigned NOT NULL DEFAULT 0,
+  `BidTotalAmount` float NOT NULL DEFAULT 0,
+  `BidFloor` float NOT NULL DEFAULT 0,
   `DateCreated` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `DateUpdated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`PrivateExchangeRtbChannelDailyStatsID`),
@@ -52,6 +56,4 @@ CREATE VIEW `PrivateExchangeRtbChannelDailyStatsRollUp` AS select `percds`.`Publ
 -- ----------------------------
 DROP VIEW IF EXISTS `SspRtbChannelDailyStatsRollUp`;
 CREATE VIEW `SspRtbChannelDailyStatsRollUp` AS select `srcds`.`SspRtbChannelSiteID` AS `SspRtbChannelSiteID`, `srcds`.`MDY` AS `MDY`, `srcds`.`SspRtbChannelSiteDomain` AS `WebDomain`, `srcds`.`SspRtbChannelSiteIABCategory` AS `IABCategory`, `srcds`.`SspRtbChannelPublisherName` AS `PublisherName`, sum(`srcds`.`ImpressionsOfferedCounter`) AS `ImpressionsOfferedCounter`, sum(`srcds`.`AuctionBidsCounter`) AS `AuctionBidsCounter` from `SspRtbChannelDailyStats` `srcds` group by `srcds`.`MDY`, `srcds`.`SspRtbChannelSiteID` order by `ImpressionsOfferedCounter` ;
-
-
 

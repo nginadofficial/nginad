@@ -90,7 +90,8 @@ class PrivateExchangeRtbChannelDailyStats extends \_factory\CachedTableRead
     			'MDYH'   							=> $PrivateExchangeRtbChannelDailyStats->MDYH,
     			'ImpressionsOfferedCounter'   		=> $PrivateExchangeRtbChannelDailyStats->ImpressionsOfferedCounter,
     			'AuctionBidsCounter'   				=> $PrivateExchangeRtbChannelDailyStats->AuctionBidsCounter,
-    			'DateCreated'   					=> $PrivateExchangeRtbChannelDailyStats->DateCreated
+    			'BidTotalAmount'   					=> $PrivateExchangeRtbChannelDailyStats->BidTotalAmount,
+    			'BidFloor'   						=> $PrivateExchangeRtbChannelDailyStats->BidFloor
     	);
 
     	$this->insert($data);
@@ -99,14 +100,22 @@ class PrivateExchangeRtbChannelDailyStats extends \_factory\CachedTableRead
     public function updatePrivateExchangeRtbChannelDailyStats(\model\PrivateExchangeRtbChannelDailyStats $PrivateExchangeRtbChannelDailyStats) {
     	$data = array(
     			'ImpressionsOfferedCounter'   		=> $PrivateExchangeRtbChannelDailyStats->ImpressionsOfferedCounter,
-    			'AuctionBidsCounter'   				=> $PrivateExchangeRtbChannelDailyStats->AuctionBidsCounter
+    			'AuctionBidsCounter'   				=> $PrivateExchangeRtbChannelDailyStats->AuctionBidsCounter,
+    			'BidTotalAmount'   					=> $PrivateExchangeRtbChannelDailyStats->BidTotalAmount,
+    			'BidFloor'   						=> $PrivateExchangeRtbChannelDailyStats->BidFloor
     	);
 
     	$private_exchange_rtb_channel_daily_stats_id = (int)$PrivateExchangeRtbChannelDailyStats->PrivateExchangeRtbChannelDailyStatsID;
     	$this->update($data, array('PrivateExchangeRtbChannelDailyStatsID' => $private_exchange_rtb_channel_daily_stats_id));
     }
     
-    public function incrementPrivateExchangeRtbChannelDailyStatsCached($config, $publisher_website_id, $impressions_offered_counter, $auction_bids_counter) {
+    public function incrementPrivateExchangeRtbChannelDailyStatsCached($config, $method_params) {
+    	
+    	$publisher_website_id = $method_params["publisher_website_id"];
+    	$impressions_offered_counter = $method_params["impressions_offered_counter"];
+    	$auction_bids_counter = $method_params["auction_bids_counter"];
+    	$spend_offered_in_bids = $method_params["spend_offered_in_bids"];
+    	$floor_price_if_any = $method_params["floor_price_if_any"];
     	
     	$params = array();
     	$params["PublisherWebsiteID"] 	= $publisher_website_id;
@@ -118,7 +127,7 @@ class PrivateExchangeRtbChannelDailyStats extends \_factory\CachedTableRead
     	if ($cached_key_exists):
     	
 	    	// increment bucket
-	    	\util\CachedStatsWrites::increment_cached_write_result_ssp_rtb_channel_stats($config, $params, $class_dir_name, $impressions_offered_counter, $auction_bids_counter);
+	    	\util\CachedStatsWrites::increment_cached_write_result_ssp_rtb_channel_stats($config, $params, $class_dir_name, $impressions_offered_counter, $auction_bids_counter, $spend_offered_in_bids);
     	
     	else:
     	
@@ -129,9 +138,14 @@ class PrivateExchangeRtbChannelDailyStats extends \_factory\CachedTableRead
     		
 	    		$bucket_impressions_offered_counter 	= $current["impressions_offered_counter"];
 		    	$bucket_auction_bids_counter 			= $current["auction_bids_counter"];
-
+		    	$bucket_spend_offered_in_bids 			= $current["spend_offered_in_bids"];
+		    	
+		    	$method_params["impressions_offered_counter"] 	= $bucket_impressions_offered_counter;
+		    	$method_params["auction_bids_counter"] 			= $bucket_auction_bids_counter;
+		    	$method_params["spend_offered_in_bids"] 		= $bucket_spend_offered_in_bids;
+		    	
 		    	// write out values
-		    	$this->incrementPrivateExchangeRtbChannelDailyStats($config, $publisher_website_id, $bucket_impressions_offered_counter, $bucket_auction_bids_counter);
+		    	$this->incrementPrivateExchangeRtbChannelDailyStats($config, $method_params);
 
 		    endif;
 		    
@@ -139,13 +153,19 @@ class PrivateExchangeRtbChannelDailyStats extends \_factory\CachedTableRead
 	    	\util\CacheSql::delete_cached_write_apc($config, $params, $class_dir_name);
 	    	 
 	    	// increment bucket
-	    	\util\CachedStatsWrites::increment_cached_write_result_ssp_rtb_channel_stats($config, $params, $class_dir_name, $impressions_offered_counter, $auction_bids_counter);
+	    	\util\CachedStatsWrites::increment_cached_write_result_ssp_rtb_channel_stats($config, $params, $class_dir_name, $impressions_offered_counter, $auction_bids_counter, $spend_offered_in_bids);
 	    	
     	endif;
     	
     }
 
-    public function incrementPrivateExchangeRtbChannelDailyStats($config, $publisher_website_id, $impressions_offered_counter, $auction_bids_counter) {
+    public function incrementPrivateExchangeRtbChannelDailyStats($config, $method_params) {
+    	
+    	$publisher_website_id = $method_params["publisher_website_id"];
+    	$impressions_offered_counter = $method_params["impressions_offered_counter"];
+    	$auction_bids_counter = $method_params["auction_bids_counter"];
+    	$spend_offered_in_bids = $method_params["spend_offered_in_bids"];
+    	$floor_price_if_any = $method_params["floor_price_if_any"];
     	
     	$PrivateExchangeRtbChannelDailyStatsFactory = \_factory\PrivateExchangeRtbChannelDailyStats::get_instance();
     	
@@ -159,12 +179,14 @@ class PrivateExchangeRtbChannelDailyStats extends \_factory\CachedTableRead
     	
     	$private_exchange_rtb_channel_daily_stats = new \model\PrivateExchangeRtbChannelDailyStats();
     	$private_exchange_rtb_channel_daily_stats->PublisherWebsiteID 		= $publisher_website_id;
+    	$private_exchange_rtb_channel_daily_stats->BidFloor 				= $floor_price_if_any;
     	
     	if ($PrivateExchangeRtbChannelDailyStats != null):
     	
 	    	$private_exchange_rtb_channel_daily_stats->PrivateExchangeRtbChannelDailyStatsID = $PrivateExchangeRtbChannelDailyStats->PrivateExchangeRtbChannelDailyStatsID;
 	    	$private_exchange_rtb_channel_daily_stats->ImpressionsOfferedCounter = $PrivateExchangeRtbChannelDailyStats->ImpressionsOfferedCounter + $impressions_offered_counter;
 	    	$private_exchange_rtb_channel_daily_stats->AuctionBidsCounter = $PrivateExchangeRtbChannelDailyStats->AuctionBidsCounter + $auction_bids_counter;
+	    	$private_exchange_rtb_channel_daily_stats->BidTotalAmount = $PrivateExchangeRtbChannelDailyStats->BidTotalAmount + $spend_offered_in_bids;
 	    	$PrivateExchangeRtbChannelDailyStatsFactory->updatePrivateExchangeRtbChannelDailyStats($private_exchange_rtb_channel_daily_stats);
     	else:
     	
@@ -172,10 +194,10 @@ class PrivateExchangeRtbChannelDailyStats extends \_factory\CachedTableRead
     		$private_exchange_rtb_channel_daily_stats->MDY 	= $current_day;
 	    	$private_exchange_rtb_channel_daily_stats->ImpressionsOfferedCounter = $impressions_offered_counter;
 	    	$private_exchange_rtb_channel_daily_stats->AuctionBidsCounter = $auction_bids_counter;
+	    	$private_exchange_rtb_channel_daily_stats->BidTotalAmount = $spend_offered_in_bids;
 	    	$private_exchange_rtb_channel_daily_stats->DateCreated = date("Y-m-d H:i:s");
 	    	$PrivateExchangeRtbChannelDailyStatsFactory->insertPrivateExchangeRtbChannelDailyStats($private_exchange_rtb_channel_daily_stats);
     	endif;
     	
     }
-
 };
