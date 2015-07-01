@@ -459,6 +459,7 @@ class IndexController extends AbstractActionController
     	$banner_request["WebDomain"] 				= $PublisherWebsite->WebDomain;
     	$banner_request["iab_category"] 			= array($PublisherWebsite->IABCategory);
     	$banner_request["iab_sub_category"] 		= array($PublisherWebsite->IABSubCategory);
+    	$banner_request["website_name"] 			= $PublisherWebsite->Description;
     	
     	if (!isset($banner_request["org_tld"]) || $banner_request["org_tld"] == null):
     	

@@ -193,6 +193,8 @@ use rtbsell\RtbSellBid;
 		$this->setObjParam($RtbBidRequestPublisher, $banner_request, "publisher_info_website", "domain");
 
 		$this->setObjParam($RtbBidRequestSite, $banner_request, "website_id", "id");
+		$this->setObjParam($RtbBidRequestSite, $banner_request, "website_name", "name");
+		
 		$this->setObjParam($RtbBidRequestSite, $banner_request, "org_tld", "domain");
 		$this->setObjParam($RtbBidRequestSite, $banner_request, "iab_category", "cat");
 		$this->setObjParam($RtbBidRequestSite, $banner_request, "loc", "page");

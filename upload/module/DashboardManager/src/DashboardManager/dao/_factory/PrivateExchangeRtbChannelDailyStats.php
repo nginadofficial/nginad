@@ -86,6 +86,7 @@ class PrivateExchangeRtbChannelDailyStats extends \_factory\CachedTableRead
     public function insertPrivateExchangeRtbChannelDailyStats(\model\PrivateExchangeRtbChannelDailyStats $PrivateExchangeRtbChannelDailyStats) {
     	$data = array(
     			'PublisherWebsiteID'   				=> $PrivateExchangeRtbChannelDailyStats->PublisherWebsiteID,
+    			'RtbChannelSiteName'   				=> $PrivateExchangeRtbChannelDailyStats->RtbChannelSiteName,
     			'MDY'   							=> $PrivateExchangeRtbChannelDailyStats->MDY,
     			'MDYH'   							=> $PrivateExchangeRtbChannelDailyStats->MDYH,
     			'ImpressionsOfferedCounter'   		=> $PrivateExchangeRtbChannelDailyStats->ImpressionsOfferedCounter,
@@ -112,6 +113,7 @@ class PrivateExchangeRtbChannelDailyStats extends \_factory\CachedTableRead
     public function incrementPrivateExchangeRtbChannelDailyStatsCached($config, $method_params) {
     	
     	$publisher_website_id = $method_params["publisher_website_id"] = $method_params["rtb_channel_site_id"];
+    	$rtb_channel_site_name = $method_params["rtb_channel_site_name"];
     	$impressions_offered_counter = $method_params["impressions_offered_counter"];
     	$auction_bids_counter = $method_params["auction_bids_counter"];
     	$spend_offered_in_bids = $method_params["spend_offered_in_bids"];
@@ -162,6 +164,7 @@ class PrivateExchangeRtbChannelDailyStats extends \_factory\CachedTableRead
     public function incrementPrivateExchangeRtbChannelDailyStats($config, $method_params) {
     	
     	$publisher_website_id = $method_params["publisher_website_id"];
+    	$rtb_channel_site_name = $method_params["rtb_channel_site_name"];
     	$impressions_offered_counter = $method_params["impressions_offered_counter"];
     	$auction_bids_counter = $method_params["auction_bids_counter"];
     	$spend_offered_in_bids = $method_params["spend_offered_in_bids"];
@@ -180,6 +183,7 @@ class PrivateExchangeRtbChannelDailyStats extends \_factory\CachedTableRead
     	$private_exchange_rtb_channel_daily_stats = new \model\PrivateExchangeRtbChannelDailyStats();
     	$private_exchange_rtb_channel_daily_stats->PublisherWebsiteID 		= $publisher_website_id;
     	$private_exchange_rtb_channel_daily_stats->BidFloor 				= $floor_price_if_any;
+    	$private_exchange_rtb_channel_daily_stats->RtbChannelSiteName 		= $rtb_channel_site_name;
     	
     	if ($PrivateExchangeRtbChannelDailyStats != null):
     	
