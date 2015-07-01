@@ -24,7 +24,7 @@ class ServicesController extends DemandAbstractActionController {
 					" " => '<input type="checkbox" name="ckssp" value="1" />',
 					"Site ID" => $SspRtbChannelDailyStatsRollUp->SspRtbChannelSiteID,
 					"Domain Name" => $SspRtbChannelDailyStatsRollUp->WebDomain,
-					"Daily Impressions" => $SspRtbChannelDailyStatsRollUp->ImpressionsOfferedCounter,
+					"Daily Impressions" => number_format($SspRtbChannelDailyStatsRollUp->ImpressionsOfferedCounter),
 					"Average CPM" => $SspRtbChannelDailyStatsRollUp->BidTotalAverage,
 					"Floor" => $SspRtbChannelDailyStatsRollUp->BidFloor,
 					"Exchange" => "adx"
