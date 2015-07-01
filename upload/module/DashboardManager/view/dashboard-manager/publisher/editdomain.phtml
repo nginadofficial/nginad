@@ -54,7 +54,18 @@ $this->headScript()->captureStart() ?>
     <label for="desc" class="control-label">Description</label>
     <div class="controls">
     <textarea maxlength="5000" class="zone-txtarea" id="Description" name="Description"><?php echo $editResultObj->Description;?></textarea>    </div>
-    </div>     
+    </div>    
+    
+        <?php  if ($is_super_admin || $is_domain_admin):   ?>
+    <div class="control-group">
+    <label for="desc" class="control-label">Platform Connection
+    </label><div class="controls">
+    <input type="checkbox" value="1" <?php if ($editResultObj->VisibilityTypeID == 1): echo 'checked="checked"'; endif; ?> id="VisibilityType" name="VisibilityType" /> 
+    <span style="position: absolute; margin-left: 15px; margin-top: 2px; cursor: pointer;" title="Publisher Websites enabled on Platform Connection will be available to all Exchange Media Buyers for impression auction bidding"><img style="border: 0; margin-bottom: 10px;" src="/images/tooltip.jpg" /></span>
+     </div>
+     </div>
+     <?php  endif;   ?>
+     
     <div class="controls">
     <button name="submit" type="submit" class="btn btn-primary btn-margin" id="submitbutton">Update Domain</button>
     </div>

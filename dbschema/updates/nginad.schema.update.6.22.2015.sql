@@ -1,10 +1,7 @@
 -- Private exchange publishers add website and ad zone visibility flags
 -- Do they want the website or ad zone to be available in the platform connection?
 -- Do they want the website and ad zone to be available to SSPs being pinged with RTB requests?
-ALTER TABLE  `PublisherWebsite` ADD  `VisibilityTypeID` int NOT NULL DEFAULT 0 AFTER  `ApprovalFlag` ;
-ALTER TABLE  `PublisherAdZone` CHANGE `PublisherAdZoneTypeID` `VisibilityTypeID` int NOT NULL DEFAULT 1;
-ALTER TABLE  `InsertionOrder` ADD  `VisibilityTypeID` int NOT NULL DEFAULT 0 AFTER  `UserID` ;
-ALTER TABLE  `InsertionOrderLineItem` CHANGE `InsertionOrderTypeID` `VisibilityTypeID` int NOT NULL DEFAULT 1;
+ALTER TABLE  `PublisherWebsite` ADD `VisibilityTypeID` int(4) NOT NULL DEFAULT 1 AFTER  `DomainOwnerID` ;
 
 -- ----------------------------
 -- Table structure for VisibilityType

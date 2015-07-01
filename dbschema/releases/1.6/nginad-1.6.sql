@@ -890,6 +890,7 @@ CREATE TABLE `PublisherWebsite` (
   `PublisherWebsiteID` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `WebDomain` varchar(255) NOT NULL,
   `DomainOwnerID` int(10) unsigned NOT NULL,
+  `VisibilityTypeID` int(4) NOT NULL DEFAULT '1',
   `AutoApprove` smallint(6) NOT NULL DEFAULT '1',
   `ApprovalFlag` smallint(6) NOT NULL DEFAULT '0',
   `IABCategory` char(8) DEFAULT NULL,
@@ -1225,11 +1226,10 @@ CREATE TABLE `VisibilityType` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Records of PublisherAdZoneType
+-- Records of VisibilityType
 -- ----------------------------
-INSERT INTO `VisibilityType` VALUES ('1', 'Public Deal', '2014-08-17 12:16:21', '2014-08-17 12:16:21');
-INSERT INTO `VisibilityType` VALUES ('2', 'Platform Connection', '2014-08-17 12:16:21', '2014-08-17 12:16:21');
-INSERT INTO `VisibilityType` VALUES ('3', 'Private Exchange', '2014-08-17 12:16:21', '2014-08-17 12:16:21');
+INSERT INTO `VisibilityType` VALUES ('1', 'Platform Connection', '2014-08-17 12:16:21', '2014-08-17 12:16:21');
+INSERT INTO `VisibilityType` VALUES ('2', 'Private Exchange', '2014-08-17 12:16:21', '2014-08-17 12:16:21');
 
 -- ----------------------------
 -- Table structure for SspRtbChannelDailyStats
@@ -1373,7 +1373,7 @@ CREATE VIEW `DemandImpressionsAndSpendHourly` AS select diashp.MDYH, diashp.Inse
 -- View structure for PrivateExchangeRtbChannelDailyStatsRollUp
 -- ----------------------------
 DROP VIEW IF EXISTS `PrivateExchangeRtbChannelDailyStatsRollUp`;
-CREATE VIEW `PrivateExchangeRtbChannelDailyStatsRollUp` AS select `percds`.`PublisherWebsiteID` AS `PublisherWebsiteID`, `au`.`user_id` AS `UserID`, `au`.`parent_id` AS `ParentID`, `percds`.`MDY` AS `MDY`, `pw`.`WebDomain` AS `WebDomain`, `pw`.`IABCategory` AS `IABCategory`, `pi`.`Name` AS `PublisherName`, `percds`.`RtbChannelSiteName` AS `RtbChannelSiteName`, sum(`percds`.`ImpressionsOfferedCounter`) AS `ImpressionsOfferedCounter`, sum(`percds`.`AuctionBidsCounter`) AS `AuctionBidsCounter`, round(ceil((sum(`percds`.`BidTotalAmount`) / sum(`percds`.`AuctionBidsCounter`)) * 100000) / 100, 2) AS `BidTotalAverage`, round(max(`percds`.`BidFloor`), 2) AS `BidFloor` from `PrivateExchangeRtbChannelDailyStats` `percds` join `PublisherWebsite` `pw` on `percds`.`PublisherWebsiteID` = `pw`.`PublisherWebsiteID` join `PublisherInfo` `pi` on `pi`.`PublisherInfoID` = `pw`.`DomainOwnerID` join `auth_Users` `au` on `au`.`PublisherInfoID` = `pi`.`PublisherInfoID` group by `percds`.`MDY`, `percds`.`PublisherWebsiteID` order by `ImpressionsOfferedCounter` ;
+CREATE VIEW `PrivateExchangeRtbChannelDailyStatsRollUp` AS select `percds`.`PublisherWebsiteID` AS `PublisherWebsiteID`, `au`.`user_id` AS `UserID`, `au`.`parent_id` AS `ParentID`, `percds`.`MDY` AS `MDY`, `pw`.`VisibilityTypeID` AS `VisibilityTypeID`, `pw`.`WebDomain` AS `WebDomain`, `pw`.`IABCategory` AS `IABCategory`, `pi`.`Name` AS `PublisherName`, `percds`.`RtbChannelSiteName` AS `RtbChannelSiteName`, sum(`percds`.`ImpressionsOfferedCounter`) AS `ImpressionsOfferedCounter`, sum(`percds`.`AuctionBidsCounter`) AS `AuctionBidsCounter`, round(ceil((sum(`percds`.`BidTotalAmount`) / sum(`percds`.`AuctionBidsCounter`)) * 100000) / 100, 2) AS `BidTotalAverage`, round(max(`percds`.`BidFloor`), 2) AS `BidFloor` from `PrivateExchangeRtbChannelDailyStats` `percds` join `PublisherWebsite` `pw` on `percds`.`PublisherWebsiteID` = `pw`.`PublisherWebsiteID` join `PublisherInfo` `pi` on `pi`.`PublisherInfoID` = `pw`.`DomainOwnerID` join `auth_Users` `au` on `au`.`PublisherInfoID` = `pi`.`PublisherInfoID` group by `percds`.`MDY`, `percds`.`PublisherWebsiteID` order by `ImpressionsOfferedCounter` ;
 
 -- ----------------------------
 -- View structure for SspRtbChannelDailyStatsRollUp

@@ -45,8 +45,8 @@ class PublisherController extends PublisherAbstractActionController {
 	    
 	    if ($this->is_super_admin):
 	    
-	        $headers = array("#","Domain","Domain Markup","Imps Loss Rate","Domain Owner","Created","Updated","Approval","Actions");
-	        $meta_data = array("WebDomain","DomainMarkupRate","DomainPublisherImpressionsLossRate","DomainOwnerID","DateCreated","DateUpdated","ApprovalFlag");
+	        $headers = array("#","Domain","Platform Connection","Domain Markup","Imps Loss Rate","Domain Owner","Created","Updated","Approval","Actions");
+	        $meta_data = array("WebDomain","VisibilityType","DomainMarkupRate","DomainPublisherImpressionsLossRate","DomainOwnerID","DateCreated","DateUpdated","ApprovalFlag");
 	    
 	        // admin is logged in as a user, get the markup if any for that user
 	        if ($this->ImpersonateID != 0 && !empty($this->PublisherInfoID)):
@@ -65,8 +65,8 @@ class PublisherController extends PublisherAbstractActionController {
 
 	    elseif ($this->is_domain_admin):
 	    
-		    $headers = array("#","Domain","Domain Owner","Created","Updated","Approval","Actions");
-		    $meta_data = array("WebDomain","DomainOwnerID","DateCreated","DateUpdated","ApprovalFlag");
+		    $headers = array("#","Domain","Platform Connection","Domain Owner","Created","Updated","Approval","Actions");
+		    $meta_data = array("WebDomain","VisibilityType","DomainOwnerID","DateCreated","DateUpdated","ApprovalFlag");
 		     
 	    else:
 	    
@@ -443,10 +443,12 @@ class PublisherController extends PublisherAbstractActionController {
 	            $domain->Description = $description;
 	            $domain->IABCategory = $iab_category;
 	            $domain->DomainOwnerID = $domain_owner_id;
+
 	            $auto_approve_websites = $this->config_handle['settings']['publisher']['auto_approve_websites'];
 	            if ($this->is_super_admin || $this->is_domain_admin || $auto_approve_websites == true):
 	            	$domain->ApprovalFlag = 1;
 	            endif;
+	            
 	            // Check if an entry exists with the same name. A NULL means there is no duplicate.
 	            if ($PublisherWebsiteFactory->get_row(array("WebDomain" => $domain->WebDomain)) === null):
 
@@ -455,6 +457,12 @@ class PublisherController extends PublisherAbstractActionController {
     	            //user AL when an admin changes impersonation during input after form is
     	            //displayed but before the form is submitted.
     	            if ($domain->DomainOwnerID == $this->PublisherInfoID):
+    	            
+	    	            $domain->VisibilityTypeID = \util\AuthHelper::isPrivateExchangePublisher($domain->WebDomain) === true ? 2 : 1;
+	    	             
+	    	            if ($this->is_super_admin || $this->is_domain_admin):
+	    	            	$domain->VisibilityTypeID = $request->getPost("EnablePlatformConnection") == 1 ? 1 : 2;
+	    	            endif;
     	            
         	            try {
         	            	$PublisherWebsiteFactory->save_domain($domain);
@@ -485,10 +493,15 @@ class PublisherController extends PublisherAbstractActionController {
         	            	endif;
         	            }
         	            catch(\Zend\Db\Adapter\Exception\InvalidQueryException $e) {
+        	            	
+        	            	var_dump($e->getMessage());
+        	            	exit;
+        	            	
         	                $error_msg ="ERROR: A database error has occurred, please contact customer service.";
         	                return array(
         	                    'error_message' => $error_msg,
         	                    'is_super_admin' => $this->is_super_admin,
+        	                	'is_domain_admin' => $this->is_domain_admin,
         	                    'user_id_list' => $this->user_id_list_publisher,
         	                    'effective_id' => $this->auth->getEffectiveIdentityID(),
         	                    'impersonate_id' => $this->ImpersonateID,
@@ -527,6 +540,7 @@ class PublisherController extends PublisherAbstractActionController {
 	    return array(
 	        'error_message' => $error_msg,
 	        'is_super_admin' => $this->is_super_admin,
+	    	'is_domain_admin' => $this->is_domain_admin,
 	        'user_id_list' => $this->user_id_list_publisher,
 	        'effective_id' => $this->auth->getEffectiveIdentityID(),
 	        'impersonate_id' => $this->ImpersonateID,
@@ -590,6 +604,12 @@ class PublisherController extends PublisherAbstractActionController {
 	            		$editResultObj->Description = $description;
 	            		$editResultObj->IABCategory = $iab_category;
  
+	            		$editResultObj->VisibilityTypeID = \util\AuthHelper::isPrivateExchangePublisher($editResultObj->WebDomain) === true ? 0 : 1;
+	            		
+	            		if ($this->is_super_admin || $this->is_domain_admin):
+	            			$editResultObj->VisibilityTypeID = $request->getPost("EnablePlatformConnection") == 1 ? 1 : 2;
+	            		endif;
+	            		
 	                    try {
 	        	            $PublisherWebsiteFactory->save_domain($editResultObj);
 	        	            if ($this->is_domain_admin):
@@ -641,6 +661,7 @@ class PublisherController extends PublisherAbstractActionController {
 	    return array(
 	    		'error_message' => $error_message,
 	    		'is_super_admin' => $this->is_super_admin,
+	    		'is_domain_admin' => $this->is_domain_admin,
 	    		'user_id_list' => $this->user_id_list_publisher,
 	            'effective_id' => $this->auth->getEffectiveIdentityID(),
 	    		'impersonate_id' => $this->ImpersonateID,

@@ -41,5 +41,22 @@ class AuthHelper {
 		die("You are not authorized to perform this action: CODE 101");
 	
 	}
+
+	public static function isPrivateExchangePublisher($publisher_info_id) {
+	
+		$auth_Users_list 				= array();
+		$authUsersFactory 				= \_factory\authUsers::get_instance();
+		$params = array();
+		$params["PublisherInfoID"] 		= $publisher_info_id;
+		$authUserChild		 			= $authUsersFactory->get_row($params);
+	
+		if ($authUserChild === null || $authUserChild->parent_id < 1):
+			return false;
+		else:
+			return true;
+		endif;
+	
+		
+	}
 	
 }
