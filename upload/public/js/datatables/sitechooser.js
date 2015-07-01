@@ -6,7 +6,7 @@ function ShowChooserSsp () {
 	$('#myModalLabel').html("SSP RTB Publisher Inventory Feeds");
 	
 	$('#InvocationCodeModal').modal('show');
-	
+
 	if (datatable === null) {
 		datatable = $('#example').dataTable( {
 			// "lengthMenu": [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]],
@@ -14,8 +14,10 @@ function ShowChooserSsp () {
 			"columns": [
 				{ "data": " " },
 				{ "data": "Site ID" },
-				{ "data": "Domain Name" },
-				{ "data": "Daily Impressions" },
+				{ "data": "Domain" },
+				{ "data": "Name" },
+				{ "data": "IAB Cat" },
+				{ "data": "Daily Imps" },
 				{ "data": "Average CPM" },
 				{ "data": "Floor" },
 				{ "data": "Exchange" }
@@ -25,6 +27,7 @@ function ShowChooserSsp () {
 		$('#example').dataTable().api().clear();
 		$('#example').dataTable().api().ajax.url( '/directory/ssp' ).load();
 	}
+	
 	
 	
 	

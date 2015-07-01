@@ -19,15 +19,28 @@ class ServicesController extends DemandAbstractActionController {
 		$data = array();
 		
 		foreach ($SspRtbChannelDailyStatsRollUpList as $SspRtbChannelDailyStatsRollUp):
+
+			$site_id =	$SspRtbChannelDailyStatsRollUp->SspRtbChannelSiteID;
+			if (strlen($site_id) > 10):
+				$site_id = '&hellip;' . substr($site_id, -10);
+			endif;
+			
+			$site_name =	$SspRtbChannelDailyStatsRollUp->RtbChannelSiteName;
+			if (strlen($site_name) > 10):
+				$site_name = substr($site_id, -10) . '&hellip;';
+			endif;
 			
 			$row = array(
 					" " => '<input type="checkbox" name="ckssp" value="1" />',
-					"Site ID" => $SspRtbChannelDailyStatsRollUp->SspRtbChannelSiteID,
-					"Domain Name" => $SspRtbChannelDailyStatsRollUp->WebDomain,
-					"Daily Impressions" => number_format($SspRtbChannelDailyStatsRollUp->ImpressionsOfferedCounter),
+					"Site ID" => $site_id,
+					"Domain" => $SspRtbChannelDailyStatsRollUp->WebDomain,
+					"Name" => $site_name,
+					"IAB Cat" => $SspRtbChannelDailyStatsRollUp->IABCategory,
+					"Daily Imps" => number_format($SspRtbChannelDailyStatsRollUp->ImpressionsOfferedCounter),
 					"Average CPM" => $SspRtbChannelDailyStatsRollUp->BidTotalAverage,
 					"Floor" => $SspRtbChannelDailyStatsRollUp->BidFloor,
-					"Exchange" => "adx"
+					"Exchange" => $SspRtbChannelDailyStatsRollUp->BuySidePartnerName,
+					"SiteIDFull" => $SspRtbChannelDailyStatsRollUp->SspRtbChannelSiteID,
 			);
 		
 			$data[] = $row;
