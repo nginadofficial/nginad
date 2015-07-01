@@ -20,7 +20,7 @@ class ServicesController extends DemandAbstractActionController {
 		$current_time = time();
 		$yesterday_time = $current_time - 86400;
 		$yesterday = date("m/d/Y", $yesterday_time);
-		$params["MDY"] = $yesterday;
+		// $params["MDY"] = $yesterday;
 		$SspRtbChannelDailyStatsRollUpList = $SspRtbChannelDailyStatsRollUpFactory->get($params);
 
 		$data = array();
@@ -34,7 +34,7 @@ class ServicesController extends DemandAbstractActionController {
 			
 			$site_name =	$SspRtbChannelDailyStatsRollUp->RtbChannelSiteName;
 			if (strlen($site_name) > 10):
-				$site_name = substr($site_id, -10) . '&hellip;';
+				$site_name = substr($site_name, 0, 10) . '&hellip;';
 			endif;
 			
 			$row = array(
