@@ -38,7 +38,7 @@ class ServicesController extends DemandAbstractActionController {
 			endif;
 			
 			$row = array(
-					" " => '<input type="checkbox" name="ckssp" value="1" />',
+					" " => '<input type="checkbox" name="ckssp[]" value="' . $SspRtbChannelDailyStatsRollUp->SspRtbChannelSiteID . '" />',
 					"Site ID" => $site_id,
 					"Domain" => $SspRtbChannelDailyStatsRollUp->WebDomain,
 					"Name" => $site_name,
@@ -46,8 +46,7 @@ class ServicesController extends DemandAbstractActionController {
 					"Daily Imps" => number_format($SspRtbChannelDailyStatsRollUp->ImpressionsOfferedCounter),
 					"Average CPM" => $SspRtbChannelDailyStatsRollUp->BidTotalAverage,
 					"Floor" => $SspRtbChannelDailyStatsRollUp->BidFloor,
-					"Exchange" => $SspRtbChannelDailyStatsRollUp->BuySidePartnerName,
-					"SiteIDFull" => $SspRtbChannelDailyStatsRollUp->SspRtbChannelSiteID,
+					"Exchange" => $SspRtbChannelDailyStatsRollUp->BuySidePartnerName
 			);
 		
 			$data[] = $row;
