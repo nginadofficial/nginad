@@ -14,6 +14,13 @@ class ServicesController extends DemandAbstractActionController {
 		
 		$SspRtbChannelDailyStatsRollUpFactory = \_factory\SspRtbChannelDailyStatsRollUp::get_instance();
 		$params = array();
+		/*
+		 * Grab only yesterday's stats
+		 */
+		$current_time = time();
+		$yesterday_time = $current_time - 86400;
+		$yesterday = date("m/d/Y", $yesterday_time);
+		$params["MDY"] = $yesterday;
 		$SspRtbChannelDailyStatsRollUpList = $SspRtbChannelDailyStatsRollUpFactory->get($params);
 
 		$data = array();
