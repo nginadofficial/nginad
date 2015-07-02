@@ -140,8 +140,8 @@ $(function() {
   <div class="inventory-container top-pad">
   	<h4 class="no-pad">SSP RTB Publisher Inventory Feeds</h4>
   	<div>
-  	<input type="button" class="btn btn-primary btn-margin" name="AddSspFeed" value="Add" onclick="ShowChooserSsp();" />
-  	<input type="button" class="btn btn-primary btn-margin next" name="RemoveSspFeed" value="Remove" />
+  	<input type="button" class="btn btn-primary btn-margin" name="AddSspFeed" value="Add" onclick="showChooserSsp();" />
+  	<input type="button" class="btn btn-primary btn-margin next" name="RemoveSspFeed" value="Remove" onclick="removeSelectedSspItems();" />
   	</div>
   	<div>
   	<select id="ssp-feeds" name="ssp-feeds[]" multiple="multiple" class="zone-txtarea inventory-select">
@@ -166,12 +166,12 @@ $(function() {
     <div class="modal-content">
       <div class="modal-header">
         <h4 class="modal-title" id="myModalLabel">Site Chooser</h4>
-        <button type="button" class="btn" data-dismiss="modal" style="position: absolute; right: 15px; top: 15px">Close</button>
-     	<button type="button" class="btn btn-default" data-dismiss="modal" style="position: absolute; right: 100px; top: 15px">Add To Insertion Order</button>
+        <button type="button" id="cls-btn" class="btn" data-dismiss="modal" style="position: absolute; right: 15px; top: 15px">Close</button>
+     	<button type="button" onclick="addCheckedBoxes();" class="btn btn-default" style="position: absolute; right: 100px; top: 15px">Add To Insertion Order</button>
       </div>
       <div class="modal-body">
         <div>
-			<table id="example" class="display compact" cellspacing="0" width="100%">
+			<table id="rtb-feed-chooser" class="display compact" cellspacing="0" width="100%">
 				<thead>
 					<tr>
 						<th> </th>

@@ -1,15 +1,48 @@
 var datatable = null;
+var current_rtb_tier = 'ssp-feeds';
+
+function addCheckedBoxes() {
+	$('#rtb-feed-chooser .ckssp:checked').each(function() {
+		var optionLabel = unescape($(this).attr('labelname'));
+		var optionValue = unescape($(this).val());
+		addSspItem(current_rtb_tier, optionValue, optionLabel);
+	});
+	$('#cls-btn').click();
+}
+
+function addSspItem(elemId, siteId, labelText) {
+	$("#" + elemId + " > option").each(function() {
+		if (this.value == siteId) {
+			// it's already in the list
+			return;
+		}
+	});
+	$('#' + elemId).append($('<option>', {
+	    value: siteId,
+	    text: labelText
+	}));
+}
+
+function removeSspItem(elemId, siteId) {
+	var sel = $('#' + elemId);
+	sel.find("option[value='" + siteId + "']").remove();
+}
+
+function removeSelectedSspItems() {
+	$("#" + current_rtb_tier + " > option:selected").remove();
+}
 
 // Invocation code  (Publisher/website/zone)
-function ShowChooserSsp () {
+function showChooserSsp () {
 
+	current_rtb_tier = 'ssp-feeds';
+	
 	$('#myModalLabel').html("SSP RTB Publisher Inventory Feeds");
 	
 	$('#InvocationCodeModal').modal('show');
 
 	if (datatable === null) {
-		datatable = $('#example').dataTable( {
-			// "lengthMenu": [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]],
+		datatable = $('#rtb-feed-chooser').dataTable( {
 			"ajax": "/directory/ssp",
 			"columns": [
 				{ "data": " " },
@@ -24,20 +57,7 @@ function ShowChooserSsp () {
 			]
 		} );
 	} else {
-		$('#example').dataTable().api().clear();
-		$('#example').dataTable().api().ajax.url( '/directory/ssp' ).load();
+		$('#rtb-feed-chooser').dataTable().api().clear();
+		$('#rtb-feed-chooser').dataTable().api().ajax.url( '/directory/ssp' ).load();
 	}
-	
-	
-	
-	
-	
-	/*
-	$.post("/publisher/zone/" + domain_id + "/generatetag", { ad_id: ad_id }, function( data ) {
-		$('#adtag_progress_bar').css("display","none");
-		$('#adtag').html(data.data.tag);
-		$('#adtag').css("display","block");
-	},'json');
-	*/
-
 }

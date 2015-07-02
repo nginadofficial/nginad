@@ -37,8 +37,15 @@ class ServicesController extends DemandAbstractActionController {
 				$site_name = substr($site_name, 0, 20) . '&hellip;';
 			endif;
 			
+			$publisher_name =	$SspRtbChannelDailyStatsRollUp->PublisherName;
+			if (strlen($publisher_name) > 20):
+				$publisher_name = substr($publisher_name, 0, 20) . '&hellip;';
+			endif;
+			
+			$label_name = $SspRtbChannelDailyStatsRollUp->WebDomain . " - " . $site_name . " - " . $publisher_name;
+			
 			$row = array(
-					" " => '<input type="checkbox" name="ckssp[]" value="' . $SspRtbChannelDailyStatsRollUp->SspRtbChannelSiteID . '" />',
+					" " => '<input type="checkbox" labelname="' . rawurlencode($label_name) . '" class="ckssp" name="ckssp[]" value="' . rawurlencode($SspRtbChannelDailyStatsRollUp->SspRtbChannelSiteID) . '" />',
 					"Site ID" => $site_id,
 					"Domain" => $SspRtbChannelDailyStatsRollUp->WebDomain,
 					"Name" => $site_name,
