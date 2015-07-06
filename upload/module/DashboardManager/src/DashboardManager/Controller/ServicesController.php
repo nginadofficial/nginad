@@ -65,6 +65,125 @@ class ServicesController extends DemandAbstractActionController {
 	
 	}
 	
+	public function platformconnectionAction() {
+	
+		$initialized = $this->initialize();
+		if ($initialized !== true) return $initialized;
+	
+	
+		$PrivateExchangeRtbChannelDailyStatsRollUpFactory = \_factory\PrivateExchangeRtbChannelDailyStatsRollUp::get_instance();
+		$params = array();
+		/*
+		 * Grab only yesterday's stats
+		*/
+		$current_time = time();
+		$yesterday_time = $current_time - 86400;
+		$yesterday = date("m/d/Y", $yesterday_time);
+		$params["MDY"] = $yesterday;
+		$PrivateExchangeRtbChannelDailyStatsRollUpList = $PrivateExchangeRtbChannelDailyStatsRollUpFactory->get($params, $this->auth->getUserID());
+	
+		$data = array();
+	
+		foreach ($PrivateExchangeRtbChannelDailyStatsRollUpList as $PrivateExchangeRtbChannelDailyStatsRollUp):
+	
+			$site_id =	$PrivateExchangeRtbChannelDailyStatsRollUp->PublisherWebsiteID;
+			if (strlen($site_id) > 10):
+				$site_id = '&hellip;' . substr($site_id, -10);
+			endif;
+				
+			$site_name =	$PrivateExchangeRtbChannelDailyStatsRollUp->RtbChannelSiteName;
+			if (strlen($site_name) > 20):
+				$site_name = substr($site_name, 0, 20) . '&hellip;';
+			endif;
+				
+			$publisher_name =	$PrivateExchangeRtbChannelDailyStatsRollUp->PublisherName;
+			if (strlen($publisher_name) > 20):
+				$publisher_name = substr($publisher_name, 0, 20) . '&hellip;';
+			endif;
+				
+			$label_name = $PrivateExchangeRtbChannelDailyStatsRollUp->WebDomain . " - " . $site_name . " - " . $publisher_name;
+				
+			$row = array(
+					" " => '<input type="checkbox" labelname="' . rawurlencode($label_name) . '" class="ckssp" name="ckssp[]" value="' . rawurlencode($PrivateExchangeRtbChannelDailyStatsRollUp->PublisherWebsiteID) . '" />',
+					"Site ID" => $site_id,
+					"Domain" => $PrivateExchangeRtbChannelDailyStatsRollUp->WebDomain,
+					"Name" => $site_name,
+					"IAB Cat" => $PrivateExchangeRtbChannelDailyStatsRollUp->IABCategory,
+					"Daily Imps" => number_format($PrivateExchangeRtbChannelDailyStatsRollUp->ImpressionsOfferedCounter),
+					"Average CPM" => $PrivateExchangeRtbChannelDailyStatsRollUp->BidTotalAverage,
+					"Floor" => $PrivateExchangeRtbChannelDailyStatsRollUp->BidFloor,
+					"Exchange" => $PrivateExchangeRtbChannelDailyStatsRollUp->BuySidePartnerName
+			);
+		
+			$data[] = $row;
+				
+		endforeach;
+	
+		$this->setJsonHeader();
+		return $this->getResponse()->setContent(json_encode(array("data"=>$data)));
+	
+	}
+	
+	public function privateexchangeAction() {
+	
+		$initialized = $this->initialize();
+		if ($initialized !== true) return $initialized;
+	
+	
+		$PrivateExchangeRtbChannelDailyStatsRollUpFactory = \_factory\PrivateExchangeRtbChannelDailyStatsRollUp::get_instance();
+		$params = array();
+		/*
+		 * Grab only yesterday's stats
+		*/
+		$current_time = time();
+		$yesterday_time = $current_time - 86400;
+		$yesterday = date("m/d/Y", $yesterday_time);
+		$params["MDY"] = $yesterday;
+		$params["ParentID"] = $this->auth->getUserID();
+		$PrivateExchangeRtbChannelDailyStatsRollUpList = $PrivateExchangeRtbChannelDailyStatsRollUpFactory->get($params);
+	
+		$data = array();
+	
+		foreach ($PrivateExchangeRtbChannelDailyStatsRollUpList as $PrivateExchangeRtbChannelDailyStatsRollUp):
+	
+			$site_id =	$PrivateExchangeRtbChannelDailyStatsRollUp->PublisherWebsiteID;
+			if (strlen($site_id) > 10):
+				$site_id = '&hellip;' . substr($site_id, -10);
+			endif;
+				
+			$site_name =	$PrivateExchangeRtbChannelDailyStatsRollUp->RtbChannelSiteName;
+			if (strlen($site_name) > 20):
+				$site_name = substr($site_name, 0, 20) . '&hellip;';
+			endif;
+				
+			$publisher_name =	$PrivateExchangeRtbChannelDailyStatsRollUp->PublisherName;
+			if (strlen($publisher_name) > 20):
+				$publisher_name = substr($publisher_name, 0, 20) . '&hellip;';
+			endif;
+				
+			$label_name = $PrivateExchangeRtbChannelDailyStatsRollUp->WebDomain . " - " . $site_name . " - " . $publisher_name;
+				
+			$row = array(
+					" " => '<input type="checkbox" labelname="' . rawurlencode($label_name) . '" class="ckssp" name="ckssp[]" value="' . rawurlencode($PrivateExchangeRtbChannelDailyStatsRollUp->PublisherWebsiteID) . '" />',
+					"Site ID" => $site_id,
+					"Domain" => $PrivateExchangeRtbChannelDailyStatsRollUp->WebDomain,
+					"Name" => $site_name,
+					"IAB Cat" => $PrivateExchangeRtbChannelDailyStatsRollUp->IABCategory,
+					"Daily Imps" => number_format($PrivateExchangeRtbChannelDailyStatsRollUp->ImpressionsOfferedCounter),
+					"Average CPM" => $PrivateExchangeRtbChannelDailyStatsRollUp->BidTotalAverage,
+					"Floor" => $PrivateExchangeRtbChannelDailyStatsRollUp->BidFloor,
+					"Exchange" => $PrivateExchangeRtbChannelDailyStatsRollUp->BuySidePartnerName
+			);
+		
+			$data[] = $row;
+				
+		endforeach;
+	
+		$this->setJsonHeader();
+		return $this->getResponse()->setContent(json_encode(array("data"=>$data)));
+	
+	}
+	
 }
 
 ?>

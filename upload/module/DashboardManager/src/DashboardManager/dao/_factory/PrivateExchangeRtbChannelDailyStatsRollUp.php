@@ -56,27 +56,34 @@ class PrivateExchangeRtbChannelDailyStatsRollUp extends \_factory\CachedTableRea
         	return null;
     }
 
-    public function get($params = null) {
-        	// http://files.zend.com/help/Zend-Framework/zend.db.select.html
-
-        $obj_list = array();
-
-    	$resultSet = $this->select(function (\Zend\Db\Sql\Select $select) use ($params) {
-        		foreach ($params as $name => $value):
-        		$select->where(
-        				$select->where->equalTo($name, $value)
-        		);
-        		endforeach;
-        		//$select->limit(10, 0);
-        		$select->order('ImpressionsOfferedCounter');
-
-        	}
-    	);
-
-    	    foreach ($resultSet as $obj):
-    	        $obj_list[] = $obj;
-    	    endforeach;
-
+    public function get($params = null, $parent_id_exclude = null) {
+    	// http://files.zend.com/help/Zend-Framework/zend.db.select.html
+    
+    	$obj_list = array();
+    
+    	$resultSet = $this->select(function (\Zend\Db\Sql\Select $select) use ($params, $parent_id_exclude) {
+    		foreach ($params as $name => $value):
+    		$select->where(
+    				$select->where->equalTo($name, $value)
+    		);
+    		endforeach;
+    		
+    		if ($parent_id_exclude !== null):
+	    		$select->where(
+	    				$select->where->notEqualTo('ParentID', $parent_id_exclude)
+	    		);
+    		endif;
+    		
+    		//$select->limit(10, 0);
+    		$select->order('ImpressionsOfferedCounter');
+    
+    	}
+    		);
+    
+    		foreach ($resultSet as $obj):
+    		$obj_list[] = $obj;
+    		endforeach;
+    
     		return $obj_list;
     }
 

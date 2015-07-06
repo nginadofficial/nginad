@@ -114,8 +114,8 @@ $(function() {
   <div class="inventory-container">
   	<h4 class="no-pad">Private Exchange Inventory Feeds</h4>
   	<div>
-  	<input type="button" class="btn btn-primary btn-margin" name="AddPcFeed" value="Add" />
-  	<input type="button" class="btn btn-primary btn-margin next" name="RemovePcFeed" value="Remove" />
+  	<input type="button" class="btn btn-primary btn-margin" name="AddPcFeed" value="Add" onclick="showChooserPx();" />
+  	<input type="button" class="btn btn-primary btn-margin next" name="RemovePxFeed" value="Remove" onclick="removeSelectedPcItems();" />
   	</div>
   	<div>
   	<select id="pc-feeds" name="pc-feeds[]" multiple="multiple" class="zone-txtarea inventory-select">
@@ -127,8 +127,8 @@ $(function() {
   <div class="inventory-container top-pad">
   	<h4 class="no-pad">Platform Connection Inventory Feeds</h4>
   	<div>
-  	<input type="button" class="btn btn-primary btn-margin" name="AddPcFeed" value="Add" />
-  	<input type="button" class="btn btn-primary btn-margin next" name="RemovePcFeed" value="Remove" />
+  	<input type="button" class="btn btn-primary btn-margin" name="AddPcFeed" value="Add" onclick="showChooserPc();" />
+  	<input type="button" class="btn btn-primary btn-margin next" name="RemovePcFeed" value="Remove" onclick="removeSelectedPcItems();" />
   	</div>
   	<div>
   	<select id="pc-feeds" name="pc-feeds[]" multiple="multiple" class="zone-txtarea inventory-select">

@@ -16,6 +16,8 @@ class PrivateExchangeRtbChannelDailyStatsRollUp {
 	public $IABCategory;
 	public $PublisherName;
 	public $RtbChannelSiteName;
+	public $ParentID;
+	public $BuySidePartnerName;
 	public $BidTotalAverage;
 	public $BidFloor;
 	public $ImpressionsOfferedCounter;
