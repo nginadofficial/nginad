@@ -11,16 +11,38 @@ function addCheckedBoxes() {
 }
 
 function addSspItem(elemId, siteId, labelText) {
+	
+	var found = false;
+	
 	$("#" + elemId + " > option").each(function() {
+
 		if (this.value == siteId) {
 			// it's already in the list
+			found = true;
 			return;
 		}
 	});
-	$('#' + elemId).append($('<option>', {
-	    value: siteId,
-	    text: labelText
-	}));
+	
+	if (found === false) {
+		$('#' + elemId).append($('<option>', {
+		    value: siteId,
+		    text: labelText
+		}));
+	}
+}
+
+function callBackDblClk() {
+	$('#rtb-feed-chooser tr').dblclick( function() {
+		var nTds = $('td', this);
+		
+		var selInput = $('input', nTds[0]);
+		
+		var optionLabel = unescape(selInput.attr('labelname'));
+		var optionValue = unescape(selInput.val());
+		
+		addSspItem(current_rtb_tier, optionValue, optionLabel);
+		$('#cls-btn').click();
+	} );
 }
 
 function removeSspItem(elemId, siteId) {
@@ -43,7 +65,6 @@ function showChooserPx () {
 
 	if (datatable === null) {
 		datatable = $('#rtb-feed-chooser').dataTable( {
-			"ajax": "/directory/privateexchange",
 			"columns": [
 				{ "data": " " },
 				{ "data": "Site ID" },
@@ -57,9 +78,14 @@ function showChooserPx () {
 			]
 		} );
 	} else {
-		$('#rtb-feed-chooser').dataTable().api().clear();
-		$('#rtb-feed-chooser').dataTable().api().ajax.url( '/directory/privateexchange' ).load();
+		$('#rtb-feed-chooser').dataTable().api().clear().draw();
 	}
+	
+	$('#rtb-feed-chooser').dataTable().api().ajax.url( '/directory/privateexchange' ).load(
+		function () {
+			callBackDblClk();
+		}		
+	);
 }
 
 // Platform Connection
@@ -73,7 +99,6 @@ function showChooserPc () {
 
 	if (datatable === null) {
 		datatable = $('#rtb-feed-chooser').dataTable( {
-			"ajax": "/directory/platformconnection",
 			"columns": [
 				{ "data": " " },
 				{ "data": "Site ID" },
@@ -87,9 +112,17 @@ function showChooserPc () {
 			]
 		} );
 	} else {
-		$('#rtb-feed-chooser').dataTable().api().clear();
+		
+		$('#rtb-feed-chooser').dataTable().api().clear().draw();
 		$('#rtb-feed-chooser').dataTable().api().ajax.url( '/directory/platformconnection' ).load();
 	}
+	
+	$('#rtb-feed-chooser').dataTable().api().ajax.url( '/directory/platformconnection' ).load(
+		function () {
+			callBackDblClk();
+		}	
+	);
+
 }
 
 // SSP
@@ -103,7 +136,6 @@ function showChooserSsp () {
 
 	if (datatable === null) {
 		datatable = $('#rtb-feed-chooser').dataTable( {
-			"ajax": "/directory/ssp",
 			"columns": [
 				{ "data": " " },
 				{ "data": "Site ID" },
@@ -117,7 +149,12 @@ function showChooserSsp () {
 			]
 		} );
 	} else {
-		$('#rtb-feed-chooser').dataTable().api().clear();
-		$('#rtb-feed-chooser').dataTable().api().ajax.url( '/directory/ssp' ).load();
+		$('#rtb-feed-chooser').dataTable().api().clear().draw();
 	}
+	
+	$('#rtb-feed-chooser').dataTable().api().ajax.url( '/directory/ssp' ).load(
+		function () {
+			callBackDblClk();
+		}		
+	);
 }

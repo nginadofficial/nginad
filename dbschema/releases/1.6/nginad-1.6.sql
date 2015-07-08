@@ -1382,6 +1382,12 @@ DROP VIEW IF EXISTS `SspRtbChannelDailyStatsRollUp`;
 CREATE VIEW `SspRtbChannelDailyStatsRollUp` AS select `srcds`.`SspRtbChannelSiteID` AS `SspRtbChannelSiteID`, `srcds`.`MDY` AS `MDY`, `srcds`.`SspRtbChannelSiteDomain` AS `WebDomain`, `srcds`.`SspRtbChannelSiteIABCategory` AS `IABCategory`, `srcds`.`SspRtbChannelPublisherName` AS `PublisherName`, `srcds`.`SspRtbChannelSiteName` AS `RtbChannelSiteName`, `srcds`.`BuySidePartnerName` AS `BuySidePartnerName`, sum(`srcds`.`ImpressionsOfferedCounter`) AS `ImpressionsOfferedCounter`, sum(`srcds`.`AuctionBidsCounter`) AS `AuctionBidsCounter`, round(ceil((sum(`srcds`.`BidTotalAmount`) / sum(`srcds`.`AuctionBidsCounter`)) * 100000) / 100, 2) AS `BidTotalAverage`, round(max(`srcds`.`BidFloor`), 2) AS `BidFloor` from `SspRtbChannelDailyStats` `srcds` group by `srcds`.`MDY`, `srcds`.`SspRtbChannelSiteID` order by `ImpressionsOfferedCounter` ;
 
 -- ----------------------------
+-- View structure for PrivateExchangeRtbChannelDailyStatsRollUpPxFilter
+-- ----------------------------
+DROP VIEW IF EXISTS `PrivateExchangeRtbChannelDailyStatsRollUpPxFilter`;
+CREATE VIEW `PrivateExchangeRtbChannelDailyStatsRollUpPxFilter` AS select `percdsru`.`PublisherWebsiteID` AS `PublisherWebsiteID`, `percdsru`.`UserID` AS `UserID`, max(`percdsru`.`MDY`) AS `MDY`, `percdsru`.`VisibilityTypeID` AS `VisibilityTypeID`, `percdsru`.`WebDomain` AS `WebDomain`, `percdsru`.`IABCategory` AS `IABCategory`, `percdsru`.`PublisherName` AS `PublisherName`, `percdsru`.`ParentID` AS `ParentID`, `percdsru`.`BuySidePartnerName` AS `BuySidePartnerName`, `percdsru`.`RtbChannelSiteName` AS `RtbChannelSiteName`, `percdsru`.`ImpressionsOfferedCounter` AS `ImpressionsOfferedCounter`, `percdsru`.`AuctionBidsCounter` AS `AuctionBidsCounter`, `percdsru`.`BidTotalAverage` AS `BidTotalAverage`, `percdsru`.`BidFloor` AS `BidFloor` from `PrivateExchangeRtbChannelDailyStatsRollUp` `percdsru` group by `percdsru`.`PublisherWebsiteID` order by `ImpressionsOfferedCounter` ;
+
+-- ----------------------------
 -- Function structure for MD5_SPLIT_SALT
 -- ----------------------------
 DROP FUNCTION IF EXISTS `MD5_SPLIT_SALT`;
