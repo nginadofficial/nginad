@@ -97,9 +97,10 @@ class SspRtbChannelToInsertionOrder extends \_factory\CachedTableRead
     
     public function saveSspRtbChannelToInsertionOrder(\model\SspRtbChannelToInsertionOrder $SspRtbChannelToInsertionOrder) {
     	$data = array(
-    			'InsertionOrderID'			=> $SspRtbChannelToInsertionOrder->InsertionOrderID,
-    			'SspPublisherChannelID'		=> $SspRtbChannelToInsertionOrder->SspPublisherChannelID,
-    			'DateUpdated'        		=> $SspRtbChannelToInsertionOrder->DateUpdated
+    			'InsertionOrderID'						=> $SspRtbChannelToInsertionOrder->InsertionOrderID,
+    			'SspPublisherChannelID'					=> $SspRtbChannelToInsertionOrder->SspPublisherChannelID,
+    			'SspPublisherChannelDescription'		=> $SspRtbChannelToInsertionOrder->SspPublisherChannelDescription,
+    			'DateUpdated'        					=> $SspRtbChannelToInsertionOrder->DateUpdated
     	);
     	
     	$pmp_deal_publisher_website_to_io_id = (int)$SspRtbChannelToInsertionOrder->SspRtbChannelToInsertionOrderID;

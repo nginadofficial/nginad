@@ -94,12 +94,14 @@ class PmpDealPublisherWebsiteToInsertionOrder extends \_factory\CachedTableRead
 
     		return $obj_list;
     }
-    
+
     public function savePmpDealPublisherWebsiteToInsertionOrder(\model\PmpDealPublisherWebsiteToInsertionOrder $PmpDealPublisherWebsiteToInsertionOrder) {
     	$data = array(
-    			'InsertionOrderID'			=> $PmpDealPublisherWebsiteToInsertionOrder->InsertionOrderID,
-    			'PublisherWebsiteID'		=> $PmpDealPublisherWebsiteToInsertionOrder->PublisherWebsiteID,
-    			'DateUpdated'        		=> $PmpDealPublisherWebsiteToInsertionOrder->DateUpdated
+    			'InsertionOrderID'					=> $PmpDealPublisherWebsiteToInsertionOrder->InsertionOrderID,
+    			'PublisherWebsiteID'				=> $PmpDealPublisherWebsiteToInsertionOrder->PublisherWebsiteID,
+    			'PublisherWebsiteLocal'				=> $PmpDealPublisherWebsiteToInsertionOrder->PublisherWebsiteLocal,
+    			'PublisherWebsiteDescription'		=> $PmpDealPublisherWebsiteToInsertionOrder->PublisherWebsiteDescription,
+    			'DateUpdated'        				=> $PmpDealPublisherWebsiteToInsertionOrder->DateUpdated
     	);
     	
     	$pmp_deal_publisher_website_to_io_id = (int)$PmpDealPublisherWebsiteToInsertionOrder->PmpDealPublisherWebsiteToInsertionOrderID;

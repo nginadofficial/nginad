@@ -146,7 +146,6 @@ class TransformPreview {
 			$banner_preview->Name 						= $InsertionOrderLineItemPreview->Name;
 			$banner_preview->StartDate					= $InsertionOrderLineItemPreview->StartDate;
 			$banner_preview->EndDate					= $InsertionOrderLineItemPreview->EndDate;
-			$banner_preview->InsertionOrderTypeID			= $InsertionOrderLineItemPreview->InsertionOrderTypeID;
 			$banner_preview->IsMobile					= $InsertionOrderLineItemPreview->IsMobile;
 			$banner_preview->IABSize					= $InsertionOrderLineItemPreview->IABSize;
 			$banner_preview->Height						= $InsertionOrderLineItemPreview->Height;
@@ -282,9 +281,7 @@ class TransformPreview {
 		$InsertionOrderLineItemVideoRestrictionsFactory = \_factory\InsertionOrderLineItemVideoRestrictions::get_instance();
 		$InsertionOrderLineItemVideoRestrictionsPreviewFactory = \_factory\InsertionOrderLineItemVideoRestrictionsPreview::get_instance();
 		
-		$PublisherAdZoneFactory = \_factory\PublisherAdZone::get_instance();
-		$LinkedBannerToAdZoneFactory = \_factory\LinkedBannerToAdZone::get_instance();
-		$LinkedBannerToAdZonePreviewFactory = \_factory\LinkedBannerToAdZonePreview::get_instance();		
+		$PublisherAdZoneFactory = \_factory\PublisherAdZone::get_instance();	
 		$InsertionOrderLineItemDomainExclusionFactory = \_factory\InsertionOrderLineItemDomainExclusion::get_instance();
 		$InsertionOrderLineItemDomainExclusionPreviewFactory = \_factory\InsertionOrderLineItemDomainExclusionPreview::get_instance();
 		$InsertionOrderLineItemDomainExclusiveInclusionFactory = \_factory\InsertionOrderLineItemDomainExclusiveInclusion::get_instance();
@@ -313,7 +310,6 @@ class TransformPreview {
 			$Banner->ImpressionType 			= $InsertionOrderLineItemPreview->ImpressionType;
 			$Banner->StartDate 					= $InsertionOrderLineItemPreview->StartDate;
 			$Banner->EndDate 					= $InsertionOrderLineItemPreview->EndDate;
-			$Banner->InsertionOrderTypeID 			= $InsertionOrderLineItemPreview->InsertionOrderTypeID;
 			$Banner->IsMobile 					= $InsertionOrderLineItemPreview->IsMobile;
 			$Banner->IABSize 					= $InsertionOrderLineItemPreview->IABSize;
 			$Banner->Height 					= $InsertionOrderLineItemPreview->Height;
@@ -427,33 +423,6 @@ class TransformPreview {
 				endif;
 					
 			endif;
-			
-			/*
-			 * LINKED BANNER TO AD ZONE
-			*/
-			
-			// first delete the existing ones, then re-insert
-			$LinkedBannerToAdZoneFactory->deleteLinkedBannerToAdZone($banner_id);
-			
-			$params = array();
-			$params["InsertionOrderLineItemPreviewID"] = $banner_preview_id;
-			$LinkedBannerToAdZonePreviewList = $LinkedBannerToAdZonePreviewFactory->get($params);
-			
-			foreach ($LinkedBannerToAdZonePreviewList as $LinkedBannerToAdZonePreview):
-			
-				$LinkedBannerToAdZone = new \model\LinkedBannerToAdZone();
-				
-				$LinkedBannerToAdZone->InsertionOrderLineItemID 	= $banner_id;
-				$LinkedBannerToAdZone->PublisherAdZoneID 	= $LinkedBannerToAdZonePreview->PublisherAdZoneID;
-				$LinkedBannerToAdZone->Weight 				= $LinkedBannerToAdZonePreview->Weight;
-				$LinkedBannerToAdZone->DateCreated 			= date("Y-m-d H:i:s");
-				$LinkedBannerToAdZone->DateUpdated 			= date("Y-m-d H:i:s");
-				
-				$LinkedBannerToAdZoneFactory->saveLinkedBannerToAdZone($LinkedBannerToAdZone);
-				
-				$PublisherAdZoneFactory->updatePublisherAdZonePublisherAdZoneType($LinkedBannerToAdZone->PublisherAdZoneID, AD_TYPE_CONTRACT);
-
-			endforeach;
 			
 			/*
 			 * DOMAIN EXCLUSIONS
@@ -576,8 +545,6 @@ class TransformPreview {
 		$InsertionOrderLineItemVideoRestrictionsFactory = \_factory\InsertionOrderLineItemVideoRestrictions::get_instance();
 		$InsertionOrderLineItemVideoRestrictionsPreviewFactory = \_factory\InsertionOrderLineItemVideoRestrictionsPreview::get_instance();
 		
-		$LinkedBannerToAdZoneFactory = \_factory\LinkedBannerToAdZone::get_instance();
-		$LinkedBannerToAdZonePreviewFactory = \_factory\LinkedBannerToAdZonePreview::get_instance();
 		$InsertionOrderLineItemDomainExclusionFactory = \_factory\InsertionOrderLineItemDomainExclusion::get_instance();
 		$InsertionOrderLineItemDomainExclusionPreviewFactory = \_factory\InsertionOrderLineItemDomainExclusionPreview::get_instance();
 		$InsertionOrderLineItemDomainExclusiveInclusionFactory = \_factory\InsertionOrderLineItemDomainExclusiveInclusion::get_instance();
@@ -597,7 +564,6 @@ class TransformPreview {
 			$BannerPreview->ImpressionType 				= $InsertionOrderLineItem->ImpressionType;
 			$BannerPreview->StartDate 					= $InsertionOrderLineItem->StartDate;
 			$BannerPreview->EndDate 					= $InsertionOrderLineItem->EndDate;
-			$BannerPreview->InsertionOrderTypeID 			= $InsertionOrderLineItem->InsertionOrderTypeID;
 			$BannerPreview->IsMobile 					= $InsertionOrderLineItem->IsMobile;
 			$BannerPreview->IABSize 					= $InsertionOrderLineItem->IABSize;
 			$BannerPreview->Height 						= $InsertionOrderLineItem->Height;
@@ -721,28 +687,6 @@ class TransformPreview {
 				    
 			    endif;
 			endif;
-			
-			/*
-			 * LINKED BANNER TO AD ZONE
-			*/
-				
-			$params = array();
-			$params["InsertionOrderLineItemID"] = $banner_id;
-			$LinkedBannerToAdZoneList = $LinkedBannerToAdZoneFactory->get($params);
-				
-			foreach ($LinkedBannerToAdZoneList as $LinkedBannerToAdZone):
-					
-				$LinkedBannerToAdZonePreview = new \model\LinkedBannerToAdZonePreview();
-				
-				$LinkedBannerToAdZonePreview->InsertionOrderLineItemPreviewID 	= $InsertionOrderLineItemPreviewID;
-				$LinkedBannerToAdZonePreview->PublisherAdZoneID 			= $LinkedBannerToAdZone->PublisherAdZoneID;
-				$LinkedBannerToAdZonePreview->Weight 						= $LinkedBannerToAdZone->Weight;
-				$LinkedBannerToAdZonePreview->DateCreated 					= date("Y-m-d H:i:s");
-				$LinkedBannerToAdZonePreview->DateUpdated 					= date("Y-m-d H:i:s");
-				
-				$LinkedBannerToAdZonePreviewFactory->saveLinkedBannerToAdZonePreview($LinkedBannerToAdZonePreview);
-				
-			endforeach;
 			
 		    /*
 		     * DOMAIN EXCLUSIONS

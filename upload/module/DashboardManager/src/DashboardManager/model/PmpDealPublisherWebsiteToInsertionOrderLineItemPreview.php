@@ -12,6 +12,8 @@ namespace model;
 class PmpDealPublisherWebsiteToInsertionOrderLineItemPreview {
     public $PmpDealPublisherWebsiteToInsertionOrderLineItemPreviewID;
     public $PublisherWebsiteID;
+    public $PublisherWebsiteLocal;
+    public $PublisherWebsiteDescription;
     public $InsertionOrderLineItemPreviewID;
     public $Enabled;
     public $DateCreated;

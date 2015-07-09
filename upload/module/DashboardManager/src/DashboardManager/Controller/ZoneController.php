@@ -353,39 +353,7 @@ class ZoneController extends PublisherAbstractActionController {
 	                    	
 	                    endif;
 
-	                    // only the admin can create direct contracts between publishers and demand customers
-	                    if ($this->is_super_admin):
-	                    
-	                    	$InsertionOrderLineItemFactory = \_factory\InsertionOrderLineItem::get_instance();
-		                    $LinkedBannerToAdZoneFactory = \_factory\LinkedBannerToAdZone::get_instance();
-		                    
-		                    // campaigntype AD_TYPE_CONTRACT case
-		                    if ($publisher_ad_zone_type_id == AD_TYPE_CONTRACT && $linkedbanners != null && count($linkedbanners) > 0):
-		                    
-			                    foreach($linkedbanners as $linked_banner_id):
-			                    
-			                    	$params = array();
-			                    	$params["InsertionOrderLineItemID"] = $linked_banner_id;
-			                    	$LinkedInsertionOrderLineItem = $InsertionOrderLineItemFactory->get_row($params);
-			                    
-			                    	if ($LinkedInsertionOrderLineItem == null):
-			                    		continue;
-			                    	endif;
-			                    	 
-			                    	$LinkedBannerToAdZone = new \model\LinkedBannerToAdZone();
-			                    	$LinkedBannerToAdZone->InsertionOrderLineItemID 			= intval($linked_banner_id);
-			                    	$LinkedBannerToAdZone->PublisherAdZoneID			= $publisher_ad_zone_id;
-			                    	$LinkedBannerToAdZone->Weight						= intval($LinkedInsertionOrderLineItem->Weight);
-			                    	$LinkedBannerToAdZone->DateCreated					= date("Y-m-d H:i:s");
-			                    	$LinkedBannerToAdZone->DateUpdated					= date("Y-m-d H:i:s");
-			                    	$LinkedBannerToAdZoneFactory->saveLinkedBannerToAdZone($LinkedBannerToAdZone);
-			                    
-			                    	$InsertionOrderLineItemFactory->updateInsertionOrderLineItemInsertionOrderType($LinkedInsertionOrderLineItem->InsertionOrderLineItemID, AD_TYPE_CONTRACT);
-			                    
-			                    endforeach;
-		                    
-		                    endif;
-		                elseif ($this->config_handle['mail']['subscribe']['zones'] === true):
+	                    if ($this->config_handle['mail']['subscribe']['zones'] === true):
 		                
 			                $is_approved = $ad->AdStatus == 1 ? 'Yes' : 'No';
 		                	$is_mobile = $ad->IsMobileFlag == 1 ? 'Yes' : 'No';
@@ -728,38 +696,7 @@ class ZoneController extends PublisherAbstractActionController {
 	                				
                 				endif;
                 				
-                				if ($this->is_super_admin):
-	                				$LinkedBannerToAdZoneFactory = \_factory\LinkedBannerToAdZone::get_instance();
-	                				$LinkedBannerToAdZoneFactory->deleteLinkedBannerToAdZoneByPublisherAdZoneID($editResultObj->PublisherAdZoneID);
-	
-	                				// campaigntype AD_TYPE_CONTRACT case
-	                				if ($publisher_ad_zone_type_id == AD_TYPE_CONTRACT && $linkedbanners != null && count($linkedbanners) > 0):
-	                				
-		                				foreach($linkedbanners as $linked_banner_id):
-		                					
-		                					$params = array();
-		                					$params["InsertionOrderLineItemID"] = $linked_banner_id;
-		                					$LinkedInsertionOrderLineItem = $InsertionOrderLineItemFactory->get_row($params);
-		                					
-		                					if ($LinkedInsertionOrderLineItem == null):
-		                						continue;
-		                					endif;
-		                				
-			                				$LinkedBannerToAdZone = new \model\LinkedBannerToAdZone();
-			                				$LinkedBannerToAdZone->InsertionOrderLineItemID 			= intval($linked_banner_id);
-			                				$LinkedBannerToAdZone->PublisherAdZoneID			= $editResultObj->PublisherAdZoneID;
-			                				$LinkedBannerToAdZone->Weight						= intval($LinkedInsertionOrderLineItem->Weight);
-			                				$LinkedBannerToAdZone->DateCreated					= date("Y-m-d H:i:s");
-			                				$LinkedBannerToAdZone->DateUpdated					= date("Y-m-d H:i:s");
-			                				$LinkedBannerToAdZoneFactory->saveLinkedBannerToAdZone($LinkedBannerToAdZone);
-			                				
-			                				$InsertionOrderLineItemFactory->updateInsertionOrderLineItemInsertionOrderType($LinkedInsertionOrderLineItem->InsertionOrderLineItemID, AD_TYPE_CONTRACT);
-			                				
-		                				endforeach;
-	                				
-	                				endif;
-	                			
-	                			elseif ($this->config_handle['mail']['subscribe']['zones'] === true):
+                				if ($this->config_handle['mail']['subscribe']['zones'] === true):
 	                			
 	                				$is_approved = $editResultObj->AdStatus == 1 ? 'Yes' : 'No';
 	                				$is_mobile = $ad->IsMobileFlag == 1 ? 'Yes' : 'No';
@@ -1250,11 +1187,6 @@ class ZoneController extends PublisherAbstractActionController {
 		     	$this->setJsonHeader();
 		     	return $this->getResponse()->setContent(json_encode($data));
 	     	endif;
-	     	
-	     	$LinkedBannerToAdZoneFactory = \_factory\LinkedBannerToAdZone::get_instance();
-	     	$params = array();
-	     	$params["PublisherAdZoneID"] = $id;
-	     	$linked_ad_banners = $LinkedBannerToAdZoneFactory->get($params);
 	     	
 		endif;
 

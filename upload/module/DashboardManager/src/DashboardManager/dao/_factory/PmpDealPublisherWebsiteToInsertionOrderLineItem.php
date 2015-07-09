@@ -97,9 +97,11 @@ class PmpDealPublisherWebsiteToInsertionOrderLineItem extends \_factory\CachedTa
 
     public function savePmpDealPublisherWebsiteToInsertionOrderLineItem(\model\PmpDealPublisherWebsiteToInsertionOrderLineItem $PmpDealPublisherWebsiteToInsertionOrderLineItem) {
     	$data = array(
-    			'InsertionOrderLineItemID'	=> $PmpDealPublisherWebsiteToInsertionOrderLineItem->InsertionOrderLineItemID,
-    			'PublisherWebsiteID'		=> $PmpDealPublisherWebsiteToInsertionOrderLineItem->PublisherWebsiteID,
-    			'DateUpdated'           	=> $PmpDealPublisherWebsiteToInsertionOrderLineItem->DateUpdated
+    			'InsertionOrderLineItemID'			=> $PmpDealPublisherWebsiteToInsertionOrderLineItem->InsertionOrderLineItemID,
+    			'PublisherWebsiteID'				=> $PmpDealPublisherWebsiteToInsertionOrderLineItem->PublisherWebsiteID,
+    			'PublisherWebsiteLocal'				=> $PmpDealPublisherWebsiteToInsertionOrderLineItem->PublisherWebsiteLocal,
+    			'PublisherWebsiteDescription'		=> $PmpDealPublisherWebsiteToInsertionOrderLineItem->PublisherWebsiteDescription,
+    			'DateUpdated'           			=> $PmpDealPublisherWebsiteToInsertionOrderLineItem->DateUpdated
     	);
     	
     	$pmp_deal_publisher_website_to_io_line_item_id = (int)$PmpDealPublisherWebsiteToInsertionOrderLineItem->PmpDealPublisherWebsiteToInsertionOrderLineItemID;

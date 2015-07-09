@@ -97,9 +97,11 @@ class PmpDealPublisherWebsiteToInsertionOrderPreview extends \_factory\CachedTab
     
     public function savePmpDealPublisherWebsiteToInsertionOrderPreview(\model\PmpDealPublisherWebsiteToInsertionOrderPreview $PmpDealPublisherWebsiteToInsertionOrderPreview) {
     	$data = array(
-    			'InsertionOrderPreviewID'	=> $PmpDealPublisherWebsiteToInsertionOrderPreview->InsertionOrderPreviewID,
-    			'PublisherWebsiteID'		=> $PmpDealPublisherWebsiteToInsertionOrderPreview->PublisherWebsiteID,
-    			'DateUpdated'           	=> $PmpDealPublisherWebsiteToInsertionOrderPreview->DateUpdated
+    			'InsertionOrderPreviewID'			=> $PmpDealPublisherWebsiteToInsertionOrderPreview->InsertionOrderPreviewID,
+    			'PublisherWebsiteID'				=> $PmpDealPublisherWebsiteToInsertionOrderPreview->PublisherWebsiteID,
+    			'PublisherWebsiteLocal'				=> $PmpDealPublisherWebsiteToInsertionOrderPreview->PublisherWebsiteLocal,
+    			'PublisherWebsiteDescription'		=> $PmpDealPublisherWebsiteToInsertionOrderPreview->PublisherWebsiteDescription,
+    			'DateUpdated'           			=> $PmpDealPublisherWebsiteToInsertionOrderPreview->DateUpdated
     	);
     	
     	$pmp_deal_publisher_website_to_io_preview_id = (int)$PmpDealPublisherWebsiteToInsertionOrderPreview->PmpDealPublisherWebsiteToInsertionOrderPreviewID;

@@ -92,8 +92,7 @@ class InsertionOrder extends \_factory\CachedTableRead
     	        'MaxImpressions'       => $InsertionOrder->MaxImpressions,
     	        'MaxSpend'             => $InsertionOrder->MaxSpend,
     	        'Active'               => $InsertionOrder->Active,
-    	        'DateUpdated'          => $InsertionOrder->DateUpdated,
-    			'VisibilityTypeID' 	   => $InsertionOrder->VisibilityTypeID
+    	        'DateUpdated'          => $InsertionOrder->DateUpdated
     	);
 
     	$ad_campaign_id = (int)$InsertionOrder->InsertionOrderID;

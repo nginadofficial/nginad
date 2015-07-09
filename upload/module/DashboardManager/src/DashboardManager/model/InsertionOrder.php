@@ -13,7 +13,6 @@ class InsertionOrder {
 
     public $InsertionOrderID;
     public $UserID;
-    public $VisibilityTypeID;
     public $Name;
     public $StartDate;
     public $EndDate;

@@ -45,7 +45,7 @@ class ServicesController extends DemandAbstractActionController {
 			$label_name = $SspRtbChannelDailyStatsRollUp->WebDomain . " - " . $site_name . " - " . $publisher_name;
 			
 			$row = array(
-					" " => '<input type="checkbox" labelname="' . rawurlencode($label_name) . '" class="ckssp" name="ckssp[]" value="' . rawurlencode($SspRtbChannelDailyStatsRollUp->SspRtbChannelSiteID) . '" />',
+					" " => '<input type="checkbox" labelname="' . rawurlencode($label_name) . '" class="ckssp" name="ckssp[]" value="' . rawurlencode($SspRtbChannelDailyStatsRollUp->SspRtbChannelSiteID . ':' . $label_name) . '" />',
 					"Site ID" => $site_id,
 					"Domain" => $SspRtbChannelDailyStatsRollUp->WebDomain,
 					"Name" => $site_name,
@@ -104,7 +104,7 @@ class ServicesController extends DemandAbstractActionController {
 			$label_name = $PrivateExchangeRtbChannelDailyStatsRollUp->WebDomain . " - " . $site_name . " - " . $publisher_name;
 				
 			$row = array(
-					" " => '<input type="checkbox" labelname="' . rawurlencode($label_name) . '" class="ckssp" name="ckssp[]" value="' . rawurlencode($PrivateExchangeRtbChannelDailyStatsRollUp->PublisherWebsiteID) . '" />',
+					" " => '<input type="checkbox" labelname="' . rawurlencode($label_name) . '" class="ckssp" name="ckssp[]" value="' . rawurlencode($PrivateExchangeRtbChannelDailyStatsRollUp->PublisherWebsiteID . ':' . $label_name) . '" />',
 					"Site ID" => $site_id,
 					"Domain" => $PrivateExchangeRtbChannelDailyStatsRollUp->WebDomain,
 					"Name" => $site_name,
@@ -157,7 +157,7 @@ class ServicesController extends DemandAbstractActionController {
 			$label_name = $PrivateExchangeRtbChannelDailyStatsRollUpPxFilter->WebDomain . " - " . $site_name . " - " . $publisher_name;
 				
 			$row = array(
-					" " => '<input type="checkbox" labelname="' . rawurlencode($label_name) . '" class="ckssp" name="ckssp[]" value="' . rawurlencode($PrivateExchangeRtbChannelDailyStatsRollUpPxFilter->PublisherWebsiteID) . '" />',
+					" " => '<input type="checkbox" labelname="' . rawurlencode($label_name) . '" class="ckssp" name="ckssp[]" value="' . rawurlencode($PrivateExchangeRtbChannelDailyStatsRollUpPxFilter->PublisherWebsiteID . ':' . $label_name) . '" />',
 					"Site ID" => $site_id,
 					"Domain" => $PrivateExchangeRtbChannelDailyStatsRollUpPxFilter->WebDomain,
 					"Name" => $site_name,

@@ -84,7 +84,6 @@ class InsertionOrderLineItem extends \_factory\CachedTableRead
     public function saveInsertionOrderLineItem(\model\InsertionOrderLineItem $Banner) {
     	$data = array(
     			'InsertionOrderID'         => $Banner->InsertionOrderID,
-    			'VisibilityTypeID' 	   => $Banner->VisibilityTypeID,
     			'Name'                 => $Banner->Name,
     			'ImpressionType'       => $Banner->ImpressionType,
     			// convert to MySQL DateTime
@@ -347,23 +346,6 @@ class InsertionOrderLineItem extends \_factory\CachedTableRead
     public function saveInsertionOrderLineItemFromDataArray($data) {
 
     	$this->update($data, array('InsertionOrderLineItemID' => $data['InsertionOrderLineItemID']));
-    }
-
-    public function updateInsertionOrderLineItemInsertionOrderType($banner_id, $type_id) {
-    
-    	$params = array();
-    	$params["InsertionOrderLineItemID"] = $banner_id;
-    	$InsertionOrderLineItem = $this->get_row($params);
-    
-    	if ($InsertionOrderLineItem != null):
-	    	 
-    		$InsertionOrderLineItem->InsertionOrderTypeID = $type_id;
-	    	// get array of data
-	    	$data = $InsertionOrderLineItem->getArrayCopy();
-	    	 
-	    	$this->update($data, array('InsertionOrderLineItemID' => $banner_id));
-    	endif;
-    
     }
     
     public function updateInsertionOrderLineItemBidAmount($banner_id, $bid_amount) {

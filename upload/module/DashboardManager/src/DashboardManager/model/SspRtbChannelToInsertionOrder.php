@@ -12,6 +12,7 @@ namespace model;
 class SspRtbChannelToInsertionOrder {
     public $SspRtbChannelToInsertionOrderID;
     public $SspPublisherChannelID;
+    public $SspPublisherChannelDescription;
     public $InsertionOrderID;
     public $Enabled;
     public $DateCreated;

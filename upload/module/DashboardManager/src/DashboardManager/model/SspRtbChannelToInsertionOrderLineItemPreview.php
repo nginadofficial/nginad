@@ -12,6 +12,7 @@ namespace model;
 class SspRtbChannelToInsertionOrderLineItemPreview {
     public $SspRtbChannelToInsertionOrderLineItemPreviewID;
     public $SspPublisherChannelID;
+    public $SspPublisherChannelDescription;
     public $InsertionOrderLineItemPreviewID;
     public $Enabled;
     public $DateCreated;

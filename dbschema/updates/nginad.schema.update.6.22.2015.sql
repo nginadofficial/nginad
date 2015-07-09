@@ -31,6 +31,8 @@ DROP TABLE IF EXISTS `PmpDealPublisherWebsiteToInsertionOrder`;
 CREATE TABLE `PmpDealPublisherWebsiteToInsertionOrder` (
   `PmpDealPublisherWebsiteToInsertionOrderID` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `PublisherWebsiteID` int(11) unsigned NOT NULL,
+  `PublisherWebsiteLocal` int(4) unsigned NOT NULL,
+  `PublisherWebsiteDescription` char(50) NOT NULL,
   `InsertionOrderID` int(11) unsigned NOT NULL,
   `Enabled` int(4) unsigned NOT NULL DEFAULT 0,
   `DateCreated` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
@@ -48,6 +50,8 @@ DROP TABLE IF EXISTS `PmpDealPublisherWebsiteToInsertionOrderLineItem`;
 CREATE TABLE `PmpDealPublisherWebsiteToInsertionOrderLineItem` (
   `PmpDealPublisherWebsiteToInsertionOrderLineItemID` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `PublisherWebsiteID` int(11) unsigned NOT NULL,
+  `PublisherWebsiteLocal` int(4) unsigned NOT NULL,
+  `PublisherWebsiteDescription` char(50) NOT NULL,
   `InsertionOrderLineItemID` int(11) unsigned NOT NULL,
   `Enabled` int(4) unsigned NOT NULL DEFAULT 0,
   `DateCreated` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
@@ -65,6 +69,8 @@ DROP TABLE IF EXISTS `PmpDealPublisherWebsiteToInsertionOrderPreview`;
 CREATE TABLE `PmpDealPublisherWebsiteToInsertionOrderPreview` (
   `PmpDealPublisherWebsiteToInsertionOrderPreviewID` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `PublisherWebsiteID` int(11) unsigned NOT NULL,
+  `PublisherWebsiteLocal` int(4) unsigned NOT NULL,
+  `PublisherWebsiteDescription` char(50) NOT NULL,
   `InsertionOrderPreviewID` int(11) unsigned NOT NULL,
   `Enabled` int(4) unsigned NOT NULL DEFAULT 0,
   `DateCreated` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
@@ -82,6 +88,8 @@ DROP TABLE IF EXISTS `PmpDealPublisherWebsiteToInsertionOrderLineItemPreview`;
 CREATE TABLE `PmpDealPublisherWebsiteToInsertionOrderLineItemPreview` (
   `PmpDealPublisherWebsiteToInsertionOrderLineItemPreviewID` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `PublisherWebsiteID` int(11) unsigned NOT NULL,
+  `PublisherWebsiteLocal` int(4) unsigned NOT NULL,
+  `PublisherWebsiteDescription` char(50) NOT NULL,
   `InsertionOrderLineItemPreviewID` int(11) unsigned NOT NULL,
   `Enabled` int(4) unsigned NOT NULL DEFAULT 0,
   `DateCreated` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
@@ -92,8 +100,6 @@ CREATE TABLE `PmpDealPublisherWebsiteToInsertionOrderLineItemPreview` (
   KEY `FK_InsertionOrderLineItem_ID` (`InsertionOrderLineItemPreviewID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-
-
 -- ----------------------------
 -- Table structure for SspRtbChannelToInsertionOrder
 -- ----------------------------
@@ -101,6 +107,7 @@ DROP TABLE IF EXISTS `SspRtbChannelToInsertionOrder`;
 CREATE TABLE `SspRtbChannelToInsertionOrder` (
   `SspRtbChannelToInsertionOrderID` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `SspPublisherChannelID` int(11) unsigned NOT NULL,
+  `SspPublisherChannelDescription` char(50) NOT NULL,
   `InsertionOrderID` int(11) unsigned NOT NULL,
   `Enabled` int(4) unsigned NOT NULL DEFAULT 0,
   `DateCreated` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
@@ -117,6 +124,7 @@ DROP TABLE IF EXISTS `SspRtbChannelToInsertionOrderLineItem`;
 CREATE TABLE `SspRtbChannelToInsertionOrderLineItem` (
   `SspRtbChannelToInsertionOrderLineItemID` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `SspPublisherChannelID` int(11) unsigned NOT NULL,
+  `SspPublisherChannelDescription` char(50) NOT NULL,
   `InsertionOrderLineItemID` int(11) unsigned NOT NULL,
   `Enabled` int(4) unsigned NOT NULL DEFAULT 0,
   `DateCreated` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
@@ -133,6 +141,7 @@ DROP TABLE IF EXISTS `SspRtbChannelToInsertionOrderPreview`;
 CREATE TABLE `SspRtbChannelToInsertionOrderPreview` (
   `SspRtbChannelToInsertionOrderPreviewID` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `SspPublisherChannelID` int(11) unsigned NOT NULL,
+  `SspPublisherChannelDescription` char(50) NOT NULL,
   `InsertionOrderPreviewID` int(11) unsigned NOT NULL,
   `Enabled` int(4) unsigned NOT NULL DEFAULT 0,
   `DateCreated` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
@@ -149,6 +158,7 @@ DROP TABLE IF EXISTS `SspRtbChannelToInsertionOrderLineItemPreview`;
 CREATE TABLE `SspRtbChannelToInsertionOrderLineItemPreview` (
   `SspRtbChannelToInsertionOrderLineItemPreviewID` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `SspPublisherChannelID` int(11) unsigned NOT NULL,
+  `SspPublisherChannelDescription` char(50) NOT NULL,
   `InsertionOrderLineItemPreviewID` int(11) unsigned NOT NULL,
   `Enabled` int(4) unsigned NOT NULL DEFAULT 0,
   `DateCreated` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',

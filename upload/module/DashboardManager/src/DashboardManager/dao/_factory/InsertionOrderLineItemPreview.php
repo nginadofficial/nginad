@@ -103,10 +103,6 @@ class InsertionOrderLineItemPreview extends AbstractTableGateway
     			'ChangeWentLive'          		=> $BannerPreview->ChangeWentLive,
     			'WentLiveDate'          		=> $BannerPreview->WentLiveDate
     	);
-
-    	if (intval($BannerPreview->VisibilityTypeID)):
-    		$data['VisibilityTypeID'] = $BannerPreview->VisibilityTypeID;
-    	endif;
     	
     	if (isset($BannerPreview->InsertionOrderLineItemID) && !empty($BannerPreview->InsertionOrderLineItemID)):
     		$data['InsertionOrderLineItemID'] = $BannerPreview->InsertionOrderLineItemID;

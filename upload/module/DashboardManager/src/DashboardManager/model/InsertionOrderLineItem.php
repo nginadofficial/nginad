@@ -13,7 +13,6 @@ class InsertionOrderLineItem {
 
     public $InsertionOrderLineItemID;
     public $InsertionOrderID;
-    public $VisibilityTypeID;
     public $ImpressionType;
     public $UserID;
     public $Name;

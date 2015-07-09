@@ -14,7 +14,6 @@ class InsertionOrderLineItemPreview {
     public $InsertionOrderLineItemPreviewID;
     public $InsertionOrderPreviewID;
     public $InsertionOrderLineItemID;  // nullable
-    public $InsertionOrderTypeID;
     public $ImpressionType;
     public $UserID;
     public $Name;

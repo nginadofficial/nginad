@@ -97,9 +97,10 @@ class SspRtbChannelToInsertionOrderPreview extends \_factory\CachedTableRead
     
     public function saveSspRtbChannelToInsertionOrderPreview(\model\SspRtbChannelToInsertionOrderPreview $SspRtbChannelToInsertionOrderPreview) {
     	$data = array(
-    			'InsertionOrderPreviewID'	=> $SspRtbChannelToInsertionOrderPreview->InsertionOrderPreviewID,
-    			'SspPublisherChannelID'		=> $SspRtbChannelToInsertionOrderPreview->SspPublisherChannelID,
-    			'DateUpdated'           	=> $SspRtbChannelToInsertionOrderPreview->DateUpdated
+    			'InsertionOrderPreviewID'				=> $SspRtbChannelToInsertionOrderPreview->InsertionOrderPreviewID,
+    			'SspPublisherChannelID'					=> $SspRtbChannelToInsertionOrderPreview->SspPublisherChannelID,
+    			'SspPublisherChannelDescription'		=> $SspRtbChannelToInsertionOrderPreview->SspPublisherChannelDescription,
+    			'DateUpdated'           				=> $SspRtbChannelToInsertionOrderPreview->DateUpdated
     	);
     	
     	$pmp_deal_publisher_website_to_io_preview_id = (int)$SspRtbChannelToInsertionOrderPreview->SspRtbChannelToInsertionOrderPreviewID;

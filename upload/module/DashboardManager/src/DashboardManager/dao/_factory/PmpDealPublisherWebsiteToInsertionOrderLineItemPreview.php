@@ -99,6 +99,8 @@ class PmpDealPublisherWebsiteToInsertionOrderLineItemPreview extends \_factory\C
     	$data = array(
     			'InsertionOrderLineItemPreviewID'	=> $PmpDealPublisherWebsiteToInsertionOrderLineItemPreview->InsertionOrderLineItemPreviewID,
     			'PublisherWebsiteID'				=> $PmpDealPublisherWebsiteToInsertionOrderLineItemPreview->PublisherWebsiteID,
+    			'PublisherWebsiteLocal'				=> $PmpDealPublisherWebsiteToInsertionOrderLineItemPreview->PublisherWebsiteLocal,
+    			'PublisherWebsiteDescription'		=> $PmpDealPublisherWebsiteToInsertionOrderLineItemPreview->PublisherWebsiteDescription,
     			'DateUpdated'           			=> $PmpDealPublisherWebsiteToInsertionOrderLineItemPreview->DateUpdated
     	);
     	
