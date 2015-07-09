@@ -100,17 +100,18 @@ class SspRtbChannelToInsertionOrderLineItem extends \_factory\CachedTableRead
     			'InsertionOrderLineItemID'				=> $SspRtbChannelToInsertionOrderLineItem->InsertionOrderLineItemID,
     			'SspPublisherChannelID'					=> $SspRtbChannelToInsertionOrderLineItem->SspPublisherChannelID,
     			'SspPublisherChannelDescription'		=> $SspRtbChannelToInsertionOrderLineItem->SspPublisherChannelDescription,
+    			'Enabled'								=> $SspRtbChannelToInsertionOrderLineItem->Enabled,
     			'DateUpdated'           				=> $SspRtbChannelToInsertionOrderLineItem->DateUpdated
     	);
     	
-    	$pmp_deal_publisher_website_to_io_line_item_id = (int)$SspRtbChannelToInsertionOrderLineItem->SspRtbChannelToInsertionOrderLineItemID;
-    	if ($pmp_deal_publisher_website_to_io_line_item_id === 0):
+    	$ssp_rtb_channel_to_io_line_item_id = (int)$SspRtbChannelToInsertionOrderLineItem->SspRtbChannelToInsertionOrderLineItemID;
+    	if ($ssp_rtb_channel_to_io_line_item_id === 0):
 	    	$data['DateCreated'] 				= $SspRtbChannelToInsertionOrderLineItem->DateCreated;
 	    	$this->insert($data);
 	    	return $this->getLastInsertValue();
     	else:
-	    	$this->update($data, array('SspRtbChannelToInsertionOrderLineItemID' => $pmp_deal_publisher_website_to_io_line_item_id));
-	    	return $pmp_deal_publisher_website_to_io_line_item_id;
+	    	$this->update($data, array('SspRtbChannelToInsertionOrderLineItemID' => $ssp_rtb_channel_to_io_line_item_id));
+	    	return $ssp_rtb_channel_to_io_line_item_id;
     	endif;
     }
 };

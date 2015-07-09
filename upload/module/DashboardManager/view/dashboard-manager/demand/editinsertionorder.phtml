@@ -58,7 +58,7 @@ $(function() {
     </ul>
     
 <div id="cdn_form_msg" class="alert alert-error" style="margin: 5px; display: none;"></div>
-<form id="campaignform" name="campaignform" class="form-horizontal form-top-magin" method="POST" action="/private-exchange/newinsertionorder">
+<form onsubmit="highlightSelects();" id="campaignform" name="campaignform" class="form-horizontal form-top-magin" method="POST" action="/private-exchange/newinsertionorder">
 <input type="hidden" name="campaignid" value="<?php echo $campaignid;?>">
 <input type="hidden" name="campaignpreviewid" value="<?php echo $campaignpreviewid;?>">
 <input type="hidden" name="ispreview" value="<?php echo $ispreview;?>">
@@ -115,7 +115,7 @@ $(function() {
   	<h4 class="no-pad">Private Exchange Inventory Feeds</h4>
   	<div>
   	<input type="button" class="btn btn-primary btn-margin" name="AddPcFeed" value="Add" onclick="showChooserPx();" />
-  	<input type="button" class="btn btn-primary btn-margin next" name="RemovePxFeed" value="Remove" onclick="removeSelectedPcItems();" />
+  	<input type="button" class="btn btn-primary btn-margin next" name="RemovePxFeed" value="Remove" onclick="removeSelectedPxItems();" />
   	</div>
   	<div>
   	<select id="px-feeds" name="px-feeds[]" multiple="multiple" class="zone-txtarea inventory-select">

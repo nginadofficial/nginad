@@ -342,11 +342,11 @@ class UserIdentityProvider extends AuthenticationService implements IdentityProv
      * @return bool TRUE if user has administrator status, FALSE otherwise.
      */
      public function getIsSuperAdmin($config) {
-       	return $this->getIdentity()->isSuperAdmin();
+       	return $this->getIdentity()->isSuperAdmin($config);
      }
         
      public function getIsDomainAdmin($config) {
-        return $this->getIdentity()->isDomainAdmin();
+        return $this->getIdentity()->isDomainAdmin($config);
      }
     
     /**

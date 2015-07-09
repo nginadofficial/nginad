@@ -101,6 +101,7 @@ class PmpDealPublisherWebsiteToInsertionOrderLineItemPreview extends \_factory\C
     			'PublisherWebsiteID'				=> $PmpDealPublisherWebsiteToInsertionOrderLineItemPreview->PublisherWebsiteID,
     			'PublisherWebsiteLocal'				=> $PmpDealPublisherWebsiteToInsertionOrderLineItemPreview->PublisherWebsiteLocal,
     			'PublisherWebsiteDescription'		=> $PmpDealPublisherWebsiteToInsertionOrderLineItemPreview->PublisherWebsiteDescription,
+    			'Enabled'							=> $PmpDealPublisherWebsiteToInsertionOrderLineItemPreview->Enabled,
     			'DateUpdated'           			=> $PmpDealPublisherWebsiteToInsertionOrderLineItemPreview->DateUpdated
     	);
     	

@@ -101,6 +101,7 @@ class PmpDealPublisherWebsiteToInsertionOrder extends \_factory\CachedTableRead
     			'PublisherWebsiteID'				=> $PmpDealPublisherWebsiteToInsertionOrder->PublisherWebsiteID,
     			'PublisherWebsiteLocal'				=> $PmpDealPublisherWebsiteToInsertionOrder->PublisherWebsiteLocal,
     			'PublisherWebsiteDescription'		=> $PmpDealPublisherWebsiteToInsertionOrder->PublisherWebsiteDescription,
+    			'Enabled'							=> $PmpDealPublisherWebsiteToInsertionOrder->Enabled,
     			'DateUpdated'        				=> $PmpDealPublisherWebsiteToInsertionOrder->DateUpdated
     	);
     	

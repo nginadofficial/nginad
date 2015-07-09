@@ -51,7 +51,15 @@ function removeSspItem(elemId, siteId) {
 }
 
 function removeSelectedSspItems() {
-	$("#" + current_rtb_tier + " > option:selected").remove();
+	$("#ssp-feeds > option:selected").remove();
+}
+
+function removeSelectedPcItems() {
+	$("#pc-feeds > option:selected").remove();
+}
+
+function removeSelectedPxItems() {
+	$("#px-feeds > option:selected").remove();
 }
 
 // Private Exchange
@@ -157,4 +165,14 @@ function showChooserSsp () {
 			callBackDblClk();
 		}		
 	);
+}
+
+/*
+ * hightlight all form selections before
+ * submission
+ */
+function highlightSelects() {
+	$("#pc-feeds > option").attr('selected', true);
+	$("#px-feeds > option").attr('selected', true);
+	$("#ssp-feeds > option").attr('selected', true);
 }

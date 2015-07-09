@@ -101,6 +101,7 @@ class PmpDealPublisherWebsiteToInsertionOrderLineItem extends \_factory\CachedTa
     			'PublisherWebsiteID'				=> $PmpDealPublisherWebsiteToInsertionOrderLineItem->PublisherWebsiteID,
     			'PublisherWebsiteLocal'				=> $PmpDealPublisherWebsiteToInsertionOrderLineItem->PublisherWebsiteLocal,
     			'PublisherWebsiteDescription'		=> $PmpDealPublisherWebsiteToInsertionOrderLineItem->PublisherWebsiteDescription,
+    			'Enabled'							=> $PmpDealPublisherWebsiteToInsertionOrderLineItem->Enabled,
     			'DateUpdated'           			=> $PmpDealPublisherWebsiteToInsertionOrderLineItem->DateUpdated
     	);
     	

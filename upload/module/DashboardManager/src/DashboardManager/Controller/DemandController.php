@@ -3124,7 +3124,7 @@ class DemandController extends DemandAbstractActionController {
 
 	    $InsertionOrderPreviewFactory = \_factory\InsertionOrderPreview::get_instance();
 	    $new_campaign_preview_id = $InsertionOrderPreviewFactory->saveInsertionOrderPreview($InsertionOrderPreview);
-
+	    
 	    /*
 	     * Private Exchange Feeds
 	     */
@@ -3149,10 +3149,12 @@ class DemandController extends DemandAbstractActionController {
 		    
 		    $params = array();
 		    $params["PublisherWebsiteID"] = $exchange_feed_id;
-		    $PmpDealPublisherWebsiteToInsertionOrderPreview = $PmpDealPublisherWebsiteToInsertionOrderPreviewFactory->get_row($params);
+		    $_PmpDealPublisherWebsiteToInsertionOrderPreview = $PmpDealPublisherWebsiteToInsertionOrderPreviewFactory->get_row($params);
 		    
-		    if ($PmpDealPublisherWebsiteToInsertionOrderPreview == null):
-		    	$PmpDealPublisherWebsiteToInsertionOrderPreview = new \model\PmpDealPublisherWebsiteToInsertionOrderPreview();
+		    $PmpDealPublisherWebsiteToInsertionOrderPreview = new \model\PmpDealPublisherWebsiteToInsertionOrderPreview();
+		    
+		    if ($_PmpDealPublisherWebsiteToInsertionOrderPreview != null):
+		    	$PmpDealPublisherWebsiteToInsertionOrderPreview->PmpDealPublisherWebsiteToInsertionOrderPreviewID = $_PmpDealPublisherWebsiteToInsertionOrderPreview->PmpDealPublisherWebsiteToInsertionOrderPreviewID;
 		    endif;
 		    
 		    $PmpDealPublisherWebsiteToInsertionOrderPreview->PublisherWebsiteID 			= $exchange_feed_id;
@@ -3165,12 +3167,13 @@ class DemandController extends DemandAbstractActionController {
 		    
 	    endforeach;
 	    
+	    
 	    /*
 	     * SSP RTB Feeds
 	     */
 	    foreach ($ssp_feeds as $raw_feed_data):
 		    $ssp_feed_data = \util\AuthHelper::parse_feed_id($raw_feed_data);
-		     
+	    
 		    if ($ssp_feed_data === null):
 		    	continue;
 		    endif;
@@ -3183,30 +3186,32 @@ class DemandController extends DemandAbstractActionController {
 		    if (!$authorized):
 		    	die("You are not authorized to add inventory from SSP RTB Channel: " . $ssp_feed_id . ' - ' . $ssp_feed_description . " <br />Please contact an administrator for more information.");
 		    endif;
-		    
+
 		    $SspRtbChannelToInsertionOrderPreviewFactory = \_factory\SspRtbChannelToInsertionOrderPreview::get_instance();
 		    
 		    $params = array();
 		    $params["SspPublisherChannelID"] = $ssp_feed_id;
-		    $SspRtbChannelToInsertionOrderPreview = $SspRtbChannelToInsertionOrderPreviewFactory->get_row($params);
+		    $_SspRtbChannelToInsertionOrderPreview = $SspRtbChannelToInsertionOrderPreviewFactory->get_row($params);
 		    
-		    if ($SspRtbChannelToInsertionOrderPreview == null):
-		    	$SspRtbChannelToInsertionOrderPreview = new \model\SspRtbChannelToInsertionOrderPreview();
+		    $SspRtbChannelToInsertionOrderPreview = new \model\SspRtbChannelToInsertionOrderPreview();
+		    
+		    if ($_SspRtbChannelToInsertionOrderPreview != null):
+		    	$SspRtbChannelToInsertionOrderPreview->SspRtbChannelToInsertionOrderPreviewID = $_SspRtbChannelToInsertionOrderPreview->SspRtbChannelToInsertionOrderPreviewID;
 		    endif;
 		    
 		    $SspRtbChannelToInsertionOrderPreview->SspPublisherChannelID 			= $ssp_feed_id;
 		    $SspRtbChannelToInsertionOrderPreview->SspPublisherChannelDescription 	= $ssp_feed_description;
 		    $SspRtbChannelToInsertionOrderPreview->InsertionOrderPreviewID			= $new_campaign_preview_id;
 		    $SspRtbChannelToInsertionOrderPreview->Enabled							= 1;
-		    
+
 		    $SspRtbChannelToInsertionOrderPreviewFactory->saveSspRtbChannelToInsertionOrderPreview($SspRtbChannelToInsertionOrderPreview);
 		    
 	    endforeach;
 	    
-	    if (!$this->is_super_admin && $new_campaign_preview_id !== null && $this->config_handle['mail']['subscribe']['campaigns'] === true):
+	    if (!$this->is_super_admin && $this->config_handle['mail']['subscribe']['campaigns'] === true):
 	    
 		    // if this ad campaign was not created/edited by the admin, then send out a notification email
-		    $message = '<b>NginAd Insertion Order Added by ' . $this->true_user_name . '.</b><br /><br />';
+		    $message = '<b>NginAd Insertion Order Added/Updated by ' . $this->true_user_name . '.</b><br /><br />';
 		    $message = $message.'<table border="0" width="10%">';
 		    $message = $message.'<tr><td><b>InsertionOrderID: </b></td><td>'.$new_campaign_preview_id.'</td></tr>';
 		    $message = $message.'<tr><td><b>UserID: </b></td><td>'.$InsertionOrderPreview->UserID.'</td></tr>';
@@ -3219,7 +3224,7 @@ class DemandController extends DemandAbstractActionController {
 		    $message = $message.'<tr><td><b>MaxSpend: </b></td><td>'.$InsertionOrderPreview->MaxSpend.'</td></tr>';
 		    $message = $message.'</table>';
 		    	
-		    $subject = "NginAd Insertion Order Added by " . $this->true_user_name;
+		    $subject = "NginAd Insertion Order Added/Updated by " . $this->true_user_name;
 		    
 		    $transport = $this->getServiceLocator()->get('mail.transport');
 		    

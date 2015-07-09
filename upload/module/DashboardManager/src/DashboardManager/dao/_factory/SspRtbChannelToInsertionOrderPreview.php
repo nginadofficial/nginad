@@ -100,17 +100,18 @@ class SspRtbChannelToInsertionOrderPreview extends \_factory\CachedTableRead
     			'InsertionOrderPreviewID'				=> $SspRtbChannelToInsertionOrderPreview->InsertionOrderPreviewID,
     			'SspPublisherChannelID'					=> $SspRtbChannelToInsertionOrderPreview->SspPublisherChannelID,
     			'SspPublisherChannelDescription'		=> $SspRtbChannelToInsertionOrderPreview->SspPublisherChannelDescription,
+    			'Enabled'								=> $SspRtbChannelToInsertionOrderPreview->Enabled,
     			'DateUpdated'           				=> $SspRtbChannelToInsertionOrderPreview->DateUpdated
     	);
-    	
-    	$pmp_deal_publisher_website_to_io_preview_id = (int)$SspRtbChannelToInsertionOrderPreview->SspRtbChannelToInsertionOrderPreviewID;
-    	if ($pmp_deal_publisher_website_to_io_preview_id === 0):
+        	
+    	$ssp_rtb_channel_to_io_preview_id = (int)$SspRtbChannelToInsertionOrderPreview->SspRtbChannelToInsertionOrderPreviewID;
+    	if ($ssp_rtb_channel_to_io_preview_id === 0):
 	    	$data['DateCreated'] 				= $SspRtbChannelToInsertionOrderPreview->DateCreated;
 	    	$this->insert($data);
 	    	return $this->getLastInsertValue();
     	else:
-	    	$this->update($data, array('SspRtbChannelToInsertionOrderPreviewID' => $pmp_deal_publisher_website_to_io_preview_id));
-	    	return $pmp_deal_publisher_website_to_io_preview_id;
+	    	$this->update($data, array('SspRtbChannelToInsertionOrderPreviewID' => $ssp_rtb_channel_to_io_preview_id));
+	    	return $ssp_rtb_channel_to_io_preview_id;
     	endif;
     }
 

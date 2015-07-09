@@ -748,7 +748,7 @@ class TransformPreview {
 
 		endforeach;
 
-		if (!$auth->getIsSuperAdmin() && $config['mail']['subscribe']['campaigns'] === true):
+		if (!$auth->getIsSuperAdmin($config) && $config['mail']['subscribe']['campaigns'] === true):
 			// if this ad campaign was not created/edited by the admin, then send out a notification email
 			$message = '<b>NginAd Demand Customer Campaign Edited by ' . $auth->getUserName() . '.</b><br /><br />';
 			$message = $message.'<table border="0" width="10%">';

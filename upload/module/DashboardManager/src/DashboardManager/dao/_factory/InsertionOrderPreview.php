@@ -109,7 +109,7 @@ class InsertionOrderPreview extends AbstractTableGateway
     		return $this->getLastInsertValue();
     	else: 
     		$this->update($data, array('InsertionOrderPreviewID' => $ad_campaign_preview_id));
-    		return null;
+    		return $ad_campaign_preview_id;
     	endif;
     }
 

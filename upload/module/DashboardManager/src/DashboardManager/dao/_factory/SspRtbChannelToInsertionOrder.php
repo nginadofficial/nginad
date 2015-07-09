@@ -100,17 +100,18 @@ class SspRtbChannelToInsertionOrder extends \_factory\CachedTableRead
     			'InsertionOrderID'						=> $SspRtbChannelToInsertionOrder->InsertionOrderID,
     			'SspPublisherChannelID'					=> $SspRtbChannelToInsertionOrder->SspPublisherChannelID,
     			'SspPublisherChannelDescription'		=> $SspRtbChannelToInsertionOrder->SspPublisherChannelDescription,
+    			'Enabled'								=> $SspRtbChannelToInsertionOrder->Enabled,
     			'DateUpdated'        					=> $SspRtbChannelToInsertionOrder->DateUpdated
     	);
     	
-    	$pmp_deal_publisher_website_to_io_id = (int)$SspRtbChannelToInsertionOrder->SspRtbChannelToInsertionOrderID;
-    	if ($pmp_deal_publisher_website_to_io_id === 0):
+    	$ssp_rtb_channel_to_io_id = (int)$SspRtbChannelToInsertionOrder->SspRtbChannelToInsertionOrderID;
+    	if ($ssp_rtb_channel_to_io_id === 0):
 	    	$data['DateCreated'] 				= $SspRtbChannelToInsertionOrder->DateCreated;
 	    	$this->insert($data);
 	    	return $this->getLastInsertValue();
     	else:
-	    	$this->update($data, array('SspRtbChannelToInsertionOrderID' => $pmp_deal_publisher_website_to_io_id));
-	    	return $pmp_deal_publisher_website_to_io_id;
+	    	$this->update($data, array('SspRtbChannelToInsertionOrderID' => $ssp_rtb_channel_to_io_id));
+	    	return $ssp_rtb_channel_to_io_id;
     	endif;
     }
 };
