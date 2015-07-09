@@ -659,7 +659,7 @@ class DemandController extends DemandAbstractActionController {
 		$refresh_url = "/private-exchange/viewlineitem/" . $InsertionOrderLineItemPreview->InsertionOrderPreviewID . "?ispreview=true";
 		$viewModel = new ViewModel(array('refresh_url' => $refresh_url));
 	
-		return $viewModel->setTemplate('dashboard-manager/private-exchange/interstitial.phtml');
+		return $viewModel->setTemplate('dashboard-manager/demand/interstitial.phtml');
 	}
 	
 	/**
@@ -819,7 +819,7 @@ class DemandController extends DemandAbstractActionController {
 		$refresh_url = "/private-exchange/viewlineitem/" . $InsertionOrderLineItemPreview->InsertionOrderPreviewID . "?ispreview=true";
 		$viewModel = new ViewModel(array('refresh_url' => $refresh_url));
 
-		return $viewModel->setTemplate('dashboard-manager/private-exchange/interstitial.phtml');
+		return $viewModel->setTemplate('dashboard-manager/demand/interstitial.phtml');
 	}
 
 	public function deliveryfiltervideoAction() {
@@ -1609,7 +1609,7 @@ class DemandController extends DemandAbstractActionController {
 		$refresh_url = "/private-exchange/viewexclusiveinclusion/" . $banner_preview_id . "?ispreview=true";
 		$viewModel = new ViewModel(array('refresh_url' => $refresh_url));
 
-		return $viewModel->setTemplate('dashboard-manager/private-exchange/interstitial.phtml');
+		return $viewModel->setTemplate('dashboard-manager/demand/interstitial.phtml');
 
 	}
 
@@ -1979,7 +1979,7 @@ class DemandController extends DemandAbstractActionController {
 		$refresh_url = "/private-exchange/viewdomainexclusion/" . $banner_preview_id . "?ispreview=true";
 		$viewModel = new ViewModel(array('refresh_url' => $refresh_url));
 
-		return $viewModel->setTemplate('dashboard-manager/private-exchange/interstitial.phtml');
+		return $viewModel->setTemplate('dashboard-manager/demand/interstitial.phtml');
 
 	}
 
@@ -2097,7 +2097,7 @@ class DemandController extends DemandAbstractActionController {
 		/*$refresh_url = "/private-exchange/viewlineitem/" . $campaign_preview_id . "?ispreview=true";
 		$viewModel = new ViewModel(array('refresh_url' => $refresh_url));
 
-		return $viewModel->setTemplate('dashboard-manager/private-exchange/interstitial.phtml');*/
+		return $viewModel->setTemplate('dashboard-manager/demand/interstitial.phtml');*/
 
 	}
 
@@ -2473,7 +2473,7 @@ class DemandController extends DemandAbstractActionController {
 		$refresh_url = "/private-exchange/viewlineitem/" . $BannerPreview->InsertionOrderPreviewID . "?ispreview=true";
 		$viewModel = new ViewModel(array('refresh_url' => $refresh_url));
 
-		return $viewModel->setTemplate('dashboard-manager/private-exchange/interstitial.phtml');
+		return $viewModel->setTemplate('dashboard-manager/demand/interstitial.phtml');
 
 	}
 
@@ -2922,7 +2922,7 @@ class DemandController extends DemandAbstractActionController {
 		/*$refresh_url = "/private-exchange/?ispreview=true";
 		$viewModel = new ViewModel(array('refresh_url' => $refresh_url));
 
-		return $viewModel->setTemplate('dashboard-manager/private-exchange/interstitial.phtml');*/
+		return $viewModel->setTemplate('dashboard-manager/demand/interstitial.phtml');*/
 
 	}
 
@@ -3242,7 +3242,7 @@ class DemandController extends DemandAbstractActionController {
 		$refresh_url = "/private-exchange/?ispreview=true";
 		$viewModel = new ViewModel(array('refresh_url' => $refresh_url));
 
-		return $viewModel->setTemplate('dashboard-manager/private-exchange/interstitial.phtml');
+		return $viewModel->setTemplate('dashboard-manager/demand/interstitial.phtml');
 
 	}
 
