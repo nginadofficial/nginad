@@ -115,5 +115,10 @@ class PmpDealPublisherWebsiteToInsertionOrder extends \_factory\CachedTableRead
 	    	return $pmp_deal_publisher_website_to_io_id;
     	endif;
     }
+    
+    public function deletePmpDealPublisherWebsiteToInsertionOrderByInsertionOrderID($insertion_order_id) {
+    	$this->delete(array('InsertionOrderID' => $insertion_order_id));
+    }
+    
 };
 ?>

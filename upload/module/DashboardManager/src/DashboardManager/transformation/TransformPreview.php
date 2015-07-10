@@ -262,7 +262,61 @@ class TransformPreview {
 		$InsertionOrder->DateUpdated   		= date("Y-m-d H:i:s");
 
 		$ad_campaign_id = $InsertionOrderFactory->saveInsertionOrder($InsertionOrder);
+		
+		$PmpDealPublisherWebsiteToInsertionOrderPreviewFactory = \_factory\PmpDealPublisherWebsiteToInsertionOrderPreview::get_instance();
+		$SspRtbChannelToInsertionOrderPreviewFactory = \_factory\SspRtbChannelToInsertionOrderPreview::get_instance();
+		$PmpDealPublisherWebsiteToInsertionOrderFactory = \_factory\PmpDealPublisherWebsiteToInsertionOrder::get_instance();
+		$SspRtbChannelToInsertionOrderFactory = \_factory\SspRtbChannelToInsertionOrder::get_instance();
 
+		/*
+		 * PMP DEALS
+		*/
+			
+		// first delete the existing ones, then re-insert
+		$PmpDealPublisherWebsiteToInsertionOrderFactory->deletePmpDealPublisherWebsiteToInsertionOrderByInsertionOrderID($ad_campaign_id);
+		
+		$params = array();
+		$params["InsertionOrderPreviewID"] 					= $ad_campaign_preview_id;
+		$PmpDealPublisherWebsiteToInsertionOrderPreviewList = $PmpDealPublisherWebsiteToInsertionOrderPreviewFactory->get($params);
+		
+		foreach ($PmpDealPublisherWebsiteToInsertionOrderPreviewList as $PmpDealPublisherWebsiteToInsertionOrderPreview):
+			
+			$PmpDealPublisherWebsiteToInsertionOrder = new \model\PmpDealPublisherWebsiteToInsertionOrder();
+			
+			$PmpDealPublisherWebsiteToInsertionOrder->PublisherWebsiteID 			= $PmpDealPublisherWebsiteToInsertionOrderPreview->PublisherWebsiteID;
+			$PmpDealPublisherWebsiteToInsertionOrder->PublisherWebsiteLocal 		= $PmpDealPublisherWebsiteToInsertionOrderPreview->PublisherWebsiteLocal;
+			$PmpDealPublisherWebsiteToInsertionOrder->PublisherWebsiteDescription 	= $PmpDealPublisherWebsiteToInsertionOrderPreview->PublisherWebsiteDescription;
+			$PmpDealPublisherWebsiteToInsertionOrder->InsertionOrderID 				= $ad_campaign_id;
+			$PmpDealPublisherWebsiteToInsertionOrder->Enabled 						= $PmpDealPublisherWebsiteToInsertionOrderPreview->Enabled;
+			
+			$PmpDealPublisherWebsiteToInsertionOrderFactory->savePmpDealPublisherWebsiteToInsertionOrder($PmpDealPublisherWebsiteToInsertionOrder);
+			
+		endforeach;
+		
+		/*
+		 * SSP RTB CHANNELS
+		*/
+			
+		// first delete the existing ones, then re-insert
+		$SspRtbChannelToInsertionOrderFactory->deleteSspRtbChannelToInsertionOrderByInsertionOrderID($ad_campaign_id);
+		
+		$params = array();
+		$params["InsertionOrderPreviewID"] 			= $ad_campaign_preview_id;
+		$SspRtbChannelToInsertionOrderPreviewList 	= $SspRtbChannelToInsertionOrderPreviewFactory->get($params);
+		
+		foreach ($SspRtbChannelToInsertionOrderPreviewList as $SspRtbChannelToInsertionOrderPreview):
+				
+			$SspRtbChannelToInsertionOrder = new \model\SspRtbChannelToInsertionOrder();
+				
+			$SspRtbChannelToInsertionOrder->SspPublisherChannelID 				= $SspRtbChannelToInsertionOrderPreview->SspPublisherChannelID;
+			$SspRtbChannelToInsertionOrder->SspPublisherChannelDescription 		= $SspRtbChannelToInsertionOrderPreview->SspPublisherChannelDescription;
+			$SspRtbChannelToInsertionOrder->InsertionOrderID 					= $ad_campaign_id;
+			$SspRtbChannelToInsertionOrder->Enabled 							= $SspRtbChannelToInsertionOrderPreview->Enabled;
+				
+			$SspRtbChannelToInsertionOrderFactory->saveSspRtbChannelToInsertionOrder($SspRtbChannelToInsertionOrder);
+				
+		endforeach;
+		
 		$InsertionOrderLineItemPreviewFactory = \_factory\InsertionOrderLineItemPreview::get_instance();
 		$params = array();
 		$params["InsertionOrderPreviewID"] = $ad_campaign_preview_id;
@@ -280,6 +334,11 @@ class TransformPreview {
 		
 		$InsertionOrderLineItemVideoRestrictionsFactory = \_factory\InsertionOrderLineItemVideoRestrictions::get_instance();
 		$InsertionOrderLineItemVideoRestrictionsPreviewFactory = \_factory\InsertionOrderLineItemVideoRestrictionsPreview::get_instance();
+		
+		$PmpDealPublisherWebsiteToInsertionOrderLineItemPreviewFactory = \_factory\PmpDealPublisherWebsiteToInsertionOrderLineItemPreview::get_instance();
+		$SspRtbChannelToInsertionOrderLineItemPreviewFactory = \_factory\SspRtbChannelToInsertionOrderLineItemPreview::get_instance();
+		$PmpDealPublisherWebsiteToInsertionOrderLineItemFactory = \_factory\PmpDealPublisherWebsiteToInsertionOrderLineItem::get_instance();
+		$SspRtbChannelToInsertionOrderLineItemFactory = \_factory\SspRtbChannelToInsertionOrderLineItem::get_instance();
 		
 		$PublisherAdZoneFactory = \_factory\PublisherAdZone::get_instance();	
 		$InsertionOrderLineItemDomainExclusionFactory = \_factory\InsertionOrderLineItemDomainExclusion::get_instance();
@@ -423,6 +482,57 @@ class TransformPreview {
 				endif;
 					
 			endif;
+			
+		
+			
+			/*
+			 * PMP DEALS
+			*/
+				
+			// first delete the existing ones, then re-insert
+			$PmpDealPublisherWebsiteToInsertionOrderLineItemFactory->deletePmpDealPublisherWebsiteToInsertionOrderLineItemByInsertionOrderLineItemID($banner_id);
+			
+			$params = array();
+			$params["InsertionOrderLineItemPreviewID"] = $banner_preview_id;
+			$PmpDealPublisherWebsiteToInsertionOrderLineItemPreviewList = $PmpDealPublisherWebsiteToInsertionOrderLineItemPreviewFactory->get($params);
+			
+			foreach ($PmpDealPublisherWebsiteToInsertionOrderLineItemPreviewList as $PmpDealPublisherWebsiteToInsertionOrderLineItemPreview):
+				
+				$PmpDealPublisherWebsiteToInsertionOrderLineItem = new \model\PmpDealPublisherWebsiteToInsertionOrderLineItem();
+					
+				$PmpDealPublisherWebsiteToInsertionOrderLineItem->PublisherWebsiteID 			= $PmpDealPublisherWebsiteToInsertionOrderLineItemPreview->PublisherWebsiteID;
+				$PmpDealPublisherWebsiteToInsertionOrderLineItem->PublisherWebsiteLocal 		= $PmpDealPublisherWebsiteToInsertionOrderLineItemPreview->PublisherWebsiteLocal;
+				$PmpDealPublisherWebsiteToInsertionOrderLineItem->PublisherWebsiteDescription 	= $PmpDealPublisherWebsiteToInsertionOrderLineItemPreview->PublisherWebsiteDescription;
+				$PmpDealPublisherWebsiteToInsertionOrderLineItem->InsertionOrderID 				= $banner_id;
+				$PmpDealPublisherWebsiteToInsertionOrderLineItem->Enabled 						= $PmpDealPublisherWebsiteToInsertionOrderLineItemPreview->Enabled;
+					
+				$PmpDealPublisherWebsiteToInsertionOrderLineItemFactory->savePmpDealPublisherWebsiteToInsertionOrderLineItem($PmpDealPublisherWebsiteToInsertionOrder);
+					
+			endforeach;
+			
+			/*
+			 * SSP RTB CHANNELS
+			*/
+				
+			// first delete the existing ones, then re-insert
+			$SspRtbChannelToInsertionOrderLineItemFactory->deleteSspRtbChannelToInsertionOrderLineItemByInsertionOrderLineItemID($banner_id);
+			
+			$params = array();
+			$params["InsertionOrderLineItemPreviewID"] = $banner_preview_id;
+			$SspRtbChannelToInsertionOrderPreviewList 	= $SspRtbChannelToInsertionOrderPreviewFactory->get($params);
+			
+			foreach ($SspRtbChannelToInsertionOrderPreviewList as $SspRtbChannelToInsertionOrderPreview):
+			
+				$SspRtbChannelToInsertionOrder = new \model\SspRtbChannelToInsertionOrder();
+				
+				$SspRtbChannelToInsertionOrder->SspPublisherChannelID 				= $SspRtbChannelToInsertionOrderPreview->SspPublisherChannelID;
+				$SspRtbChannelToInsertionOrder->SspPublisherChannelDescription 		= $SspRtbChannelToInsertionOrderPreview->SspPublisherChannelDescription;
+				$SspRtbChannelToInsertionOrder->InsertionOrderID 					= $banner_id;
+				$SspRtbChannelToInsertionOrder->Enabled 							= $SspRtbChannelToInsertionOrderPreview->Enabled;
+				
+				$SspRtbChannelToInsertionOrderFactory->saveSspRtbChannelToInsertionOrder($SspRtbChannelToInsertionOrder);
+				
+			endforeach;
 			
 			/*
 			 * DOMAIN EXCLUSIONS

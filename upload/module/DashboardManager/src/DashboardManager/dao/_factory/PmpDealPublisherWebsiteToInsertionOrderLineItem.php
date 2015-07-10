@@ -115,5 +115,9 @@ class PmpDealPublisherWebsiteToInsertionOrderLineItem extends \_factory\CachedTa
 	    	return $pmp_deal_publisher_website_to_io_line_item_id;
     	endif;
     }
+    
+    public function deletePmpDealPublisherWebsiteToInsertionOrderLineItemByInsertionOrderLineItemID($insertion_order_line_item_id) {
+    	$this->delete(array('InsertionOrderLineItemID' => $insertion_order_line_item_id));
+    }
 };
 ?>

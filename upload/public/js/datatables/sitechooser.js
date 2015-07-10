@@ -10,16 +10,43 @@ function addCheckedBoxes() {
 	$('#cls-btn').click();
 }
 
+function parse_feed_id(raw_feed_data) {
+	
+	raw_feed_data = unescape(raw_feed_data);
+	
+	var start = unescape(raw_feed_data).indexOf(':');
+
+	if (start === -1) {
+		return null;
+	}
+	
+	var feed_id = raw_feed_data.substring(0, start);
+	var feed_description = raw_feed_data.substring(start + 1);
+	
+	return {
+		"id" 			: feed_id,
+		"description" 	: feed_description
+	};
+	
+}
+
 function addSspItem(elemId, siteId, labelText) {
 	
 	var found = false;
 	
+	var siteIdObj = parse_feed_id(siteId);
+	if (siteIdObj === null) return;
+	
 	$("#" + elemId + " > option").each(function() {
 
-		if (this.value == siteId) {
-			// it's already in the list
-			found = true;
-			return;
+		var siteIdCompareObj = parse_feed_id(this.value);
+		
+		if (siteIdCompareObj !== null) {
+			if (siteIdCompareObj.id == siteIdObj.id) {
+				// it's already in the list
+				found = true;
+				return;
+			}
 		}
 	});
 	

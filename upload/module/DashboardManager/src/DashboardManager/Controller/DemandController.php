@@ -2962,6 +2962,16 @@ class DemandController extends DemandAbstractActionController {
 			$campaign_preview_id = $id;
 			$id = "";
 
+			$PmpDealPublisherWebsiteToInsertionOrderPreviewFactory = \_factory\PmpDealPublisherWebsiteToInsertionOrderPreview::get_instance();
+			$params = array();
+			$params["InsertionOrderPreviewID"] = $campaign_preview_id;
+			$PmpDealPublisherWebsiteToInsertionOrderList = $PmpDealPublisherWebsiteToInsertionOrderPreviewFactory->get($params);
+			
+			$SspRtbChannelToInsertionOrderPreviewFactory = \_factory\SspRtbChannelToInsertionOrderPreview::get_instance();
+			$params = array();
+			$params["InsertionOrderPreviewID"] = $campaign_preview_id;
+			$SspRtbChannelToInsertionOrderList = $SspRtbChannelToInsertionOrderPreviewFactory->get($params);
+			
 		else:
 			// ACL PERMISSIONS CHECK
 			transformation\CheckPermissions::checkEditPermissionInsertionOrder($id, $this->auth, $this->config_handle);
@@ -2973,6 +2983,17 @@ class DemandController extends DemandAbstractActionController {
 
 			$InsertionOrder = $InsertionOrderFactory->get_row($params);
 
+			$PmpDealPublisherWebsiteToInsertionOrderFactory = \_factory\PmpDealPublisherWebsiteToInsertionOrder::get_instance();
+			$params = array();
+			$params["InsertionOrderID"] = $id;
+			$PmpDealPublisherWebsiteToInsertionOrderList = $PmpDealPublisherWebsiteToInsertionOrderFactory->get($params);
+				
+			$SspRtbChannelToInsertionOrderFactory = \_factory\SspRtbChannelToInsertionOrder::get_instance();
+			$params = array();
+			$params["InsertionOrderID"] = $id;
+			$SspRtbChannelToInsertionOrderList = $SspRtbChannelToInsertionOrderFactory->get($params);
+			
+			
 		endif;
 
 		if ($InsertionOrder == null):
@@ -2987,7 +3008,6 @@ class DemandController extends DemandAbstractActionController {
 		$maximpressions            = $InsertionOrder->MaxImpressions;
 		$maxspend                  = sprintf("%1.2f", $InsertionOrder->MaxSpend);
 
-
 		return new ViewModel(array(
 				'campaignid' => $id,
 				'campaignpreviewid' => $campaign_preview_id,
@@ -2998,6 +3018,8 @@ class DemandController extends DemandAbstractActionController {
 				'customername' => $customername,
 				'customerid' => $customerid,
 				'maximpressions' => $maximpressions,
+				'pmp_deal_list' => $PmpDealPublisherWebsiteToInsertionOrderList,
+				'ssp_channel_list' => $SspRtbChannelToInsertionOrderList,
 				'maxspend' => $maxspend,
 				'bread_crumb_info' => $this->getBreadCrumbInfoFromInsertionOrder($id, $campaign_preview_id, $is_preview),
 				'user_id_list' => $this->user_id_list_demand_customer,

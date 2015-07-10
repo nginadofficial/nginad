@@ -119,6 +119,11 @@ $(function() {
   	</div>
   	<div>
   	<select id="px-feeds" name="px-feeds[]" multiple="multiple" class="zone-txtarea inventory-select">
+  	<?php foreach ($pmp_deal_list as $pmp_deal):
+			if ($pmp_deal->PublisherWebsiteLocal == 1 && $pmp_deal->Enabled == 1): ?>
+				<option value="<?php echo urlencode($pmp_deal->PublisherWebsiteID . ':' . $pmp_deal->PublisherWebsiteDescription); ?>"><?php echo $pmp_deal->PublisherWebsiteDescription; ?></option>
+	<?php 	endif;	
+		endforeach; ?>
 	</select>
   	</div>
   </div>
@@ -131,6 +136,11 @@ $(function() {
   	</div>
   	<div>
   	<select id="pc-feeds" name="pc-feeds[]" multiple="multiple" class="zone-txtarea inventory-select">
+  	<?php foreach ($pmp_deal_list as $pmp_deal):
+			if ($pmp_deal->PublisherWebsiteLocal == 0 && $pmp_deal->Enabled == 1): ?>
+				<option value="<?php echo rawurlencode($pmp_deal->PublisherWebsiteID . ':' . $pmp_deal->PublisherWebsiteDescription); ?>"><?php echo $pmp_deal->PublisherWebsiteDescription; ?></option>
+	<?php 	endif;	
+		endforeach; ?>
 	</select>
   	</div>
   </div>
@@ -143,6 +153,11 @@ $(function() {
   	</div>
   	<div>
   	<select id="ssp-feeds" name="ssp-feeds[]" multiple="multiple" class="zone-txtarea inventory-select">
+  	<?php foreach ($ssp_channel_list as $ssp_channel):
+			if ($ssp_channel->Enabled == 1): ?>
+				<option value="<?php echo rawurlencode($ssp_channel->SspPublisherChannelID . ':' . $ssp_channel->SspPublisherChannelDescription); ?>"><?php echo $ssp_channel->SspPublisherChannelDescription; ?></option>
+	<?php 	endif;	
+		endforeach; ?>
 	</select>
   	</div>
   </div>

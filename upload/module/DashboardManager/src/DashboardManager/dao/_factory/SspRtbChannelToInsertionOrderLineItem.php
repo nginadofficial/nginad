@@ -114,5 +114,9 @@ class SspRtbChannelToInsertionOrderLineItem extends \_factory\CachedTableRead
 	    	return $ssp_rtb_channel_to_io_line_item_id;
     	endif;
     }
+    
+    public function deleteSspRtbChannelToInsertionOrderLineItemByInsertionOrderLineItemID($insertion_order_line_item_id) {
+    	$this->delete(array('InsertionOrderLineItemID' => $insertion_order_line_item_id));
+    }
 };
 ?>
