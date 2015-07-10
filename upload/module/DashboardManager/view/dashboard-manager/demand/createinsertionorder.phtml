@@ -1,7 +1,11 @@
 <?php
-$this->headLink()->appendStylesheet($this->basePath() . '/css/jquery-ui/smoothness/jquery-ui-1.9.2.custom.min.css');
 $this->headScript()->appendFile($this->basePath() . '/js/3rdparty/jquery-ui-1.9.2.custom.min.js');
+$this->headLink()->appendStylesheet($this->basePath() . '/css/datatables/sitechooser.css');
+$this->headLink()->appendStylesheet($this->basePath() . '/css/datatables/jquery.dataTables.css');
+$this->headLink()->appendStylesheet($this->basePath() . '/css/jquery-ui/smoothness/jquery-ui-1.9.2.custom.min.css');
 $this->headScript()->appendFile($this->basePath() . '/js/script.js');
+$this->headScript()->appendFile($this->basePath() . '/js/datatables/jquery.dataTables.js');
+$this->headScript()->appendFile($this->basePath() . '/js/datatables/sitechooser.js');
 
 $enddate = date('m/d/Y', time() + (86400 * 30));
 $minEndDate = explode("/", $enddate);
@@ -54,6 +58,7 @@ margin-left: 253px;
 <div id="cdn_form_msg" class="alert alert-error" style="margin: 5px; display: none;"></div>
 <form id="campaignform" class="form-horizontal form-top-magin" name="campaignform" method="POST" action="/private-exchange/newinsertionorder">
 <fieldset>
+<div class="span7">
 	    <div class="control-group">
 		<label for="campaignname">Order Name</label>
 		<input type="text" class="input-medium" name="campaignname">
@@ -89,10 +94,97 @@ margin-left: 253px;
 	    <div class="input-prepend">
 		<span class="add-on">$</span>
 	    <input type="text" value="100.00" class="input-mini" maxlength="20" id="maxspend" name="maxspend">    </div>
-	    </div>
-	</div>
-	  <div class="control-group">
+    </div>
+  </div>
+  <div class="span7">
+  <div class="inventory-container">
+  	<h4 class="no-pad">Private Exchange Inventory Feeds</h4>
+  	<div>
+  	<input type="button" class="btn btn-primary btn-margin" name="AddPcFeed" value="Add" onclick="showChooserPx();" />
+  	<input type="button" class="btn btn-primary btn-margin next" name="RemovePxFeed" value="Remove" onclick="removeSelectedPxItems();" />
+  	</div>
+  	<div>
+  	<select id="px-feeds" name="px-feeds[]" multiple="multiple" class="zone-txtarea inventory-select">
+	</select>
+  	</div>
+  </div>
+  
+  <div class="inventory-container top-pad">
+  	<h4 class="no-pad">Platform Connection Inventory Feeds</h4>
+  	<div>
+  	<input type="button" class="btn btn-primary btn-margin" name="AddPcFeed" value="Add" onclick="showChooserPc();" />
+  	<input type="button" class="btn btn-primary btn-margin next" name="RemovePcFeed" value="Remove" onclick="removeSelectedPcItems();" />
+  	</div>
+  	<div>
+  	<select id="pc-feeds" name="pc-feeds[]" multiple="multiple" class="zone-txtarea inventory-select">
+	</select>
+  	</div>
+  </div>
+  
+  <div class="inventory-container top-pad">
+  	<h4 class="no-pad">SSP RTB Publisher Inventory Feeds</h4>
+  	<div>
+  	<input type="button" class="btn btn-primary btn-margin" name="AddSspFeed" value="Add" onclick="showChooserSsp();" />
+  	<input type="button" class="btn btn-primary btn-margin next" name="RemoveSspFeed" value="Remove" onclick="removeSelectedSspItems();" />
+  	</div>
+  	<div>
+  	<select id="ssp-feeds" name="ssp-feeds[]" multiple="multiple" class="zone-txtarea inventory-select">
+	</select>
+  	</div>
+  </div>
+  
+  </div>
+  <div class="span12">
+    <div class="control-group">
 	   <input type="submit" class="btn btn-primary" name="B1" value="Create New Campaign" />
+	</div>
 	</div>
 </fieldset>
 </form>
+
+<!-- Invocation Code Modal -->
+<div class="modal fade" id="InvocationCodeModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="myModalLabel">Site Chooser</h4>
+        <button type="button" id="cls-btn" class="btn" data-dismiss="modal" style="position: absolute; right: 15px; top: 15px">Close</button>
+     	<button type="button" onclick="addCheckedBoxes();" class="btn btn-default" style="position: absolute; right: 100px; top: 15px">Add To Insertion Order</button>
+      </div>
+      <div class="modal-body">
+        <div>
+			<table id="rtb-feed-chooser" class="display compact" cellspacing="0" width="100%">
+				<thead>
+					<tr>
+						<th> </th>
+						<th>Site ID</th>
+						<th>Domain</th>
+						<th>Name</th>
+						<th>IAB Cat</th>
+						<th>Daily Imps</th>
+						<th>Average CPM</th>
+						<th>Floor</th>
+						<th>Exchange</th>
+					</tr>
+				</thead>
+
+				<tfoot>
+					<tr>
+						<th> </th>
+						<th>Site ID</th>
+						<th>Domain</th>
+						<th>Name</th>
+						<th>IAB Cat</th>
+						<th>Daily Imps</th>
+						<th>Average CPM</th>
+						<th>Floor</th>
+						<th>Exchange</th>
+					</tr>
+				</tfoot>
+			</table>
+	</div>				
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Invocation Code Modal -->

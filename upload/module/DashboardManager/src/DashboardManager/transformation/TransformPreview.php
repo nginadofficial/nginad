@@ -483,8 +483,6 @@ class TransformPreview {
 					
 			endif;
 			
-		
-			
 			/*
 			 * PMP DEALS
 			*/
