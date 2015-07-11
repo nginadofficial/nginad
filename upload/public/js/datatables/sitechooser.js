@@ -157,12 +157,16 @@ function showChooserPc () {
 			]
 		} );
 	} else {
-		
 		$('#rtb-feed-chooser').dataTable().api().clear().draw();
-		$('#rtb-feed-chooser').dataTable().api().ajax.url( '/directory/platformconnection' ).load();
 	}
 	
-	$('#rtb-feed-chooser').dataTable().api().ajax.url( '/directory/platformconnection' ).load(
+	var use_date = $('#stats-date-pc').val();
+	var re = new RegExp('/', 'g');
+	use_date = use_date.replace(re, '-');
+	
+	var params = 'selected-date=' + escape(use_date);
+	
+	$('#rtb-feed-chooser').dataTable().api().ajax.url( '/directory/platformconnection?' + params ).load(
 		function () {
 			callBackDblClk();
 		}	
@@ -197,7 +201,13 @@ function showChooserSsp () {
 		$('#rtb-feed-chooser').dataTable().api().clear().draw();
 	}
 	
-	$('#rtb-feed-chooser').dataTable().api().ajax.url( '/directory/ssp' ).load(
+	var use_date = $('#stats-date-ssp').val();
+	var re = new RegExp('/', 'g');
+	use_date = use_date.replace(re, '-');
+	
+	var params = 'selected-date=' + escape(use_date);
+	
+	$('#rtb-feed-chooser').dataTable().api().ajax.url( '/directory/ssp?' + params ).load(
 		function () {
 			callBackDblClk();
 		}		

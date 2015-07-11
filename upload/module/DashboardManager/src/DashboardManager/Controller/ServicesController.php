@@ -19,8 +19,19 @@ class ServicesController extends DemandAbstractActionController {
 		 */
 		$current_time = time();
 		$yesterday_time = $current_time - 86400;
-		$yesterday = date("m/d/Y", $yesterday_time);
-		$params["MDY"] = $yesterday;
+		$use_date = date("m/d/Y", $yesterday_time);
+		
+		$selected_date = $this->getRequest()->getQuery('selected-date');
+		if ($selected_date != null):
+			$selected_date = str_replace('-', '/', $selected_date);
+			$selected_timestamp = strtotime($selected_date);
+			if ($selected_timestamp !== false):
+				$use_date = date("m/d/Y", $selected_timestamp);
+			endif;
+		endif;
+		
+		$params["MDY"] = $use_date;
+		
 		$SspRtbChannelDailyStatsRollUpList = $SspRtbChannelDailyStatsRollUpFactory->get($params);
 
 		$data = array();
@@ -83,8 +94,19 @@ class ServicesController extends DemandAbstractActionController {
 		*/
 		$current_time = time();
 		$yesterday_time = $current_time - 86400;
-		$yesterday = date("m/d/Y", $yesterday_time);
-		$params["MDY"] = $yesterday;
+		$use_date = date("m/d/Y", $yesterday_time);
+		
+		$selected_date = $this->getRequest()->getQuery('selected-date');
+		if ($selected_date != null):
+			$selected_date = str_replace('-', '/', $selected_date);
+			$selected_timestamp = strtotime($selected_date);
+			if ($selected_timestamp !== false):
+				$use_date = date("m/d/Y", $selected_timestamp);
+			endif;
+		endif;
+
+		$params["MDY"] = $use_date;
+		
 		$PrivateExchangeRtbChannelDailyStatsRollUpList = $PrivateExchangeRtbChannelDailyStatsRollUpFactory->get($params, $this->auth->getUserID());
 	
 		$data = array();
@@ -133,7 +155,6 @@ class ServicesController extends DemandAbstractActionController {
 	
 		$initialized = $this->initialize();
 		if ($initialized !== true) return $initialized;
-	
 	
 		$PrivateExchangeRtbChannelDailyStatsRollUpPxFilterFactory = \_factory\PrivateExchangeRtbChannelDailyStatsRollUpPxFilter::get_instance();
 		$params = array();

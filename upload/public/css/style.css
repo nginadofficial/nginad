@@ -829,3 +829,15 @@ input.next {
 .top-pad {
 	margin-top: 20px;
 }
+
+.stats-date {
+	margin-top: 10px;
+}
+
+.stats-date small {
+	margin-right: 10px;
+}
+
+#startdateicon, #enddateicon, #stats-date-pc-icon, #stats-date-ssp-icon {
+	cursor: pointer;
+}

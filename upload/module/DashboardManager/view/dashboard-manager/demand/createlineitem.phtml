@@ -8,6 +8,10 @@ $this->headScript()->appendFile($this->basePath() . '/js/script.js');
 $this->headScript()->appendFile($this->basePath() . '/js/datatables/jquery.dataTables.js');
 $this->headScript()->appendFile($this->basePath() . '/js/datatables/sitechooser.js');
 
+$current_time = time();
+$yesterday_time = $current_time - 86400;
+$yesterday = date('m/d/Y', $yesterday_time);
+
 $preview_query = $ispreview == true ? "?ispreview=true" : "";
 
 if ($ispreview == true):
@@ -36,11 +40,7 @@ $(function() {
 	        $("#enddate").datepicker( "option", "minDate", endDate );
 	    }
 	});
-	
-	$( '#startdateicon' ).click(function() {
-          $('#startdate').datepicker('show');
-    });
-    
+
     $( "#enddate" ).datepicker(
 	{
 		changeMonth: true,
@@ -50,6 +50,36 @@ $(function() {
         yearRange: "-1:+6",
         minDate:new Date(<?php echo $minEndDate[2];?>,<?php echo $minEndDate[0];?>,<?php echo $minEndDate[1];?>)
 	});
+	
+	$( "#stats-date-ssp" ).datepicker(
+	{
+		changeMonth: true,
+		changeYear: true,
+		showOtherMonths: true,
+        selectOtherMonths: true,
+        yearRange: "-1:+6",
+	});
+	
+	$( "#stats-date-pc" ).datepicker(
+	{
+		changeMonth: true,
+		changeYear: true,
+		showOtherMonths: true,
+        selectOtherMonths: true,
+        yearRange: "-1:+6",
+	});
+	
+	$( '#stats-date-ssp-icon' ).click(function() {
+          $('#stats-date-ssp').datepicker('show');
+    });
+	
+	$( '#stats-date-pc-icon' ).click(function() {
+          $('#stats-date-pc').datepicker('show');
+    });
+	
+	$( '#startdateicon' ).click(function() {
+          $('#startdate').datepicker('show');
+    });
 	
 	$( '#enddateicon' ).click(function() {
           $('#enddate').datepicker('show');
@@ -263,6 +293,9 @@ $(function() {
 		endforeach; ?>
 	</select>
   	</div>
+  	<div class="stats-date">
+  	<small>Statistics Date: LATEST</small>
+  	</div>
   </div>
   
   <div class="inventory-container top-pad">
@@ -280,6 +313,13 @@ $(function() {
 		endforeach; ?>
 	</select>
   	</div>
+  	<div class="stats-date">
+  		<small>Statistics Date: </small>
+  		<div class="input-append date">
+			<input name="stats-date-pc" id="stats-date-pc" class="span2" size="16" type="text" value="<?php echo $yesterday;?>" readonly="readonly" />
+			<span class="add-on" id="stats-date-pc-icon"><i class="icon-calendar"></i></span>
+		</div>
+  	</div>
   </div>
   
   <div class="inventory-container top-pad">
@@ -296,6 +336,13 @@ $(function() {
 	<?php 	endif;	
 		endforeach; ?>
 	</select>
+  	</div>
+  	<div class="stats-date">
+  		<small>Statistics Date: </small>
+  		<div class="input-append date">
+			<input name="stats-date-ssp" id="stats-date-ssp" class="span2" size="16" type="text" value="<?php echo $yesterday;?>" readonly="readonly" />
+			<span class="add-on" id="stats-date-ssp-icon"><i class="icon-calendar"></i></span>
+		</div>
   	</div>
   </div>
   
