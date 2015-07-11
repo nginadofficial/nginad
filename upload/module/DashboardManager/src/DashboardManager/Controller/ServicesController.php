@@ -20,7 +20,7 @@ class ServicesController extends DemandAbstractActionController {
 		$current_time = time();
 		$yesterday_time = $current_time - 86400;
 		$yesterday = date("m/d/Y", $yesterday_time);
-		//$params["MDY"] = $yesterday;
+		$params["MDY"] = $yesterday;
 		$SspRtbChannelDailyStatsRollUpList = $SspRtbChannelDailyStatsRollUpFactory->get($params);
 
 		$data = array();
@@ -44,8 +44,13 @@ class ServicesController extends DemandAbstractActionController {
 			
 			$label_name = $SspRtbChannelDailyStatsRollUp->WebDomain . " - " . $site_name . " - " . $publisher_name;
 			
+			/*
+			 * Also remember to replace colons : in SspRtbChannelSiteID
+			 * in the Workflows that match the site ids with line items as well
+			 */
+			
 			$row = array(
-					" " => '<input type="checkbox" labelname="' . rawurlencode($label_name) . '" class="ckssp" name="ckssp[]" value="' . rawurlencode($SspRtbChannelDailyStatsRollUp->SspRtbChannelSiteID . ':' . $SspRtbChannelDailyStatsRollUp->BuySidePartnerName . ':' . $label_name) . '" />',
+					" " => '<input type="checkbox" labelname="' . rawurlencode($label_name) . '" class="ckssp" name="ckssp[]" value="' . rawurlencode(str_replace(':', '-', $SspRtbChannelDailyStatsRollUp->SspRtbChannelSiteID) . ':' . $SspRtbChannelDailyStatsRollUp->BuySidePartnerName . ':' . $label_name) . '" />',
 					"Site ID" => $site_id,
 					"Domain" => $SspRtbChannelDailyStatsRollUp->WebDomain,
 					"Name" => $site_name,
@@ -79,7 +84,7 @@ class ServicesController extends DemandAbstractActionController {
 		$current_time = time();
 		$yesterday_time = $current_time - 86400;
 		$yesterday = date("m/d/Y", $yesterday_time);
-		//$params["MDY"] = $yesterday;
+		$params["MDY"] = $yesterday;
 		$PrivateExchangeRtbChannelDailyStatsRollUpList = $PrivateExchangeRtbChannelDailyStatsRollUpFactory->get($params, $this->auth->getUserID());
 	
 		$data = array();

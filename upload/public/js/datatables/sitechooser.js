@@ -52,7 +52,7 @@ function addSspItem(elemId, siteId, labelText) {
 		var siteIdCompareObj = parse_feed_id(this.value);
 		
 		if (siteIdCompareObj !== null) {
-			if (siteIdCompareObj.id == siteIdObj.id) {
+			if ((siteIdCompareObj.id == siteIdObj.id) && siteIdCompareObj.exchange == siteIdObj.exchange) {
 				// it's already in the list
 				found = true;
 				return;
