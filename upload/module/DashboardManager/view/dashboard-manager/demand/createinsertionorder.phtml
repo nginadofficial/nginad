@@ -56,7 +56,7 @@ margin-left: 253px;
     <li>Create Insertion Order</li>
     </ul>
 <div id="cdn_form_msg" class="alert alert-error" style="margin: 5px; display: none;"></div>
-<form id="campaignform" class="form-horizontal form-top-magin" name="campaignform" method="POST" action="/private-exchange/newinsertionorder">
+<form onsubmit="highlightSelects();" id="campaignform" class="form-horizontal form-top-magin" name="campaignform" method="POST" action="/private-exchange/newinsertionorder">
 <fieldset>
 <div class="span7">
 	    <div class="control-group">
@@ -98,37 +98,40 @@ margin-left: 253px;
   </div>
   <div class="span7">
   <div class="inventory-container">
-  	<h4 class="no-pad">Private Exchange Inventory Feeds</h4>
+  	<h4 class="no-pad">Private Exchange Inventory Feeds
+  	<br /><small>[ Default Value for new Line Items ]</small></h4>
   	<div>
   	<input type="button" class="btn btn-primary btn-margin" name="AddPcFeed" value="Add" onclick="showChooserPx();" />
   	<input type="button" class="btn btn-primary btn-margin next" name="RemovePxFeed" value="Remove" onclick="removeSelectedPxItems();" />
   	</div>
   	<div>
-  	<select id="px-feeds" name="px-feeds[]" multiple="multiple" class="zone-txtarea inventory-select">
+  	<select autocomplete="off" id="px-feeds" name="px-feeds[]" multiple="multiple" class="zone-txtarea inventory-select">
 	</select>
   	</div>
   </div>
   
   <div class="inventory-container top-pad">
-  	<h4 class="no-pad">Platform Connection Inventory Feeds</h4>
+  	<h4 class="no-pad">Platform Connection Inventory Feeds
+  	<br /><small>[ Default Value for new Line Items ]</small></h4>
   	<div>
   	<input type="button" class="btn btn-primary btn-margin" name="AddPcFeed" value="Add" onclick="showChooserPc();" />
   	<input type="button" class="btn btn-primary btn-margin next" name="RemovePcFeed" value="Remove" onclick="removeSelectedPcItems();" />
   	</div>
   	<div>
-  	<select id="pc-feeds" name="pc-feeds[]" multiple="multiple" class="zone-txtarea inventory-select">
+  	<select autocomplete="off" id="pc-feeds" name="pc-feeds[]" multiple="multiple" class="zone-txtarea inventory-select">
 	</select>
   	</div>
   </div>
   
   <div class="inventory-container top-pad">
-  	<h4 class="no-pad">SSP RTB Publisher Inventory Feeds</h4>
+  	<h4 class="no-pad">SSP RTB Publisher Inventory Feeds
+  	<br /><small>[ Default Value for new Line Items ]</small></h4>
   	<div>
   	<input type="button" class="btn btn-primary btn-margin" name="AddSspFeed" value="Add" onclick="showChooserSsp();" />
   	<input type="button" class="btn btn-primary btn-margin next" name="RemoveSspFeed" value="Remove" onclick="removeSelectedSspItems();" />
   	</div>
   	<div>
-  	<select id="ssp-feeds" name="ssp-feeds[]" multiple="multiple" class="zone-txtarea inventory-select">
+  	<select autocomplete="off" id="ssp-feeds" name="ssp-feeds[]" multiple="multiple" class="zone-txtarea inventory-select">
 	</select>
   	</div>
   </div>

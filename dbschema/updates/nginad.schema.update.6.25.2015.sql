@@ -25,6 +25,7 @@ CREATE TABLE `SspRtbChannelDailyStats` (
   `DateCreated` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `DateUpdated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`SspRtbChannelDailyStatsID`),
+  UNIQUE KEY `SspRtbChannelDailyStats_UNQ_IDX` (`BuySidePartnerName`,`SspRtbChannelSiteID`,`MDYH`),
   UNIQUE KEY `SspRtbChannelDailyStats_UNIQUE` (`SspRtbChannelDailyStatsID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -43,6 +44,7 @@ CREATE TABLE `PrivateExchangeRtbChannelDailyStats` (
   `DateUpdated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`PrivateExchangeRtbChannelDailyStatsID`),
   UNIQUE KEY `PrivateExchangeRtbChannelDailyStats_UNIQUE` (`PrivateExchangeRtbChannelDailyStatsID`),
+  UNIQUE KEY `PrivateExchangeRtbChannelDailyStats_UNQ_IDX` (`PublisherWebsiteID`,`MDYH`),
   KEY `FK_Publisher_Website_ID` (`PublisherWebsiteID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

@@ -100,6 +100,7 @@ class SspRtbChannelToInsertionOrder extends \_factory\CachedTableRead
     			'InsertionOrderID'						=> $SspRtbChannelToInsertionOrder->InsertionOrderID,
     			'SspPublisherChannelID'					=> $SspRtbChannelToInsertionOrder->SspPublisherChannelID,
     			'SspPublisherChannelDescription'		=> $SspRtbChannelToInsertionOrder->SspPublisherChannelDescription,
+    			'SspExchange'							=> $SspRtbChannelToInsertionOrder->SspExchange,
     			'Enabled'								=> $SspRtbChannelToInsertionOrder->Enabled,
     			'DateUpdated'        					=> $SspRtbChannelToInsertionOrder->DateUpdated
     	);

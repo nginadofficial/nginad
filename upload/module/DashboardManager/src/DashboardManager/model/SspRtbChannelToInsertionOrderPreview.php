@@ -13,6 +13,7 @@ class SspRtbChannelToInsertionOrderPreview {
     public $SspRtbChannelToInsertionOrderPreviewID;
     public $SspPublisherChannelID;
     public $SspPublisherChannelDescription;
+    public $SspExchange;
     public $InsertionOrderPreviewID;
     public $Enabled;
     public $DateCreated;

@@ -115,5 +115,9 @@ class PmpDealPublisherWebsiteToInsertionOrderLineItemPreview extends \_factory\C
 	    	return $pmp_deal_publisher_website_to_io_line_item_preview_id;
     	endif;
     }
+    
+    public function deletePmpDealPublisherWebsiteToInsertionOrderLineItemByInsertionOrderLineItemPreviewID($insertion_order_line_item_preview_id) {
+    	$this->delete(array('InsertionOrderLineItemPreviewID' => $insertion_order_line_item_preview_id));
+    }
 };
 ?>

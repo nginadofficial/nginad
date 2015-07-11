@@ -115,6 +115,10 @@ class PmpDealPublisherWebsiteToInsertionOrderPreview extends \_factory\CachedTab
 	    	return $pmp_deal_publisher_website_to_io_preview_id;
     	endif;
     }
+    
+    public function deletePmpDealPublisherWebsiteToInsertionOrderByInsertionOrderPreviewID($insertion_order_preview_id) {
+    	$this->delete(array('InsertionOrderPreviewID' => $insertion_order_preview_id));
+    }
 
 };
 ?>

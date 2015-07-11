@@ -14,17 +14,27 @@ function parse_feed_id(raw_feed_data) {
 	
 	raw_feed_data = unescape(raw_feed_data);
 	
-	var start = unescape(raw_feed_data).indexOf(':');
+	var start = raw_feed_data.indexOf(':');
 
 	if (start === -1) {
 		return null;
 	}
 	
 	var feed_id = raw_feed_data.substring(0, start);
-	var feed_description = raw_feed_data.substring(start + 1);
+	var next_string = raw_feed_data.substring(start + 1);
+	
+	start = next_string.indexOf(':');
+
+	if (start === -1) {
+		return null;
+	}
+	
+	var feed_exchange = next_string.substring(0, start);
+	var feed_description = next_string.substring(start + 1);
 	
 	return {
 		"id" 			: feed_id,
+		"exchange" 		: feed_exchange,
 		"description" 	: feed_description
 	};
 	
@@ -52,7 +62,7 @@ function addSspItem(elemId, siteId, labelText) {
 	
 	if (found === false) {
 		$('#' + elemId).append($('<option>', {
-		    value: siteId,
+		    value: escape(siteId),
 		    text: labelText
 		}));
 	}
@@ -199,7 +209,7 @@ function showChooserSsp () {
  * submission
  */
 function highlightSelects() {
-	$("#pc-feeds > option").attr('selected', true);
-	$("#px-feeds > option").attr('selected', true);
-	$("#ssp-feeds > option").attr('selected', true);
+	$("#pc-feeds > option:not(:selected)").prop('selected', true);
+	$("#px-feeds > option:not(:selected)").prop('selected', true);
+	$("#ssp-feeds > option:not(:selected)").prop('selected', true);
 }

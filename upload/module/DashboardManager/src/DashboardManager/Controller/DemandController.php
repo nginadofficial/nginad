@@ -109,6 +109,7 @@ class DemandController extends DemandAbstractActionController {
 	    $view = new ViewModel(array(
 	    		'ad_campaigns' => $ad_campaign_list,
 	    		'is_super_admin' => $this->auth->isSuperAdmin($this->config_handle),
+	    		'is_domain_admin' => $this->auth->isDomainAdmin($this->config_handle),
 	    		'user_id_list' => $this->user_id_list_demand_customer,
 	    		'effective_id' => $this->auth->getEffectiveIdentityID(),
 	    		'campaign_markup_rate_list'=>$campaign_markup_rate_list,
@@ -2200,9 +2201,31 @@ class DemandController extends DemandAbstractActionController {
 	        transformation\CheckPermissions::checkEditPermissionInsertionOrderPreview($id, $this->auth, $this->config_handle);
         	$campaignpreviewid = $id;
         	$id = "";
+        	
+        	$PmpDealPublisherWebsiteToInsertionOrderPreviewFactory = \_factory\PmpDealPublisherWebsiteToInsertionOrderPreview::get_instance();
+        	$params = array();
+        	$params["InsertionOrderPreviewID"] = $campaignpreviewid;
+        	$PmpDealPublisherWebsiteToInsertionOrderList = $PmpDealPublisherWebsiteToInsertionOrderPreviewFactory->get($params);
+        		
+        	$SspRtbChannelToInsertionOrderPreviewFactory = \_factory\SspRtbChannelToInsertionOrderPreview::get_instance();
+        	$params = array();
+        	$params["InsertionOrderPreviewID"] = $campaignpreviewid;
+        	$SspRtbChannelToInsertionOrderList = $SspRtbChannelToInsertionOrderPreviewFactory->get($params);
+        	
         else:
 	        // ACL PERMISSIONS CHECK
 	        transformation\CheckPermissions::checkEditPermissionInsertionOrder($id, $this->auth, $this->config_handle);
+        
+	        $PmpDealPublisherWebsiteToInsertionOrderFactory = \_factory\PmpDealPublisherWebsiteToInsertionOrder::get_instance();
+	        $params = array();
+	        $params["InsertionOrderID"] = $id;
+	        $PmpDealPublisherWebsiteToInsertionOrderList = $PmpDealPublisherWebsiteToInsertionOrderFactory->get($params);
+	        
+	        $SspRtbChannelToInsertionOrderFactory = \_factory\SspRtbChannelToInsertionOrder::get_instance();
+	        $params = array();
+	        $params["InsertionOrderID"] = $id;
+	        $SspRtbChannelToInsertionOrderList = $SspRtbChannelToInsertionOrderFactory->get($params);
+        
         endif;
 
         $current_mimes 					= array();
@@ -2220,6 +2243,8 @@ class DemandController extends DemandAbstractActionController {
         		'campaignpreviewid' 		=> $campaignpreviewid,
                 'mobile_options'    		=> \util\BannerOptions::$mobile_options,
                 'size_list'         		=> \util\BannerOptions::$iab_banner_options,
+        		'pmp_deal_list' 			=> $PmpDealPublisherWebsiteToInsertionOrderList,
+        		'ssp_channel_list' 			=> $SspRtbChannelToInsertionOrderList,
 				'bread_crumb_info' 			=> $this->getBreadCrumbInfoFromInsertionOrder($id, $campaignpreviewid, $is_preview),
         		'user_id_list' => $this->user_id_list_demand_customer,
     			'center_class' 				=> 'centerj',
@@ -2252,7 +2277,7 @@ class DemandController extends DemandAbstractActionController {
 	 * 
 	 * @return Ambigous <\Zend\View\Model\ViewModel, \Zend\View\Model\ViewModel>
 	 */
-	public function newbannerAction() {
+	public function newlineitemAction() {
 
 		$initialized = $this->initialize();
 		if ($initialized !== true) return $initialized;
@@ -2291,15 +2316,20 @@ class DemandController extends DemandAbstractActionController {
 			$this->validateInput($needed_input_banner);
 		endif;
 		
-		$adcampaigntype 		= AD_TYPE_ANY_REMNANT;
-		$linkedzones 			= array();
-		
 		$campaignid 			= $this->getRequest()->getPost('campaignid');
 		$campaign_preview_id 	= $this->getRequest()->getPost('campaignpreviewid');
 		$bannerid 				= $this->getRequest()->getPost('bannerid');
 		$banner_preview_id 		= $this->getRequest()->getPost('bannerpreviewid');
 		$ispreview 				= $this->getRequest()->getPost('ispreview');
 
+		$px_feeds 					= $this->getRequest()->getPost('px-feeds');
+		$pc_feeds 					= $this->getRequest()->getPost('pc-feeds');
+		$ssp_feeds 					= $this->getRequest()->getPost('ssp-feeds');
+		$pc_feeds 					= is_array($pc_feeds) ? $pc_feeds : array();
+		$px_feeds 					= is_array($px_feeds) ? $px_feeds : array();
+		$ssp_feeds 					= is_array($ssp_feeds) ? $ssp_feeds : array();
+		$exchange_feeds 			= array_merge($pc_feeds, $px_feeds);
+		
 		if ($ispreview != true):
 			/*
 			 * THIS METHOD CHECKS IF THERE IS AN EXISTING PREVIEW MODE CAMPAIGN
@@ -2331,10 +2361,6 @@ class DemandController extends DemandAbstractActionController {
 		$bannername = $this->getRequest()->getPost('bannername');
 		$startdate = $this->getRequest()->getPost('startdate');
 		$enddate = $this->getRequest()->getPost('enddate');
-		if ($this->is_super_admin):
-			$adcampaigntype 		= $this->getRequest()->getPost('adcampaigntype');
-			$linkedzones 			= $this->getRequest()->getPost('linkedzones');
-		endif;
 		$ismobile = $this->getRequest()->getPost('ismobile');
 		$iabsize = $this->getRequest()->getPost('iabsize');
 		$height = $this->getRequest()->getPost('height');
@@ -2399,9 +2425,6 @@ class DemandController extends DemandAbstractActionController {
 		$BannerPreview->InsertionOrderPreviewID       = $campaign_preview_id;
 		$BannerPreview->StartDate                 = date("Y-m-d H:i:s", strtotime($startdate));
 		$BannerPreview->EndDate                   = date("Y-m-d H:i:s", strtotime($enddate));
-		if ($this->is_super_admin || $banner_preview_id == null):
-			$BannerPreview->InsertionOrderTypeID      = $adcampaigntype;
-		endif;
 		
 		$BannerPreview->ImpressionType			  = $ImpressionType;
 		$BannerPreview->IsMobile                  = $ismobile;
@@ -2469,6 +2492,105 @@ class DemandController extends DemandAbstractActionController {
 			
 		endif;
 
+		
+		/*
+		 * Private Exchange Feeds
+	     * 
+	     * wipe out existing preview data first
+	     */
+		$PmpDealPublisherWebsiteToInsertionOrderLineItemPreviewFactory = \_factory\PmpDealPublisherWebsiteToInsertionOrderLineItemPreview::get_instance();
+		
+		$PmpDealPublisherWebsiteToInsertionOrderLineItemPreviewFactory->deletePmpDealPublisherWebsiteToInsertionOrderLineItemByInsertionOrderLineItemPreviewID($banner_preview_id);
+		
+		foreach ($exchange_feeds as $raw_feed_data):
+		
+			$raw_feed_data = rawurldecode($raw_feed_data);
+		
+			$exchange_feed_data = \util\AuthHelper::parse_feed_id($raw_feed_data);
+			 
+			if ($exchange_feed_data === null):
+				continue;
+			endif;
+			
+			$exchange_feed_id 			= intval($exchange_feed_data["id"]);
+			$exchange_feed_description 	= $exchange_feed_data["description"];
+			$is_local = false;
+			$authorized = \util\AuthHelper::domain_user_authorized_publisher_website_passthru($this->auth->getUserID(), $exchange_feed_id, $is_local);
+			
+			if (!$authorized):
+				die("You are not authorized to add inventory from Publisher Website: " . $exchange_feed_id . ' - ' . $exchange_feed_description . " <br />Please contact an administrator for more information.");
+			endif;
+			
+			$params = array();
+			$params["PublisherWebsiteID"] = $exchange_feed_id;
+			$_PmpDealPublisherWebsiteToInsertionOrderLineItemPreview = $PmpDealPublisherWebsiteToInsertionOrderLineItemPreviewFactory->get_row($params);
+			
+			$PmpDealPublisherWebsiteToInsertionOrderLineItemPreview = new \model\PmpDealPublisherWebsiteToInsertionOrderLineItemPreview();
+			
+			if ($_PmpDealPublisherWebsiteToInsertionOrderLineItemPreview != null):
+				$PmpDealPublisherWebsiteToInsertionOrderLineItemPreview->PmpDealPublisherWebsiteToInsertionOrderPreviewID = $_PmpDealPublisherWebsiteToInsertionOrderLineItemPreview->PmpDealPublisherWebsiteToInsertionOrderLineItemPreviewID;
+			endif;
+			
+			$PmpDealPublisherWebsiteToInsertionOrderLineItemPreview->PublisherWebsiteID 				= $exchange_feed_id;
+			$PmpDealPublisherWebsiteToInsertionOrderLineItemPreview->PublisherWebsiteLocal 				= $is_local;
+			$PmpDealPublisherWebsiteToInsertionOrderLineItemPreview->PublisherWebsiteDescription 		= $exchange_feed_description;
+			$PmpDealPublisherWebsiteToInsertionOrderLineItemPreview->InsertionOrderLineItemPreviewID	= $banner_preview_id;
+			$PmpDealPublisherWebsiteToInsertionOrderLineItemPreview->Enabled							= 1;
+			
+			$PmpDealPublisherWebsiteToInsertionOrderLineItemPreviewFactory->savePmpDealPublisherWebsiteToInsertionOrderLineItemPreview($PmpDealPublisherWebsiteToInsertionOrderLineItemPreview);
+			
+		endforeach;
+		 
+		 
+		/*
+		 * SSP RTB Feeds
+	     * 
+	     * wipe out existing preview data first
+	     */
+	    $SspRtbChannelToInsertionOrderLineItemPreviewFactory = \_factory\SspRtbChannelToInsertionOrderLineItemPreview::get_instance();
+			
+	    $SspRtbChannelToInsertionOrderLineItemPreviewFactory->deleteSspRtbChannelToInsertionOrderLineItemByInsertionOrderLineItemPreviewID($banner_preview_id);
+	    
+		foreach ($ssp_feeds as $raw_feed_data):
+		
+			$raw_feed_data = rawurldecode($raw_feed_data);
+		
+			$ssp_feed_data = \util\AuthHelper::parse_feed_id($raw_feed_data);
+			 
+			if ($ssp_feed_data === null):
+				continue;
+			endif;
+			
+			$ssp_feed_id 			= $ssp_feed_data["id"];
+			$ssp_exchange 			= $ssp_feed_data["exchange"];
+			$ssp_feed_description 	= $ssp_feed_data["description"];
+			
+			$authorized = \util\AuthHelper::domain_user_authorized_ssp_passthru($this->auth->getUserID(), $ssp_feed_id);
+			
+			if (!$authorized):
+				die("You are not authorized to add inventory from SSP RTB Channel: " . $ssp_feed_id . ' - ' . $ssp_feed_description . " <br />Please contact an administrator for more information.");
+			endif;
+			
+			$params = array();
+			$params["SspPublisherChannelID"] = $ssp_feed_id;
+			$_SspRtbChannelToInsertionOrderLineItemPreview = $SspRtbChannelToInsertionOrderLineItemPreviewFactory->get_row($params);
+			
+			$SspRtbChannelToInsertionOrderLineItemPreview = new \model\SspRtbChannelToInsertionOrderLineItemPreview();
+			
+			if ($_SspRtbChannelToInsertionOrderLineItemPreview != null):
+				$SspRtbChannelToInsertionOrderLineItemPreview->SspRtbChannelToInsertionOrderLineItemPreviewID = $_SspRtbChannelToInsertionOrderLineItemPreview->SspRtbChannelToInsertionOrderLineItemPreviewID;
+			endif;
+			
+			$SspRtbChannelToInsertionOrderLineItemPreview->SspPublisherChannelID 			= $ssp_feed_id;
+			$SspRtbChannelToInsertionOrderLineItemPreview->SspPublisherChannelDescription 	= $ssp_feed_description;
+			$SspRtbChannelToInsertionOrderLineItemPreview->SspExchange						= $ssp_exchange;
+			$SspRtbChannelToInsertionOrderLineItemPreview->InsertionOrderLineItemPreviewID	= $banner_preview_id;
+			$SspRtbChannelToInsertionOrderLineItemPreview->Enabled							= 1;
+			
+			$SspRtbChannelToInsertionOrderLineItemPreviewFactory->saveSspRtbChannelToInsertionOrderLineItemPreview($SspRtbChannelToInsertionOrderLineItemPreview);
+			
+		endforeach;		
+		
 		$refresh_url = "/private-exchange/viewlineitem/" . $BannerPreview->InsertionOrderPreviewID . "?ispreview=true";
 		$viewModel = new ViewModel(array('refresh_url' => $refresh_url));
 
@@ -2516,6 +2638,16 @@ class DemandController extends DemandAbstractActionController {
 
 			$InsertionOrderLineItem = $InsertionOrderLineItemPreviewFactory->get_row($params);
 
+			$PmpDealPublisherWebsiteToInsertionOrderLineItemPreviewFactory = \_factory\PmpDealPublisherWebsiteToInsertionOrderLineItemPreview::get_instance();
+			$params = array();
+			$params["InsertionOrderLineItemPreviewID"] = $banner_preview_id;
+			$PmpDealPublisherWebsiteToInsertionOrderLineItemList = $PmpDealPublisherWebsiteToInsertionOrderLineItemPreviewFactory->get($params);
+				
+			$SspRtbChannelToInsertionOrderLineItemPreviewFactory = \_factory\SspRtbChannelToInsertionOrderLineItemPreview::get_instance();
+			$params = array();
+			$params["InsertionOrderLineItemPreviewID"] = $banner_preview_id;
+			$SspRtbChannelToInsertionOrderLineItemList = $SspRtbChannelToInsertionOrderLineItemPreviewFactory->get($params);
+			
 		else:
 			// ACL PERMISSIONS CHECK
 			transformation\CheckPermissions::checkEditPermissionInsertionOrderLineItem($id, $this->auth, $this->config_handle);
@@ -2533,6 +2665,16 @@ class DemandController extends DemandAbstractActionController {
 
 			$InsertionOrderLineItem = $InsertionOrderLineItemFactory->get_row($params);
 
+			$PmpDealPublisherWebsiteToInsertionOrderLineItemFactory = \_factory\PmpDealPublisherWebsiteToInsertionOrderLineItem::get_instance();
+			$params = array();
+			$params["InsertionOrderLineItemID"] = $id;
+			$PmpDealPublisherWebsiteToInsertionOrderLineItemList = $PmpDealPublisherWebsiteToInsertionOrderLineItemFactory->get($params);
+			
+			$SspRtbChannelToInsertionOrderLineItemFactory = \_factory\SspRtbChannelToInsertionOrderLineItem::get_instance();
+			$params = array();
+			$params["InsertionOrderLineItemID"] = $id;
+			$SspRtbChannelToInsertionOrderLineItemList = $SspRtbChannelToInsertionOrderLineItemFactory->get($params);
+			
 		endif;
 
 		if ($InsertionOrderLineItem == null):
@@ -2634,6 +2776,8 @@ class DemandController extends DemandAbstractActionController {
 		return new ViewModel(array(
 				'campaignid'              => $campaignid,
 		        'bannerid'                => $bannerid,
+				'pmp_deal_list' 		  => $PmpDealPublisherWebsiteToInsertionOrderLineItemList,
+				'ssp_channel_list' 		  => $SspRtbChannelToInsertionOrderLineItemList,
 				'campaignpreviewid'       => $campaignpreviewid,
 				'bannerpreviewid'         => $bannerpreviewid,
 				'ispreview' 			  => $is_preview == true ? '1' : '0',
@@ -2680,118 +2824,6 @@ class DemandController extends DemandAbstractActionController {
 				
 				'impression_type' => $impression_type
 		));
-	}
-
-	/**
-	 *
-	 * @return JSON encoded data for AJAX call
-	 */
-	public function editlinkedzoneAction() {
-
-		$id 		= $this->getEvent()->getRouteMatch()->getParam('param1');
-		$height 	= $this->getRequest()->getQuery('height');
-		$width 		= $this->getRequest()->getQuery('width');
-		$is_preview = $this->getRequest()->getQuery('is_preview');
-				
-		if ($height == null || $width == null):
-			$data = array(
-					'success' => false,
-					'linked_ad_zones' => "", 
-					'complete_zone_list' => array()
-			);
-			$this->setJsonHeader();
-			return $this->getResponse()->setContent(json_encode($data));
-		endif;
-	
-		$initialized = $this->initialize();
-		if ($initialized !== true) return $initialized;
-		
-		if (!$this->is_super_admin):
-			$data = array(
-					'success' => false,
-					'linked_ad_zones' => "", 
-					'complete_zone_list' => array()
-			);
-			$this->setJsonHeader();
-			return $this->getResponse()->setContent(json_encode($data));
-		endif;
-
-		// verify
-		if ($is_preview == "true"):
-			$is_preview = \transformation\TransformPreview::doesPreviewBannerExist($id, $this->auth);
-		endif;
-		$banner_preview_id = "";
-		$linked_ad_zones = array();
-
-		if ($id != null):
-
-			if ($is_preview === true):
-
-				// ACL PREVIEW PERMISSIONS CHECK
-				transformation\CheckPermissions::checkEditPermissionInsertionOrderLineItemPreview($id, $this->auth, $this->config_handle);
-			
-				$InsertionOrderLineItemPreviewFactory = \_factory\InsertionOrderLineItemPreview::get_instance();
-				$params = array();
-				$params["Active"] = 1;
-				$params["InsertionOrderLineItemPreviewID"] = $id;
-				$banner_preview_id = $id;
-			
-				$InsertionOrderLineItem = $InsertionOrderLineItemPreviewFactory->get_row($params);
-				
-			else:
-			
-				// ACL PERMISSIONS CHECK
-				transformation\CheckPermissions::checkEditPermissionInsertionOrderLineItem($id, $this->auth, $this->config_handle);
-			
-				$InsertionOrderLineItemFactory = \_factory\InsertionOrderLineItem::get_instance();
-				$params = array();
-				$params["Active"] = 1;
-				$params["InsertionOrderLineItemID"] = $id;
-			
-				$InsertionOrderLineItem = $InsertionOrderLineItemFactory->get_row($params);
-				
-			endif;
-		endif;
-		
-		$params = array();
-		$params["Height"] = $height;
-		$params["Width"] = $width;
-		// $params["AdOwnerID"] = \transformation\UserToPublisher::user_id_to_publisher_info_id($this->auth->getEffectiveUserID());
-		
-		$PublisherAdZoneFactory = \_factory\PublisherAdZone::get_instance();
-		$PublisherAdZoneList = $PublisherAdZoneFactory->get($params);
-		if ($PublisherAdZoneList === null):
-			$PublisherAdZoneList = array();
-		endif;
-		
-		$complete_zone_list = array();
-		
-		foreach ($PublisherAdZoneList as $PublisherAdZone):
-		
-			$complete_zone_list[] = array(
-									"zone_id"	=>$PublisherAdZone->PublisherAdZoneID,
-									"ad_name"	=>$PublisherAdZone->AdName
-			);
-		
-		endforeach;
-		
-		$linked_zone_list = array();
-		
-		foreach ($linked_ad_zones as $linked_ad_zone):
-		
-			$linked_zone_list[] = $linked_ad_zone->PublisherAdZoneID;
-			
-		endforeach;
-		
-		$data = array(
-				'success' => count($PublisherAdZoneList) > 0,
-				'linked_ad_zones' => implode(',', $linked_zone_list), 
-				'complete_zone_list' => $complete_zone_list
-		);
-		
-		$this->setJsonHeader();
-		return $this->getResponse()->setContent(json_encode($data));
-
 	}
 	
 	/*
@@ -3146,9 +3178,17 @@ class DemandController extends DemandAbstractActionController {
 	    
 	    /*
 	     * Private Exchange Feeds
+	     * 
+	     * wipe out existing preview data first
 	     */
+	    $PmpDealPublisherWebsiteToInsertionOrderPreviewFactory = \_factory\PmpDealPublisherWebsiteToInsertionOrderPreview::get_instance();
+	    
+	    $PmpDealPublisherWebsiteToInsertionOrderPreviewFactory->deletePmpDealPublisherWebsiteToInsertionOrderByInsertionOrderPreviewID($new_campaign_preview_id);
+	    
 	    foreach ($exchange_feeds as $raw_feed_data):
 	     
+	    	$raw_feed_data = rawurldecode($raw_feed_data);
+	    
 		    $exchange_feed_data = \util\AuthHelper::parse_feed_id($raw_feed_data);
 		     
 		    if ($exchange_feed_data === null):
@@ -3164,8 +3204,7 @@ class DemandController extends DemandAbstractActionController {
 		    	die("You are not authorized to add inventory from Publisher Website: " . $exchange_feed_id . ' - ' . $exchange_feed_description . " <br />Please contact an administrator for more information.");
 		    endif;
 		    
-		    $PmpDealPublisherWebsiteToInsertionOrderPreviewFactory = \_factory\PmpDealPublisherWebsiteToInsertionOrderPreview::get_instance();
-		    
+
 		    $params = array();
 		    $params["PublisherWebsiteID"] = $exchange_feed_id;
 		    $_PmpDealPublisherWebsiteToInsertionOrderPreview = $PmpDealPublisherWebsiteToInsertionOrderPreviewFactory->get_row($params);
@@ -3186,11 +3225,19 @@ class DemandController extends DemandAbstractActionController {
 		    
 	    endforeach;
 	    
-	    
 	    /*
 	     * SSP RTB Feeds
+	     * 
+	     * wipe out existing preview data first
 	     */
+	    $SspRtbChannelToInsertionOrderPreviewFactory = \_factory\SspRtbChannelToInsertionOrderPreview::get_instance();
+	    
+	    $SspRtbChannelToInsertionOrderPreviewFactory->deleteSspRtbChannelToInsertionOrderByInsertionOrderPreviewID($new_campaign_preview_id);
+	    
 	    foreach ($ssp_feeds as $raw_feed_data):
+	    
+	    	$raw_feed_data = rawurldecode($raw_feed_data);
+	    
 		    $ssp_feed_data = \util\AuthHelper::parse_feed_id($raw_feed_data);
 	    
 		    if ($ssp_feed_data === null):
@@ -3198,6 +3245,7 @@ class DemandController extends DemandAbstractActionController {
 		    endif;
 		    
 		    $ssp_feed_id 			= $ssp_feed_data["id"];
+		    $ssp_exchange 			= $ssp_feed_data["exchange"];
 		    $ssp_feed_description 	= $ssp_feed_data["description"];
 		    
 		    $authorized = \util\AuthHelper::domain_user_authorized_ssp_passthru($this->auth->getUserID(), $ssp_feed_id);
@@ -3206,8 +3254,6 @@ class DemandController extends DemandAbstractActionController {
 		    	die("You are not authorized to add inventory from SSP RTB Channel: " . $ssp_feed_id . ' - ' . $ssp_feed_description . " <br />Please contact an administrator for more information.");
 		    endif;
 
-		    $SspRtbChannelToInsertionOrderPreviewFactory = \_factory\SspRtbChannelToInsertionOrderPreview::get_instance();
-		    
 		    $params = array();
 		    $params["SspPublisherChannelID"] = $ssp_feed_id;
 		    $_SspRtbChannelToInsertionOrderPreview = $SspRtbChannelToInsertionOrderPreviewFactory->get_row($params);
@@ -3220,6 +3266,7 @@ class DemandController extends DemandAbstractActionController {
 		    
 		    $SspRtbChannelToInsertionOrderPreview->SspPublisherChannelID 			= $ssp_feed_id;
 		    $SspRtbChannelToInsertionOrderPreview->SspPublisherChannelDescription 	= $ssp_feed_description;
+		    $SspRtbChannelToInsertionOrderPreview->SspExchange						= $ssp_exchange;
 		    $SspRtbChannelToInsertionOrderPreview->InsertionOrderPreviewID			= $new_campaign_preview_id;
 		    $SspRtbChannelToInsertionOrderPreview->Enabled							= 1;
 

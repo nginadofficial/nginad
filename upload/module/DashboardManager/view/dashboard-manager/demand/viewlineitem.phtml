@@ -90,13 +90,13 @@ endif;
             <a href="/private-exchange/editlineitem/<?php echo $banner_id; ?><?php echo $preview_query; ?>"><?php echo $edit; ?></a>
             <hr />
             
-            <a href="javascript:void(0);" onclick="deleteBannerModal('/demand/deletelineitem/<?php echo $banner_id;?><?php echo $preview_query;?>','<?php echo $rtb_banner->Name;?>');">Delete Line Item</a>
+            <a href="javascript:void(0);" onclick="deleteBannerModal('/private-exchange/deletelineitem/<?php echo $banner_id;?><?php echo $preview_query;?>','<?php echo $rtb_banner->Name;?>');">Delete Line Item</a>
            </td>
            <td>
             <a href="/private-exchange/deliveryfilter<?php echo $video; ?>/<?php echo $banner_id;?><?php echo $preview_query;?>">Edit Delivery Filter</a>
             <hr />
             
-            <a href="javascript:void(0);" onclick="deleteDeliveryFilterModal('/demand/deletedeliveryfilter/<?php echo $banner_id;?><?php echo $preview_query;?>','<?php echo $rtb_banner->Name;?>');">Delete Delivery Filter</a>
+            <a href="javascript:void(0);" onclick="deleteDeliveryFilterModal('/private-exchange/deletedeliveryfilter/<?php echo $banner_id;?><?php echo $preview_query;?>','<?php echo $rtb_banner->Name;?>');">Delete Delivery Filter</a>
            </td>
            <td>
             <a href="/private-exchange/createdomainexclusion/<?php echo $banner_id;?><?php echo $preview_query;?>">Create Domain Exclusion</a>

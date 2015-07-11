@@ -310,6 +310,7 @@ class TransformPreview {
 				
 			$SspRtbChannelToInsertionOrder->SspPublisherChannelID 				= $SspRtbChannelToInsertionOrderPreview->SspPublisherChannelID;
 			$SspRtbChannelToInsertionOrder->SspPublisherChannelDescription 		= $SspRtbChannelToInsertionOrderPreview->SspPublisherChannelDescription;
+			$SspRtbChannelToInsertionOrder->SspExchange 						= $SspRtbChannelToInsertionOrderPreview->SspExchange;
 			$SspRtbChannelToInsertionOrder->InsertionOrderID 					= $ad_campaign_id;
 			$SspRtbChannelToInsertionOrder->Enabled 							= $SspRtbChannelToInsertionOrderPreview->Enabled;
 				
@@ -501,10 +502,10 @@ class TransformPreview {
 				$PmpDealPublisherWebsiteToInsertionOrderLineItem->PublisherWebsiteID 			= $PmpDealPublisherWebsiteToInsertionOrderLineItemPreview->PublisherWebsiteID;
 				$PmpDealPublisherWebsiteToInsertionOrderLineItem->PublisherWebsiteLocal 		= $PmpDealPublisherWebsiteToInsertionOrderLineItemPreview->PublisherWebsiteLocal;
 				$PmpDealPublisherWebsiteToInsertionOrderLineItem->PublisherWebsiteDescription 	= $PmpDealPublisherWebsiteToInsertionOrderLineItemPreview->PublisherWebsiteDescription;
-				$PmpDealPublisherWebsiteToInsertionOrderLineItem->InsertionOrderID 				= $banner_id;
+				$PmpDealPublisherWebsiteToInsertionOrderLineItem->InsertionOrderLineItemID 		= $banner_id;
 				$PmpDealPublisherWebsiteToInsertionOrderLineItem->Enabled 						= $PmpDealPublisherWebsiteToInsertionOrderLineItemPreview->Enabled;
 					
-				$PmpDealPublisherWebsiteToInsertionOrderLineItemFactory->savePmpDealPublisherWebsiteToInsertionOrderLineItem($PmpDealPublisherWebsiteToInsertionOrder);
+				$PmpDealPublisherWebsiteToInsertionOrderLineItemFactory->savePmpDealPublisherWebsiteToInsertionOrderLineItem($PmpDealPublisherWebsiteToInsertionOrderLineItem);
 					
 			endforeach;
 			
@@ -517,18 +518,19 @@ class TransformPreview {
 			
 			$params = array();
 			$params["InsertionOrderLineItemPreviewID"] = $banner_preview_id;
-			$SspRtbChannelToInsertionOrderPreviewList 	= $SspRtbChannelToInsertionOrderPreviewFactory->get($params);
+			$SspRtbChannelToInsertionOrderLineItemPreviewList 	= $SspRtbChannelToInsertionOrderLineItemPreviewFactory->get($params);
 			
-			foreach ($SspRtbChannelToInsertionOrderPreviewList as $SspRtbChannelToInsertionOrderPreview):
+			foreach ($SspRtbChannelToInsertionOrderLineItemPreviewList as $SspRtbChannelToInsertionOrderLineItemPreview):
 			
-				$SspRtbChannelToInsertionOrder = new \model\SspRtbChannelToInsertionOrder();
+				$SspRtbChannelToInsertionOrderLineItem = new \model\SspRtbChannelToInsertionOrderLineItem();
 				
-				$SspRtbChannelToInsertionOrder->SspPublisherChannelID 				= $SspRtbChannelToInsertionOrderPreview->SspPublisherChannelID;
-				$SspRtbChannelToInsertionOrder->SspPublisherChannelDescription 		= $SspRtbChannelToInsertionOrderPreview->SspPublisherChannelDescription;
-				$SspRtbChannelToInsertionOrder->InsertionOrderID 					= $banner_id;
-				$SspRtbChannelToInsertionOrder->Enabled 							= $SspRtbChannelToInsertionOrderPreview->Enabled;
+				$SspRtbChannelToInsertionOrderLineItem->SspPublisherChannelID 				= $SspRtbChannelToInsertionOrderLineItemPreview->SspPublisherChannelID;
+				$SspRtbChannelToInsertionOrderLineItem->SspPublisherChannelDescription 		= $SspRtbChannelToInsertionOrderLineItemPreview->SspPublisherChannelDescription;
+				$SspRtbChannelToInsertionOrderLineItem->SspExchange 						= $SspRtbChannelToInsertionOrderLineItemPreview->SspExchange;
+				$SspRtbChannelToInsertionOrderLineItem->InsertionOrderLineItemID 			= $banner_id;
+				$SspRtbChannelToInsertionOrderLineItem->Enabled 							= $SspRtbChannelToInsertionOrderLineItemPreview->Enabled;
 				
-				$SspRtbChannelToInsertionOrderFactory->saveSspRtbChannelToInsertionOrder($SspRtbChannelToInsertionOrder);
+				$SspRtbChannelToInsertionOrderLineItemFactory->saveSspRtbChannelToInsertionOrderLineItem($SspRtbChannelToInsertionOrderLineItem);
 				
 			endforeach;
 			

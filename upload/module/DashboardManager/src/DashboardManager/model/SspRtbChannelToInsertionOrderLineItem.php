@@ -13,6 +13,7 @@ class SspRtbChannelToInsertionOrderLineItem {
     public $SspRtbChannelToInsertionOrderLineItemID;
     public $SspPublisherChannelID;
     public $SspPublisherChannelDescription;
+    public $SspExchange;
     public $InsertionOrderLineItemID;
     public $Enabled;
     public $DateCreated;

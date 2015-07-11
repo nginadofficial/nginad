@@ -21,7 +21,7 @@ $effective_user_in_dashboard = false;
      <div class="span3" style="float: right"> 
          <?php if ($is_super_admin === true): ?>
 			
-			 <form name="loginas" id="loginas" action="/demand/loginas" class="forms pull-left"  style="margin-top: 10px;">
+			 <form name="loginas" id="loginas" action="/private-exchange/loginas" class="forms pull-left"  style="margin-top: 10px;">
 			  <span style="font-size: 12px; font-weight: bold;">LOG IN AS USER</span>	<select name="userid" onchange="submitForm();">
 			 		<option value="0">Admin (<?php echo $true_user_name; ?>)</option>
 					<?php foreach ($user_id_list as $user_info_id => $user_info_name): ?>
@@ -38,7 +38,7 @@ $effective_user_in_dashboard = false;
 <div class="pull-left" style="margin: 10px 0 0 10px;">
 <?php if ($effective_id != 0 && $effective_user_in_dashboard === true): ?>
 
-					<form name="changeusermarkup" id="changeusermarkup" action="/demand/changeusermarkup"class="forms pull-right" >
+					<form name="changeusermarkup" id="changeusermarkup" action="/private-exchange/changeusermarkup"class="forms pull-right" >
 						<input type="hidden" name="markupuserid" value="<?php echo $effective_id;?>" />
 				
 					<span style="font-size: 12px; font-weight: bold;">User Markup Rate:</span>	 <input type="text"  style="text-align: right" name="user-markup" class="span1" value="<?php echo $user_markup_rate;?>">%
@@ -61,6 +61,8 @@ $effective_user_in_dashboard = false;
            <th>
             USER ID
            </th>
+    <?php endif; ?>
+    <?php if ($is_super_admin === true || $is_domain_admin === true): ?>
            <th>
             ADMIN ACTION
            </th>
@@ -134,21 +136,23 @@ $effective_user_in_dashboard = false;
 					User Unknown
               <?php endif; ?>
            </td>
+    <?php endif; ?>
+    <?php if ($is_super_admin === true || $is_domain_admin === true): ?>
            <?php if (isset($ad_campaign->InsertionOrderPreviewID)): ?>
            <td>
-              <a href="/private-exchange/approvecampaign/<?php echo $ad_campaign->InsertionOrderPreviewID;?>" onclick="return confirm('Are you sure?');">APPROVE CAMPAIGN CHANGES</a>
-              <hr /><a href="/private-exchange/rejectcampaign/<?php echo $ad_campaign->InsertionOrderPreviewID; ?>" onclick="return confirm('Are you sure?');">REJECT CAMPAIGN CHANGES</a>
+              <a href="/private-exchange/approvecampaign/<?php echo $ad_campaign->InsertionOrderPreviewID;?>" onclick="return confirm('Are you sure?');">APPROVE TO PRODUCTION</a>
+              <hr /><a href="/private-exchange/rejectcampaign/<?php echo $ad_campaign->InsertionOrderPreviewID; ?>" onclick="return confirm('Are you sure?');">REJECT CHANGES</a>
            </td>
            <?php else: ?>
            <td>
               N/A
            </td>
            <?php endif; ?>
-
+	<?php endif; ?>
 	<?php if ($is_super_admin === true && $effective_id != 0): ?>
            <td>
            		<?php if (isset($ad_campaign->InsertionOrderID) && $ad_campaign->InsertionOrderID != null && isset($campaign_markup_rate_list[$ad_campaign->InsertionOrderID])): ?>
-					<form name="change-campaign-markup-<?php echo $ad_campaign->InsertionOrderID;?>" class="change-campaign-markup" action="/demand/changecampaignmarkup">
+					<form name="change-campaign-markup-<?php echo $ad_campaign->InsertionOrderID;?>" class="change-campaign-markup" action="/private-exchange/changecampaignmarkup">
 						<input type="hidden" name="markupcampaignid" value="<?php echo $ad_campaign->InsertionOrderID;?>" />
 						<div style="float: right;">
 							<input type="text" style="text-align: right" name="campaign-markup" class="input-mini" value="<?php echo $campaign_markup_rate_list[$ad_campaign->InsertionOrderID];?>">%
@@ -164,18 +168,17 @@ $effective_user_in_dashboard = false;
 	<?php endif; ?>
 
 
-	<?php endif; ?>
            <td>
             <?php if (!isset($ad_campaign->InsertionOrderPreviewID)): ?>
             	<?php echo '<span style="color:green; font-weight: bold;">APROVED</span>'; ?>
             <?php elseif (isset($ad_campaign->Deleted) && $ad_campaign->Deleted == 1): ?>
             	<?php echo '<span style="color:red; font-weight: bold;">DELETED</span>'; ?>
-            	<?php if ($is_super_admin === false): ?>
+            	<?php if ($is_super_admin === false && $is_domain_admin === false): ?>
             		<hr /><a href="/private-exchange/cancelcampaign/<?php echo $ad_campaign->InsertionOrderPreviewID; ?>" onclick="return confirm('Are you sure?');">CANCEL CAMPAIGN CHANGES</a>
             	<?php endif; ?>
             <?php else: ?>
-            	<?php echo '<span style="color:brown; font-weight: bold;">PENDING APPROVAL</span>'; ?>
-            	<?php if ($is_super_admin === false): ?>
+            	<?php echo '<span style="color:brown; font-weight: bold;">IN STAGING</span>'; ?>
+            	<?php if ($is_super_admin === false && $is_domain_admin === false): ?>
             		<hr /><a href="/private-exchange/cancelcampaign/<?php echo $ad_campaign->InsertionOrderPreviewID; ?>" onclick="return confirm('Are you sure?');">CANCEL CAMPAIGN CHANGES</a>
             	<?php endif; ?>
             <?php endif; ?>
@@ -223,7 +226,7 @@ $effective_user_in_dashboard = false;
             <a href="/private-exchange/editinsertionorder/<?php echo $campaign_id; ?><?php echo $preview_query; ?>">Edit Insertion Order</a>
             <hr />
            
-            <a href="javascript:void(0);" onclick="deleteCampaignModal('/demand/deleteinsertionorder/<?php echo $campaign_id; ?><?php echo $preview_query;?>','<?php echo $ad_campaign->Name;?>');">Delete Insertion Order</a>
+            <a href="javascript:void(0);" onclick="deleteCampaignModal('/private-exchange/deleteinsertionorder/<?php echo $campaign_id; ?><?php echo $preview_query;?>','<?php echo $ad_campaign->Name;?>');">Delete Insertion Order</a>
            </td>
            <td>
             <a href="/private-exchange/createlineitem/<?php echo $campaign_id; ?><?php echo $preview_query;?>">Create Line Item</a>

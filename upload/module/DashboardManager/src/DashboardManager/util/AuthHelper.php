@@ -118,10 +118,19 @@ class AuthHelper {
 		endif;
 		
 		$feed_id = substr($raw_feed_data, 0, $start);
-		$feed_description = substr($raw_feed_data, $start + 1);
+		$next_string = substr($raw_feed_data, $start + 1);
+		
+		$start = strpos($next_string, ':');
+		if ($start === false):
+			return null;
+		endif;
+		
+		$feed_exchange = substr($next_string, 0, $start);
+		$feed_description = substr($next_string, $start + 1);
 		
 		return array(
 			"id" 			=> $feed_id,
+			"exchange" 		=> $feed_exchange,
 			"description" 	=> $feed_description
 		);
 		

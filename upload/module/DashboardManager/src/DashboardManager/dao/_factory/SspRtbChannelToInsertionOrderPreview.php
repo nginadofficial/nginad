@@ -100,6 +100,7 @@ class SspRtbChannelToInsertionOrderPreview extends \_factory\CachedTableRead
     			'InsertionOrderPreviewID'				=> $SspRtbChannelToInsertionOrderPreview->InsertionOrderPreviewID,
     			'SspPublisherChannelID'					=> $SspRtbChannelToInsertionOrderPreview->SspPublisherChannelID,
     			'SspPublisherChannelDescription'		=> $SspRtbChannelToInsertionOrderPreview->SspPublisherChannelDescription,
+    			'SspExchange'							=> $SspRtbChannelToInsertionOrderPreview->SspExchange,
     			'Enabled'								=> $SspRtbChannelToInsertionOrderPreview->Enabled,
     			'DateUpdated'           				=> $SspRtbChannelToInsertionOrderPreview->DateUpdated
     	);
@@ -113,6 +114,10 @@ class SspRtbChannelToInsertionOrderPreview extends \_factory\CachedTableRead
 	    	$this->update($data, array('SspRtbChannelToInsertionOrderPreviewID' => $ssp_rtb_channel_to_io_preview_id));
 	    	return $ssp_rtb_channel_to_io_preview_id;
     	endif;
+    }
+    
+    public function deleteSspRtbChannelToInsertionOrderByInsertionOrderPreviewID($insertion_order_preview_id) {
+    	$this->delete(array('InsertionOrderPreviewID' => $insertion_order_preview_id));
     }
 
 };

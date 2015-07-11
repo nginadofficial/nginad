@@ -100,6 +100,7 @@ class SspRtbChannelToInsertionOrderLineItemPreview extends \_factory\CachedTable
     			'InsertionOrderLineItemPreviewID'		=> $SspRtbChannelToInsertionOrderLineItemPreview->InsertionOrderLineItemPreviewID,
     			'SspPublisherChannelID'					=> $SspRtbChannelToInsertionOrderLineItemPreview->SspPublisherChannelID,
     			'SspPublisherChannelDescription'		=> $SspRtbChannelToInsertionOrderLineItemPreview->SspPublisherChannelDescription,
+    			'SspExchange'							=> $SspRtbChannelToInsertionOrderLineItemPreview->SspExchange,
     			'Enabled'								=> $SspRtbChannelToInsertionOrderLineItemPreview->Enabled,
     			'DateUpdated'           				=> $SspRtbChannelToInsertionOrderLineItemPreview->DateUpdated
     	);
@@ -113,6 +114,10 @@ class SspRtbChannelToInsertionOrderLineItemPreview extends \_factory\CachedTable
 	    	$this->update($data, array('SspRtbChannelToInsertionOrderLineItemPreviewID' => $ssp_rtb_channel_to_io_line_item_preview_id));
 	    	return $ssp_rtb_channel_to_io_line_item_preview_id;
     	endif;
+    }
+    
+    public function deleteSspRtbChannelToInsertionOrderLineItemByInsertionOrderLineItemPreviewID($insertion_order_line_item_preview_id) {
+    	$this->delete(array('InsertionOrderLineItemPreviewID' => $insertion_order_line_item_preview_id));
     }
 };
 ?>

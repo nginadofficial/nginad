@@ -39,6 +39,7 @@ CREATE TABLE `PmpDealPublisherWebsiteToInsertionOrder` (
   `DateUpdated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`PmpDealPublisherWebsiteToInsertionOrderID`),
   UNIQUE KEY `PmpDealPublisherWebsiteToInsertionOrder_UNIQUE` (`PmpDealPublisherWebsiteToInsertionOrderID`),
+  UNIQUE KEY `PmpDealPublisherWebsiteToInsertionOrder_UNQ_IDX` (`PublisherWebsiteID`,`InsertionOrderID`),
   KEY `FK_Publisher_Website_ID` (`PublisherWebsiteID`),
   KEY `FK_InsertionOrder_ID` (`InsertionOrderID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -58,6 +59,7 @@ CREATE TABLE `PmpDealPublisherWebsiteToInsertionOrderLineItem` (
   `DateUpdated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`PmpDealPublisherWebsiteToInsertionOrderLineItemID`),
   UNIQUE KEY `PmpDealPublisherWebsiteToInsertionOrderLineItem_UNIQUE` (`PmpDealPublisherWebsiteToInsertionOrderLineItemID`),
+  UNIQUE KEY `PmpDealPublisherWebsiteToInsertionOrderLineItem_UNQ_IDX` (`PublisherWebsiteID`,`InsertionOrderLineItemID`),
   KEY `FK_Publisher_Website_ID` (`PublisherWebsiteID`),
   KEY `FK_InsertionOrderLineItem_ID` (`InsertionOrderLineItemID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -77,6 +79,7 @@ CREATE TABLE `PmpDealPublisherWebsiteToInsertionOrderPreview` (
   `DateUpdated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`PmpDealPublisherWebsiteToInsertionOrderPreviewID`),
   UNIQUE KEY `PmpDealPublisherWebsiteToInsertionOrderPreview_UNIQUE` (`PmpDealPublisherWebsiteToInsertionOrderPreviewID`),
+  UNIQUE KEY `PmpDealPublisherWebsiteToInsertionOrderPreview_UNQ_IDX` (`PublisherWebsiteID`,`InsertionOrderPreviewID`),
   KEY `FK_Publisher_Website_ID` (`PublisherWebsiteID`),
   KEY `FK_InsertionOrder_ID` (`InsertionOrderPreviewID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -96,6 +99,7 @@ CREATE TABLE `PmpDealPublisherWebsiteToInsertionOrderLineItemPreview` (
   `DateUpdated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`PmpDealPublisherWebsiteToInsertionOrderLineItemPreviewID`),
   UNIQUE KEY `PmpDealPublisherWebsiteToInsertionOrderLineItemPreview_UNIQUE` (`PmpDealPublisherWebsiteToInsertionOrderLineItemPreviewID`),
+  UNIQUE KEY `PmpDealPublisherWebsiteToInsertionOrderLineItemPreview_UNQ_IDX` (`PublisherWebsiteID`,`InsertionOrderLineItemPreviewID`),
   KEY `FK_Publisher_Website_ID` (`PublisherWebsiteID`),
   KEY `FK_InsertionOrderLineItem_ID` (`InsertionOrderLineItemPreviewID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -108,12 +112,14 @@ CREATE TABLE `SspRtbChannelToInsertionOrder` (
   `SspRtbChannelToInsertionOrderID` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `SspPublisherChannelID` char(100) NOT NULL,
   `SspPublisherChannelDescription` char(100) NOT NULL,
+  `SspExchange` char(100) NOT NULL,
   `InsertionOrderID` int(11) unsigned NOT NULL,
   `Enabled` int(4) unsigned NOT NULL DEFAULT 0,
   `DateCreated` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `DateUpdated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`SspRtbChannelToInsertionOrderID`),
   UNIQUE KEY `SspRtbChannelToIO_UNIQUE` (`SspRtbChannelToInsertionOrderID`),
+  UNIQUE KEY `SspRtbChannelToIO_UNQ_IDX` (`SspPublisherChannelID`,`SspExchange`,`InsertionOrderID`),
   KEY `FK_InsertionOrder_ID` (`InsertionOrderID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -125,12 +131,14 @@ CREATE TABLE `SspRtbChannelToInsertionOrderLineItem` (
   `SspRtbChannelToInsertionOrderLineItemID` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `SspPublisherChannelID` char(100) NOT NULL,
   `SspPublisherChannelDescription` char(100) NOT NULL,
+  `SspExchange` char(100) NOT NULL,
   `InsertionOrderLineItemID` int(11) unsigned NOT NULL,
   `Enabled` int(4) unsigned NOT NULL DEFAULT 0,
   `DateCreated` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `DateUpdated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`SspRtbChannelToInsertionOrderLineItemID`),
   UNIQUE KEY `SspRtbChannelToIOLineItem_UNIQUE` (`SspRtbChannelToInsertionOrderLineItemID`),
+  UNIQUE KEY `SspRtbChannelToIOLineItem_UNQ_IDX` (`SspPublisherChannelID`,`SspExchange`,`InsertionOrderLineItemID`),
   KEY `FK_InsertionOrderLineItem_ID` (`InsertionOrderLineItemID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -142,12 +150,14 @@ CREATE TABLE `SspRtbChannelToInsertionOrderPreview` (
   `SspRtbChannelToInsertionOrderPreviewID` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `SspPublisherChannelID` char(100) NOT NULL,
   `SspPublisherChannelDescription` char(100) NOT NULL,
+  `SspExchange` char(100) NOT NULL,
   `InsertionOrderPreviewID` int(11) unsigned NOT NULL,
   `Enabled` int(4) unsigned NOT NULL DEFAULT 0,
   `DateCreated` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `DateUpdated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`SspRtbChannelToInsertionOrderPreviewID`),
   UNIQUE KEY `SspRtbChannelToIOPreview_UNIQUE` (`SspRtbChannelToInsertionOrderPreviewID`),
+  UNIQUE KEY `SspRtbChannelToIOPreview_UNQ_IDX` (`SspPublisherChannelID`,`SspExchange`,`InsertionOrderPreviewID`),
   KEY `FK_InsertionOrder_ID` (`InsertionOrderPreviewID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -159,14 +169,13 @@ CREATE TABLE `SspRtbChannelToInsertionOrderLineItemPreview` (
   `SspRtbChannelToInsertionOrderLineItemPreviewID` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `SspPublisherChannelID` char(100) NOT NULL,
   `SspPublisherChannelDescription` char(100) NOT NULL,
+  `SspExchange` char(100) NOT NULL,
   `InsertionOrderLineItemPreviewID` int(11) unsigned NOT NULL,
   `Enabled` int(4) unsigned NOT NULL DEFAULT 0,
   `DateCreated` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `DateUpdated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`SspRtbChannelToInsertionOrderLineItemPreviewID`),
   UNIQUE KEY `SspRtbChannelToIOLineItemPreview_UNIQUE` (`SspRtbChannelToInsertionOrderLineItemPreviewID`),
+  UNIQUE KEY `SspRtbChannelToIOLineItemPreview_UNQ_IDX` (`SspPublisherChannelID`,`SspExchange`,`InsertionOrderLineItemPreviewID`),
   KEY `FK_InsertionOrderLineItem_ID` (`InsertionOrderLineItemPreviewID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-
-
