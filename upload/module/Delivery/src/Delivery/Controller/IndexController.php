@@ -169,7 +169,7 @@ class IndexController extends AbstractActionController
 	    endif;
 	    
 	    $params = array();
-	    $params["PublisherWebsiteID"] 	= $PublisherWebsite->PublisherWebsiteID;
+	    $params["PublisherWebsiteID"] 	= $PublisherAdZone->PublisherWebsiteID;
 	    $PublisherWebsite 				= $PublisherWebsiteFactory->get_row_cached($config, $params);
 	    
 	    if ($PublisherWebsite == null):
@@ -219,10 +219,10 @@ class IndexController extends AbstractActionController
 	 
 	 	$RtbSellV22Bid->clone_local_rtb_request_with_pmp($config, $banner_request, $PmpDealPublisherWebsiteToInsertionOrderLineItemList);
 	 	
-	 	$bid_request_list[GENERIC_PARTNER] = $RtbSellV22Bid->build_rtb_bid_request_generic();
-	 	
-	 	$bid_request_list[LOOPBACK_PARTNER] = $RtbSellV22Bid->build_rtb_bid_request_loopback();
-	 	
+	 	$bid_request_list[self::GENERIC_PARTNER] = $RtbSellV22Bid->build_rtb_bid_request_generic();
+
+	 	$bid_request_list[self::LOOPBACK_PARTNER] = $RtbSellV22Bid->build_rtb_bid_request_loopback();
+
 	 	$PingManager = new \pinger\PingManager($config, $bid_request_list, $PublisherAdZone->AdOwnerID, $PublisherAdZone->PublisherWebsiteID, $PublisherAdZone->FloorPrice, $banner_request["PublisherAdZoneID"], $banner_request["AdName"], $banner_request["WebDomain"], $banner_request["ImpressionType"]);
 	 	
 	 	/*

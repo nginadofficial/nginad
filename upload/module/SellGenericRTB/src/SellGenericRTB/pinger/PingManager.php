@@ -84,7 +84,7 @@ class PingManager {
 			
 			$LoopbackPartnerBid = new \buyloopbackpartner\LoopbackPartnerBid($this->config, $this->config['buyside_rtb']['supply_partners']['BuyLoopbackPartner']['buyer_id']);
 			$LoopbackPartnerBid->is_local_request = true;
-			$validated = $LoopbackPartnerBid->parse_incoming_request($this->ping_request_list[LOOPBACK_PARTNER]);
+			$validated = $LoopbackPartnerBid->parse_incoming_request($this->ping_request_list[self::LOOPBACK_PARTNER]);
 			if ($validated === true):
 				$request_id = $LoopbackPartnerBid->RtbBidRequest->id;
 				$LoopbackPartnerBid->process_business_logic();
@@ -169,7 +169,7 @@ class PingManager {
 			 * Do we have a customized OpenRTB request just for this partner?
 			 */
 			
-			$ping_request_key = GENERIC_PARTNER;
+			$ping_request_key = self::GENERIC_PARTNER;
 			
 			if (isset($this->ping_request_list[$key])):
 				$ping_request_key = $key;
@@ -283,7 +283,7 @@ class PingManager {
 		 * to the multiple banner responses.
 		 */
 
-		$AuctionPopo->request_impid = $this->ping_request_list[GENERIC_PARTNER]["imp"][0]["id"];
+		$AuctionPopo->request_impid = json_decode($this->ping_request_list[self::GENERIC_PARTNER], true)["imp"][0]["id"];
 
 		$logger = \rtbsellv22\RtbSellV22Logger::get_instance();
 		$OpenRTBWorkflow = new \sellrtb\workflows\OpenRTBWorkflow();

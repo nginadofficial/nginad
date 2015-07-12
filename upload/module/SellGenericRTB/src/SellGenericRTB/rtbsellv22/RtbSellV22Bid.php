@@ -152,8 +152,9 @@ use rtbsell\RtbSellBid;
 		 * publishers have platform connection enabled on 
 		 * their inventory (website domains).
 		 */
-		$this->RtbBidRequestLocalPmp 				= clone $this->RtbBidRequest;
-		
+		// shallow copy - children are not cloned
+		$this->RtbBidRequestLocalPmp 		= clone $this->RtbBidRequest;
+
 		if (!count($PmpDealPublisherWebsiteToInsertionOrderLineItemList)):
 			return;
 		endif;
@@ -181,19 +182,27 @@ use rtbsell\RtbSellBid;
 		$this->setObjParam($RtbBidRequestDirectDeals, $banner_request, "bidfloor");
 		$RtbBidRequestDirectDeals->at 			= $config['settings']['rtb']['second_price_auction'] === true ? 2 : 1;
 		$RtbBidRequestDirectDeals->bidfloorcur  = $config['settings']['rtb']['auction_currency'];
-		$RtbBidRequestDirectDeals->wseats  		= $wseats;
+		$RtbBidRequestDirectDeals->wseat  		= $wseats;
 		
 		$RtbBidRequestPmp->RtbBidRequestDirectDealsList[] = $RtbBidRequestDirectDeals;
 		
 		/*
 		 * Add the PMP to each OpenRTB impression object
+		 * 
+		 * Because the original clone at the beginning of the 
+		 * method was a shallow copy, we need to deep copy the
+		 * Impression object children in order to change their
+		 * values.
 		 */
-		foreach ($this->RtbBidRequestLocalPmp->RtbBidRequestImpList as $RtbBidRequestImpKey => $RtbBidRequestImpValue):
+		$this->RtbBidRequestLocalPmp->RtbBidRequestImpList = array();
+		
+		foreach ($this->RtbBidRequest->RtbBidRequestImpList as $RtbBidRequestImpKey => $RtbBidRequestImpValue):
 			
+			$this->RtbBidRequestLocalPmp->RtbBidRequestImpList[$RtbBidRequestImpKey] = clone $this->RtbBidRequest->RtbBidRequestImpList[$RtbBidRequestImpKey];
 			$this->RtbBidRequestLocalPmp->RtbBidRequestImpList[$RtbBidRequestImpKey]->RtbBidRequestPmp = $RtbBidRequestPmp;
 			
 		endforeach;
-				
+			
 	}
 	
 	public function create_rtb_request_from_publisher_display_impression($config, $banner_request) {
