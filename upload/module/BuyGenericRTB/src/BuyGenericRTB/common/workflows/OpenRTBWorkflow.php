@@ -82,7 +82,17 @@ class OpenRTBWorkflow
 			        /*
 			         * check the business rules against the banner
 			         */
-		        	
+	        		
+	        		// Check PMP
+	        		if (\buyrtb\workflows\tasklets\common\adcampaignbanner\CheckPrivateMarketPlace::execute($logger, $this, $RtbBidRequest, $RtbBidRequestImp, $InsertionOrderLineItem) === false):
+	        			continue;
+	        		endif;
+	        	
+	        		// Check Domain Admin SSP Channel Selections
+	        		if (\buyrtb\workflows\tasklets\common\adcampaignbanner\CheckSspChannelSelections::execute($logger, $this, $RtbBidRequest, $RtbBidRequestImp, $InsertionOrderLineItem) === false):
+	        			continue;
+	        		endif;
+	        		
 		        	// Check banner date
 		        	if (\buyrtb\workflows\tasklets\common\adcampaignbanner\CheckBannerDate::execute($logger, $this, $RtbBidRequest, $RtbBidRequestImp, $InsertionOrderLineItem) === false):
 		        		continue;

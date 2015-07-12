@@ -46,11 +46,6 @@ class BannerRestrictionsWorkflow {
 			return false;
 		endif;
 		
-		// Check banner for PMP Enable
-		if (\buyrtbfidelity\workflows\tasklets\common\adcampaignmediarestrictions\CheckPrivateMarketPlaceEnabled::execute($Logger, $ParentWorkflow, $RtbBidRequest, $RtbBidRequestImp, $InsertionOrderLineItem, $InsertionOrderLineItemRestrictions) === false):
-			return false;
-		endif;
-		
 		// Check banner for https:// secure
 		if (\buyrtbfidelity\workflows\tasklets\common\adcampaignmediarestrictions\CheckSecureOnly::execute($Logger, $ParentWorkflow, $RtbBidRequest, $RtbBidRequestImp, $InsertionOrderLineItem, $InsertionOrderLineItemRestrictions) === false):
 			return false;
