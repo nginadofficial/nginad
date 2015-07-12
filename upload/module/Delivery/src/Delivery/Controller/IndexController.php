@@ -13,6 +13,10 @@ use Zend\Mvc\Controller\AbstractActionController;
 
 class IndexController extends AbstractActionController
 {
+	
+	const GENERIC_PARTNER = "GenericPartner";
+	
+	const LOOPBACK_PARTNER = "LoopbackPartner";
 
     public function indexAction()
     {
@@ -153,6 +157,7 @@ class IndexController extends AbstractActionController
     private function process_publisher_tag($config, $banner_request) {
 
     	$PublisherAdZoneFactory = \_factory\PublisherAdZone::get_instance();
+    	$PublisherWebsiteFactory = \_factory\PublisherWebsite::get_instance();
     	
     	$params = array();
     	$params["AdStatus"] = 1;
@@ -162,9 +167,29 @@ class IndexController extends AbstractActionController
 	    if ($PublisherAdZone == null):
 	    	return;
 	    endif;
-    	
-	    $banner_request["ImpressionType"] = $PublisherAdZone->ImpressionType;
 	    
+	    $params = array();
+	    $params["PublisherWebsiteID"] 	= $PublisherWebsite->PublisherWebsiteID;
+	    $PublisherWebsite 				= $PublisherWebsiteFactory->get_row_cached($config, $params);
+	    
+	    if ($PublisherWebsite == null):
+	    	return;
+	    endif;
+	    
+	    /*
+	     * Does this publisher's website belong to a Domain Admin
+	     * running a private exchange?
+	     * 
+	     * If it does, did the domain admin enable this website's inventory
+	     * to be available on the platform connection feature to other
+	     * domain admins running their own private exchanges?
+	     * 
+	     * Did he enable platform exchange on the website edit page
+	     * to enable this publisher's website inventory to be sent to DSPs?
+	     */
+	    $banner_request["PrivateExchangeOnly"] 			= $PublisherWebsite->VisibilityTypeID == 2 ? true : false;
+    	
+	    $banner_request["ImpressionType"] 				= $PublisherAdZone->ImpressionType;
 
 	 	$banner_request = $this->build_request_array($config, $banner_request);   	
 	
@@ -172,13 +197,51 @@ class IndexController extends AbstractActionController
 	 		
 	 	$RtbSellV22Bid->create_rtb_request_from_publisher_display_impression($config, $banner_request);
 	 		
-	 	$bid_request = $RtbSellV22Bid->build_rtb_bid_request();
+	 	/* 
+	 	 * We build the OpenRTB request destined for demand
+	 	 * that is local to this NginAd instance
+	 	 */
 	 	
-	 	$PingManager = new \pinger\PingManager($config, $bid_request, $PublisherAdZone->AdOwnerID, $PublisherAdZone->PublisherWebsiteID, $PublisherAdZone->FloorPrice, $banner_request["PublisherAdZoneID"], $banner_request["AdName"], $banner_request["WebDomain"], $banner_request["ImpressionType"]);
+	 	$PmpDealPublisherWebsiteToInsertionOrderLineItemFactory = \_factory\PmpDealPublisherWebsiteToInsertionOrderLineItem::get_instance();
 	 	
-	 	$PingManager->set_up_local_demand_ping_clients();	 		
-	 	$PingManager->set_up_remote_rtb_ping_clients();
+	 	$params = array();
+	 	$params["PublisherWebsiteID"] 					= $PublisherWebsite->PublisherWebsiteID;
+	 	$params["Enabled"] 								= 1;
+	 	if ($banner_request["PrivateExchangeOnly"] === true):
+	 		/*
+	 		 * PublisherWebsiteLocal is set to 1 only if the domain admin
+	 		 * owns the publishers under their private exchange
+	 		 */
+	 		$params["PublisherWebsiteLocal"] 			= $PublisherWebsite->VisibilityTypeID == 2 ? 1 : 0;
+	 	endif;
 
+	 	$PmpDealPublisherWebsiteToInsertionOrderLineItemList = $PmpDealPublisherWebsiteToInsertionOrderLineItemFactory->get_cached($config, $params);
+	 
+	 	$RtbSellV22Bid->clone_local_rtb_request_with_pmp($config, $banner_request, $PmpDealPublisherWebsiteToInsertionOrderLineItemList);
+	 	
+	 	$bid_request_list[GENERIC_PARTNER] = $RtbSellV22Bid->build_rtb_bid_request_generic();
+	 	
+	 	$bid_request_list[LOOPBACK_PARTNER] = $RtbSellV22Bid->build_rtb_bid_request_loopback();
+	 	
+	 	$PingManager = new \pinger\PingManager($config, $bid_request_list, $PublisherAdZone->AdOwnerID, $PublisherAdZone->PublisherWebsiteID, $PublisherAdZone->FloorPrice, $banner_request["PublisherAdZoneID"], $banner_request["AdName"], $banner_request["WebDomain"], $banner_request["ImpressionType"]);
+	 	
+	 	/*
+	 	 * Only send the RTB request to private exchanges
+	 	 * customers and domain admins if there are campaigns 
+	 	 * set up for it
+	 	 */
+	 	if (count($PmpDealPublisherWebsiteToInsertionOrderLineItemList)):
+	 		$PingManager->set_up_local_demand_ping_clients();	 		
+	 	endif;
+	 	
+	 	/*
+	 	 * Only send the RTB request to DSPs if the source
+	 	 * website is not marked for a private exchange only
+	 	 */
+	 	if ($banner_request["PrivateExchangeOnly"] === false):
+	 		$PingManager->set_up_remote_rtb_ping_clients();
+		endif;
+		
 	 	$PingManager->ping_rtb_ping_clients();
 	 	
 	 	$AuctionPopo   		= $PingManager->process_rtb_ping_responses();

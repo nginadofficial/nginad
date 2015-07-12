@@ -12,13 +12,24 @@ use \Exception;
 
 class PingManager {
 	
+	const GENERIC_PARTNER = "GenericPartner";
+	
+	const LOOPBACK_PARTNER = "LoopbackPartner";
+	
 	private $RTBPingerList = array();
 	
 	private $RTBLoopbackPing = null;
 	
 	private $config;
 	
-	private $ping_request;
+	/*
+	 * An array of json encoded 
+	 * OpenRTB requests 
+	 * 
+	 * where each key is the name of a specific
+	 * partner who's OpenRTB request needs customization
+	 */
+	private $ping_request_list;
 
 	private $winning_partner_pinger;
 
@@ -42,10 +53,10 @@ class PingManager {
 	
 	private $skipped_partner_list = array();
 	
-	public function __construct($config, $ping_request, $PublisherInfoID, $PublisherWebsiteID, $FloorPrice, $PublisherAdZoneID, $AdName, $WebDomain, $ImpressionType) {
+	public function __construct($config, $ping_request_list, $PublisherInfoID, $PublisherWebsiteID, $FloorPrice, $PublisherAdZoneID, $AdName, $WebDomain, $ImpressionType) {
 		
 		$this->config 					= $config;
-		$this->ping_request 			= json_decode($ping_request, true);
+		$this->ping_request_list 		= $ping_request_list;
 		$this->PublisherInfoID 			= $PublisherInfoID;
 		$this->PublisherWebsiteID 		= $PublisherWebsiteID;
 		$this->FloorPrice 				= floatval($FloorPrice);
@@ -54,9 +65,6 @@ class PingManager {
 		$this->WebDomain 				= $WebDomain;
 		$this->ImpressionType			= $ImpressionType;
 		$this->is_second_price_auction	= $this->config['settings']['rtb']['second_price_auction'];
-		
-		// is this a 1rst price or 2nd price auction?
-		$this->ping_request["at"]		= ($this->is_second_price_auction === true) ? 2 : 1;
 		
 		$this->publisher_markup_rate = \util\Markup::getPublisherMarkupRate($this->PublisherWebsiteID, $this->PublisherInfoID, $this->config);
 		
@@ -76,7 +84,7 @@ class PingManager {
 			
 			$LoopbackPartnerBid = new \buyloopbackpartner\LoopbackPartnerBid($this->config, $this->config['buyside_rtb']['supply_partners']['BuyLoopbackPartner']['buyer_id']);
 			$LoopbackPartnerBid->is_local_request = true;
-			$validated = $LoopbackPartnerBid->parse_incoming_request(json_encode($this->ping_request));
+			$validated = $LoopbackPartnerBid->parse_incoming_request($this->ping_request_list[LOOPBACK_PARTNER]);
 			if ($validated === true):
 				$request_id = $LoopbackPartnerBid->RtbBidRequest->id;
 				$LoopbackPartnerBid->process_business_logic();
@@ -157,14 +165,30 @@ class PingManager {
 		
 			$partner_class = new $demand_partner['class_name']();
 			
-			// optionally customize ping data for a specific demand partner
-			$json_ping_data = $partner_class->customize($this->ping_request);
+			/*
+			 * Do we have a customized OpenRTB request just for this partner?
+			 */
+			
+			$ping_request_key = GENERIC_PARTNER;
+			
+			if (isset($this->ping_request_list[$key])):
+				$ping_request_key = $key;
+			endif;
+			
+			/*
+			 * Optionally customize ping data for a specific demand partner
+			 * 
+			 * This method is now responsible for decoding the
+			 * data as json, and re-encoding it before it
+			 * returns the modified OpenRTB request
+			 */
+			$json_ping_data = $partner_class->customize($this->ping_request_list[$ping_request_key]);
 			
 			$RTBPinger = new RTBPinger(
 					$partner_class->partner_name,
 					$partner_class->partner_id,
 					$demand_partner['partner_rtb_url'],
-					json_encode($json_ping_data),
+					$json_ping_data,
 					$partner_class->rtb_connection_timeout_ms,
 					$partner_class->rtb_timeout_ms,
 					$partner_class->partner_quality_score,
@@ -259,7 +283,7 @@ class PingManager {
 		 * to the multiple banner responses.
 		 */
 
-		$AuctionPopo->request_impid = $this->ping_request["imp"][0]["id"];
+		$AuctionPopo->request_impid = $this->ping_request_list[GENERIC_PARTNER]["imp"][0]["id"];
 
 		$logger = \rtbsellv22\RtbSellV22Logger::get_instance();
 		$OpenRTBWorkflow = new \sellrtb\workflows\OpenRTBWorkflow();

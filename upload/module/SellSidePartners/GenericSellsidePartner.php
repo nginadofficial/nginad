@@ -26,6 +26,11 @@ class GenericSellsidePartner {
 	
 	public function customize($json_ping_data) {
 	
+		/*
+		 * This method is now responsible for decoding the
+		 * data as json, and re-encoding it before it 
+		 * returns the modified OpenRTB request
+		 */
 		return $json_ping_data;
 	}
 	

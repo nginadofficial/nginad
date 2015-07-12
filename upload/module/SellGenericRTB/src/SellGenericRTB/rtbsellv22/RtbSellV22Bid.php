@@ -20,6 +20,9 @@ use rtbsell\RtbSellBid;
 
 	// object containing the JSON request
 	public $RtbBidRequest;
+	// inject PMP to local requests
+	public $RtbBidRequestLocalPmp;
+	
 	public $RtbBidResponse;
 	
 	public $user_ip_hash;
@@ -64,12 +67,16 @@ use rtbsell\RtbSellBid;
 	}
 	
 	
-	public function build_rtb_bid_request() {
-		$bid_request = array();
+	public function build_rtb_bid_request_generic() {
+
+		return \buyrtb\encoders\openrtb\RtbBidRequestJsonEncoder::execute($this->RtbBidRequest);
 		
-		$this->bid_request = \buyrtb\encoders\openrtb\RtbBidRequestJsonEncoder::execute($this->RtbBidRequest);
-		
-		return $this->bid_request;
+	}
+	
+	public function build_rtb_bid_request_loopback() {
+
+		return \buyrtb\encoders\openrtb\RtbBidRequestJsonEncoder::execute($this->RtbBidRequestLocalPmp);
+	
 	}
 	
 	private function setObjParam(&$obj, &$arr, $name, $obj_name = null) {
@@ -133,6 +140,60 @@ use rtbsell\RtbSellBid;
 		endif;
 
 		return $RtbBidRequestBanner;
+	}
+	
+	public function clone_local_rtb_request_with_pmp($config, $banner_request, $PmpDealPublisherWebsiteToInsertionOrderLineItemList) {
+		/*
+		 * Take the existing RTB requests that we send to DSPs
+		 * and inject the PMP object for local domain admins
+		 * which are using the platform for private exchanges
+		 * or which are bidding on platform connection inventory
+		 * from other domain admins on the platform who's 
+		 * publishers have platform connection enabled on 
+		 * their inventory (website domains).
+		 */
+		$this->RtbBidRequestLocalPmp 				= clone $this->RtbBidRequest;
+		
+		if (!count($PmpDealPublisherWebsiteToInsertionOrderLineItemList)):
+			return;
+		endif;
+		
+		$RtbBidRequestPmp							= new \model\openrtb\RtbBidRequestPmp();
+		
+		$RtbBidRequestPmp->private_auction			= 1;
+		
+		/*
+		 * In this implementation wseats 
+		 * is an array of InsertionOrderLineItemIDs
+		 * from the domain admins who have added the 
+		 * inventory to their InsertionOrders
+		 */
+		$wseats = array();
+		
+		foreach ($PmpDealPublisherWebsiteToInsertionOrderLineItemList as $PmpDealPublisherWebsiteToInsertionOrderLineItem):
+
+			$wseats[] = $PmpDealPublisherWebsiteToInsertionOrderLineItem->InsertionOrderLineItemID;
+		
+		endforeach;
+		
+		$RtbBidRequestDirectDeals				= new \model\openrtb\RtbBidRequestDirectDeals();
+		$RtbBidRequestDirectDeals->id			= $this->generate_transaction_id();
+		$this->setObjParam($RtbBidRequestDirectDeals, $banner_request, "bidfloor");
+		$RtbBidRequestDirectDeals->at 			= $config['settings']['rtb']['second_price_auction'] === true ? 2 : 1;
+		$RtbBidRequestDirectDeals->bidfloorcur  = $config['settings']['rtb']['auction_currency'];
+		$RtbBidRequestDirectDeals->wseats  		= $wseats;
+		
+		$RtbBidRequestPmp->RtbBidRequestDirectDealsList[] = $RtbBidRequestDirectDeals;
+		
+		/*
+		 * Add the PMP to each OpenRTB impression object
+		 */
+		foreach ($this->RtbBidRequestLocalPmp->RtbBidRequestImpList as $RtbBidRequestImpKey => $RtbBidRequestImpValue):
+			
+			$this->RtbBidRequestLocalPmp->RtbBidRequestImpList[$RtbBidRequestImpKey]->RtbBidRequestPmp = $RtbBidRequestPmp;
+			
+		endforeach;
+				
 	}
 	
 	public function create_rtb_request_from_publisher_display_impression($config, $banner_request) {
@@ -229,7 +290,7 @@ use rtbsell\RtbSellBid;
 		endif;
 
 		// first price auction
-		$RtbBidRequest->at 							= 1;
+		$RtbBidRequest->at 							= $config['settings']['rtb']['second_price_auction'] === true ? 2 : 1;
 
 		// currency from the config file
 		$RtbBidRequest->cur							= array($config['settings']['rtb']['auction_currency']);
