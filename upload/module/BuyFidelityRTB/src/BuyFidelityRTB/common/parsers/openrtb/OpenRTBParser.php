@@ -21,7 +21,7 @@ class OpenRTBParser {
 	public $missing_optional_bid_request_params = "Bid Request missing optional parameter";
 	public $got_optional_bid_request_params = "Got Bid Request optional parameter";
 	
-	public function parse_request($config, $is_local, $raw_post = null) {
+	public function parse_request($config, $is_local, $rtb_ssp_friendly_name, $raw_post = null) {
 
 		$this->config = $config;
 		
@@ -32,7 +32,8 @@ class OpenRTBParser {
 		
 		// prepare the response object
 		$this->RtbBidRequest = new \model\openrtb\RtbBidRequest();
-		$this->RtbBidRequest->is_local_request = $is_local;
+		$this->RtbBidRequest->is_local_request 	= $is_local;
+		$this->RtbBidRequest->ssp_exchange_name = $rtb_ssp_friendly_name;
 		
 		// Initialize Data
 		try {

@@ -51,4 +51,6 @@ class RtbBidRequest {
 
 	// used only by NginAd internally
 	public $is_local_request;
+	
+	public $ssp_exchange_name;
 }

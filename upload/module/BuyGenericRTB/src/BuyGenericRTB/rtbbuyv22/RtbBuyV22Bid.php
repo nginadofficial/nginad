@@ -161,7 +161,7 @@ abstract class RtbBuyV22Bid extends RtbBuyBid {
 
 		$OpenRTBParser = new \buyrtb\parsers\openrtb\OpenRTBParser();
 		try {
-			$this->RtbBidRequest = $OpenRTBParser->parse_request($this->config, $this->is_local_request, $raw_post);
+			$this->RtbBidRequest = $OpenRTBParser->parse_request($this->config, $this->is_local_request, $this->rtb_ssp_friendly_name, $raw_post);
 		} catch (Exception $e) {
 			$this->no_bid_reason = NOBID_INVALID_REQUEST;
 			return false;
@@ -300,7 +300,7 @@ abstract class RtbBuyV22Bid extends RtbBuyBid {
 			* GRID LAYOUT WITH THE DAILY IMPS IN A SORTABLE COLUMN
 			*/
 
-			$buyside_partner_name 				= $this->rtb_ssp_friendly_name;;
+			$buyside_partner_name 				= $this->rtb_ssp_friendly_name;
 			$rtb_channel_site_id 				= "N/A";
 			$rtb_channel_site_name				= "N/A";
 			$rtb_channel_publisher_name			= "N/A";
