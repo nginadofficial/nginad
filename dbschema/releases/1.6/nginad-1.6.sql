@@ -696,46 +696,6 @@ INSERT INTO `IndustryCategories` VALUES ('36', 'Travel', null, '1', null, '2013-
 INSERT INTO `IndustryCategories` VALUES ('38', 'Women\'s Interest', null, '1', null, '2013-01-29 17:10:00', '2014-01-29 17:14:25');
 
 -- ----------------------------
--- Table structure for LinkedBannerToAdZone
--- ----------------------------
-DROP TABLE IF EXISTS `LinkedBannerToAdZone`;
-CREATE TABLE `LinkedBannerToAdZone` (
-  `LinkedBannerToAdZoneID` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `InsertionOrderLineItemID` int(11) unsigned NOT NULL,
-  `PublisherAdZoneID` int(11) unsigned NOT NULL,
-  `Weight` int(11) NOT NULL DEFAULT '5',
-  `DateCreated` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `DateUpdated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`LinkedBannerToAdZoneID`),
-  UNIQUE KEY `LinkedBannerToAdZone_UNIQUE` (`LinkedBannerToAdZoneID`),
-  KEY `FK_Publisher_Zone_ID` (`InsertionOrderLineItemID`),
-  KEY `FK_InsertionOrder_Banner_ID` (`PublisherAdZoneID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- ----------------------------
--- Records of LinkedBannerToAdZone
--- ----------------------------
-
--- ----------------------------
--- Table structure for LinkedBannerToAdZonePreview
--- ----------------------------
-DROP TABLE IF EXISTS `LinkedBannerToAdZonePreview`;
-CREATE TABLE `LinkedBannerToAdZonePreview` (
-  `LinkedBannerToAdZonePreviewID` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `InsertionOrderLineItemPreviewID` int(11) unsigned NOT NULL,
-  `PublisherAdZoneID` int(11) unsigned NOT NULL,
-  `Weight` int(11) NOT NULL DEFAULT '5',
-  `DateCreated` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `DateUpdated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`LinkedBannerToAdZonePreviewID`),
-  UNIQUE KEY `LinkedBannerToAdZone_UNIQUE` (`LinkedBannerToAdZonePreviewID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- ----------------------------
--- Records of LinkedBannerToAdZonePreview
--- ----------------------------
-
--- ----------------------------
 -- Table structure for Maintenance
 -- ----------------------------
 DROP TABLE IF EXISTS `Maintenance`;
@@ -773,7 +733,6 @@ DROP TABLE IF EXISTS `PublisherAdZone`;
 CREATE TABLE `PublisherAdZone` (
   `PublisherAdZoneID` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `PublisherWebsiteID` int(10) unsigned NOT NULL,
-  `PublisherAdZoneTypeID` int(11) NOT NULL,
   `ImpressionType` char(10) NOT NULL DEFAULT 'banner',
   `AdOwnerID` int(10) unsigned NOT NULL,
   `AdName` varchar(100) NOT NULL,
@@ -824,28 +783,6 @@ CREATE TABLE `PublisherAdZoneVideo` (
   PRIMARY KEY (`PublisherAdZoneVideoID`),
   UNIQUE KEY `UQ_PublisherAdZone` (`PublisherAdZoneID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
-
-
--- ----------------------------
--- Table structure for PublisherAdZoneType
--- ----------------------------
-DROP TABLE IF EXISTS `PublisherAdZoneType`;
-CREATE TABLE `PublisherAdZoneType` (
-  `PublisherAdZoneTypeID` int(11) unsigned NOT NULL,
-  `Description` varchar(255) NOT NULL,
-  `DateCreated` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `DateUpdated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`PublisherAdZoneTypeID`),
-  UNIQUE KEY `PublisherAdZoneType_UNIQUE` (`PublisherAdZoneTypeID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- ----------------------------
--- Records of PublisherAdZoneType
--- ----------------------------
-INSERT INTO `PublisherAdZoneType` VALUES ('1', 'Any Remnant', '2014-08-17 12:16:21', '2014-08-17 12:16:21');
-INSERT INTO `PublisherAdZoneType` VALUES ('2', 'In House Remnant', '2014-08-17 12:16:21', '2014-08-17 12:16:21');
-INSERT INTO `PublisherAdZoneType` VALUES ('3', 'RTB Remnant', '2014-08-17 12:16:21', '2014-08-17 12:16:21');
-INSERT INTO `PublisherAdZoneType` VALUES ('4', 'Contract', '2014-08-17 12:16:21', '2014-08-17 12:16:21');
 
 -- ----------------------------
 -- Table structure for PublisherInfo

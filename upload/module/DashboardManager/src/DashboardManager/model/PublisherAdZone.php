@@ -18,7 +18,6 @@ class PublisherAdZone  implements InputFilterAwareInterface
 {
     public $PublisherAdZoneID;
     public $PublisherWebsiteID;
-    public $VisibilityTypeID;
     public $ImpressionType;
     public $AdName;
     public $Description;
@@ -41,7 +40,6 @@ class PublisherAdZone  implements InputFilterAwareInterface
     public function exchangeArray($data)
     {
     	$this->AdName          			= (isset($data['AdName']))          		? $data['AdName']           	: null;
-        $this->PublisherAdZoneTypeID    = (isset($data['PublisherAdZoneTypeID']))   ? $data['PublisherAdZoneTypeID'] : null;
         $this->ImpressionType    		= (isset($data['ImpressionType']))   		? $data['ImpressionType'] 		: null;
         $this->Description     			= (isset($data['Description']))     		? $data['Description']      	: null;
         $this->PassbackAdTag   			= (isset($data['PassbackAdTag']))   		? $data['PassbackAdTag']    	: null;
@@ -78,15 +76,7 @@ class PublisherAdZone  implements InputFilterAwareInterface
         if (!$this->inputFilter):
         
             $inputFilter = new InputFilter();
-            $factory = new InputFactory();
-            
-            $inputFilter->add($factory->createInput(array(
-            		'name' => 'PublisherAdZoneTypeID',
-            		'required' => false,
-            		'filters' => array(
-            				array('name' => 'Int'),
-            		),
-            )));    
+            $factory = new InputFactory();    
 
             $inputFilter->add($factory->createInput(array(
             		'name' => 'ImpressionType',

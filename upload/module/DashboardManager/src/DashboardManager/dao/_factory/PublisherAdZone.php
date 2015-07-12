@@ -197,7 +197,6 @@ class PublisherAdZone extends \_factory\CachedTableRead
     // We must enforce data integrity!
     $data['PublisherAdZoneID'] = intval(abs($rawData->PublisherAdZoneID));
     $data['PublisherWebsiteID'] = intval(abs($rawData->PublisherWebsiteID));
-    $data['VisibilityTypeID'] = intval(abs($rawData->VisibilityTypeID));
    	$data['AdOwnerID'] = intval(abs($rawData->AdOwnerID));
    	$data['AdName'] = substr($rawData->AdName,0,100);
    	$data['Description'] = $rawData->Description;
@@ -307,23 +306,6 @@ class PublisherAdZone extends \_factory\CachedTableRead
        return FALSE; // Invalid ID.
        
    }
-   
-   public function updatePublisherAdZonePublisherAdZoneType($publisher_ad_zone_id, $type_id) {
-    
-    	$params = array();
-    	$params["PublisherAdZoneID"] = $publisher_ad_zone_id;
-    	$PublisherAdZone = $this->get_row($params);
-    
-    	if ($PublisherAdZone != null):
-	    	 
-    		$PublisherAdZone->PublisherAdZoneTypeID = $type_id;
-	    	// get array of data
-	    	$data = $PublisherAdZone->getArrayCopy();
-	    	 
-	    	$this->update($data, array('PublisherAdZoneID' => $publisher_ad_zone_id));
-    	endif;
-    
-    }
     
     public function updatePublisherAdZonePublisherAdZoneStatus($publisher_ad_zone_id, $approval_flag) {
     

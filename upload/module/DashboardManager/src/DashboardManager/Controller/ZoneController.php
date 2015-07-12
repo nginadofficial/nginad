@@ -304,15 +304,7 @@ class ZoneController extends PublisherAbstractActionController {
 				else:
 					$ad->AdStatus = 0;
 				endif;
-				
-				// only the admin can create direct contracts between publishers and demand customers
-				if ($this->is_super_admin):
-					$publisher_ad_zone_type_id = $request->getPost("PublisherAdZoneTypeID");
-					$linkedbanners = $this->getRequest()->getPost('linkedbanners');
-				endif;
-				
-				$ad->PublisherAdZoneTypeID	= $publisher_ad_zone_type_id;
-				
+
                 // Check to see if an entry exists with the same name for the same website domain. A NULL means there are no duplicates.
                 if ($PublisherAdZoneFactory->get_row(array("PublisherWebsiteID" => $DomainObj->PublisherWebsiteID, "AdName" => $ad->AdName)) === null):
                 
@@ -433,7 +425,6 @@ class ZoneController extends PublisherAbstractActionController {
         		'effective_id' => $this->EffectiveID,
         		'impersonate_id' => $this->ImpersonateID,
                 'domain_obj' => $DomainObj,
-        		'publisheradzonetype_options'  => $this->getPublisherAdZoneTypeOptions(),
         		'true_user_name' => $this->true_user_name,
         		'dashboard_view' => 'publisher',
         		'AdOwnerID' => $this->PublisherInfoID,
@@ -477,8 +468,6 @@ class ZoneController extends PublisherAbstractActionController {
         $InsertionOrderLineItemFactory = \_factory\InsertionOrderLineItem::get_instance();
         $PublisherAdZoneVideoFactory = \_factory\PublisherAdZoneVideo::get_instance();
         
-        $current_publisheradzonetype = AD_TYPE_ANY_REMNANT;
-
         $editResultObj = new \model\PublisherAdZone();
         
         $DomainObj = $this->get_domain_data($DomainID, $this->PublisherInfoID);
@@ -544,9 +533,6 @@ class ZoneController extends PublisherAbstractActionController {
                 $editResultObj = $PublisherAdZoneFactory->get_row_object($AdSpaceParameters);
 
                 if (intval($editResultObj->PublisherAdZoneID) == $AdSpaceID && intval($editResultObj->PublisherWebsiteID) == $DomainObj->PublisherWebsiteID):
-                     
-                	$current_publisheradzonetype   = $editResultObj->PublisherAdZoneTypeID;
-                
 
 	                $params = array();
 	                $params['PublisherAdZoneID'] 	= $editResultObj->PublisherAdZoneID;
@@ -587,14 +573,7 @@ class ZoneController extends PublisherAbstractActionController {
                 
                     	$validate = $this->validateInput($needed_input, false);
             
-            			if ($validate):
-            				
-            				// only the admin can change the ad zone type
-            				if ($this->is_super_admin):
-	            				$publisher_ad_zone_type_id 				= $request->getPost("PublisherAdZoneTypeID");
-	            				$linkedbanners 							= $request->getPost('linkedbanners');
-	            				$editResultObj->PublisherAdZoneTypeID	= $publisher_ad_zone_type_id;
-							endif;            			
+            			if ($validate):        			
 
 	                    	$editResultObj->AdName 					= $request->getPost("AdName");
 							$editResultObj->Description 			= $request->getPost("Description");
@@ -775,8 +754,6 @@ class ZoneController extends PublisherAbstractActionController {
         		'effective_id' => $this->EffectiveID,
         		'impersonate_id' => $this->ImpersonateID,
         		'domain_obj' => $DomainObj,
-        		'current_publisheradzonetype'  => $current_publisheradzonetype,
-        		'publisheradzonetype_options'  => $this->getPublisherAdZoneTypeOptions(),
         		'editResultObj' => $editResultObj,
         		'AdTemplateList' => $this->get_ad_templates(),
         		'true_user_name' => $this->true_user_name,
@@ -1114,23 +1091,6 @@ class ZoneController extends PublisherAbstractActionController {
           return $this->getResponse()->setContent(json_encode($data));
 
         endif;
-     }
-         
-     private function getPublisherAdZoneTypeOptions() {
-     
-     	$PublisherAdZoneTypeFactory = \_factory\PublisherAdZoneType::get_instance();
-     	$params = array();
-     	$PublisherAdZoneTypeList = $PublisherAdZoneTypeFactory->get($params);
-     	     	
-     	$publisheradzonetype_options = array();
-     
-     	foreach ($PublisherAdZoneTypeList as $PublisherAdZoneType):
-     
-     		$publisheradzonetype_options[$PublisherAdZoneType->PublisherAdZoneTypeID] = $PublisherAdZoneType->Description;
-     
-     	endforeach;
-     
-     	return $publisheradzonetype_options;
      }
      
      /**

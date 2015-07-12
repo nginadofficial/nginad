@@ -57,19 +57,6 @@ $(function() {
     <input type="text" value="0" class="input-mini" maxlength="20" id="FloorPrice" name="FloorPrice"></div>
     </div>
     </div>
-    <?php if ($is_super_admin): ?>
-	<div class="form-group">
-		<label for="PublisherAdZoneTypeID" class="control-label">Zone type?</label>
-		<div class="controls">
-        <select id="PublisherAdZoneTypeID"  class="selbox-width" name="PublisherAdZoneTypeID" onchange="switchPublisherAdZoneType();">
-            <?php foreach ($publisheradzonetype_options as $code => $name): ?>
-                <option value="<?php echo $code;?>"><?php echo $name;?></option>
-            <?php endforeach; ?>
-        </select>
-        <div id="banner-picker"></div>
-		</div>
-	</div>
-	<?php endif; ?>
     <div class="control-group novideo">
      <label for="IsMobileFlag" class="control-label">Is Mobile?</label>
     <div class="controls">
