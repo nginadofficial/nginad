@@ -53,22 +53,22 @@ class OpenRTBWorkflow
     	 */
     	
     	// match ip against country code
-    	\buyrtbfidelity\workflows\tasklets\common\adcampaign\GetGeoCodeCountry::execute($logger, $this, $RtbBidRequest);
+    	\buyrtbfidelity\workflows\tasklets\common\insertionorder\GetGeoCodeCountry::execute($logger, $this, $RtbBidRequest);
 
     	foreach ($InsertionOrderList as $InsertionOrder):
 
 	    	// Check campaign date
-	    	if (\buyrtbfidelity\workflows\tasklets\common\adcampaign\CheckCampaignDate::execute($logger, $this, $RtbBidRequest, $InsertionOrder) === false):
+	    	if (\buyrtbfidelity\workflows\tasklets\common\insertionorder\CheckCampaignDate::execute($logger, $this, $RtbBidRequest, $InsertionOrder) === false):
 	    		continue;
 	    	endif;
 
         	// Check max spend
-	    	if (\buyrtbfidelity\workflows\tasklets\common\adcampaign\CheckMaxSpend::execute($logger, $this, $RtbBidRequest, $InsertionOrder) === false):
+	    	if (\buyrtbfidelity\workflows\tasklets\common\insertionorder\CheckMaxSpend::execute($logger, $this, $RtbBidRequest, $InsertionOrder) === false):
 	    		continue;
 	    	endif;
 
 	    	// Check max impressions
-	    	if (\buyrtbfidelity\workflows\tasklets\common\adcampaign\CheckMaxImpressions::execute($logger, $this, $RtbBidRequest, $InsertionOrder) === false):
+	    	if (\buyrtbfidelity\workflows\tasklets\common\insertionorder\CheckMaxImpressions::execute($logger, $this, $RtbBidRequest, $InsertionOrder) === false):
 	    		continue;
 	    	endif;
 
@@ -95,22 +95,22 @@ class OpenRTBWorkflow
 			         */
 		        	
 		        	// Check banner date
-		        	if (\buyrtbfidelity\workflows\tasklets\common\adcampaignbanner\CheckBannerDate::execute($logger, $this, $RtbBidRequest, $RtbBidRequestImp, $InsertionOrderLineItem) === false):
+		        	if (\buyrtbfidelity\workflows\tasklets\common\insertionorderlineitem\CheckBannerDate::execute($logger, $this, $RtbBidRequest, $RtbBidRequestImp, $InsertionOrderLineItem) === false):
 		        		continue;
 		        	endif;
 	            	
 		        	// Check impression price floor
-		        	if (\buyrtbfidelity\workflows\tasklets\common\adcampaignbanner\CheckPriceFloor::execute($logger, $this, $RtbBidRequest, $RtbBidRequestImp, $InsertionOrderLineItem, $markup_rate) === false):
+		        	if (\buyrtbfidelity\workflows\tasklets\common\insertionorderlineitem\CheckPriceFloor::execute($logger, $this, $RtbBidRequest, $RtbBidRequestImp, $InsertionOrderLineItem, $markup_rate) === false):
 		        		continue;
 		        	endif;
 		        	
 	            	// Check banner domain exclusive inclusions
-		        	if (\buyrtbfidelity\workflows\tasklets\common\adcampaignbanner\CheckExclusiveInclusion::execute($logger, $this, $RtbBidRequest, $RtbBidRequestImp, $InsertionOrderLineItem, $InsertionOrderLineItemExclusiveInclusionFactory) === false):
+		        	if (\buyrtbfidelity\workflows\tasklets\common\insertionorderlineitem\CheckExclusiveInclusion::execute($logger, $this, $RtbBidRequest, $RtbBidRequestImp, $InsertionOrderLineItem, $InsertionOrderLineItemExclusiveInclusionFactory) === false):
 		        		continue;
 		        	endif;
 	
 	            	// Check banner domain exclusions match
-		        	if (\buyrtbfidelity\workflows\tasklets\common\adcampaignbanner\CheckDomainExclusion::execute($logger, $this, $RtbBidRequest, $RtbBidRequestImp, $InsertionOrderLineItem, $InsertionOrderLineItemDomainExclusionFactory) === false):
+		        	if (\buyrtbfidelity\workflows\tasklets\common\insertionorderlineitem\CheckDomainExclusion::execute($logger, $this, $RtbBidRequest, $RtbBidRequestImp, $InsertionOrderLineItem, $InsertionOrderLineItemDomainExclusionFactory) === false):
 		        		continue;
 		        	endif;
 		        	

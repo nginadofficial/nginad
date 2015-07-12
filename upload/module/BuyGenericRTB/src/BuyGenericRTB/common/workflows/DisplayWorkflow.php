@@ -14,17 +14,17 @@ class DisplayWorkflow
     public function process_business_rules_workflow(&$Logger, &$ParentWorkflow, \model\openrtb\RtbBidRequest &$RtbBidRequest, &$RtbBidRequestImp, &$InsertionOrderLineItem, &$InsertionOrderLineItemRestrictionsFactory) {
 
     	// Check banner height and width match
-    	if (\buyrtb\workflows\tasklets\display\adcampaignbanner\CheckDisplayBannerDimensions::execute($Logger, $ParentWorkflow, $RtbBidRequest, $RtbBidRequestImp, $InsertionOrderLineItem) === false):
+    	if (\buyrtb\workflows\tasklets\display\insertionorderlineitem\CheckDisplayBannerDimensions::execute($Logger, $ParentWorkflow, $RtbBidRequest, $RtbBidRequestImp, $InsertionOrderLineItem) === false):
     		return false;
     	endif;
     	 
     	// Check is mobile web, phone, tablet, native iOS or native Android
-    	if (\buyrtb\workflows\tasklets\display\adcampaignbanner\CheckIsMobile::execute($Logger, $ParentWorkflow, $RtbBidRequest, $RtbBidRequestImp, $InsertionOrderLineItem) === false):
+    	if (\buyrtb\workflows\tasklets\display\insertionorderlineitem\CheckIsMobile::execute($Logger, $ParentWorkflow, $RtbBidRequest, $RtbBidRequestImp, $InsertionOrderLineItem) === false):
     		return false;
     	endif;
     	 
     	// Check banner restrictions
-    	if (\buyrtb\workflows\tasklets\display\adcampaignbanner\BannerRestrictionsWorkflow::execute($Logger, $ParentWorkflow, $RtbBidRequest, $RtbBidRequestImp, $InsertionOrderLineItem, $InsertionOrderLineItemRestrictionsFactory) === false):
+    	if (\buyrtb\workflows\tasklets\display\insertionorderlineitem\BannerRestrictionsWorkflow::execute($Logger, $ParentWorkflow, $RtbBidRequest, $RtbBidRequestImp, $InsertionOrderLineItem, $InsertionOrderLineItemRestrictionsFactory) === false):
     		return false;
     	endif;
     	

@@ -42,22 +42,22 @@ class OpenRTBWorkflow
     	$InsertionOrderLineItemVideoRestrictionsFactory = \_factory\InsertionOrderLineItemVideoRestrictions::get_instance();
     	
     	// match ip against country code
-    	\buyrtb\workflows\tasklets\common\adcampaign\GetGeoCodeCountry::execute($logger, $this, $RtbBidRequest);
+    	\buyrtb\workflows\tasklets\common\insertionorder\GetGeoCodeCountry::execute($logger, $this, $RtbBidRequest);
 
     	foreach ($InsertionOrderList as $InsertionOrder):
 
 	    	// Check campaign date
-	    	if (\buyrtb\workflows\tasklets\common\adcampaign\CheckCampaignDate::execute($logger, $this, $RtbBidRequest, $InsertionOrder) === false):
+	    	if (\buyrtb\workflows\tasklets\common\insertionorder\CheckCampaignDate::execute($logger, $this, $RtbBidRequest, $InsertionOrder) === false):
 	    		continue;
 	    	endif;
 
         	// Check max spend
-	    	if (\buyrtb\workflows\tasklets\common\adcampaign\CheckMaxSpend::execute($logger, $this, $RtbBidRequest, $InsertionOrder) === false):
+	    	if (\buyrtb\workflows\tasklets\common\insertionorder\CheckMaxSpend::execute($logger, $this, $RtbBidRequest, $InsertionOrder) === false):
 	    		continue;
 	    	endif;
 
 	    	// Check max impressions
-	    	if (\buyrtb\workflows\tasklets\common\adcampaign\CheckMaxImpressions::execute($logger, $this, $RtbBidRequest, $InsertionOrder) === false):
+	    	if (\buyrtb\workflows\tasklets\common\insertionorder\CheckMaxImpressions::execute($logger, $this, $RtbBidRequest, $InsertionOrder) === false):
 	    		continue;
 	    	endif;
 
@@ -84,32 +84,32 @@ class OpenRTBWorkflow
 			         */
 	        		
 	        		// Check PMP
-	        		if (\buyrtb\workflows\tasklets\common\adcampaignbanner\CheckPrivateMarketPlace::execute($logger, $this, $RtbBidRequest, $RtbBidRequestImp, $InsertionOrderLineItem) === false):
+	        		if (\buyrtb\workflows\tasklets\common\insertionorderlineitem\CheckPrivateMarketPlace::execute($logger, $this, $RtbBidRequest, $RtbBidRequestImp, $InsertionOrderLineItem) === false):
 	        			continue;
 	        		endif;
 	        	
 	        		// Check Domain Admin SSP Channel Selections
-	        		if (\buyrtb\workflows\tasklets\common\adcampaignbanner\CheckSspChannelSelections::execute($logger, $this, $RtbBidRequest, $RtbBidRequestImp, $InsertionOrderLineItem) === false):
+	        		if (\buyrtb\workflows\tasklets\common\insertionorderlineitem\CheckSspChannelSelections::execute($logger, $this, $RtbBidRequest, $RtbBidRequestImp, $InsertionOrderLineItem) === false):
 	        			continue;
 	        		endif;
 	        		
 		        	// Check banner date
-		        	if (\buyrtb\workflows\tasklets\common\adcampaignbanner\CheckBannerDate::execute($logger, $this, $RtbBidRequest, $RtbBidRequestImp, $InsertionOrderLineItem) === false):
+		        	if (\buyrtb\workflows\tasklets\common\insertionorderlineitem\CheckBannerDate::execute($logger, $this, $RtbBidRequest, $RtbBidRequestImp, $InsertionOrderLineItem) === false):
 		        		continue;
 		        	endif;
 	            	
 		        	// Check impression price floor
-		        	if (\buyrtb\workflows\tasklets\common\adcampaignbanner\CheckPriceFloor::execute($logger, $this, $RtbBidRequest, $RtbBidRequestImp, $InsertionOrderLineItem, $markup_rate) === false):
+		        	if (\buyrtb\workflows\tasklets\common\insertionorderlineitem\CheckPriceFloor::execute($logger, $this, $RtbBidRequest, $RtbBidRequestImp, $InsertionOrderLineItem, $markup_rate) === false):
 		        		continue;
 		        	endif;
 		        	
 	            	// Check banner domain exclusive inclusions
-		        	if (\buyrtb\workflows\tasklets\common\adcampaignbanner\CheckExclusiveInclusion::execute($logger, $this, $RtbBidRequest, $RtbBidRequestImp, $InsertionOrderLineItem, $InsertionOrderLineItemExclusiveInclusionFactory) === false):
+		        	if (\buyrtb\workflows\tasklets\common\insertionorderlineitem\CheckExclusiveInclusion::execute($logger, $this, $RtbBidRequest, $RtbBidRequestImp, $InsertionOrderLineItem, $InsertionOrderLineItemExclusiveInclusionFactory) === false):
 		        		continue;
 		        	endif;
 	
 	            	// Check banner domain exclusions match
-		        	if (\buyrtb\workflows\tasklets\common\adcampaignbanner\CheckDomainExclusion::execute($logger, $this, $RtbBidRequest, $RtbBidRequestImp, $InsertionOrderLineItem, $InsertionOrderLineItemDomainExclusionFactory) === false):
+		        	if (\buyrtb\workflows\tasklets\common\insertionorderlineitem\CheckDomainExclusion::execute($logger, $this, $RtbBidRequest, $RtbBidRequestImp, $InsertionOrderLineItem, $InsertionOrderLineItemDomainExclusionFactory) === false):
 		        		continue;
 		        	endif;
 		        	
