@@ -216,7 +216,7 @@ class IndexController extends AbstractActionController
 	 	endif;
 
 	 	$PmpDealPublisherWebsiteToInsertionOrderLineItemList = $PmpDealPublisherWebsiteToInsertionOrderLineItemFactory->get_cached($config, $params);
-	 
+
 	 	$RtbSellV22Bid->clone_local_rtb_request_with_pmp($config, $banner_request, $PmpDealPublisherWebsiteToInsertionOrderLineItemList);
 	 	
 	 	$bid_request_list[self::GENERIC_PARTNER] = $RtbSellV22Bid->build_rtb_bid_request_generic();

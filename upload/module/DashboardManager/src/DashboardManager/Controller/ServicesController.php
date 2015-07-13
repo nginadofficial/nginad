@@ -61,7 +61,7 @@ class ServicesController extends DemandAbstractActionController {
 			 */
 			
 			$row = array(
-					" " => '<input type="checkbox" labelname="' . rawurlencode($label_name) . '" class="ckssp" name="ckssp[]" value="' . rawurlencode(str_replace(':', '-', $SspRtbChannelDailyStatsRollUp->SspRtbChannelSiteID) . ':' . str_replace(':', '-', $SspRtbChannelDailyStatsRollUp->BuySidePartnerName) . ':' . $label_name) . '" />',
+					" " => '<input type="checkbox" labelname="' . rawurlencode($label_name) . '" class="ckssp" name="ckssp[]" value="' . rawurlencode(str_replace(':', '__COLON__', $SspRtbChannelDailyStatsRollUp->SspRtbChannelSiteID) . ':' . str_replace(':', '__COLON__', $SspRtbChannelDailyStatsRollUp->BuySidePartnerName) . ':' . $label_name) . '" />',
 					"Site ID" => $site_id,
 					"Domain" => $SspRtbChannelDailyStatsRollUp->WebDomain,
 					"Name" => $site_name,

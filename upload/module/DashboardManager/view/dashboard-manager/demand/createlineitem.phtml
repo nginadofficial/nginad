@@ -332,7 +332,7 @@ $(function() {
   	<select autocomplete="off" id="ssp-feeds" name="ssp-feeds[]" multiple="multiple" class="zone-txtarea inventory-select">
   	<?php foreach ($ssp_channel_list as $ssp_channel):
 			if ($ssp_channel->Enabled == 1): ?>
-				<option value="<?php echo rawurlencode(str_replace(':', '-', $ssp_channel->SspPublisherChannelID) . ':' . str_replace(':', '-', $ssp_channel->SspExchange) . ':' . $ssp_channel->SspPublisherChannelDescription); ?>"><?php echo $ssp_channel->SspPublisherChannelDescription; ?></option>
+				<option value="<?php echo rawurlencode(str_replace(':', '__COLON__', $ssp_channel->SspPublisherChannelID) . ':' . str_replace(':', '__COLON__', $ssp_channel->SspExchange) . ':' . $ssp_channel->SspPublisherChannelDescription); ?>"><?php echo $ssp_channel->SspPublisherChannelDescription; ?></option>
 	<?php 	endif;	
 		endforeach; ?>
 	</select>

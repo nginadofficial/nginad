@@ -32,7 +32,7 @@ class ParsePrivateMarketPlace {
 				try {
 					$RtbBidRequestDirectDeals = new \model\openrtb\RtbBidRequestDirectDeals();
 					\buyrtb\parsers\openrtb\parselets\common\imp\ParseDirectDeals::execute($Logger, $Parser, $RtbBidRequest, $RtbBidRequestDirectDeals, $pmp_deal);
-					$RtbBidRequestUser->RtbBidRequestDirectDealsList[] = $RtbBidRequestDirectDeals;
+					$RtbBidRequestPmp->RtbBidRequestDirectDealsList[] = $RtbBidRequestDirectDeals;
 				} catch (Exception $e) {
 					throw new Exception($e->getMessage(), $e->getCode(), $e->getPrevious());
 				}

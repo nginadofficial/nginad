@@ -2563,6 +2563,10 @@ class DemandController extends DemandAbstractActionController {
 			
 			$ssp_feed_id 			= $ssp_feed_data["id"];
 			$ssp_exchange 			= $ssp_feed_data["exchange"];
+			
+			$ssp_feed_id = str_replace('__COLON__', ':', $ssp_feed_id);
+			$ssp_exchange = str_replace('__COLON__', ':', $ssp_exchange);
+			
 			$ssp_feed_description 	= $ssp_feed_data["description"];
 			
 			$authorized = \util\AuthHelper::domain_user_authorized_ssp_passthru($this->auth->getUserID(), $ssp_feed_id);
@@ -3246,6 +3250,10 @@ class DemandController extends DemandAbstractActionController {
 		    
 		    $ssp_feed_id 			= $ssp_feed_data["id"];
 		    $ssp_exchange 			= $ssp_feed_data["exchange"];
+		    
+		    $ssp_feed_id = str_replace('__COLON__', ':', $ssp_feed_id);
+		    $ssp_exchange = str_replace('__COLON__', ':', $ssp_exchange);
+		    
 		    $ssp_feed_description 	= $ssp_feed_data["description"];
 		    
 		    $authorized = \util\AuthHelper::domain_user_authorized_ssp_passthru($this->auth->getUserID(), $ssp_feed_id);

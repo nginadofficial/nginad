@@ -45,7 +45,7 @@ class CheckPrivateMarketPlace {
 				 * Here "seats" are mapped to InsertionOrderLineItemIDs
 				 */
 				foreach ($RtbBidRequestDirectDeals->wseat as $seat_id):
-					
+				
 					if ($InsertionOrderLineItem->InsertionOrderLineItemID == $seat_id):
 						/*
 						 * If bidfloor is set, set it in the imp object
@@ -63,7 +63,7 @@ class CheckPrivateMarketPlace {
 			
 			return false;
 		endif;
-		
+
 		return true;
 	}
 	
