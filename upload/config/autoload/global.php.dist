@@ -118,8 +118,13 @@ return array(
 				'maintenance_updates_minutes' 							=> 15,
 				// default demand 30% markup
 				'default_demand_markup_rate' 							=> 0.30,
-				// default publisher 30% markup
-				'default_publisher_markup_rate' 						=> 0.30,
+				// default publisher 10% markup
+				'default_publisher_markup_rate' 						=> 0.10,
+				/*
+				 * default publisher 20% markup for 
+				 * private exchange domain admins
+				 */ 
+				'default_private_exchange_publisher_markup_rate' 		=> 0.20,
 				// our house user ids are exempt from being marked up
 				'markup_exempt_userid_list'								=> array(1),
 				// our house publisher ids are exempt from being marked up

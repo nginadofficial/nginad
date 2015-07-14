@@ -54,6 +54,20 @@ class Markup {
 		return $ad_campaign_markup;
 	}
 
+	
+	public static function getMarkupForPrivateExchangePublisherWebsite($publisher_website_id, $config, $cached = true) {
+	
+		$PrivateExchangePublisherWebsiteMarkupFactory = \_factory\PrivateExchangePublisherWebsiteMarkup::get_instance();
+		$params = array();
+		$params["PublisherWebsiteID"] = $publisher_website_id;
+		if ($cached === true):
+			$publisher_website_markup = $PrivateExchangePublisherWebsiteMarkupFactory->get_row_cached($config, $params);
+		else:
+			$publisher_website_markup = $PrivateExchangePublisherWebsiteMarkupFactory->get_row($params);
+		endif;
+		return $publisher_website_markup;
+	}
+	
 	public static function getMarkupForPublisherWebsite($publisher_website_id, $config, $cached = true) {
 	
 		$PublisherWebsiteMarkupFactory = \_factory\PublisherWebsiteMarkup::get_instance();
@@ -80,6 +94,20 @@ class Markup {
 		endif;
 		return $user_markup;
 
+	}
+	
+	public static function getMarkupForPrivateExchangePublisher($publisher_info_id, $config, $cached = true) {
+	
+		$PrivateExchangePublisherMarkupFactory = \_factory\PrivateExchangePublisherMarkup::get_instance();
+		$params = array();
+		$params["PublisherInfoID"] = $publisher_info_id;
+		if ($cached === true):
+			$user_markup = $PrivateExchangePublisherMarkupFactory->get_row_cached($config, $params);
+		else:
+			$user_markup = $PrivateExchangePublisherMarkupFactory->get_row($params);
+		endif;
+		return $user_markup;
+	
 	}
 	
 	public static function getMarkupForPublisher($publisher_info_id, $config, $cached = true) {

@@ -63,11 +63,6 @@ class PublisherController extends PublisherAbstractActionController {
 		        
 	        endif;
 
-	    elseif ($this->is_domain_admin):
-	    
-		    $headers = array("#","Domain","Platform Connection","Domain Owner","Created","Updated","Approval","Actions");
-		    $meta_data = array("WebDomain","VisibilityType","DomainOwnerID","DateCreated","DateUpdated","ApprovalFlag");
-		     
 	    else:
 	    
 	        $headers = array("#","Domain","Created","Updated","Approval","Actions");
@@ -148,16 +143,42 @@ class PublisherController extends PublisherAbstractActionController {
 	
 		$parameters['DomainOwnerID'] = $this->PublisherInfoID;
 
+		$publisher_markup_rate = $this->config_handle['system']['default_private_exchange_publisher_markup_rate'];
+		
 		$PublisherWebsiteList = $PublisherWebsiteFactory->get($parameters);
 		 
-		$headers = array("#","Domain","Domain Owner","Created","Updated","Approval","Actions");
-		$meta_data = array("WebDomain","DomainOwnerID","DateCreated","DateUpdated","ApprovalFlag");
-		 
+		$headers = array("#","Domain","Inventory Availability","Domain Markup","Domain Owner","Created","Updated","Approval","Actions");
+		$meta_data = array("WebDomain","VisibilityTypeID","DomainMarkupRate","DomainOwnerID","DateCreated","DateUpdated","ApprovalFlag");
+
+		// admin is logged in as a user, get the markup if any for that user
+		if ($this->ImpersonateID != 0 && !empty($this->PublisherInfoID)):
+			
+			$publisher_markup = \util\Markup::getMarkupForPrivateExchangePublisher($this->PublisherInfoID, $this->config_handle, false);
+			if ($publisher_markup != null):
+				$publisher_markup_rate = $publisher_markup->MarkupRate;
+			endif;
+
+		endif;
+		
+		foreach ($PublisherWebsiteList as $PublisherWebsite):
+		
+			$website_markup = \util\Markup::getMarkupForPrivateExchangePublisherWebsite($PublisherWebsite->PublisherWebsiteID, $this->config_handle, false);
+			 
+			if ($website_markup != null):
+				$website_markup_rate_list[$PublisherWebsite->PublisherWebsiteID] = $website_markup->MarkupRate * 100;
+			else:
+				$website_markup_rate_list[$PublisherWebsite->PublisherWebsiteID] = $publisher_markup_rate * 100;
+			endif;
+
+		endforeach;
+		
 		$PublisherInfoFactory = \_factory\PublisherInfo::get_instance();
 		$params = array();
 		$params["PublisherInfoID"] = $this->PublisherInfoID;
 		$PublisherInfo = $PublisherInfoFactory->get_row($params);
 		 
+		$publisher_markup_rate *= 100;
+		
 		$view = new ViewModel(array(
 				'true_user_name' => $this->auth->getUserName(),
 				'domain_list_raw' => $PublisherWebsiteList,
@@ -170,6 +191,8 @@ class PublisherController extends PublisherAbstractActionController {
 				'publisher_info_id' => $this->PublisherInfoID,
 				'dashboard_view' => 'publisher',
 				'user_identity' => $this->identity(),
+				'publisher_markup_rate' => $publisher_markup_rate,
+				'website_markup_rate_list' => isset($website_markup_rate_list) ? $website_markup_rate_list : array(),
 		));
 	
 		if ($this->is_domain_admin == false
