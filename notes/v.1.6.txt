@@ -1,0 +1,2 @@
+1. Demand Markup is no longer applied globally. It is specifically not applied to domain admins' own publishers in a private exchange
+
