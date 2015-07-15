@@ -70,7 +70,7 @@ class AuthHelper {
 	
 	}
 	
-	public static function domain_user_authorized_publisher_website_passthru($parent_id, $publisher_website_id, &$is_local) {
+	public static function domain_user_authorized_px_publisher_website_passthru($parent_id, $publisher_website_id, &$is_local) {
 	
 		$PublisherWebsiteFactory 		= \_factory\PublisherWebsite::get_instance();
 		$params = array();
@@ -96,6 +96,21 @@ class AuthHelper {
 		endif;
 	
 		return false;
+	
+	}
+	
+	public static function domain_user_authorized_publisher_website($parent_id, $publisher_website_id) {
+	
+		$PublisherWebsiteFactory 		= \_factory\PublisherWebsite::get_instance();
+		$params = array();
+		$params["PublisherWebsiteID"] 	= $publisher_website_id;
+		$PublisherWebsite	 			= $PublisherWebsiteFactory->get_row_cached($params);
+	
+		if (!\util\AuthHelper::domain_user_authorized_publisher($parent_id, $PublisherWebsite->DomainOwnerID)):
+			die("You are not authorized to perform this action: CODE 101");
+		endif;
+		
+		return true;
 	
 	}
 	

@@ -3202,7 +3202,7 @@ class DemandController extends DemandAbstractActionController {
 		    $exchange_feed_id 			= intval($exchange_feed_data["id"]);
 		    $exchange_feed_description 	= $exchange_feed_data["description"];
 		    $is_local = false;
-		    $authorized = \util\AuthHelper::domain_user_authorized_publisher_website_passthru($this->auth->getUserID(), $exchange_feed_id, $is_local);
+		    $authorized = \util\AuthHelper::domain_user_authorized_px_publisher_website_passthru($this->auth->getUserID(), $exchange_feed_id, $is_local);
 		    
 		    if (!$authorized):
 		    	die("You are not authorized to add inventory from Publisher Website: " . $exchange_feed_id . ' - ' . $exchange_feed_description . " <br />Please contact an administrator for more information.");

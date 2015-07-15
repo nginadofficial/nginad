@@ -811,10 +811,14 @@ class PublisherController extends PublisherAbstractActionController {
 		if ($this->is_super_admin == false && $this->is_domain_admin == false):
 			die("You do not have permission to access this page");
 		endif;
-	
+
 		$publisher_info_id 		= $this->getRequest()->getQuery('markuppublisherinfoid');
 		$publisher_markup 		= $this->getRequest()->getQuery('private-exchange-publisher-markup');
 	
+		if ($this->is_super_admin == false && !\util\AuthHelper::domain_user_authorized_publisher($this->auth->getUserID(), $publisher_info_id)):
+			die("You are not authorized to perform this action: CODE 101");
+		endif;
+		
 		$PrivateExchangePublisherMarkupFactory 		= \_factory\PrivateExchangePublisherMarkup::get_instance();
 		$params = array();
 		$params["PublisherInfoID"] 					= $publisher_info_id;
@@ -870,6 +874,10 @@ class PublisherController extends PublisherAbstractActionController {
 		$publisher_website_id 		= $this->getRequest()->getQuery('markupdomainid');
 		$publisher_website_markup 	= $this->getRequest()->getQuery('private-exchange-domain-markup');
 	
+		if ($this->is_super_admin == false && !\util\AuthHelper::domain_user_authorized_publisher_website($this->auth->getUserID(), $publisher_website_id)):
+			die("You are not authorized to perform this action: CODE 101");
+		endif;
+		
 		$PrivateExchangePublisherWebsiteMarkupFactory 	= \_factory\PrivateExchangePublisherWebsiteMarkup::get_instance();
 		$params = array();
 		$params["PublisherWebsiteID"] 					= $publisher_website_id;
