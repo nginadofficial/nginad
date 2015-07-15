@@ -95,39 +95,6 @@ class IndexController extends AbstractActionController
     	exit;
     }
     
-    private function process_contract_zone_tag($config, $banner_request, $linked_banner_to_ad_zone_list) {
-    	/*
-    	 * Add publisher statistics logging
-    	 */
-    	
-    	$banner_request["demand_banner_id"] = $this->get_banner_id_from_display_probability($linked_banner_to_ad_zone_list);
-    
-    	$InsertionOrderLineItemFactory = \_factory\InsertionOrderLineItem::get_instance();
-    	
-    	$params = array();
-    	$params["InsertionOrderLineItemID"] 	= $banner_request["demand_banner_id"];
-    	$InsertionOrderLineItem 				= $InsertionOrderLineItemFactory->get_row_cached($config, $params);
-    	
-    	if ($InsertionOrderLineItem != null):
-    		$cpm_price = $InsertionOrderLineItem->BidAmount;
-    	else:
-    		$cpm_price = 0;
-		endif;
-		    	
-    	$ContractPublisherZoneHourlyImpressions = new \model\ContractPublisherZoneHourlyImpressions();
-    	
-    	$ContractPublisherZoneHourlyImpressions->InsertionOrderLineItemID		= $banner_request["demand_banner_id"];
-    	$ContractPublisherZoneHourlyImpressions->PublisherAdZoneID		= $banner_request["publisher_banner_id"];
-    	$ContractPublisherZoneHourlyImpressions->Impressions			= 1;
-    	$ContractPublisherZoneHourlyImpressions->SpendTotalGross		= floatval($cpm_price) / 1000;
-    	$ContractPublisherZoneHourlyImpressions->SpendTotalNet			= $ContractPublisherZoneHourlyImpressions->SpendTotalGross;
-
-    	\util\CachedStatsWrites::incrementContractPublisherZoneHourlyImpressionsCached($config, $ContractPublisherZoneHourlyImpressions);
-
-    	$this->process_demand_tag($config, $banner_request);
-
-    }
-    
     /*
      * @param array linked_banner_to_ad_zone_list
      * An array of associative objects with banners to 

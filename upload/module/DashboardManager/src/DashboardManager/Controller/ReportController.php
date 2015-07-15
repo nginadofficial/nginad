@@ -301,56 +301,6 @@ class ReportController extends PublisherAbstractActionController {
         return $view;
     }
 
-    public function contractImpressionsAction() {
-        
-		$initialized = $this->initialize();
-		if ($initialized !== true) return $initialized;
-        if ($this->is_super_admin):
-            $this->EffectiveID;
-            $this->adminFunctionsSufix = 'Admin';
-            $user_role = 1;
-        elseif ($this->PublisherInfoID != null):
-            $user_role = 2;
-        elseif ($this->DemandCustomerInfoID != null):
-            $user_role = 3;
-            return $this->redirect()->toUrl('incomingBids');
-        endif;
-
-
-        $view = new ViewModel();
-        $view->setTerminal(true);
-        $view->setTemplate('dashboard-manager/report/header.phtml');
-        $view->setVariables(array(
-            'action' => 'contractImpressions',
-            'user_role' => $user_role
-        ));
-
-        $menu_tpl = $this->getServiceLocator()
-                ->get('viewrenderer')
-                ->render($view);
-
-        $impression = \_factory\ContractPublisherZoneHourlyImpressions::get_instance();
-        
-        $stats	= json_decode($this->getPerTime($impression), TRUE);
-        
-        $view = new ViewModel(array(
-            'dashboard_view' => 'report',
-            'menu_tpl' => $menu_tpl,
-            'action' => 'contractImpressions',
-        	'impressions_header' => $impression->getPerTimeHeader($this->is_super_admin),
-            'impressions' => $stats['data'],
-        	'totals' 	=> $stats['totals'],
-            'user_id_list' => $this->user_id_list,
-            'user_identity' => $this->identity(),
-            'true_user_name' => $this->auth->getUserName(),
-            'header_title' => 'Reports',
-            'is_super_admin' => $this->is_super_admin,
-            'effective_id' => $this->auth->getEffectiveIdentityID(),
-            'impersonate_id' => $this->ImpersonateID
-        ));
-        return $view;
-    }
-
     public function spendAction() {
 
 		$initialized = $this->initialize();
@@ -759,43 +709,6 @@ class ReportController extends PublisherAbstractActionController {
     	$title = "Outgoing Bids";
     	
     	\util\ReportHelper::download_excel_file($stats['data'], $outgoing_bid_headers, $stats['totals'], $title, $dates);
-    }
-
-    public function getContractImpressionsPerTimeAction() {
-    	
-    	$initialized = $this->initialize();
-    	if ($initialized !== true) return $initialized;
-    	
-    	if (!$this->is_super_admin):
-    		die("bad request");
-    	endif;
-    	
-    	$this->setJsonHeader();
-    	return $this->getResponse()->setContent(
-        		$this->getPerTime(\_factory\ContractPublisherZoneHourlyImpressions::get_instance())
-    	);
-    }
-    
-    public function getContractImpressionsPerTimeExcelAction() {
-    	 
-    	$initialized = $this->initialize();
-    	if ($initialized !== true) return $initialized;
-    	 
-    	if (!$this->is_super_admin):
-    		die("bad request");
-    	endif;
-    	 
-    	$impressions = \_factory\ContractPublisherZoneHourlyImpressions::get_instance();
-    	$stats	= json_decode($this->getPerTime($impressions), TRUE);
-    	 
-    	$impressions_headers = $impressions->getPerTimeHeader($this->is_super_admin);
-    	 
-    	$dates = $this->getDatesForExcelReport();
-    	
-    	$title = "Contract Impressions";
-    	 
-    	\util\ReportHelper::download_excel_file($stats['data'], $impressions_headers, $stats['totals'], $title, $dates);
-    
     }
 
     public function getImpressionsCurrentSpendPerTimeAction() {
