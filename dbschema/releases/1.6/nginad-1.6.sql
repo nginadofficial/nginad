@@ -608,29 +608,6 @@ CREATE TABLE `BuySideHourlyImpressionsCounterCurrentSpend` (
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for ContractPublisherZoneHourlyImpressions
--- ----------------------------
-DROP TABLE IF EXISTS `ContractPublisherZoneHourlyImpressions`;
-CREATE TABLE `ContractPublisherZoneHourlyImpressions` (
-  `ContractPublisherZoneHourlyImpressionsID` int(11) NOT NULL AUTO_INCREMENT,
-  `InsertionOrderLineItemID` int(11) NOT NULL,
-  `PublisherAdZoneID` int(11) NOT NULL,
-  `MDYH` char(15) NOT NULL,
-  `Impressions` bigint(20) NOT NULL,
-  `SpendTotalGross` float NOT NULL,
-  `SpendTotalNet` float NOT NULL,
-  `DateCreated` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `DateUpdated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`ContractPublisherZoneHourlyImpressionsID`),
-  UNIQUE KEY `ContractPublisherZoneHourlyImpression_IDX` (`ContractPublisherZoneHourlyImpressionsID`,`InsertionOrderLineItemID`,`PublisherAdZoneID`,`MDYH`) USING BTREE,
-  UNIQUE KEY `ContractPublisherZoneHourlyImpressions_IDX` (`InsertionOrderLineItemID`,`PublisherAdZoneID`,`MDYH`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- ----------------------------
--- Records of ContractPublisherZoneHourlyImpressions
--- ----------------------------
-
--- ----------------------------
 -- Table structure for DemandCustomerInfo
 -- ----------------------------
 DROP TABLE IF EXISTS `DemandCustomerInfo`;
@@ -991,6 +968,7 @@ CREATE TABLE `SellSidePartnerHourlyBids` (
   `BidsLostCounter` bigint(20) NOT NULL,
   `BidsErrorCounter` bigint(20) NOT NULL,
   `SpendTotalGross` float NOT NULL,
+  `SpendTotalPrivateExchangeNet` float NOT NULL,
   `SpendTotalNet` float NOT NULL,
   `DateCreated` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `DateUpdated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -1027,6 +1005,7 @@ CREATE TABLE `PublisherHourlyBids` (
   `BidsLostCounter` bigint(20) NOT NULL,
   `BidsErrorCounter` bigint(20) NOT NULL,
   `SpendTotalGross` float NOT NULL,
+  `SpendTotalPrivateExchangeNet` float NOT NULL,
   `SpendTotalNet` float NOT NULL,
   `DateCreated` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `DateUpdated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,

@@ -1,6 +1,7 @@
 DROP TABLE IF EXISTS `LinkedBannerToAdZone`;
 DROP TABLE IF EXISTS `LinkedBannerToAdZonePreview`;
 DROP TABLE IF EXISTS `PublisherAdZoneType`;
+DROP TABLE IF EXISTS `ContractPublisherZoneHourlyImpressions`;
 -- ALTER TABLE PublisherAdZone DROP COLUMN `VisibilityTypeID`;
 ALTER TABLE PublisherAdZone DROP COLUMN `PublisherAdZoneTypeID`;
 
@@ -25,3 +26,6 @@ CREATE TABLE `PrivateExchangePublisherWebsiteMarkup` (
   PRIMARY KEY (`PublisherWebsiteID`),
   UNIQUE KEY `PublisherWebsiteID` (`PublisherWebsiteID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+ALTER TABLE  `SellSidePartnerHourlyBids` ADD `SpendTotalPrivateExchangeNet` float NOT NULL AFTER `SpendTotalGross` ;
+ALTER TABLE  `PublisherHourlyBids` ADD `SpendTotalPrivateExchangeNet` float NOT NULL AFTER `SpendTotalGross` ;
