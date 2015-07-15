@@ -39,12 +39,12 @@ $effective_user_in_dashboard = false;
 <div class="pull-left" style="margin: 10px 0 0 10px;">
 			<?php if ($effective_id != 0 && $effective_user_in_dashboard === true): ?>
 					<div>
-					<form name="changepublishermarkup" id="changepublishermarkup" action="/publisher/changepublishermarkup"class="forms pull-right" >
+					<form name="changeprivateexchangepublishermarkup" id="changeprivateexchangepublishermarkup" action="/publisher/changeprivateexchangepublishermarkup"class="forms pull-right" >
 						<input type="hidden" name="markuppublisherinfoid" value="<?php echo $publisher_info_id;?>" />
 				
-					<span style="font-size: 12px; font-weight: bold;">Publisher Markup Rate:</span>	 <input type="text"  style="text-align: right" name="publisher-markup" class="span1" value="<?php echo $publisher_markup_rate;?>">%
+					<span style="font-size: 12px; font-weight: bold;">Publisher Markup Rate:</span>	 <input type="text"  style="text-align: right" name="private-exchange-publisher-markup" class="span1" value="<?php echo $private_exchange_publisher_markup_rate;?>">%
 						<div style="display: inline;">
-							<input type="submit" name="publisher-markup-submit" class="btn actv  btn-small" value="Change Publisher Markup" style="width: 180px; margin-left: 8px; margin-bottom: 10px;" />
+							<input type="submit" name="private-exchange-publisher-markup-submit" class="btn actv  btn-small" value="Change Publisher Markup" style="width: 180px; margin-left: 8px; margin-bottom: 10px;" />
 							<span style="cursor: pointer;" title="The Rate that the Impressions Will be Marked up from the Bid Price and Floor Prices (Your Profit)"><img style="border: 0; margin-bottom: 10px;" src="/images/tooltip.jpg" /></span>
 						</div>
 					
@@ -95,14 +95,14 @@ $effective_user_in_dashboard = false;
                                    		break;
                                     case "DomainMarkupRate":
                                     	if ($is_domain_admin === true && $effective_id != 0):
-                                        	if (isset($domain_id) && $domain_id != null && isset($website_markup_rate_list[$domain_id])): ?>
-                                   				<form name="change-domain-markup-<?php echo $domain_id;?>" class="change-domain-markup" action="/publisher/changedomainmarkup">
+                                        	if (isset($domain_id) && $domain_id != null && isset($private_exchange_website_markup_rate_list[$domain_id])): ?>
+                                   				<form name="change-private-exchange-domain-markup-<?php echo $domain_id;?>" class="change-private-exchange-domain-markup" action="/publisher/changeprivateexchangedomainmarkup">
                                         			<input type="hidden" name="markupdomainid" value="<?php echo $domain_id;?>" />
                                         			<div style="float: right;">
-                                        				<input type="text" style="text-align: right" name="domain-markup" class="input-mini" value="<?php echo $website_markup_rate_list[$domain_id];?>">%
+                                        				<input type="text" style="text-align: right" name="private-exchange-domain-markup" class="input-mini" value="<?php echo $private_exchange_website_markup_rate_list[$domain_id];?>">%
                                         			</div>
                                         			<div>
-                                        				<input type="submit" name="domain-markup-submit" class="btn btn-warning btn-mini" value="Update Markup" style="" />
+                                        				<input type="submit" name="private-exchange-domain-markup-submit" class="btn btn-warning btn-mini" value="Update Markup" style="" />
                                         			</div>
                                         		</form>
                                  		<?php else: ?>

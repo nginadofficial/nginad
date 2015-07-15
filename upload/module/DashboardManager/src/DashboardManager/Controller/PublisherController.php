@@ -191,8 +191,8 @@ class PublisherController extends PublisherAbstractActionController {
 				'publisher_info_id' => $this->PublisherInfoID,
 				'dashboard_view' => 'publisher',
 				'user_identity' => $this->identity(),
-				'publisher_markup_rate' => $publisher_markup_rate,
-				'website_markup_rate_list' => isset($website_markup_rate_list) ? $website_markup_rate_list : array(),
+				'private_exchange_publisher_markup_rate' => $publisher_markup_rate,
+				'private_exchange_website_markup_rate_list' => isset($website_markup_rate_list) ? $website_markup_rate_list : array(),
 		));
 	
 		if ($this->is_domain_admin == false
@@ -803,6 +803,116 @@ class PublisherController extends PublisherAbstractActionController {
 	 *
 	 * @return Ambigous <\Zend\Http\Response, \Zend\Stdlib\ResponseInterface>
 	 */
+	public function changeprivateexchangepublishermarkupAction() {
+	
+		$initialized = $this->initialize();
+		if ($initialized !== true) return $initialized;
+	
+		if ($this->is_super_admin == false && $this->is_domain_admin == false):
+			die("You do not have permission to access this page");
+		endif;
+	
+		$publisher_info_id 		= $this->getRequest()->getQuery('markuppublisherinfoid');
+		$publisher_markup 		= $this->getRequest()->getQuery('private-exchange-publisher-markup');
+	
+		$PrivateExchangePublisherMarkupFactory 		= \_factory\PrivateExchangePublisherMarkup::get_instance();
+		$params = array();
+		$params["PublisherInfoID"] 					= $publisher_info_id;
+		$PrivateExchangePublisherMarkup 			= $PrivateExchangePublisherMarkupFactory->get_row($params);
+	
+		$publisher_markup = floatval($publisher_markup) / 100;
+	
+		if ($publisher_markup <= 0):
+			die("Publisher Markup can not be less than or equal to zero percent");
+		endif;
+	
+		if ($publisher_markup >= 1):
+			die("Publisher Markup can not be greater than or equal to one hundred percent");
+		endif;
+	
+		$publisher_markup = sprintf("%1.2f", $publisher_markup);
+	
+		$_PrivateExchangePublisherMarkup = new \model\PrivateExchangePublisherMarkup();
+		$_PrivateExchangePublisherMarkup->PublisherInfoID 	= $publisher_info_id;
+		$_PrivateExchangePublisherMarkup->MarkupRate 		= $publisher_markup;
+	
+		if ($PrivateExchangePublisherMarkup != null):
+	
+			$PrivateExchangePublisherMarkupFactory->updatePrivateExchangePublisherMarkup($_PrivateExchangePublisherMarkup);
+	
+		else:
+	
+			$PrivateExchangePublisherMarkupFactory->insertPrivateExchangePublisherMarkup($_PrivateExchangePublisherMarkup);
+	
+		endif;
+	
+		if ($this->is_domain_admin):
+			return $this->redirect()->toRoute('pxpublishers');
+		else:
+			return $this->redirect()->toRoute('publisher');
+		endif;
+	
+	}
+	
+	/**
+	 *
+	 * @return Ambigous <\Zend\Http\Response, \Zend\Stdlib\ResponseInterface>
+	 */
+	public function changeprivateexchangedomainmarkupAction() {
+	
+		$initialized = $this->initialize();
+		if ($initialized !== true) return $initialized;
+	
+		if ($this->is_super_admin == false && $this->is_domain_admin == false):
+			die("You do not have permission to access this page");
+		endif;
+	
+		$publisher_website_id 		= $this->getRequest()->getQuery('markupdomainid');
+		$publisher_website_markup 	= $this->getRequest()->getQuery('private-exchange-domain-markup');
+	
+		$PrivateExchangePublisherWebsiteMarkupFactory 	= \_factory\PrivateExchangePublisherWebsiteMarkup::get_instance();
+		$params = array();
+		$params["PublisherWebsiteID"] 					= $publisher_website_id;
+		$PrivateExchangePublisherWebsiteMarkup 			= $PrivateExchangePublisherWebsiteMarkupFactory->get_row($params);
+	
+		$publisher_website_markup = floatval($publisher_website_markup) / 100;
+	
+		if ($publisher_website_markup <= 0):
+			die("Domain Markup can not be less than or equal to zero percent");
+		endif;
+	
+		if ($publisher_website_markup >= 1):
+			die("Domain Markup can not be greater than or equal to one hundred percent");
+		endif;
+	
+		$publisher_website_markup = sprintf("%1.2f", $publisher_website_markup);
+	
+		$_PrivateExchangePublisherWebsiteMarkup 						= new \model\PrivateExchangePublisherWebsiteMarkup();
+		$_PrivateExchangePublisherWebsiteMarkup->PublisherWebsiteID 	= $publisher_website_id;
+		$_PrivateExchangePublisherWebsiteMarkup->MarkupRate 			= $publisher_website_markup;
+	
+		if ($PrivateExchangePublisherWebsiteMarkup != null):
+	
+			$PrivateExchangePublisherWebsiteMarkupFactory->updatePrivateExchangePublisherWebsiteMarkup($_PrivateExchangePublisherWebsiteMarkup);
+	
+		else:
+	
+			$PrivateExchangePublisherWebsiteMarkupFactory->insertPrivateExchangePublisherWebsiteMarkup($_PrivateExchangePublisherWebsiteMarkup);
+	
+		endif;
+	
+		if ($this->is_domain_admin):
+			return $this->redirect()->toRoute('pxpublishers');
+		else:
+			return $this->redirect()->toRoute('publisher');
+		endif;
+	
+	}
+	
+	/**
+	 *
+	 * @return Ambigous <\Zend\Http\Response, \Zend\Stdlib\ResponseInterface>
+	 */
 	public function changepublishermarkupAction() {
 		
 		$initialized = $this->initialize();
@@ -846,12 +956,8 @@ class PublisherController extends PublisherAbstractActionController {
 	
 		endif;
 	
-		if ($this->is_domain_admin):
-        	return $this->redirect()->toRoute('pxpublishers');
-       	else:
-       		return $this->redirect()->toRoute('publisher');
-    	endif;
-	
+		return $this->redirect()->toRoute('publisher');
+
 	}
 	
 	/**
@@ -901,11 +1007,7 @@ class PublisherController extends PublisherAbstractActionController {
 		
 		endif;
 		
-  		if ($this->is_domain_admin):
-       		return $this->redirect()->toRoute('pxpublishers');
-       	else:
-     		return $this->redirect()->toRoute('publisher');
-    	endif;
+  		return $this->redirect()->toRoute('publisher');
 	
 	}
 	

@@ -83,8 +83,8 @@ class PrivateExchangePublisherMarkup extends \_factory\CachedTableRead
 
     public function insertPrivateExchangePublisherMarkup(\model\PrivateExchangePublisherMarkup $PrivateExchangePublisherMarkup) {
     	$data = array(
-    	        'PublisherInfoID'   => $PublisherMarkup->PublisherInfoID,
-    			'MarkupRate'        => $PublisherMarkup->MarkupRate
+    	        'PublisherInfoID'   => $PrivateExchangePublisherMarkup->PublisherInfoID,
+    			'MarkupRate'        => $PrivateExchangePublisherMarkup->MarkupRate
     	);
 
     	$this->insert($data);
@@ -92,11 +92,11 @@ class PrivateExchangePublisherMarkup extends \_factory\CachedTableRead
 
     public function updatePrivateExchangePublisherMarkup(\model\PrivateExchangePublisherMarkup $PrivateExchangePublisherMarkup) {
     	$data = array(
-    	        'PublisherInfoID'   => $PublisherMarkup->PublisherInfoID,
-    			'MarkupRate'        => $PublisherMarkup->MarkupRate
+    	        'PublisherInfoID'   => $PrivateExchangePublisherMarkup->PublisherInfoID,
+    			'MarkupRate'        => $PrivateExchangePublisherMarkup->MarkupRate
     	);
 
-    	$publisher_info_id = $PublisherMarkup->PublisherInfoID;
+    	$publisher_info_id = $PrivateExchangePublisherMarkup->PublisherInfoID;
     	$this->update($data, array('PublisherInfoID' => $publisher_info_id));
     }
 

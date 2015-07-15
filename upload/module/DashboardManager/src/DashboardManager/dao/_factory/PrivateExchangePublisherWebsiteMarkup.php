@@ -83,8 +83,8 @@ class PrivateExchangePublisherWebsiteMarkup extends \_factory\CachedTableRead
 
     public function insertPrivateExchangePublisherWebsiteMarkup(\model\PrivateExchangePublisherWebsiteMarkup $PrivateExchangePublisherWebsiteMarkup) {
     	$data = array(
-    	        'PublisherWebsiteID'    => $PublisherWebsiteMarkup->PublisherWebsiteID,
-    			'MarkupRate'        	=> $PublisherWebsiteMarkup->MarkupRate
+    	        'PublisherWebsiteID'    => $PrivateExchangePublisherWebsiteMarkup->PublisherWebsiteID,
+    			'MarkupRate'        	=> $PrivateExchangePublisherWebsiteMarkup->MarkupRate
     	);
 
     	$this->insert($data);
@@ -92,11 +92,11 @@ class PrivateExchangePublisherWebsiteMarkup extends \_factory\CachedTableRead
 
     public function updatePrivateExchangePublisherWebsiteMarkup(\model\PrivateExchangePublisherWebsiteMarkup $PrivateExchangePublisherWebsiteMarkup) {
     	$data = array(
-    	        'PublisherWebsiteID'    => $PublisherWebsiteMarkup->PublisherWebsiteID,
-    			'MarkupRate'        	=> $PublisherWebsiteMarkup->MarkupRate
+    	        'PublisherWebsiteID'    => $PrivateExchangePublisherWebsiteMarkup->PublisherWebsiteID,
+    			'MarkupRate'        	=> $PrivateExchangePublisherWebsiteMarkup->MarkupRate
     	);
 
-    	$publisher_website_markup_id = $PublisherWebsiteMarkup->PublisherWebsiteID;
+    	$publisher_website_markup_id = $PrivateExchangePublisherWebsiteMarkup->PublisherWebsiteID;
     	$this->update($data, array('PublisherWebsiteID' => $publisher_website_markup_id));
     }
 
