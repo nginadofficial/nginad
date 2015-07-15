@@ -152,5 +152,29 @@ class Markup {
 	
 		return $config['system']['default_publisher_markup_rate'];
 	}
+	
+	public static function getPrivateExchangePublisherMarkupRate($publisher_website_id, $publisher_info_id, $config, $cached = true) {
+	
+		// first try ad campaign specific markup
+	
+		$private_exchange_publisher_website_markup = self::getMarkupForPrivateExchangePublisherWebsite($publisher_website_id, $config, $cached);
+	
+		if ($private_exchange_publisher_website_markup != null):
+			return $private_exchange_publisher_website_markup->MarkupRate;
+		endif;
+	
+		// next try user specific markup
+	
+		$private_exchange_publisher_markup = self::getMarkupForPrivateExchangePublisher($publisher_info_id, $config, $cached);
+	
+		if ($private_exchange_publisher_markup != null):
+			return $private_exchange_publisher_markup->MarkupRate;
+		endif;
+	
+		// next send back the default markup rate
+	
+		return $config['system']['default_private_exchange_publisher_markup_rate'];
+	}
+	
 
 }
