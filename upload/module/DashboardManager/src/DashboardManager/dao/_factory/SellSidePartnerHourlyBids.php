@@ -178,6 +178,7 @@ class SellSidePartnerHourlyBids extends \_factory\CachedTableRead {
             'BidsLostCounter' => $SellSidePartnerHourlyBids->BidsLostCounter,
             'BidsErrorCounter' => $SellSidePartnerHourlyBids->BidsErrorCounter,
             'SpendTotalGross' => $SellSidePartnerHourlyBids->SpendTotalGross,
+        	'SpendTotalPrivateExchangeGross' => $SellSidePartnerHourlyBids->SpendTotalPrivateExchangeGross,
             'SpendTotalNet' => $SellSidePartnerHourlyBids->SpendTotalNet,
             'DateCreated' => $SellSidePartnerHourlyBids->DateCreated
         );
@@ -190,6 +191,7 @@ class SellSidePartnerHourlyBids extends \_factory\CachedTableRead {
             'BidsLostCounter' => $SellSidePartnerHourlyBids->BidsLostCounter,
             'BidsErrorCounter' => $SellSidePartnerHourlyBids->BidsErrorCounter,
             'SpendTotalGross' => $SellSidePartnerHourlyBids->SpendTotalGross,
+        	'SpendTotalPrivateExchangeGross' => $SellSidePartnerHourlyBids->SpendTotalPrivateExchangeGross,
             'SpendTotalNet' => $SellSidePartnerHourlyBids->SpendTotalNet,
         );
 

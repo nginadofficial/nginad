@@ -144,6 +144,7 @@ class PublisherHourlyBids extends \_factory\CachedTableRead {
             'BidsLostCounter' => $PublisherHourlyBids->BidsLostCounter,
             'BidsErrorCounter' => $PublisherHourlyBids->BidsErrorCounter,
             'SpendTotalGross' => $PublisherHourlyBids->SpendTotalGross,
+        	'SpendTotalPrivateExchangeGross' => $PublisherHourlyBids->SpendTotalPrivateExchangeGross,
             'SpendTotalNet' => $PublisherHourlyBids->SpendTotalNet,
             'DateCreated' => $PublisherHourlyBids->DateCreated
         );
@@ -157,6 +158,7 @@ class PublisherHourlyBids extends \_factory\CachedTableRead {
             'BidsLostCounter' => $PublisherHourlyBids->BidsLostCounter,
             'BidsErrorCounter' => $PublisherHourlyBids->BidsErrorCounter,
             'SpendTotalGross' => $PublisherHourlyBids->SpendTotalGross,
+        	'SpendTotalPrivateExchangeGross' => $PublisherHourlyBids->SpendTotalPrivateExchangeGross,
             'SpendTotalNet' => $PublisherHourlyBids->SpendTotalNet,
         );
 

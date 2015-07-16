@@ -27,5 +27,5 @@ CREATE TABLE `PrivateExchangePublisherWebsiteMarkup` (
   UNIQUE KEY `PublisherWebsiteID` (`PublisherWebsiteID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-ALTER TABLE  `SellSidePartnerHourlyBids` ADD `SpendTotalPrivateExchangeNet` float NOT NULL AFTER `SpendTotalGross` ;
-ALTER TABLE  `PublisherHourlyBids` ADD `SpendTotalPrivateExchangeNet` float NOT NULL AFTER `SpendTotalGross` ;
+ALTER TABLE  `SellSidePartnerHourlyBids` ADD `SpendTotalPrivateExchangeGross` float NOT NULL AFTER `SpendTotalGross` ;
+ALTER TABLE  `PublisherHourlyBids` ADD `SpendTotalPrivateExchangeGross` float NOT NULL AFTER `SpendTotalGross` ;

@@ -18,6 +18,7 @@ class SellSidePartnerHourlyBids {
     public $BidsLostCounter;
     public $BidsErrorCounter;
     public $SpendTotalGross;
+    public $SpendTotalPrivateExchangeGross;
     public $SpendTotalNet;
     public $DateCreated;
 }
