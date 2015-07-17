@@ -47,6 +47,10 @@ class RTBPinger {
 	
 	public $winning_bid;  				// to be filled out by the ping manager
 	
+	public $winning_adjusted_bid;
+
+	public $winning_amount_before_private_exchange_markup_bid;
+	
 	public $won_auction				= false;  	// to be filled out by the ping manager
 	
 	public $is_loopback_pinger		= false;
