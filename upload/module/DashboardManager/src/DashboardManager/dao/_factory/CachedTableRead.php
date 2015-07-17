@@ -18,6 +18,8 @@ abstract class CachedTableRead extends AbstractTableGateway
 	
     protected $adminFields = array();
     
+    protected $domainAdminFields = array();
+    
     private static $null_value = "_NULL";
     private static $empty_array_value = "_EMPTY_ARRAY";
     
@@ -69,7 +71,7 @@ abstract class CachedTableRead extends AbstractTableGateway
     }
     
     // default APC ttl is 15 minutes, 900 seconds
-    public function getPerTimeCached($config, $where_params = null, $time_to_live = 900, $refresh = false, $is_super_admin = FALSE) {
+    public function getPerTimeCached($config, $where_params = null, $time_to_live = 900, $refresh = false, $is_super_admin = false, $is_domain_admin = false) {
     
     	$cached_data = \util\CacheSql::get_cached_read_result_apc($config, $where_params, $this->table . '_M');
     	 
@@ -83,7 +85,7 @@ abstract class CachedTableRead extends AbstractTableGateway
     	
     	else:
 
-    		$data = $this->getPerTime($where_params, $is_super_admin);
+    		$data = $this->getPerTime($where_params, $is_super_admin, $is_domain_admin);
 
                 \util\CacheSql::put_cached_read_result_apc($config, $where_params, $this->table . '_M', $data, $time_to_live);
     	

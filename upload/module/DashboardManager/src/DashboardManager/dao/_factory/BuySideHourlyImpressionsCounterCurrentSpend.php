@@ -88,7 +88,7 @@ class BuySideHourlyImpressionsCounterCurrentSpend extends \_factory\CachedTableR
         return $obj_list;
     }
 
-    public function getPerTime($where_params = null, $is_super_admin = false) {
+    public function getPerTime($where_params = null, $is_super_admin = false, $is_domain_admin = false) {
         $obj_list = array();
 
         $sql = new Sql($this->adapter);
@@ -115,28 +115,45 @@ class BuySideHourlyImpressionsCounterCurrentSpend extends \_factory\CachedTableR
 
     }
 
-    public function getPerTimeHeader($is_super_admin = false) {
+    public function getPerTimeHeader($is_super_admin = false, $is_domain_admin = false) {
 
-        return ($is_super_admin) ? array(
-            'BuySidePartnerID' => '',
-            'MDYH' => '',
-            'ImpressionsCounter' => '',
-            'CurrentSpendGross' => '',
-            'CurrentSpendNet' => '',
-            'AverageBidCurrentSpendNet' => '',
-            'AverageBidCurrentSpendGross' => '',
-            'DateCreated' => '',
-            'DateUpdated' => '',
-            'Name' => ''
-                ) : array(
-            'MDYH' => '',
-            'ImpressionsCounter' => '',
-            'CurrentSpendGross' => '',
-            'AverageBidCurrentSpendGross' => '',
-            'DateCreated' => '',
-            'DateUpdated' => '',
-            'Name' => ''
-        );
+        if ($is_super_admin):
+    		return array(
+	            'BuySidePartnerID' => '',
+	            'MDYH' => '',
+	            'ImpressionsCounter' => '',
+	            'CurrentSpendGross' => '',
+	            'CurrentSpendNet' => '',
+	            'AverageBidCurrentSpendNet' => '',
+	            'AverageBidCurrentSpendGross' => '',
+	            'DateCreated' => '',
+	            'DateUpdated' => '',
+	            'Name' => ''
+	                ); 
+    	elseif ($is_domain_admin):
+	    	return array(
+	    		'BuySidePartnerID' => '',
+	    		'MDYH' => '',
+	    		'ImpressionsCounter' => '',
+	    		'CurrentSpendGross' => '',
+	    		'CurrentSpendNet' => '',
+	    		'AverageBidCurrentSpendNet' => '',
+	    		'AverageBidCurrentSpendGross' => '',
+	    		'DateCreated' => '',
+	    		'DateUpdated' => '',
+	    		'Name' => ''
+	    	);
+        else:
+	        return array(
+	        	'MDYH' => '',
+	        	'ImpressionsCounter' => '',
+	        	'CurrentSpendGross' => '',
+	        	'AverageBidCurrentSpendGross' => '',
+	        	'DateCreated' => '',
+	        	'DateUpdated' => '',
+	        	'Name' => ''
+	        );
+    	endif;
     }
 
 //    public function getUserImpressionsSpendAdmin() {

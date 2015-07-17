@@ -88,7 +88,7 @@ class SellSidePartnerHourlyBids extends \_factory\CachedTableRead {
         return $obj_list;
     }
 
-    public function getPerTime($where_params = null, $is_super_admin = 0) {
+    public function getPerTime($where_params = null, $is_super_admin = false, $is_domain_admin = false) {
 
         $obj_list = array();
 

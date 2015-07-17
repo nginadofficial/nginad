@@ -94,10 +94,10 @@ class AuthController extends ZendAbstractActionController {
 
     	$request = $this->getRequest();
     	if ($request->isPost()):
-   			//check authentication...
+   			// check authentication...
    			$this->getAuthService()->getAdapter()
    			->setIdentity($request->getPost('username'))
-   			->setCredential(mysql_escape_string($request->getPost('password')));
+   			->setCredential(mysql_real_escape_string($request->getPost('password')));
    			
    			$user_session = new Container('user');
    			

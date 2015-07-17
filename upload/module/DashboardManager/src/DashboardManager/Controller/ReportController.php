@@ -14,8 +14,8 @@ use DashboardManager\ParentControllers\PublisherAbstractActionController;
 use Zend\View\Model\ViewModel;
 
 /**
- * @author Kelvin Mok - Kelvin did not author this controller, 
- * I have no idea why this is here. I am guessing somebody copy/pasted.
+ * @author This controller was originally authored by the Ukraine team 
+ * and later heavily edited by cgu.
  * This is the ReportController that is the initial display of the ReportController class.
  */
 class ReportController extends PublisherAbstractActionController {
@@ -36,14 +36,17 @@ class ReportController extends PublisherAbstractActionController {
             if ($this->ImpersonateID != 0 && !empty($this->PublisherInfoID)):
             	$extra_params = array('PublisherInfoID' => $this->PublisherInfoID);
             endif;
+        elseif ($this->DemandCustomerInfoID != null && $this->is_domain_admin):
+            $user_role = 3;
+            // admin is logged in as a user, get the stats for just that user
+            if ($this->ImpersonateID != 0 && !empty($this->PublisherInfoID)):
+            	$extra_params = array('PublisherInfoID' => $this->PublisherInfoID);
+            endif;
         elseif ($this->PublisherInfoID != null):
             $user_role = 2;
             $extra_params = array('PublisherInfoID' => $this->PublisherInfoID);
-        elseif ($this->DemandCustomerInfoID != null):
-            $user_role = 3;
-            return $this->redirect()->toUrl('report/demandindex');
-        endif;
 
+        endif;
 
         $view = new ViewModel();
         $view->setTerminal(true);
@@ -59,15 +62,21 @@ class ReportController extends PublisherAbstractActionController {
 
         $impression = \_factory\PublisherImpressionsAndSpendHourly::get_instance($this->config_handle);
 
-        $stats	= json_decode($this->getPerTime($impression, $extra_params), TRUE);
+        $stats	= json_decode($this->getPerTime($impression, $extra_params, $this->is_domain_admin), TRUE);
         
+        if ($this->is_domain_admin):
+        	$impressions_header = $impression->getPerTimeHeaderPrivateExchange();
+        else:
+       		$impressions_header = $impression->getPerTimeHeader($this->is_super_admin);
+        endif;
+
         $data = array(
             'dashboard_view' => 'report',
             'action' => 'index',
             'menu_tpl' => $menu_tpl,
             
             'impressions' => $stats['data'],
-            'impressions_header' => $impression->getPerTimeHeader($this->is_super_admin),
+            'impressions_header' => $impressions_header,
         	'totals' => $stats['totals'],
         		
             'user_id_list' => $this->user_id_list,
@@ -75,6 +84,7 @@ class ReportController extends PublisherAbstractActionController {
             'true_user_name' => $this->auth->getUserName(),
             'header_title' => 'Reports',
             'is_super_admin' => $this->is_super_admin,
+        	'is_domain_admin' => $this->is_domain_admin,
             'effective_id' => $this->auth->getEffectiveIdentityID(),
             'impersonate_id' => $this->ImpersonateID
         );
@@ -97,12 +107,12 @@ class ReportController extends PublisherAbstractActionController {
     		if ($this->ImpersonateID != 0 && !empty($this->DemandCustomerInfoID)):
 	    		$extra_params = array('DemandCustomerInfoID' => $this->DemandCustomerInfoID);
     		endif;
-    	elseif ($this->PublisherInfoID != null):
-    		return $this->redirect()->toUrl('report/');
-    		$user_role = 2;
     	elseif ($this->DemandCustomerInfoID != null):
     		$user_role = 3;
     		$extra_params = array('DemandCustomerInfoID' => $this->DemandCustomerInfoID);
+    	elseif ($this->PublisherInfoID != null):
+    		return $this->redirect()->toUrl('report/');
+    		$user_role = 2;
     	endif;
     
     
@@ -341,6 +351,7 @@ class ReportController extends PublisherAbstractActionController {
             'user_spend_statistic' => $impression_spend->getUserImpressionsSpend($this->is_super_admin),
             'user_spend_statistic_header' => $impression_spend->getUserImpressionsSpendHeaders($this->is_super_admin),
             'is_super_admin' => $this->is_super_admin,
+        	'is_domain_admin' => $this->is_domain_admin,
             'user_id_list' => $this->user_id_list,
             'user_identity' => $this->identity(),
             'true_user_name' => $this->auth->getUserName(),
@@ -606,7 +617,7 @@ class ReportController extends PublisherAbstractActionController {
     	
     	$this->setJsonHeader();
     	return $this->getResponse()->setContent(
-        		$this->getPerTime(\_factory\PublisherImpressionsAndSpendHourly::get_instance($this->config_handle), $extra_params)
+        		$this->getPerTime(\_factory\PublisherImpressionsAndSpendHourly::get_instance($this->config_handle), $extra_params, $this->is_domain_admin)
     	);
     }
     
@@ -818,7 +829,7 @@ class ReportController extends PublisherAbstractActionController {
     }
     
     
-    private function getPerTime($obj, $extra_params = null) {
+    private function getPerTime($obj, $extra_params = null, $is_domain_admin_applicable = false) {
 
 		$initialized = $this->initialize();
 		if ($initialized !== true) return $initialized;
@@ -881,7 +892,7 @@ class ReportController extends PublisherAbstractActionController {
             $refresh = false;
         endif;
 
-        $stats_data 	= $obj->getPerTimeCached($this->config_handle, $where_params, 900, $refresh, $this->is_super_admin);
+        $stats_data 	= $obj->getPerTimeCached($this->config_handle, $where_params, 900, $refresh, $this->is_super_admin, $is_domain_admin_applicable);
         $totals_data 	= $this->createTotals($stats_data);
         
         $data = array(

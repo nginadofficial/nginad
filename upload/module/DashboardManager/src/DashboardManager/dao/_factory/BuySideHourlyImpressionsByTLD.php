@@ -80,7 +80,7 @@ class BuySideHourlyImpressionsByTLD extends \_factory\CachedTableRead {
         return $obj_list;
     }
 
-    public function getPerTime($where_params = null, $is_super_admin = false) {
+    public function getPerTime($where_params = null, $is_super_admin = false, $is_domain_admin = false) {
 
         $results = $this->select(function (\Zend\Db\Sql\Select $select) use ($where_params) {
             $select->columns(array('InsertionOrderLineItemID', 'PublisherTLD', 'MDYH', 'Impressions', 'DateCreated', 'DateUpdated'));
