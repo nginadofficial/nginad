@@ -52,11 +52,15 @@ class DemandController extends DemandAbstractActionController {
 	    $params = array();
 	    $params["Active"] = 1;
 	    // admin should see campaigns requiring approval and the user they belong to ONLY
-	    $params["UserID"] = $this->auth->getEffectiveUserID();
-
+	    if ($this->is_domain_admin):
+	    	$params["UserID"] = $this->auth->getUserID();
+	    else:
+	    	$params["UserID"] = $this->auth->getEffectiveUserID();
+		endif;
+		
 	    $_ad_campaign_list = $InsertionOrderFactory->get($params);
 	    $InsertionOrderPreviewFactory = \_factory\InsertionOrderPreview::get_instance();
-
+	    
 	    $ad_campaign_list = array();
 
 	    // admin should see campaigns requiring approval and the user they belong to ONLY
@@ -86,7 +90,7 @@ class DemandController extends DemandAbstractActionController {
 	    endif;
 	    
 	    $_ad_campaign_preview_list = $InsertionOrderPreviewFactory->get($params);
-
+	    
 	    foreach ($_ad_campaign_preview_list as $ad_campaign_preview):
 		    if ($ad_campaign_preview != null):
 		    	$ad_campaign_list[] = $ad_campaign_preview;
