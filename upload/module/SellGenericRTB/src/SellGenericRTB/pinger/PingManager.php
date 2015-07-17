@@ -49,7 +49,9 @@ class PingManager {
 	
 	private $is_second_price_auction;
 	
-	private $publisher_markup_rate = 40;
+	private $publisher_markup_rate = 10;
+	
+	private $private_exchange_publisher_markup_rate = 20;
 	
 	private $skipped_partner_list = array();
 	
@@ -66,8 +68,8 @@ class PingManager {
 		$this->ImpressionType			= $ImpressionType;
 		$this->is_second_price_auction	= $this->config['settings']['rtb']['second_price_auction'];
 		
-		$this->publisher_markup_rate = \util\Markup::getPublisherMarkupRate($this->PublisherWebsiteID, $this->PublisherInfoID, $this->config);
-		
+		$this->publisher_markup_rate 					= \util\Markup::getPublisherMarkupRate($this->PublisherWebsiteID, $this->PublisherInfoID, $this->config);
+		$this->private_exchange_publisher_markup_rate 	= \util\Markup::getPrivateExchangePublisherMarkupRate($this->PublisherWebsiteID, $this->PublisherInfoID, $this->config);
 	}
 	
 	public function set_up_local_demand_ping_clients() {
@@ -272,10 +274,11 @@ class PingManager {
 		 */
 		
 		$AuctionPopo = new \sellrtb\workflows\tasklets\popo\AuctionPopo();
-		$AuctionPopo->publisher_markup_rate 	= $this->publisher_markup_rate;
-		$AuctionPopo->FloorPrice 				= $this->FloorPrice;
-		$AuctionPopo->is_second_price_auction 	= $this->is_second_price_auction;
-		$AuctionPopo->ImpressionType 			= $this->ImpressionType;
+		$AuctionPopo->publisher_markup_rate 					= $this->publisher_markup_rate;
+		$AuctionPopo->private_exchange_publisher_markup_rate	= $this->private_exchange_publisher_markup_rate;
+		$AuctionPopo->FloorPrice 								= $this->FloorPrice;
+		$AuctionPopo->is_second_price_auction 					= $this->is_second_price_auction;
+		$AuctionPopo->ImpressionType 							= $this->ImpressionType;
 		
 		/*
 		 * Get the single impid. If and when we start sending multiple 
@@ -300,25 +303,27 @@ class PingManager {
 		 * COLLECT STATS FOR THE BID LOGS
 		 */
 		
-		$bids_total 				= 0;
-		$bids_won				 	= 0;
-		$bids_lost					= 0;
-		$bid_errors				 	= 0;
-		$spend_total_gross			= 0;
-		$spend_total_net			= 0;
-		$error_list				= array();
+		$bids_total 								= 0;
+		$bids_won				 					= 0;
+		$bids_lost									= 0;
+		$bid_errors				 					= 0;
+		$spend_total_gross							= 0;
+		$spend_total_private_exchange_gross			= 0;
+		$spend_total_net							= 0;
+		$error_list									= array();
 		
 		foreach ($this->RTBPingerList as $RTBPinger):
 		
 			$SellSidePartnerHourlyBids = new \model\SellSidePartnerHourlyBids();
 
-			$SellSidePartnerHourlyBids->SellSidePartnerID		= $RTBPinger->partner_id;
-			$SellSidePartnerHourlyBids->PublisherAdZoneID		= $this->PublisherAdZoneID;
-			$SellSidePartnerHourlyBids->BidsWonCounter			= 0;
-			$SellSidePartnerHourlyBids->BidsLostCounter			= 0;
-			$SellSidePartnerHourlyBids->BidsErrorCounter		= 0;
-			$SellSidePartnerHourlyBids->SpendTotalGross			= 0;
-			$SellSidePartnerHourlyBids->SpendTotalNet			= 0;
+			$SellSidePartnerHourlyBids->SellSidePartnerID				= $RTBPinger->partner_id;
+			$SellSidePartnerHourlyBids->PublisherAdZoneID				= $this->PublisherAdZoneID;
+			$SellSidePartnerHourlyBids->BidsWonCounter					= 0;
+			$SellSidePartnerHourlyBids->BidsLostCounter					= 0;
+			$SellSidePartnerHourlyBids->BidsErrorCounter				= 0;
+			$SellSidePartnerHourlyBids->SpendTotalGross					= 0;
+			$SellSidePartnerHourlyBids->SpendTotalPrivateExchangeGross	= 0;
+			$SellSidePartnerHourlyBids->SpendTotalNet					= 0;
 			
 			if ($RTBPinger->ping_success == true):
 			
@@ -331,17 +336,30 @@ class PingManager {
 					$SellSidePartnerHourlyBids->BidsWonCounter 	= $RTBPinger->won_bids;
 					
 					if ($AuctionPopo->is_second_price_auction === true):
-						$SellSidePartnerHourlyBids->SpendTotalGross	= floatval($AuctionPopo->second_price_winning_bid_price) / 1000;
+						$SellSidePartnerHourlyBids->SpendTotalGross					= floatval($AuctionPopo->second_price_winning_bid_price) / 1000;
+						$SellSidePartnerHourlyBids->SpendTotalPrivateExchangeGross	= floatval($AuctionPopo->second_price_winning_adjusted_amount_before_private_exchange_markup_bid_price) / 1000;
 					else:
-						$SellSidePartnerHourlyBids->SpendTotalGross	= floatval($RTBPinger->winning_bid) / 1000;
+						$SellSidePartnerHourlyBids->SpendTotalGross					= floatval($RTBPinger->winning_bid) / 1000;
+						$SellSidePartnerHourlyBids->SpendTotalPrivateExchangeGross	= floatval($RTBPinger->winning_amount_before_private_exchange_markup_bid) / 1000;
 					endif;
 					
-					$spend_total_gross = $SellSidePartnerHourlyBids->SpendTotalGross;
+					$spend_total_gross 						= $SellSidePartnerHourlyBids->SpendTotalGross;
+					$spend_total_private_exchange_gross		= $SellSidePartnerHourlyBids->SpendTotalPrivateExchangeGross;
 					
-					// Subtract Ad Exchange Publisher markup
+					// Subtract Global Ad Exchange Publisher markup
 
 					$mark_down = floatval($SellSidePartnerHourlyBids->SpendTotalGross) * floatval($this->publisher_markup_rate);
-					$adusted_amount = floatval($SellSidePartnerHourlyBids->SpendTotalGross) - floatval($mark_down);
+					$adusted_amount_before_private_exchange_markup = floatval($SellSidePartnerHourlyBids->SpendTotalGross) - floatval($mark_down);
+					
+					$SellSidePartnerHourlyBids->SpendTotalPrivateExchangeGross = $adusted_amount_before_private_exchange_markup;
+					
+					$spend_total_private_exchange_gross = $SellSidePartnerHourlyBids->SpendTotalPrivateExchangeGross;
+					
+					// Subtract Private Ad Exchange Publisher markup
+						
+					$mark_down_private_exchange = floatval($SellSidePartnerHourlyBids->SpendTotalPrivateExchangeGross) * floatval($this->private_exchange_publisher_markup_rate);
+					$adusted_amount = floatval($adusted_amount_before_private_exchange_markup) - floatval($mark_down_private_exchange);
+					
 					$SellSidePartnerHourlyBids->SpendTotalNet = $adusted_amount;
 					
 					$spend_total_net = $SellSidePartnerHourlyBids->SpendTotalNet;
@@ -366,13 +384,14 @@ class PingManager {
 		
 		$PublisherHourlyBids = new \model\PublisherHourlyBids();
 			
-		$PublisherHourlyBids->PublisherAdZoneID		= $this->PublisherAdZoneID;
-		$PublisherHourlyBids->AuctionCounter		= 1;
-		$PublisherHourlyBids->BidsWonCounter		= $bids_won;
-		$PublisherHourlyBids->BidsLostCounter		= $bids_lost;
-		$PublisherHourlyBids->BidsErrorCounter		= $bid_errors;
-		$PublisherHourlyBids->SpendTotalGross		= $spend_total_gross;
-		$PublisherHourlyBids->SpendTotalNet			= $spend_total_net;
+		$PublisherHourlyBids->PublisherAdZoneID						= $this->PublisherAdZoneID;
+		$PublisherHourlyBids->AuctionCounter						= 1;
+		$PublisherHourlyBids->BidsWonCounter						= $bids_won;
+		$PublisherHourlyBids->BidsLostCounter						= $bids_lost;
+		$PublisherHourlyBids->BidsErrorCounter						= $bid_errors;
+		$PublisherHourlyBids->SpendTotalGross						= $spend_total_gross;
+		$PublisherHourlyBids->SpendTotalPrivateExchangeGross		= $spend_total_private_exchange_gross;
+		$PublisherHourlyBids->SpendTotalNet							= $spend_total_net;
 		
 		if ($AuctionPopo->ImpressionType == "video" && $AuctionPopo->auction_was_won && \util\ParseHelper::isVastURL($AuctionPopo->winning_ad_tag) === true):
 			
@@ -383,23 +402,25 @@ class PingManager {
 			 */
 			$PublisherHourlyBidsCopy = new \model\PublisherHourlyBids();
 		
-			$PublisherHourlyBidsCopy->PublisherAdZoneID	= $this->PublisherAdZoneID;
-			$PublisherHourlyBidsCopy->AuctionCounter	= 0;
-			$PublisherHourlyBidsCopy->BidsWonCounter	= 1;
-			$PublisherHourlyBidsCopy->BidsLostCounter	= 0;
-			$PublisherHourlyBidsCopy->BidsErrorCounter	= 0;
-			$PublisherHourlyBidsCopy->SpendTotalGross	= $spend_total_gross;
-			$PublisherHourlyBidsCopy->SpendTotalNet		= $spend_total_net;
+			$PublisherHourlyBidsCopy->PublisherAdZoneID					= $this->PublisherAdZoneID;
+			$PublisherHourlyBidsCopy->AuctionCounter					= 0;
+			$PublisherHourlyBidsCopy->BidsWonCounter					= 1;
+			$PublisherHourlyBidsCopy->BidsLostCounter					= 0;
+			$PublisherHourlyBidsCopy->BidsErrorCounter					= 0;
+			$PublisherHourlyBidsCopy->SpendTotalGross					= $spend_total_gross;
+			$PublisherHourlyBidsCopy->SpendTotalPrivateExchangeGross	= $spend_total_private_exchange_gross;
+			$PublisherHourlyBidsCopy->SpendTotalNet						= $spend_total_net;
 			
-			$AuctionPopo->vast_publisher_imp_obj 	= $PublisherHourlyBidsCopy;
+			$AuctionPopo->vast_publisher_imp_obj 						= $PublisherHourlyBidsCopy;
 			
 			/*
 			 * Record the general impression auction information here now.
 			 */
 			
-			$PublisherHourlyBids->BidsWonCounter		= 0;
-			$PublisherHourlyBids->SpendTotalGross		= 0;
-			$PublisherHourlyBids->SpendTotalNet			= 0;
+			$PublisherHourlyBids->BidsWonCounter						= 0;
+			$PublisherHourlyBids->SpendTotalGross						= 0;
+			$PublisherHourlyBids->SpendTotalPrivateExchangeGross		= 0;
+			$PublisherHourlyBids->SpendTotalNet							= 0;
 		endif;
 		
 		\util\CachedStatsWrites::incrementPublisherBidsCounterCached($this->config, $PublisherHourlyBids);

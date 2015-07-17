@@ -76,10 +76,15 @@ class OpenRTBWorkflow {
     	$bid_list_key							= \util\WorkflowHelper::get_first_key($WinningRTBPinger->RtbBidResponse->RtbBidResponseSeatBidList[$seat_bid_list_key]->RtbBidResponseBidList);
     	$WinningRtbResponseBid 					= $WinningRTBPinger->RtbBidResponse->RtbBidResponseSeatBidList[$seat_bid_list_key]->RtbBidResponseBidList[$bid_list_key];
     	 
-    	$bid_price 								= floatval($WinningRtbResponseBid->price);
+    	$winning_bid_price 													= floatval($WinningRtbResponseBid->price);
+    	$winning_adjusted_bid_price											= floatval($WinningRtbResponseBid->adusted_bid_amount);
+    	$winning_adjusted_amount_before_private_exchange_markup_bid_price	= floatval($WinningRtbResponseBid->adusted_bid_amount_before_private_exchange_markup);
     	
-    	$WinningRTBPinger->won_auction 			= true;
-    	$WinningRTBPinger->winning_bid 			= $bid_price;
+    	$WinningRTBPinger->won_auction 											= true;
+    	$WinningRTBPinger->winning_bid 											= $winning_bid_price;
+    	$WinningRTBPinger->winning_adjusted_bid 								= $winning_adjusted_bid_price;
+    	$WinningRTBPinger->winning_amount_before_private_exchange_markup_bid 	= $winning_adjusted_amount_before_private_exchange_markup_bid_price;
+    	
     	if ($AuctionPopo->ImpressionType == 'video' && empty($WinningRtbResponseBid->adm)
     			&& !empty($WinningRtbResponseBid->nurl)):
     			
@@ -126,8 +131,12 @@ class OpenRTBWorkflow {
     		endif;
 	    	
     	endif;
-    	$AuctionPopo->winning_bid_price			= sprintf("%1.4f", $this->encrypt_bid($bid_price));
+    	$AuctionPopo->winning_bid_price													= sprintf("%1.4f", $winning_bid_price);
+    	$AuctionPopo->winning_adjusted_bid_price										= sprintf("%1.4f", $winning_adjusted_bid_price);
+    	$AuctionPopo->winning_adjusted_amount_before_private_exchange_markup_bid_price	= sprintf("%1.4f", $winning_adjusted_amount_before_private_exchange_markup_bid_price);
+    	
     	$AuctionPopo->winning_partner_id		= $WinningRTBPinger->partner_id;
+    	
     	$popo_seat_bid_key						= \util\WorkflowHelper::get_first_key($WinningRTBPinger->RtbBidResponse->RtbBidResponseSeatBidList);
     	$AuctionPopo->winning_seat				= $WinningRTBPinger->RtbBidResponse->RtbBidResponseSeatBidList[$popo_seat_bid_key]->seat;
     	/*
@@ -153,7 +162,8 @@ class OpenRTBWorkflow {
 			endif;
 			
 			$AuctionPopo->second_price_winning_adjusted_bid_price = $AuctionPopo->adjusted_bid_price_list[$index];
-			
+			$AuctionPopo->second_price_winning_adjusted_amount_before_private_exchange_markup_bid_price = $AuctionPopo->adusted_bid_amount_before_private_exchange_markup_list[$index];
+		
 		endif;
 
     	if ($WinningRTBPinger->is_loopback_pinger):

@@ -18,8 +18,9 @@ class LogBidPrices {
 	public static function execute(&$Logger, &$Workflow, \sellrtb\workflows\tasklets\popo\AuctionPopo &$AuctionPopo) {
 	
 		// init
-		$AuctionPopo->bid_price_list 			= array();
-		$AuctionPopo->adjusted_bid_price_list 	= array();
+		$AuctionPopo->bid_price_list 											= array();
+		$AuctionPopo->adjusted_bid_price_list 									= array();
+		$AuctionPopo->adusted_bid_amount_before_private_exchange_markup_list 	= array();
 		
 		$RTBPingerList = $AuctionPopo->SelectedPingerList;
 		
@@ -41,12 +42,14 @@ class LogBidPrices {
 		endforeach;
 	
 		// grab hashed keys of bid prices
-		$AuctionPopo->bid_price_list 			= array_keys($AuctionPopo->bid_price_list);
-		$AuctionPopo->adjusted_bid_price_list 	= array_keys($AuctionPopo->adjusted_bid_price_list);
+		$AuctionPopo->bid_price_list 											= array_keys($AuctionPopo->bid_price_list);
+		$AuctionPopo->adjusted_bid_price_list 									= array_keys($AuctionPopo->adjusted_bid_price_list);
+		$AuctionPopo->adusted_bid_amount_before_private_exchange_markup_list 	= array_keys($AuctionPopo->adusted_bid_amount_before_private_exchange_markup_list);
 		
 		// reverse sort so the highest bid is the first item in the array
 		rsort($AuctionPopo->bid_price_list);
 		rsort($AuctionPopo->adjusted_bid_price_list);
+		rsort($AuctionPopo->adusted_bid_amount_before_private_exchange_markup_list);
 		
 		return $result;
 	
@@ -66,15 +69,16 @@ class LogBidPrices {
 		* Also make sure it's greater than zero
 		*/
 	
-		$bid_price 					= floatval($RtbBidResponseBid->price);
+		$bid_price 												= floatval($RtbBidResponseBid->price);
 	
-		$adjusted_bid_price 		= floatval($RtbBidResponseBid->adusted_bid_amount);
+		$adusted_bid_amount_before_private_exchange_markup 		= floatval($RtbBidResponseBid->adusted_bid_amount_before_private_exchange_markup);
+		
+		$adjusted_bid_price 									= floatval($RtbBidResponseBid->adusted_bid_amount);
 		
 		$AuctionPopo->bid_price_list[(string)$bid_price] = true;
+		$AuctionPopo->adusted_bid_amount_before_private_exchange_markup_list[(string)$adusted_bid_amount_before_private_exchange_markup] = true;
 		$AuctionPopo->adjusted_bid_price_list[(string)$adjusted_bid_price] = true;
 
-		
-		
 	}
 	
 }

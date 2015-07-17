@@ -14,6 +14,7 @@ class AuctionPopo {
 	public $winning_partner_seat;
 	
 	public $winning_bid_price;
+	public $winning_adjusted_amount_before_private_exchange_markup_bid_price;
 	public $winning_adjusted_bid_price;
 	
 	public $winning_partner_id;
@@ -23,6 +24,7 @@ class AuctionPopo {
 	public $is_second_price_auction;
 	
 	public $second_price_winning_bid_price;
+	public $second_price_winning_adjusted_amount_before_private_exchange_markup_bid_price;
 	public $second_price_winning_adjusted_bid_price;
 	
 	public $highest_bid_price;
@@ -34,8 +36,10 @@ class AuctionPopo {
 	public $loopback_demand_partner_won;
 	public $FloorPrice;
 	public $publisher_markup_rate;
-	
+	public $private_exchange_publisher_markup_rate;
+
 	public $bid_price_list;
+	public $adusted_bid_amount_before_private_exchange_markup_list;
 	public $adjusted_bid_price_list;
 	
 	/*

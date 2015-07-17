@@ -53,11 +53,12 @@ class CachedStatsWrites {
 
 			if ($current != null):
 				// write out values
-				$SellSidePartnerHourlyBids->BidsWonCounter 		= $current["BidsWonCounter"];
-				$SellSidePartnerHourlyBids->BidsLostCounter 	= $current["BidsLostCounter"];
-				$SellSidePartnerHourlyBids->BidsErrorCounter 	= $current["BidsErrorCounter"];
-				$SellSidePartnerHourlyBids->SpendTotalGross 	= floatval($current["SpendTotalGross"]);
-				$SellSidePartnerHourlyBids->SpendTotalNet 		= floatval($current["SpendTotalNet"]);
+				$SellSidePartnerHourlyBids->BidsWonCounter 					= $current["BidsWonCounter"];
+				$SellSidePartnerHourlyBids->BidsLostCounter 				= $current["BidsLostCounter"];
+				$SellSidePartnerHourlyBids->BidsErrorCounter 				= $current["BidsErrorCounter"];
+				$SellSidePartnerHourlyBids->SpendTotalGross 				= floatval($current["SpendTotalGross"]);
+				$SellSidePartnerHourlyBids->SpendTotalPrivateExchangeGross 	= floatval($current["SpendTotalPrivateExchangeGross"]);
+				$SellSidePartnerHourlyBids->SpendTotalNet 					= floatval($current["SpendTotalNet"]);
 				
 				self::incrementSellSideBidsCounter($SellSidePartnerHourlyBids);
 			endif;
@@ -86,23 +87,25 @@ class CachedStatsWrites {
 
 		if ($SellSidePartnerHourlyBids != null):
 		
-			$sellside_partner_hourly_bids_counter->SellSidePartnerHourlyBidsID 	= $SellSidePartnerHourlyBids->SellSidePartnerHourlyBidsID;
-			$sellside_partner_hourly_bids_counter->BidsWonCounter 				= $SellSidePartnerHourlyBids->BidsWonCounter + $SellSidePartnerHourlyBidsToAdd->BidsWonCounter;
-			$sellside_partner_hourly_bids_counter->BidsLostCounter 				= $SellSidePartnerHourlyBids->BidsLostCounter + $SellSidePartnerHourlyBidsToAdd->BidsLostCounter;
-			$sellside_partner_hourly_bids_counter->BidsErrorCounter 			= $SellSidePartnerHourlyBids->BidsErrorCounter + $SellSidePartnerHourlyBidsToAdd->BidsErrorCounter;
-			$sellside_partner_hourly_bids_counter->SpendTotalGross 				= floatval($SellSidePartnerHourlyBids->SpendTotalGross) + $SellSidePartnerHourlyBidsToAdd->SpendTotalGross;
-			$sellside_partner_hourly_bids_counter->SpendTotalNet 				= floatval($SellSidePartnerHourlyBids->SpendTotalNet) + $SellSidePartnerHourlyBidsToAdd->SpendTotalNet;
+			$sellside_partner_hourly_bids_counter->SellSidePartnerHourlyBidsID 		= $SellSidePartnerHourlyBids->SellSidePartnerHourlyBidsID;
+			$sellside_partner_hourly_bids_counter->BidsWonCounter 					= $SellSidePartnerHourlyBids->BidsWonCounter + $SellSidePartnerHourlyBidsToAdd->BidsWonCounter;
+			$sellside_partner_hourly_bids_counter->BidsLostCounter 					= $SellSidePartnerHourlyBids->BidsLostCounter + $SellSidePartnerHourlyBidsToAdd->BidsLostCounter;
+			$sellside_partner_hourly_bids_counter->BidsErrorCounter 				= $SellSidePartnerHourlyBids->BidsErrorCounter + $SellSidePartnerHourlyBidsToAdd->BidsErrorCounter;
+			$sellside_partner_hourly_bids_counter->SpendTotalGross 					= floatval($SellSidePartnerHourlyBids->SpendTotalGross) + $SellSidePartnerHourlyBidsToAdd->SpendTotalGross;
+			$sellside_partner_hourly_bids_counter->SpendTotalPrivateExchangeGross 	= floatval($SellSidePartnerHourlyBids->SpendTotalPrivateExchangeGross) + $SellSidePartnerHourlyBidsToAdd->SpendTotalPrivateExchangeGross;
+			$sellside_partner_hourly_bids_counter->SpendTotalNet 					= floatval($SellSidePartnerHourlyBids->SpendTotalNet) + $SellSidePartnerHourlyBidsToAdd->SpendTotalNet;
 			$SellSidePartnerHourlyBidsFactory->updateSellSidePartnerHourlyBids($sellside_partner_hourly_bids_counter);
 			
 		else:
 		
-			$sellside_partner_hourly_bids_counter->MDYH 			= $current_hour;
-			$sellside_partner_hourly_bids_counter->BidsWonCounter 	= $SellSidePartnerHourlyBidsToAdd->BidsWonCounter;
-			$sellside_partner_hourly_bids_counter->BidsLostCounter 	= $SellSidePartnerHourlyBidsToAdd->BidsLostCounter;
-			$sellside_partner_hourly_bids_counter->BidsErrorCounter = $SellSidePartnerHourlyBidsToAdd->BidsErrorCounter;
-			$sellside_partner_hourly_bids_counter->SpendTotalGross 	= $SellSidePartnerHourlyBidsToAdd->SpendTotalGross;
-			$sellside_partner_hourly_bids_counter->SpendTotalNet 	= $SellSidePartnerHourlyBidsToAdd->SpendTotalNet;
-			$sellside_partner_hourly_bids_counter->DateCreated 		= date("Y-m-d H:i:s");
+			$sellside_partner_hourly_bids_counter->MDYH 							= $current_hour;
+			$sellside_partner_hourly_bids_counter->BidsWonCounter 					= $SellSidePartnerHourlyBidsToAdd->BidsWonCounter;
+			$sellside_partner_hourly_bids_counter->BidsLostCounter 					= $SellSidePartnerHourlyBidsToAdd->BidsLostCounter;
+			$sellside_partner_hourly_bids_counter->BidsErrorCounter 				= $SellSidePartnerHourlyBidsToAdd->BidsErrorCounter;
+			$sellside_partner_hourly_bids_counter->SpendTotalGross 					= $SellSidePartnerHourlyBidsToAdd->SpendTotalGross;
+			$sellside_partner_hourly_bids_counter->SpendTotalPrivateExchangeGross 	= $SellSidePartnerHourlyBidsToAdd->SpendTotalPrivateExchangeGross;
+			$sellside_partner_hourly_bids_counter->SpendTotalNet 					= $SellSidePartnerHourlyBidsToAdd->SpendTotalNet;
+			$sellside_partner_hourly_bids_counter->DateCreated 						= date("Y-m-d H:i:s");
 			$SellSidePartnerHourlyBidsFactory->insertSellSidePartnerHourlyBids($sellside_partner_hourly_bids_counter);
 		endif;
 	
@@ -149,12 +152,13 @@ class CachedStatsWrites {
 
 			if ($current != null):
 				// write out values
-				$PublisherHourlyBids->AuctionCounter 	= $current["AuctionCounter"];
-				$PublisherHourlyBids->BidsWonCounter 	= $current["BidsWonCounter"];
-				$PublisherHourlyBids->BidsLostCounter 	= $current["BidsLostCounter"];
-				$PublisherHourlyBids->BidsErrorCounter 	= $current["BidsErrorCounter"];
-				$PublisherHourlyBids->SpendTotalGross 	= floatval($current["SpendTotalGross"]);
-				$PublisherHourlyBids->SpendTotalNet 	= floatval($current["SpendTotalNet"]);
+				$PublisherHourlyBids->AuctionCounter 					= $current["AuctionCounter"];
+				$PublisherHourlyBids->BidsWonCounter 					= $current["BidsWonCounter"];
+				$PublisherHourlyBids->BidsLostCounter 					= $current["BidsLostCounter"];
+				$PublisherHourlyBids->BidsErrorCounter 					= $current["BidsErrorCounter"];
+				$PublisherHourlyBids->SpendTotalGross 					= floatval($current["SpendTotalGross"]);
+				$PublisherHourlyBids->SpendTotalPrivateExchangeGross 	= floatval($current["SpendTotalPrivateExchangeGross"]);
+				$PublisherHourlyBids->SpendTotalNet 					= floatval($current["SpendTotalNet"]);
 			
 				self::incrementPublisherBidsCounter($PublisherHourlyBids);
 			endif;
@@ -180,25 +184,27 @@ class CachedStatsWrites {
 	
 		if ($PublisherHourlyBids != null):
 	
-			$publisher_hourly_bids_counter->PublisherHourlyBidsID 		= $PublisherHourlyBids->PublisherHourlyBidsID;
-			$publisher_hourly_bids_counter->AuctionCounter 				= $PublisherHourlyBids->AuctionCounter + $PublisherHourlyBidsToAdd->AuctionCounter;
-			$publisher_hourly_bids_counter->BidsWonCounter 				= $PublisherHourlyBids->BidsWonCounter + $PublisherHourlyBidsToAdd->BidsWonCounter;
-			$publisher_hourly_bids_counter->BidsLostCounter 			= $PublisherHourlyBids->BidsLostCounter + $PublisherHourlyBidsToAdd->BidsLostCounter;
-			$publisher_hourly_bids_counter->BidsErrorCounter 			= $PublisherHourlyBids->BidsErrorCounter + $PublisherHourlyBidsToAdd->BidsErrorCounter;
-			$publisher_hourly_bids_counter->SpendTotalGross 			= floatval($PublisherHourlyBids->SpendTotalGross) + $PublisherHourlyBidsToAdd->SpendTotalGross;
-			$publisher_hourly_bids_counter->SpendTotalNet 				= floatval($PublisherHourlyBids->SpendTotalNet) + $PublisherHourlyBidsToAdd->SpendTotalNet;
+			$publisher_hourly_bids_counter->PublisherHourlyBidsID 					= $PublisherHourlyBids->PublisherHourlyBidsID;
+			$publisher_hourly_bids_counter->AuctionCounter 							= $PublisherHourlyBids->AuctionCounter + $PublisherHourlyBidsToAdd->AuctionCounter;
+			$publisher_hourly_bids_counter->BidsWonCounter 							= $PublisherHourlyBids->BidsWonCounter + $PublisherHourlyBidsToAdd->BidsWonCounter;
+			$publisher_hourly_bids_counter->BidsLostCounter 						= $PublisherHourlyBids->BidsLostCounter + $PublisherHourlyBidsToAdd->BidsLostCounter;
+			$publisher_hourly_bids_counter->BidsErrorCounter 						= $PublisherHourlyBids->BidsErrorCounter + $PublisherHourlyBidsToAdd->BidsErrorCounter;
+			$publisher_hourly_bids_counter->SpendTotalGross 						= floatval($PublisherHourlyBids->SpendTotalGross) + $PublisherHourlyBidsToAdd->SpendTotalGross;
+			$publisher_hourly_bids_counter->SpendTotalPrivateExchangeGross 			= floatval($PublisherHourlyBids->SpendTotalPrivateExchangeGross) + $PublisherHourlyBidsToAdd->SpendTotalPrivateExchangeGross;
+			$publisher_hourly_bids_counter->SpendTotalNet 							= floatval($PublisherHourlyBids->SpendTotalNet) + $PublisherHourlyBidsToAdd->SpendTotalNet;
 			$PublisherHourlyBidsFactory->updatePublisherHourlyBids($publisher_hourly_bids_counter);
 				
 		else:
 	
-			$publisher_hourly_bids_counter->MDYH 				= $current_hour;
-			$publisher_hourly_bids_counter->AuctionCounter 		= $PublisherHourlyBidsToAdd->AuctionCounter;
-			$publisher_hourly_bids_counter->BidsWonCounter 		= $PublisherHourlyBidsToAdd->BidsWonCounter;
-			$publisher_hourly_bids_counter->BidsLostCounter 	= $PublisherHourlyBidsToAdd->BidsLostCounter;
-			$publisher_hourly_bids_counter->BidsErrorCounter	= $PublisherHourlyBidsToAdd->BidsErrorCounter;
-			$publisher_hourly_bids_counter->SpendTotalGross 	= $PublisherHourlyBidsToAdd->SpendTotalGross;
-			$publisher_hourly_bids_counter->SpendTotalNet 		= $PublisherHourlyBidsToAdd->SpendTotalNet;
-			$publisher_hourly_bids_counter->DateCreated 		= date("Y-m-d H:i:s");
+			$publisher_hourly_bids_counter->MDYH 							= $current_hour;
+			$publisher_hourly_bids_counter->AuctionCounter 					= $PublisherHourlyBidsToAdd->AuctionCounter;
+			$publisher_hourly_bids_counter->BidsWonCounter 					= $PublisherHourlyBidsToAdd->BidsWonCounter;
+			$publisher_hourly_bids_counter->BidsLostCounter 				= $PublisherHourlyBidsToAdd->BidsLostCounter;
+			$publisher_hourly_bids_counter->BidsErrorCounter				= $PublisherHourlyBidsToAdd->BidsErrorCounter;
+			$publisher_hourly_bids_counter->SpendTotalGross 				= $PublisherHourlyBidsToAdd->SpendTotalGross;
+			$publisher_hourly_bids_counter->SpendTotalPrivateExchangeGross 	= $PublisherHourlyBidsToAdd->SpendTotalPrivateExchangeGross;
+			$publisher_hourly_bids_counter->SpendTotalNet 					= $PublisherHourlyBidsToAdd->SpendTotalNet;
+			$publisher_hourly_bids_counter->DateCreated 					= date("Y-m-d H:i:s");
 			$PublisherHourlyBidsFactory->insertPublisherHourlyBids($publisher_hourly_bids_counter);
 		endif;
 	
@@ -225,17 +231,21 @@ class CachedStatsWrites {
 			$existing_bids_spend_total_gross = floatval($current["SpendTotalGross"]);
 			$existing_bids_spend_total_gross += $PublisherHourlyBidsToAdd->SpendTotalGross;
 		
+			$existing_bids_spend_total_private_exchange_gross = floatval($current["SpendTotalPrivateExchangeGross"]);
+			$existing_bids_spend_total_private_exchange_gross += $PublisherHourlyBidsToAdd->SpendTotalPrivateExchangeGross;
+			
 			$existing_bids_spend_total_net = floatval($current["SpendTotalNet"]);
 			$existing_bids_spend_total_net += $PublisherHourlyBidsToAdd->SpendTotalNet;
 				
 		else:
 	
-			$existing_auction_counter			= $PublisherHourlyBidsToAdd->AuctionCounter;
-			$existing_bids_won_counter			= $PublisherHourlyBidsToAdd->BidsWonCounter;
-			$existing_bids_lost_counter			= $PublisherHourlyBidsToAdd->BidsLostCounter;
-			$existing_bids_error_counter		= $PublisherHourlyBidsToAdd->BidsErrorCounter;
-			$existing_bids_spend_total_gross	= $PublisherHourlyBidsToAdd->SpendTotalGross;
-			$existing_bids_spend_total_net		= $PublisherHourlyBidsToAdd->SpendTotalNet;
+			$existing_auction_counter							= $PublisherHourlyBidsToAdd->AuctionCounter;
+			$existing_bids_won_counter							= $PublisherHourlyBidsToAdd->BidsWonCounter;
+			$existing_bids_lost_counter							= $PublisherHourlyBidsToAdd->BidsLostCounter;
+			$existing_bids_error_counter						= $PublisherHourlyBidsToAdd->BidsErrorCounter;
+			$existing_bids_spend_total_gross					= $PublisherHourlyBidsToAdd->SpendTotalGross;
+			$existing_bids_spend_total_private_exchange_gross	= $PublisherHourlyBidsToAdd->SpendTotalPrivateExchangeGross;
+			$existing_bids_spend_total_net						= $PublisherHourlyBidsToAdd->SpendTotalNet;
 				
 		endif;
 	
@@ -244,12 +254,13 @@ class CachedStatsWrites {
 				$params,
 				$class_name,
 				array(
-						"AuctionCounter"		=> $existing_auction_counter,
-						"BidsWonCounter"		=> $existing_bids_won_counter,
-						"BidsLostCounter"		=> $existing_bids_lost_counter,
-						"BidsErrorCounter"		=> $existing_bids_error_counter,
-						"SpendTotalGross"		=> $existing_bids_spend_total_gross,
-						"SpendTotalNet"			=> $existing_bids_spend_total_net
+						"AuctionCounter"						=> $existing_auction_counter,
+						"BidsWonCounter"						=> $existing_bids_won_counter,
+						"BidsLostCounter"						=> $existing_bids_lost_counter,
+						"BidsErrorCounter"						=> $existing_bids_error_counter,
+						"SpendTotalGross"						=> $existing_bids_spend_total_gross,
+						"SpendTotalPrivateExchangeGross"		=> $existing_bids_spend_total_private_exchange_gross,
+						"SpendTotalNet"							=> $existing_bids_spend_total_net
 	
 				));
 	
@@ -284,16 +295,20 @@ class CachedStatsWrites {
 			$existing_bids_spend_total_gross = floatval($current["SpendTotalGross"]);
 			$existing_bids_spend_total_gross += $SellSidePartnerHourlyBidsToAdd->SpendTotalGross;
 
+			$existing_bids_spend_total_private_exchange_gross = floatval($current["SpendTotalPrivateExchangeGross"]);
+			$existing_bids_spend_total_private_exchange_gross += $SellSidePartnerHourlyBidsToAdd->SpendTotalPrivateExchangeGross;
+			
 			$existing_bids_spend_total_net = floatval($current["SpendTotalNet"]);
 			$existing_bids_spend_total_net += $SellSidePartnerHourlyBidsToAdd->SpendTotalNet;
 			
 		else: 
 		
-			$existing_bids_won_counter			= $SellSidePartnerHourlyBidsToAdd->BidsWonCounter;
-			$existing_bids_lost_counter			= $SellSidePartnerHourlyBidsToAdd->BidsLostCounter;
-			$existing_bids_error_counter		= $SellSidePartnerHourlyBidsToAdd->BidsErrorCounter;
-			$existing_bids_spend_total_gross	= $SellSidePartnerHourlyBidsToAdd->SpendTotalGross;
-			$existing_bids_spend_total_net		= $SellSidePartnerHourlyBidsToAdd->SpendTotalNet;
+			$existing_bids_won_counter							= $SellSidePartnerHourlyBidsToAdd->BidsWonCounter;
+			$existing_bids_lost_counter							= $SellSidePartnerHourlyBidsToAdd->BidsLostCounter;
+			$existing_bids_error_counter						= $SellSidePartnerHourlyBidsToAdd->BidsErrorCounter;
+			$existing_bids_spend_total_gross					= $SellSidePartnerHourlyBidsToAdd->SpendTotalGross;
+			$existing_bids_spend_total_private_exchange_gross	= $SellSidePartnerHourlyBidsToAdd->SpendTotalPrivateExchangeGross;
+			$existing_bids_spend_total_net						= $SellSidePartnerHourlyBidsToAdd->SpendTotalNet;
 			
 		endif;
 	
@@ -302,11 +317,12 @@ class CachedStatsWrites {
 				$params, 
 				$class_name, 
 				array(
-						"BidsWonCounter"		=> $existing_bids_won_counter, 
-						"BidsLostCounter"		=> $existing_bids_lost_counter,
-						"BidsErrorCounter"		=> $existing_bids_error_counter,
-						"SpendTotalGross"		=> $existing_bids_spend_total_gross,
-						"SpendTotalNet"			=> $existing_bids_spend_total_net
+						"BidsWonCounter"						=> $existing_bids_won_counter, 
+						"BidsLostCounter"						=> $existing_bids_lost_counter,
+						"BidsErrorCounter"						=> $existing_bids_error_counter,
+						"SpendTotalGross"						=> $existing_bids_spend_total_gross,
+						"SpendTotalPrivateExchangeGross"		=> $existing_bids_spend_total_private_exchange_gross,
+						"SpendTotalNet"							=> $existing_bids_spend_total_net
 						
 				));
 	

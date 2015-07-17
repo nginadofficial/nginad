@@ -51,7 +51,10 @@ class AdjustBidAmountWithMarkup {
 		$bid_price 		= floatval($RtbBidResponseBid->price);
 		
 		$mark_down = floatval($bid_price) * floatval($AuctionPopo->publisher_markup_rate);
-		$RtbBidResponseBid->adusted_bid_amount = $bid_price - floatval($mark_down);
+		$RtbBidResponseBid->adusted_bid_amount_before_private_exchange_markup = $bid_price - floatval($mark_down);
+		
+		$private_exchange_mark_down = floatval($RtbBidResponseBid->adusted_bid_amount_before_private_exchange_markup) * floatval($AuctionPopo->private_exchange_publisher_markup_rate);
+		$RtbBidResponseBid->adusted_bid_amount = $RtbBidResponseBid->adusted_bid_amount_before_private_exchange_markup - floatval($private_exchange_mark_down);
 
 	}
 }

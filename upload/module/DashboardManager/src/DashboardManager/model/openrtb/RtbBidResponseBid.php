@@ -44,6 +44,8 @@ class RtbBidResponseBid {
 	// used internally
 	public $adusted_bid_amount;
 	
+	public $adusted_bid_amount_before_private_exchange_markup;
+	
 	public $won_auction = false;
 	public $uid;
 }
