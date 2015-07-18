@@ -225,7 +225,10 @@ class TransformPreview {
 		$InsertionOrderPreviewFactory = \_factory\InsertionOrderPreview::get_instance();
 		$params = array();
 		$params["InsertionOrderPreviewID"] = $ad_campaign_preview_id;
-		if ($auth->isSuperAdmin($config)):
+		
+		// TODO: NEW DOMAIN ADMIN PERMISSIONS
+		
+		if (!$auth->isSuperAdmin($config)):
 			die("You do not have permission to access this page");
 		endif;
 		$params["Active"] = 1;

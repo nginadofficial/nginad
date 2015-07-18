@@ -157,7 +157,7 @@ class DemandController extends DemandAbstractActionController {
 		$initialized = $this->initialize();
 		if ($initialized !== true) return $initialized;
 
-		if ($this->auth->isSuperAdmin($this->config_handle)):
+		if (!$this->auth->isSuperAdmin($this->config_handle)):
 			die("You do not have permission to access this page");
 		endif;
 
@@ -208,7 +208,7 @@ class DemandController extends DemandAbstractActionController {
 		$initialized = $this->initialize();
 		if ($initialized !== true) return $initialized;
 
-		if ($this->auth->isSuperAdmin($this->config_handle)):
+		if (!$this->auth->isSuperAdmin($this->config_handle)):
 			die("You do not have permission to access this page");
 		endif;
 
@@ -259,7 +259,7 @@ class DemandController extends DemandAbstractActionController {
 		$initialized = $this->initialize();
 		if ($initialized !== true) return $initialized;
 
-		if ($this->auth->isSuperAdmin($this->config_handle)):
+		if (!$this->auth->isSuperAdmin($this->config_handle)):
 			die("You do not have permission to access this page");
 		endif;
 
@@ -345,7 +345,7 @@ class DemandController extends DemandAbstractActionController {
 		$initialized = $this->initialize();
 		if ($initialized !== true) return $initialized;
 
-		if ($this->auth->isSuperAdmin($this->config_handle)):
+		if (!$this->auth->isSuperAdmin($this->config_handle)):
 			die("You do not have permission to access this page");
 		endif;
 
@@ -2359,6 +2359,7 @@ class DemandController extends DemandAbstractActionController {
 			endif;
 		endif;
 
+		
 		// ACL PREVIEW PERMISSIONS CHECK
 		transformation\CheckPermissions::checkEditPermissionInsertionOrderPreview($campaign_preview_id, $this->auth, $this->config_handle);
 
@@ -2453,7 +2454,8 @@ class DemandController extends DemandAbstractActionController {
 
 		if ($banner_preview_id_new != null):
 			$banner_preview_id = $banner_preview_id_new;
-		elseif ($BannerPreview->InsertionOrderLineItemPreviewID == null):
+		endif;
+		if ($BannerPreview->InsertionOrderLineItemPreviewID == null):
 			$BannerPreview->InsertionOrderLineItemPreviewID = $banner_preview_id;
 		endif;
 		
@@ -2519,12 +2521,17 @@ class DemandController extends DemandAbstractActionController {
 			$exchange_feed_id 			= intval($exchange_feed_data["id"]);
 			$exchange_feed_description 	= $exchange_feed_data["description"];
 			$is_local = false;
-			$authorized = \util\AuthHelper::domain_user_authorized_publisher_website_passthru($this->auth->getUserID(), $exchange_feed_id, $is_local);
 			
-			if (!$authorized):
-				die("You are not authorized to add inventory from Publisher Website: " . $exchange_feed_id . ' - ' . $exchange_feed_description . " <br />Please contact an administrator for more information.");
+			if (!$this->is_super_admin):
+			
+				$authorized = \util\AuthHelper::domain_user_authorized_px_publisher_website_passthru($this->auth->getUserID(), $exchange_feed_id, $is_local);
+
+				if (!$authorized):
+					die("You are not authorized to add inventory from Publisher Website: " . $exchange_feed_id . ' - ' . $exchange_feed_description . " <br />Please contact an administrator for more information.");
+				endif;
+			
 			endif;
-			
+				
 			$params = array();
 			$params["PublisherWebsiteID"] = $exchange_feed_id;
 			$_PmpDealPublisherWebsiteToInsertionOrderLineItemPreview = $PmpDealPublisherWebsiteToInsertionOrderLineItemPreviewFactory->get_row($params);
@@ -2573,10 +2580,13 @@ class DemandController extends DemandAbstractActionController {
 			
 			$ssp_feed_description 	= $ssp_feed_data["description"];
 			
-			$authorized = \util\AuthHelper::domain_user_authorized_ssp_passthru($this->auth->getUserID(), $ssp_feed_id);
+			if (!$this->is_super_admin):
 			
-			if (!$authorized):
-				die("You are not authorized to add inventory from SSP RTB Channel: " . $ssp_feed_id . ' - ' . $ssp_feed_description . " <br />Please contact an administrator for more information.");
+				$authorized = \util\AuthHelper::domain_user_authorized_ssp_passthru($this->auth->getUserID(), $ssp_feed_id);
+				
+				if (!$authorized):
+					die("You are not authorized to add inventory from SSP RTB Channel: " . $ssp_feed_id . ' - ' . $ssp_feed_description . " <br />Please contact an administrator for more information.");
+				endif;
 			endif;
 			
 			$params = array();
@@ -2598,7 +2608,7 @@ class DemandController extends DemandAbstractActionController {
 			$SspRtbChannelToInsertionOrderLineItemPreviewFactory->saveSspRtbChannelToInsertionOrderLineItemPreview($SspRtbChannelToInsertionOrderLineItemPreview);
 			
 		endforeach;		
-		
+
 		$refresh_url = "/private-exchange/viewlineitem/" . $BannerPreview->InsertionOrderPreviewID . "?ispreview=true";
 		$viewModel = new ViewModel(array('refresh_url' => $refresh_url));
 
@@ -3206,10 +3216,15 @@ class DemandController extends DemandAbstractActionController {
 		    $exchange_feed_id 			= intval($exchange_feed_data["id"]);
 		    $exchange_feed_description 	= $exchange_feed_data["description"];
 		    $is_local = false;
-		    $authorized = \util\AuthHelper::domain_user_authorized_px_publisher_website_passthru($this->auth->getUserID(), $exchange_feed_id, $is_local);
 		    
-		    if (!$authorized):
-		    	die("You are not authorized to add inventory from Publisher Website: " . $exchange_feed_id . ' - ' . $exchange_feed_description . " <br />Please contact an administrator for more information.");
+		    if (!$this->is_super_admin):
+			    
+			    $authorized = \util\AuthHelper::domain_user_authorized_px_publisher_website_passthru($this->auth->getUserID(), $exchange_feed_id, $is_local);
+			    
+			    if (!$authorized):
+			    	die("You are not authorized to add inventory from Publisher Website: " . $exchange_feed_id . ' - ' . $exchange_feed_description . " <br />Please contact an administrator for more information.");
+			    endif;
+			    
 		    endif;
 		    
 
@@ -3260,12 +3275,15 @@ class DemandController extends DemandAbstractActionController {
 		    
 		    $ssp_feed_description 	= $ssp_feed_data["description"];
 		    
-		    $authorized = \util\AuthHelper::domain_user_authorized_ssp_passthru($this->auth->getUserID(), $ssp_feed_id);
+		    if (!$this->is_super_admin):
 		    
-		    if (!$authorized):
-		    	die("You are not authorized to add inventory from SSP RTB Channel: " . $ssp_feed_id . ' - ' . $ssp_feed_description . " <br />Please contact an administrator for more information.");
-		    endif;
-
+			    $authorized = \util\AuthHelper::domain_user_authorized_ssp_passthru($this->auth->getUserID(), $ssp_feed_id);
+			    
+			    if (!$authorized):
+			    	die("You are not authorized to add inventory from SSP RTB Channel: " . $ssp_feed_id . ' - ' . $ssp_feed_description . " <br />Please contact an administrator for more information.");
+			    endif;
+			endif;
+			
 		    $params = array();
 		    $params["SspPublisherChannelID"] = $ssp_feed_id;
 		    $_SspRtbChannelToInsertionOrderPreview = $SspRtbChannelToInsertionOrderPreviewFactory->get_row($params);
