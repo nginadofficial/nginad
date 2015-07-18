@@ -17,6 +17,10 @@ class DemandCustomerInfo {
     public $Website;
     public $Company;
     public $PartnerType;
+    public $ApprovedForPlatformConnectionInventory;
+    public $ApprovedForSspRtbInventory;
+    public $CreditApplicationWasSent;
+    public $DateCreditApplicationWasSent;
     public $DateCreated;
     public $DateUpdated;
 

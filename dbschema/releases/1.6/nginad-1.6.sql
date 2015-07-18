@@ -618,6 +618,10 @@ CREATE TABLE `DemandCustomerInfo` (
   `Website` varchar(255) NOT NULL,
   `Company` varchar(255) NOT NULL,
   `PartnerType` int(11) NOT NULL,
+  `ApprovedForPlatformConnectionInventory` tinyint(4) NOT NULL DEFAULT '0',
+  `ApprovedForSspRtbInventory` tinyint(4) NOT NULL DEFAULT '0',
+  `CreditApplicationWasSent` tinyint(4) NOT NULL DEFAULT '0',
+  `DateCreditApplicationWasSent` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `DateCreated` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `DateUpdated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`DemandCustomerInfoID`)

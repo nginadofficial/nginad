@@ -130,12 +130,17 @@ class DemandCustomerInfo extends \_factory\CachedTableRead
     */
     public function saveCustomerInfo(\model\DemandCustomerInfo $DemandCustomerInfo) {
     	
-    	$data['DemandCustomerInfoID'] = $DemandCustomerInfo->DemandCustomerInfoID;
-    	$data['Name']          	 = $DemandCustomerInfo->Name;
-        $data['Website']   	 = $DemandCustomerInfo->Website;
-        $data['Company']   	 = $DemandCustomerInfo->Company;
-    	$data['Email']       = $DemandCustomerInfo->Email;
-    	$data['PartnerType'] = $DemandCustomerInfo->PartnerType; 
+    	$data['DemandCustomerInfoID'] 	= $DemandCustomerInfo->DemandCustomerInfoID;
+    	$data['Name']          	 		= $DemandCustomerInfo->Name;
+        $data['Website']   	 			= $DemandCustomerInfo->Website;
+        $data['Company']   	 			= $DemandCustomerInfo->Company;
+    	$data['Email']       			= $DemandCustomerInfo->Email;
+    	$data['PartnerType'] 			= $DemandCustomerInfo->PartnerType; 
+    	
+    	$data['ApprovedForPlatformConnectionInventory']     = $DemandCustomerInfo->ApprovedForPlatformConnectionInventory;
+    	$data['ApprovedForSspRtbInventory']       			= $DemandCustomerInfo->ApprovedForSspRtbInventory;
+    	$data['CreditApplicationWasSent']       			= $DemandCustomerInfo->CreditApplicationWasSent;
+    	$data['DateCreditApplicationWasSent']       		= $DemandCustomerInfo->DateCreditApplicationWasSent;
     	
     	$DemandCustomerInfoID = (int)$DemandCustomerInfo->DemandCustomerInfoID;
     	if ($DemandCustomerInfoID === 0): 
