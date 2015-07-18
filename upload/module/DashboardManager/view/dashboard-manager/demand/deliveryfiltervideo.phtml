@@ -226,20 +226,6 @@ var currentStates = "<?php echo $current_states; ?>";
 
 	</div>
 	
-<div class="control-group">
-		<label for="pmpenable">Pmp Enable</label>
-<select id="pmpenable" name="pmpenable" class="zone-txtarea"> 
-    <?php foreach ($pmpenable_options as $code => $name): ?>
-        <?php if ((string)$code === $current_pmpenable): ?>
-            <option value="<?php echo $code;?>" selected="selected"><?php echo $name;?></option>
-        <?php else: ?>
-            <option value="<?php echo $code;?>"><?php echo $name;?></option>
-        <?php endif; ?>
-    <?php endforeach; ?>
-</select>
-
-	</div>
-	
     <div class="control-group">
 		<label for="optout">Optout</label>
 <select id="optout" name="optout" class="zone-txtarea">
