@@ -159,4 +159,61 @@ class DemandCustomerInfo extends \_factory\CachedTableRead
     public function deleteCustomerInfo($DemandCustomerInfoID) {
     	return $this->delete(array('DemandCustomerInfoID' => $DemandCustomerInfoID));
     }
+    
+    public function approvedForPlatfromConnectionInventory($demand_customer_info_id, $approval_flag) {
+    
+    	$approval_flag = $approval_flag == true ? 1 : 0;
+    	
+    	$params = array();
+    	$params["DemandCustomerInfoID"] = $demand_customer_info_id;
+    	$DemandCustomerInfo = $this->get_row($params);
+    
+    	if ($DemandCustomerInfo != null):
+   
+	    	$DemandCustomerInfo->ApprovedForPlatformConnectionInventory	= $approval_flag;
+	    	// get array of data
+	    	$data = $DemandCustomerInfo->getArrayCopy();
+	    
+	    	$this->update($data, array('DemandCustomerInfoID' => $demand_customer_info_id));
+    	endif;
+    
+    }
+    
+    public function approvedForSspRtbInventory($demand_customer_info_id, $approval_flag) {
+    
+    	$approval_flag = $approval_flag == true ? 1 : 0;
+    	 
+    	$params = array();
+    	$params["DemandCustomerInfoID"] = $demand_customer_info_id;
+    	$DemandCustomerInfo = $this->get_row($params);
+    
+    	if ($DemandCustomerInfo != null):
+	    	 
+	    	$DemandCustomerInfo->ApprovedForSspRtbInventory	= $approval_flag;
+	    	// get array of data
+	    	$data = $DemandCustomerInfo->getArrayCopy();
+	    	 
+	    	$this->update($data, array('DemandCustomerInfoID' => $demand_customer_info_id));
+    	endif;
+    
+    }
+    
+    public function markCreditApplicationSent($demand_customer_info_id) {
+    
+    	$params = array();
+    	$params["DemandCustomerInfoID"] = $demand_customer_info_id;
+    	$DemandCustomerInfo = $this->get_row($params);
+    
+    	if ($DemandCustomerInfo != null):
+	    	 
+	    	$DemandCustomerInfo->CreditApplicationWasSent		= 1;
+    		$DemandCustomerInfo->DateCreditApplicationWasSent	= date("Y-m-d H:i:s");
+	    	// get array of data
+	    	$data = $DemandCustomerInfo->getArrayCopy();
+	    	 
+	    	$this->update($data, array('DemandCustomerInfoID' => $demand_customer_info_id));
+    	endif;
+    
+    }
+    
 };
