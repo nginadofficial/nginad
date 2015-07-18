@@ -611,6 +611,12 @@ class ReportController extends PublisherAbstractActionController {
     	if ($this->PublisherInfoID != null):
     		$user_role = 2;
     		$extra_params = array('PublisherInfoID' => $this->PublisherInfoID);
+    	elseif ($this->DemandCustomerInfoID != null && $this->is_domain_admin):
+    		$user_role = 3;
+    		// admin is logged in as a user, get the stats for just that user
+    		if ($this->ImpersonateID != 0 && !empty($this->PublisherInfoID)):
+    			$extra_params = array('PublisherInfoID' => $this->PublisherInfoID);
+    		endif;
     	elseif (!$this->is_super_admin):
     		die("bad request");
     	endif;
@@ -631,16 +637,26 @@ class ReportController extends PublisherAbstractActionController {
     	if ($this->PublisherInfoID != null):
     		$user_role = 2;
     		$extra_params = array('PublisherInfoID' => $this->PublisherInfoID);
+    	elseif ($this->DemandCustomerInfoID != null && $this->is_domain_admin):
+    		$user_role = 3;
+    		// admin is logged in as a user, get the stats for just that user
+    		if ($this->ImpersonateID != 0 && !empty($this->PublisherInfoID)):
+    			$extra_params = array('PublisherInfoID' => $this->PublisherInfoID);
+    		endif;
     	elseif (!$this->is_super_admin):
     		die("bad request");
     	endif;
 
     	$impression = \_factory\PublisherImpressionsAndSpendHourly::get_instance($this->config_handle);
     	 
-    	$stats	= json_decode($this->getPerTime($impression, $extra_params), TRUE);
+    	$stats	= json_decode($this->getPerTime($impression, $extra_params, $this->is_domain_admin), TRUE);
     	
-    	$impression_headers = $impression->getPerTimeHeader($this->is_super_admin);
-    	 
+    	if ($this->is_domain_admin):
+    		$impression_headers = $impression->getPerTimeHeaderPrivateExchange();
+    	else:
+    		$impression_headers = $impression->getPerTimeHeader($this->is_super_admin);
+    	endif;
+    	
     	$dates = $this->getDatesForExcelReport();
     	
     	$title = "Publisher Impressions";

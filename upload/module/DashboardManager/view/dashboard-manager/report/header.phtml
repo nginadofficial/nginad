@@ -16,5 +16,4 @@ $this->headScript()->appendFile($this->basePath() . '/js/reporting_scripts.js');
     <?php if($user_role == 1):?><a class="btn <?php if ($action == 'usertotals') echo 'actv' ?>" href="/report/usertotals">User Totals</a><?php endif;?>
     <?php if($user_role == 1):?><a class="btn <?php if ($action == 'incomingBids') echo 'actv' ?>" href="/report/IncomingBids">Incoming Bids</a><?php endif;?>
     <?php if($user_role == 1):?><a class="btn <?php if ($action == 'outgoingBids') echo 'actv' ?>" href="/report/Outgoingbids">Outgoing Bids</a><?php endif;?>
-    <?php if($user_role == 1):?><a class="btn <?php if ($action == 'contractImpressions') echo 'actv' ?>" href="/report/contractImpressions">Contract Impressions</a><?php endif;?>
 </div>

@@ -132,7 +132,7 @@ class PublisherImpressionsAndSpendHourly extends \_factory\CachedTableRead {
     }
 
     public function getPerTimeCustom($where_params = null, $is_super_admin = false, $is_domain_admin = false) {
-    
+
     	$obj_list = array();
     
     
@@ -255,7 +255,7 @@ class PublisherImpressionsAndSpendHourly extends \_factory\CachedTableRead {
         $switch_to_custom_threshold = 2 * 86400;
         
         if ($date_span > $switch_to_custom_threshold):
-        	return $this->getPerTimeCustom($where_params, $is_super_admin);
+        	return $this->getPerTimeCustom($where_params, $is_super_admin, $is_domain_admin);
         endif;
 
         $sql = new Sql($this->adapter);
