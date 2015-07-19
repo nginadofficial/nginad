@@ -141,7 +141,7 @@ $effective_user_in_dashboard = false;
            <?php if (isset($ad_campaign->InsertionOrderPreviewID)): ?>
            <td>
               <a href="/private-exchange/approvecampaign/<?php echo $ad_campaign->InsertionOrderPreviewID;?>" onclick="return confirm('Are you sure?');">APPROVE TO PRODUCTION</a>
-              <hr /><a href="/private-exchange/rejectcampaign/<?php echo $ad_campaign->InsertionOrderPreviewID; ?>" onclick="return confirm('Are you sure?');">REJECT CHANGES</a>
+              <hr /><a href="/private-exchange/rejectcampaign/<?php echo $ad_campaign->InsertionOrderPreviewID; ?>" onclick="return confirm('Are you sure?');">RESET STAGING</a>
            </td>
            <?php else: ?>
            <td>

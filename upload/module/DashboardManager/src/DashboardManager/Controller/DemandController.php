@@ -259,7 +259,7 @@ class DemandController extends DemandAbstractActionController {
 		$initialized = $this->initialize();
 		if ($initialized !== true) return $initialized;
 
-		if (!$this->auth->isSuperAdmin($this->config_handle)):
+		if (!$this->auth->isSuperAdmin($this->config_handle) && !$this->auth->isDomainAdmin($this->config_handle)):
 			die("You do not have permission to access this page");
 		endif;
 
@@ -275,6 +275,9 @@ class DemandController extends DemandAbstractActionController {
 
 		$InsertionOrderFactory = \_factory\InsertionOrder::get_instance();
 		$params = array();
+		if (!$this->auth->isSuperAdmin($this->config_handle)):
+			$params["UserID"] = $this->auth->getUserID();
+		endif;
 		$params["InsertionOrderID"] = $ad_campaign_id;
 		$InsertionOrder = $InsertionOrderFactory->get_row($params);
 		
@@ -289,9 +292,9 @@ class DemandController extends DemandAbstractActionController {
 		
         if ($auth_User !== null && $this->config_handle['mail']['subscribe']['user_ad_campaigns']):
 			// approval, send out email
-			$message = 'Your NginAd Exchange Demand Ad Campaign : ' . $InsertionOrder->Name . ' was approved.<br /><br />Please login <a href="http://server.nginad.com/auth/login">here</a> with your email and password';
+			$message = 'Your NginAd Exchange Demand Ad Campaign on Staging : ' . $InsertionOrder->Name . ' was promoted to production.<br /><br />Please login <a href="http://server.nginad.com/auth/login">here</a> with your email and password to make changes.';
 			
-			$subject = "Your NginAd Exchange Demand Ad Campaign : " . $InsertionOrder->Name . " was approved";
+			$subject = "Your NginAd Exchange Demand Ad Campaign on Staging : " . $InsertionOrder->Name . " was promoted to production";
 			 
 			$transport = $this->getServiceLocator()->get('mail.transport');
 			 
@@ -345,7 +348,7 @@ class DemandController extends DemandAbstractActionController {
 		$initialized = $this->initialize();
 		if ($initialized !== true) return $initialized;
 
-		if (!$this->auth->isSuperAdmin($this->config_handle)):
+		if (!$this->auth->isSuperAdmin($this->config_handle) && !$this->auth->isDomainAdmin($this->config_handle)):
 			die("You do not have permission to access this page");
 		endif;
 
@@ -356,11 +359,14 @@ class DemandController extends DemandAbstractActionController {
 
 		$InsertionOrderPreviewFactory = \_factory\InsertionOrderPreview::get_instance();
 		$params = array();
+		if (!$this->auth->isSuperAdmin($this->config_handle)):
+			$params["UserID"] = $this->auth->getUserID();
+		endif;
 		$params["InsertionOrderPreviewID"] = $id;
 		$InsertionOrderPreview = $InsertionOrderPreviewFactory->get_row($params);
 		
 		if ($InsertionOrderPreview == null):
-			die("InsertionOrderPreviewID not found");
+			return $this->redirect()->toRoute('private-exchange');
 		endif;	
 		
 		$ad_campaign_preview_name = $InsertionOrderPreview->Name;
@@ -376,9 +382,9 @@ class DemandController extends DemandAbstractActionController {
 		
 		if ($auth_User !== null && $ad_campaign_preview_name && $this->config_handle['mail']['subscribe']['user_ad_campaigns']):
 			// approval, send out email
-			$message = 'Your NginAd Exchange Demand Ad Campaign : ' . $ad_campaign_preview_name . ' was rejected.<br /><br />Please login <a href="http://server.nginad.com/auth/login">here</a> with your email and password';
+			$message = 'Your NginAd Exchange Demand Ad Campaign on Staging : ' . $ad_campaign_preview_name . ' was reset.<br /><br />Please login <a href="http://server.nginad.com/auth/login">here</a> with your email and password to make changes.';
 				
-			$subject = "Your NginAd Exchange Demand Ad Campaign : " . $ad_campaign_preview_name . " was rejected";
+			$subject = "Your NginAd Exchange Demand Ad Campaign on Staging : " . $ad_campaign_preview_name . " was reset";
 			
 			$transport = $this->getServiceLocator()->get('mail.transport');
 			
