@@ -24,7 +24,7 @@ class TransformPreview {
 		/*
 		 * SHOULD WE CREATE A NEW PREVIEW MODE?
 		*/
-		if (self::doesPreviewBannerExist($banner_id, $auth) == false):
+		if (self::doesPreviewBannerExistForBanner($banner_id, $auth) == false):
 
 			$InsertionOrderLineItemFactory = \_factory\InsertionOrderLineItem::get_instance();
 			$params = array();
@@ -43,8 +43,15 @@ class TransformPreview {
 
 		else:
 
-			return null;
-
+			$InsertionOrderLineItemPreviewFactory = \_factory\InsertionOrderLineItemPreview::get_instance();
+			$params = array();
+			$params["InsertionOrderLineItemID"] = $banner_id;
+			$params["Active"] = 1;
+			$params["UserID"] = $auth->getEffectiveUserID();
+			$InsertionOrderLineItemPreview = $InsertionOrderLineItemPreviewFactory->get_row($params);
+			$params["InsertionOrderLineItemPreviewID"] = $InsertionOrderLineItemPreview->InsertionOrderLineItemPreviewID;
+			return $params;
+			
 		endif;
 
 	}
@@ -197,6 +204,18 @@ class TransformPreview {
 		$params["UserID"] = $auth->getEffectiveUserID();
 		$InsertionOrderLineItemPreview = $InsertionOrderLineItemPreviewFactory->get_row($params);
 
+		return $InsertionOrderLineItemPreview !== null;
+	}
+	
+	public static function doesPreviewBannerExistForBanner($banner_id, $auth) {
+	
+		$InsertionOrderLineItemPreviewFactory = \_factory\InsertionOrderLineItemPreview::get_instance();
+		$params = array();
+		$params["InsertionOrderLineItemID"] = $banner_id;
+		$params["Active"] = 1;
+		$params["UserID"] = $auth->getEffectiveUserID();
+		$InsertionOrderLineItemPreview = $InsertionOrderLineItemPreviewFactory->get_row($params);
+	
 		return $InsertionOrderLineItemPreview !== null;
 	}
 
