@@ -78,20 +78,23 @@ class AuthHelper {
 		$PublisherWebsite	 			= $PublisherWebsiteFactory->get_row_cached($params);
 
 		if ($PublisherWebsite !== null):
-			if ($PublisherWebsite->VisibilityTypeID == 1):
-				/*
-				 * optionally add some flag checking for platform connection
-				 * being turned on for the user here
-				 */ 
+		
+			$ret_val = self::domain_user_authorized_publisher_passthru($parent_id, $PublisherWebsite->DomainOwnerID);
+			if ($ret_val === true):
+				$is_local = true;
 				return true;
-			else:
-				$ret_val = self::domain_user_authorized_publisher_passthru($parent_id, $PublisherWebsite->DomainOwnerID);
-				if ($ret_val === true):
-					$is_local = true;
+			elseif ($PublisherWebsite->VisibilityTypeID == 1):
+				/*
+				 * add a flag checking for platform connection
+				 * being turned on for the user here
+				 */
+				if (\util\CreditHelper::wasApprovedForPlatfromConnectionInventoryAuthUserID($parent_id)):
 					return true;
 				else:
 					return false;
 				endif;
+			else:
+				return false;
 			endif;
 		endif;
 	

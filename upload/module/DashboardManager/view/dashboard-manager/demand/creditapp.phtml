@@ -1,0 +1,24 @@
+<?php
+// setting a meta refresh for 3 seconds to a new url:
+$this->headMeta()->appendHttpEquiv('Refresh', '8;URL=' . $refresh_url);
+$this->headScript()->captureStart(); ?>
+$(function(){
+    $('#main-container').addClass("centerj");
+});
+<?php $this->headScript()->captureEnd();  ?>
+<div class="" style="min-height: 400px; padding: 20px;">
+    <h2><?php echo $this->escapeHtml('You Lack Sufficient Credit to Buy This Inventory'); ?></h2>
+    <div style="text-align=center">
+        Your information was <strong>not saved</strong>. 
+        <br /><br />
+        You have attempted to purchase inventory which you have not been approved
+        for by the exchange.
+        <br /><br />
+        You may download a <a target="_blank" href="/forms/credit.application.pdf">credit application</a> here and email it to 
+        <strong><?php echo $admin_email; ?></strong>
+        to gain access to the inventory you tried to purchase.
+        <br /><br />
+        Please <strong><a target="_blank" href="<?php echo $refresh_url; ?>">click here to continue</a></strong> and limit your inventory to your own publishers until you have been notified by your account manager.
+    </div>
+</div>
+<div style="clear:both"></div>

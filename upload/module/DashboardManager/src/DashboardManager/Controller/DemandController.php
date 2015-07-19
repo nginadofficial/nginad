@@ -2527,7 +2527,11 @@ class DemandController extends DemandAbstractActionController {
 				$authorized = \util\AuthHelper::domain_user_authorized_px_publisher_website_passthru($this->auth->getUserID(), $exchange_feed_id, $is_local);
 
 				if (!$authorized):
-					die("You are not authorized to add inventory from Publisher Website: " . $exchange_feed_id . ' - ' . $exchange_feed_description . " <br />Please contact an administrator for more information.");
+					$viewModel = new ViewModel(array(
+										'admin_email' => $this->config_handle['mail']['reply-to']['email'],
+										'refresh_url' => '/private-exchange/editlineitem/' . $banner_preview_id . '?ispreview=true'
+					));
+					return $viewModel->setTemplate('dashboard-manager/demand/creditapp.phtml');
 				endif;
 			
 			endif;
@@ -2561,6 +2565,20 @@ class DemandController extends DemandAbstractActionController {
 	    $SspRtbChannelToInsertionOrderLineItemPreviewFactory = \_factory\SspRtbChannelToInsertionOrderLineItemPreview::get_instance();
 			
 	    $SspRtbChannelToInsertionOrderLineItemPreviewFactory->deleteSspRtbChannelToInsertionOrderLineItemByInsertionOrderLineItemPreviewID($banner_preview_id);
+
+	    /*
+	     * If they are adding inventory from SSP RTB Channels
+	     * make sure they are approved for that
+	     */
+	    if (count($ssp_feeds) >= 1):
+	    	if (!\util\CreditHelper::wasApprovedForSspRtbInventoryAuthUserID($this->auth->getUserID())):
+					$viewModel = new ViewModel(array(
+										'admin_email' => $this->config_handle['mail']['reply-to']['email'],
+										'refresh_url' => '/private-exchange/editlineitem/' . $banner_preview_id . '?ispreview=true'
+					));
+					return $viewModel->setTemplate('dashboard-manager/demand/creditapp.phtml');
+	    	endif;
+	    endif;
 	    
 		foreach ($ssp_feeds as $raw_feed_data):
 		
@@ -3222,7 +3240,11 @@ class DemandController extends DemandAbstractActionController {
 			    $authorized = \util\AuthHelper::domain_user_authorized_px_publisher_website_passthru($this->auth->getUserID(), $exchange_feed_id, $is_local);
 			    
 			    if (!$authorized):
-			    	die("You are not authorized to add inventory from Publisher Website: " . $exchange_feed_id . ' - ' . $exchange_feed_description . " <br />Please contact an administrator for more information.");
+					$viewModel = new ViewModel(array(
+										'admin_email' => $this->config_handle['mail']['reply-to']['email'],
+										'refresh_url' => '/private-exchange/editinsertionorder/' . $new_campaign_preview_id . '?ispreview=true'
+					));
+					return $viewModel->setTemplate('dashboard-manager/demand/creditapp.phtml');
 			    endif;
 			    
 		    endif;
@@ -3256,6 +3278,20 @@ class DemandController extends DemandAbstractActionController {
 	    $SspRtbChannelToInsertionOrderPreviewFactory = \_factory\SspRtbChannelToInsertionOrderPreview::get_instance();
 	    
 	    $SspRtbChannelToInsertionOrderPreviewFactory->deleteSspRtbChannelToInsertionOrderByInsertionOrderPreviewID($new_campaign_preview_id);
+	    
+	    /*
+	     * If they are adding inventory from SSP RTB Channels
+	    * make sure they are approved for that
+	    */
+	    if (count($ssp_feeds) >= 1):
+		    if (!\util\CreditHelper::wasApprovedForSspRtbInventoryAuthUserID($this->auth->getUserID())):
+					$viewModel = new ViewModel(array(
+										'admin_email' => $this->config_handle['mail']['reply-to']['email'],
+										'refresh_url' => '/private-exchange/editinsertionorder/' . $new_campaign_preview_id . '?ispreview=true'
+					));
+					return $viewModel->setTemplate('dashboard-manager/demand/creditapp.phtml');
+		    endif;
+	    endif;
 	    
 	    foreach ($ssp_feeds as $raw_feed_data):
 	    
