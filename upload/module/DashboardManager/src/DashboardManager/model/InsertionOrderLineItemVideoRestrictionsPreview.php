@@ -28,7 +28,6 @@ class InsertionOrderLineItemVideoRestrictionsPreview {
     public $StartDelay;
     public $Linearity;
     public $FoldPos;
-    public $PmpEnable;
     public $Secure;
     public $Optout;
     public $Vertical;

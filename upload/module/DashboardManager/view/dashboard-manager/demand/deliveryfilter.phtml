@@ -138,19 +138,7 @@ var currentStates = "<?php echo $current_states; ?>";
 </select>
 
 	</div>
-<div class="control-group">
-		<label for="inmultiplenestediframes">In Multiple Nested IFrames?</label>
-<select id="inmultiplenestediframes" name="inmultiplenestediframes" class="zone-txtarea">
-    <?php foreach ($inmultiplenestediframes_options as $code => $name): ?>
-        <?php if ((string)$code === $current_inmultiplenestediframes): ?>
-            <option value="<?php echo $code;?>" selected="selected"><?php echo $name;?></option>
-        <?php else: ?>
-            <option value="<?php echo $code;?>"><?php echo $name;?></option>
-        <?php endif; ?>
-    <?php endforeach; ?>
-</select>
 
-	</div>
 <div class="control-group">
 		<label for="minscreenresolutionwidth">Min Screen Resolution Width : <span class="hlp"><small><i>(eg. 500 [in px])</i></small></span></label>
 		<input type="text" name="minscreenresolutionwidth" value="<?php echo $minscreenresolutionwidth_option;?>" class="input-mini">
@@ -175,11 +163,6 @@ var currentStates = "<?php echo $current_states; ?>";
 <div class="control-group">
 		<label for="browseruseragentgrep">Browser User Agent Grep : <span class="hlp"><small><i>( Non-Empty matches UserAgent String, Example: Firefox/23 )</i></small></span></label>
 		<input type="text" name="browseruseragentgrep" value="<?php echo $browseruseragentgrep_option;?>" class="zone-txtbox">
-	</div>
-
-	<div class="control-group">
-		<label for="cookiegrep">Cookie Grep : <span class="hlp"><small><i>( Non-Empty matches Cookie String, Example: pcv:1|uid:123 )</i></small></span></label>
-		<input type="text" name="cookiegrep" value="<?php echo $cookiegrep_option;?>" class="zone-txtbox">
 	</div>
 
    <div class="control-group">

@@ -99,7 +99,6 @@ class InsertionOrderLineItemVideoRestrictions extends \_factory\CachedTableRead
     			'FoldPos'              		   	   => $VideoRestrictions->FoldPos === "" ? null : $VideoRestrictions->FoldPos,
     			'MinHeight'              		   => $VideoRestrictions->MinHeight === "" ? null : $VideoRestrictions->MinHeight,
     			'MinWidth'              		   => $VideoRestrictions->MinWidth === "" ? null : $VideoRestrictions->MinWidth,
-    			'PmpEnable'              		   => $VideoRestrictions->PmpEnable === "" ? null : $VideoRestrictions->PmpEnable,
     			'Secure'              		   	   => $VideoRestrictions->Secure === "" ? null : $VideoRestrictions->Secure,
     			'Optout'              		   	   => $VideoRestrictions->Optout === "" ? null : $VideoRestrictions->Optout,
     	        'Vertical'                         => $VideoRestrictions->Vertical === "" ? null : $VideoRestrictions->Vertical,

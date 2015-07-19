@@ -33,19 +33,6 @@ class CheckInIFrame {
 			return false;
 		endif;
 		
-		/*
-		 * Check banner multiple nested IFRAMEs disposition
-		 * - we are checking for string 0 as well
-		*/
-		if ($InsertionOrderLineItemRestrictions->InMultipleNestedIframes != null && $InsertionOrderLineItemRestrictions->InMultipleNestedIframes == 0 && $in_iframe == true):
-			if ($Logger->setting_log === true):
-			$Logger->log[] = "Failed: " . "Check banner in multiple nested IFRAMEs :: EXPECTED: "
-					. $InsertionOrderLineItemRestrictions->InMultipleNestedIframes
-					. " GOT: " . $in_iframe;
-			endif;
-			return false;
-		endif;
-		
 		return true;
 	}
 }

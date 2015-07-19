@@ -30,12 +30,6 @@ class DeliveryFilterOptions {
     		"1"=>"Yes IFrame Ads"
     );
 
-    public static $inmultiplenestediframes_options = array(
-    		""=>"No Preference",
-    		"0"=>"No Multiple Nested IFrame Ads",
-    		"1"=>"Yes Multiple Nested IFrame Ads"
-    );
-
     public static $timezone_options = array(
     		""=>"None",
     		"-12"=>"(GMT -12:00) Eniwetok, Kwajalein",
@@ -69,12 +63,6 @@ class DeliveryFilterOptions {
     		"10"=>"(GMT +10:00) Eastern Australia, Guam, Vladivostok",
     		"11"=>"(GMT +11:00) Magadan, Solomon Islands, New Caledonia",
     		"12"=>"(GMT +12:00) Auckland, Wellington, Fiji, Kamchatka"
-    );
-
-    public static $pmpenable_options = array(
-    		""=>"No Preference",
-    		"0"=>"PMP Enable Off",
-    		"1"=>"PMP Enable On"
     );
 
     public static $secure_options = array(

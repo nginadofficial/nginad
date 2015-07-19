@@ -460,7 +460,6 @@ class TransformPreview {
 					$VideoRestrictions->FoldPos			 					= $InsertionOrderLineItemVideoRestrictionsPreview->FoldPos;
 					$VideoRestrictions->MinHeight 							= $InsertionOrderLineItemVideoRestrictionsPreview->MinHeight;
 					$VideoRestrictions->MinWidth 							= $InsertionOrderLineItemVideoRestrictionsPreview->MinWidth;
-					$VideoRestrictions->PmpEnable 							= $InsertionOrderLineItemVideoRestrictionsPreview->PmpEnable;
 					$VideoRestrictions->Secure 								= $InsertionOrderLineItemVideoRestrictionsPreview->Secure;
 					$VideoRestrictions->Optout 								= $InsertionOrderLineItemVideoRestrictionsPreview->Optout;
 					$VideoRestrictions->Vertical 							= $InsertionOrderLineItemVideoRestrictionsPreview->Vertical;
@@ -497,15 +496,12 @@ class TransformPreview {
 					$BannerRestrictions->Freq 								= $InsertionOrderLineItemRestrictionsPreview->Freq;
 					$BannerRestrictions->Timezone 							= $InsertionOrderLineItemRestrictionsPreview->Timezone;
 					$BannerRestrictions->InIframe 							= $InsertionOrderLineItemRestrictionsPreview->InIframe;
-					$BannerRestrictions->InMultipleNestedIframes 			= $InsertionOrderLineItemRestrictionsPreview->InMultipleNestedIframes;
 					$BannerRestrictions->MinScreenResolutionWidth 			= $InsertionOrderLineItemRestrictionsPreview->MinScreenResolutionWidth;
 					$BannerRestrictions->MaxScreenResolutionWidth 			= $InsertionOrderLineItemRestrictionsPreview->MaxScreenResolutionWidth;
 					$BannerRestrictions->MinScreenResolutionHeight 			= $InsertionOrderLineItemRestrictionsPreview->MinScreenResolutionHeight;
 					$BannerRestrictions->MaxScreenResolutionHeight 			= $InsertionOrderLineItemRestrictionsPreview->MaxScreenResolutionHeight;
 					$BannerRestrictions->HttpLanguage 						= $InsertionOrderLineItemRestrictionsPreview->HttpLanguage;
 					$BannerRestrictions->BrowserUserAgentGrep 				= $InsertionOrderLineItemRestrictionsPreview->BrowserUserAgentGrep;
-					$BannerRestrictions->CookieGrep 						= $InsertionOrderLineItemRestrictionsPreview->CookieGrep;
-					$BannerRestrictions->PmpEnable 							= $InsertionOrderLineItemRestrictionsPreview->PmpEnable;
 					$BannerRestrictions->Secure 							= $InsertionOrderLineItemRestrictionsPreview->Secure;
 					$BannerRestrictions->Optout 							= $InsertionOrderLineItemRestrictionsPreview->Optout;
 					$BannerRestrictions->Vertical 							= $InsertionOrderLineItemRestrictionsPreview->Vertical;
@@ -763,7 +759,6 @@ class TransformPreview {
 					$VideoRestrictionsPreview->FoldPos			 				= $InsertionOrderLineItemVideoRestrictions->FoldPos;
 					$VideoRestrictionsPreview->MinHeight 						= $InsertionOrderLineItemVideoRestrictions->MinHeight;
 					$VideoRestrictionsPreview->MinWidth 						= $InsertionOrderLineItemVideoRestrictions->MinWidth;
-					$VideoRestrictionsPreview->PmpEnable 						= $InsertionOrderLineItemVideoRestrictions->PmpEnable;
 					$VideoRestrictionsPreview->Secure 							= $InsertionOrderLineItemVideoRestrictions->Secure;
 					$VideoRestrictionsPreview->Optout 							= $InsertionOrderLineItemVideoRestrictions->Optout;
 					$VideoRestrictionsPreview->Vertical 						= $InsertionOrderLineItemVideoRestrictions->Vertical;
@@ -806,15 +801,12 @@ class TransformPreview {
 				    $BannerRestrictionsPreview->Freq 								= $InsertionOrderLineItemRestrictions->Freq;
 				    $BannerRestrictionsPreview->Timezone 							= $InsertionOrderLineItemRestrictions->Timezone;
 				    $BannerRestrictionsPreview->InIframe 							= $InsertionOrderLineItemRestrictions->InIframe;
-				    $BannerRestrictionsPreview->InMultipleNestedIframes 			= $InsertionOrderLineItemRestrictions->InMultipleNestedIframes;
 				    $BannerRestrictionsPreview->MinScreenResolutionWidth 			= $InsertionOrderLineItemRestrictions->MinScreenResolutionWidth;
 				    $BannerRestrictionsPreview->MaxScreenResolutionWidth 			= $InsertionOrderLineItemRestrictions->MaxScreenResolutionWidth;
 				    $BannerRestrictionsPreview->MinScreenResolutionHeight 			= $InsertionOrderLineItemRestrictions->MinScreenResolutionHeight;
 				    $BannerRestrictionsPreview->MaxScreenResolutionHeight 			= $InsertionOrderLineItemRestrictions->MaxScreenResolutionHeight;
 				    $BannerRestrictionsPreview->HttpLanguage 						= $InsertionOrderLineItemRestrictions->HttpLanguage;
 				    $BannerRestrictionsPreview->BrowserUserAgentGrep 				= $InsertionOrderLineItemRestrictions->BrowserUserAgentGrep;
-				    $BannerRestrictionsPreview->CookieGrep 							= $InsertionOrderLineItemRestrictions->CookieGrep;
-				    $BannerRestrictionsPreview->PmpEnable 							= $InsertionOrderLineItemRestrictions->PmpEnable;
 				    $BannerRestrictionsPreview->Secure 								= $InsertionOrderLineItemRestrictions->Secure;
 				    $BannerRestrictionsPreview->Optout 								= $InsertionOrderLineItemRestrictions->Optout;
 				    $BannerRestrictionsPreview->Vertical 							= $InsertionOrderLineItemRestrictions->Vertical;

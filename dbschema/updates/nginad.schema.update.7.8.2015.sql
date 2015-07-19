@@ -43,10 +43,21 @@ ALTER TABLE  `DemandCustomerInfo` ADD `ApprovedForSspRtbInventory` tinyint(4) NO
 ALTER TABLE  `DemandCustomerInfo` ADD `CreditApplicationWasSent` tinyint(4) NOT NULL DEFAULT '0' AFTER `ApprovedForSspRtbInventory` ;
 ALTER TABLE  `DemandCustomerInfo` ADD `DateCreditApplicationWasSent` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' AFTER `CreditApplicationWasSent` ;
 
+-- Remove columns we can't support in the near future with OpenRTB
+-- Most of these are from Pubmatic
+-- Keep Frequency and other columns not dependent on OpenRTB data exclusively
 
+ALTER TABLE InsertionOrderLineItemRestrictions DROP COLUMN `InMultipleNestedIframes`;
+ALTER TABLE InsertionOrderLineItemRestrictions DROP COLUMN `CookieGrep`;
+ALTER TABLE InsertionOrderLineItemRestrictions DROP COLUMN `PmpEnable`;
 
+ALTER TABLE InsertionOrderLineItemVideoRestrictions DROP COLUMN `PmpEnable`;
 
+ALTER TABLE InsertionOrderLineItemRestrictionsPreview DROP COLUMN `InMultipleNestedIframes`;
+ALTER TABLE InsertionOrderLineItemRestrictionsPreview DROP COLUMN `CookieGrep`;
+ALTER TABLE InsertionOrderLineItemRestrictionsPreview DROP COLUMN `PmpEnable`;
 
+ALTER TABLE InsertionOrderLineItemVideoRestrictionsPreview DROP COLUMN `PmpEnable`;
 
 
 

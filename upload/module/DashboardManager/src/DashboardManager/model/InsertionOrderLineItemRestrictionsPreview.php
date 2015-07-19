@@ -25,15 +25,12 @@ class InsertionOrderLineItemRestrictionsPreview {
     public $Freq;
     public $Timezone;
     public $InIframe;
-    public $InMultipleNestedIframes;
     public $MinScreenResolutionWidth;
     public $MaxScreenResolutionWidth;
     public $MinScreenResolutionHeight;
     public $MaxScreenResolutionHeight;
     public $HttpLanguage;
     public $BrowserUserAgentGrep;
-    public $CookieGrep;
-    public $PmpEnable;
     public $Secure;
     public $Optout;
     public $Vertical;

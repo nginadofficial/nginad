@@ -544,9 +544,7 @@ class DemandController extends DemandAbstractActionController {
 		$geostate 					= $this->getRequest()->getPost("geostate");
 		
 		$geocity 					= $this->getRequest()->getPost("geocity");
-		
-		$pmpenable 					= $this->getRequest()->getPost("pmpenable");
-		
+
 		$secure 					= $this->getRequest()->getPost("secure");
 			
 		$optout 					= $this->getRequest()->getPost("optout");
@@ -640,7 +638,6 @@ class DemandController extends DemandAbstractActionController {
 		$VideoRestrictionsPreview->GeoCountry                               = trim($geocountry);
 		$VideoRestrictionsPreview->GeoState                                 = trim($geostate);
 		$VideoRestrictionsPreview->GeoCity                                  = trim($geocity);
-		$VideoRestrictionsPreview->PmpEnable                                = trim($pmpenable);
 		$VideoRestrictionsPreview->Secure                                   = trim($secure);
 		$VideoRestrictionsPreview->Optout                                   = trim($optout);
 		$VideoRestrictionsPreview->MinDuration                              = trim($min_duration);
@@ -723,15 +720,12 @@ class DemandController extends DemandAbstractActionController {
 		$frequency = $this->getRequest()->getPost('frequency');
 		$timezone = $this->getRequest()->getPost('timezone');
 		$iniframe = $this->getRequest()->getPost('iniframe');
-		$inmultiplenestediframes = $this->getRequest()->getPost('inmultiplenestediframes');
 		$minscreenresolutionwidth = $this->getRequest()->getPost('minscreenresolutionwidth');
 		$maxscreenresolutionwidth = $this->getRequest()->getPost('maxscreenresolutionwidth');
 		$minscreenresolutionheight = $this->getRequest()->getPost('minscreenresolutionheight');
 		$maxscreenresolutionheight = $this->getRequest()->getPost('maxscreenresolutionheight');
 		$httplanguage = $this->getRequest()->getPost('httplanguage');
 		$browseruseragentgrep = $this->getRequest()->getPost('browseruseragentgrep');
-		$cookiegrep = $this->getRequest()->getPost('cookiegrep');
-		$pmpenable = $this->getRequest()->getPost('pmpenable');
 		$secure = $this->getRequest()->getPost('secure');
 		$optout = $this->getRequest()->getPost('optout');
 
@@ -803,15 +797,12 @@ class DemandController extends DemandAbstractActionController {
 		$BannerRestrictionsPreview->Freq                                     = trim($frequency);
 		$BannerRestrictionsPreview->Timezone                                 = trim($timezone);
 		$BannerRestrictionsPreview->InIframe                                 = trim($iniframe);
-		$BannerRestrictionsPreview->InMultipleNestedIframes                  = trim($inmultiplenestediframes);
 		$BannerRestrictionsPreview->MinScreenResolutionWidth                 = trim($minscreenresolutionwidth);
 		$BannerRestrictionsPreview->MaxScreenResolutionWidth                 = trim($maxscreenresolutionwidth);
 		$BannerRestrictionsPreview->MinScreenResolutionHeight                = trim($minscreenresolutionheight);
 		$BannerRestrictionsPreview->MaxScreenResolutionHeight                = trim($maxscreenresolutionheight);
 		$BannerRestrictionsPreview->HttpLanguage                             = trim($httplanguage);
 		$BannerRestrictionsPreview->BrowserUserAgentGrep                     = trim($browseruseragentgrep);
-		$BannerRestrictionsPreview->CookieGrep                               = trim($cookiegrep);
-		$BannerRestrictionsPreview->PmpEnable                                = trim($pmpenable);
 		$BannerRestrictionsPreview->Secure                                   = trim($secure);
 		$BannerRestrictionsPreview->Optout                                   = trim($optout);
 		$BannerRestrictionsPreview->Vertical                                 = trim($vertical);
@@ -907,7 +898,6 @@ class DemandController extends DemandAbstractActionController {
 		$current_linearity 				= array();
 		$current_foldpos 				= "";
 		
-		$current_pmpenable 				= "";
 		$current_secure 				= "";
 		$current_optout 				= "";
 		$current_vertical 				= array();
@@ -942,7 +932,6 @@ class DemandController extends DemandAbstractActionController {
 			$current_min_height = $InsertionOrderLineItemVideoRestrictions->MinHeight == null ? "" : $InsertionOrderLineItemVideoRestrictions->MinHeight;
 			$current_min_width = $InsertionOrderLineItemVideoRestrictions->MinWidth == null ? "" : $InsertionOrderLineItemVideoRestrictions->MinWidth;
 
-			$current_pmpenable = $InsertionOrderLineItemVideoRestrictions->PmpEnable == null ? "" : $InsertionOrderLineItemVideoRestrictions->PmpEnable;
 			$current_secure = $InsertionOrderLineItemVideoRestrictions->Secure == null ? "" : $InsertionOrderLineItemVideoRestrictions->Secure;
 			$current_optout = $InsertionOrderLineItemVideoRestrictions->Optout == null ? "" : $InsertionOrderLineItemVideoRestrictions->Optout;
 			$current_vertical_raw = $InsertionOrderLineItemVideoRestrictions->Vertical == null ? "" : $InsertionOrderLineItemVideoRestrictions->Vertical;
@@ -1017,8 +1006,6 @@ class DemandController extends DemandAbstractActionController {
 				'foldpos_options' => \util\DeliveryFilterOptions::$foldpos_options,
 				'current_foldpos' => $current_foldpos,
 				'geocity_option' => $geocity_option,
-				'pmpenable_options' => \util\DeliveryFilterOptions::$pmpenable_options,
-				'current_pmpenable' => $current_pmpenable,
 				'secure_options' => \util\DeliveryFilterOptions::$secure_options,
 				'current_secure' => $current_secure,
 				'optout_options' => \util\DeliveryFilterOptions::$optout_options,
@@ -1136,15 +1123,12 @@ class DemandController extends DemandAbstractActionController {
 		$current_timezone = "";
 		$current_adtagtype = "";
 		$current_iniframe = "";
-		$current_inmultiplenestediframes = "";
 		$minscreenresolutionwidth_option = "";
 		$maxscreenresolutionwidth_option = "";
 		$minscreenresolutionheight_option = "";
 		$maxscreenresolutionheight_option = "";
 		$httplanguage_option = "";
 		$browseruseragentgrep_option = "";
-		$cookiegrep_option = "";
-		$current_pmpenable = "";
 		$current_secure = "";
 		$current_optout = "";
 		$current_vertical = array();
@@ -1164,15 +1148,12 @@ class DemandController extends DemandAbstractActionController {
     		$current_timezone = $InsertionOrderLineItemRestrictions->Timezone == null ? "" : $InsertionOrderLineItemRestrictions->Timezone;
     		$current_adtagtype = $InsertionOrderLineItemRestrictions->AdTagType == null ? "" : $InsertionOrderLineItemRestrictions->AdTagType;
     		$current_iniframe = $InsertionOrderLineItemRestrictions->InIframe == null ? "" : $InsertionOrderLineItemRestrictions->InIframe;
-    		$current_inmultiplenestediframes = $InsertionOrderLineItemRestrictions->InMultipleNestedIframes == null ? "" : $InsertionOrderLineItemRestrictions->InMultipleNestedIframes;
     		$minscreenresolutionwidth_option = $InsertionOrderLineItemRestrictions->MinScreenResolutionWidth == null ? "" : $InsertionOrderLineItemRestrictions->MinScreenResolutionWidth;
     		$maxscreenresolutionwidth_option = $InsertionOrderLineItemRestrictions->MaxScreenResolutionWidth == null ? "" : $InsertionOrderLineItemRestrictions->MaxScreenResolutionWidth;
     		$minscreenresolutionheight_option = $InsertionOrderLineItemRestrictions->MinScreenResolutionHeight == null ? "" : $InsertionOrderLineItemRestrictions->MinScreenResolutionHeight;
     		$maxscreenresolutionheight_option = $InsertionOrderLineItemRestrictions->MaxScreenResolutionHeight == null ? "" : $InsertionOrderLineItemRestrictions->MaxScreenResolutionHeight;
     		$httplanguage_option = $InsertionOrderLineItemRestrictions->HttpLanguage == null ? "" : $InsertionOrderLineItemRestrictions->HttpLanguage;
     		$browseruseragentgrep_option = $InsertionOrderLineItemRestrictions->BrowserUserAgentGrep == null ? "" : $InsertionOrderLineItemRestrictions->BrowserUserAgentGrep;
-    		$cookiegrep_option = $InsertionOrderLineItemRestrictions->CookieGrep == null ? "" : $InsertionOrderLineItemRestrictions->CookieGrep;
-    		$current_pmpenable = $InsertionOrderLineItemRestrictions->PmpEnable == null ? "" : $InsertionOrderLineItemRestrictions->PmpEnable;
     		$current_secure = $InsertionOrderLineItemRestrictions->Secure == null ? "" : $InsertionOrderLineItemRestrictions->Secure;
     		$current_optout = $InsertionOrderLineItemRestrictions->Optout == null ? "" : $InsertionOrderLineItemRestrictions->Optout;
     		$current_vertical = $InsertionOrderLineItemRestrictions->Vertical == null ? "" : $InsertionOrderLineItemRestrictions->Vertical;
@@ -1229,17 +1210,12 @@ class DemandController extends DemandAbstractActionController {
 		        'current_timezones' => $current_timezones,
     		    'iniframe_options' => \util\DeliveryFilterOptions::$iniframe_options,
     		    'current_iniframe' => $current_iniframe,
-    		    'inmultiplenestediframes_options' => \util\DeliveryFilterOptions::$inmultiplenestediframes_options,
-    		    'current_inmultiplenestediframes' => $current_inmultiplenestediframes,
     		    'minscreenresolutionwidth_option' => $minscreenresolutionwidth_option,
     		    'maxscreenresolutionwidth_option' => $maxscreenresolutionwidth_option,
     		    'minscreenresolutionheight_option' => $minscreenresolutionheight_option,
     		    'maxscreenresolutionheight_option' => $maxscreenresolutionheight_option,
 		        'httplanguage_option' => $httplanguage_option,
 		        'browseruseragentgrep_option' => $browseruseragentgrep_option,
-		        'cookiegrep_option' => $cookiegrep_option,
-    		    'pmpenable_options' => \util\DeliveryFilterOptions::$pmpenable_options,
-    		    'current_pmpenable' => $current_pmpenable,
     		    'secure_options' => \util\DeliveryFilterOptions::$secure_options,
     		    'current_secure' => $current_secure,
     		    'optout_options' => \util\DeliveryFilterOptions::$optout_options,

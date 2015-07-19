@@ -100,7 +100,6 @@ class InsertionOrderLineItemVideoRestrictionsPreview extends AbstractTableGatewa
     			'FoldPos'              		   	   => $VideoRestrictionsPreview->FoldPos === "" ? null : $VideoRestrictionsPreview->FoldPos,
     			'MinHeight'              		   => $VideoRestrictionsPreview->MinHeight === "" ? null : $VideoRestrictionsPreview->MinHeight,
     			'MinWidth'              		   => $VideoRestrictionsPreview->MinWidth === "" ? null : $VideoRestrictionsPreview->MinWidth,
-    			'PmpEnable'              		   => $VideoRestrictionsPreview->PmpEnable === "" ? null : $VideoRestrictionsPreview->PmpEnable,
     			'Secure'              		   	   => $VideoRestrictionsPreview->Secure === "" ? null : $VideoRestrictionsPreview->Secure,
     			'Optout'              		   	   => $VideoRestrictionsPreview->Optout === "" ? null : $VideoRestrictionsPreview->Optout,
     	        'Vertical'                         => $VideoRestrictionsPreview->Vertical === "" ? null : $VideoRestrictionsPreview->Vertical,
