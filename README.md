@@ -1,6 +1,17 @@
 nginad
 =======
 
+July 18, 2015
+------------------
+
+Something awesome just happened. Private Exchanges are all done. Some other minor fixes are also done.
+The nomenclature changes for those crying out for Insertion Orders and Line Items are also done.
+
+This is the remaining list for NginAd 1.6 and these things are relatively quick:
+
+* Flash or AJAX image uploader for ad agency creatives in insertion order line items
+* Vanity domains like http://preview.test.console.appnexus.com so that private exchange customers can white label from a single NginAd Exchange like AppNexus with their own publishers visiting their own login with their logo and CSS color scheme.
+
 June 25, 2015
 ------------------
 
