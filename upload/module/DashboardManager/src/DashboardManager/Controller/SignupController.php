@@ -594,8 +594,7 @@ class SignupController extends PublisherAbstractActionController {
 	
 		$initialized = $this->initialize();
 		if ($initialized !== true) return $initialized;
-	
-		$authUsers = new \model\authUsers();
+		
 		$authUsersFactory = \_factory\authUsers::get_instance();
 	
 		$userData = $authUsersFactory->get_row(array("user_id" => $this->auth->getUserID()));
@@ -645,16 +644,12 @@ class SignupController extends PublisherAbstractActionController {
 		$initialized = $this->initialize();
 		if ($initialized !== true) return $initialized;
 		
-		$authUsers = new \model\authUsers();
 		$authUsersFactory = \_factory\authUsers::get_instance();
-		
-		$userData = $authUsersFactory->get_row(array("user_id" => $this->auth->getUserID()));
-		
+
 		if (!$this->is_super_admin) :
      		return $this->redirect()->toRoute($this->dashboard_home);
 		endif;
 		
-		$PublisherInfo = new \model\PublisherInfo();
 		$PublisherInfoFactory = \_factory\PublisherInfo::get_instance();
 		
 		$orders = 'DateCreated DESC'; 	    
@@ -679,21 +674,153 @@ class SignupController extends PublisherAbstractActionController {
 
 	}
 	
+	public function managecreditAction() {
+	
+		$initialized = $this->initialize();
+		if ($initialized !== true) return $initialized;
+	
+		if (!$this->is_super_admin) :
+			return $this->redirect()->toRoute($this->dashboard_home);
+		endif;
+		
+		$id = $this->getEvent()->getRouteMatch()->getParam('param1');
+		if ($id == null):
+			die("Invalid Customer ID");
+		endif;
+
+		$DemandCustomerInfoFactory = \_factory\DemandCustomerInfo::get_instance();
+		
+		$params["DemandCustomerInfoID"] = $id;	    
+		$DemandCustomerInfo = $DemandCustomerInfoFactory->get_row($params);
+		
+		if ($DemandCustomerInfo == null):
+			die("Invalid Customer ID");
+		endif;
+
+		$email_sent = $this->getRequest()->getQuery('emailsent');
+		$email_sent = ($email_sent == "true") ? true : false;
+		
+		$authUsersFactory = \_factory\authUsers::get_instance();
+		
+		$view = new ViewModel(array(
+	    	'dashboard_view' => 'account',
+			'email_sent' => $email_sent,
+	    	'user_data' => $DemandCustomerInfo,
+			'authUsersFactory' => $authUsersFactory,
+	    	'user_type' => 'customer',
+	    	'user_id' => $this->auth->getUserID(),
+	       	'user_id_list' => $this->user_id_list,
+	      	'user_identity' => $this->identity(),
+		  	'true_user_name' => $this->auth->getUserName(),
+			'header_title' => 'Manage Customer Credit',
+			'is_super_admin' => $this->is_super_admin,
+			'effective_id' => $this->auth->getEffectiveIdentityID(),
+			'impersonate_id' => $this->ImpersonateID
+	    ));
+		
+		return $view->setTemplate('dashboard-manager/auth/managecredit.phtml');
+	}
+	
+	public function sendcreditapplicationAction() {
+		$initialized = $this->initialize();
+		if ($initialized !== true) return $initialized;
+		
+		if (!$this->is_super_admin) :
+			return $this->redirect()->toRoute($this->dashboard_home);
+		endif;
+		
+		$id = $this->getEvent()->getRouteMatch()->getParam('param1');
+		if ($id == null):
+			die("Invalid Customer ID");
+		endif;
+		
+		$DemandCustomerInfoFactory = \_factory\DemandCustomerInfo::get_instance();
+		
+		$params["DemandCustomerInfoID"] = $id;
+		$DemandCustomerInfo = $DemandCustomerInfoFactory->get_row($params);
+		
+		if ($DemandCustomerInfo == null):
+			die("Invalid Customer ID");
+		endif;
+		
+		$transport = $this->getServiceLocator()->get('mail.transport');
+		
+		\util\CreditHelper::sendCreditApplication($transport, $this->config_handle, $DemandCustomerInfo->DemandCustomerInfoID);
+		
+		return $this->redirect()->toUrl('/users/managecredit/' . $DemandCustomerInfo->DemandCustomerInfoID . "?emailsent=true");
+	}
+	
+	public function approvessprtbinventoryAction() {
+		$initialized = $this->initialize();
+		if ($initialized !== true) return $initialized;
+		
+		if (!$this->is_super_admin) :
+			return $this->redirect()->toRoute($this->dashboard_home);
+		endif;
+		
+		$id = $this->getEvent()->getRouteMatch()->getParam('param1');
+		if ($id == null):
+			die("Invalid Customer ID");
+		endif;
+		
+		$DemandCustomerInfoFactory = \_factory\DemandCustomerInfo::get_instance();
+		
+		$params["DemandCustomerInfoID"] = $id;
+		$DemandCustomerInfo = $DemandCustomerInfoFactory->get_row($params);
+		
+		if ($DemandCustomerInfo == null):
+			die("Invalid Customer ID");
+		endif;
+		
+		$approve_flag = $this->getRequest()->getQuery('approve');
+		$approve_flag = ($approve_flag == "true") ? true : false;
+
+		$DemandCustomerInfoFactory->approvedForSspRtbInventory($DemandCustomerInfo->DemandCustomerInfoID, $approve_flag);
+		
+		return $this->redirect()->toUrl('/users/managecredit/' . $DemandCustomerInfo->DemandCustomerInfoID);
+	}
+	
+	public function approveplatformconnectioninventoryAction() {
+		$initialized = $this->initialize();
+		if ($initialized !== true) return $initialized;
+		
+		if (!$this->is_super_admin) :
+			return $this->redirect()->toRoute($this->dashboard_home);
+		endif;
+		
+		$id = $this->getEvent()->getRouteMatch()->getParam('param1');
+		if ($id == null):
+			die("Invalid Customer ID");
+		endif;
+		
+		$DemandCustomerInfoFactory = \_factory\DemandCustomerInfo::get_instance();
+		
+		$params["DemandCustomerInfoID"] = $id;
+		$DemandCustomerInfo = $DemandCustomerInfoFactory->get_row($params);
+		
+		if ($DemandCustomerInfo == null):
+			die("Invalid Customer ID");
+		endif;
+		
+		$approve_flag = $this->getRequest()->getQuery('approve');
+		$approve_flag = ($approve_flag == "true") ? true : false;
+		
+		$DemandCustomerInfoFactory->approvedForPlatfromConnectionInventory($DemandCustomerInfo->DemandCustomerInfoID, $approve_flag);
+		
+		return $this->redirect()->toUrl('/users/managecredit/' . $DemandCustomerInfo->DemandCustomerInfoID);
+	}
+	
 	public function customersAction() {
 		
 		$initialized = $this->initialize();
 		if ($initialized !== true) return $initialized;
-		
-		$authUsers = new \model\authUsers();
+
 		$authUsersFactory = \_factory\authUsers::get_instance();
-		
-		$userData = $authUsersFactory->get_row(array("user_id" => $this->auth->getUserID()));
 
 		if (!$this->is_super_admin) :
 			return $this->redirect()->toRoute($this->dashboard_home);
 		endif;
 		
-		$DemandCustomerInfo = new \model\DemandCustomerInfo();
 		$DemandCustomerInfoFactory = \_factory\DemandCustomerInfo::get_instance();
 		
 		$orders = 'DateCreated DESC'; 	    

@@ -1,6 +1,19 @@
 <?php
 $this->headScript()->prependFile($this->basePath() . '/js/script.js');
 ?>
+
+   <ul class="breadcrumb">
+    <li><a href="/users/customers">Demand Customer List</a><span class="divider">/</span></li>
+    <li>Manage Customer Credit</li>
+    </ul>
+
+    
+<?php if ($email_sent == true): ?>
+<div id="cdn_form_msg" class="alert alert-success" style="margin: 5px;">The <a target="_blank" style="color: #000;" href="/forms/credit.application.pdf">Credit Application</a> Email was Sent to: 
+<?php echo $user_data->Email; ?> 
+</div>
+<?php endif; ?>
+
 <div class="steps-container step1">
 
     <div id="selection-results" class="steps-box">
@@ -20,20 +33,20 @@ $this->headScript()->prependFile($this->basePath() . '/js/script.js');
             	Email	
            </th>
            <th>
-            	Website	
+            	Platform Connection Inventory
            </th>
            <th>
-            	Credit Approvals
+            	SSP RTB Inventory
+           </th>
+           <th>
+            	<a target="_blank" style="color: #fff;" href="/forms/credit.application.pdf">Credit App</a> Last Sent On
            </th>
             <th>
-            	Date Created
-           </th>
-           <th>
-           	    Approval
+            	<a target="_blank" style="color: #fff;" href="/forms/credit.application.pdf">Credit Application</a> Email
            </th>
            </tr>
 
-    	   <?php foreach ($user_detail as $user_data) :  
+    	   <?php 
     	   		$userData = $authUsersFactory->get_row(array("DemandCustomerInfoID" => $user_data->DemandCustomerInfoID));
     	   		$approval = false;
     	   		// fixes bad auth_User data from previous signup bug which was fixed in 1.4
@@ -59,43 +72,44 @@ $this->headScript()->prependFile($this->basePath() . '/js/script.js');
             <?php echo $user_data->Email; ?>
            </td>
            <td>
-            <?php echo $user_data->Website; ?>
-           </td>
-           <td>
-            <table style="margin: 0;"><tr><td colspan="2" style="text-align: center">
-            <a href="/users/managecredit/<?php echo $user_data->DemandCustomerInfoID; ?>">Manage Buying Credit</a>
-            </td></tr><tr><td>
-            Platform Connection:</td><td>
             <?php if ($user_data->ApprovedForPlatformConnectionInventory == 1): ?>
             	 <span class="label label-success">Approved</span>
             <?php else: ?>
             	 <span class="label label-info">Not Approved</span>
             <?php endif; ?>
-            </td></tr><tr><td>
-            SSP RTB Inventory:</td><td>
+            &nbsp;|&nbsp;
+            <?php if ($user_data->ApprovedForPlatformConnectionInventory == 1): ?>
+            	 <a href="/users/approveplatformconnectioninventory/<?php echo $user_data->DemandCustomerInfoID; ?>?approve=false">Un-Approve</a>
+            <?php else: ?>
+            	 <a href="/users/approveplatformconnectioninventory/<?php echo $user_data->DemandCustomerInfoID; ?>?approve=true">Approve</a>
+            <?php endif; ?>
+           </td>
+           <td>
             <?php if ($user_data->ApprovedForSspRtbInventory == 1): ?>
             	 <span class="label label-success">Approved</span>
             <?php else: ?>
             	 <span class="label label-info">Not Approved</span>
             <?php endif; ?>
-            </td></tr>
-            </table>
+            &nbsp;|&nbsp;
+            <?php if ($user_data->ApprovedForSspRtbInventory == 1): ?>
+            	 <a href="/users/approvessprtbinventory/<?php echo $user_data->DemandCustomerInfoID; ?>?approve=false">Un-Approve</a>
+            <?php else: ?>
+            	 <a href="/users/approvessprtbinventory/<?php echo $user_data->DemandCustomerInfoID; ?>?approve=true">Approve</a>
+            <?php endif; ?>
            </td>
            <td>
-            <?php echo $user_data->DateCreated; ?>
+            <?php 
+            	$tme = strtotime($user_data->DateCreditApplicationWasSent);
+            if ($tme):
+				echo date("m/d/Y", $tme);
+            else:
+            	echo "Never";
+            endif; ?>
            </td>
            <td>
-              	 <?php if($approval==true): ?>
-              	  <span class="label label-success">Approved</span>
-              	 <?php else: ?>
-              	 <a href="javascript:void(0);" onclick="userAcceptModal(<?php echo $user_data->DemandCustomerInfoID;?>,'<?php echo $user_data->Name;?>');">Approve</a>
-              	 &nbsp;|&nbsp;
-              	 <a href="javascript:void(0);" onclick="userRejectionModal(<?php echo $user_data->DemandCustomerInfoID;?>,'<?php echo $user_data->Name;?>');">Reject</a>
-              	 <?php endif; ?>
-              	 
+            <a href="/users/sendcreditapplication/<?php echo $user_data->DemandCustomerInfoID; ?>">Email Credit Application</a>
            </td>
            </tr>
-    <?php endforeach; ?>
     </table>
     </div>
     </div>

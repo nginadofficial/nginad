@@ -110,17 +110,17 @@ class CreditHelper {
 		return false;
 	}
 	
-	public static function sendCreditApplicationAuthUserID($auth_user_id) {
+	public static function sendCreditApplicationAuthUserID($transport, $config, $auth_user_id) {
 			
 		$demand_customer_info_id = self::getDemandCustomerInfoIDFromAuthUserID($auth_user_id);
 	
 		if ($demand_customer_info_id === false) return false;
 	
-		return self::sendCreditApplication($demand_customer_info_id);
+		return self::sendCreditApplication($transport, $config, $demand_customer_info_id);
 	
 	}
 	
-	public static function sendCreditApplication($demand_customer_info_id) {
+	public static function sendCreditApplication($transport, $config, $demand_customer_info_id) {
 		
 		$DemandCustomerInfoFactory = \_factory\DemandCustomerInfo::get_instance();
 		
@@ -133,12 +133,11 @@ class CreditHelper {
 			// approval, send out email
 			$subject = "Your NginAd Exchange Private Exchange Requires Credit Approval";
 		
-			$message = 'Your NginAd Private Exchange for: ' . $DemandCustomerInfo->Website . ', ' . $DemandCustomerInfo->Company . ', needs credit approval before you can access Platform Connection Inventory and SSP RTB Inventory.'
+			$message = 'Your NginAd Private Exchange for: ' . $DemandCustomerInfo->Company . ', needs credit approval before you can access Platform Connection Inventory and SSP RTB Inventory.'
 					. '<br /><br />Please download the credit application <a href="http://server.nginad.com/forms/credit.application.pdf">here</a>.'
-					. '<br /><br />Fill out the application completely and email it back to:' . $this->config_handle['mail']['reply-to']['email']
+					. '<br /><br />Link: http://server.nginad.com/forms/credit.application.pdf'
+					. '<br /><br />Fill out the application completely and email it back to:' . $config['mail']['reply-to']['email']
 					. '<br /><br />Once your application is approved we will set a credit limit for your programmatic media buys and enable either the Platform Connection inventory, or the SSP RTB inventory or both depending on your credit worthiness.';
-			
-			$transport = $this->getServiceLocator()->get('mail.transport');
 			
 			$text = new Mime\Part($message);
 			$text->type = Mime\Mime::TYPE_HTML;
@@ -148,7 +147,7 @@ class CreditHelper {
 			$mimeMessage->setParts(array($text));
 			$zf_message = new Message();
 			$zf_message->addTo($DemandCustomerInfo->Email)
-			->addFrom($this->config_handle['mail']['reply-to']['email'], $this->config_handle['mail']['reply-to']['name'])
+			->addFrom($config['mail']['reply-to']['email'], $config['mail']['reply-to']['name'])
 			->setSubject($subject)
 			->setBody($mimeMessage);
 			$transport->send($zf_message);
