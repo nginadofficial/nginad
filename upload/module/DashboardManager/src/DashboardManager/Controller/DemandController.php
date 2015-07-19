@@ -3184,22 +3184,24 @@ class DemandController extends DemandAbstractActionController {
 
 	    endif;
 
-	    if ($campaign_preview_id != null):
+	    
+	    // ACL PREVIEW PERMISSIONS CHECK
+		transformation\CheckPermissions::checkEditPermissionInsertionOrderPreview($campaign_preview_id, $this->auth, $this->config_handle);
+	  	$InsertionOrderPreview->InsertionOrderPreviewID	= $campaign_preview_id;
 
-		    // ACL PREVIEW PERMISSIONS CHECK
-		    transformation\CheckPermissions::checkEditPermissionInsertionOrderPreview($campaign_preview_id, $this->auth, $this->config_handle);
-	       	$InsertionOrderPreview->InsertionOrderPreviewID               = $campaign_preview_id;
-
-	       	$params = array();
-	       	$params["InsertionOrderPreviewID"] = $campaign_preview_id;
-	       	$InsertionOrderPreviewFactory = \_factory\InsertionOrderPreview::get_instance();
-	       	$_InsertionOrderPreview = $InsertionOrderPreviewFactory->get_row($params);
-	       	$InsertionOrderPreview->InsertionOrderID 	= $_InsertionOrderPreview->InsertionOrderID;
-	    endif;
+		$params = array();
+		$params["InsertionOrderPreviewID"] = $campaign_preview_id;
+		$InsertionOrderPreviewFactory = \_factory\InsertionOrderPreview::get_instance();
+	  	$_InsertionOrderPreview = $InsertionOrderPreviewFactory->get_row($params);
+	  	
+	  	if ($_InsertionOrderPreview == null):
+	  		die("Staging preview was not created: CODE 106");
+	  	endif;
+	  	$InsertionOrderPreview->InsertionOrderID 	= $_InsertionOrderPreview->InsertionOrderID;
 
 	    // else new campaign, ispreview is always true
 
-	    $InsertionOrderPreview->UserID             			= $this->auth->getEffectiveUserID();
+	    $InsertionOrderPreview->UserID             		  = $this->auth->getEffectiveUserID();
 
     	$InsertionOrderPreview->Name                      = $campaignname;
     	$InsertionOrderPreview->StartDate                 = date("Y-m-d H:i:s", strtotime($startdate));

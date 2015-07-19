@@ -50,7 +50,7 @@ class TransformPreview {
 	}
 
 	public static function previewCheckInsertionOrderID($ad_campaign_id, $auth, $config, $mail_transport, $update_data = array()) {
-
+		
 		/*
 		 * SHOULD WE CREATE A NEW PREVIEW MODE?
 		*/
@@ -68,12 +68,23 @@ class TransformPreview {
 				$params["error"] = "No Such Ad Campaign";
 				return $params;
 			endif;
-
+			
 			return self::cloneInsertionOrderIntoInsertionOrderPreview($InsertionOrder->InsertionOrderID, $auth, $config, $mail_transport, $update_data);
 
 		else:
 
-			return null;
+			$InsertionOrderPreviewFactory = \_factory\InsertionOrderPreview::get_instance();
+			$params = array();
+			$params["InsertionOrderID"] = $ad_campaign_id;
+			$params["Active"] = 1;
+			$params["UserID"] = $auth->getEffectiveUserID();
+	
+			$InsertionOrderPreview = $InsertionOrderPreviewFactory->get_row($params);
+	
+			$params["InsertionOrderPreviewID"] = $InsertionOrderPreview->InsertionOrderPreviewID;
+			$params["InsertionOrderLineItemPreviewID"] = null;
+			
+			return $params;
 
 		endif;
 
@@ -619,12 +630,12 @@ class TransformPreview {
 
 		/*
 		 * Clone InsertionOrder into InsertionOrderPreview
-		 */
-
+		*/
+		
 		$InsertionOrderPreviewFactory = \_factory\InsertionOrderPreview::get_instance();
 		$InsertionOrderPreview = new \model\InsertionOrderPreview();
 
-		$InsertionOrderPreview->InsertionOrderID 		= $InsertionOrder->InsertionOrderID;
+		$InsertionOrderPreview->InsertionOrderID 	= $InsertionOrder->InsertionOrderID;
 		$InsertionOrderPreview->UserID 				= $InsertionOrder->UserID;
 		$InsertionOrderPreview->Name				= $InsertionOrder->Name;
 		$InsertionOrderPreview->StartDate			= $InsertionOrder->StartDate;
