@@ -10,8 +10,7 @@ The nomenclature changes for those crying out for Insertion Orders and Line Item
 This is the remaining list for NginAd 1.6 and these things are relatively quick:
 
 * Flash or AJAX image uploader for ad agency creatives in insertion order line items
-* Vanity domains like http://preview.test.console.appnexus.com so that private exchange customers can white label from a single NginAd Exchange like AppNexus with their own publishers visiting their own login with their logo and CSS color scheme.
-
+* Vanity domains like http://preview.test.console.appnexus.com so that private exchange customers can white label from a single NginAd Exchange like AppNexus with their own publishers visiting their own login with their logo and CSS color scheme. This will be done with a wildcard virtual host in nginx, and a HTTP host name to private exchange user mapping in the database.
 June 25, 2015
 ------------------
 
