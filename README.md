@@ -1,6 +1,17 @@
 nginad
 =======
 
+July 19, 2015
+------------------
+
+The creatives manager/image uploader is done! 
+Finally dropzone.js was used for drag & drop style uploading similar to the new version of JIRA.
+
+Also, 2 new params were set in the delivery.local.php.dist so that the exchange name and the base site url are automatic in user update emails and for the creatives uploader.
+
+The last remaining item before 1.6 is ready to dev-test and release is to finish the vanity domains.
+That should provide some similar functionality to the full featured version of AppNexus.
+
 July 18, 2015
 ------------------
 
