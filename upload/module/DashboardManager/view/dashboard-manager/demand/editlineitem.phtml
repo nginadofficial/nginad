@@ -120,9 +120,15 @@ $(function() {
 		<select id="ImpressionType" name="ImpressionType" class="zone-txtarea" onchange="switchImpressionType();">
 			<?php if ($ImpressionType == 'banner'): ?>
 				<option value="banner" selected="selected">Banner Ad</option>
+				<option value="image">Image Ad</option>
+				<option value="video">Video Ad</option>
+			<?php elseif ($ImpressionType == 'image'): ?>
+				<option value="banner">Banner Ad</option>
+				<option value="image" selected="selected">Image Ad</option>
 				<option value="video">Video Ad</option>
 			<?php else: ?>
 				<option value="banner">Banner Ad</option>
+				<option value="image">Image Ad</option>
 				<option value="video" selected="selected">Video Ad</option>
 			<?php endif; ?>
 		</select>
@@ -224,7 +230,7 @@ $(function() {
     <?php endforeach; ?>
 </select>
   </div>
-	
+	  </div>
 
  <div class="control-group novideo">
 		<label for="height">Height</label>
@@ -248,6 +254,18 @@ $(function() {
 		  <button type="button" onclick="switchImpressionType('url');" class="btn btn-default">VAST URL</button>
 		</div>
 	</div>
+	 <div class="control-group imagead" style="display: none">
+		<label for="imageurl">Image Ad URL : <span class="hlp"><small><i>( eg. http://www.iab.net/media/image/120x20.png )</i></small></span></label>
+		<span id="imageurlwrapper">
+			<input value="<?php echo $imageurl;?>" class="input-xxlarge" type="text" id="imageurl" name="imageurl" />
+		</span>
+	</div>	
+	 <div class="control-group imagead" style="display: none">
+		<label for="landingpageurl">Image Ad Landing Page URL : <span class="hlp"><small><i>( eg. http://www.example.com/landing-page.html )</i></small></span></label>
+		<span id="landingpageurlwrapper">
+			<input value="<?php echo $landingpageurl;?>" class="input-xxlarge" type="text" id="landingpageurl" name="landingpageurl" />
+		</span>
+	</div>	
 	 <div class="control-group">
 		<label for="adtag">Ad Tag</label>
 		<span id="adtagwrapper">
@@ -301,7 +319,6 @@ $(function() {
 		<label for="landingpagetld" class="input">LandingPage TLD [top level domain] <span class="hlp"><br/><small><i>(eg. nginad.com - required by RTB [if not known just use the tld of the tag])</i></small></span></label>
 		<input type="text" class="input-medium" name="landingpagetld" value="<?php echo $landingpagetld;?>">
 	</div>
-		</div>
 		</div>
 	<div class="span7">
 	

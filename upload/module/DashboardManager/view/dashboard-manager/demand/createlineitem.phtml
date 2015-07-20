@@ -109,6 +109,7 @@ $(function() {
 		<label for="adname">Ad Delivery Type</label>
 		<select id="ImpressionType" name="ImpressionType" class="selbox-width" onchange="switchImpressionType();">
 			<option value="banner">Banner Ad</option>
+			<option value="image">Image Ad</option>
 			<option value="video">Video Ad</option>
 		</select>
 	</div>
@@ -198,7 +199,7 @@ $(function() {
     <?php endforeach; ?>
 </select>
   </div>
-
+  </div>
 		<div class="form-group novideo">
 		<label for="height">Height</label>
 		<input type="text" id="height" name="height" class="input-mini">
@@ -222,6 +223,18 @@ $(function() {
 		  <button type="button" onclick="switchImpressionType('url');" class="btn btn-default">VAST URL</button>
 		</div>
 	</div>
+	 <div class="control-group imagead" style="display: none">
+		<label for="imageurl">Image Ad URL : <span class="hlp"><small><i>( eg. http://www.iab.net/media/image/120x20.png )</i></small></span></label>
+		<span id="imageurlwrapper">
+			<input value="<?php echo $imageurl;?>" class="input-xxlarge" type="text" id="imageurl" name="imageurl" />
+		</span>
+	</div>	
+	 <div class="control-group imagead" style="display: none">
+		<label for="landingpageurl">Image Ad Landing Page URL : <span class="hlp"><small><i>( eg. http://www.example.com/landing-page.html )</i></small></span></label>
+		<span id="landingpageurlwrapper">
+			<input value="<?php echo $landingpageurl;?>" class="input-xxlarge" type="text" id="landingpageurl" name="landingpageurl" />
+		</span>
+	</div>	
 	<div class="form-group">
 		<label for="adtag">Ad Tag</label>
 		<span id="adtagwrapper">
@@ -276,7 +289,6 @@ $(function() {
 		<input type="text" class="input-medium" name="landingpagetld" value="nginad.com">
 	</div>
 	</div>
-			</div>
 	<div class="span7">
   <div class="inventory-container">
   	<h4 class="no-pad">Private Exchange Inventory Feeds</h4>

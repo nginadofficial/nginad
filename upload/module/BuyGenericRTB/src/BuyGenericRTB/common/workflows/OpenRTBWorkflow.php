@@ -75,7 +75,7 @@ class OpenRTBWorkflow
 	        	foreach ($InsertionOrderLineItemList as $InsertionOrderLineItem):
 			        	
 	        		if (empty($RtbBidRequestImp->RtbBidRequestVideo) && $InsertionOrderLineItem->ImpressionType == 'video'
-	        				|| !empty($RtbBidRequestImp->RtbBidRequestVideo) && $InsertionOrderLineItem->ImpressionType == 'banner'):
+	        				|| !empty($RtbBidRequestImp->RtbBidRequestVideo) && ($InsertionOrderLineItem->ImpressionType == 'banner' || $InsertionOrderLineItem->ImpressionType == 'image')):
 	        			continue;
 	        		endif;
 	        		
@@ -122,7 +122,7 @@ class OpenRTBWorkflow
 							
 					else:
 					
-						// Display Banner Workflow - Default
+						// Display Banner Workflow - Default [ banner/ad tag/image creative types ]
 						$DisplayWorkflow = new \buyrtb\workflows\DisplayWorkflow();
 						$passed_child_workflow = $DisplayWorkflow->process_business_rules_workflow($logger, $this, $RtbBidRequest, $RtbBidRequestImp, $InsertionOrderLineItem, $InsertionOrderLineItemRestrictionsFactory);
 

@@ -1,5 +1,3 @@
-var currentZones = {};
-var completeZoneList = {};
 var storedVastTagXML = "";
 var storedVastTagURL = "";
 
@@ -76,139 +74,30 @@ function switchInsertionOrderType() {
 	
 	var adCampaignType = $("#adcampaigntype :selected").text();
 
-	if (adCampaignType == "Contract") {
-		getZonesDataAndPopulate();
-	} else {
-		$("#zone-picker").hide();
-	}
 }
 
-function populateZones() {
-	var height 			= $("#height").val();
-	var width 			= $("#width").val();
-	if (height && width) {
-		populateZonesSelect();
-	} else {
-		$("#weight-box").hide();
-		$("#zone-picker").html("");
-		$("#zone-picker").hide();
-	}
-}
-
-function hasCurrentZone(currentZoneArray, currentZone) {
-
-	for (var key in currentZoneArray) {
-		if (currentZoneArray[key] == currentZone) {
-			return true;
-		}
-	}
-
-	return false;
-}
-
-function registerZones() {
-
-	currentZones = "";
-	var comma = "";
-
-	$("#linkedzones option:selected").each(
-			function() {
-				currentZones += comma + $(this).val();
-				comma = ",";
-			}
-	);
-
-}
-
-function getZonesDataAndPopulate() {
+function updateImageAd(setDefault) {
+	var defaultImg = "http://www.iab.net/media/image/728x90.gif";
+	var defaultHref = "http://www.example.com/landing-page.html";
 	
-	$("#adcampaigntype").prop("disabled", true);
+	var imageAdImgUrl = $("#imageurl").val().trim();
+	var imageAdHrefUrl = $("#landingpageurl").val().trim();
 	
-	var ispreview		= $("input[name='ispreview']").val();
-	var campaignId 		= "";
-	var previewParam 	= "false";
-	if (ispreview == 1) {
-		bannerId 		= $("input[name='bannerpreviewid']").val();
-		previewParam 	= "true";
-	} else {
-		bannerId 		= $("input[name='bannerid']").val();
+	if (!imageAdImgUrl && setDefault) {
+		imageAdImgUrl = defaultImg;
+		$("#imageurl").val(imageAdImgUrl);
 	}
 	
-	var height 			= $("#height").val();
-	var width 			= $("#width").val();
-
-	if (!height || !width) {
-		alert("Select banner dimensions first, choose a height and width.");
-		$("#zone-picker").hide();
-		$("#adcampaigntype").val(1);
-		$("#adcampaigntype").prop("disabled", false);
-		return false;
-	}
-
-	var campaignParam = bannerParam = "";
-	
-	if (bannerId && bannerId != 'undefined') {
-		bannerParam = bannerId;
+	if (!imageAdHrefUrl && setDefault) {
+		imageAdHrefUrl = defaultHref;
+		$("#landingpageurl").val(imageAdHrefUrl);
 	}
 	
-	if (!completeZoneList[width+'x'+height]) {
-		$.get("/demand/editlinkedzone/" + bannerParam + "?height=" + height + "&width=" + width + "&is_preview=" + previewParam, function( data ) {
-			$("#zone_no_btn").attr("disabled",false);
-			if(data.success == false) {
-				alert("There are no Publisher Zones that match this demand campaign banner");
-				$("#zone-picker").hide();
-				$("#adcampaigntype").val(1);
-				$("#adcampaigntype").prop("disabled", false);
-				return false;
-			}
-			
-			if(data.success == true) {
-				
-				currentZones = data.linked_ad_zones;
-				completeZoneList[width+'x'+height] = data.complete_zone_list;
-				populateZonesSelect(data.complete_zone_list);
-			
-			}
-			
-		},'json');
-	} else {
-		populateZonesSelect(completeZoneList[width+'x'+height]);
-	}
-}
-
-function populateZonesSelect(complete_zone_list) {
-	var selectZonesPre = '<select id="linkedzones" name="linkedzones[]"  onchange="registerZones();" multiple style="min-height: 200px">';
-	var selectZones = "";
-	var foundZone = false;
-	var currentZoneArray = currentZones.split(",");
-	var height 			= $("#height").val();
-	var width 			= $("#width").val();
+	$('#adtag').prop('readonly', true);
 	
-	for (i = 0; i < complete_zone_list.length; i++) {
-		
-		var current_zone = complete_zone_list[i];
-		var ad_name = current_zone.ad_name + " - " + width + "x" + height;
-		if (hasCurrentZone(currentZoneArray, current_zone.zone_id) == true) {
-			foundZone = true;
-			selectZones += '<option value="' + current_zone.zone_id + '" selected="selected">' + ad_name + '</option>';
-		} else {
-			selectZones += '<option value="' + current_zone.zone_id + '">' + ad_name + '</option>';
-		}
-	}
-	selectZones += '</select>';
-
-	var allSelectZones = selectZonesPre;
-	if (foundZone == false) {
-		allSelectZones += '<option value="" selected="selected">Choose Zones</option>';
-	}
-	allSelectZones += selectZones;
-	
-	$("#adcampaigntype").prop("disabled", false);
-	$("#weight-box").show();
-	var header = '<div id="choose-zones">Choose Zones to Associate to this Banner:</div>';
-	allSelectZones = header + allSelectZones;
-	$("#zone-picker").html(allSelectZones);
-	$("#zone-picker").show();
+	var imageadhtml = '<a href="' + imageAdHrefUrl + '">'
+					+ '<img border="0" src="' + imageAdImgUrl + '"></a>';
+	$("#adtag").val(imageadhtml);
 }
 
 function switchImpressionType(adtagtype) {
@@ -253,6 +142,8 @@ function switchImpressionType(adtagtype) {
 			$("#adtag").css("height", "350px").css("width", "500px");
 		}
 
+		$('#adtag').prop('readonly', false);
+		$(".imagead").hide();
 		$(".novideo").hide();
 		$(".nobanner").show();
 		$("label[for=bannername]").html("Video Ad Name");
@@ -267,10 +158,21 @@ function switchImpressionType(adtagtype) {
 		
 		$(".novideo").show();
 		$(".nobanner").hide();
+
+		if (impType == 'image') {
+			
+			updateImageAd(true);
+			
+			$(".imagead").show();
+		} else {
+			$('#adtag').prop('readonly', false);
+			$(".imagead").hide();
+		}
+		
 		$("label[for=bannername]").html("Banner Ad Name");
 		$("label[for=adtag]").html("Ad Tag");
 		
-		$("#update-button").val("Update Banner");
+		$(".btn-primary").val("Update Banner");
 		
 		$("#adtag").css("height", "200px").css("width", "500px"); 
 		
@@ -278,6 +180,9 @@ function switchImpressionType(adtagtype) {
 }
 
 $().ready(function() {
+	
+	$("#imageurl, #landingpageurl").keyup(function() {
+		updateImageAd(false);
+	});
 
-	switchInsertionOrderType();
 });

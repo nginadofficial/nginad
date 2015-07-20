@@ -2222,8 +2222,13 @@ class DemandController extends DemandAbstractActionController {
         
         $current_start_delay 			= "";
         $current_linearity 				= "";
+
+        $imageurl						= "";
+        $landingpageurl					= "";
         
         return new ViewModel(array(
+        		'imageurl'					=> $imageurl,
+        		'landingpageurl'			=> $landingpageurl,
         		'ispreview'	  				=> $is_preview == true ? '1' : '0',
         		'campaignid'       			=> $id,
         		'campaignpreviewid' 		=> $campaignpreviewid,
@@ -2270,7 +2275,7 @@ class DemandController extends DemandAbstractActionController {
 
 		$ImpressionType = $this->getRequest()->getPost('ImpressionType');
 		
-		if ($ImpressionType != 'banner' && $ImpressionType != 'video'):
+		if ($ImpressionType != 'banner' && $ImpressionType != 'image' && $ImpressionType != 'video'):
 			die("Required Field: ImpressionType was missing");
 		endif;
 		
@@ -2296,8 +2301,25 @@ class DemandController extends DemandAbstractActionController {
 				'landingpagetld'
 		);
 		
+		$adtag = $this->getRequest()->getPost('adtag');
+		
 		if ($ImpressionType == 'video'):
 			$this->validateInput($needed_input_video);
+		elseif ($ImpressionType == 'image'):
+			$this->validateInput($needed_input_banner);
+		
+			preg_match('/< *img[^>]*src *= *["\']?([^"\']*)/i', $adtag, $matches);
+			
+			if (!isset($matches[1])):
+				die("Required Field: <img src= attribute was missing");
+			endif;
+			
+			preg_match('/href=[\'"]?([^\s\>\'"]*)[\'"\>]/', $adtag, $matches);
+			
+			if (!isset($matches[1])):
+				die("Required Field: <a href= attribute was missing");
+			endif;
+			
 		else:
 			$this->validateInput($needed_input_banner);
 		endif;
@@ -2354,7 +2376,6 @@ class DemandController extends DemandAbstractActionController {
 		$width = $this->getRequest()->getPost('width');
 		$weight = $this->getRequest()->getPost('weight');
 		$bidamount = $this->getRequest()->getPost('bidamount');
-		$adtag = $this->getRequest()->getPost('adtag');
 		$landingpagetld = $this->getRequest()->getPost('landingpagetld');
 		$bannerid = $this->getRequest()->getPost('bannerid');
 
@@ -2724,6 +2745,20 @@ class DemandController extends DemandAbstractActionController {
 		
 		$ImpressionType           = $InsertionOrderLineItem->ImpressionType;
 
+		if ($ImpressionType == 'image'):
+			preg_match('/< *img[^>]*src *= *["\']?([^"\']*)/i', $adtag, $matches);
+			
+			if (!isset($matches[1])):
+				die("Required Field: <img src= attribute was missing");
+			endif;
+			
+			preg_match('/href=[\'"]?([^\s\>\'"]*)[\'"\>]/', $adtag, $matches);
+			
+			if (!isset($matches[1])):
+				die("Required Field: <a href= attribute was missing");
+			endif;
+		endif;
+		
 		$current_mimes 					= array();
 		$current_apis_supported 		= array();
 		$current_protocols 				= array();
@@ -2791,7 +2826,28 @@ class DemandController extends DemandAbstractActionController {
 		$is_vast_url = \util\ParseHelper::isVastURL($adtag);
 		$vast_type = $is_vast_url == true ? "url" : "xml";
 		
+		$imageurl			= "";
+		$landingpageurl 	= "";
+		
+		if ($ImpressionType == "image"):
+		
+			preg_match('/< *img[^>]*src *= *["\']?([^"\']*)/i', $adtag, $matches);
+			
+			if (isset($matches[1])):
+				$imageurl				= $matches[1];
+			endif;
+			
+			preg_match('/href=[\'"]?([^\s\>\'"]*)[\'"\>]/', $adtag, $matches);
+			
+			if (isset($matches[1])):
+				$landingpageurl			= $matches[1];
+			endif;
+			
+		endif;
+		
 		return new ViewModel(array(
+				'imageurl'				  => $imageurl,
+				'landingpageurl'		  => $landingpageurl,
 				'campaignid'              => $campaignid,
 		        'bannerid'                => $bannerid,
 				'pmp_deal_list' 		  => $PmpDealPublisherWebsiteToInsertionOrderLineItemList,
