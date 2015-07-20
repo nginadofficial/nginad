@@ -130,12 +130,15 @@ class CreditHelper {
 		
 		if ($DemandCustomerInfo != null):
 
+			$site_url 		= $config['delivery']['site_url'];
+			$exchange_name 	= $config['delivery']['exchange_name'];
+			
 			// approval, send out email
-			$subject = "Your NginAd Exchange Private Exchange Requires Credit Approval";
+			$subject = "Your ' . $exchange_name . ' Private Exchange Requires Credit Approval";
 		
-			$message = 'Your NginAd Private Exchange for: ' . $DemandCustomerInfo->Company . ', needs credit approval before you can access Platform Connection Inventory and SSP RTB Inventory.'
-					. '<br /><br />Please download the credit application <a href="http://server.nginad.com/forms/credit.application.pdf">here</a>.'
-					. '<br /><br />Link: http://server.nginad.com/forms/credit.application.pdf'
+			$message = 'Your ' . $exchange_name . ' Private Exchange for: ' . $DemandCustomerInfo->Company . ', needs credit approval before you can access Platform Connection Inventory and SSP RTB Inventory.'
+					. '<br /><br />Please download the credit application <a href="' . $site_url . '/forms/credit.application.pdf">here</a>.'
+					. '<br /><br />Link: ' . $site_url . '/forms/credit.application.pdf'
 					. '<br /><br />Fill out the application completely and email it back to:' . $config['mail']['reply-to']['email']
 					. '<br /><br />Once your application is approved we will set a credit limit for your programmatic media buys and enable either the Platform Connection inventory, or the SSP RTB inventory or both depending on your credit worthiness.';
 			

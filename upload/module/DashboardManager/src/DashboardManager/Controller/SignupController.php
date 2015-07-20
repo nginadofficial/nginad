@@ -990,9 +990,12 @@ class SignupController extends PublisherAbstractActionController {
 	        if($bol == true):
 	          $publisher_obj = $PublisherInfoFactory->get_row_object(array('PublisherInfoID'=>$publisher_id));
 	          
-				$message = 'Your server.nginad.com Publisher account was approved.<br /><br />Please login <a href="http://server.nginad.com/auth/login">here</a> with your email and password';
+		        $site_url 		= $this->config_handle['delivery']['site_url'];
+		        $exchange_name 	= $this->config_handle['delivery']['exchange_name'];
+		        
+				$message = 'Your ' . $exchange_name . ' Publisher account was approved.<br /><br />Please login <a href="' . $site_url . '/auth/login">here</a> with your email and password';
 	
-				$subject = "Your NGINAD Exchange Publisher account was approved";
+				$subject = "Your ' . $exchange_name . ' Publisher account was approved";
 					
 				$transport = $this->getServiceLocator()->get('mail.transport');
 					
@@ -1095,10 +1098,13 @@ class SignupController extends PublisherAbstractActionController {
 	        
 	        if($bol == true):
 	           $customer_obj = $DemandCustomerFactory->get_row_object(array('DemandCustomerInfoID'=>$customer_id));
-	          
-				$message = 'Your server.nginad.com Demand Customer account was approved.<br /><br />Please login <a href="http://server.nginad.com/auth/login">here</a> with your email and password';
+
+		        $site_url 		= $this->config_handle['delivery']['site_url'];
+		        $exchange_name 	= $this->config_handle['delivery']['exchange_name'];
+		        
+				$message = 'Your ' . $exchange_name . ' Demand Customer account was approved.<br /><br />Please login <a href="' . $site_url . '/auth/login">here</a> with your email and password';
 	
-				$subject = "Your NGINAD Exchange Demand Customer account was approved";
+				$subject = "Your ' . $exchange_name . ' Demand Customer account was approved";
 					
 				$transport = $this->getServiceLocator()->get('mail.transport');
 					

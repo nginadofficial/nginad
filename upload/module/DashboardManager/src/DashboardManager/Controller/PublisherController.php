@@ -283,13 +283,17 @@ class PublisherController extends PublisherAbstractActionController {
 		    		$PublisherInfo = $PublisherInfoFactory->get_row($params);
 		    		
 		    		if ($PublisherInfo !== null):
+		    		
+			    		$site_url 		= $this->config_handle['delivery']['site_url'];
+			    		$exchange_name 	= $this->config_handle['delivery']['exchange_name'];
+			    		
 		    			// approval, send out email
 		    			if ($flag == 1):
-				    		$message = 'Your NginAd Exchange Publisher Domain: ' . $domain_object->WebDomain . ' was approved.<br /><br />Please login <a href="http://server.nginad.com/auth/login">here</a> with your email and password';
-				    		$subject = "Your NginAd Exchange Publisher Domain: " . $domain_object->WebDomain . " was approved";
+				    		$message = 'Your ' . $exchange_name . ' Publisher Domain: ' . $domain_object->WebDomain . ' was approved.<br /><br />Please login <a href="' . $site_url . '/auth/login">here</a> with your email and password';
+				    		$subject = "Your ' . $exchange_name . ' Publisher Domain: " . $domain_object->WebDomain . " was approved";
 			    		else:
-				    		$message = 'Your NginAd Exchange Publisher Domain: ' . $domain_object->WebDomain . ' was rejected.<br /><br />Please login <a href="http://server.nginad.com/auth/login">here</a> with your email and password';
-				    		$subject = "Your NginAd Exchange Publisher Domain: " . $domain_object->WebDomain . " was rejected";
+				    		$message = 'Your ' . $exchange_name . ' Publisher Domain: ' . $domain_object->WebDomain . ' was rejected.<br /><br />Please login <a href="' . $site_url . '/auth/login">here</a> with your email and password';
+				    		$subject = "Your ' . $exchange_name . ' Publisher Domain: " . $domain_object->WebDomain . " was rejected";
 			    		endif;
 			    		$transport = $this->getServiceLocator()->get('mail.transport');
 			    			

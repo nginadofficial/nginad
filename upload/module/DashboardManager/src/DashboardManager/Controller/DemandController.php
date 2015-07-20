@@ -21,7 +21,7 @@ use Zend\Mime;
  * of demand functions.
  */
 class DemandController extends DemandAbstractActionController {
-
+ 
     /**
      * Will Show the dashboard index page.
      * (non-PHPdoc)
@@ -290,11 +290,14 @@ class DemandController extends DemandAbstractActionController {
         $params["user_id"] = $InsertionOrder->UserID; 
         $auth_User = $authUsersFactory->get_row($params);
 		
+		$site_url 		= $this->config_handle['delivery']['site_url'];
+		$exchange_name 	= $this->config_handle['delivery']['exchange_name'];
+        
         if ($auth_User !== null && $this->config_handle['mail']['subscribe']['user_ad_campaigns']):
 			// approval, send out email
-			$message = 'Your NginAd Exchange Demand Ad Campaign on Staging : ' . $InsertionOrder->Name . ' was promoted to production.<br /><br />Please login <a href="http://server.nginad.com/auth/login">here</a> with your email and password to make changes.';
+			$message = 'Your ' . $exchange_name . ' Demand Ad Campaign on Staging : ' . $InsertionOrder->Name . ' was promoted to production.<br /><br />Please login <a href="' . $site_url . '/auth/login">here</a> with your email and password to make changes.';
 			
-			$subject = "Your NginAd Exchange Demand Ad Campaign on Staging : " . $InsertionOrder->Name . " was promoted to production";
+			$subject = "Your ' . $exchange_name . ' Demand Ad Campaign on Staging : " . $InsertionOrder->Name . " was promoted to production";
 			 
 			$transport = $this->getServiceLocator()->get('mail.transport');
 			 
@@ -380,11 +383,14 @@ class DemandController extends DemandAbstractActionController {
 		$params["user_id"] = $user_id; 
 		$auth_User = $authUsersFactory->get_row($params);
 		
+		$site_url 		= $this->config_handle['delivery']['site_url'];
+		$exchange_name 	= $this->config_handle['delivery']['exchange_name'];
+		
 		if ($auth_User !== null && $ad_campaign_preview_name && $this->config_handle['mail']['subscribe']['user_ad_campaigns']):
 			// approval, send out email
-			$message = 'Your NginAd Exchange Demand Ad Campaign on Staging : ' . $ad_campaign_preview_name . ' was reset.<br /><br />Please login <a href="http://server.nginad.com/auth/login">here</a> with your email and password to make changes.';
+			$message = 'Your ' . $exchange_name . ' Demand Ad Campaign on Staging : ' . $ad_campaign_preview_name . ' was reset.<br /><br />Please login <a href="' . $site_url . '/auth/login">here</a> with your email and password to make changes.';
 				
-			$subject = "Your NginAd Exchange Demand Ad Campaign on Staging : " . $ad_campaign_preview_name . " was reset";
+			$subject = "Your ' . $exchange_name . ' Demand Ad Campaign on Staging : " . $ad_campaign_preview_name . " was reset";
 			
 			$transport = $this->getServiceLocator()->get('mail.transport');
 			
