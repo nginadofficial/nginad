@@ -1,0 +1,1 @@
+Set the permissions of this folder to be writable by the nginx process

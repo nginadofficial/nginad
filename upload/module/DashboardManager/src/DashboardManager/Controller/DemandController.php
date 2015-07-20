@@ -2265,6 +2265,59 @@ class DemandController extends DemandAbstractActionController {
 	}
 	
 	/**
+	 *
+	 * @return Ambigous <\Zend\View\Model\ViewModel, \Zend\View\Model\ViewModel>
+	 */
+	public function uploadcreativeAction() {
+	
+		$initialized = $this->initialize();
+		if ($initialized !== true) return $initialized;
+	
+		$creatives_dir = 'public/creatives/' . $this->auth->getUserID() . '/';
+		
+		if (!file_exists($creatives_dir)):
+			mkdir($creatives_dir, 0644, true);
+		endif;
+		
+		$site_url = $this->config_handle['delivery']['site_url'];
+		
+		if(substr($site_url, -1) == '/') {
+			$site_url = substr($site_url, 0, -1);
+		}
+		
+		$files =  $this->request->getFiles()->toArray();
+		$httpadapter = new \Zend\File\Transfer\Adapter\Http();
+		$filesize  = new \Zend\Validator\File\Size(array('min' => 2000 )); //1KB
+		$extension = new \Zend\Validator\File\Extension(array('extension' => array('jpg', 'jpeg', 'png', 'gif', 'swf')));
+		$httpadapter->setValidators(array($filesize, $extension), $files['file']['name']);
+		$ext = pathinfo($files['file']['name'], PATHINFO_EXTENSION);
+		$newName = md5(rand() . $files['file']['name']) . '.' . $ext;
+		$httpadapter->addFilter('File\Rename', array(
+				'target' => $creatives_dir . $newName,
+		));
+		if($httpadapter->isValid()) {
+			if($httpadapter->receive($files['file']['name'])) {
+				$httpadapter->getFilter('File\Rename')->getFile();
+				$newfile = $httpadapter->getFileName();
+				header("Content-type: text/plain");
+				echo $site_url . substr($newfile, strlen('public'));
+				exit;
+			}
+		}
+		$error = array();
+		$dataError = $httpadapter->getMessages();
+		foreach($dataError as $key=>$row)
+		{
+			$error[] = $row;
+		} //set formElementErrors
+		http_response_code(400);
+		header("Content-type: text/plain");
+		echo implode(',', $error);
+		exit;
+
+	}
+	
+	/**
 	 * 
 	 * @return Ambigous <\Zend\View\Model\ViewModel, \Zend\View\Model\ViewModel>
 	 */
@@ -2352,7 +2405,7 @@ class DemandController extends DemandAbstractActionController {
 			endif;
 
 			$return_val = \transformation\TransformPreview::previewCheckInsertionOrderID($campaignid, $this->auth, $this->config_handle, $this->getServiceLocator()->get('mail.transport'), $update_data);
-
+			
 			if ($return_val !== null):
 				if ($bannerid != null):
 					$campaign_preview_id 	= $return_val["InsertionOrderPreviewID"];

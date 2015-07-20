@@ -30,7 +30,9 @@ class TransformPreview {
 			$params = array();
 			$params["InsertionOrderLineItemID"] = $banner_id;
 			$params["Active"] = 1;
-			$params["UserID"] = $auth->getEffectiveUserID();  // ACL permissions check equivalent
+			if (!$auth->isSuperAdmin($config)):
+				$params["UserID"] = $auth->getUserID();
+			endif;
 			$InsertionOrderLineItem = $InsertionOrderLineItemFactory->get_row($params);
 
 			if ($InsertionOrderLineItem == null):
@@ -47,7 +49,9 @@ class TransformPreview {
 			$params = array();
 			$params["InsertionOrderLineItemID"] = $banner_id;
 			$params["Active"] = 1;
-			$params["UserID"] = $auth->getEffectiveUserID();
+			if (!$auth->isSuperAdmin($config)):
+				$params["UserID"] = $auth->getUserID();
+			endif;
 			$InsertionOrderLineItemPreview = $InsertionOrderLineItemPreviewFactory->get_row($params);
 			$params["InsertionOrderLineItemPreviewID"] = $InsertionOrderLineItemPreview->InsertionOrderLineItemPreviewID;
 			return $params;
@@ -67,7 +71,10 @@ class TransformPreview {
 			$params = array();
 			$params["InsertionOrderID"] = $ad_campaign_id;
 			$params["Active"] = 1;
-			$params["UserID"] = $auth->getEffectiveUserID();  // ACL permissions check equivalent
+			if (!$auth->isSuperAdmin($config)):
+				$params["UserID"] = $auth->getUserID();
+			endif;
+			
 			$InsertionOrder = $InsertionOrderFactory->get_row($params);
 
 			if ($InsertionOrder == null):
@@ -84,7 +91,9 @@ class TransformPreview {
 			$params = array();
 			$params["InsertionOrderID"] = $ad_campaign_id;
 			$params["Active"] = 1;
-			$params["UserID"] = $auth->getEffectiveUserID();
+			if (!$auth->isSuperAdmin($config)):
+				$params["UserID"] = $auth->getUserID();
+			endif;
 	
 			$InsertionOrderPreview = $InsertionOrderPreviewFactory->get_row($params);
 	
@@ -201,7 +210,7 @@ class TransformPreview {
 		$params = array();
 		$params["InsertionOrderLineItemPreviewID"] = $banner_preview_id;
 		$params["Active"] = 1;
-		$params["UserID"] = $auth->getEffectiveUserID();
+
 		$InsertionOrderLineItemPreview = $InsertionOrderLineItemPreviewFactory->get_row($params);
 
 		return $InsertionOrderLineItemPreview !== null;
@@ -213,7 +222,7 @@ class TransformPreview {
 		$params = array();
 		$params["InsertionOrderLineItemID"] = $banner_id;
 		$params["Active"] = 1;
-		$params["UserID"] = $auth->getEffectiveUserID();
+
 		$InsertionOrderLineItemPreview = $InsertionOrderLineItemPreviewFactory->get_row($params);
 	
 		return $InsertionOrderLineItemPreview !== null;
@@ -225,8 +234,7 @@ class TransformPreview {
 		$params = array();
 		$params["InsertionOrderPreviewID"] = $ad_campaign_preview_id;
 		$params["Active"] = 1;
-		$params["UserID"] = $auth->getEffectiveUserID();
-
+		
 		$InsertionOrderPreview = $InsertionOrderPreviewFactory->get_row($params);
 
 		return $InsertionOrderPreview !== null;
@@ -238,7 +246,6 @@ class TransformPreview {
 		$params = array();
 		$params["InsertionOrderID"] = $ad_campaign_id;
 		$params["Active"] = 1;
-		$params["UserID"] = $auth->getEffectiveUserID();
 
 		$InsertionOrderPreview = $InsertionOrderPreviewFactory->get_row($params);
 
@@ -633,7 +640,9 @@ class TransformPreview {
 		$InsertionOrderFactory = \_factory\InsertionOrder::get_instance();
 		$params = array();
 		$params["InsertionOrderID"] = $ad_campaign_id;
-		$params["UserID"] = $auth->getEffectiveUserID();
+		if (!$auth->isSuperAdmin($config)):
+			$params["UserID"] = $auth->getUserID();
+		endif;
 		$params["Active"] = 1;
 		$InsertionOrder = $InsertionOrderFactory->get_row($params);
 

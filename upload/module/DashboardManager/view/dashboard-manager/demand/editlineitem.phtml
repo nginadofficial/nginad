@@ -2,11 +2,13 @@
 $this->headScript()->appendFile($this->basePath() . '/js/3rdparty/jquery-ui-1.9.2.custom.min.js');
 $this->headLink()->appendStylesheet($this->basePath() . '/css/datatables/sitechooser.css');
 $this->headLink()->appendStylesheet($this->basePath() . '/css/datatables/jquery.dataTables.css');
+$this->headLink()->appendStylesheet($this->basePath() . '/css/upload/dropzone.css');
 $this->headLink()->appendStylesheet($this->basePath() . '/css/jquery-ui/smoothness/jquery-ui-1.9.2.custom.min.css');
 $this->headScript()->appendFile($this->basePath() . '/js/banner.js');
 $this->headScript()->appendFile($this->basePath() . '/js/script.js');
 $this->headScript()->appendFile($this->basePath() . '/js/datatables/jquery.dataTables.js');
 $this->headScript()->appendFile($this->basePath() . '/js/datatables/sitechooser.js');
+$this->headScript()->appendFile($this->basePath() . '/js/upload/dropzone.js');
 
 $current_time = time();
 $yesterday_time = $current_time - 86400;
@@ -23,8 +25,10 @@ endif;
 
 $minEndDate = explode("/", $enddate);
 
-
 $this->headScript()->captureStart(); ?>
+
+Dropzone.autoDiscover = false;
+var mockFile = null;
 
 $(function() {
 	$( "#startdate" ).datepicker(
@@ -87,6 +91,33 @@ $(function() {
 	$( '#enddateicon' ).click(function() {
           $('#enddate').datepicker('show');
     });
+    
+    var myDropzone = new Dropzone("div#dr-zone", { 
+    		url: "/private-exchange/uploadcreative/",
+    		acceptedFiles: "image/jpg, image/jpeg,image/png,image/gif,application/x-shockwave-flash",
+    		paramName: "file",
+  			maxFilesize: 2, // MB
+  			uploadMultiple: false,
+  			success: function(file, storedName) { $("#imageurl").val(storedName); updateImageAd(false); alert("Creative Upload Set"); },
+  			error: function(file, errorMessage) { alert("Error: " + errorMessage); },
+  			init: function() {
+				    this.on("addedfile", function() {
+				      if (mockFile !== null) {
+				    	$(".dz-image-preview").remove();
+				      	mockFile = null;
+				      }
+				      if (this.files[1]!=null){
+				        this.removeFile(this.files[0]);
+				      }
+				    });
+			},
+    		});
+    
+<?php if (!empty($imageurl)): ?>
+    mockFile = { name: "banner_mock.jpg", size: 12345 };
+    myDropzone.options.addedfile.call(myDropzone, mockFile);
+    myDropzone.options.thumbnail.call(myDropzone, mockFile, "<?php echo $imageurl; ?>");
+ <?php endif; ?>
     
     switchImpressionType('<?php echo $vast_type;  ?>');
 });
@@ -254,7 +285,10 @@ $(function() {
 		  <button type="button" onclick="switchImpressionType('url');" class="btn btn-default">VAST URL</button>
 		</div>
 	</div>
-	 <div class="control-group imagead" style="display: none">
+	<div class="control-group imagead" style="display: none">
+		<div id="dr-zone" action="/file-upload" class="dropzone"></div>
+	</div>	
+	<div class="control-group imagead" style="display: none">
 		<label for="imageurl">Image Ad URL : <span class="hlp"><small><i>( eg. http://www.iab.net/media/image/120x20.png )</i></small></span></label>
 		<span id="imageurlwrapper">
 			<input value="<?php echo $imageurl;?>" class="input-xxlarge" type="text" id="imageurl" name="imageurl" />
