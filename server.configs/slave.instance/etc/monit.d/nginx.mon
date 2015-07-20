@@ -1,0 +1,10 @@
+check process nginx with pidfile /var/run/nginx.pid
+group nginx
+start program = "/etc/init.d/nginx start"
+stop program = "/etc/init.d/nginx stop"
+if children > 4000 then restart
+if loadavg(5min) greater than 10 for 8 cycles then stop
+if failed host server.mydomain.com port 80 protocol http
+       and request "/"
+       then restart
+if 3 restarts within 5 cycles then timeout

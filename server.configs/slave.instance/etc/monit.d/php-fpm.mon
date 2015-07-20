@@ -1,0 +1,10 @@
+### Monitoring php-fpm: the parent process.
+check process php-fpm with pidfile /var/run/php-fpm/php-fpm.pid
+group phpcgi # phpcgi group
+start program = "/etc/init.d/php-fpm start"
+stop program  = "/etc/init.d/php-fpm stop"
+## Test the UNIX socket. Restart if down.
+#if failed unixsocket /var/run/php-fpm.sock then restart
+if failed port 9000 type TCP then restart
+## If the restarts attempts fail then alert.
+if 3 restarts within 5 cycles then timeout
