@@ -35,6 +35,25 @@ if(isset($child->user_identity)):
 	$userRole = $userRole[0];
 endif;
 
+$theme_path = null;
+$logo_url = null;
+
+$http_host = @$_SERVER['HTTP_HOST'];
+if ($http_host != null):
+	$PrivateExchangeVanityDomainFactory = \_factory\PrivateExchangeVanityDomain::get_instance();
+	
+	$params = array();
+	$params["VanityDomain"] = strtolower($http_host);
+	$PrivateExchangeVanityDomain = $PrivateExchangeVanityDomainFactory->get_row($params);
+	
+	if ($PrivateExchangeVanityDomain != null):
+		$theme_path = '/vdomain/' . $PrivateExchangeVanityDomain->UserID . '/theme.css';
+		if ($PrivateExchangeVanityDomain->UseLogo == 1):
+			$logo_url = '/vdomain/' . $PrivateExchangeVanityDomain->UserID . '/logo-sm.png';
+		endif;
+	endif;
+endif;
+
 echo $this->doctype(); ?>
 
 <html lang="en">
@@ -44,8 +63,17 @@ echo $this->doctype(); ?>
 
         <?php echo $this->headMeta()->appendName('viewport', 'width=device-width, initial-scale=1.0') ?>
         <!-- Le styles -->
-        <?php echo $this->headLink(array('rel' => 'shortcut icon', 'href' => $this->basePath() . '/images/favicon.png'))
-        				->prependStylesheet($this->basePath() . '/css/colorscheme/theme.css')
+        <?php 
+        if ($theme_path == null):
+        	$css_color_path = '/css/colorscheme/theme.css';
+        	$headlink = $this->headLink(array('rel' => 'shortcut icon', 'href' => $this->basePath() . '/images/favicon.png'));
+        else:
+       		$favicon = array();
+        	$css_color_path = $theme_path;
+        	$headlink = $this->headLink();
+        endif;
+        
+        echo $headlink->prependStylesheet($this->basePath() . $css_color_path)
                         ->prependStylesheet($this->basePath() . '/css/style.css')
                         ->prependStylesheet($this->basePath() . '/css/bootstrap.css')
                         ->prependStylesheet($this->basePath() . '/css/default.dashboard.css');
@@ -67,18 +95,30 @@ echo $this->doctype(); ?>
             <div class="navbar-inner">
             <div class="compLayout-top">
                 <div class="container" style="position: relative;">
-
                     <a class="brand" href="/<?php echo $home_link; ?>">
-					<img src="/images/nginad_logo.png" class="logo-img" />
-					 <?php if($userRole=='domain_admin'): ?>
-                     	<em>Private Exchange Dashboard</em>
-                     <?php else: ?>
-                    	 <em>Real Time Bidding Dashboard</em>
-                     <?php endif; ?>
-                    </a>
+                    <?php if ($theme_path == null): ?>
+						<img src="/images/nginad_logo.png" class="logo-img" />
+						 <?php if($userRole=='domain_admin'): ?>
+	                     	<em>Private Exchange Dashboard</em>
+	                     <?php else: ?>
+	                    	 <em>Real Time Bidding Dashboard</em>
+	                     <?php endif; ?>
+	                </a>
 					<div class="instructions-btn">
 						<input onclick="return helpWindow('https://nginad.atlassian.net/wiki/display/NGIN/Using+NginAd+Ad+Server', 1200,1000);" type="button" name="help-button" value="I Need Instructions" class="btn btn-primary">
 					</div>
+					 <?php else: ?>
+				 	<a class="brand" href="/<?php echo $home_link; ?>">
+				 		 <?php if ($logo_url == null): ?>
+							<img src="/images/nginad_logo_blank.png" class="logo-img" />
+						 <?php else: ?>
+						 	<img src="<?php echo $logo_url; ?>" style="max-height: 42px; margin-right: 30px;" class="logo-img" />
+						 <?php endif; ?>
+						 <?php if($userRole=='domain_admin'): ?>
+	                     	<em>Private Exchange Dashboard</em>
+	                     <?php endif; ?>
+	                </a>
+                    <?php endif; ?>
                        <div class="navbar">
     <div class="navbar-inner">
     <ul class="nav">

@@ -217,7 +217,16 @@ class DemandController extends DemandAbstractActionController {
 			'vanity_domain' => $vanity_domain,
 			'use_logo' => $use_logo,
 			'use_vanity_domain' => $use_vanity_domain,
-			'success_message_display' => $success
+			'success_message_display' => $success,
+	    	'is_super_admin' => $this->auth->isSuperAdmin($this->config_handle),
+	    	'is_domain_admin' => $this->auth->isDomainAdmin($this->config_handle),
+			'effective_id' => $this->auth->getEffectiveIdentityID(),
+			'dashboard_view' => 'private-exchange',
+			'user_identity' => $this->identity(),
+			'true_user_name' => $this->auth->getUserName(),
+			'is_super_admin' => $this->is_super_admin,
+			'effective_id' => $this->auth->getEffectiveIdentityID(),
+			'impersonate_id' => $this->ImpersonateID
 		));
 		
 	}
@@ -276,8 +285,15 @@ class DemandController extends DemandAbstractActionController {
 				die("Missing Vanity Domain: CODE 107");			
 			endif;
 		
-			$vanity_domain = str_replace(array('https://', 'http://'), array('', ''), $vanity_domain);
+			$vanity_domain = trim(strtolower(str_replace(array('https://', 'http://'), array('', ''), $vanity_domain)));
 
+			$site_url = $this->config_handle['delivery']['site_url'];
+			$site_url = trim(strtolower(str_replace(array('https://', 'http://'), array('', ''), $site_url)));
+			
+			if ($vanity_domain == $site_url):
+				die("Illegal Vanity Domain, try another domain: CODE 108");
+			endif;
+			
 			if (!file_exists($assets_dir)):
 				mkdir($assets_dir, 0644, true);
 			endif;
@@ -346,7 +362,7 @@ class DemandController extends DemandAbstractActionController {
 		$filesize  = new \Zend\Validator\File\Size(array('max' => 2000000 )); //2MB
 		$extension = new \Zend\Validator\File\Extension(array('extension' => array('png')));
 		$httpadapter->setValidators(array($filesize, $extension), $files['file']['name']);
-		$newName = 'logo-lg.png';
+		$newName = 'logo-full.png';
 		$httpadapter->addFilter('File\Rename', array(
 				'target' => $vdomain_dir . $newName,
 				'overwrite' => true
@@ -355,8 +371,31 @@ class DemandController extends DemandAbstractActionController {
 			if($httpadapter->receive($files['file']['name'])):
 				$httpadapter->getFilter('File\Rename')->getFile();
 				$newfile = $httpadapter->getFileName();
+				
+				$imagick_enabled 	= $this->config_handle['themes']['imagick_enabled'];
+				
+				$image_created = false;
+				
+				if ($imagick_enabled == true):
+					try {
+						/* Attempt to open */
+		    			$img = new \Imagick($vdomain_dir . 'logo-full.png'); 
+		    			$img->scaleImage(300,0);
+		    			$img->writeImage($vdomain_dir . 'logo-lg.png');
+					    $img->scaleImage(0,42); 
+					    $img->writeImage($vdomain_dir . 'logo-sm.png'); 
+					    $img->destroy();
+		    			$image_created = true;
+					} catch (Exception $e) { }
+				endif;
+				
+				if ($image_created == false):
+					copy($newfile, $vdomain_dir . 'logo-lg.png');
+					copy($newfile, $vdomain_dir . 'logo-sm.png');
+				endif;
+				
 				header("Content-type: text/plain");
-				echo $site_url . substr($newfile, strlen('public'));
+				echo $site_url . substr($vdomain_dir . 'logo-lg.png', strlen('public'));
 				exit;
 			endif;
 		endif;

@@ -127,6 +127,21 @@ return array(
 		),
 		'themes' => array(
 				/*
+				 * The PHP Imagick (ImageMagick) module is installed and enabled
+				 * We need this to resize the custom logo
+				 * 
+				 * Install PHP ImageMagick:
+				 * yum --enablerepo=remi install php-imagick
+				 * 
+				 * Reset permissions on the PHP session directory afterwards:
+				 * chown -R nginx:nginx /var/lib/php/session
+				 * 
+				 * Restart php-fpm and nginx:
+				 * service php-fpm restart
+				 * service nginx restart
+				 */
+				'imagick_enabled' => true,
+				/*
 				 * The default color scheme for your NginAd Exchange
 				 * see public/css/colorscheme/theme.css.template
 				 */ 
