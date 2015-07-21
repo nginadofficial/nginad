@@ -1,6 +1,14 @@
 nginad
 =======
 
+July 21, 2015
+------------------
+
+Vanity Domains and themes are now ostensibly done. 
+That was the last thing that needed to be done for NginAd 1.6 to be complete.
+However, we have to do some production testing before we release NginAd 1.6. 
+This testing should not take more than a day or two.
+
 July 20, 2015
 ------------------
 
