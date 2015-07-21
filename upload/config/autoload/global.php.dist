@@ -111,6 +111,20 @@ return array(
 					),
 				)
 		),
+		'vanity_domains' => array(
+			/*
+			 * This should be the main IP address of the NginAd installation.
+			 * If you only have 1 server, then it's the IP address of the server.
+			 * 
+			 * If you have many NginAd instances behind a nginx load balancer,
+			 * then it would be the IP address of the load balancer.
+			 * 
+			 * Configs for load balancing are in: \server.configs\load.balancer\etc
+			 * 
+			 * If no IP or 127.0.0.1 is specified, $_SERVER['SERVER_ADDR'] will be used.
+			 */
+			'server_ip' => '127.0.0.1' 
+		),
 		'themes' => array(
 				/*
 				 * The default color scheme for your NginAd Exchange

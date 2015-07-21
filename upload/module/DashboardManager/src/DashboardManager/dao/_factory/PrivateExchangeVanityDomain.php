@@ -84,8 +84,8 @@ class PrivateExchangeVanityDomain extends \_factory\CachedTableRead
     public function insertPrivateExchangeVanityDomain(\model\PrivateExchangeVanityDomain $PrivateExchangeVanityDomain) {
     	$data = array(
     	        'UserID'         	=> $PrivateExchangeVanityDomain->UserID,
-    			'VanityUrl'        	=> $PrivateExchangeVanityDomain->VanityUrl,
-    			'HasLogo'        	=> $PrivateExchangeVanityDomain->HasLogo
+    			'VanityDomain'      => $PrivateExchangeVanityDomain->VanityDomain,
+    			'UseLogo'        	=> $PrivateExchangeVanityDomain->UseLogo
     	);
 
     	$this->insert($data);
@@ -94,8 +94,8 @@ class PrivateExchangeVanityDomain extends \_factory\CachedTableRead
     public function updatePrivateExchangeVanityDomain(\model\PrivateExchangeVanityDomain $PrivateExchangeVanityDomain) {
     	$data = array(
     	        'UserID'         	=> $PrivateExchangeVanityDomain->UserID,
-    			'VanityUrl'        	=> $PrivateExchangeVanityDomain->VanityUrl,
-    			'HasLogo'        	=> $PrivateExchangeVanityDomain->HasLogo
+    			'VanityDomain'      => $PrivateExchangeVanityDomain->VanityDomain,
+    			'UseLogo'        	=> $PrivateExchangeVanityDomain->UseLogo
     	);
 
     	$user_id = $PrivateExchangeVanityDomain->UserID;

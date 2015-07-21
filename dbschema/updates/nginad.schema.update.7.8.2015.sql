@@ -78,12 +78,12 @@ CREATE TABLE `PrivateExchangeTheme` (
 DROP TABLE IF EXISTS `PrivateExchangeVanityDomain`;
 CREATE TABLE `PrivateExchangeVanityDomain` (
   `UserID` int(11) NOT NULL,
-  `VanityUrl` char(255) NOT NULL,
-  `HasLogo` tinyint(4) NOT NULL DEFAULT '0',
+  `VanityDomain` char(255) NOT NULL,
+  `UseLogo` tinyint(4) NOT NULL DEFAULT '0',
   PRIMARY KEY (`UserID`),
   UNIQUE KEY `UserIDKey` (`UserID`),
-  UNIQUE KEY `VanityUrlKey` (`VanityUrl`),
-  INDEX `VanityUrlIdx` (`VanityUrl`)
+  UNIQUE KEY `VanityDomainKey` (`VanityDomain`),
+  INDEX `VanityDomainIdx` (`VanityDomain`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 

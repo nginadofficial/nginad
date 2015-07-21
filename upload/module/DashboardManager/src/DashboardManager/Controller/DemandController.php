@@ -140,10 +140,87 @@ class DemandController extends DemandAbstractActionController {
 
 	public function editthemeAction()
 	{
-		return new ViewModel(array(
+		
+		$initialized = $this->initialize();
+		if ($initialized !== true) return $initialized;
+		
+		$default_colors 	= $this->config_handle['themes']['default_colors'];
+		$server_ip 			= $this->config_handle['vanity_domains']['server_ip'];
+		
+		if (empty($server_ip) || $server_ip == '127.0.0.1'):
+			$server_ip = $_SERVER['SERVER_ADDR'];
+		endif;
+		
+		$vanity_domain 		= '';
+		$use_logo	 		= false;
+		$use_vanity_domain	= false;
+		
+		$PrivateExchangeVanityDomainFactory = \_factory\PrivateExchangeVanityDomain::get_instance();
+		
+		$params = array();
+		$params["UserID"] = $this->auth->getUserID();
+		$PrivateExchangeVanityDomain = $PrivateExchangeVanityDomainFactory->get_row($params);
+		
+		if ($PrivateExchangeVanityDomain != null):
+			$use_vanity_domain	= true;
+			$vanity_domain 		= $PrivateExchangeVanityDomain->VanityDomain;
+			$use_logo	 		= $PrivateExchangeVanityDomain->UseLogo == 1 ? true : false;
+		endif;
 
+		$PrivateExchangeThemeFactory = \_factory\PrivateExchangeTheme::get_instance();
+		
+		$params = array();
+		$params["UserID"] = $this->auth->getUserID();
+		$PrivateExchangeTheme = $PrivateExchangeThemeFactory->get_row($params);
+		
+		if ($PrivateExchangeTheme != null):
+			$theme_params_serialized = $PrivateExchangeTheme->ThemeParamsSerialized;
+			try {
+				$theme_params = unserialize($theme_params_serialized);
+				
+				foreach ($default_colors as $key => $value):
+					if (isset($theme_params[$key])):
+						$default_colors[$key] = $theme_params[$key];
+					endif;
+				endforeach;
+			} catch (Exception $e) { }
+		endif;
+		
+		$assets_dir = 'public/vdomain/' . $this->auth->getUserID() . '/';
+		
+		$imageurl = '';
+		
+		if (file_exists($assets_dir . 'logo-lg.png')):
+			$imageurl = $assets_dir . 'logo-lg.png';
+		endif;
+		
+		$theme_color_params = array();
+		
+		foreach ($default_colors as $key => $value):
+			
+			$label_name = trim(str_replace('_', ' ', $key));
+			
+			$theme_color_params[] = array (
+										"label_name"	=> $label_name,
+										"key"			=> $key,
+										"value"			=> $value,
+									);
+		
+		endforeach;
+		
+		return new ViewModel(array(
+			'theme_color_params' => $theme_color_params,
+			'server_ip' => $server_ip,
+			'imageurl' => $imageurl,
+			'vanity_domain' => $vanity_domain,
+			'use_logo' => $use_logo,
+			'use_vanity_domain' => $use_vanity_domain
 		));
+		
 		/*
+		if (!file_exists($creatives_dir)):
+			mkdir($creatives_dir, 0644, true);
+		endif;
 	
 		$css = file_get_contents('public/css/colorscheme/theme.css.template');
 	

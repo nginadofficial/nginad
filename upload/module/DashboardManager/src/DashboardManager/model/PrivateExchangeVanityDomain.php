@@ -11,6 +11,6 @@ namespace model;
 
 class PrivateExchangeVanityDomain {
     public $UserID;
-    public $VanityUrl;
-    public $HasLogo;
+    public $VanityDomain;
+    public $UseLogo;
 }
