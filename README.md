@@ -1,6 +1,13 @@
 nginad
 =======
 
+July 20, 2015
+------------------
+
+Vanity Domains and Themes are now persisted in the DB and the CSS and Logo files are written out.
+However, they need to be implemented in the layout.phtml. That is the last thing to do in version 1.6.
+It should be very quick to complete, and will be completed tomorrow morning some time.
+
 July 19, 2015
 ------------------
 
