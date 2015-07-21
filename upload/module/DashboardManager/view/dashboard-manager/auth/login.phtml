@@ -10,9 +10,17 @@ $this->headScript()->prependFile($this->basePath() . '/js/script.js');
 <div class="loginbox">
 <form class="form-horizontal" method="POST" action="/auth/authenticate" name="loginform" id="loginform" >
 						<fieldset>
+						<?php if (isset($this->logo_url)): ?>
+							<div id="legend" class="headbreadcrumb" style="background-color: #fff;">
+								<div id="logo-container" style="max-width: 300px; margin-left: auto; margin-right: auto;">
+								<img src="<?php echo $this->logo_url; ?>" style="max-width: 300px;" />
+								</div>
+							</div>  
+						<?php else: ?>
 							<div id="legend" class="headbreadcrumb">
 								<h1 class="loginhead">Login</h1>
 							</div>  
+						<?php endif; ?>
 <?php
 if (isset($_SESSION['user']['message'])):
    echo '<div id="cdn_form_msg" class="alert alert-error" style="margin: 5px;">'.$_SESSION['user']['message'].'</div>';

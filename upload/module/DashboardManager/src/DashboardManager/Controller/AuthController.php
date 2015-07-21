@@ -24,7 +24,7 @@ class AuthController extends ZendAbstractActionController {
     protected $authservice;
     protected $config;
 
-    protected function getAuthService()
+    public function getAuthService()
     {
     	if (! $this->authservice): 
     		$this->authservice = $this->getServiceLocator()
@@ -56,23 +56,7 @@ class AuthController extends ZendAbstractActionController {
 
     public function loginAction()
     {
-    	$user_session = new Container('user');
-    	
-    	//if already login, redirect to success page
-    	if ($this->getAuthService()->hasIdentity()):
-    		$user_session->message = '';
-    		if ($this->getAuthService()->getPublisherInfoID() != null):
-    			return $this->redirect()->toRoute('publisher');
-    		else:
-    			return $this->redirect()->toRoute('private-exchange');
-    		endif;
-    	endif;
-
-    	return array(
-    			'messages'  => $user_session->message,
-    			'center_class' => 'centerj',
-    			'dashboard_view' => 'login'
-    	);
+		return \util\AuthHelper::login($this);
     }
 
     public function authenticateAction()
@@ -194,7 +178,7 @@ class AuthController extends ZendAbstractActionController {
     
     private function msaagreement($auth_User)
     {
-    	$view_directory = "demand";
+    	$view_directory = "private-exchange";
     	
     	if ($auth_User->PublisherInfoID != null):
     		$view_directory = "publisher";

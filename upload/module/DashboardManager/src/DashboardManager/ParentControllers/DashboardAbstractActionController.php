@@ -240,7 +240,7 @@ abstract class DashboardAbstractActionController extends ZendAbstractActionContr
     		$this->dashboard_home = "publisher";
     	elseif($this->DemandCustomerInfoID != null):
     		$this->user_id_list = $this->user_id_list_demand_customer;
-    		$this->dashboard_home = "demand";
+    		$this->dashboard_home = "private-exchange";
     	endif;
     	
     	natcasesort($this->user_id_list_publisher);

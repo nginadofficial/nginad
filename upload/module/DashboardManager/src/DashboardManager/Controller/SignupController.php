@@ -33,6 +33,19 @@ class SignupController extends PublisherAbstractActionController {
 			if ($initialized === true) return $this->redirect()->toRoute($this->dashboard_home);
     	endif;
 	    
+    	$http_host = @$_SERVER['HTTP_HOST'];
+    	if ($http_host != null):
+	    	$PrivateExchangeVanityDomainFactory = \_factory\PrivateExchangeVanityDomain::get_instance();
+	    	
+	    	$params = array();
+	    	$params["VanityDomain"] = strtolower($http_host);
+	    	$PrivateExchangeVanityDomain = $PrivateExchangeVanityDomainFactory->get_row($params);
+	    	
+	    	if ($PrivateExchangeVanityDomain != null):
+	    		return \util\AuthHelper::login($this);
+	    	endif;
+    	endif;
+    	
 	    $view = new ViewModel(array(
 	    		'dashboard_view' => 'signup',
 	    		'vertical_map' => \util\DeliveryFilterOptions::$vertical_map
@@ -1347,7 +1360,10 @@ class SignupController extends PublisherAbstractActionController {
         return $this->getResponse()->setContent(json_encode($data));
 	} 
 	
-	
+	public function getAuthService()
+	{
+		return $this->getServiceLocator()->get('AuthService');
+	}
 }
 
 ?>

@@ -1,6 +1,8 @@
 <?php
 
 namespace util;
+use Zend\Session\Container;
+use Zend\View\Model\ViewModel;
 
 class AuthHelper {
 	
@@ -24,6 +26,47 @@ class AuthHelper {
 		die("You are not authorized to perform this action: CODE 101");
 		
 	}
+	
+	public static function login($view) {
+		$user_session = new Container('user');
+		 
+		//if already login, redirect to success page
+		if ($view->getAuthService()->hasIdentity()):
+			$user_session->message = '';
+			if ($view->getAuthService()->getPublisherInfoID() != null):
+				return $view->redirect()->toRoute('publisher');
+			else:
+				return $view->redirect()->toRoute('private-exchange');
+			endif;
+		endif;
+		
+		$logo_url = null;
+		 
+		$http_host = @$_SERVER['HTTP_HOST'];
+		if ($http_host != null):
+			$PrivateExchangeVanityDomainFactory = \_factory\PrivateExchangeVanityDomain::get_instance();
+			
+			$params = array();
+			$params["VanityDomain"] = strtolower($http_host);
+			$PrivateExchangeVanityDomain = $PrivateExchangeVanityDomainFactory->get_row($params);
+			
+			if ($PrivateExchangeVanityDomain != null):
+				$theme_path = '/vdomain/' . $PrivateExchangeVanityDomain->UserID . '/theme.css';
+				if ($PrivateExchangeVanityDomain->UseLogo == 1):
+					$logo_url = '/vdomain/' . $PrivateExchangeVanityDomain->UserID . '/logo-lg.png';
+				endif;
+			endif;
+		endif;
+		 
+		$viewModel = new ViewModel(array(
+				'messages'  => $user_session->message,
+				'center_class' => 'centerj',
+				'logo_url' => $logo_url,
+				'dashboard_view' => 'login'
+		));
+		
+		return $viewModel->setTemplate('dashboard-manager/auth/login.phtml');
+	}	
 	
 	public static function domain_user_authorized_publisher($parent_id, $publisher_info_id) {
 		

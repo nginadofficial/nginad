@@ -123,8 +123,10 @@ echo $this->doctype(); ?>
     <div class="navbar-inner">
     <ul class="nav">
     <?php if ($this->Login_bool() == false):?>
-    <li class="<?php if($home_dashboard_view == "signup") echo "active";?>"><a class="navlink" href="/signup">Signup</a></li>
-    <li class="divider-vertical"></li>
+	    <?php if ($theme_path == null):?>
+	    <li class="<?php if($home_dashboard_view == "signup") echo "active";?>"><a class="navlink" href="/signup">Signup</a></li>
+	    <li class="divider-vertical"></li>
+	    <?php endif;?>
     <?php else:?>
    	<?php if (($user_data != null && $user_data->DemandCustomerInfoID != null)
    			|| $userRole=='domain_admin' || $userRole=='super_admin'): ?>
