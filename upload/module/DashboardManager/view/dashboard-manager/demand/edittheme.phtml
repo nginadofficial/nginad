@@ -17,7 +17,13 @@ $(function() {
     		paramName: "file",
   			maxFilesize: 2, // MB
   			uploadMultiple: false,
-  			success: function(file, storedName) { $("#imageurl").val(storedName); updateImageAd(false); alert("Logo Upload Set"); },
+  			success: function(file, storedName) { 
+  				var imgurl = '<img src="' + storedName + '" />';
+  				$("#img-preview-container").html(imgurl);
+  				$("#imageurl").val(storedName); 
+  				$("#logo-enabled").prop("checked", true);
+  				alert("Logo Upload Set"); 
+  			},
   			error: function(file, errorMessage) { alert("Error: " + errorMessage); },
   			init: function() {
 				    this.on("addedfile", function() {
@@ -50,9 +56,18 @@ Set Vanity Domain &amp; Color Theme
           <br clear="all">
        </div>
 </h4>
+<?php 
+    if($success_message_display == true):
+    	echo '<div id="cdn_form_success" class="alert alert-error" style="margin: 5px;">Your Settings have been Updated Successfully';
+		if (!empty($vanity_domain)):
+			echo ', <a target="_blank" href="http://' . $vanity_domain . '">[ Click Here to Preview: ' . $vanity_domain . ']</a>';
+		endif;
+		echo '</div>';
+    endif;
+?>
 <div class="steps-container step1">
     <div id="selection-results" class="steps-box">
-    <form onsubmit="highlightSelects();" id="bannerform" name="bannerform" method="POST" class="form-horizontal form-top-magin" action="/private-exchange/newlineitem">
+    <form id="editthemeform" name="editthemeform" method="POST" class="form-horizontal form-top-magin" action="/private-exchange/newvanitydomain">
 <div class="formbox">
 <fieldset>
     <div style="margin-bottom: 5px;">
@@ -84,17 +99,22 @@ Set Vanity Domain &amp; Color Theme
            <td>
             <div class="input-prepend input-append" id="best-offer-wrapper">
                         <span class="add-on">http://</span>
-                        <input class="span2" style="width: 300px;" name="vanity-domain" id="vanity-domain" type="text" />
+                        <input class="span2" style="width: 300px;" name="vanity-domain" id="vanity-domain" type="text" value="<?php echo $vanity_domain; ?>" />
            </div>
             </td>
            <td>
-           	 <label for="vd-enabled" class="input">Enable:</label> <input type="checkbox" value="1" <?php if (true): echo 'checked="checked"'; endif; ?> id="vd-enabled" name="vd-enabled" /> 
+           	 <label for="vd-enabled" class="input">Enable:</label> <input type="checkbox" value="1" <?php if ($use_vanity_domain): echo 'checked="checked"'; endif; ?> id="vd-enabled" name="vd-enabled" /> 
            </td>
            </tr>
            
            <tr>
            <td>
             <label for="dr-zone" class="input">Company Logo <span class="hlp"><br/><small><i>(eg. console.mediashakers.com - PNG file only, 300px wide)</i></small></span></label>
+           	<div id="img-preview-container">
+           		<?php if (!empty($imageurl)): ?>
+           			<img src="<?php echo $imageurl; ?>" />
+           		<?php endif; ?>
+           	</div>
            </td>
            <td>
 			<div class="control-group">
@@ -102,7 +122,7 @@ Set Vanity Domain &amp; Color Theme
 			</div>	
             </td>
            <td>
-           	 <label for="logo-enabled" class="input">Enable:</label> <input type="checkbox" value="1" <?php if (true): echo 'checked="checked"'; endif; ?> id="logo-enabled" name="logo-enabled" /> 
+           	 <label for="logo-enabled" class="input">Enable:</label> <input type="checkbox" value="1" <?php if ($use_logo): echo 'checked="checked"'; endif; ?> id="logo-enabled" name="logo-enabled" /> 
            </td>
            </tr>
            <?php foreach ($theme_color_params as $theme_color_param): ?>

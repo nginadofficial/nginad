@@ -140,7 +140,6 @@ class DemandController extends DemandAbstractActionController {
 
 	public function editthemeAction()
 	{
-		
 		$initialized = $this->initialize();
 		if ($initialized !== true) return $initialized;
 		
@@ -190,8 +189,8 @@ class DemandController extends DemandAbstractActionController {
 		
 		$imageurl = '';
 		
-		if (file_exists($assets_dir . 'logo-lg.png')):
-			$imageurl = $assets_dir . 'logo-lg.png';
+		if ($use_logo && file_exists($assets_dir . 'logo-lg.png')):
+			$imageurl = str_replace('public/', '/', $assets_dir) . 'logo-lg.png';
 		endif;
 		
 		$theme_color_params = array();
@@ -208,32 +207,168 @@ class DemandController extends DemandAbstractActionController {
 		
 		endforeach;
 		
+		$success = $this->getRequest()->getQuery('success');
+		$success = $success == 'true' ? true : false;
+		
 		return new ViewModel(array(
 			'theme_color_params' => $theme_color_params,
 			'server_ip' => $server_ip,
 			'imageurl' => $imageurl,
 			'vanity_domain' => $vanity_domain,
 			'use_logo' => $use_logo,
-			'use_vanity_domain' => $use_vanity_domain
+			'use_vanity_domain' => $use_vanity_domain,
+			'success_message_display' => $success
 		));
 		
-		/*
-		if (!file_exists($creatives_dir)):
-			mkdir($creatives_dir, 0644, true);
+	}
+	
+	public function newvanitydomainAction()
+	{
+		$initialized = $this->initialize();
+		if ($initialized !== true) return $initialized;
+		
+		$assets_dir = 'public/vdomain/' . $this->auth->getUserID() . '/';
+		
+		$theme_colors 	= $this->config_handle['themes']['default_colors'];
+		
+		$vanity_domain 	= $this->getRequest()->getPost("vanity-domain");
+		$vd_enabled 	= $this->getRequest()->getPost("vd-enabled");
+		$logo_enabled 	= $this->getRequest()->getPost("logo-enabled");
+		$reset			= $this->getRequest()->getPost("B2");
+		
+		if ($reset != "Reset Colors"):
+			foreach ($this->getRequest()->getPost() as $key => $value):
+	
+				if (isset($theme_colors[$key]) && strpos($value, '#') == 0 && strlen($value) <= 7):
+					$theme_colors[$key] = $value;
+				endif;
+	
+			endforeach;
+		endif;
+		
+		$serialized_colors = serialize($theme_colors);
+		
+		$PrivateExchangeVanityDomainFactory = \_factory\PrivateExchangeVanityDomain::get_instance();
+		$PrivateExchangeThemeFactory = \_factory\PrivateExchangeTheme::get_instance();
+		
+		$params = array();
+		$params["UserID"] = $this->auth->getUserID();
+		$PrivateExchangeTheme = $PrivateExchangeThemeFactory->get_row($params);
+		
+		$params = array();
+		$params["UserID"] = $this->auth->getUserID();
+		$_PrivateExchangeTheme = $PrivateExchangeThemeFactory->get_row($params);
+			
+		$PrivateExchangeTheme = new \model\PrivateExchangeTheme();
+			
+		$PrivateExchangeTheme->UserID 					= $this->auth->getUserID();
+		$PrivateExchangeTheme->ThemeParamsSerialized 	= $serialized_colors;
+			
+		if ($_PrivateExchangeTheme != null):
+			$PrivateExchangeThemeFactory->updatePrivateExchangeTheme($PrivateExchangeTheme);
+		else:
+			$PrivateExchangeThemeFactory->insertPrivateExchangeTheme($PrivateExchangeTheme);
+		endif;
+		
+		if ($vd_enabled == 1):
+			
+			if (empty($vanity_domain)):
+				die("Missing Vanity Domain: CODE 107");			
+			endif;
+		
+			$vanity_domain = str_replace(array('https://', 'http://'), array('', ''), $vanity_domain);
+
+			if (!file_exists($assets_dir)):
+				mkdir($assets_dir, 0644, true);
+			endif;
+			
+			$css = file_get_contents('public/css/colorscheme/theme.css.template');
+
+			foreach ($theme_colors as $key => $value):
+				$css = str_replace($key, $value, $css);
+			endforeach;
+			
+			$fh = fopen($assets_dir . "theme.css", "w");
+			fwrite($fh, $css);
+			fclose($fh);
+		
+			$params = array();
+			$params["UserID"] = $this->auth->getUserID();
+			$_PrivateExchangeVanityDomain = $PrivateExchangeVanityDomainFactory->get_row($params);
+			
+			$PrivateExchangeVanityDomain = new \model\PrivateExchangeVanityDomain();
+			
+			$PrivateExchangeVanityDomain->UserID 		= $this->auth->getUserID();
+			$PrivateExchangeVanityDomain->VanityDomain 	= $vanity_domain;
+			$PrivateExchangeVanityDomain->UseLogo 		= $logo_enabled == 1 ? 1 : 0;
+			
+			if ($_PrivateExchangeVanityDomain != null):
+				$PrivateExchangeVanityDomainFactory->updatePrivateExchangeVanityDomain($PrivateExchangeVanityDomain);
+			else:
+				$PrivateExchangeVanityDomainFactory->insertPrivateExchangeVanityDomain($PrivateExchangeVanityDomain);
+			endif;
+			
+
+			
+		else:
+		
+			$PrivateExchangeVanityDomainFactory->deletePrivateExchangeVanityDomain($this->auth->getUserID());
+
+		endif;
+		
+		return $this->redirect()->toUrl('/private-exchange/edittheme?success=true');
+		
+	}
+	
+	/**
+	 *
+	 * @return Ambigous <\Zend\View\Model\ViewModel, \Zend\View\Model\ViewModel>
+	 */
+	public function uploadlogoAction() {
+	
+		$initialized = $this->initialize();
+		if ($initialized !== true) return $initialized;
+	
+		$vdomain_dir = 'public/vdomain/' . $this->auth->getUserID() . '/';
+	
+		if (!file_exists($vdomain_dir)):
+			mkdir($vdomain_dir, 0644, true);
 		endif;
 	
-		$css = file_get_contents('public/css/colorscheme/theme.css.template');
+		$site_url = $this->config_handle['delivery']['site_url'];
 	
-		$default_colors 		= $this->config_handle['themes']['default_colors'];
+		if(substr($site_url, -1) == '/'):
+			$site_url = substr($site_url, 0, -1);
+		endif;
 	
-		foreach ($default_colors as $key => $value):
-			$css = str_replace($key, $value, $css);
+		$files =  $this->request->getFiles()->toArray();
+		$httpadapter = new \Zend\File\Transfer\Adapter\Http();
+		$filesize  = new \Zend\Validator\File\Size(array('max' => 2000000 )); //2MB
+		$extension = new \Zend\Validator\File\Extension(array('extension' => array('png')));
+		$httpadapter->setValidators(array($filesize, $extension), $files['file']['name']);
+		$newName = 'logo-lg.png';
+		$httpadapter->addFilter('File\Rename', array(
+				'target' => $vdomain_dir . $newName,
+				'overwrite' => true
+		));
+		if($httpadapter->isValid()):
+			if($httpadapter->receive($files['file']['name'])):
+				$httpadapter->getFilter('File\Rename')->getFile();
+				$newfile = $httpadapter->getFileName();
+				header("Content-type: text/plain");
+				echo $site_url . substr($newfile, strlen('public'));
+				exit;
+			endif;
+		endif;
+		$error = array();
+		$dataError = $httpadapter->getMessages();
+		foreach($dataError as $key=>$row):
+			$error[] = $row;
 		endforeach;
-	
-		header("Content-type: text/css");
-		echo $css;
+		http_response_code(400);
+		header("Content-type: text/plain");
+		echo implode(',', $error);
 		exit;
-		*/
 	
 	}
 	
@@ -2386,35 +2521,35 @@ class DemandController extends DemandAbstractActionController {
 		
 		$site_url = $this->config_handle['delivery']['site_url'];
 		
-		if(substr($site_url, -1) == '/') {
+		if(substr($site_url, -1) == '/'):
 			$site_url = substr($site_url, 0, -1);
-		}
+		endif;
 		
 		$files =  $this->request->getFiles()->toArray();
 		$httpadapter = new \Zend\File\Transfer\Adapter\Http();
-		$filesize  = new \Zend\Validator\File\Size(array('min' => 2000 )); //1KB
+		$filesize  = new \Zend\Validator\File\Size(array('max' => 2000000 )); //2MB
 		$extension = new \Zend\Validator\File\Extension(array('extension' => array('jpg', 'jpeg', 'png', 'gif', 'swf')));
 		$httpadapter->setValidators(array($filesize, $extension), $files['file']['name']);
 		$ext = pathinfo($files['file']['name'], PATHINFO_EXTENSION);
 		$newName = md5(rand() . $files['file']['name']) . '.' . $ext;
 		$httpadapter->addFilter('File\Rename', array(
 				'target' => $creatives_dir . $newName,
+				'overwrite' => true
 		));
-		if($httpadapter->isValid()) {
-			if($httpadapter->receive($files['file']['name'])) {
+		if($httpadapter->isValid()):
+			if($httpadapter->receive($files['file']['name'])):
 				$httpadapter->getFilter('File\Rename')->getFile();
 				$newfile = $httpadapter->getFileName();
 				header("Content-type: text/plain");
 				echo $site_url . substr($newfile, strlen('public'));
 				exit;
-			}
-		}
+			endif;
+		endif;
 		$error = array();
 		$dataError = $httpadapter->getMessages();
-		foreach($dataError as $key=>$row)
-		{
+		foreach($dataError as $key=>$row):
 			$error[] = $row;
-		} //set formElementErrors
+		endforeach; 
 		http_response_code(400);
 		header("Content-type: text/plain");
 		echo implode(',', $error);
