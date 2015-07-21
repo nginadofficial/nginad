@@ -134,7 +134,7 @@ class CreditHelper {
 			$exchange_name 	= $config['delivery']['exchange_name'];
 			
 			// approval, send out email
-			$subject = "Your ' . $exchange_name . ' Private Exchange Requires Credit Approval";
+			$subject = "Your " . $exchange_name . " Private Exchange Requires Credit Approval";
 		
 			$message = 'Your ' . $exchange_name . ' Private Exchange for: ' . $DemandCustomerInfo->Company . ', needs credit approval before you can access Platform Connection Inventory and SSP RTB Inventory.'
 					. '<br /><br />Please download the credit application <a href="' . $site_url . '/forms/credit.application.pdf">here</a>.'

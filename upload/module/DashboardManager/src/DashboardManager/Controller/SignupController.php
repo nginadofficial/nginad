@@ -995,7 +995,7 @@ class SignupController extends PublisherAbstractActionController {
 		        
 				$message = 'Your ' . $exchange_name . ' Publisher account was approved.<br /><br />Please login <a href="' . $site_url . '/auth/login">here</a> with your email and password';
 	
-				$subject = "Your ' . $exchange_name . ' Publisher account was approved";
+				$subject = "Your " . $exchange_name . " Publisher account was approved";
 					
 				$transport = $this->getServiceLocator()->get('mail.transport');
 					
@@ -1104,7 +1104,7 @@ class SignupController extends PublisherAbstractActionController {
 		        
 				$message = 'Your ' . $exchange_name . ' Demand Customer account was approved.<br /><br />Please login <a href="' . $site_url . '/auth/login">here</a> with your email and password';
 	
-				$subject = "Your ' . $exchange_name . ' Demand Customer account was approved";
+				$subject = "Your " . $exchange_name . " Demand Customer account was approved";
 					
 				$transport = $this->getServiceLocator()->get('mail.transport');
 					

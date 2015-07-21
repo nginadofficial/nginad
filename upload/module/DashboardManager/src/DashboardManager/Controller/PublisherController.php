@@ -290,10 +290,10 @@ class PublisherController extends PublisherAbstractActionController {
 		    			// approval, send out email
 		    			if ($flag == 1):
 				    		$message = 'Your ' . $exchange_name . ' Publisher Domain: ' . $domain_object->WebDomain . ' was approved.<br /><br />Please login <a href="' . $site_url . '/auth/login">here</a> with your email and password';
-				    		$subject = "Your ' . $exchange_name . ' Publisher Domain: " . $domain_object->WebDomain . " was approved";
+				    		$subject = "Your " . $exchange_name . " Publisher Domain: " . $domain_object->WebDomain . " was approved";
 			    		else:
 				    		$message = 'Your ' . $exchange_name . ' Publisher Domain: ' . $domain_object->WebDomain . ' was rejected.<br /><br />Please login <a href="' . $site_url . '/auth/login">here</a> with your email and password';
-				    		$subject = "Your ' . $exchange_name . ' Publisher Domain: " . $domain_object->WebDomain . " was rejected";
+				    		$subject = "Your " . $exchange_name . " Publisher Domain: " . $domain_object->WebDomain . " was rejected";
 			    		endif;
 			    		$transport = $this->getServiceLocator()->get('mail.transport');
 			    			
