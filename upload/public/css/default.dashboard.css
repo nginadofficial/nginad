@@ -58,23 +58,19 @@ ul.nav li a:hover {
 }
 
 table a:link {
-	color: #666;
 	font-weight: bold;
 	text-decoration:none;
 }
 table a:visited {
-	color: #999999;
 	font-weight:bold;
 	text-decoration:none;
 }
 table a:active,
 table a:hover {
-	color: #bd5a35;
 	text-decoration:underline;
 }
 table {
 	font-family:Arial, Helvetica, sans-serif;
-	color:#666;
 	font-size:12px;
 	text-shadow: 1px 1px 0px #fff;
 	background:#eaebec;

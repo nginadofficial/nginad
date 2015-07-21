@@ -15,37 +15,19 @@ body {
 a.brand{
 text-shadow: none;
 font-size: 14px !Important;
-color:#fff !Important;
 }
 
 a.brand:hover{
 text-shadow: none;
 }
 
-.navbar-inverse .navbar-inner{
-border-color:#0088CC;
-}
-
 .btn-top-mgn{
 	margin-top:15px !important;
-}
-
-.navbar-inner{
-	 background-image: linear-gradient(to bottom,#0088CC,#0088CC);
-}
-
-.btn-group > .btn, .btn-group > .dropdown-menu, .btn-group > .popover{
-	
-
 }
 
 .dropdown-menu > li > a{
 	font-size: 13px !important;
 		color: #777 !important;
-}
-
-.dropdown-menu > li > a:hover{
-	color:#fff !important;
 }
 
 .login-botton{
@@ -57,16 +39,11 @@ p.copyrights{
 	font-size: 13px;
 }
 
-footer{
-	background: #F5F5F5;
-}
 .footer_buttons{
 	margin: 15px 0 -5px 15px;
 }
 
 .actv{
-background:#0088CC;
-color: #fff;
 text-shadow: none;
 }
 
@@ -75,8 +52,6 @@ text-shadow: none;
 }
 
 .footer_buttons .btn:hover{
-	background:#0088CC;
-color: #fff;
 text-shadow: none;
 }
 
@@ -92,18 +67,14 @@ span.help_center .btn{
 
 span.help_center .btn:hover{
 	background:none;
-	color:#0088CC;	
 }
 
 .btn-primary{
-	background-color: #0088CC;
-    background-image: linear-gradient(to bottom, #0088CC, #0061A7);
     background-repeat: repeat-x;
     border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
 }
 
 .btn-primary:hover{
-		background-color: #0088CC;
 	 background-image: none;
     filter: none;
 }
@@ -137,9 +108,7 @@ span.help_center .btn:hover{
 }
 
 #selection-results table th{
-background:#0088CC !Important;
 text-shadow: none;
-color: #eee;
 } 
 
 .form-group{
@@ -196,17 +165,12 @@ width:175px;
 .selbox-width{
 	width:217px;
 }
-.hlp 
-{
-	 color: #0061A7;
-}
 
 .footer {
     border-top: 1px solid #DDDDDD;
     margin-top: 40px;
 }
 li.active .navlink {
-    background: none repeat scroll 0 0 #222222 !important;
     border: 0 solid !important;
     font-size: 14px !important;
     text-transform: uppercase;
@@ -221,24 +185,16 @@ li.active .navlink {
     padding: 10px;
 }
 .headbreadcrumb {
-    background-color: #f5f5f5;
     border-radius: 4px;
     font-size: 23px;
     list-style: none outside none;
     margin: 0px;
     padding: 32px 15px;
 }
-.headtop{
-	 background-color: #f5f5f5;
-}
 
 .breadcrumb-heading{
 	margin-bottom: 0px;
 	background: none;
-}
-
-.blue-color{
-	color:#0088cc;
 }
 
 #legend {
@@ -282,17 +238,13 @@ li.active .navlink {
 .banner-txtarea{
 	width:301px;
 }
+
 .loginhead{
-	color: #0088cc;
 	text-align: center;
 }
 
 ul.left_nav li a:hover{
 	color:#6388CC !important;
-}
-
-h2.person_heading{
-	color:#0088CC;
 }
 
 .leadership_firstrow{
@@ -324,40 +276,26 @@ ul.press_tab{
 }
 
 ul.press_tab li{
-	background:#0088CC;
 	border-right:1px solid #fff;
 	border-top-left-radius: 5px;
 	border-top-right-radius: 5px;
 	}
-	
-ul.press_tab li:hover{
-	color:#fff;
-}	
 
 ul.press_tab li.active{
 	border-radius:none;
 	color:#333 !important;
 }
 
-ul.press_tab li.active a{
-	color:#0088CC !important;
-}
-
-
 ul.press_tab li a{
-	color:#fff !important;
  margin-right: 0px !important;
 }
 
 ul.press_tab li a:hover{
-	color:#fff;
-	background:#333;
    	border-top-left-radius: 5px;
 	border-top-right-radius: 5px;		
 }
 
 h3.stories{
-	color:#0088CC !important;
 	margin-top: 50px;
 }
 
@@ -366,13 +304,8 @@ p.jobs_mgn{
 }
 
 td.table_blue_txt{
-	color:#0088CC;
 	font-weight: bold;
 	font-size: 14px;
-}
-
-td.table_blue_txt a{
-	color:#0088CC;
 }
 
 td.table_black_txt{
@@ -383,7 +316,6 @@ td.table_black_txt{
 }
 
 h3.testimonials{
-		color:#0088CC !Important;
 		line-height: 2px !important;
 		margin-bottom: 26px;
 }
@@ -396,7 +328,6 @@ h3.testimonials{
 
 h5.person_name{
 	margin-bottom: 2px;
-	color:#0088CC;
 }
 
 p.person_address{
@@ -497,7 +428,6 @@ padding-left: 15px;
 .jobs_footer_heading{
 	margin-top:8px;
 	font-style: italic;
-	color: #0088cc;
 	font-size: 13px;
 }
 
@@ -508,7 +438,6 @@ padding-left: 15px;
 }
 
 .jobs_table td a{
-	color:#0088cc;
 	font-weight: bold;
 }
 
@@ -576,21 +505,8 @@ p.indicates_required{
 	text-decoration: none;
 }
 
-.left_navigation li.active a{
-	background:#0088cc;
-	color: #fff;
-}
-
 .left_navigation li.active a:hover{
-	background:#0088cc;
-	color: #fff !important;
 	cursor: pointer;
-}
-
-
-.left_navigation li.active a:focus{
-	background:#0088cc;
-	color: #fff !important;
 }
 
 .contact_row{
@@ -612,8 +528,6 @@ p.indicates_required{
 }
 
 #myModal1 .modal-header{
-	background:#0088cc;
-	color:#fff;
 	border-top-left-radius:3px;
 	border-top-right-radius:3px;
 }
@@ -695,7 +609,6 @@ p.indicates_required{
 
 #pending_list_form h4{
 	padding-left: 20px;
-	color:#0088CC;
 }
 
 #pending_list_form p{
@@ -707,10 +620,6 @@ p.indicates_required{
 	margin-bottom: 20px;
 }
 
-.pending_heading{
-	color:#0088CC;
-}
-
 ul.pendinglist{
 	list-style: none;
 	margin: 0;
@@ -719,14 +628,8 @@ ul.pendinglist{
 }
 
 ul.pendinglist li{
-	background: #1E66AE;
-	color:#fff;
 		padding: 5px;
 margin-bottom:1px;
-}
-
-ul.pendinglist li a{
-	color:#fff;
 }
 
 ul.pendinglist li a:focus{
@@ -753,16 +656,9 @@ padding:0;
 	margin-bottom: 25px;
 }
 
-.myaccordion .accordion-heading{
-	background: #1E66AE;
-	color:#fff;
-}
-
 .myaccordion .accordion-heading a{
-	color:#fff;
 	text-decoration: none;
 }
-
 
 .myaccordion  .accordion-group{
 	margin-bottom: 0px;

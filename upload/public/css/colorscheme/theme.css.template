@@ -1,0 +1,923 @@
+/* bootstrap.css */
+
+body {
+  color: _COLOR_FONT_MAIN_;
+  background-color: #ffffff;
+}
+
+a:hover,
+a:focus {
+  color: _COLOR_LINK_HIGHLIGHT_;
+}
+
+a {
+  color: _COLOR_LINK_TEXT_;
+}
+
+.headbreadcrumb {
+    background-color: _HEADER_BACKGROUND_COLOR_;
+}
+
+.headtop{
+	 background-color: _HEADER_BACKGROUND_COLOR_;
+}
+
+
+table a {
+	color: _TABLE_LINK_COLOR_TEXT_;
+}
+
+table a:link {
+	color: _TABLE_LINK_COLOR_TEXT_;
+}
+table a:visited {
+	color: _TABLE_LINK_COLOR_VISITED_;
+}
+table a:active,
+table a:hover {
+	color: _TABLE_LINK_COLOR_ACTIVE_;
+}
+table {
+	color: _TABLE_TEXT_COLOR_;
+}
+
+li.active .navlink {
+    background: none repeat scroll 0 0 _NAVLINK_TAB_ACTIVE_ !important;
+}
+
+.dropdown-menu > li > a:hover,
+.dropdown-menu > li > a:focus,
+.dropdown-submenu:hover > a,
+.dropdown-submenu:focus > a {
+  color:_COLOR_FONT_FOREGROUND_;
+  background-color: #0081c2;
+  background-image: -moz-linear-gradient(top, _COLOR_BACKGROUND_, #0077b3);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(_COLOR_BACKGROUND_), to(#0077b3));
+  background-image: -webkit-linear-gradient(top, _COLOR_BACKGROUND_, #0077b3);
+  background-image: -o-linear-gradient(top, _COLOR_BACKGROUND_, #0077b3);
+  background-image: linear-gradient(to bottom, _COLOR_BACKGROUND_, #0077b3);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff0088cc', endColorstr='#ff0077b3', GradientType=0);
+}
+
+.dropdown-menu > .active > a,
+.dropdown-menu > .active > a:hover,
+.dropdown-menu > .active > a:focus {
+  color:_COLOR_FONT_FOREGROUND_;
+  background-color: #0081c2;
+  background-image: -moz-linear-gradient(top, _COLOR_BACKGROUND_, #0077b3);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(_COLOR_BACKGROUND_), to(#0077b3));
+  background-image: -webkit-linear-gradient(top, _COLOR_BACKGROUND_, #0077b3);
+  background-image: -o-linear-gradient(top, _COLOR_BACKGROUND_, #0077b3);
+  background-image: linear-gradient(to bottom, _COLOR_BACKGROUND_, #0077b3);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff0088cc', endColorstr='#ff0077b3', GradientType=0);
+}
+
+.btn {
+  color:_COLOR_BUTTON_FONT_FOREGROUND_;
+  background-color: _COLOR_BUTTON_BACKGROUND_;
+  *background-color: _COLOR_BUTTON_BACKGROUND_;
+  background-image: -moz-linear-gradient(top, _BUTTON_START_GRADIENT_, _BUTTON_END_GRADIENT_);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(_BUTTON_START_GRADIENT_), to(_BUTTON_END_GRADIENT_));
+  background-image: -webkit-linear-gradient(top, _BUTTON_START_GRADIENT_, _BUTTON_END_GRADIENT_);
+  background-image: -o-linear-gradient(top, _BUTTON_START_GRADIENT_, _BUTTON_END_GRADIENT_);
+  background-image: linear-gradient(to bottom, _BUTTON_START_GRADIENT_, _BUTTON_END_GRADIENT_);
+  border-color: #e6e6e6 #e6e6e6 #bfbfbf;
+  border-bottom-color: #b3b3b3;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffffff', endColorstr='#ffe6e6e6', GradientType=0);
+}
+
+.btn:hover,
+.btn:focus,
+.btn:active,
+.btn.active,
+.btn.disabled,
+.btn[disabled] {
+  color: _COLOR_BUTTON_FONT_HOVER_;
+  background-color: _COLOR_BUTTON_BKRND_HOVER_;
+  *background-color: _COLOR_BUTTON_BKRND_HOVER_;
+}
+
+.footer_buttons .btn, span.help_center .btn{
+	background:_COLOR_FOOTER_BUTTON_BACKGROUND_;
+	color:_COLOR_FOOTER_BUTTON_FONT_TEXT_;
+}
+
+.footer_buttons .btn:hover, span.help_center .btn:hover{
+	background:_FOOTER_COLOR_BUTTON_BKRND_HOVER_;
+	color:_COLOR_FOOTER_BUTTON_FONT_HOVER_;
+}
+
+.actv{
+	background:_COLOR_BUTTON_BKRND_ACTIVE_;
+	color:_COLOR_BUTTON_FONT_ACTIVE_;
+}
+
+.btn:active,
+.btn.active {
+  background-color: _COLOR_BUTTON_BKRND_ACTIVE_ \9;
+}
+
+.btn-primary {
+  color:_COLOR_BUTTON_FONT_FOREGROUND_;
+  background-color: _COLOR_BUTTON_BACKGROUND_;
+  *background-color: _COLOR_BUTTON_BACKGROUND_;
+  background-image: -moz-linear-gradient(top, _BUTTON_START_GRADIENT_, _BUTTON_END_GRADIENT_);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(_BUTTON_START_GRADIENT_), to(_BUTTON_END_GRADIENT_));
+  background-image: -webkit-linear-gradient(top, _BUTTON_START_GRADIENT_, _BUTTON_END_GRADIENT_);
+  background-image: -o-linear-gradient(top, _BUTTON_START_GRADIENT_, _BUTTON_END_GRADIENT_);
+  background-image: linear-gradient(to bottom, _BUTTON_START_GRADIENT_, #0044cc);
+  border-color: #0044cc #0044cc #002a80;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff0088cc', endColorstr='#ff0044cc', GradientType=0);
+}
+
+.btn-link {
+  color: _COLOR_BACKGROUND_;
+}
+
+.btn-link:hover,
+.btn-link:focus {
+  color: _COLOR_LINK_HIGHLIGHT_;
+}
+
+.nav-list > .active > a,
+.nav-list > .active > a:hover,
+.nav-list > .active > a:focus {
+  color:_COLOR_NAVLINK_FONT_FOREGROUND_;
+  background-color: _COLOR_NAVLINK_BACKGROUND_;
+}
+
+.nav-pills > .active > a,
+.nav-pills > .active > a:hover,
+.nav-pills > .active > a:focus {
+  color:_COLOR_NAVLINK_FONT_FOREGROUND_;
+  background-color: _COLOR_NAVLINK_BACKGROUND_;
+}
+
+a.thumbnail:hover,
+a.thumbnail:focus {
+  border-color: _COLOR_BACKGROUND_;
+}
+
+.muted {
+  color: _DISABLED_TEXT_COLOR_;
+}
+
+a.muted:hover,
+a.muted:focus {
+  color: _DISABLED_TEXT_COLOR_;
+}
+
+.text-warning {
+  color: #c09853;
+}
+
+a.text-warning:hover,
+a.text-warning:focus {
+  color: #a47e3c;
+}
+
+.text-error {
+  color: #b94a48;
+}
+
+a.text-error:hover,
+a.text-error:focus {
+  color: #953b39;
+}
+
+.text-info {
+  color: #3a87ad;
+}
+
+a.text-info:hover,
+a.text-info:focus {
+  color: #2d6987;
+}
+
+.text-success {
+  color: #468847;
+}
+
+a.text-success:hover,
+a.text-success:focus {
+  color: #356635;
+}
+
+h1 small,
+h2 small,
+h3 small,
+h4 small,
+h5 small,
+h6 small {
+  color: _DISABLED_TEXT_COLOR_;
+}
+
+blockquote small {
+  color: _DISABLED_TEXT_COLOR_;
+}
+
+legend small {
+  color: _DISABLED_TEXT_COLOR_;
+}
+
+.uneditable-input,
+.uneditable-textarea {
+  color: _DISABLED_TEXT_COLOR_;
+  background-color: #fcfcfc;
+  border-color: #cccccc;
+}
+
+input:-moz-placeholder,
+textarea:-moz-placeholder {
+  color: _DISABLED_TEXT_COLOR_;
+}
+
+input:-ms-input-placeholder,
+textarea:-ms-input-placeholder {
+  color: _DISABLED_TEXT_COLOR_;
+}
+
+input::-webkit-input-placeholder,
+textarea::-webkit-input-placeholder {
+  color: _DISABLED_TEXT_COLOR_;
+}
+
+.dropdown-menu > .disabled > a,
+.dropdown-menu > .disabled > a:hover,
+.dropdown-menu > .disabled > a:focus {
+  color: _DISABLED_TEXT_COLOR_;
+}
+
+.nav-header {
+  color: _DISABLED_TEXT_COLOR_;
+}
+
+.tabs-stacked .open > a:hover,
+.tabs-stacked .open > a:focus {
+  border-color: _DISABLED_TEXT_COLOR_;
+}
+
+.nav > .disabled > a {
+  color: _DISABLED_TEXT_COLOR_;
+}
+
+.pagination ul > .active > a,
+.pagination ul > .active > span {
+  color: _DISABLED_TEXT_COLOR_;
+}
+
+.breadcrumb > .active {
+  color: _DISABLED_TEXT_COLOR_;
+}
+
+.pagination ul > .disabled > span,
+.pagination ul > .disabled > a,
+.pagination ul > .disabled > a:hover,
+.pagination ul > .disabled > a:focus {
+  color: _DISABLED_TEXT_COLOR_;
+}
+
+.pager .disabled > a,
+.pager .disabled > a:hover,
+.pager .disabled > a:focus,
+.pager .disabled > span {
+  color: _DISABLED_TEXT_COLOR_;
+  background-color: #fff;
+}
+
+/* font color */
+
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active,
+.btn-primary.active,
+.btn-primary.disabled,
+.btn-primary[disabled] {
+  color:_COLOR_FONT_FOREGROUND_;
+  background-color: #0044cc;
+  *background-color: #003bb3;
+}
+
+.btn-primary:active,
+.btn-primary.active {
+  background-color: _COLOR_BUTTON_BKRND_ACTIVE_ \9;
+}
+
+.btn-warning {
+  color:_COLOR_FONT_FOREGROUND_;
+	  background-color: #faa732;
+  *background-color: _BUTTON_END_GRADIENT_;
+  background-image: -moz-linear-gradient(top, _BUTTON_START_GRADIENT_, _BUTTON_END_GRADIENT_);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(_BUTTON_START_GRADIENT_), to(_BUTTON_END_GRADIENT_));
+  background-image: -webkit-linear-gradient(top, _BUTTON_START_GRADIENT_, _BUTTON_END_GRADIENT_);
+  background-image: -o-linear-gradient(top, _BUTTON_START_GRADIENT_, _BUTTON_END_GRADIENT_);
+  background-image: linear-gradient(to bottom, _BUTTON_START_GRADIENT_, _BUTTON_END_GRADIENT_);	
+  border-color: _BUTTON_END_GRADIENT_ _BUTTON_END_GRADIENT_ #ad6704;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fffbb450', endColorstr='#fff89406', GradientType=0);
+}
+
+.btn-warning:hover,
+.btn-warning:focus,
+.btn-warning:active,
+.btn-warning.active,
+.btn-warning.disabled,
+.btn-warning[disabled] {
+  color:_COLOR_FONT_FOREGROUND_;
+  background-color: _BUTTON_END_GRADIENT_;
+  *background-color: #df8505;
+}
+
+.btn-danger {
+  color:_COLOR_FONT_FOREGROUND_;
+  background-color: #da4f49;
+  *background-color: #bd362f;
+  background-image: -moz-linear-gradient(top, #ee5f5b, #bd362f);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ee5f5b), to(#bd362f));
+  background-image: -webkit-linear-gradient(top, #ee5f5b, #bd362f);
+  background-image: -o-linear-gradient(top, #ee5f5b, #bd362f);
+  background-image: linear-gradient(to bottom, #ee5f5b, #bd362f);
+  border-color: #bd362f #bd362f #802420;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffee5f5b', endColorstr='#ffbd362f', GradientType=0);
+}
+
+.btn-danger:hover,
+.btn-danger:focus,
+.btn-danger:active,
+.btn-danger.active,
+.btn-danger.disabled,
+.btn-danger[disabled] {
+  color:_COLOR_FONT_FOREGROUND_;
+  background-color: #bd362f;
+  *background-color: #a9302a;
+}
+
+.btn-danger:active,
+.btn-danger.active {
+  background-color: #942a25 \9;
+}
+
+.btn-success {
+  color:_COLOR_FONT_FOREGROUND_;
+  background-color: #5bb75b;
+  *background-color: #51a351;
+  background-image: -moz-linear-gradient(top, #62c462, #51a351);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#62c462), to(#51a351));
+  background-image: -webkit-linear-gradient(top, #62c462, #51a351);
+  background-image: -o-linear-gradient(top, #62c462, #51a351);
+  background-image: linear-gradient(to bottom, #62c462, #51a351);
+  border-color: #51a351 #51a351 #387038;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff62c462', endColorstr='#ff51a351', GradientType=0);
+}
+
+.btn-success:hover,
+.btn-success:focus,
+.btn-success:active,
+.btn-success.active,
+.btn-success.disabled,
+.btn-success[disabled] {
+  color:_COLOR_FONT_FOREGROUND_;
+  background-color: #51a351;
+  *background-color: #499249;
+}
+
+
+.btn-success:active,
+.btn-success.active {
+  background-color: #408140 \9;
+}
+
+.btn-info {
+  color:_COLOR_FONT_FOREGROUND_;
+  background-color: #49afcd;
+  *background-color: #2f96b4;
+  background-image: -moz-linear-gradient(top, #5bc0de, #2f96b4);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#5bc0de), to(#2f96b4));
+  background-image: -webkit-linear-gradient(top, #5bc0de, #2f96b4);
+  background-image: -o-linear-gradient(top, #5bc0de, #2f96b4);
+  background-image: linear-gradient(to bottom, #5bc0de, #2f96b4);
+  border-color: #2f96b4 #2f96b4 #1f6377;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff5bc0de', endColorstr='#ff2f96b4', GradientType=0);
+}
+
+.btn-info:hover,
+.btn-info:focus,
+.btn-info:active,
+.btn-info.active,
+.btn-info.disabled,
+.btn-info[disabled] {
+  color:_COLOR_FONT_FOREGROUND_;
+  background-color: #2f96b4;
+  *background-color: #2a85a0;
+}
+
+.btn-info:active,
+.btn-info.active {
+  background-color: #24748c \9;
+}
+
+.btn-inverse {
+  color:_COLOR_FONT_FOREGROUND_;
+  background-color: #363636;
+  *background-color: #222222;
+  background-image: -moz-linear-gradient(top, #444444, #222222);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#444444), to(#222222));
+  background-image: -webkit-linear-gradient(top, #444444, #222222);
+  background-image: -o-linear-gradient(top, #444444, #222222);
+  background-image: linear-gradient(to bottom, #444444, #222222);
+  border-color: #222222 #222222 #000000;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff444444', endColorstr='#ff222222', GradientType=0);
+}
+
+.btn-inverse:hover,
+.btn-inverse:focus,
+.btn-inverse:active,
+.btn-inverse.active,
+.btn-inverse.disabled,
+.btn-inverse[disabled] {
+  color:_COLOR_FONT_FOREGROUND_;
+  background-color: #222222;
+  *background-color: #151515;
+}
+
+.btn-inverse:active,
+.btn-inverse.active {
+  background-color: #080808 \9;
+}
+
+.nav-tabs .open .dropdown-toggle,
+.nav-pills .open .dropdown-toggle,
+.nav > li.dropdown.open.active > a:hover,
+.nav > li.dropdown.open.active > a:focus {
+  color:_COLOR_FONT_FOREGROUND_;
+  background-color: _DISABLED_TEXT_COLOR_;
+  border-color: _DISABLED_TEXT_COLOR_;
+}
+
+.navbar .btn-navbar {
+  color:_COLOR_FONT_FOREGROUND_;
+  background-color: #ededed;
+  *background-color: #e5e5e5;
+}
+
+.navbar .btn-navbar:hover,
+.navbar .btn-navbar:focus,
+.navbar .btn-navbar:active,
+.navbar .btn-navbar.active,
+.navbar .btn-navbar.disabled,
+.navbar .btn-navbar[disabled] {
+  color:_COLOR_FONT_FOREGROUND_;
+  background-color: #e5e5e5;
+  *background-color: #d9d9d9;
+}
+
+.navbar .btn-navbar:active,
+.navbar .btn-navbar.active {
+  background-color: #cccccc \9;
+}
+
+.navbar-inverse .brand,
+.navbar-inverse .nav > li > a {
+  color:_COLOR_FONT_FOREGROUND;
+}
+
+.navbar-inverse .brand:hover,
+.navbar-inverse .nav > li > a:hover,
+.navbar-inverse .brand:focus,
+.navbar-inverse .nav > li > a:focus {
+  color:_COLOR_FONT_FOREGROUND_;
+}
+
+.navbar-inverse .brand {
+  color: _DISABLED_TEXT_COLOR_;
+}
+
+.navbar-inverse .navbar-text {
+  color: _DISABLED_TEXT_COLOR_;
+}
+
+.navbar-inverse .nav > li > a:focus,
+.navbar-inverse .nav > li > a:hover {
+  color:_COLOR_FONT_FOREGROUND_;
+}
+
+.navbar-inverse .nav .active > a,
+.navbar-inverse .nav .active > a:hover,
+.navbar-inverse .nav .active > a:focus {
+  color:_COLOR_FONT_FOREGROUND_;
+  border: 1px solid #CCC;
+}
+
+.navbar-inverse .navbar-link {
+  color: _DISABLED_TEXT_COLOR_;
+}
+
+.navbar-inverse .navbar-link:hover,
+.navbar-inverse .navbar-link:focus {
+  color:_COLOR_FONT_FOREGROUND_;
+}
+
+.navbar-inverse .divider-vertical {
+  border-right-color:_COLOR_FONT_FOREGROUND;
+  border-left-color:_COLOR_FONT_FOREGROUND;
+}
+
+.navbar-inverse .nav li.dropdown.open > .dropdown-toggle,
+.navbar-inverse .nav li.dropdown.active > .dropdown-toggle,
+.navbar-inverse .nav li.dropdown.open.active > .dropdown-toggle {
+  color:_COLOR_FONT_FOREGROUND_;
+  background-color: #111111;
+}
+
+.navbar-inverse .nav li.dropdown > a:hover .caret,
+.navbar-inverse .nav li.dropdown > a:focus .caret {
+  border-top-color:_COLOR_FONT_FOREGROUND_;
+  border-bottom-color:_COLOR_FONT_FOREGROUND_;
+}
+
+.navbar-inverse .nav li.dropdown > .dropdown-toggle .caret {
+  border-top-color: _DISABLED_TEXT_COLOR_;
+  border-bottom-color: _DISABLED_TEXT_COLOR_;
+}
+
+.navbar-inverse .nav li.dropdown.open > .dropdown-toggle .caret,
+.navbar-inverse .nav li.dropdown.active > .dropdown-toggle .caret,
+.navbar-inverse .nav li.dropdown.open.active > .dropdown-toggle .caret {
+  border-top-color:_COLOR_FONT_FOREGROUND_;
+  border-bottom-color:_COLOR_FONT_FOREGROUND_;
+}
+
+.navbar-inverse .navbar-search .search-query {
+  color:_COLOR_FONT_FOREGROUND_;
+  background-color: #515151;
+  border-color: #111111;
+}
+
+.navbar-inverse .btn-navbar {
+  color:_COLOR_FONT_FOREGROUND_;
+  background-color: #0e0e0e;
+  *background-color: #040404;
+  background-image: -moz-linear-gradient(top, #151515, #040404);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#151515), to(#040404));
+  background-image: -webkit-linear-gradient(top, #151515, #040404);
+  background-image: -o-linear-gradient(top, #151515, #040404);
+  background-image: linear-gradient(to bottom, #151515, #040404);
+  border-color: #040404 #040404 #000000;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff151515', endColorstr='#ff040404', GradientType=0);
+}
+
+.navbar-inverse .btn-navbar:hover,
+.navbar-inverse .btn-navbar:focus,
+.navbar-inverse .btn-navbar:active,
+.navbar-inverse .btn-navbar.active,
+.navbar-inverse .btn-navbar.disabled,
+.navbar-inverse .btn-navbar[disabled] {
+  color:_COLOR_FONT_FOREGROUND_;
+  background-color: #040404;
+  *background-color: #000000;
+}
+
+.navbar-inverse .btn-navbar:active,
+.navbar-inverse .btn-navbar.active {
+  background-color: #000000 \9;
+}
+
+.tooltip-inner {
+  color:_COLOR_FONT_FOREGROUND_;
+  background-color: #000000;
+}
+
+.label,
+.badge {
+  color:_COLOR_FONT_FOREGROUND_;
+  background-color: _DISABLED_TEXT_COLOR_;
+}
+
+a.label:hover,
+a.label:focus,
+a.badge:hover,
+a.badge:focus {
+  color:_COLOR_FONT_FOREGROUND_;
+}
+
+.progress .bar {
+  color:_COLOR_FONT_FOREGROUND_;
+  background-color: #0e90d2;
+  background-image: -moz-linear-gradient(top, #149bdf, #0480be);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#149bdf), to(#0480be));
+  background-image: -webkit-linear-gradient(top, #149bdf, #0480be);
+  background-image: -o-linear-gradient(top, #149bdf, #0480be);
+  background-image: linear-gradient(to bottom, #149bdf, #0480be);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff149bdf', endColorstr='#ff0480be', GradientType=0);
+}
+
+.carousel-control {
+  color:_COLOR_FONT_FOREGROUND_;
+  background: #222222;
+  border: 3px solid #ffffff;
+}
+
+.carousel-control:hover,
+.carousel-control:focus {
+  color:_COLOR_FONT_FOREGROUND_;
+}
+
+.carousel-caption h4,
+.carousel-caption p {
+  color:_COLOR_FONT_FOREGROUND_;
+}
+
+.navbar .brand {
+  color: _NAV_LINK_LIGHT_COLOR_;
+}
+
+.navbar-text {
+  color: _NAV_LINK_LIGHT_COLOR_;
+}
+
+.navbar-link {
+  color: _NAV_LINK_LIGHT_COLOR_;
+}
+
+.navbar-link:hover,
+.navbar-link:focus {
+  color: _NAV_LINK_DARK_COLOR_;
+}
+
+.navbar .nav > li > a {
+  color: _NAV_LINK_LIGHT_COLOR_;
+}
+
+.navbar .nav > li > a:focus,
+.navbar .nav > li > a:hover {
+  color: _NAV_LINK_DARK_COLOR_;
+}
+
+.navbar .nav > .active > a,
+.navbar .nav > .active > a:hover,
+.navbar .nav > .active > a:focus {
+  color: _NAV_LINK_LIGHT_COLOR_;
+}
+
+.navbar .nav li.dropdown > a:hover .caret,
+.navbar .nav li.dropdown > a:focus .caret {
+  border-top-color: _NAV_LINK_DARK_COLOR_;
+  border-bottom-color: _NAV_LINK_DARK_COLOR_;
+}
+
+.navbar .nav li.dropdown.open > .dropdown-toggle,
+.navbar .nav li.dropdown.active > .dropdown-toggle,
+.navbar .nav li.dropdown.open.active > .dropdown-toggle {
+  color: _NAV_LINK_MEDIUM_COLOR_;
+  background-color: #e5e5e5;
+}
+
+.navbar .nav li.dropdown > .dropdown-toggle .caret {
+  border-top-color: _NAV_LINK_LIGHT_COLOR_;
+  border-bottom-color: _NAV_LINK_LIGHT_COLOR_;
+}
+
+.navbar .nav li.dropdown.open > .dropdown-toggle .caret,
+.navbar .nav li.dropdown.active > .dropdown-toggle .caret,
+.navbar .nav li.dropdown.open.active > .dropdown-toggle .caret {
+  border-top-color: _NAV_LINK_MEDIUM_COLOR_;
+  border-bottom-color: _NAV_LINK_MEDIUM_COLOR_;
+}
+
+/* datepicker.css */
+
+.datepicker td.active,
+.datepicker td.active:hover {
+  color:_COLOR_FONT_FOREGROUND_;
+  background-color: #006dcc;
+  background-image: -moz-linear-gradient(top, _COLOR_BACKGROUND_, #0044cc);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(_COLOR_BACKGROUND_), to(#0044cc));
+  background-image: -webkit-linear-gradient(top, _COLOR_BACKGROUND_, #0044cc);
+  background-image: -o-linear-gradient(top, _COLOR_BACKGROUND_, #0044cc);
+  background-image: linear-gradient(to bottom, _COLOR_BACKGROUND_, #0044cc);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff0088cc', endColorstr='#ff0044cc', GradientType=0);
+  border-color: #0044cc #0044cc #002a80;
+  color:_COLOR_FONT_FOREGROUND;
+}
+
+.datepicker td span.active {
+  color:_COLOR_FONT_FOREGROUND_;
+  background-color: #006dcc;
+  background-image: -moz-linear-gradient(top, _COLOR_BACKGROUND_, #0044cc);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(_COLOR_BACKGROUND_), to(#0044cc));
+  background-image: -webkit-linear-gradient(top, _COLOR_BACKGROUND_, #0044cc);
+  background-image: -o-linear-gradient(top, _COLOR_BACKGROUND_, #0044cc);
+  background-image: linear-gradient(to bottom, _COLOR_BACKGROUND_, #0044cc);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff0088cc', endColorstr='#ff0044cc', GradientType=0);
+  border-color: #0044cc #0044cc #002a80;
+  *background-color: #0044cc;
+  color:_COLOR_FONT_FOREGROUND;
+}
+
+.datepicker td.active:hover,
+.datepicker td.active:hover:hover,
+.datepicker td.active:focus,
+.datepicker td.active:hover:focus,
+.datepicker td.active:active,
+.datepicker td.active:hover:active,
+.datepicker td.active.active,
+.datepicker td.active:hover.active,
+.datepicker td.active.disabled,
+.datepicker td.active:hover.disabled,
+.datepicker td.active[disabled],
+.datepicker td.active:hover[disabled] {
+  color:_COLOR_FONT_FOREGROUND_;
+  background-color: #0044cc;
+  *background-color: #003bb3;
+}
+.datepicker td.active:active,
+.datepicker td.active:hover:active,
+.datepicker td.active.active,
+.datepicker td.active:hover.active {
+  background-color: #003399 \9;
+}
+.datepicker td span.active:hover,
+.datepicker td span.active:focus,
+.datepicker td span.active:active,
+.datepicker td span.active.active,
+.datepicker td span.active.disabled,
+.datepicker td span.active[disabled] {
+  color:_COLOR_FONT_FOREGROUND_;
+  background-color: #0044cc;
+  *background-color: #003bb3;
+}
+.datepicker td span.active:active,
+.datepicker td span.active.active {
+  background-color: #003399 \9;
+}
+
+/* style.css */
+
+.navbar-inverse .navbar-inner{
+border-color:_COLOR_BACKGROUND_;
+}
+
+
+.navbar-inner{
+	 background-image: linear-gradient(to bottom,_COLOR_BACKGROUND_,_COLOR_BACKGROUND_);
+}
+
+span.help_center .btn:hover{
+	color:_COLOR_BACKGROUND_;	
+}
+
+.btn-primary{
+	background-color: _COLOR_BACKGROUND_;
+    background-image: linear-gradient(to bottom, _COLOR_BACKGROUND_, _BUTTON_END_GRADIENT_);
+}
+
+.btn-primary:hover{
+		background-color: _COLOR_BACKGROUND_;
+}
+
+#selection-results table th{
+background:_COLOR_BACKGROUND_ !important;
+color: #eee;
+}
+
+.blue-color{
+	color:_COLOR_BACKGROUND_;
+}
+
+.loginhead{
+	color: _COLOR_BACKGROUND_;
+}
+
+h2.person_heading{
+	color:_COLOR_BACKGROUND_;
+}
+
+ul.press_tab li{
+	background:_COLOR_BACKGROUND_;
+	}
+
+ul.press_tab li.active a{
+	color:_COLOR_BACKGROUND_ !important;
+}	
+
+h3.stories{
+	color:_COLOR_BACKGROUND_ !important;
+}
+
+td.table_blue_txt{
+	color:_COLOR_BACKGROUND_;
+}
+
+td.table_blue_txt a{
+	color:_COLOR_BACKGROUND_;
+}
+
+h3.testimonials{
+		color:_COLOR_BACKGROUND_ !important;
+}
+
+h5.person_name{
+	color:_COLOR_BACKGROUND_;
+}
+
+.jobs_footer_heading{
+	color: _COLOR_BACKGROUND_;
+}
+
+.jobs_table td a{
+	color:_COLOR_BACKGROUND_;
+}
+
+.left_navigation li.active a{
+	background:_COLOR_BACKGROUND_;
+	color:_COLOR_FONT_FOREGROUND;
+}
+
+.left_navigation li.active a:hover{
+	background:_COLOR_BACKGROUND_;
+	color:_COLOR_FONT_FOREGROUND !important;
+}
+
+.left_navigation li.active a:focus{
+	background:_COLOR_BACKGROUND_;
+	color:_COLOR_FONT_FOREGROUND !important;
+}
+
+#myModal1 .modal-header{
+	background:_COLOR_BACKGROUND_;
+	color:_COLOR_FONT_FOREGROUND_;
+}
+
+#pending_list_form h4{
+	color:_COLOR_BACKGROUND_;
+}
+
+.pending_heading{
+	color:_COLOR_BACKGROUND_;
+}
+
+a.brand {
+color:_COLOR_FONT_FOREGROUND_ !important;
+}
+
+.dropdown-menu > li > a:hover{
+	color:_COLOR_FONT_FOREGROUND_ !important;
+}
+	
+ul.press_tab li:hover{
+	color:_COLOR_FONT_FOREGROUND_;
+}	
+
+ul.press_tab li a{
+	color:_COLOR_FONT_FOREGROUND_ !important;
+}
+
+ul.press_tab li a:hover{
+	color:_COLOR_FONT_FOREGROUND_;
+	background:#333;	
+}
+
+ul.pendinglist li{
+	background: #1E66AE;
+	color:_COLOR_FONT_FOREGROUND_;
+}
+
+ul.pendinglist li a{
+	color:_COLOR_FONT_FOREGROUND_;
+}
+
+.myaccordion .accordion-heading{
+	background: #1E66AE;
+	color:_COLOR_FONT_FOREGROUND_;
+}
+
+.myaccordion .accordion-heading a{
+	color:_COLOR_FONT_FOREGROUND_;
+}
+
+.hlp 
+{
+	 color: _HELP_TEXT_COLOR_;
+}
+
+footer{
+	background: _FOOTER_BACKGROUND_COLOR_;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

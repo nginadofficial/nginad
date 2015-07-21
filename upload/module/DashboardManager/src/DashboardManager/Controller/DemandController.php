@@ -138,6 +138,28 @@ class DemandController extends DemandAbstractActionController {
 	    return $view;
 	}
 
+	public function editthemeAction()
+	{
+		return new ViewModel(array(
+
+		));
+		/*
+	
+		$css = file_get_contents('public/css/colorscheme/theme.css.template');
+	
+		$default_colors 		= $this->config_handle['themes']['default_colors'];
+	
+		foreach ($default_colors as $key => $value):
+			$css = str_replace($key, $value, $css);
+		endforeach;
+	
+		header("Content-type: text/css");
+		echo $css;
+		exit;
+		*/
+	
+	}
+	
 	/**
 	 * Allows an administrator to "login as another user", to impersonate a lower user to manage another user's objects.
 	 * @return Ambigous <\Zend\Http\Response, \Zend\Stdlib\ResponseInterface>

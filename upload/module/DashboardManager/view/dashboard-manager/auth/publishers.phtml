@@ -60,7 +60,7 @@ $this->headScript()->prependFile($this->basePath() . '/js/script.js');
            </td>
            <td>
            <?php if($approval==true): ?>
-           	<a href="/websites/list/<?php echo $user_data->PublisherInfoID;?>" style="color:#0088cc;">View</a>
+           	<a href="/websites/list/<?php echo $user_data->PublisherInfoID;?>">View</a>
            <?php else: 
            	echo $user_data->Domain;
            endif;?>

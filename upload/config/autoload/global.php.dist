@@ -111,6 +111,45 @@ return array(
 					),
 				)
 		),
+		'themes' => array(
+				/*
+				 * The default color scheme for your NginAd Exchange
+				 * see public/css/colorscheme/theme.css.template
+				 */ 
+				'default_colors' => array(
+					"_COLOR_FONT_MAIN_"					=> "#333333",
+					"_COLOR_FONT_FOREGROUND_"			=> "#ffffff",
+					"_COLOR_LINK_TEXT_"					=> "#0088cc",
+					"_COLOR_LINK_HIGHLIGHT_"			=> "#005580",
+					"_COLOR_BACKGROUND_"				=> "#0088cc",
+					"_BUTTON_START_GRADIENT_"			=> "#0088cc",
+					"_BUTTON_END_GRADIENT_"				=> "#0044cc",
+					"_NAV_LINK_LIGHT_COLOR_"			=> "#ffffff",
+					"_NAV_LINK_MEDIUM_COLOR_"			=> "#555555",
+					"_NAV_LINK_DARK_COLOR_"				=> "#333333",
+					"_DISABLED_TEXT_COLOR_"				=> "#999999",
+					"_HELP_TEXT_COLOR_"					=> "#0088cc",
+					"_HEADER_BACKGROUND_COLOR_"			=> "#f5f5f5",
+					"_TABLE_LINK_COLOR_TEXT_"			=> "#666666",
+					"_TABLE_LINK_COLOR_VISITED_"		=> "#999999",
+					"_TABLE_LINK_COLOR_ACTIVE_"			=> "#bd5a35",
+					"_TABLE_TEXT_COLOR_"				=> "#666666",
+					"_COLOR_BUTTON_FONT_FOREGROUND_"	=> "#ffffff",
+					"_COLOR_BUTTON_BACKGROUND_"			=> "#f5f5f5",
+					"_COLOR_BUTTON_BKRND_HOVER_"		=> "#219BED",
+					"_FOOTER_BACKGROUND_COLOR_"			=> "#F5F5F5",
+					"_COLOR_BUTTON_FONT_HOVER_"			=> "#cccccc",
+					"_COLOR_BUTTON_BKRND_ACTIVE_"		=> "#cccccc",
+					"_COLOR_BUTTON_FONT_ACTIVE_"		=> "#666666",
+					"_COLOR_FOOTER_BUTTON_BACKGROUND_"	=> "#F5F5F5",
+					"_COLOR_FOOTER_BUTTON_FONT_TEXT_"	=> "#333333",
+					"_FOOTER_COLOR_BUTTON_BKRND_HOVER_"	=> "#cccccc",
+					"_COLOR_FOOTER_BUTTON_FONT_HOVER_"	=> "#666666",
+					"_NAVLINK_TAB_ACTIVE_"				=> "#222222",
+					"_COLOR_NAVLINK_FONT_FOREGROUND_"	=> "#ffffff",
+					"_COLOR_NAVLINK_BACKGROUND_"		=> "#ffffff"
+				)
+		),
 		'system' => array(
 				'debug' 												=> false, // simple debug information to track errors/status.
 				'debug_verbose'                     					=> false, // maximum debug information.

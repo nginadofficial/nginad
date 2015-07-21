@@ -59,9 +59,32 @@ ALTER TABLE InsertionOrderLineItemRestrictionsPreview DROP COLUMN `PmpEnable`;
 
 ALTER TABLE InsertionOrderLineItemVideoRestrictionsPreview DROP COLUMN `PmpEnable`;
 
+-- Add SQL Tables to hold the Vanity Domain Information
 
+-- ----------------------------
+-- Table structure for PrivateExchangeTheme
+-- ----------------------------
+DROP TABLE IF EXISTS `PrivateExchangeTheme`;
+CREATE TABLE `PrivateExchangeTheme` (
+  `UserID` int(11) NOT NULL,
+  `ThemeParamsSerialized` text NOT NULL,
+  PRIMARY KEY (`UserID`),
+  UNIQUE KEY `UserIDKey` (`UserID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-
+-- ----------------------------
+-- Table structure for PrivateExchangeVanityDomain
+-- ----------------------------
+DROP TABLE IF EXISTS `PrivateExchangeVanityDomain`;
+CREATE TABLE `PrivateExchangeVanityDomain` (
+  `UserID` int(11) NOT NULL,
+  `VanityUrl` char(255) NOT NULL,
+  `HasLogo` tinyint(4) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`UserID`),
+  UNIQUE KEY `UserIDKey` (`UserID`),
+  UNIQUE KEY `VanityUrlKey` (`VanityUrl`),
+  INDEX `VanityUrlIdx` (`VanityUrl`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
 

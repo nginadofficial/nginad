@@ -1,0 +1,64 @@
+<?php
+$this->headScript()->prependFile($this->basePath() . '/js/script.js');
+?>
+<div class="steps-container step1">
+    <div id="selection-results" class="steps-box">
+    <div class="formbox">  
+    <div style="margin-bottom: 5px;">
+  
+        <table class="table table-striped table-bordered table-margin">
+            <tr>
+           <th>
+				#
+           </th>
+           <th>
+                Website
+           </th>
+           <th>
+            	IAB Category	
+           </th>
+            <th>
+            	Date Created
+           </th>
+           <th style="width: 13%;">
+           	    Status
+           </th>
+           </tr>
+
+    	   <?php 
+    	   $i=1;
+    	   foreach ($pending_list as $website):
+    	   		$userData = $PublisherInfoFactory->get_row(array("PublisherInfoID" => $website->DomainOwnerID));
+    	   ?>   
+           <tr id="sites_row_<?php echo $website->PublisherWebsiteID;?>">
+           <td>
+            <?php echo $i; ?>
+           </td>
+           <td id="wb_site_<?php echo $website->PublisherWebsiteID;?>">
+            <?php echo $website->WebDomain; ?>
+            </td>
+           <td>
+            <?php echo $vertical_map[$website->IABCategory]; ?>
+           </td>
+           <td>
+            <?php echo $website->DateCreated; ?>
+           </td>
+           <td>
+           <?php if($website->ApprovalFlag == 0): 
+           			echo '<span class="label label-info">Waiting for Approval</span>';
+           		 elseif($website->ApprovalFlag == 1):
+           		 	echo '<span class="label label-success">Approved</span>';
+           		 else:
+           		 	echo '<span class="label label-important">Denied</span>';	
+                 endif;
+           ?>
+           </td>
+           </tr>
+    <?php 
+    	 $i++;
+    	endforeach;
+    ?>
+    </table>
+    </div>
+    </div>
+</div>

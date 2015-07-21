@@ -172,7 +172,7 @@ function switchImpressionType(adtagtype) {
 		$("label[for=bannername]").html("Banner Ad Name");
 		$("label[for=adtag]").html("Ad Tag");
 		
-		$(".btn-primary").val("Update Banner");
+		$("#update-button").val("Update Banner");
 		
 		$("#adtag").css("height", "200px").css("width", "500px"); 
 		

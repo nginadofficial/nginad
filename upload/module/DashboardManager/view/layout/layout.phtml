@@ -45,6 +45,7 @@ echo $this->doctype(); ?>
         <?php echo $this->headMeta()->appendName('viewport', 'width=device-width, initial-scale=1.0') ?>
         <!-- Le styles -->
         <?php echo $this->headLink(array('rel' => 'shortcut icon', 'href' => $this->basePath() . '/images/favicon.png'))
+        				->prependStylesheet($this->basePath() . '/css/colorscheme/theme.css')
                         ->prependStylesheet($this->basePath() . '/css/style.css')
                         ->prependStylesheet($this->basePath() . '/css/bootstrap.css')
                         ->prependStylesheet($this->basePath() . '/css/default.dashboard.css');
@@ -123,6 +124,9 @@ echo $this->doctype(); ?>
                   <?php endif;?>
                   <?php if ($userRole=='domain_admin' || ($user_data != null && $user_data->PublisherInfoID != null)): ?>
                   <li><a href="/private-exchange/publisher/websites">Websites List</a></li>
+                  <?php endif;?>
+                  <?php if ($userRole=='domain_admin' || ($user_data != null && $user_data->PublisherInfoID != null)): ?>
+                  <li><a href="/private-exchange/edittheme">Theme &amp; URL</a></li>
                   <?php endif;?>
                   <li><a href="<?php echo $this->url('login/process', array('action'=>'logout')); ?>">Logout</a></li>
                 </ul>

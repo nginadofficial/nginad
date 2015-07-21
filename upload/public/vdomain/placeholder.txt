@@ -1,0 +1,2 @@
+This directory holds all the private exchange custom CSS and Logos
+for vanity domains
