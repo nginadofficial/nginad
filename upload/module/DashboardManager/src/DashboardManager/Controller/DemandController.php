@@ -286,11 +286,11 @@ class DemandController extends DemandAbstractActionController {
 			endif;
 		
 			$vanity_domain = trim(strtolower(str_replace(array('https://', 'http://'), array('', ''), $vanity_domain)));
-
+			
 			$site_url = $this->config_handle['delivery']['site_url'];
 			$site_url = trim(strtolower(str_replace(array('https://', 'http://'), array('', ''), $site_url)));
 			
-			if ($vanity_domain == $site_url):
+			if (empty($vanity_domain) || $vanity_domain == $site_url):
 				die("Illegal Vanity Domain, try another domain: CODE 108");
 			endif;
 			
