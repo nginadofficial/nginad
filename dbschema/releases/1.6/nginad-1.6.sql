@@ -622,7 +622,7 @@ CREATE TABLE `DemandCustomerInfo` (
 -- ----------------------------
 -- Records of DemandCustomerInfo
 -- ----------------------------
-INSERT INTO `DemandCustomerInfo` VALUES ('18', 'Larry Brin', 'larry.brin@suckmedianow.com', 'suckmedianow.com', 'Suck Media Now', '1', '2014-09-03 21:32:24', '2014-09-03 21:32:24');
+INSERT INTO `DemandCustomerInfo` VALUES ('18', 'Larry Brin', 'larry.brin@suckmedianow.com', 'suckmedianow.com', 'Suck Media Now', '1', '0', '0', '0', '0000-00-00 00:00:00', '2014-09-03 21:32:24', '2014-09-03 21:32:24');
 
 -- ----------------------------
 -- Table structure for IndustryCategories
@@ -754,7 +754,7 @@ CREATE TABLE `PublisherAdZone` (
 -- ----------------------------
 -- Records of PublisherAdZone
 -- ----------------------------
-INSERT INTO `PublisherAdZone` VALUES ('6', '4', '1', 'banner', '3', 'Leaderboard Top Banner', 'This leaderboard ad tag will be shown at the top of all the pages on the website.', '<script language=\"Javascript\">\r\nvar zflag_nid=\"2674\"; var zflag_cid=\"1\"; var zflag_sid=\"1\"; var zflag_width=\"728\"; var zflag_height=\"90\"; var zflag_sz=\"14\";\r\n</script>\r\n<script language=\"Javascript\" src=\"http://xp2.zedo.com/jsc/xp2/fo.js\"></script>', '1', '0', '3', '0', '728', '90', '0.10', '0', '0', '0.00', '2014-09-03 22:40:17', '2014-09-03 22:40:56');
+INSERT INTO `PublisherAdZone` VALUES ('6', '4', 'banner', '3', 'Leaderboard Top Banner', 'This leaderboard ad tag will be shown at the top of all the pages on the website.', '<script language=\"Javascript\">\r\nvar zflag_nid=\"2674\"; var zflag_cid=\"1\"; var zflag_sid=\"1\"; var zflag_width=\"728\"; var zflag_height=\"90\"; var zflag_sz=\"14\";\r\n</script>\r\n<script language=\"Javascript\" src=\"http://xp2.zedo.com/jsc/xp2/fo.js\"></script>', '1', '0', '3', '0', '728', '90', '0.10', '0', '0', '0.00', '2014-09-03 22:40:17', '2014-09-03 22:40:56');
 
 -- ----------------------------
 -- Table structure for PublisherAdZoneVideo
@@ -838,7 +838,7 @@ CREATE TABLE `PublisherWebsite` (
 -- ----------------------------
 -- Records of PublisherWebsite
 -- ----------------------------
-INSERT INTO `PublisherWebsite` VALUES ('4', 'blowmedianow.com', '3', '1', '1', 'IAB19', null, 'Blow Media Website', '2014-09-03 22:38:06', '2014-09-03 22:38:06');
+INSERT INTO `PublisherWebsite` VALUES ('4', 'blowmedianow.com', '3', '1', '1', '1', 'IAB19', null, 'Blow Media Website', '2014-09-03 22:38:06', '2014-09-03 22:38:06');
 
 -- ----------------------------
 -- Table structure for PublisherWebsiteMarkup
