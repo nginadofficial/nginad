@@ -348,7 +348,7 @@ function reloadDemandWindow(data) {
 		if (data && data.location && data.previewid) {
 			window.location = data.location + data.previewid + '?ispreview=true'
 		} else {
-			window.location = '/demand/'
+			window.location = '/private-exchange/'
 		}
 	} else {
 		window.location.reload();
