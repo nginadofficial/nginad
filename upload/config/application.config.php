@@ -23,15 +23,6 @@ $is_bid = strpos(strtolower($request_path), "/bid") === 0;
 $is_report = strpos(strtolower($request_path), "/report") === 0;
 
 /*
- * Configure InsertionOrderTypes
- */
-
-define('AD_TYPE_ANY_REMNANT', 		1);
-define('AD_TYPE_IN_HOUSE_REMNANT', 	2);
-define('AD_TYPE_RTB_REMNANT', 		3);
-define('AD_TYPE_CONTRACT', 			4);
-
-/*
  * Configure Device Types
 */
 

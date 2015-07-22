@@ -58,7 +58,7 @@ ALTER TABLE InsertionOrderLineItemDomainExclusiveInclusionPreview CHANGE AdCampa
 -- Table structure for InsertionOrderLineItemPreview
 ALTER TABLE InsertionOrderLineItemPreview CHANGE AdCampaignBannerPreviewID InsertionOrderLineItemPreviewID int(11) NOT NULL AUTO_INCREMENT;
 ALTER TABLE InsertionOrderLineItemPreview CHANGE AdCampaignPreviewID InsertionOrderPreviewID int(11) NOT NULL;
-ALTER TABLE InsertionOrderLineItemPreview CHANGE AdCampaignBannerID InsertionOrderLineItemID int(11) NOT NULL;
+ALTER TABLE InsertionOrderLineItemPreview CHANGE AdCampaignBannerID InsertionOrderLineItemID int(11) DEFAULT NULL;
 ALTER TABLE InsertionOrderLineItemPreview CHANGE AdCampaignTypeID InsertionOrderTypeID int(11) NOT NULL;
 
 -- Table structure for InsertionOrderLineItemRestrictions
@@ -79,10 +79,7 @@ ALTER TABLE InsertionOrderLineItemVideoRestrictionsPreview CHANGE AdCampaignBann
 
 -- Table structure for InsertionOrderPreview
 ALTER TABLE InsertionOrderPreview CHANGE AdCampaignPreviewID InsertionOrderPreviewID int(11) NOT NULL AUTO_INCREMENT;
-ALTER TABLE InsertionOrderPreview CHANGE AdCampaignID InsertionOrderID int(11) NOT NULL;
-
--- Table structure for InsertionOrderType
-ALTER TABLE InsertionOrderType CHANGE AdCampaignTypeID InsertionOrderTypeID int(11) unsigned NOT NULL;
+ALTER TABLE InsertionOrderPreview CHANGE AdCampaignID InsertionOrderID int(11) DEFAULT NULL;
 
 -- Table structure for InsertionOrderMarkup
 ALTER TABLE InsertionOrderMarkup CHANGE AdCampaignID InsertionOrderID int(11) unsigned NOT NULL;
@@ -177,6 +174,8 @@ CREATE VIEW `DemandImpressionsAndSpendHourly` AS select diashp.MDYH, diashp.Inse
 -- Do they want the website or ad zone to be available in the platform connection?
 -- Do they want the website and ad zone to be available to SSPs being pinged with RTB requests?
 ALTER TABLE  `PublisherWebsite` ADD `VisibilityTypeID` int(4) NOT NULL DEFAULT 1 AFTER  `DomainOwnerID` ;
+
+DROP TABLE IF EXISTS `ContractPublisherZoneHourlyImpressions`;
 
 -- ----------------------------
 -- Table structure for VisibilityType
@@ -484,6 +483,11 @@ ALTER TABLE InsertionOrderLineItemRestrictionsPreview DROP COLUMN `CookieGrep`;
 ALTER TABLE InsertionOrderLineItemRestrictionsPreview DROP COLUMN `PmpEnable`;
 
 ALTER TABLE InsertionOrderLineItemVideoRestrictionsPreview DROP COLUMN `PmpEnable`;
+
+ALTER TABLE InsertionOrderLineItem DROP COLUMN `InsertionOrderTypeID`;
+ALTER TABLE InsertionOrderLineItemPreview DROP COLUMN `InsertionOrderTypeID`;
+
+DROP TABLE IF EXISTS `InsertionOrderType`;
 
 -- ----------------------------
 -- Table structure for PrivateExchangeTheme

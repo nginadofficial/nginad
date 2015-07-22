@@ -50,7 +50,6 @@ DROP TABLE IF EXISTS `InsertionOrderLineItem`;
 CREATE TABLE `InsertionOrderLineItem` (
   `InsertionOrderLineItemID` int(11) NOT NULL AUTO_INCREMENT,
   `InsertionOrderID` int(11) NOT NULL,
-  `InsertionOrderTypeID` int(11) NOT NULL,
   `ImpressionType` char(10) NOT NULL DEFAULT 'banner',
   `UserID` int(11) NOT NULL,
   `Name` char(100) NOT NULL,
@@ -77,13 +76,13 @@ CREATE TABLE `InsertionOrderLineItem` (
 -- ----------------------------
 -- Records of InsertionOrderLineItem
 -- ----------------------------
-INSERT INTO `InsertionOrderLineItem` VALUES ('1', '4', '1', 'banner', '21', 'Top Leaderboard Creative', '2014-09-03 00:00:00', '2019-11-04 00:00:00', '0', '728x90', '90', '728', '5', '0.25', '<!-- Desktop 728x90 START -->\r\n<a href=\"http://www.iab.net/guidelines/508676/508767/displayguidelines\"><img border=\"0\" src=\"http://www.iab.net/media/image/728x90.gif\" /></a>\r\n<!-- Desktop 728x90 END -->', 'js', 'iab.net', '0', '0', '0', '1', '2015-05-03 22:57:27', '2015-05-03 22:57:27');
-INSERT INTO `InsertionOrderLineItem` VALUES ('2', '4', '1', 'banner', '21', 'Medium Rectange Creative', '2014-09-03 00:00:00', '2019-11-04 00:00:00', '0', '300x250', '250', '300', '5', '0.25', '<!-- Desktop 300x250 START -->\r\n<a href=\"http://www.iab.net/guidelines/508676/508767/displayguidelines\"><img border=\"0\" src=\"http://www.iab.net/media/image/300x250.gif\" /></a>\r\n<!-- Desktop 300x250 END -->', 'js', 'iab.net', '0', '0', '0', '1', '2015-05-03 23:57:27', '2015-05-03 23:57:27');
-INSERT INTO `InsertionOrderLineItem` VALUES ('3', '4', '1', 'banner', '21', 'Wide Skyscraper Creative', '2014-09-03 00:00:00', '2019-11-04 00:00:00', '0', '160x600', '600', '160', '5', '0.25', '<!-- Desktop 160x600 START -->\r\n<a href=\"http://www.iab.net/guidelines/508676/508767/displayguidelines\"><img border=\"0\" src=\"http://www.iab.net/media/image/160x600.gif\" /></a>\r\n<!-- Desktop 160x600 END -->', 'js', 'iab.net', '0', '0', '0', '1', '2015-04-26 20:02:23', '2015-04-26 20:02:23');
+INSERT INTO `InsertionOrderLineItem` VALUES ('1', '4', 'banner', '21', 'Top Leaderboard Creative', '2014-09-03 00:00:00', '2019-11-04 00:00:00', '0', '728x90', '90', '728', '5', '0.25', '<!-- Desktop 728x90 START -->\r\n<a href=\"http://www.iab.net/guidelines/508676/508767/displayguidelines\"><img border=\"0\" src=\"http://www.iab.net/media/image/728x90.gif\" /></a>\r\n<!-- Desktop 728x90 END -->', 'js', 'iab.net', '0', '0', '0', '1', '2015-05-03 22:57:27', '2015-05-03 22:57:27');
+INSERT INTO `InsertionOrderLineItem` VALUES ('2', '4', 'banner', '21', 'Medium Rectange Creative', '2014-09-03 00:00:00', '2019-11-04 00:00:00', '0', '300x250', '250', '300', '5', '0.25', '<!-- Desktop 300x250 START -->\r\n<a href=\"http://www.iab.net/guidelines/508676/508767/displayguidelines\"><img border=\"0\" src=\"http://www.iab.net/media/image/300x250.gif\" /></a>\r\n<!-- Desktop 300x250 END -->', 'js', 'iab.net', '0', '0', '0', '1', '2015-05-03 23:57:27', '2015-05-03 23:57:27');
+INSERT INTO `InsertionOrderLineItem` VALUES ('3', '4', 'banner', '21', 'Wide Skyscraper Creative', '2014-09-03 00:00:00', '2019-11-04 00:00:00', '0', '160x600', '600', '160', '5', '0.25', '<!-- Desktop 160x600 START -->\r\n<a href=\"http://www.iab.net/guidelines/508676/508767/displayguidelines\"><img border=\"0\" src=\"http://www.iab.net/media/image/160x600.gif\" /></a>\r\n<!-- Desktop 160x600 END -->', 'js', 'iab.net', '0', '0', '0', '1', '2015-04-26 20:02:23', '2015-04-26 20:02:23');
 -- MOBILE CAMPAIGNS
-INSERT INTO `InsertionOrderLineItem` VALUES ('4', '5', '1', 'banner', '21', 'Mobile Top Leaderboard Creative', '2014-09-03 00:00:00', '2019-11-04 00:00:00', '1', '728x90', '90', '728', '5', '0.25', '<!-- Mobile 728x90 START -->\r\n<a href=\"http://www.iab.net/guidelines/508676/508767/displayguidelines\"><img border=\"0\" src=\"http://www.iab.net/media/image/728x90.gif\" /></a>\r\n<!-- Mobile 728x90 END -->', 'js', 'iab.net', '0', '0', '0', '1', '2015-05-03 22:57:27', '2015-05-03 22:57:27');
-INSERT INTO `InsertionOrderLineItem` VALUES ('5', '5', '1', 'banner', '21', 'Mobile Medium Rectange Creative', '2014-09-03 00:00:00', '2019-11-04 00:00:00', '1', '300x250', '250', '300', '5', '0.25', '<!-- Mobile 300x250 START -->\r\n<a href=\"http://www.iab.net/guidelines/508676/508767/displayguidelines\"><img border=\"0\" src=\"http://www.iab.net/media/image/300x250.gif\" /></a>\r\n<!-- Mobile 300x250 END -->', 'js', 'iab.net', '0', '0', '0', '1', '2015-05-03 23:57:27', '2015-05-03 23:57:27');
-INSERT INTO `InsertionOrderLineItem` VALUES ('6', '5', '1', 'banner', '21', 'Mobile Wide Skyscraper Creative', '2014-09-03 00:00:00', '2019-11-04 00:00:00', '1', '160x600', '600', '160', '5', '0.25', '<!-- Mobile 160x600 START -->\r\n<a href=\"http://www.iab.net/guidelines/508676/508767/displayguidelines\"><img border=\"0\" src=\"http://www.iab.net/media/image/160x600.gif\" /></a>\r\n<!-- Mobile 160x600 END -->', 'js', 'iab.net', '0', '0', '0', '1', '2015-04-26 20:02:23', '2015-04-26 20:02:23');
+INSERT INTO `InsertionOrderLineItem` VALUES ('4', '5', 'banner', '21', 'Mobile Top Leaderboard Creative', '2014-09-03 00:00:00', '2019-11-04 00:00:00', '1', '728x90', '90', '728', '5', '0.25', '<!-- Mobile 728x90 START -->\r\n<a href=\"http://www.iab.net/guidelines/508676/508767/displayguidelines\"><img border=\"0\" src=\"http://www.iab.net/media/image/728x90.gif\" /></a>\r\n<!-- Mobile 728x90 END -->', 'js', 'iab.net', '0', '0', '0', '1', '2015-05-03 22:57:27', '2015-05-03 22:57:27');
+INSERT INTO `InsertionOrderLineItem` VALUES ('5', '5', 'banner', '21', 'Mobile Medium Rectange Creative', '2014-09-03 00:00:00', '2019-11-04 00:00:00', '1', '300x250', '250', '300', '5', '0.25', '<!-- Mobile 300x250 START -->\r\n<a href=\"http://www.iab.net/guidelines/508676/508767/displayguidelines\"><img border=\"0\" src=\"http://www.iab.net/media/image/300x250.gif\" /></a>\r\n<!-- Mobile 300x250 END -->', 'js', 'iab.net', '0', '0', '0', '1', '2015-05-03 23:57:27', '2015-05-03 23:57:27');
+INSERT INTO `InsertionOrderLineItem` VALUES ('6', '5', 'banner', '21', 'Mobile Wide Skyscraper Creative', '2014-09-03 00:00:00', '2019-11-04 00:00:00', '1', '160x600', '600', '160', '5', '0.25', '<!-- Mobile 160x600 START -->\r\n<a href=\"http://www.iab.net/guidelines/508676/508767/displayguidelines\"><img border=\"0\" src=\"http://www.iab.net/media/image/160x600.gif\" /></a>\r\n<!-- Mobile 160x600 END -->', 'js', 'iab.net', '0', '0', '0', '1', '2015-04-26 20:02:23', '2015-04-26 20:02:23');
 
 -- ----------------------------
 -- Table structure for InsertionOrderLineItemDomainExclusion
@@ -164,8 +163,7 @@ DROP TABLE IF EXISTS `InsertionOrderLineItemPreview`;
 CREATE TABLE `InsertionOrderLineItemPreview` (
   `InsertionOrderLineItemPreviewID` int(11) NOT NULL AUTO_INCREMENT,
   `InsertionOrderPreviewID` int(11) NOT NULL,
-  `InsertionOrderLineItemID` int(11) NOT NULL,
-  `InsertionOrderTypeID` int(11) NOT NULL,
+  `InsertionOrderLineItemID` int(11) DEFAULT NULL,
   `ImpressionType` char(10) NOT NULL DEFAULT 'banner',
   `UserID` int(11) NOT NULL,
   `Name` char(100) NOT NULL,
@@ -194,7 +192,7 @@ CREATE TABLE `InsertionOrderLineItemPreview` (
 -- ----------------------------
 -- Records of InsertionOrderLineItemPreview
 -- ----------------------------
-INSERT INTO `InsertionOrderLineItemPreview` VALUES ('1', '1', '0', '1', 'banner', '21', 'Top Leaderboard Creative', '2014-09-03 00:00:00', '2015-11-04 00:00:00', '0', '728x90', '90', '728', '5', '0.25', '<script language=\"Javascript\">\r\nvar zflag_nid=\"2674\"; var zflag_cid=\"1\"; var zflag_sid=\"1\"; var zflag_width=\"728\"; var zflag_height=\"90\"; var zflag_sz=\"14\";\r\n</script>\r\n<script language=\"Javascript\" src=\"http://xp2.zedo.com/jsc/xp2/fo.js\"></script>', 'js', 'nginad.com', '0', '0', '0', '0', '2014-09-03 22:44:59', '2014-09-03 22:57:27', '1', '2014-09-03 22:57:27');
+INSERT INTO `InsertionOrderLineItemPreview` VALUES ('1', '1', null, 'banner', '21', 'Top Leaderboard Creative', '2014-09-03 00:00:00', '2015-11-04 00:00:00', '0', '728x90', '90', '728', '5', '0.25', '<script language=\"Javascript\">\r\nvar zflag_nid=\"2674\"; var zflag_cid=\"1\"; var zflag_sid=\"1\"; var zflag_width=\"728\"; var zflag_height=\"90\"; var zflag_sz=\"14\";\r\n</script>\r\n<script language=\"Javascript\" src=\"http://xp2.zedo.com/jsc/xp2/fo.js\"></script>', 'js', 'nginad.com', '0', '0', '0', '0', '2014-09-03 22:44:59', '2014-09-03 22:57:27', '1', '2014-09-03 22:57:27');
 
 -- ----------------------------
 -- Table structure for InsertionOrderLineItemRestrictions
@@ -240,7 +238,7 @@ CREATE TABLE `InsertionOrderLineItemRestrictions` (
 DROP TABLE IF EXISTS `InsertionOrderLineItemVideoRestrictions`;
 CREATE TABLE `InsertionOrderLineItemVideoRestrictions` (
   `InsertionOrderLineItemVideoRestrictionsID` int(11) NOT NULL AUTO_INCREMENT,
-  `InsertionOrderLineItemID` int(11) DEFAULT NULL,
+  `InsertionOrderLineItemID` int(11) NOT NULL,
   `GeoCountry` char(255) DEFAULT NULL,
   `GeoState` char(255) DEFAULT NULL,
   `GeoCity` char(255) DEFAULT NULL,
@@ -372,27 +370,6 @@ CREATE TABLE `InsertionOrderPreview` (
 -- Records of InsertionOrderPreview
 -- ----------------------------
 INSERT INTO `InsertionOrderPreview` VALUES ('1', null, '21', 'My Media Campaign for XBrand', '2014-09-03 00:00:00', '2017-05-19 00:00:00', 'XBrand', '10101100', '0', '1000000', '0', '100', '0', '0', '2014-09-03 22:42:03', '2014-09-03 22:42:03', '1', '2014-09-03 22:57:27');
-
--- ----------------------------
--- Table structure for InsertionOrderType
--- ----------------------------
-DROP TABLE IF EXISTS `InsertionOrderType`;
-CREATE TABLE `InsertionOrderType` (
-  `InsertionOrderTypeID` int(11) unsigned NOT NULL,
-  `Description` varchar(255) NOT NULL,
-  `DateCreated` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `DateUpdated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`InsertionOrderTypeID`),
-  UNIQUE KEY `InsertionOrderType_UNIQUE` (`InsertionOrderTypeID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- ----------------------------
--- Records of InsertionOrderType
--- ----------------------------
-INSERT INTO `InsertionOrderType` VALUES ('1', 'Any Remnant', '2014-09-03 22:44:24', '2014-09-03 22:44:24');
-INSERT INTO `InsertionOrderType` VALUES ('2', 'In House Remnant', '2014-09-03 22:44:24', '2014-09-03 22:44:24');
-INSERT INTO `InsertionOrderType` VALUES ('3', 'RTB Remnant', '2014-09-03 22:44:24', '2014-09-03 22:44:24');
-INSERT INTO `InsertionOrderType` VALUES ('4', 'Contract', '2014-09-03 22:44:24', '2014-09-03 22:44:24');
 
 -- ----------------------------
 -- Table structure for InsertionOrderMarkup

@@ -292,7 +292,6 @@ class ZoneController extends PublisherAbstractActionController {
 					
 				endif;
 				
-				$publisher_ad_zone_type_id = AD_TYPE_ANY_REMNANT;
 				$linkedbanners = array();
 				
 				$auto_approve_zones = $this->config_handle['settings']['publisher']['auto_approve_zones'];
@@ -505,7 +504,6 @@ class ZoneController extends PublisherAbstractActionController {
             
             endif;
 		
-            $publisher_ad_zone_type_id = AD_TYPE_ANY_REMNANT;
             $linkedbanners = array();
             
             $AdTemplateList = $this->get_ad_templates();
