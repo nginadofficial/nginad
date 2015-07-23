@@ -90,10 +90,10 @@ var currentStates = "<?php echo $current_states; ?>";
 		<input type="text" name="MinWidth" value="<?php echo $MinWidth;?>" class="input-mini">
 	</div>
 	<div class="control-group">
-		<label for="FoldPos">Fold Position</label>
-<select id="FoldPos" name="FoldPos" class="zone-txtarea">
-    <?php foreach ($fold_pos as $code => $name): ?>
-        <?php if ((string)$code === $current_fold_pos): ?>
+		<label for="foldpos">Fold Position</label>
+<select id="foldpos" name="foldpos" class="zone-txtarea">
+    <?php foreach ($foldpos_options as $code => $name): ?>
+        <?php if ((string)$code === $current_foldpos): ?>
             <option value="<?php echo $code;?>" selected="selected"><?php echo $name;?></option>
         <?php else: ?>
             <option value="<?php echo $code;?>"><?php echo $name;?></option>

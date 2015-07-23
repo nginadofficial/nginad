@@ -814,7 +814,7 @@ class DemandController extends DemandAbstractActionController {
 
 		$start_delay 				= $this->getRequest()->getPost("StartDelay");
 			
-		$fold_pos 					= $this->getRequest()->getPost("FoldPos");
+		$fold_pos 					= $this->getRequest()->getPost("foldpos");
 
 		$vertical 					= $this->getRequest()->getPost("vertical");
 		
@@ -1190,7 +1190,7 @@ class DemandController extends DemandAbstractActionController {
 		
 		if ($InsertionOrderLineItemVideoRestrictions != null):
 		
-			$current_foldpos = $InsertionOrderLineItemVideoRestrictions->Vertical == null ? "" : $InsertionOrderLineItemVideoRestrictions->Vertical;
+			$current_foldpos = $InsertionOrderLineItemVideoRestrictions->FoldPos == null ? "" : $InsertionOrderLineItemVideoRestrictions->FoldPos;
 			$current_states = $InsertionOrderLineItemVideoRestrictions->GeoState == null ? "" : $InsertionOrderLineItemVideoRestrictions->GeoState;
 			$current_country = $InsertionOrderLineItemVideoRestrictions->GeoCountry == null ? "" : $InsertionOrderLineItemVideoRestrictions->GeoCountry;
 			$geocity_option = $InsertionOrderLineItemVideoRestrictions->GeoCity == null ? "" : $InsertionOrderLineItemVideoRestrictions->GeoCity;
@@ -1203,7 +1203,6 @@ class DemandController extends DemandAbstractActionController {
 			
 			$current_start_delay = $InsertionOrderLineItemVideoRestrictions->StartDelay == null ? "" : $InsertionOrderLineItemVideoRestrictions->StartDelay;
 			$current_linearity = $InsertionOrderLineItemVideoRestrictions->Linearity == null ? "" : $InsertionOrderLineItemVideoRestrictions->Linearity;
-			$current_fold_pos = $InsertionOrderLineItemVideoRestrictions->FoldPos == null ? "" : $InsertionOrderLineItemVideoRestrictions->FoldPos;
 
 			$current_min_duration = $InsertionOrderLineItemVideoRestrictions->MinDuration == null ? "" : $InsertionOrderLineItemVideoRestrictions->MinDuration;
 			$current_max_duration = $InsertionOrderLineItemVideoRestrictions->MaxDuration == null ? "" : $InsertionOrderLineItemVideoRestrictions->MaxDuration;
