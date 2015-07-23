@@ -310,7 +310,7 @@ class SignupController extends PublisherAbstractActionController {
 			$error_msg = "ERROR: A duplicate Account may exist. Please try another.";
 		endif;
 	
-		return $this->redirect()->toRoute('pxpublishers',
+		return $this->redirect()->toRoute('pxpublisherlist',
 				array(
 						'error_msg' => $error_msg
 				)
@@ -525,6 +525,7 @@ class SignupController extends PublisherAbstractActionController {
 		    	'true_user_name' => $this->auth->getUserName(),
 				'header_title' => 'Account Settings',
 				'is_super_admin' => $this->is_super_admin,
+				'is_domain_admin' => $this->is_domain_admin,
 				'effective_id' => $this->auth->getEffectiveIdentityID(),
 				'impersonate_id' => $this->ImpersonateID
 	    ));
@@ -596,6 +597,7 @@ class SignupController extends PublisherAbstractActionController {
 		    	'true_user_name' => $this->auth->getUserName(),
 				'header_title' => 'Account Settings',
 				'is_super_admin' => $this->is_super_admin,
+				'is_domain_admin' => $this->is_domain_admin,
 				'effective_id' => $this->auth->getEffectiveIdentityID(),
 				'impersonate_id' => $this->ImpersonateID
 	    ));
@@ -1231,6 +1233,8 @@ class SignupController extends PublisherAbstractActionController {
 	    	$PublisherWebsite->DateCreated = date("Y-m-d H:i:s");
 	    	$PublisherWebsite->Description = "";
 	    	
+	    	$PublisherWebsite->VisibilityTypeID = \util\AuthHelper::isPrivateExchangePublisher($this->auth->getPublisherInfoID()) === true ? 2 : 1;
+	    	
 	    	$auto_approve_websites = $this->config_handle['settings']['publisher']['auto_approve_websites'];
 	    	
 	    	$PublisherWebsite->AutoApprove = ($auto_approve_websites == true) ? 1 : 0;
@@ -1302,6 +1306,7 @@ class SignupController extends PublisherAbstractActionController {
 		  	'true_user_name' => $this->auth->getUserName(),
 			'header_title' => 'Account Settings',
 			'is_super_admin' => $this->is_super_admin,
+			'is_domain_admin' => $this->is_domain_admin,
 			'effective_id' => $this->auth->getEffectiveIdentityID(),
 			'impersonate_id' => $this->ImpersonateID
 	    ));
@@ -1309,6 +1314,72 @@ class SignupController extends PublisherAbstractActionController {
 	    return $view;
 	}
 	
+	public function pxwebsitesAction() {
+	
+		$initialized = $this->initialize();
+		if ($initialized !== true) return $initialized;
+		
+		if (!$this->auth->hasIdentity()):
+			return $this->redirect()->toRoute('login');
+		elseif (!$this->is_domain_admin):
+			return $this->redirect()->toRoute('publisher');
+		endif;
+		
+		$error_msg = null;
+		$success_msg = null;
+		$PublisherWebsiteFactory = \_factory\PublisherWebsite::get_instance();
+
+		$authUsersFactory 			= \_factory\authUsers::get_instance();
+		$params = array();
+		$params["parent_id"] 		= $this->auth->getUserID();
+		$authUserChildlist		 	= $authUsersFactory->get($params);
+		
+		$PublisherInfoFactory = \_factory\PublisherInfo::get_instance();
+		
+		$pending_list = array();
+		$approved_list = array();
+		$denied_list = array();
+		
+		foreach ($authUserChildlist as $authUserChild):
+			$orders = 'DateCreated DESC';
+			$params = array();
+			$params["DomainOwnerID"] = $authUserChild->PublisherInfoID;
+			
+			$params["ApprovalFlag"] = 0;
+			$websites_list = $PublisherWebsiteFactory->get($params, $orders);
+			$pending_list = array_merge($pending_list, $websites_list);
+				
+			$params["ApprovalFlag"] = 1;
+			$websites_list = $PublisherWebsiteFactory->get($params, $orders);
+			$approved_list = array_merge($approved_list, $websites_list);
+			
+			$params["ApprovalFlag"] = 2;
+			$websites_list = $PublisherWebsiteFactory->get($params, $orders);
+			$denied_list = array_merge($denied_list, $denied_list);
+			
+		endforeach;
+
+		$view = new ViewModel(array(
+				'dashboard_view' => 'account',
+				'pending_list' => $pending_list,
+				'approved_list' => $approved_list,
+				'denied_list' => $denied_list,
+				'success_msg' => $success_msg,
+				'error_msg' => $error_msg,
+				'vertical_map' => \util\DeliveryFilterOptions::$vertical_map,
+				'user_id' => $this->auth->getUserID(),
+				'user_id_list' => $this->user_id_list,
+				'user_identity' => $this->identity(),
+				'true_user_name' => $this->auth->getUserName(),
+				'header_title' => 'Account Settings',
+				'is_super_admin' => $this->is_super_admin,
+				'is_domain_admin' => $this->is_domain_admin,
+				'effective_id' => $this->auth->getEffectiveIdentityID(),
+				'impersonate_id' => $this->ImpersonateID
+		));
+		 
+		return $view->setTemplate('dashboard-manager/signup/websites.phtml');
+	}
 	
 	public function deletewebsiteAction() {
 		
@@ -1325,29 +1396,50 @@ class SignupController extends PublisherAbstractActionController {
 		$PublisherWebsiteFactory = \_factory\PublisherWebsite::get_instance();
 		$PublisherAdZoneFactory = \_factory\PublisherAdZone::get_instance();
 		
+		$publisher_website_data = null;
+		
 		$request = $this->getRequest();
 	    if ($request->isPost()):
 	        
 	    	$website_id = intval($request->getPost('website_id'));
-	    
-	    	$params = array();
-	    	$params["PublisherWebsiteID"] 		= $website_id;
-	    	$params["DomainOwnerID"] 			= $this->auth->getPublisherInfoID();
-	    	$publisher_website_data = $PublisherWebsiteFactory->get_row($params);
-	    	$success = true;
-	    	$PublisherWebsiteFactory->delete_domain($website_id);
-	    	 
-	    	$params = array();
-	    	$params['PublisherWebsiteID'] = $website_id;
-	    	$PublisherAdZoneList = $PublisherAdZoneFactory->get($params);
-	    	 
-	    	foreach ($PublisherAdZoneList as $PublisherAdZone):
+
+	    	if ($this->auth->isDomainAdmin($this->config_handle)):
+	    		$authorized = \util\AuthHelper::domain_user_authorized_publisher_website($this->auth->getUserID(), $website_id);
 	    	
-	    		$PublisherAdZoneFactory->delete_zone(intval($PublisherAdZone->PublisherAdZoneID));
+	    		if ($authorized === true):
+			    	$params = array();
+			    	$params["PublisherWebsiteID"] 		= $website_id;
+			    	$publisher_website_data = $PublisherWebsiteFactory->get_row($params);
+		    	endif;
+	    	else:
+		    	$params = array();
+		    	$params["PublisherWebsiteID"] 		= $website_id;
+		    	$params["DomainOwnerID"] 			= $this->auth->getPublisherInfoID();
+		    	$publisher_website_data = $PublisherWebsiteFactory->get_row($params);
+	    	endif;
 	    	
-	    	endforeach;
-	    	 
-	    	$msg = '"' . $publisher_website_data->WebDomain . '" removed successfully.';
+	    	if ($publisher_website_data == null):
+	    	
+	    		$msg = 'Authorization Error.';
+	    	
+	    	else:
+		    	
+		    	$success = true;
+		    	$PublisherWebsiteFactory->delete_domain($website_id);
+		    	 
+		    	$params = array();
+		    	$params['PublisherWebsiteID'] = $website_id;
+		    	$PublisherAdZoneList = $PublisherAdZoneFactory->get($params);
+		    	 
+		    	foreach ($PublisherAdZoneList as $PublisherAdZone):
+		    	
+		    		$PublisherAdZoneFactory->delete_zone(intval($PublisherAdZone->PublisherAdZoneID));
+		    	
+		    	endforeach;
+		    	 
+		    	$msg = '"' . $publisher_website_data->WebDomain . '" removed successfully.';
+		    	
+	    	endif;
 	    	
 	    endif;	
 		

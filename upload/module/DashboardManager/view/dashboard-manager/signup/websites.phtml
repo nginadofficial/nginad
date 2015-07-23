@@ -5,7 +5,11 @@ $this->headScript()->prependFile($this->basePath() . '/js/script.js');
             <ul class="nav nav-tabs" id="myTab">
               <li><a  href="/users/account">Profile</a></li>
               <li><a href="/users/changepassword">Change Password</a></li>
+              <?php if ($is_domain_admin == true): ?>
+              <li class="active"><a href="/users/pxwebsites">Websites</a></li>
+              <?php elseif($is_super_admin != true): ?>
               <li class="active"><a href="/users/websites">Websites</a></li>
+              <?php endif; ?>
             </ul>
             <div class="tab-content" id="myTabContent">
               <div id="websites" class="tab-pane fade active in">
@@ -15,7 +19,11 @@ $this->headScript()->prependFile($this->basePath() . '/js/script.js');
              <div id="pending_list_form">
             <div class="row">
             	<h4>Pending Site List</h4>
-            	<p>These are the websites that are waiting to be approved for Nginad ads. Approval can take upto 48 hours.</p>   	
+            	<p>These are the websites that are waiting to be approved for ad tags. 
+            	<?php if($is_super_admin != true && $is_domain_admin != true): ?>
+            	Approval can take upto 48 hours.
+            	<?php endif; ?>
+            	</p>   	
             </div>
      		<?php 
                 if(isset($error_msg) && $error_msg != null):
@@ -27,6 +35,7 @@ $this->headScript()->prependFile($this->basePath() . '/js/script.js');
 			   ?>
 	<div id="cdn_form_error1" class="alert alert-error" style="margin-left: 8px;margin-right: 8px; display: none;"></div>
 	<div id="cdn_form_success1" class="alert alert-success" style="margin-left: 8px;margin-right: 8px; display: none;"></div>
+	<?php if($is_domain_admin != true): ?>
     <form action="/users/websites" method="post" class="form-horizontal form-top-magin" name="websiteform" id="websiteform">        
         <fieldset>
             	<div class="row">
@@ -55,6 +64,7 @@ $this->headScript()->prependFile($this->basePath() . '/js/script.js');
            	</div>	
              	 </fieldset>
              	</form>
+      <?php endif; ?>
              	</div><!-- end of pending_list_form -->
        <div id="selection-results" class="pending_table_margin"><?php //print_r($site_data);?>
       <table class="table table-striped table-bordered table-margin">

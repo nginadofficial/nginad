@@ -150,7 +150,7 @@ class AuthHelper {
 		$PublisherWebsiteFactory 		= \_factory\PublisherWebsite::get_instance();
 		$params = array();
 		$params["PublisherWebsiteID"] 	= $publisher_website_id;
-		$PublisherWebsite	 			= $PublisherWebsiteFactory->get_row_cached($params);
+		$PublisherWebsite	 			= $PublisherWebsiteFactory->get_row($params);
 	
 		if (!\util\AuthHelper::domain_user_authorized_publisher($parent_id, $PublisherWebsite->DomainOwnerID)):
 			die("You are not authorized to perform this action: CODE 101");

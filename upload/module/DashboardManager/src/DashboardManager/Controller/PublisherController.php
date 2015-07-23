@@ -485,7 +485,7 @@ class PublisherController extends PublisherAbstractActionController {
     	            //displayed but before the form is submitted.
     	            if ($domain->DomainOwnerID == $this->PublisherInfoID):
     	            
-	    	            $domain->VisibilityTypeID = \util\AuthHelper::isPrivateExchangePublisher($domain->WebDomain) === true ? 2 : 1;
+	    	            $domain->VisibilityTypeID = \util\AuthHelper::isPrivateExchangePublisher($domain->DomainOwnerID) === true ? 2 : 1;
 	    	             
 	    	            if ($this->is_super_admin || $this->is_domain_admin):
 	    	            	$domain->VisibilityTypeID = $request->getPost("EnablePlatformConnection") == 1 ? 1 : 2;
@@ -631,7 +631,7 @@ class PublisherController extends PublisherAbstractActionController {
 	            		$editResultObj->Description = $description;
 	            		$editResultObj->IABCategory = $iab_category;
  
-	            		$editResultObj->VisibilityTypeID = \util\AuthHelper::isPrivateExchangePublisher($editResultObj->WebDomain) === true ? 0 : 1;
+	            		$editResultObj->VisibilityTypeID = \util\AuthHelper::isPrivateExchangePublisher($editResultObj->DomainOwnerID) === true ? 0 : 1;
 	            		
 	            		if ($this->is_super_admin || $this->is_domain_admin):
 	            			$editResultObj->VisibilityTypeID = $request->getPost("EnablePlatformConnection") == 1 ? 1 : 2;
