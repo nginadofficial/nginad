@@ -278,6 +278,12 @@ class ServicesController extends DemandAbstractActionController {
 				$mark_up = $floor_price * floatval($px_markup_rate_for_publisher);
 				$adusted_floor_price = floatval($floor_price) + floatval($mark_up);
 				
+				// floor should be marked up by the global exchange rate for this publisher and website
+	
+				$exchange_markup_rate_for_publisher = \util\Markup::getPublisherMarkupRate($site_id, $PublisherWebsite->DomainOwnerID, $this->config_handle);
+				$mark_up = $adusted_floor_price * floatval($exchange_markup_rate_for_publisher);
+				$adusted_floor_price = floatval($adusted_floor_price) + floatval($mark_up);
+
 				// floor should be marked up by the IO markup rate
 				// Approximation: actual implementation is mark-down in buyrtb\workflows\OpenRTBWorkflow
 				$mark_up = $adusted_floor_price * floatval($markup_rate);
