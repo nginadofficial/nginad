@@ -144,7 +144,13 @@ class ServicesController extends DemandAbstractActionController {
 		
 		$params["MDY"] = $use_date;
 		
-		$PrivateExchangeRtbChannelDailyStatsRollUpList = $PrivateExchangeRtbChannelDailyStatsRollUpFactory->get($params, $this->auth->getUserID());
+		if ($this->auth->isSuperAdmin($this->config_handle)):
+			$parent_id = $this->auth->getEffectiveIdentityID();
+		else:
+			$parent_id = $this->auth->getUserID();
+		endif;
+		
+		$PrivateExchangeRtbChannelDailyStatsRollUpList = $PrivateExchangeRtbChannelDailyStatsRollUpFactory->get($params, $parent_id);
 	
 		$data = array();
 	
@@ -225,7 +231,11 @@ class ServicesController extends DemandAbstractActionController {
 	
 		$PrivateExchangeRtbChannelDailyStatsRollUpPxFilterFactory = \_factory\PrivateExchangeRtbChannelDailyStatsRollUpPxFilter::get_instance();
 		$params = array();
-		$params["ParentID"] = $this->auth->getUserID();
+		if ($this->auth->isSuperAdmin($this->config_handle)):
+			$params["ParentID"] = $this->auth->getEffectiveIdentityID();
+		else: 
+			$params["ParentID"] = $this->auth->getUserID();
+		endif;
 		$PrivateExchangeRtbChannelDailyStatsRollUpPxFilterList = $PrivateExchangeRtbChannelDailyStatsRollUpPxFilterFactory->get($params);
 	
 		$insertion_order_id = $this->getRequest()->getQuery('insertion-order-id');
@@ -242,7 +252,7 @@ class ServicesController extends DemandAbstractActionController {
 		endif;
 		
 		$data = array();
-	
+
 		$PublisherWebsiteFactory = \_factory\PublisherWebsite::get_instance();
 		
 		foreach ($PrivateExchangeRtbChannelDailyStatsRollUpPxFilterList as $PrivateExchangeRtbChannelDailyStatsRollUpPxFilter):
@@ -265,7 +275,7 @@ class ServicesController extends DemandAbstractActionController {
 			if ($PrivateExchangeRtbChannelDailyStatsRollUpPxFilter->BidFloor):
 				
 				$floor_price = floatval($PrivateExchangeRtbChannelDailyStatsRollUpPxFilter->BidFloor);
-					
+
 				$params = array();
 				$params["PublisherWebsiteID"] = $site_id;
 				$PublisherWebsite = $PublisherWebsiteFactory->get_row_cached($params);
