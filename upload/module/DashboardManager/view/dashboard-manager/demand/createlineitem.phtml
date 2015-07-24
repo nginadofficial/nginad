@@ -27,6 +27,8 @@ $minEndDate = explode("/", $enddate);
 
 $this->headScript()->captureStart() ?>
 
+var insertion_order_id = null;
+
 Dropzone.autoDiscover = false;
 
 $(function() {

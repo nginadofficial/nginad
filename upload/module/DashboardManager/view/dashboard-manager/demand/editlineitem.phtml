@@ -30,6 +30,12 @@ $this->headScript()->captureStart(); ?>
 Dropzone.autoDiscover = false;
 var mockFile = null;
 
+<?php if (!empty($campaignid) && intval($campaignid) > 0): ?>
+var insertion_order_id = <?php echo $campaignid; ?>;
+<?php else: ?>
+var insertion_order_id = null;
+<?php endif; ?>
+
 $(function() {
 	$( "#startdate" ).datepicker(
 	{

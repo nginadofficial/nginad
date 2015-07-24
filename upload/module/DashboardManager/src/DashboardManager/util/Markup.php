@@ -39,6 +39,29 @@ class Markup {
 
 		return $config['system']['default_demand_markup_rate'];
 	}
+	
+	public static function getMarkupRateByInsertionOrderIDAndUserID($insertion_order_id, $user_id, $config, $cached = true) {
+		
+		// first try ad campaign specific markup
+		
+		$ad_campaign_markup = self::getMarkupForInsertionOrder($insertion_order_id, $config, $cached);
+		
+		if ($ad_campaign_markup != null):
+			return $ad_campaign_markup->MarkupRate;
+		endif;
+		
+		// next try user specific markup
+		
+		$user_markup = self::getMarkupForUser($user_id, $config, $cached);
+		
+		if ($user_markup != null):
+			return $user_markup->MarkupRate;
+		endif;
+		
+		// next send back the default markup rate
+		
+		return $config['system']['default_demand_markup_rate'];
+	}
 
 	public static function getMarkupForInsertionOrder($ad_campaign_id, $config, $cached = true) {
 

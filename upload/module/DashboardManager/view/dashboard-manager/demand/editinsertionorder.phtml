@@ -16,6 +16,13 @@ $preview_query = $ispreview == true ? "?ispreview=true" : "";
 $minEndDate = explode("/", $enddate);
 
 $this->headScript()->captureStart() ?>
+
+<?php if (!empty($campaignid) && intval($campaignid) > 0): ?>
+var insertion_order_id = <?php echo $campaignid; ?>;
+<?php else: ?>
+var insertion_order_id = null;
+<?php endif; ?>
+
 $(function() {
 	$( "#startdate" ).datepicker(
 	{

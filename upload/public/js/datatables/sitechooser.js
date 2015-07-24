@@ -126,7 +126,13 @@ function showChooserPx () {
 		$('#rtb-feed-chooser').dataTable().api().clear().draw();
 	}
 	
-	$('#rtb-feed-chooser').dataTable().api().ajax.url( '/directory/privateexchange' ).load(
+	var params = "";
+	
+	if (insertion_order_id !== null) {
+		params = '?insertion-order-id=' + insertion_order_id;
+	}
+	
+	$('#rtb-feed-chooser').dataTable().api().ajax.url( '/directory/privateexchange' + params ).load(
 		function () {
 			callBackDblClk();
 		}		
@@ -165,6 +171,10 @@ function showChooserPc () {
 	use_date = use_date.replace(re, '-');
 	
 	var params = 'selected-date=' + escape(use_date);
+	
+	if (insertion_order_id !== null) {
+		params = '&insertion-order-id=' + insertion_order_id;
+	}
 	
 	$('#rtb-feed-chooser').dataTable().api().ajax.url( '/directory/platformconnection?' + params ).load(
 		function () {
@@ -206,6 +216,10 @@ function showChooserSsp () {
 	use_date = use_date.replace(re, '-');
 	
 	var params = 'selected-date=' + escape(use_date);
+	
+	if (insertion_order_id !== null) {
+		params = '&insertion-order-id=' + insertion_order_id;
+	}
 	
 	$('#rtb-feed-chooser').dataTable().api().ajax.url( '/directory/ssp?' + params ).load(
 		function () {

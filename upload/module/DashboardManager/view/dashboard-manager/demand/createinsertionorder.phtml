@@ -15,6 +15,9 @@ $enddate = date('m/d/Y', time() + (86400 * 30));
 $minEndDate = explode("/", $enddate);
 
 $this->headScript()->captureStart();?>
+
+var insertion_order_id = null;
+
 $(function() {
 	$( "#startdate" ).datepicker(
 	{
