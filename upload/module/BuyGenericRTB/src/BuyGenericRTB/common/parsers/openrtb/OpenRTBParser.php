@@ -271,6 +271,14 @@ class OpenRTBParser {
 	       		$VideoParser = new \buyrtb\parsers\openrtb\VideoParser();
 	       		$VideoParser->parse_request($logger, $this, $RtbBidRequestImp->RtbBidRequestVideo, $ad_impression_video);
 	       		
+	        elseif (isset($ad_impression["native"])):
+	       		// this is a native ad
+	       		$ad_impression_native = $ad_impression["native"];
+	       		$RtbBidRequestImp->media_type = "native";
+	       		$RtbBidRequestImp->RtbBidRequestNative = new \model\openrtb\native\request\RtbBidRequestNative();
+	       		$NativeParser = new \buyrtb\parsers\openrtb\NativeParser();
+	       		$NativeParser->parse_request($logger, $this, $RtbBidRequestImp->RtbBidRequestNative, $ad_impression_native);
+	       		
 	        else:
 	       		throw new Exception($this->expeption_missing_min_bid_request_params . ": at least one banner or video object in the imp");
 	        endif;

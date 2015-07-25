@@ -15,13 +15,13 @@ class RtbBidRequestNativeAsset {
 	
 	public $required;
 	
-	public $title;
+	public $RtbBidRequestNativeTitle;
 	
-	public $img;
+	public $RtbBidRequestNativeImage;
 	
-	public $video;
+	public $RtbBidRequestNativeVideo;
 	
-	public $data;
+	public $RtbBidRequestNativeData;
 	
 	public $ext;
 	

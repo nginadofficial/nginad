@@ -166,6 +166,7 @@ abstract class RtbBuyV22Bid extends RtbBuyBid {
 			$this->no_bid_reason = NOBID_INVALID_REQUEST;
 			return false;
 		}
+
 		return true;
 	}
 
@@ -271,8 +272,6 @@ abstract class RtbBuyV22Bid extends RtbBuyBid {
 			unset($RtbBidResponse->cur);
 			if ($this->no_bid_reason != null):
 				$RtbBidResponse->nbr 								= $this->no_bid_reason;
-				unset($RtbBidResponseBid->price);
-				unset($RtbBidResponse->RtbBidResponseSeatBidList);
 			else:
 				$RtbBidResponseSeatBid								= new \model\openrtb\RtbBidResponseSeatBid();
 				$RtbBidResponseBid									= new \model\openrtb\RtbBidResponseBid();

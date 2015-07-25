@@ -21,7 +21,7 @@ class RtbBidRequestNative {
 	
 	public $seq;
 	
-	public $assets;
+	public $RtbBidRequestAssetList = array();
 	
 	public $ext;
 	

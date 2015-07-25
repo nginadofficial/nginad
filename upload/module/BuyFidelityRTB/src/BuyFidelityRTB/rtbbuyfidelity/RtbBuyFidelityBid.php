@@ -192,6 +192,8 @@ abstract class RtbBuyFidelityBid extends \rtbbuy\RtbBuyBid {
 			$this->no_bid_reason = NOBID_INVALID_REQUEST;
 			return false;
 		}
+		
+		
 		return true;
 	}
 	
@@ -340,8 +342,6 @@ abstract class RtbBuyFidelityBid extends \rtbbuy\RtbBuyBid {
 			unset($RtbBidResponse->cur);
 			if ($this->no_bid_reason != null):
 				$RtbBidResponse->nbr 								= $this->no_bid_reason;
-				unset($RtbBidResponseBid->price);
-				unset($RtbBidResponse->RtbBidResponseSeatBidList);
 			else:
 				$RtbBidResponseSeatBid								= new \model\openrtb\RtbBidResponseSeatBid();
 				$RtbBidResponseBid									= new \model\openrtb\RtbBidResponseBid();

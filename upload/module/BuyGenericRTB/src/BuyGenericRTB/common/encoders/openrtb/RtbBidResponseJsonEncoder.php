@@ -25,6 +25,10 @@ class RtbBidResponseJsonEncoder {
 		\util\ParseHelper::setArrayParam($RtbBidResponse, $bid_response, 'customdata');
 		\util\ParseHelper::setArrayParam($RtbBidResponse, $bid_response, 'nbr');
 
+		if (isset($bid_response['nbr'])):
+			unset($bid_response["seatbid"]);
+		endif;
+		
 		$result = json_encode($bid_response);
 	
 		return $result;
