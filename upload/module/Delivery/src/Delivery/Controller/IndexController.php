@@ -193,13 +193,9 @@ class IndexController extends AbstractActionController
 	 	$PingManager = new \pinger\PingManager($config, $bid_request_list, $PublisherAdZone->AdOwnerID, $PublisherAdZone->PublisherWebsiteID, $PublisherAdZone->FloorPrice, $banner_request["PublisherAdZoneID"], $banner_request["AdName"], $banner_request["WebDomain"], $banner_request["ImpressionType"]);
 	 	
 	 	/*
-	 	 * Only send the RTB request to private exchanges
-	 	 * customers and domain admins if there are campaigns 
-	 	 * set up for it
+	 	 * Send the RTB request to local demand
 	 	 */
-	 	if (count($PmpDealPublisherWebsiteToInsertionOrderLineItemList)):
-	 		$PingManager->set_up_local_demand_ping_clients();	 		
-	 	endif;
+	 	$PingManager->set_up_local_demand_ping_clients();
 	 	
 	 	/*
 	 	 * Only send the RTB request to DSPs if the source
