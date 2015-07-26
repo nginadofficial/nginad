@@ -2904,7 +2904,7 @@ class DemandController extends DemandAbstractActionController {
 	     * If they are adding inventory from SSP RTB Channels
 	     * make sure they are approved for that
 	     */
-	    if (count($ssp_feeds) >= 1):
+	    if (!$this->is_super_admin && count($ssp_feeds) >= 1):
 	    	if (!\util\CreditHelper::wasApprovedForSspRtbInventoryAuthUserID($this->auth->getUserID())):
 					$viewModel = new ViewModel(array(
 										'admin_email' => $this->config_handle['mail']['reply-to']['email'],
@@ -3649,9 +3649,9 @@ class DemandController extends DemandAbstractActionController {
 	    
 	    /*
 	     * If they are adding inventory from SSP RTB Channels
-	    * make sure they are approved for that
-	    */
-	    if (count($ssp_feeds) >= 1):
+	     * make sure they are approved for that
+	     */
+	    if (!$this->is_super_admin && count($ssp_feeds) >= 1):
 		    if (!\util\CreditHelper::wasApprovedForSspRtbInventoryAuthUserID($this->auth->getUserID())):
 					$viewModel = new ViewModel(array(
 										'admin_email' => $this->config_handle['mail']['reply-to']['email'],

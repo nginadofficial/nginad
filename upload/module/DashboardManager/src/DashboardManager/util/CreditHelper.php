@@ -20,7 +20,7 @@ class CreditHelper {
 		
 		if ($authUser != null):
 			
-			$authUser->DemandCustomerInfoID;
+			return $authUser->DemandCustomerInfoID;
 		
 		endif;
 		
