@@ -173,7 +173,7 @@ function showChooserPc () {
 	var params = 'selected-date=' + escape(use_date);
 	
 	if (insertion_order_id !== null) {
-		params = '&insertion-order-id=' + insertion_order_id;
+		params += '&insertion-order-id=' + insertion_order_id;
 	}
 	
 	$('#rtb-feed-chooser').dataTable().api().ajax.url( '/directory/platformconnection?' + params ).load(
@@ -218,7 +218,7 @@ function showChooserSsp () {
 	var params = 'selected-date=' + escape(use_date);
 	
 	if (insertion_order_id !== null) {
-		params = '&insertion-order-id=' + insertion_order_id;
+		params += '&insertion-order-id=' + insertion_order_id;
 	}
 	
 	$('#rtb-feed-chooser').dataTable().api().ajax.url( '/directory/ssp?' + params ).load(
