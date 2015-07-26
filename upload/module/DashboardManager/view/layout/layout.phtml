@@ -164,10 +164,10 @@ echo $this->doctype(); ?>
                   <?php if ($userRole=='super_admin' || ($user_data != null && $user_data->PublisherInfoID != null)): ?>
                   <li><a href="/websites">Websites List</a></li>
                   <?php endif;?>
-                  <?php if ($userRole=='domain_admin' || ($user_data != null && $user_data->PublisherInfoID != null)): ?>
+                  <?php if ($userRole=='domain_admin'): ?>
                   <li><a href="/private-exchange/publisher/websites">Websites List</a></li>
                   <?php endif;?>
-                  <?php if ($userRole=='domain_admin' || ($user_data != null && $user_data->PublisherInfoID != null)): ?>
+                  <?php if ($userRole=='domain_admin'): ?>
                   <li><a href="/private-exchange/edittheme">Theme &amp; URL</a></li>
                   <?php endif;?>
                   <li><a href="<?php echo $this->url('login/process', array('action'=>'logout')); ?>">Logout</a></li>
