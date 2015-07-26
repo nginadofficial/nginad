@@ -100,7 +100,7 @@ $this->headScript()->prependFile($this->basePath() . '/js/script.js');
            <td>
             <?php 
             	$tme = strtotime($user_data->DateCreditApplicationWasSent);
-            if ($tme):
+            if ($tme && $user_data->DateCreditApplicationWasSent != '0000-00-00 00:00:00'):
 				echo date("m/d/Y", $tme);
             else:
             	echo "Never";
