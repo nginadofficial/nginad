@@ -178,7 +178,7 @@ class AuthController extends ZendAbstractActionController {
     
     private function msaagreement($auth_User)
     {
-    	$view_directory = "private-exchange";
+    	$view_directory = "demand";
     	
     	if ($auth_User->PublisherInfoID != null):
     		$view_directory = "publisher";
