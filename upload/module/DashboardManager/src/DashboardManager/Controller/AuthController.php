@@ -136,12 +136,6 @@ class AuthController extends ZendAbstractActionController {
     public function msaAction()
     {
     
-    	$redirect = intval($this->params()->fromRoute('param1', null));
-    	
-    	if ($redirect != 'private-exchange'):
-    		$redirect = 'publisher';
-    	endif;
-    	
     	$user_id = $this->getRequest()->getPost('user_id');
     	$sechash = $this->getRequest()->getPost('sechash');
     
@@ -169,6 +163,9 @@ class AuthController extends ZendAbstractActionController {
 	    	
 	    	$result = $auth_service_trusted->authenticateTrusted($userDetails);
 	    	$authUsersFactory->saveUser($auth_User);
+	    	
+	    	$redirect = ($auth_User->user_role == $this->getConfig()['roles']['domain_admin']) ? 'private-exchange' : 'publisher';
+	    	
     		return $this->redirect()->toRoute($redirect);
     	else:
     		return $this->redirect()->toRoute('login');
