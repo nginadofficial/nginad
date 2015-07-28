@@ -160,7 +160,7 @@ class AuthController extends ZendAbstractActionController {
 	    	$userDetails = new \stdClass();
 	    	$userDetails->user_password 		= $auth_User->user_password;
 	    	$userDetails->user_password_salt 	= $auth_User->user_password_salt;
-	    	$userDetails->user_role_name 		= $this->getConfig()['roles']['member'];
+	    	$userDetails->user_role_name 		= $auth_User->user_role;
 	    	$userDetails->user_id 				= $auth_User->user_id;
 	    	$userDetails->user_login 			= $auth_User->user_login;
 	    	$userDetails->PublisherInfoID 		= $auth_User->PublisherInfoID;
@@ -169,7 +169,7 @@ class AuthController extends ZendAbstractActionController {
 	    	
 	    	$result = $auth_service_trusted->authenticateTrusted($userDetails);
 	    	$authUsersFactory->saveUser($auth_User);
-    		return $this->redirect()->toRoute('private-exchange');
+    		return $this->redirect()->toRoute($redirect);
     	else:
     		return $this->redirect()->toRoute('login');
     	endif;
