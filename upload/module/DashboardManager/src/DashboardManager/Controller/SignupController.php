@@ -158,6 +158,7 @@ class SignupController extends PublisherAbstractActionController {
 				$authUsers->user_enabled	      	= 0; 
 				$authUsers->user_verified         	= 0; 
 				$authUsers->user_agreement_accepted = 0;
+				$authUsers->parent_id				= 0;
 				$authUsers->create_date	   	      	= date("Y-m-d H:i:s");
 				
 				$authUsersFactory->saveUser($authUsers);
