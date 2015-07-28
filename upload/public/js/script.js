@@ -32,7 +32,7 @@ function getValidDomain(domain)
 // Validate space in username
 function validateUser(username) {
 
-	var nameRegex = /^[a-zA-Z\-]+$/;
+	var nameRegex = /^[a-zA-Z0-9\-]+$/;
     return username.match(nameRegex);
 
 }
