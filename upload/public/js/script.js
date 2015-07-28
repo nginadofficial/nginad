@@ -390,7 +390,7 @@ $.validator.addMethod("validatewebsite", function(value) {
 
 $.validator.addMethod("validateuser", function(value) {
 		return validateUser(value);
-}, 'Only characters A-Z, a-z acceptable.');
+}, 'Only characters A-Z, a-z, 0-9 acceptable.');
 
 $().ready(function() {
 
