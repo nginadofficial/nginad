@@ -130,12 +130,17 @@ class SignupController extends PublisherAbstractActionController {
 			$DemandCustomerInfo = new \model\DemandCustomerInfo();
 			$DemandCustomerInfoFactory = \_factory\DemandCustomerInfo::get_instance();
 			
-			$DemandCustomerInfo->Name		    = 	$Name;
-			$DemandCustomerInfo->Email			=	$Email;
-			$DemandCustomerInfo->Website		=	$Website;
-			$DemandCustomerInfo->Company		=	$Company;
-			$DemandCustomerInfo->PartnerType	=	$PartnerType;
-			$DemandCustomerInfo->DateCreated	=	date("Y-m-d H:i:s");
+			$DemandCustomerInfo->Name		    							= 	$Name;
+			$DemandCustomerInfo->Email										=	$Email;
+			$DemandCustomerInfo->Website									=	$Website;
+			$DemandCustomerInfo->Company									=	$Company;
+			$DemandCustomerInfo->PartnerType								=	$PartnerType;
+			$DemandCustomerInfo->DateCreated								=	date("Y-m-d H:i:s");
+			$DemandCustomerInfo->ApprovedForPlatformConnectionInventory		=	0;
+			$DemandCustomerInfo->ApprovedForSspRtbInventory					=	0;
+			$DemandCustomerInfo->CreditApplicationWasSent					=	0;
+			$DemandCustomerInfo->ApprovedForPlatformConnectionInventory		=	'0000-00-00 00:00:00';
+				
 			
 			$authUsers = new \model\authUsers();
 			$authUsersFactory = \_factory\authUsers::get_instance();
