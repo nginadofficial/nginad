@@ -5,6 +5,7 @@ July 31, 2015
 ------------------
 
 NginAd 1.6 is being released and tagged today. 
+This release features private exchanges, vanity domains, AJAX creatives uploads and much more.
 There is a confluence page describing the features and differences here:
 https://nginad.atlassian.net/wiki/display/NGIN/NginAd-Concepts
 
