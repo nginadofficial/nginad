@@ -1,6 +1,13 @@
 nginad
 =======
 
+July 31, 2015
+------------------
+
+NginAd 1.6 is being released and tagged today. 
+There is a confluence page describing the features and differences here:
+https://nginad.atlassian.net/wiki/display/NGIN/NginAd-Concepts
+
 July 21, 2015
 ------------------
 
