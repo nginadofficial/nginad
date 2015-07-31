@@ -146,7 +146,6 @@ function switchImpressionType(adtagtype) {
 		$(".imagead").hide();
 		$(".novideo").hide();
 		$(".nobanner").show();
-		$("label[for=bannername]").html("Video Ad Name");
 		$("#update-button").val("Update Video");
 		
 		 
@@ -169,7 +168,6 @@ function switchImpressionType(adtagtype) {
 			$(".imagead").hide();
 		}
 		
-		$("label[for=bannername]").html("Banner Ad Name");
 		$("label[for=adtag]").html("Ad Tag");
 		
 		$("#update-button").val("Update Banner");
