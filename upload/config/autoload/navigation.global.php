@@ -46,7 +46,7 @@ return array(
                                         'module' => 'DashboardManager',
                                         'id' => 'ViewBannerLevel',
                                         'pages' => array(
-							        		    array('label' => 'Edit Banner',
+							        		    array('label' => 'Edit Line Item',
 							        		    		'action' => 'editlineitem',
                                                         'controller' => 'DashboardManager\Controller\demand',
                                                         'module' => 'DashboardManager',
