@@ -179,7 +179,7 @@ class ServicesController extends DemandAbstractActionController {
 			
 				$params = array();
 				$params["PublisherWebsiteID"] = $site_id;
-				$PublisherWebsite = $PublisherWebsiteFactory->get_row_cached($params);
+				$PublisherWebsite = $PublisherWebsiteFactory->get_row_cached($this->config_handle, $params);
 				
 				if ($PublisherWebsite == null) continue;
 				
@@ -278,7 +278,7 @@ class ServicesController extends DemandAbstractActionController {
 
 				$params = array();
 				$params["PublisherWebsiteID"] = $site_id;
-				$PublisherWebsite = $PublisherWebsiteFactory->get_row_cached($params);
+				$PublisherWebsite = $PublisherWebsiteFactory->get_row_cached($this->config_handle, $params);
 				
 				if ($PublisherWebsite == null) continue;
 			

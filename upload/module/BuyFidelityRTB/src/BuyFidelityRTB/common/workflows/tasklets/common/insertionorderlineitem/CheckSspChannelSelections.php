@@ -23,7 +23,7 @@ class CheckSspChannelSelections {
 			
 			$params = array();
 			$params["InsertionOrderLineItemID"] 		= $InsertionOrderLineItem->InsertionOrderLineItemID;
-			$SspRtbChannelToInsertionOrderLineItemList 	= $SspRtbChannelToInsertionOrderLineItemFactory->get_cached($params);
+			$SspRtbChannelToInsertionOrderLineItemList 	= $SspRtbChannelToInsertionOrderLineItemFactory->get_cached($Workflow->config, $params);
 			
 			foreach ($SspRtbChannelToInsertionOrderLineItemList as $SspRtbChannelToInsertionOrderLineItem):
 				

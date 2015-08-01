@@ -113,12 +113,12 @@ class AuthHelper {
 	
 	}
 	
-	public static function domain_user_authorized_px_publisher_website_passthru($parent_id, $publisher_website_id, &$is_local) {
+	public static function domain_user_authorized_px_publisher_website_passthru($config, $parent_id, $publisher_website_id, &$is_local) {
 	
 		$PublisherWebsiteFactory 		= \_factory\PublisherWebsite::get_instance();
 		$params = array();
 		$params["PublisherWebsiteID"] 	= $publisher_website_id;
-		$PublisherWebsite	 			= $PublisherWebsiteFactory->get_row_cached($params);
+		$PublisherWebsite	 			= $PublisherWebsiteFactory->get_row_cached($config, $params);
 
 		if ($PublisherWebsite !== null):
 		

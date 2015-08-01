@@ -2858,7 +2858,7 @@ class DemandController extends DemandAbstractActionController {
 			
 			if (!$this->is_super_admin):
 			
-				$authorized = \util\AuthHelper::domain_user_authorized_px_publisher_website_passthru($this->auth->getUserID(), $exchange_feed_id, $is_local);
+				$authorized = \util\AuthHelper::domain_user_authorized_px_publisher_website_passthru($this->config_handle, $this->auth->getUserID(), $exchange_feed_id, $is_local);
 
 				if (!$authorized):
 					$viewModel = new ViewModel(array(
@@ -3605,7 +3605,7 @@ class DemandController extends DemandAbstractActionController {
 		    
 		    if (!$this->is_super_admin):
 			    
-			    $authorized = \util\AuthHelper::domain_user_authorized_px_publisher_website_passthru($this->auth->getUserID(), $exchange_feed_id, $is_local);
+			    $authorized = \util\AuthHelper::domain_user_authorized_px_publisher_website_passthru($this->config_handle, $this->auth->getUserID(), $exchange_feed_id, $is_local);
 			    
 			    if (!$authorized):
 					$viewModel = new ViewModel(array(
