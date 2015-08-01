@@ -239,7 +239,7 @@ class ZoneController extends PublisherAbstractActionController {
 				$ad->IsMobileFlag 			= $request->getPost("IsMobileFlag");
 				$ad->Width 					= $request->getPost("Width");
 				$ad->Height 				= $request->getPost("Height");
-				$ad->AdOwnerID				= intval($this->PublisherInfoID);
+				$ad->AdOwnerID				= $this->PublisherInfoID;
 
 				if ($ad->AdOwnerID <= 0) die("No Auth");
 				
