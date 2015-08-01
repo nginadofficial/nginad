@@ -466,10 +466,12 @@ class PublisherController extends PublisherAbstractActionController {
 	            $iab_category = $request->getPost("IABCategory");
 	            $domain_owner_id = $request->getPost("DomainOwnerID");
 	            
-	            $domain->WebDomain = $web_domain;
-	            $domain->Description = $description;
-	            $domain->IABCategory = $iab_category;
-	            $domain->DomainOwnerID = $domain_owner_id;
+	            $domain->WebDomain = strip_tags($web_domain);
+	            $domain->Description = strip_tags($description);
+	            $domain->IABCategory = strip_tags($iab_category);
+	            $domain->DomainOwnerID = intval($domain_owner_id);
+	            
+	            if ($domain->DomainOwnerID <= 0) die("No Auth");
 
 	            $auto_approve_websites = $this->config_handle['settings']['publisher']['auto_approve_websites'];
 	            if ($this->is_super_admin || $this->is_domain_admin || $auto_approve_websites == true):
@@ -627,9 +629,9 @@ class PublisherController extends PublisherAbstractActionController {
 	            
       	        // Check if an entry exists with the same name. A NULL means there is no duplicate.
 	            		//if ($PublisherWebsiteFactory->get_row(array("WebDomain" => $web_domain)) === null):
-    	                $editResultObj->WebDomain = $web_domain;
-	            		$editResultObj->Description = $description;
-	            		$editResultObj->IABCategory = $iab_category;
+    	                $editResultObj->WebDomain = strip_tags($web_domain);
+	            		$editResultObj->Description = strip_tags($description);
+	            		$editResultObj->IABCategory = strip_tags($iab_category);
  
 	            		$editResultObj->VisibilityTypeID = \util\AuthHelper::isPrivateExchangePublisher($editResultObj->DomainOwnerID) === true ? 0 : 1;
 	            		

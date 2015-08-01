@@ -230,8 +230,8 @@ class ZoneController extends PublisherAbstractActionController {
             
                 $PublisherAdZoneFactory = \_factory\PublisherAdZone::get_instance();
                 
-                $ad->AdName					= $request->getPost("AdName");
-				$ad->Description	 		= $request->getPost("Description");
+                $ad->AdName					= strip_tags($request->getPost("AdName"));
+				$ad->Description	 		= strip_tags($request->getPost("Description"));
 				$ad->PassbackAdTag 			= $request->getPost("PassbackAdTag");
 				$floor_price 				= $request->getPost("FloorPrice") == null ? 0 : $request->getPost("FloorPrice");
 				$ad->FloorPrice 			= floatval($floor_price);
@@ -239,8 +239,10 @@ class ZoneController extends PublisherAbstractActionController {
 				$ad->IsMobileFlag 			= $request->getPost("IsMobileFlag");
 				$ad->Width 					= $request->getPost("Width");
 				$ad->Height 				= $request->getPost("Height");
-				$ad->AdOwnerID				= $this->PublisherInfoID;
+				$ad->AdOwnerID				= intval($this->PublisherInfoID);
 
+				if ($ad->AdOwnerID <= 0) die("No Auth");
+				
 				$ad->ImpressionType			= $request->getPost("ImpressionType") == 'video' ? 'video' : 'banner';
 				
 				if ($ad->ImpressionType == 'video'):
@@ -573,8 +575,8 @@ class ZoneController extends PublisherAbstractActionController {
             
             			if ($validate):        			
 
-	                    	$editResultObj->AdName 					= $request->getPost("AdName");
-							$editResultObj->Description 			= $request->getPost("Description");
+	                    	$editResultObj->AdName 					= strip_tags($request->getPost("AdName"));
+							$editResultObj->Description 			= strip_tags($request->getPost("Description"));
 							$editResultObj->PassbackAdTag 			= $request->getPost("PassbackAdTag");
 							$floor_price 							= $request->getPost("FloorPrice") == null ? 0 : $request->getPost("FloorPrice");
 							$editResultObj->FloorPrice 						= floatval($floor_price);
