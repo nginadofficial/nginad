@@ -1,6 +1,17 @@
 nginad
 =======
 
+August 4, 2015
+------------------
+
+NEWS: The NginAd Project is in the process of filing for non-profit organization status in the United States and is now under the control of the NginAd Foundation.
+INFO: http://www.nginad.com
+
+NO MORE COMMITS WILL BE MADE TO THIS GIT REPOSITORY!
+
+The official NginAd OpenRTB Ad Server git repo is now: https://github.com/nginadfoundation/nginad
+The official NginAd OVA git repo is: https://github.com/nginadfoundation/open-video-ads
+
 July 31, 2015
 ------------------
 
