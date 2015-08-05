@@ -150,6 +150,8 @@ class ServicesController extends DemandAbstractActionController {
 			$parent_id = $this->auth->getUserID();
 		endif;
 		
+		if ($parent_id == 0) $parent_id = null;
+
 		$PrivateExchangeRtbChannelDailyStatsRollUpList = $PrivateExchangeRtbChannelDailyStatsRollUpFactory->get($params, $parent_id);
 	
 		$data = array();
