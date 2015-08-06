@@ -1,9 +1,9 @@
 <?php
 /**
- * CDNPAL NGINAD Project
+ * NGINAD Project
  *
  * @link http://www.nginad.com
- * @copyright Copyright (c) 2013-2015 CDNPAL Ltd. All Rights Reserved
+ * @copyright Copyright (c) 2013-2016 NginAd Foundation. All Rights Reserved
  * @license GPLv3
  */
 $request_path = $_SERVER['REQUEST_URI'];

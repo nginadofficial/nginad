@@ -1,9 +1,9 @@
 <?php
 /**
- * CDNPAL NGINAD Project
+ * NGINAD Project
  *
  * @link http://www.nginad.com
- * @copyright Copyright (c) 2013-2015 CDNPAL Ltd. All Rights Reserved
+ * @copyright Copyright (c) 2013-2016 NginAd Foundation. All Rights Reserved
  * @license GPLv3
  */
 
@@ -101,22 +101,22 @@ return array (
 							'timeout_enabled'	=> false
 					),
 						
-					// DO NOT REMOVE the default CDNPAL Media Exchange sell side partner,
-					// Or you will have no one to sell impressions to via RTB by default.
-					// Sign up on the http://www.nginad.com website for a 
-					// seller account if you want to get paid for impressions via paypal.
+					/*
+					 * This is a sample sell side DSP partner 
+					 * in the case where the DSP is also running 
+					 * NginAd OpenRTB Ad Server Software
+					 * 
+					 * 
 					'GenericSellsidePartner' => array(
 							'class_name' 		=> 'GenericSellsidePartner',
 							'partner_id'		=> '0001',
 							'ping_enabled'		=> true,
 							'timeout_enabled'	=> false,
-							/*
-							 * if you have a rtb_seat_id and secret_key, 
-							 * add it to the url here
-							 */ 
-							'partner_rtb_url'	=> 'http://server.nginad.com/bid?rtb_seat_id=0001&secret_key=nginad'
+							// if you have a rtb_seat_id and secret_key,  add it to the url here
+							'partner_rtb_url'	=> 'http://mydomainhere.com/bid?rtb_seat_id=0001&secret_key=nginad'
 					),
-						
+					*/
+					
 					/*
 					 * As you grow your RTB ad traffic network you will
 					 * get more DSPs to sell traffic to.
@@ -125,18 +125,17 @@ return array (
 					 * If the sell side partner does not have any OpenRTB extensions
 					 * and they use OpenRTB, you can simply use the existing
 					 * sell side module GenericSellsidePartner
-					 */
+					 * 
+					 * 
 					'Sample DSP Partner 2' => array(
 							'class_name' 		=> 'GenericSellsidePartner',
 							'partner_id'		=> '0002',
 							'ping_enabled'		=> false,
 							'timeout_enabled'	=> false,
-							/*
-							 * if you have a rtb_seat_id and secret_key,
-							 * add it to the url here
-							 */
+							// if you have a rtb_seat_id and secret_key, add it to the url here
 							'partner_rtb_url'	=> 'http://www.remote-nginad.com/bid?rtb_seat_id=0002&secret_key=nginad'
 					),
+					*/
 				)
 		),	
 );

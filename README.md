@@ -67,7 +67,7 @@ Master is now the development branch for NginAd 1.6!
 This is the last time master will be used as a development branch, promised!
 
 If you need to use NginAd, please check out the 1.5.2 tag here:
-https://github.com/cdnpal/nginad/releases/tag/1.5.2
+https://github.com/nginadfoundation/nginad/releases/tag/1.5.2
 
 Also note that today at 1:30PM PST the lead developer Chris Gu is having double extraction 
 oral surgery #1 and #16, so it's likely there will be no further commits until tomorrow.
