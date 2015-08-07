@@ -102,7 +102,7 @@ class PublisherAdZoneVideo extends \_factory\CachedTableRead
    public function get_row_object($params = null)
    {
        $rawData = $this->get_row($params);
-       $DataObj = new \model\PublisherAdZone();
+       $DataObj = new \model\PublisherAdZoneVideo();
        if ($rawData !== null):
        
            foreach (get_object_vars($DataObj) AS $key => $value):
