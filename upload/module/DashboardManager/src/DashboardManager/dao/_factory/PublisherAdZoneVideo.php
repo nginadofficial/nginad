@@ -97,7 +97,7 @@ class PublisherAdZoneVideo extends \_factory\CachedTableRead
      * Query database for a row and return results as an object.
      * 
      * @param string $params
-     * @return \DashboardManager\dao\PublisherAdZone
+     * @return \DashboardManager\dao\PublisherAdZoneVideo
      */
    public function get_row_object($params = null)
    {
@@ -118,7 +118,7 @@ class PublisherAdZoneVideo extends \_factory\CachedTableRead
     * Query database and return results as an array of objects.
     * 
     * @param string $params
-    * @return array:\DashboardManager\dao\PublisherAdZone
+    * @return array:\DashboardManager\dao\PublisherAdZoneVideo
     */
    public function get_object($params = null)
    {
