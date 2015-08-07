@@ -167,7 +167,7 @@ class PublisherAdZoneVideo extends \_factory\CachedTableRead
    /**
     * Delete the Ad specified.
     * 
-    * @param int $PublisherAdZoneVideoID The integer ID of the Ad to delete.
+    * @param int $PublisherAdZoneID The integer ID of the Ad to delete.
     * @throws \InvalidArgumentException is thrown when an invalid integer is provided.
     * @return boolean|int Returns the rows affected, or FALSE if failure.
     */
