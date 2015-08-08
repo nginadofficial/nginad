@@ -133,7 +133,7 @@ class InsertionOrderLineItem extends \_factory\CachedTableRead
     	else:
     	
 	    	// get value sum from apc
-	    	$current = \util\CacheSql::get_cached_read_result_apc($config, $params, $class_dir_name);
+	    	$current = \util\CacheSql::get_cached_read_result_apc_type_convert($config, $params, $class_dir_name);
 
     		if ($current != null):
     		
@@ -211,7 +211,7 @@ class InsertionOrderLineItem extends \_factory\CachedTableRead
   		else:
 	  		 
 	  		// get value sum from apc
-	  		$current = \util\CacheSql::get_cached_read_result_apc($config, $params, $class_dir_name);
+	  		$current = \util\CacheSql::get_cached_read_result_apc_type_convert($config, $params, $class_dir_name);
 	  		
 	  		if ($current != null):
 		  		$bucket_value = $current["value"];
@@ -279,7 +279,7 @@ class InsertionOrderLineItem extends \_factory\CachedTableRead
     	else:
 	    
     		// get value sum from apc
-    		$current = \util\CacheSql::get_cached_read_result_apc($config, $params, $class_dir_name);
+    		$current = \util\CacheSql::get_cached_read_result_apc_type_convert($config, $params, $class_dir_name);
     		
     		if ($current != null):
 	    		$bucket_value = $current["value"];

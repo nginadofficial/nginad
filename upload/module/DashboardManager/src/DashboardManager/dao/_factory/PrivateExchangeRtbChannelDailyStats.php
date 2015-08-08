@@ -120,7 +120,6 @@ class PrivateExchangeRtbChannelDailyStats extends \_factory\CachedTableRead
     	$floor_price_if_any = $method_params["floor_price_if_any"];
     	
     	$params = array();
-    	$params["PublisherWebsiteID"] 	= $publisher_website_id;
     	
     	$class_dir_name = 'PrivateExchangeRtbChannelDailyStats';
     	
@@ -129,25 +128,17 @@ class PrivateExchangeRtbChannelDailyStats extends \_factory\CachedTableRead
     	if ($cached_key_exists):
     	
 	    	// increment bucket
-	    	\util\CachedStatsWrites::increment_cached_write_result_ssp_rtb_channel_stats($config, $params, $class_dir_name, $impressions_offered_counter, $auction_bids_counter, $spend_offered_in_bids);
+	    	\util\CachedStatsWrites::increment_cached_write_result_private_exchange_channel_stats($config, $params, $class_dir_name, $method_params);
     	
     	else:
     	
 	    	// get value sum from apc
-	    	$current = \util\CacheSql::get_cached_read_result_apc($config, $params, $class_dir_name);
+	    	$current = \util\CacheSql::get_cached_read_result_apc_type_convert($config, $params, $class_dir_name);
 
     		if ($current != null):
-    		
-	    		$bucket_impressions_offered_counter 	= $current["impressions_offered_counter"];
-		    	$bucket_auction_bids_counter 			= $current["auction_bids_counter"];
-		    	$bucket_spend_offered_in_bids 			= $current["spend_offered_in_bids"];
-		    	
-		    	$method_params["impressions_offered_counter"] 	= $bucket_impressions_offered_counter;
-		    	$method_params["auction_bids_counter"] 			= $bucket_auction_bids_counter;
-		    	$method_params["spend_offered_in_bids"] 		= $bucket_spend_offered_in_bids;
-		    	
+
 		    	// write out values
-		    	$this->incrementPrivateExchangeRtbChannelDailyStats($config, $method_params);
+		    	$this->incrementPrivateExchangeRtbChannelDailyStats($config, $current);
 
 		    endif;
 		    
@@ -155,53 +146,61 @@ class PrivateExchangeRtbChannelDailyStats extends \_factory\CachedTableRead
 	    	\util\CacheSql::delete_cached_write_apc($config, $params, $class_dir_name);
 	    	 
 	    	// increment bucket
-	    	\util\CachedStatsWrites::increment_cached_write_result_ssp_rtb_channel_stats($config, $params, $class_dir_name, $impressions_offered_counter, $auction_bids_counter, $spend_offered_in_bids);
+	    	\util\CachedStatsWrites::increment_cached_write_result_private_exchange_channel_stats($config, $params, $class_dir_name, $method_params);
 	    	
     	endif;
     	
     }
 
-    public function incrementPrivateExchangeRtbChannelDailyStats($config, $method_params) {
+    public function incrementPrivateExchangeRtbChannelDailyStats($config, $current) {
     	
-    	$publisher_website_id = $method_params["publisher_website_id"];
-    	$rtb_channel_site_name = $method_params["rtb_channel_site_name"];
-    	$impressions_offered_counter = $method_params["impressions_offered_counter"];
-    	$auction_bids_counter = $method_params["auction_bids_counter"];
-    	$spend_offered_in_bids = $method_params["spend_offered_in_bids"];
-    	$floor_price_if_any = $method_params["floor_price_if_any"];
+    	if (!is_array($current)):
+    		return;
+    	endif;
     	
     	$PrivateExchangeRtbChannelDailyStatsFactory = \_factory\PrivateExchangeRtbChannelDailyStats::get_instance();
     	
-    	$current_hour 	= date("m/d/Y H");
-    	$current_day 	= date("m/d/Y");
+    	foreach ($current as $publisher_website_id => $method_params):
+
+	    	$publisher_website_id = $method_params["publisher_website_id"];
+	    	$rtb_channel_site_name = $method_params["rtb_channel_site_name"];
+	    	$impressions_offered_counter = $method_params["impressions_offered_counter"];
+	    	$auction_bids_counter = $method_params["auction_bids_counter"];
+	    	$spend_offered_in_bids = $method_params["spend_offered_in_bids"];
+	    	$floor_price_if_any = $method_params["floor_price_if_any"];
+
+	    	$current_hour 	= date("m/d/Y H");
+	    	$current_day 	= date("m/d/Y");
+	    	
+	    	$params = array();
+	    	$params["PublisherWebsiteID"] 	= $publisher_website_id;
+	    	$params["MDYH"] 				= $current_hour;
+	    	$PrivateExchangeRtbChannelDailyStats 		= $PrivateExchangeRtbChannelDailyStatsFactory->get_row($params);
+	    	
+	    	$private_exchange_rtb_channel_daily_stats = new \model\PrivateExchangeRtbChannelDailyStats();
+	    	$private_exchange_rtb_channel_daily_stats->PublisherWebsiteID 		= $publisher_website_id;
+	    	$private_exchange_rtb_channel_daily_stats->BidFloor 				= $floor_price_if_any;
+	    	$private_exchange_rtb_channel_daily_stats->RtbChannelSiteName 		= $rtb_channel_site_name;
+	    	
+	    	if ($PrivateExchangeRtbChannelDailyStats != null):
+	    	
+		    	$private_exchange_rtb_channel_daily_stats->PrivateExchangeRtbChannelDailyStatsID = $PrivateExchangeRtbChannelDailyStats->PrivateExchangeRtbChannelDailyStatsID;
+		    	$private_exchange_rtb_channel_daily_stats->ImpressionsOfferedCounter = $PrivateExchangeRtbChannelDailyStats->ImpressionsOfferedCounter + $impressions_offered_counter;
+		    	$private_exchange_rtb_channel_daily_stats->AuctionBidsCounter = $PrivateExchangeRtbChannelDailyStats->AuctionBidsCounter + $auction_bids_counter;
+		    	$private_exchange_rtb_channel_daily_stats->BidTotalAmount = $PrivateExchangeRtbChannelDailyStats->BidTotalAmount + $spend_offered_in_bids;
+		    	$PrivateExchangeRtbChannelDailyStatsFactory->updatePrivateExchangeRtbChannelDailyStats($private_exchange_rtb_channel_daily_stats);
+	    	else:
+	    	
+		    	$private_exchange_rtb_channel_daily_stats->MDYH = $current_hour;
+	    		$private_exchange_rtb_channel_daily_stats->MDY 	= $current_day;
+		    	$private_exchange_rtb_channel_daily_stats->ImpressionsOfferedCounter = $impressions_offered_counter;
+		    	$private_exchange_rtb_channel_daily_stats->AuctionBidsCounter = $auction_bids_counter;
+		    	$private_exchange_rtb_channel_daily_stats->BidTotalAmount = $spend_offered_in_bids;
+		    	$private_exchange_rtb_channel_daily_stats->DateCreated = date("Y-m-d H:i:s");
+		    	$PrivateExchangeRtbChannelDailyStatsFactory->insertPrivateExchangeRtbChannelDailyStats($private_exchange_rtb_channel_daily_stats);
+	    	endif;
     	
-    	$params = array();
-    	$params["PublisherWebsiteID"] 	= $publisher_website_id;
-    	$params["MDYH"] 				= $current_hour;
-    	$PrivateExchangeRtbChannelDailyStats 		= $PrivateExchangeRtbChannelDailyStatsFactory->get_row($params);
-    	
-    	$private_exchange_rtb_channel_daily_stats = new \model\PrivateExchangeRtbChannelDailyStats();
-    	$private_exchange_rtb_channel_daily_stats->PublisherWebsiteID 		= $publisher_website_id;
-    	$private_exchange_rtb_channel_daily_stats->BidFloor 				= $floor_price_if_any;
-    	$private_exchange_rtb_channel_daily_stats->RtbChannelSiteName 		= $rtb_channel_site_name;
-    	
-    	if ($PrivateExchangeRtbChannelDailyStats != null):
-    	
-	    	$private_exchange_rtb_channel_daily_stats->PrivateExchangeRtbChannelDailyStatsID = $PrivateExchangeRtbChannelDailyStats->PrivateExchangeRtbChannelDailyStatsID;
-	    	$private_exchange_rtb_channel_daily_stats->ImpressionsOfferedCounter = $PrivateExchangeRtbChannelDailyStats->ImpressionsOfferedCounter + $impressions_offered_counter;
-	    	$private_exchange_rtb_channel_daily_stats->AuctionBidsCounter = $PrivateExchangeRtbChannelDailyStats->AuctionBidsCounter + $auction_bids_counter;
-	    	$private_exchange_rtb_channel_daily_stats->BidTotalAmount = $PrivateExchangeRtbChannelDailyStats->BidTotalAmount + $spend_offered_in_bids;
-	    	$PrivateExchangeRtbChannelDailyStatsFactory->updatePrivateExchangeRtbChannelDailyStats($private_exchange_rtb_channel_daily_stats);
-    	else:
-    	
-	    	$private_exchange_rtb_channel_daily_stats->MDYH = $current_hour;
-    		$private_exchange_rtb_channel_daily_stats->MDY 	= $current_day;
-	    	$private_exchange_rtb_channel_daily_stats->ImpressionsOfferedCounter = $impressions_offered_counter;
-	    	$private_exchange_rtb_channel_daily_stats->AuctionBidsCounter = $auction_bids_counter;
-	    	$private_exchange_rtb_channel_daily_stats->BidTotalAmount = $spend_offered_in_bids;
-	    	$private_exchange_rtb_channel_daily_stats->DateCreated = date("Y-m-d H:i:s");
-	    	$PrivateExchangeRtbChannelDailyStatsFactory->insertPrivateExchangeRtbChannelDailyStats($private_exchange_rtb_channel_daily_stats);
-    	endif;
+    	endforeach;
     	
     }
 };

@@ -40,7 +40,7 @@ class CachedStatsWrites {
 			\util\CacheSql::create_reset_write_lock($config, $params, $class_dir_name);
 
 			// get value sum from apc
-			$current = \util\CacheSql::get_cached_read_result_apc($config, $params, $class_dir_name);
+			$current = \util\CacheSql::get_cached_read_result_apc_type_convert($config, $params, $class_dir_name);
 		
 			// delete existing key - reset bucket
 			\util\CacheSql::delete_cached_write_apc($config, $params, $class_dir_name);
@@ -139,7 +139,7 @@ class CachedStatsWrites {
 			\util\CacheSql::create_reset_write_lock($config, $params, $class_dir_name);
 
 			// get value sum from apc
-			$current = \util\CacheSql::get_cached_read_result_apc($config, $params, $class_dir_name);
+			$current = \util\CacheSql::get_cached_read_result_apc_type_convert($config, $params, $class_dir_name);
 		
 			// delete existing key - reset bucket
 			\util\CacheSql::delete_cached_write_apc($config, $params, $class_dir_name);
@@ -212,7 +212,7 @@ class CachedStatsWrites {
 	
 	public static function increment_cached_write_result_publisher_bids_apc($config, $params, $class_name, \model\PublisherHourlyBids $PublisherHourlyBidsToAdd) {
 	
-		$current = \util\CacheSql::get_cached_read_result_apc($config, $params, $class_name);
+		$current = \util\CacheSql::get_cached_read_result_apc_type_convert($config, $params, $class_name);
 	
 		if ($current !== null):
 		
@@ -262,7 +262,9 @@ class CachedStatsWrites {
 						"SpendTotalPrivateExchangeGross"		=> $existing_bids_spend_total_private_exchange_gross,
 						"SpendTotalNet"							=> $existing_bids_spend_total_net
 	
-				));
+				),
+				3600
+			);
 	
 		$timer_name = 'write_timer';
 		$write_timer = \util\CacheSql::get_cached_read_result_apc($config, $params, $class_name . $timer_name);
@@ -279,7 +281,7 @@ class CachedStatsWrites {
 	
 	public static function increment_cached_write_result_sellside_bids_apc($config, $params, $class_name, \model\SellSidePartnerHourlyBids $SellSidePartnerHourlyBidsToAdd) {
 	
-		$current = \util\CacheSql::get_cached_read_result_apc($config, $params, $class_name);
+		$current = \util\CacheSql::get_cached_read_result_apc_type_convert($config, $params, $class_name);
 	
 		if ($current !== null):
 		
@@ -324,7 +326,9 @@ class CachedStatsWrites {
 						"SpendTotalPrivateExchangeGross"		=> $existing_bids_spend_total_private_exchange_gross,
 						"SpendTotalNet"							=> $existing_bids_spend_total_net
 						
-				));
+					),
+				3600
+			);
 	
 		$timer_name = 'write_timer';
 		$write_timer = \util\CacheSql::get_cached_read_result_apc($config, $params, $class_name . $timer_name);
@@ -338,34 +342,119 @@ class CachedStatsWrites {
 	
 	}
 	
+	public static function increment_cached_write_result_private_exchange_channel_stats($config, $params, $class_name, $method_params) {
 	
-	public static function increment_cached_write_result_ssp_rtb_channel_stats($config, $params, $class_name, $impressions_offered_counter_value, $auction_bids_counter_value, $spend_offered_in_bids_value) {
-		
-		$current = \util\CacheSql::get_cached_read_result_apc($config, $params, $class_name);
+    	$publisher_website_id = $method_params["publisher_website_id"] = $method_params["rtb_channel_site_id"];
+    	$rtb_channel_site_name = $method_params["rtb_channel_site_name"];
+    	$impressions_offered_counter = $method_params["impressions_offered_counter"];
+    	$auction_bids_counter = $method_params["auction_bids_counter"];
+    	$spend_offered_in_bids = $method_params["spend_offered_in_bids"];
+    	$floor_price_if_any = $method_params["floor_price_if_any"];
+	
+		$current = \util\CacheSql::get_cached_read_result_apc_type_convert($config, $params, $class_name);
 	
 		if ($current !== null):
 		
-			$existing_impressions_offered_counter = intval($current["impressions_offered_counter"]);
-			$impressions_offered_counter_value += $existing_impressions_offered_counter;
-		
-			$existing_auction_bids_counter = floatval($current["auction_bids_counter"]);
-			$auction_bids_counter_value += $existing_auction_bids_counter;
+			if (isset($current[$publisher_website_id])):
 			
-			$existing_spend_offered_in_bids = floatval($current["spend_offered_in_bids"]);
-			$spend_offered_in_bids_value += $existing_spend_offered_in_bids;
+				$existing_impressions_offered_counter = intval($current[$publisher_website_id]["impressions_offered_counter"]);
+				$impressions_offered_counter += $existing_impressions_offered_counter;
+				$current[$publisher_website_id]["impressions_offered_counter"] = intval($impressions_offered_counter);
+			
+				$existing_auction_bids_counter = floatval($current[$publisher_website_id]["auction_bids_counter"]);
+				$auction_bids_counter += $existing_auction_bids_counter;
+				$current[$publisher_website_id]["auction_bids_counter"] = intval($auction_bids_counter);
+			
+				$existing_spend_offered_in_bids = floatval($current[$publisher_website_id]["spend_offered_in_bids"]);
+				$spend_offered_in_bids += $existing_spend_offered_in_bids;
+				$current[$publisher_website_id]["spend_offered_in_bids"] = floatval($spend_offered_in_bids);
+			
+			else:
+				
+				$current[$publisher_website_id] = $method_params;
+		
+			endif;
+	
+		else:
+				
+			$current = array();
+			$current[$publisher_website_id] = $method_params;
+				
+		endif;
+	
+		// cache up to 1 hour, the write the the db should occur before that.
+		\util\CacheSql::put_cached_read_result_apc(
+				$config,
+				$params,
+				$class_name,
+				$current,
+				3600
+		);
+	
+		$timer_name = 'write_timer';
+		$write_timer = \util\CacheSql::get_cached_read_result_apc($config, $params, $class_name . $timer_name);
+	
+		if ($write_timer == null):
+	
+		/*
+		 * 60 second write timer, when the apc cache value is gone the
+		* contents are written the DB and the apc value is cleared
+		*/
+		\util\CacheSql::put_cached_read_result_apc($config, $params, $class_name . $timer_name, array($timer_name=>true), 60);
+		endif;
+	
+	}
+	
+	public static function increment_cached_write_result_ssp_rtb_channel_stats($config, $params, $class_name, $method_params) {
+		
+		$buyside_partner_name = $method_params["buyside_partner_name"];
+		$rtb_channel_site_id = $method_params["rtb_channel_site_id"];
+		$rtb_channel_site_name = $method_params["rtb_channel_site_name"];
+		$rtb_channel_site_domain = $method_params["rtb_channel_site_domain"];
+		$rtb_channel_site_iab_category = $method_params["rtb_channel_site_iab_category"];
+		$rtb_channel_publisher_name = $method_params["rtb_channel_publisher_name"];
+		$impressions_offered_counter = $method_params["impressions_offered_counter"];
+		$auction_bids_counter = $method_params["auction_bids_counter"];
+		$spend_offered_in_bids = $method_params["spend_offered_in_bids"];
+		$floor_price_if_any = $method_params["floor_price_if_any"];
+		
+		$current = \util\CacheSql::get_cached_read_result_apc_type_convert($config, $params, $class_name);
+	
+		if ($current !== null):
+		
+			if (isset($current[$buyside_partner_name][$rtb_channel_site_id])):
+			
+				$existing_impressions_offered_counter = intval($current[$buyside_partner_name][$rtb_channel_site_id]["impressions_offered_counter"]);
+				$impressions_offered_counter += $existing_impressions_offered_counter;
+				$current[$buyside_partner_name][$rtb_channel_site_id]["impressions_offered_counter"] = intval($impressions_offered_counter);
+				
+				$existing_auction_bids_counter = floatval($current[$buyside_partner_name][$rtb_channel_site_id]["auction_bids_counter"]);
+				$auction_bids_counter += $existing_auction_bids_counter;
+				$current[$buyside_partner_name][$rtb_channel_site_id]["auction_bids_counter"] = intval($auction_bids_counter);
+				
+				$existing_spend_offered_in_bids = floatval($current[$buyside_partner_name][$rtb_channel_site_id]["spend_offered_in_bids"]);
+				$spend_offered_in_bids += $existing_spend_offered_in_bids;
+				$current[$buyside_partner_name][$rtb_channel_site_id]["spend_offered_in_bids"] = floatval($spend_offered_in_bids);
+				
+			else:
+				
+				$current[$buyside_partner_name][$rtb_channel_site_id] = $method_params;
+				
+			endif;
+			
+		else: 
+			
+			$current = array();
+			$current[$buyside_partner_name][$rtb_channel_site_id] = $method_params;
 
 		endif;
-		
+
 		// cache up to 1 hour, the write the the db should occur before that.
 		\util\CacheSql::put_cached_read_result_apc(
 				$config, 
 				$params, 
 				$class_name, 
-				array(
-						"auction_bids_counter"=>intval($auction_bids_counter_value), 
-						"impressions_offered_counter"=>intval($impressions_offered_counter_value),
-						"spend_offered_in_bids"=>floatval($spend_offered_in_bids_value),
-					), 
+				$current,
 				3600
 		);
 
