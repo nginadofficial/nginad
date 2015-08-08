@@ -97,12 +97,12 @@ class PublisherAdZoneVideo extends \_factory\CachedTableRead
      * Query database for a row and return results as an object.
      * 
      * @param string $params
-     * @return \DashboardManager\dao\PublisherAdZone
+     * @return \DashboardManager\dao\PublisherAdZoneVideo
      */
    public function get_row_object($params = null)
    {
        $rawData = $this->get_row($params);
-       $DataObj = new \model\PublisherAdZone();
+       $DataObj = new \model\PublisherAdZoneVideo();
        if ($rawData !== null):
        
            foreach (get_object_vars($DataObj) AS $key => $value):
@@ -118,7 +118,7 @@ class PublisherAdZoneVideo extends \_factory\CachedTableRead
     * Query database and return results as an array of objects.
     * 
     * @param string $params
-    * @return array:\DashboardManager\dao\PublisherAdZone
+    * @return array:\DashboardManager\dao\PublisherAdZoneVideo
     */
    public function get_object($params = null)
    {
@@ -167,7 +167,7 @@ class PublisherAdZoneVideo extends \_factory\CachedTableRead
    /**
     * Delete the Ad specified.
     * 
-    * @param int $PublisherAdZoneVideoID The integer ID of the Ad to delete.
+    * @param int $PublisherAdZoneID The integer ID of the Ad to delete.
     * @throws \InvalidArgumentException is thrown when an invalid integer is provided.
     * @return boolean|int Returns the rows affected, or FALSE if failure.
     */

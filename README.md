@@ -1,6 +1,11 @@
 nginad
 =======
 
+August 4, 2015
+------------------
+
+*NEWS:* The NginAd Project is in the process of filing for non-profit organization status in the United States and is now under the control of the NginAd Foundation.
+
 July 31, 2015
 ------------------
 
