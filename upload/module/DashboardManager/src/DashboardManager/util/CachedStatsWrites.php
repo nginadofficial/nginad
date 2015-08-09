@@ -422,30 +422,30 @@ class CachedStatsWrites {
 	
 		if ($current !== null):
 		
-			if (isset($current[$buyside_partner_name][$rtb_channel_site_id])):
+			if (isset($current[$rtb_channel_site_id])):
 			
-				$existing_impressions_offered_counter = intval($current[$buyside_partner_name][$rtb_channel_site_id]["impressions_offered_counter"]);
+				$existing_impressions_offered_counter = intval($current[$rtb_channel_site_id]["impressions_offered_counter"]);
 				$impressions_offered_counter += $existing_impressions_offered_counter;
-				$current[$buyside_partner_name][$rtb_channel_site_id]["impressions_offered_counter"] = intval($impressions_offered_counter);
+				$current[$rtb_channel_site_id]["impressions_offered_counter"] = intval($impressions_offered_counter);
 				
-				$existing_auction_bids_counter = floatval($current[$buyside_partner_name][$rtb_channel_site_id]["auction_bids_counter"]);
+				$existing_auction_bids_counter = floatval($current[$rtb_channel_site_id]["auction_bids_counter"]);
 				$auction_bids_counter += $existing_auction_bids_counter;
-				$current[$buyside_partner_name][$rtb_channel_site_id]["auction_bids_counter"] = intval($auction_bids_counter);
+				$current[$rtb_channel_site_id]["auction_bids_counter"] = intval($auction_bids_counter);
 				
-				$existing_spend_offered_in_bids = floatval($current[$buyside_partner_name][$rtb_channel_site_id]["spend_offered_in_bids"]);
+				$existing_spend_offered_in_bids = floatval($current[$rtb_channel_site_id]["spend_offered_in_bids"]);
 				$spend_offered_in_bids += $existing_spend_offered_in_bids;
-				$current[$buyside_partner_name][$rtb_channel_site_id]["spend_offered_in_bids"] = floatval($spend_offered_in_bids);
+				$current[$rtb_channel_site_id]["spend_offered_in_bids"] = floatval($spend_offered_in_bids);
 				
 			else:
 				
-				$current[$buyside_partner_name][$rtb_channel_site_id] = $method_params;
+				$current[$rtb_channel_site_id] = $method_params;
 				
 			endif;
 			
 		else: 
 			
 			$current = array();
-			$current[$buyside_partner_name][$rtb_channel_site_id] = $method_params;
+			$current[$rtb_channel_site_id] = $method_params;
 
 		endif;
 

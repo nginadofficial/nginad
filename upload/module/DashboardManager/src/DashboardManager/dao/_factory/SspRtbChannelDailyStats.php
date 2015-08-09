@@ -171,10 +171,12 @@ class SspRtbChannelDailyStats extends \_factory\CachedTableRead
     	
     	$SspRtbChannelDailyStatsFactory = \_factory\SspRtbChannelDailyStats::get_instance();
     	
-    	foreach ($current as $buyside_partner_name => $rtb_channel_site_id_list):
-    	
-    		foreach ($rtb_channel_site_id_list as $rtb_channel_site_id => $method_params):
+    	foreach ($current as $rtb_channel_site_id => $method_params):
 	    	
+    			if (!isset($method_params["buyside_partner_name"])):
+					continue;
+    			endif;
+    	
 		    	$buyside_partner_name = $method_params["buyside_partner_name"]; 
 		    	$rtb_channel_site_id = $method_params["rtb_channel_site_id"];  
 		    	$rtb_channel_site_name = $method_params["rtb_channel_site_name"];  
@@ -222,7 +224,6 @@ class SspRtbChannelDailyStats extends \_factory\CachedTableRead
 			    	$SspRtbChannelDailyStatsFactory->insertSspRtbChannelDailyStats($ssp_rtb_channel_daily_stats);
 		    	endif;
 		    	
-	    	endforeach;
 	    	
     	endforeach;
     	
