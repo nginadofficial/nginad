@@ -4,7 +4,7 @@ nginad
 August 8, 2015
 ------------------
 
-One of the Ad Networks using NginAd for RTB found a massive bug with some of the new 1.6 classes which count RTB statistics for RTB requests shown in the inventory choosers.
+One of the Ad Networks using NginAd for RTB found a massive bug with some of the new 1.6 classes which compile RTB statistics for RTB requests shown in the inventory choosers.
 We have patched these bugs, with mutexes and semaphores that spin lock the data keys in APC while the existing data is flushed back to the DB in an upsert.
 
 August 4, 2015
