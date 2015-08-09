@@ -142,8 +142,25 @@ class SspRtbChannelDailyStats extends \_factory\CachedTableRead
     	
     	else:
     	
+	    	/*
+	    	 * DO THIS BEFORE APC RESET OPERATIONS TO AVOID THREAD-LIKE DUPLICATION DUE TO THE LACK OF
+	    	* A SYNCHRONIZED KEYWORD IN PHP
+	    	*/
+	    	
+	    	// SYNCHRONIZED BLOCK START
+	    	\util\CacheSql::create_reset_write_lock($config, $params, $class_dir_name);
+	    	
 	    	// get value sum from apc
 	    	$current = \util\CacheSql::get_cached_read_result_apc_type_convert($config, $params, $class_dir_name);
+	    	
+	    	// delete existing key - reset bucket
+	    	\util\CacheSql::delete_cached_write_apc($config, $params, $class_dir_name);
+	    		
+	    	// increment bucket
+	    	\util\CachedStatsWrites::increment_cached_write_result_ssp_rtb_channel_stats($config, $params, $class_dir_name, $method_params);
+	    	
+	    	// SYNCHRONIZED BLOCK END
+	    	\util\CacheSql::reset_write_unlock($config, $params, $class_dir_name);
 
     		if ($current != null):
 		    	
@@ -151,13 +168,7 @@ class SspRtbChannelDailyStats extends \_factory\CachedTableRead
 		    	$this->incrementSspRtbChannelDailyStats($config, $current);
 
 		    endif;
-		    
-	    	// delete existing key - reset bucket
-	    	\util\CacheSql::delete_cached_write_apc($config, $params, $class_dir_name);
-	    	 
-	    	// increment bucket
-	    	\util\CachedStatsWrites::increment_cached_write_result_ssp_rtb_channel_stats($config, $params, $class_dir_name, $method_params);
-	    	
+
     	endif;
     	
     }

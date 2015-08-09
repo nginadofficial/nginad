@@ -132,9 +132,26 @@ class InsertionOrderLineItem extends \_factory\CachedTableRead
     	
     	else:
     	
+	    	/*
+	    	 * DO THIS BEFORE APC RESET OPERATIONS TO AVOID THREAD-LIKE DUPLICATION DUE TO THE LACK OF
+	    	* A SYNCHRONIZED KEYWORD IN PHP
+	    	*/
+	    	
+	    	// SYNCHRONIZED BLOCK START
+	    	\util\CacheSql::create_reset_write_lock($config, $params, $class_dir_name);
+	    	
 	    	// get value sum from apc
 	    	$current = \util\CacheSql::get_cached_read_result_apc_type_convert($config, $params, $class_dir_name);
-
+	    	
+	    	// delete existing key - reset bucket
+	    	\util\CacheSql::delete_cached_write_apc($config, $params, $class_dir_name);
+	    		
+	    	// increment bucket
+	    	\util\CachedStatsWrites::increment_cached_write_result_impressions_spend_apc($config, $params, $class_dir_name, 1, $impression_cost_gross, $impression_cost_net);
+	    	
+	    	// SYNCHRONIZED BLOCK END
+	    	\util\CacheSql::reset_write_unlock($config, $params, $class_dir_name);
+	    	
     		if ($current != null):
     		
 	    		$bucket_impressions = $current["impressions"];
@@ -145,12 +162,6 @@ class InsertionOrderLineItem extends \_factory\CachedTableRead
 		    	$this->incrementInsertionOrderLineItemImpressionsCounterAndSpend($buyer_id, $banner_id, $bucket_impressions, $bucket_spend_gross, $bucket_spend_net);
 
 		    endif;
-		    
-	    	// delete existing key - reset bucket
-	    	\util\CacheSql::delete_cached_write_apc($config, $params, $class_dir_name);
-	    	 
-	    	// increment bucket
-	    	\util\CachedStatsWrites::increment_cached_write_result_impressions_spend_apc($config, $params, $class_dir_name, 1, $impression_cost_gross, $impression_cost_net);
 	    	
     	endif;
     	
@@ -210,8 +221,25 @@ class InsertionOrderLineItem extends \_factory\CachedTableRead
 	  		 
   		else:
 	  		 
-	  		// get value sum from apc
-	  		$current = \util\CacheSql::get_cached_read_result_apc_type_convert($config, $params, $class_dir_name);
+	    	/*
+	    	 * DO THIS BEFORE APC RESET OPERATIONS TO AVOID THREAD-LIKE DUPLICATION DUE TO THE LACK OF
+	    	* A SYNCHRONIZED KEYWORD IN PHP
+	    	*/
+	    	
+	    	// SYNCHRONIZED BLOCK START
+	    	\util\CacheSql::create_reset_write_lock($config, $params, $class_dir_name);
+	    	
+	    	// get value sum from apc
+	    	$current = \util\CacheSql::get_cached_read_result_apc_type_convert($config, $params, $class_dir_name);
+	    	
+	    	// delete existing key - reset bucket
+	    	\util\CacheSql::delete_cached_write_apc($config, $params, $class_dir_name);
+	    		
+	  		// increment bucket
+	  		\util\CachedStatsWrites::increment_cached_write_result_int_apc($config, $params, $class_dir_name, 1);
+	  		
+	    	// SYNCHRONIZED BLOCK END
+	    	\util\CacheSql::reset_write_unlock($config, $params, $class_dir_name);
 	  		
 	  		if ($current != null):
 		  		$bucket_value = $current["value"];
@@ -219,12 +247,6 @@ class InsertionOrderLineItem extends \_factory\CachedTableRead
 		  		// write out value
 		  		$this->incrementInsertionOrderLineItemBidsCounter($buyer_id, $banner_id, $bucket_value);
 	  		endif;
-	  		
-	  		// delete existing key - reset bucket
-	  		\util\CacheSql::delete_cached_write_apc($config, $params, $class_dir_name);
-	  		
-	  		// increment bucket
-	  		\util\CachedStatsWrites::increment_cached_write_result_int_apc($config, $params, $class_dir_name, 1);
 	  		 
   		endif;
   
@@ -278,8 +300,25 @@ class InsertionOrderLineItem extends \_factory\CachedTableRead
 	    	 
     	else:
 	    
-    		// get value sum from apc
-    		$current = \util\CacheSql::get_cached_read_result_apc_type_convert($config, $params, $class_dir_name);
+	    	/*
+	    	 * DO THIS BEFORE APC RESET OPERATIONS TO AVOID THREAD-LIKE DUPLICATION DUE TO THE LACK OF
+	    	* A SYNCHRONIZED KEYWORD IN PHP
+	    	*/
+	    	
+	    	// SYNCHRONIZED BLOCK START
+	    	\util\CacheSql::create_reset_write_lock($config, $params, $class_dir_name);
+	    	
+	    	// get value sum from apc
+	    	$current = \util\CacheSql::get_cached_read_result_apc_type_convert($config, $params, $class_dir_name);
+	    	
+	    	// delete existing key - reset bucket
+	    	\util\CacheSql::delete_cached_write_apc($config, $params, $class_dir_name);
+	    		
+    		// increment bucket
+    		\util\CachedStatsWrites::increment_cached_write_result_int_apc($config, $params, $class_dir_name, 1);
+    			
+	    	// SYNCHRONIZED BLOCK END
+	    	\util\CacheSql::reset_write_unlock($config, $params, $class_dir_name);
     		
     		if ($current != null):
 	    		$bucket_value = $current["value"];
@@ -287,13 +326,7 @@ class InsertionOrderLineItem extends \_factory\CachedTableRead
 	    		// write out value
 	    		$this->incrementBuySideHourlyImpressionsByTLD($banner_id, $tld, $bucket_value);
     		endif;
-    		
-    		// delete existing key - reset bucket
-    		\util\CacheSql::delete_cached_write_apc($config, $params, $class_dir_name);
-    		
-    		// increment bucket
-    		\util\CachedStatsWrites::increment_cached_write_result_int_apc($config, $params, $class_dir_name, 1);
-	    
+
     	endif;
     	
     }
