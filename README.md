@@ -5,6 +5,7 @@ August 11, 2015
 ------------------
 
 A Critical Signup bug was found by a user. The wrong field was getting assigned a MySQL date.
+Also another bug was fixed for a new bug found by a user: Windows requires an .xlsx extension to open the file after download. Windows 8 does not require this (mime type), but it could be a previous version of Windows.
 This requires a minor version update to version 1.6.2
 
 August 8, 2015
