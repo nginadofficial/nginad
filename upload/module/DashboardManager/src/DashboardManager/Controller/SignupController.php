@@ -139,7 +139,7 @@ class SignupController extends PublisherAbstractActionController {
 			$DemandCustomerInfo->ApprovedForPlatformConnectionInventory		=	0;
 			$DemandCustomerInfo->ApprovedForSspRtbInventory					=	0;
 			$DemandCustomerInfo->CreditApplicationWasSent					=	0;
-			$DemandCustomerInfo->ApprovedForPlatformConnectionInventory		=	'0000-00-00 00:00:00';
+			$DemandCustomerInfo->DateCreditApplicationWasSent				=	'0000-00-00 00:00:00';
 				
 			
 			$authUsers = new \model\authUsers();
