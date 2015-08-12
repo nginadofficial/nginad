@@ -65,7 +65,7 @@ class ReportHelper {
 		$fname = str_replace(" ", "_", $cells_header);
 		
 		header('Content-type: application/vnd.ms-excel');
-		header('Content-Disposition: attachment; filename="' . $fname . '"');
+		header('Content-Disposition: attachment; filename="' . $fname . '.xlsx"');
 		header('Cache-Control: max-age=0');
 		
 		$objPHPExcel->setActiveSheetIndex(0);
