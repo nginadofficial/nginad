@@ -1,6 +1,12 @@
 nginad
 =======
 
+August 11, 2015
+------------------
+
+A Critical Signup bug was found by a user. The wrong field was getting assigned a MySQL date.
+This requires a minor version update to version 1.6.2
+
 August 8, 2015
 ------------------
 
