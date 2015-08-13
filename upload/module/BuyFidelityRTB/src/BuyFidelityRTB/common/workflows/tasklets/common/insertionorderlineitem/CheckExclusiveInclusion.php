@@ -60,7 +60,7 @@ class CheckExclusiveInclusion {
 				if (strpos(strtolower($referrer), $domain_to_match) === false):
 				
 					if ($Logger->setting_log === true):
-						$Logger->log[] = "Failed: " . "Check banner page referrer url, site exclusive inclusions do not match :: EXPECTED: " . $domain_to_match . " GOT: " . $RtbBidRequest->refurl;
+						$Logger->log[] = "Failed: " . "Check banner page referrer url, site exclusive inclusions do not match :: EXPECTED: " . $domain_to_match . " GOT: " . $referrer;
 					endif;
 					$result = false;
 					continue;
