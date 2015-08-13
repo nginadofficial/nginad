@@ -699,6 +699,64 @@ class TransformPreview {
 		$InsertionOrderLineItemDomainExclusiveInclusionFactory = \_factory\InsertionOrderLineItemDomainExclusiveInclusion::get_instance();
 		$InsertionOrderLineItemDomainExclusiveInclusionPreviewFactory = \_factory\InsertionOrderLineItemDomainExclusiveInclusionPreview::get_instance();
 
+		$SspRtbChannelToInsertionOrderLineItemPreviewFactory = \_factory\SspRtbChannelToInsertionOrderLineItemPreview::get_instance();
+		$SspRtbChannelToInsertionOrderLineItemFactory = \_factory\SspRtbChannelToInsertionOrderLineItem::get_instance();
+		$PmpDealPublisherWebsiteToInsertionOrderLineItemFactory = \_factory\PmpDealPublisherWebsiteToInsertionOrderLineItem::get_instance();
+		$PmpDealPublisherWebsiteToInsertionOrderLineItemPreviewFactory = \_factory\PmpDealPublisherWebsiteToInsertionOrderLineItemPreview::get_instance();
+		
+		$SspRtbChannelToInsertionOrderPreviewFactory = \_factory\SspRtbChannelToInsertionOrderPreview::get_instance();
+		$SspRtbChannelToInsertionOrderFactory = \_factory\SspRtbChannelToInsertionOrder::get_instance();
+		$PmpDealPublisherWebsiteToInsertionOrderFactory = \_factory\PmpDealPublisherWebsiteToInsertionOrder::get_instance();
+		$PmpDealPublisherWebsiteToInsertionOrderPreviewFactory = \_factory\PmpDealPublisherWebsiteToInsertionOrderPreview::get_instance();
+		
+		/*
+		 * PMP INVENTORY
+		*/
+		
+		$params = array();
+		$params["InsertionOrderID"] = $InsertionOrder->InsertionOrderID;
+		$PmpDealPublisherWebsiteToInsertionOrder = $PmpDealPublisherWebsiteToInsertionOrderFactory->get_row($params);
+		
+		if ($PmpDealPublisherWebsiteToInsertionOrder != null):
+		
+			$PmpDealPublisherWebsiteToInsertionOrderPreview = new \model\PmpDealPublisherWebsiteToInsertionOrderPreview();
+			
+			$PmpDealPublisherWebsiteToInsertionOrderPreview->PublisherWebsiteID 									= $PmpDealPublisherWebsiteToInsertionOrder->PublisherWebsiteID;
+			$PmpDealPublisherWebsiteToInsertionOrderPreview->PublisherWebsiteLocal 									= $PmpDealPublisherWebsiteToInsertionOrder->PublisherWebsiteLocal;
+			$PmpDealPublisherWebsiteToInsertionOrderPreview->PublisherWebsiteDescription 							= $PmpDealPublisherWebsiteToInsertionOrder->PublisherWebsiteDescription;
+			$PmpDealPublisherWebsiteToInsertionOrderPreview->InsertionOrderPreviewID 								= $InsertionOrderPreviewID;
+			$PmpDealPublisherWebsiteToInsertionOrderPreview->Enabled 												= $PmpDealPublisherWebsiteToInsertionOrder->Enabled;
+			$PmpDealPublisherWebsiteToInsertionOrderPreview->DateCreated 											= date("Y-m-d H:i:s");
+			$PmpDealPublisherWebsiteToInsertionOrderPreview->DateUpdated 											= date("Y-m-d H:i:s");
+			
+			$PmpDealPublisherWebsiteToInsertionOrderPreviewFactory->savePmpDealPublisherWebsiteToInsertionOrderPreview($PmpDealPublisherWebsiteToInsertionOrderPreview);
+			
+		endif;
+
+		/*
+		 * SSP INVENTORY
+		*/
+		
+		$params = array();
+		$params["InsertionOrderID"] = $InsertionOrder->InsertionOrderID;
+		$SspRtbChannelToInsertionOrder = $SspRtbChannelToInsertionOrderFactory->get_row($params);
+		
+		if ($SspRtbChannelToInsertionOrder != null):
+		
+			$SspRtbChannelToInsertionOrderPreview = new \model\SspRtbChannelToInsertionOrderPreview();
+			
+			$SspRtbChannelToInsertionOrderPreview->SspPublisherChannelID 								= $SspRtbChannelToInsertionOrder->SspPublisherChannelID;
+			$SspRtbChannelToInsertionOrderPreview->SspPublisherChannelDescription 						= $SspRtbChannelToInsertionOrder->SspPublisherChannelDescription;
+			$SspRtbChannelToInsertionOrderPreview->SspExchange 											= $SspRtbChannelToInsertionOrder->SspExchange;
+			$SspRtbChannelToInsertionOrderPreview->InsertionOrderPreviewID 								= $InsertionOrderPreviewID;
+			$SspRtbChannelToInsertionOrderPreview->Enabled 												= $SspRtbChannelToInsertionOrder->Enabled;
+			$SspRtbChannelToInsertionOrderPreview->DateCreated 											= date("Y-m-d H:i:s");
+			$SspRtbChannelToInsertionOrderPreview->DateUpdated 											= date("Y-m-d H:i:s");
+			
+			$SspRtbChannelToInsertionOrderPreviewFactory->saveSspRtbChannelToInsertionOrderPreview($SspRtbChannelToInsertionOrderPreview);
+			
+		endif;
+
 		foreach ($InsertionOrderLineItemList as $InsertionOrderLineItem):
 
 			$banner_id = $InsertionOrderLineItem->InsertionOrderLineItemID;
@@ -831,6 +889,62 @@ class TransformPreview {
 				    endif;
 				    
 			    endif;
+			endif;
+			
+			/*
+			 * PMP INVENTORY
+			*/
+			
+			$params = array();
+			$params["InsertionOrderLineItemID"] = $banner_id;
+			$PmpDealPublisherWebsiteToInsertionOrderLineItemList = $PmpDealPublisherWebsiteToInsertionOrderLineItemFactory->get($params);
+			
+			if ($PmpDealPublisherWebsiteToInsertionOrderLineItemList != null):
+			
+				foreach ($PmpDealPublisherWebsiteToInsertionOrderLineItemList as $PmpDealPublisherWebsiteToInsertionOrderLineItem):
+				
+					$PmpDealPublisherWebsiteToInsertionOrderLineItemPreview = new \model\PmpDealPublisherWebsiteToInsertionOrderLineItemPreview();
+					
+					$PmpDealPublisherWebsiteToInsertionOrderLineItemPreview->PublisherWebsiteID 									= $PmpDealPublisherWebsiteToInsertionOrderLineItem->PublisherWebsiteID;
+					$PmpDealPublisherWebsiteToInsertionOrderLineItemPreview->PublisherWebsiteLocal 									= $PmpDealPublisherWebsiteToInsertionOrderLineItem->PublisherWebsiteLocal;
+					$PmpDealPublisherWebsiteToInsertionOrderLineItemPreview->PublisherWebsiteDescription 							= $PmpDealPublisherWebsiteToInsertionOrderLineItem->PublisherWebsiteDescription;
+					$PmpDealPublisherWebsiteToInsertionOrderLineItemPreview->InsertionOrderLineItemPreviewID 						= $InsertionOrderLineItemPreviewID;
+					$PmpDealPublisherWebsiteToInsertionOrderLineItemPreview->Enabled 												= $PmpDealPublisherWebsiteToInsertionOrderLineItem->Enabled;
+					$PmpDealPublisherWebsiteToInsertionOrderLineItemPreview->DateCreated 											= date("Y-m-d H:i:s");
+					$PmpDealPublisherWebsiteToInsertionOrderLineItemPreview->DateUpdated 											= date("Y-m-d H:i:s");
+					
+					$PmpDealPublisherWebsiteToInsertionOrderLineItemPreviewFactory->savePmpDealPublisherWebsiteToInsertionOrderLineItemPreview($PmpDealPublisherWebsiteToInsertionOrderLineItemPreview);
+					
+				endforeach;
+
+			endif;
+			
+			/*
+			 * SSP INVENTORY
+			*/
+			
+			$params = array();
+			$params["InsertionOrderLineItemID"] = $banner_id;
+			$SspRtbChannelToInsertionOrderLineItemList = $SspRtbChannelToInsertionOrderLineItemFactory->get_row($params);
+			
+			if ($SspRtbChannelToInsertionOrderLineItemList != null):
+				
+				foreach ($SspRtbChannelToInsertionOrderLineItemList as $SspRtbChannelToInsertionOrderLineItem):
+				
+					$SspRtbChannelToInsertionOrderLineItemPreview = new \model\SspRtbChannelToInsertionOrderLineItemPreview();
+					
+					$SspRtbChannelToInsertionOrderLineItemPreview->SspPublisherChannelID 								= $SspRtbChannelToInsertionOrderLineItem->SspPublisherChannelID;
+					$SspRtbChannelToInsertionOrderLineItemPreview->SspPublisherChannelDescription 						= $SspRtbChannelToInsertionOrderLineItem->SspPublisherChannelDescription;
+					$SspRtbChannelToInsertionOrderLineItemPreview->SspExchange 											= $SspRtbChannelToInsertionOrderLineItem->SspExchange;
+					$SspRtbChannelToInsertionOrderLineItemPreview->InsertionOrderLineItemPreviewID 						= $InsertionOrderLineItemPreviewID;
+					$SspRtbChannelToInsertionOrderLineItemPreview->Enabled 												= $SspRtbChannelToInsertionOrderLineItem->Enabled;
+					$SspRtbChannelToInsertionOrderLineItemPreview->DateCreated 											= date("Y-m-d H:i:s");
+					$SspRtbChannelToInsertionOrderLineItemPreview->DateUpdated 											= date("Y-m-d H:i:s");
+					
+					$SspRtbChannelToInsertionOrderLineItemPreviewFactory->saveSspRtbChannelToInsertionOrderLineItemPreview($SspRtbChannelToInsertionOrderLineItemPreview);
+					
+				endforeach;
+					
 			endif;
 			
 		    /*
