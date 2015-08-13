@@ -295,7 +295,7 @@ class DemandController extends DemandAbstractActionController {
 			endif;
 			
 			if (!file_exists($assets_dir)):
-				mkdir($assets_dir, 0644, true);
+				mkdir($assets_dir, 0755, true);
 			endif;
 			
 			$css = file_get_contents('public/css/colorscheme/theme.css.template');
@@ -348,7 +348,7 @@ class DemandController extends DemandAbstractActionController {
 		$vdomain_dir = 'public/vdomain/' . $this->auth->getUserID() . '/';
 	
 		if (!file_exists($vdomain_dir)):
-			mkdir($vdomain_dir, 0644, true);
+			mkdir($vdomain_dir, 0755, true);
 		endif;
 	
 		$site_url = $this->config_handle['delivery']['site_url'];
@@ -2554,7 +2554,7 @@ class DemandController extends DemandAbstractActionController {
 		$creatives_dir = 'public/creatives/' . $this->auth->getUserID() . '/';
 		
 		if (!file_exists($creatives_dir)):
-			mkdir($creatives_dir, 0644, true);
+			mkdir($creatives_dir, 0755, true);
 		endif;
 		
 		$site_url = $this->config_handle['delivery']['site_url'];
