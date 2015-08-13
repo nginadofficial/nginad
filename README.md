@@ -1,6 +1,13 @@
 nginad
 =======
 
+August 13, 2015
+------------------
+ 
+A Critical bug was found where Private Exchange and SSP inventory selections would be completely lost if a campaign was edited after an initial selection because the insertion orders' inventory selections were not being copied to the staging preview tables.
+Also another bug was fixed by a NginAd user kh0r which sets directories to 755 upon creation.
+This requires a minor version update to version 1.6.3
+
 August 11, 2015
 ------------------
 
