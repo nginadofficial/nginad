@@ -674,7 +674,8 @@ class TransformPreview {
 		$InsertionOrderPreview->DateCreated   		= date("Y-m-d H:i:s");
 		$InsertionOrderPreview->DateUpdated   		= date("Y-m-d H:i:s");
 		$InsertionOrderPreview->ChangeWentLive   	= 0;
-
+		$InsertionOrderPreview->WentLiveDate        = '0000-00-00 00:00:00';
+		
 		$InsertionOrderPreviewID = $InsertionOrderPreviewFactory->saveInsertionOrderPreview($InsertionOrderPreview);
 
 		if ($update_data['type'] == 'InsertionOrderID'):
@@ -764,8 +765,8 @@ class TransformPreview {
 			
 			$BannerPreview = new \model\InsertionOrderLineItemPreview();
 
-			$BannerPreview->InsertionOrderPreviewID 		= $InsertionOrderPreviewID;
-			$BannerPreview->InsertionOrderLineItemID 			= $InsertionOrderLineItem->InsertionOrderLineItemID;
+			$BannerPreview->InsertionOrderPreviewID 	= $InsertionOrderPreviewID;
+			$BannerPreview->InsertionOrderLineItemID 	= $InsertionOrderLineItem->InsertionOrderLineItemID;
 			$BannerPreview->UserID 						= $InsertionOrderLineItem->UserID;
 			$BannerPreview->Name 						= $InsertionOrderLineItem->Name;
 			$BannerPreview->ImpressionType 				= $InsertionOrderLineItem->ImpressionType;
@@ -787,7 +788,8 @@ class TransformPreview {
 			$BannerPreview->DateCreated 				= date("Y-m-d H:i:s");
 			$BannerPreview->DateUpdated 				= date("Y-m-d H:i:s");
 			$BannerPreview->ChangeWentLive 				= 0;
-
+			$BannerPreview->WentLiveDate        	  	= '0000-00-00 00:00:00';
+			
 			$InsertionOrderLineItemPreviewID = $InsertionOrderLineItemPreviewFactory->saveInsertionOrderLineItemPreview($BannerPreview);
 
 			if ($update_data['type'] == 'InsertionOrderLineItemID' && $update_data['id'] == $banner_id):

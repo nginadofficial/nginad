@@ -2782,7 +2782,8 @@ class DemandController extends DemandAbstractActionController {
 		$BannerPreview->DateCreated               = date("Y-m-d H:i:s");
 		$BannerPreview->DateUpdated               = date("Y-m-d H:i:s");
 		$BannerPreview->ChangeWentLive       	  = 0;
-
+		$BannerPreview->WentLiveDate        	  = '0000-00-00 00:00:00';
+		
 		$InsertionOrderLineItemPreviewFactory = \_factory\InsertionOrderLineItemPreview::get_instance();
 		$banner_preview_id_new = $InsertionOrderLineItemPreviewFactory->saveInsertionOrderLineItemPreview($BannerPreview);
 
@@ -3576,7 +3577,8 @@ class DemandController extends DemandAbstractActionController {
     	$InsertionOrderPreview->DateCreated               = date("Y-m-d H:i:s");
     	$InsertionOrderPreview->DateUpdated               = date("Y-m-d H:i:s");
     	$InsertionOrderPreview->ChangeWentLive            = 0;
-
+    	$InsertionOrderPreview->WentLiveDate              = '0000-00-00 00:00:00';
+    	
 	    $InsertionOrderPreviewFactory = \_factory\InsertionOrderPreview::get_instance();
 	    $new_campaign_preview_id = $InsertionOrderPreviewFactory->saveInsertionOrderPreview($InsertionOrderPreview);
 	    
