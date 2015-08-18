@@ -3578,7 +3578,7 @@ class DemandController extends DemandAbstractActionController {
     	$InsertionOrderPreview->DateUpdated               = date("Y-m-d H:i:s");
     	$InsertionOrderPreview->ChangeWentLive            = 0;
     	$InsertionOrderPreview->WentLiveDate              = '0000-00-00 00:00:00';
-    	
+    	 
 	    $InsertionOrderPreviewFactory = \_factory\InsertionOrderPreview::get_instance();
 	    $new_campaign_preview_id = $InsertionOrderPreviewFactory->saveInsertionOrderPreview($InsertionOrderPreview);
 	    
