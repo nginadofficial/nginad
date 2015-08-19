@@ -3514,7 +3514,7 @@ class DemandController extends DemandAbstractActionController {
 	    $customername = $this->getRequest()->getPost('customername');
 	    $customerid = $this->getRequest()->getPost('customerid');
 	    if (!$customerid) $customerid = "001";
-	    $maximpressions = $this->getRequest()->getPost('maximpressions');
+	    $maximpressions = intval($this->getRequest()->getPost('maximpressions'));
 	    $maxspend = $this->getRequest()->getPost('maxspend');
 	    $campaignid = $this->getRequest()->getPost('campaignid');
 	    $campaign_preview_id 		= $this->getRequest()->getPost('campaignpreviewid');
@@ -3527,6 +3527,9 @@ class DemandController extends DemandAbstractActionController {
 	    $px_feeds 					= is_array($px_feeds) ? $px_feeds : array();
 	    $ssp_feeds 					= is_array($ssp_feeds) ? $ssp_feeds : array();
 	    $exchange_feeds 			= array_merge($pc_feeds, $px_feeds);
+	    
+	    // 4 byte max int(11) check
+	    if ($maximpressions < 1 || $maximpressions > 2147483647) $maximpressions = 2147483647;
 	    
 	    $InsertionOrderPreview = new \model\InsertionOrderPreview();
 
