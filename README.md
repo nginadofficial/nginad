@@ -1,6 +1,13 @@
 nginad
 =======
 
+August 24, 2015
+------------------
+ 
+Some small bug fixes including a string escape fix for an email subject when IOs are approved from staging.
+Also a bug where the upper boundary of max impressions was not checked on input validation for an insertion order.
+This is a minor version update to version 1.6.4
+
 August 13, 2015
 ------------------
  
