@@ -663,7 +663,7 @@ class DemandController extends DemandAbstractActionController {
 			// approval, send out email
 			$message = 'Your ' . $exchange_name . ' Demand Ad Campaign on Staging : ' . $ad_campaign_preview_name . ' was reset.<br /><br />Please login <a href="' . $site_url . '/auth/login">here</a> with your email and password to make changes.';
 				
-			$subject = "Your ' . $exchange_name . ' Demand Ad Campaign on Staging : " . $ad_campaign_preview_name . " was reset";
+			$subject = "Your " . $exchange_name . " Demand Ad Campaign on Staging : " . $ad_campaign_preview_name . " was reset";
 			
 			$transport = $this->getServiceLocator()->get('mail.transport');
 			
