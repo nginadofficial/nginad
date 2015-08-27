@@ -2869,6 +2869,16 @@ class DemandController extends DemandAbstractActionController {
 					return $viewModel->setTemplate('dashboard-manager/demand/creditapp.phtml');
 				endif;
 			
+			else:
+	
+				$PublisherWebsiteFactory 		= \_factory\PublisherWebsite::get_instance();
+				$params = array();
+				$params["PublisherWebsiteID"] 	= $exchange_feed_id;
+				$PublisherWebsite	 			= $PublisherWebsiteFactory->get_row_cached($this->config_handle, $params);
+				$ret_val = \util\AuthHelper::domain_user_authorized_publisher_passthru($this->auth->getEffectiveUserID(), $PublisherWebsite->DomainOwnerID);
+				if ($ret_val === true):
+					$is_local = true;
+				endif;
 			endif;
 				
 			$params = array();
@@ -3620,7 +3630,13 @@ class DemandController extends DemandAbstractActionController {
 					return $viewModel->setTemplate('dashboard-manager/demand/creditapp.phtml');
 			    endif;
 			    
-		    endif;
+			else:
+				
+				$ret_val = \util\AuthHelper::domain_user_authorized_publisher_passthru($this->auth->getEffectiveUserID(), $PublisherWebsite->DomainOwnerID);
+				if ($ret_val === true):
+					$is_local = true;
+				endif;
+			endif;
 		    
 
 		    $params = array();
