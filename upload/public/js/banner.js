@@ -147,7 +147,7 @@ function switchImpressionType(adtagtype) {
 		$(".novideo").hide();
 		$(".nobanner").show();
 		$("#update-button").val("Update Video");
-		
+		$("#create-button").val("Create New Video");
 		 
 		
 	} else {
@@ -171,6 +171,7 @@ function switchImpressionType(adtagtype) {
 		$("label[for=adtag]").html("Ad Tag");
 		
 		$("#update-button").val("Update Banner");
+		$("#create-button").val("Create New Banner");
 		
 		$("#adtag").css("height", "200px").css("width", "500px"); 
 		

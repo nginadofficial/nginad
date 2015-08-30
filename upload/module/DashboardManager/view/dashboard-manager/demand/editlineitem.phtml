@@ -10,6 +10,12 @@ $this->headScript()->appendFile($this->basePath() . '/js/datatables/jquery.dataT
 $this->headScript()->appendFile($this->basePath() . '/js/datatables/sitechooser.js');
 $this->headScript()->appendFile($this->basePath() . '/js/upload/dropzone.js');
 
+$impression_type_list = array(
+		"banner"	=> "Banner Ad",
+		"image"		=> "Image Ad",
+		"video"		=> "Video Ad",
+);
+
 $current_time = time();
 $yesterday_time = $current_time - 86400;
 $yesterday = date('m/d/Y', $yesterday_time);
@@ -138,7 +144,7 @@ $(function() {
     </ul>
 
 <div id="cdn_form_msg" class="alert alert-error" style="margin: 5px; display: none;"></div>
-<form onsubmit="highlightSelects();" id="bannerform" name="bannerform" method="POST" class="form-horizontal form-top-magin" action="/private-exchange/newlineitem">
+<form onsubmit="highlightSelects();" id="bannerform" name="bannerform" method="POST" class="" action="/private-exchange/newlineitem">
 <div class="formbox">
 <fieldset>
 <div class="span7">
@@ -149,25 +155,19 @@ $(function() {
 	<input type="hidden" name="ispreview" value="<?php echo $ispreview;?>">
 	  <div class="control-group">
 		<label for="bannername">Ad Name</label>
-		<input type="text" name="bannername" class="zone-txtbox" value="<?php echo $bannername;?>">
+		<input type="text" name="bannername" class="txtbox-width" value="<?php echo $bannername;?>">
 	</div>
 
 	  <div class="control-group">
 		<label for="adname">Ad Delivery Type</label>
-		<select id="ImpressionType" name="ImpressionType" class="zone-txtarea" onchange="switchImpressionType();">
-			<?php if ($ImpressionType == 'banner'): ?>
-				<option value="banner" selected="selected">Banner Ad</option>
-				<option value="image">Image Ad</option>
-				<option value="video">Video Ad</option>
-			<?php elseif ($ImpressionType == 'image'): ?>
-				<option value="banner">Banner Ad</option>
-				<option value="image" selected="selected">Image Ad</option>
-				<option value="video">Video Ad</option>
-			<?php else: ?>
-				<option value="banner">Banner Ad</option>
-				<option value="image">Image Ad</option>
-				<option value="video" selected="selected">Video Ad</option>
-			<?php endif; ?>
+		<select id="ImpressionType" name="ImpressionType" class="selbox-width" onchange="switchImpressionType();">
+			<?php foreach ($impression_type_list as $key => $value): ?>
+				<?php if ($ImpressionType == $key): ?>
+					<option value="<?php echo $key; ?>" selected="selected"><?php echo $value; ?></option>
+				<?php else: ?>
+					<option value="<?php echo $key; ?>"><?php echo $value; ?></option>
+				<?php endif; ?>
+			<?php endforeach; ?>
 		</select>
 	</div>
 	
