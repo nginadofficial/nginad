@@ -16,7 +16,23 @@ class CheckSspChannelSelections {
 		 */
 		if ($RtbBidRequest->is_local_request === false):
 			
-			$site_id 				= strtolower($RtbBidRequest->RtbBidRequestSite->id);
+			if (!empty($RtbBidRequest->RtbBidRequestSite->id)):
+				$site_id = $RtbBidRequest->RtbBidRequestSite->id;
+			elseif (!empty($RtbBidRequest->RtbBidRequestApp->id)):
+				$site_id = $RtbBidRequest->RtbBidRequestApp->id;
+			else:
+				/*
+				 * Return true here if you want to blindly bid
+				 * against OpenRTB bid requests with no site object
+				 * or app object with which to match ids from the 
+				 * SSP chooser on the IO line item page from the
+				 * demand dashboard.
+				 */
+				return false;
+			endif;
+			
+			$site_id = strtolower($site_id);
+			
 			$exchange_name 			= strtolower($RtbBidRequest->ssp_exchange_name);
 		
 			$SspRtbChannelToInsertionOrderLineItemFactory =  \_factory\SspRtbChannelToInsertionOrderLineItem::get_instance();
