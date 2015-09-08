@@ -63,8 +63,8 @@ class Module implements AutoloaderProviderInterface
 	   							"pinger" => __DIR__ . '/../SellGenericRTB/src/SellGenericRTB/pinger',
     							// LOAD THE GENERIC RTB PARENT CLASSES
     							"rtbbuyv22" => __DIR__ . '/../BuyGenericRTB/src/BuyGenericRTB/rtbbuyv22',
-    							"rtbbuy" => __DIR__ . '/../../BuyGenericRTB/src/BuyGenericRTB/rtbbuy',
-    							"buyrtb" => __DIR__ . '/../../BuyGenericRTB/src/BuyGenericRTB/common',
+    							"rtbbuy" => __DIR__ . '/../BuyGenericRTB/src/BuyGenericRTB/rtbbuy',
+    							"buyrtb" => __DIR__ . '/../BuyGenericRTB/src/BuyGenericRTB/common',
     							// LOAD THE REST OF THE STUFF
     							"buyloopbackpartner" => __DIR__ . '/../BuySidePartners/BuyLoopbackPartner/src/BuyLoopbackPartner/loopbackpartner',
     							"mobileutil" => __DIR__ . '/../BuyGenericRTB/src/BuyGenericRTB/_mobile',
