@@ -74,8 +74,8 @@ class OpenRTBWorkflow
         		
 	        	foreach ($InsertionOrderLineItemList as $InsertionOrderLineItem):
 			        	
-	        		if (empty($RtbBidRequestImp->RtbBidRequestVideo) && $InsertionOrderLineItem->ImpressionType == 'video'
-	        				|| !empty($RtbBidRequestImp->RtbBidRequestVideo) && ($InsertionOrderLineItem->ImpressionType == 'banner' || $InsertionOrderLineItem->ImpressionType == 'image')):
+	        		if ((empty($RtbBidRequestImp->RtbBidRequestVideo) && $InsertionOrderLineItem->ImpressionType == 'video')
+	        				|| (empty($RtbBidRequestImp->RtbBidRequestBanner) && ($InsertionOrderLineItem->ImpressionType == 'banner' || $InsertionOrderLineItem->ImpressionType == 'image'))):
 	        			continue;
 	        		endif;
 	        		
