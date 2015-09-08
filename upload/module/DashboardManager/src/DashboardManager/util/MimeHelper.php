@@ -42,7 +42,9 @@ class MimeHelper {
 				,"html"=>"text/html"
 		);
 	
-		$extension = strtolower(end(explode('.',$file)));
+		$file_parts = explode('.', $file);
+		
+		$extension = strtolower(end($file_parts));
 	
 		return isset($mime_types[$extension]) ? $mime_types[$extension] : "not/found";
 	}
