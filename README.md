@@ -1,6 +1,12 @@
 nginad
 =======
 
+September 9, 2015
+------------------
+ 
+A small bug fix update.
+This is a minor version update to version 1.6.5
+
 August 24, 2015
 ------------------
  
