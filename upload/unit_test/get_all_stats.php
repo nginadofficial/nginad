@@ -52,11 +52,16 @@ if (!isset($argv[1])):
 	die("no date to fetch");
 endif;
 
-$start_date 	= $argv[1];
+$start_date = $argv[1];
+$sdate = strtotime(str_replace(".", "/", $start_date));
+
+$start_date 	= date("m.d.Y", $sdate);
 $end_date 		= null;
 
 if (isset($argv[2])):
 	$end_date = $argv[2];
+	$edate = strtotime(str_replace(".", "/", $end_date));
+	$end_date = date("m.d.Y", $edate);
 endif;
 
 
