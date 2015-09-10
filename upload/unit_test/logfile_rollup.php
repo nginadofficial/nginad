@@ -54,11 +54,12 @@ if (isset($argv[2])):
 		$dates[date("m.d.Y", $i)] = true;
 	endfor;
 	
-	$dates[$end_date] = true;
+	$dates[date("m.d.Y", $edate)] = true;
 	
 else:
 
-	$dates[$start_date] = true;
+	$sdate = strtotime(str_replace(".", "/", $start_date));
+	$dates[date("m.d.Y", $sdate)] = true;
 
 endif;
 
