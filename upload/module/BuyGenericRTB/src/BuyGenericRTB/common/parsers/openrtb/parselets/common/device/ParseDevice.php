@@ -175,7 +175,11 @@ class ParseDevice {
 		
 		// device type id
 		
-		if (isset($RtbBidRequestDevice->model)):
+		if (!empty($default_device["devicetype"])):		
+		
+			$RtbBidRequestDevice->devicetype = intval($default_device["devicetype"]);
+			
+		elseif (isset($RtbBidRequestDevice->model)):
 			 
 			if (\mobileutil\MobileDeviceType::isPhone($RtbBidRequestDevice->model) === true):
 			 
