@@ -475,11 +475,6 @@ textarea::-webkit-input-placeholder {
   background-color: #cccccc \9;
 }
 
-.navbar-inverse .brand,
-.navbar-inverse .nav > li > a {
-  color:_COLOR_FONT_FOREGROUND;
-}
-
 .navbar-inverse .brand:hover,
 .navbar-inverse .nav > li > a:hover,
 .navbar-inverse .brand:focus,
@@ -514,11 +509,6 @@ textarea::-webkit-input-placeholder {
 .navbar-inverse .navbar-link:hover,
 .navbar-inverse .navbar-link:focus {
   color:#ffffff;
-}
-
-.navbar-inverse .divider-vertical {
-  border-right-color:_COLOR_FONT_FOREGROUND;
-  border-left-color:_COLOR_FONT_FOREGROUND;
 }
 
 .navbar-inverse .nav li.dropdown.open > .dropdown-toggle,
@@ -697,7 +687,6 @@ a.badge:focus {
   background-image: linear-gradient(to bottom, #0088cc, #0044cc);
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff0088cc', endColorstr='#ff0044cc', GradientType=0);
   border-color: #0044cc #0044cc #002a80;
-  color:_COLOR_FONT_FOREGROUND;
 }
 
 .datepicker td span.active {
@@ -711,7 +700,6 @@ a.badge:focus {
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff0088cc', endColorstr='#ff0044cc', GradientType=0);
   border-color: #0044cc #0044cc #002a80;
   *background-color: #0044cc;
-  color:_COLOR_FONT_FOREGROUND;
 }
 
 .datepicker td.active:hover,
@@ -830,17 +818,14 @@ h5.person_name{
 
 .left_navigation li.active a{
 	background:#0088cc;
-	color:_COLOR_FONT_FOREGROUND;
 }
 
 .left_navigation li.active a:hover{
 	background:#0088cc;
-	color:_COLOR_FONT_FOREGROUND !important;
 }
 
 .left_navigation li.active a:focus{
 	background:#0088cc;
-	color:_COLOR_FONT_FOREGROUND !important;
 }
 
 #myModal1 .modal-header{
