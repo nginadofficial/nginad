@@ -169,6 +169,9 @@ width:175px;
 .footer {
     border-top: 1px solid #DDDDDD;
     margin-top: 40px;
+	bottom: 0px;
+    position: fixed;
+    width: 100%;
 }
 li.active .navlink {
     border: 0 solid !important;
