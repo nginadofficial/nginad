@@ -103,7 +103,7 @@ li.active .navlink {
 }
 
 .footer_buttons .btn:hover, span.help_center .btn:hover{
-	background:_FOOTER#219BED;
+	background:#219BED;
 	color:#666666;
 }
 
