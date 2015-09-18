@@ -173,6 +173,11 @@ width:175px;
     position: fixed;
     width: 100%;
 }
+
+.bottom-container {
+	margin-bottom: 150px;
+}
+
 li.active .navlink {
     border: 0 solid !important;
     font-size: 14px !important;
