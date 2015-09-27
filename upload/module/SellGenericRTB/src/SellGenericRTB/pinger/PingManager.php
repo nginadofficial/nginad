@@ -91,9 +91,9 @@ class PingManager {
 				$request_id = $LoopbackPartnerBid->RtbBidRequest->id;
 				$LoopbackPartnerBid->process_business_logic();
 				$LoopbackPartnerBid->convert_ads_to_bid_response();
+				$LoopbackPartnerBid->build_outgoing_bid_response();
 			endif;
-			$LoopbackPartnerBid->build_outgoing_bid_response();
-
+			
 			if ($LoopbackPartnerBid->had_bid_response == true):
 			
 				if (\buyloopbackpartner\LoopbackPartnerLogger::get_instance()->setting_only_log_bids == true):
