@@ -5,7 +5,16 @@ namespace buyrtb\workflows\tasklets\common\insertionorderlineitem;
 class CheckPrivateMarketPlace {
 	
 	public static function execute(&$Logger, &$Workflow, \model\openrtb\RtbBidRequest &$RtbBidRequest, \model\openrtb\RtbBidRequestImp &$RtbBidRequestImp, &$InsertionOrderLineItem) {
-	
+		
+		/*
+		 * Skip this decision for the test user installed
+		 * user_login = suckmedia
+		 */
+		
+		if ($InsertionOrderLineItem->UserID == TEST_USER_DEMAND):
+			return true;
+		endif;
+		
 		/*
 		 * A. First check to see if this is a private auction 
 		 * 		from another exchange. If so lets ignore it since

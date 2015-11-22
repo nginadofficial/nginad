@@ -23,6 +23,13 @@ $is_bid = strpos(strtolower($request_path), "/bid") === 0;
 $is_report = strpos(strtolower($request_path), "/report") === 0;
 
 /*
+ * Configure Test User
+*/
+
+define('TEST_USER_PUBLISHER', 		20);
+define('TEST_USER_DEMAND', 			21);
+
+/*
  * Configure Device Types
 */
 
