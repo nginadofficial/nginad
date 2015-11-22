@@ -72,8 +72,7 @@ class IndexController extends AbstractActionController
         		 * In the first case a test bid has to be returned to our test bid request, in the latter case a “no bid” 
         		 * response has to be returned (normally represented by an HTTP return code 204, see OpenRTB specification).
         		 */
-        		//http_response_code(204);
-        		$FidelityBuysidePartnerBid->send_bid_response();
+        		http_response_code(204);
         		\buyfidelitybuysidepartner\FidelityBuysidePartnerLogger::get_instance()->output_auction_results($request_id, true);
         	else:
 	        	$FidelityBuysidePartnerBid->send_bid_response();
