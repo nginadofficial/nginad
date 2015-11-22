@@ -20,6 +20,10 @@ class CheckVertical {
 			$verticals_to_check = $RtbBidRequest->RtbBidRequestSite->cat;
 		elseif (!empty($RtbBidRequest->RtbBidRequestSite->RtbBidRequestPublisher->cat)):
 			$verticals_to_check = $RtbBidRequest->RtbBidRequestSite->RtbBidRequestPublisher->cat;
+		elseif (!empty($RtbBidRequest->RtbBidRequestApp->cat)):
+			$verticals_to_check = $RtbBidRequest->RtbBidRequestApp->cat;
+		elseif (!empty($RtbBidRequest->RtbBidRequestApp->RtbBidRequestPublisher->cat)):
+			$verticals_to_check = $RtbBidRequest->RtbBidRequestApp->RtbBidRequestPublisher->cat;
 		endif;
 		
 		/*
@@ -47,7 +51,7 @@ class CheckVertical {
 			
 			if ($has_vertical === false):
 				if ($Logger->setting_log === true):
-					$Logger->log[] = "Failed: " . "Check banner for it being in the right vertical :: EXPECTED: " . $InsertionOrderMediaRestrictions->Vertical . " GOT: " . $RtbBidRequest->RtbBidRequestSite->RtbBidRequestPublisher->cat;
+					$Logger->log[] = "Failed: " . "Check publisher zone for it being in the right vertical :: EXPECTED: " . $InsertionOrderMediaRestrictions->Vertical . " GOT: " . $RtbBidRequest->RtbBidRequestSite->RtbBidRequestPublisher->cat;
 				endif;
 				return false;
 			endif;
