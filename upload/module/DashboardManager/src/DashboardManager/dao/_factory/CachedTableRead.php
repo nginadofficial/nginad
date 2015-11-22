@@ -23,11 +23,11 @@ abstract class CachedTableRead extends AbstractTableGateway
     private static $null_value = "_NULL";
     private static $empty_array_value = "_EMPTY_ARRAY";
     
-    public function get_row_cached($config, $params = array()) {
+    public function get_row_cached($config, $params = array(), $force_update = false) {
     	
     	$cached_data = \util\CacheSql::get_cached_read_result_apc($config, $params, $this->table . '_S');
     	 
-    	if ($cached_data !== null):
+    	if ($cached_data !== null && $force_update === false):
     	
     		if ($cached_data == self::$null_value):
     			return null;
@@ -46,11 +46,11 @@ abstract class CachedTableRead extends AbstractTableGateway
     	endif;
     }
     
-    public function get_cached($config, $params = array()) {
+    public function get_cached($config, $params = array(), $force_update = false) {
     	
     	$cached_data = \util\CacheSql::get_cached_read_result_apc($config, $params, $this->table . '_M');
     	 
-    	if ($cached_data !== null):
+    	if ($cached_data !== null && $force_update === false):
     	
     		if ($cached_data == self::$empty_array_value):
     			return array();
