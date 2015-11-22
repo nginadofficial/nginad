@@ -8,6 +8,7 @@
  */
 
 namespace buyrtb\workflows\tasklets\common\insertionorder;
+use stdClass;
 
 class GetGeoCodeCountry {
 	
@@ -17,6 +18,10 @@ class GetGeoCodeCountry {
 		 * use maxmind incrementally. The geo-Country pay DB we have is only 1 meg
 		 * if we need city/state ok, but only load it if absolutely necessary
 		 */
+		
+		if (empty($RtbBidRequest->RtbBidRequestDevice)):
+			$RtbBidRequest->RtbBidRequestDevice = new \stdClass();
+		endif;
 		
 		$RtbBidRequestGeo = new \model\openrtb\RtbBidRequestGeo();
 		$RtbBidRequest->RtbBidRequestDevice->RtbBidRequestGeo = $RtbBidRequestGeo;

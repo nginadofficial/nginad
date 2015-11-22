@@ -130,21 +130,24 @@ class OpenRTBParser {
 
         endif;
         
-        // Parse Device
+  		// Parse Device
+        
+        $RtbBidRequestDevice = new \model\openrtb\RtbBidRequestDevice();
+        
         if (isset($this->json_post["device"])):
-	
+        
 	        $device = $this->json_post["device"];
-	        $RtbBidRequestDevice = new \model\openrtb\RtbBidRequestDevice();
 	        
 	        try {
 	        	\buyrtb\parsers\openrtb\parselets\common\device\ParseDevice::execute($logger, $this, $this->RtbBidRequest, $RtbBidRequestDevice, $device);
-	        	$this->RtbBidRequest->RtbBidRequestDevice = $RtbBidRequestDevice;
-	        	$logger->log[] = "Is Mobile: " . $this->RtbBidRequest->RtbBidRequestDevice->devicetype != 2;
+	        	$logger->log[] = "Is Mobile: " . $RtbBidRequestDevice->devicetype != 2;
 	        
 	        } catch (Exception $e) {
 	        	throw new Exception($e->getMessage(), $e->getCode(), $e->getPrevious());
 	        }
         endif;
+        
+        $this->RtbBidRequest->RtbBidRequestDevice = $RtbBidRequestDevice;
         
         // Parse Regs
 
@@ -271,13 +274,18 @@ class OpenRTBParser {
 	       		$VideoParser = new \buyrtb\parsers\openrtb\VideoParser();
 	       		$VideoParser->parse_request($logger, $this, $RtbBidRequestImp->RtbBidRequestVideo, $ad_impression_video);
 	       		
-	        elseif (isset($ad_impression["native"])):
+	       	elseif (!empty($ad_impression["native"]["request"])):
 	       		// this is a native ad
-	       		$ad_impression_native = $ad_impression["native"];
+	       		$ad_impression_native_raw = json_decode($ad_impression["native"]["request"], true);
+	       		if (empty($ad_impression_native_raw["native"])):
+	       			throw new Exception($this->expeption_missing_min_bid_request_params . ": decoded native object is missing in the imp");
+	       		endif;
+	       		$ad_impression_native = $ad_impression_native_raw["native"];
 	       		$RtbBidRequestImp->media_type = "native";
-	       		$RtbBidRequestImp->RtbBidRequestNative = new \model\openrtb\native\request\RtbBidRequestNative();
+	       		$RtbBidRequestImp->RtbBidRequestNative = new \model\openrtb\native\request\RtbBidRequestNative();	
 	       		$NativeParser = new \buyrtb\parsers\openrtb\NativeParser();
 	       		$NativeParser->parse_request($logger, $this, $RtbBidRequestImp->RtbBidRequestNative, $ad_impression_native);
+	       		
 	       		
 	        else:
 	       		throw new Exception($this->expeption_missing_min_bid_request_params . ": at least one banner or video object in the imp");

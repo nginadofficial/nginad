@@ -150,21 +150,24 @@ class OpenRTBParser {
 
         endif;
         
-        // Parse Device
+    	// Parse Device
+        
+        $RtbBidRequestDevice = new \model\openrtb\RtbBidRequestDevice();
+        
         if (isset($this->json_post["device"])):
         
 	        $device = $this->json_post["device"];
-	        $RtbBidRequestDevice = new \model\openrtb\RtbBidRequestDevice();
 	        
 	        try {
 	        	\buyrtbfidelity\parsers\openrtb\parselets\common\device\ParseDevice::execute($logger, $this, $this->RtbBidRequest, $RtbBidRequestDevice, $device);
-	        	$this->RtbBidRequest->RtbBidRequestDevice = $RtbBidRequestDevice;
-	        	$logger->log[] = "Is Mobile: " . $this->RtbBidRequest->RtbBidRequestDevice->devicetype != 2;
+	        	$logger->log[] = "Is Mobile: " . $RtbBidRequestDevice->devicetype != 2;
 	        
 	        } catch (Exception $e) {
 	        	throw new Exception($e->getMessage(), $e->getCode(), $e->getPrevious());
 	        }
 	    endif;
+	    
+	    $this->RtbBidRequest->RtbBidRequestDevice = $RtbBidRequestDevice;
 	    
         // Parse Regs
 
