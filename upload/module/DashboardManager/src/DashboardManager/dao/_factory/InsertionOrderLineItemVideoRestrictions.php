@@ -113,11 +113,13 @@ class InsertionOrderLineItemVideoRestrictions extends \_factory\CachedTableRead
     	$video_restrictions_id = (int)$VideoRestrictions->InsertionOrderLineItemVideoRestrictionsID;
     	if ($video_restrictions_id === 0 && $_video_restrictions === null): 
     		$this->insert($data);
+    		return $this->getLastInsertValue();
     	else: 
     		if ($video_restrictions_id === 0):
     			$video_restrictions_id = $_video_restrictions->InsertionOrderLineItemVideoRestrictionsID;
     		endif;
     		$this->update($data, array('InsertionOrderLineItemVideoRestrictionsID' => $video_restrictions_id));
+    		return $video_restrictions_id;
     	endif;
     }
 

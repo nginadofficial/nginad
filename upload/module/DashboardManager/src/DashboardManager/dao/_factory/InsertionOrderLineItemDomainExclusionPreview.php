@@ -96,7 +96,7 @@ class InsertionOrderLineItemDomainExclusionPreview extends AbstractTableGateway
     		return $this->getLastInsertValue();
     	else: 
     		$this->update($data, array('InsertionOrderLineItemDomainExclusionPreviewID' => $banner_domain_exclusion_preview_id));
-    		return null;
+    		return $banner_domain_exclusion_preview_id;
     	endif;
     }
 

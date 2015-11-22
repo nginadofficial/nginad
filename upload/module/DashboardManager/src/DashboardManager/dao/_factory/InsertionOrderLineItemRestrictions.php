@@ -117,11 +117,13 @@ class InsertionOrderLineItemRestrictions extends \_factory\CachedTableRead
     	$banner_restrictions_id = (int)$BannerRestrictions->InsertionOrderLineItemRestrictionsID;
     	if ($banner_restrictions_id === 0 && $_banner_restrictions === null): 
     		$this->insert($data);
+    		return $this->getLastInsertValue();
     	else: 
     		if ($banner_restrictions_id === 0):
     			$banner_restrictions_id = $_banner_restrictions->InsertionOrderLineItemRestrictionsID;
     		endif;
     		$this->update($data, array('InsertionOrderLineItemRestrictionsID' => $banner_restrictions_id));
+    		return $banner_restrictions_id;
     	endif;
     }
 

@@ -95,7 +95,7 @@ class InsertionOrderLineItemDomainExclusiveInclusionPreview extends AbstractTabl
     		return $this->getLastInsertValue();
     	else: 
     		$this->update($data, array('InsertionOrderLineItemDomainExclusiveInclusionPreviewID' => $banner_domain_exclusive_inclusion_preview_id));
-    		return null;
+    		return $banner_domain_exclusive_inclusion_preview_id;
     	endif;
     }
 

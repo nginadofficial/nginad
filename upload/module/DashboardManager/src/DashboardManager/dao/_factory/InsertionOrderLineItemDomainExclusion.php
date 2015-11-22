@@ -91,8 +91,10 @@ class InsertionOrderLineItemDomainExclusion extends \_factory\CachedTableRead
     	$banner_domain_exclusion_id = (int)$BannerDomainExclusion->InsertionOrderLineItemDomainExclusionID;
     	if ($banner_domain_exclusion_id === 0): 
     		$this->insert($data);
+    		return $this->getLastInsertValue();
     	else: 
     		$this->update($data, array('InsertionOrderLineItemDomainExclusionID' => $banner_domain_exclusion_id));
+    		return $banner_domain_exclusion_id;
     	endif;
     }
 

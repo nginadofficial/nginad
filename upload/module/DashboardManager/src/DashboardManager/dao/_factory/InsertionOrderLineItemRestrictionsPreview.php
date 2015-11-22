@@ -124,7 +124,7 @@ class InsertionOrderLineItemRestrictionsPreview extends AbstractTableGateway
     			$banner_restrictions_preview_id = $_banner_restrictions_preview->InsertionOrderLineItemRestrictionsID;
     		endif;
     		$this->update($data, array('InsertionOrderLineItemRestrictionsPreviewID' => $banner_restrictions_preview_id));
-    		return null;
+    		return $banner_restrictions_preview_id;
     	endif;
     }
 

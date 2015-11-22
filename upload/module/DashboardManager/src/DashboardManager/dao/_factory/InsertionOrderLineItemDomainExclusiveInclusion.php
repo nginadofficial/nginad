@@ -91,8 +91,10 @@ class InsertionOrderLineItemDomainExclusiveInclusion extends \_factory\CachedTab
     	$banner_domain_exclusive_inclusion_id = (int)$BannerDomainExclusiveInclusion->InsertionOrderLineItemDomainExclusiveInclusionID;
     	if ($banner_domain_exclusive_inclusion_id === 0): 
     		$this->insert($data);
+    		return $this->getLastInsertValue();
     	else: 
     		$this->update($data, array('InsertionOrderLineItemDomainExclusiveInclusionID' => $banner_domain_exclusive_inclusion_id));
+    		return $banner_domain_exclusive_inclusion_id;
     	endif;
     }
 

@@ -121,7 +121,7 @@ class InsertionOrderLineItemVideoRestrictionsPreview extends AbstractTableGatewa
     			$video_restrictions_preview_id = $_video_restrictions_preview->InsertionOrderLineItemVideoRestrictionsID;
     		endif;
     		$this->update($data, array('InsertionOrderLineItemVideoRestrictionsPreviewID' => $video_restrictions_preview_id));
-    		return null;
+    		return $video_restrictions_preview_id;
     	endif;
     }
 
