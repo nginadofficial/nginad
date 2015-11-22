@@ -33,6 +33,17 @@ return array(
 				'super_admin' 		=> "super_admin",
 		),
 		'settings' => array(
+				/*
+				 * Bypass private exchange channel selections
+				 * completely and bid on all SSP traffic.
+				 * 
+				 * Set this to true if you are using NginAd as a bidder 
+				 * and are not hosting private exchange customers.
+				 */
+				'ssp_channel_bypass'			=> false,
+				/*
+				 * publisher settings
+				 */ 
 				'publisher' => array(
 						'auto_approve_zones' 	=> true,
 						'auto_approve_websites' => true
@@ -202,6 +213,6 @@ return array(
 				// our house publisher ids are exempt from being scrubbed as network loss
 				'network_loss_exempt_publisher_info_id_list'			=> array(),
 				// version
-				'version_id'											=> '1.6.5'
+				'version_id'											=> '1.6.6'
 		),
 );

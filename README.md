@@ -1,6 +1,15 @@
 nginad
 =======
 
+November 21, 2015
+------------------
+ 
+An extensive bug fix update.
+This is a minor version update to version 1.6.6
+
+Note that we are actively working on NginAd 1.7 at this point which 
+features huge improvements on NginAd as a video server.
+
 September 9, 2015
 ------------------
  
