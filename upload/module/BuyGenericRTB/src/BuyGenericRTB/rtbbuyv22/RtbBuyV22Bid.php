@@ -182,28 +182,13 @@ abstract class RtbBuyV22Bid extends RtbBuyBid {
 		
 		$tld = "not_available";
 
+		$rtb_ids = null;
+		
 		if ($this->RtbBidRequest != null):
 		
-			$parse = null;
-		
-			if (isset($this->RtbBidRequest->RtbBidRequestSite->domain)):
-				$parse = parse_url($this->RtbBidRequest->RtbBidRequestSite->domain);
-			elseif (isset($this->RtbBidRequest->RtbBidRequestApp->domain)):
-				$parse = parse_url($this->RtbBidRequest->RtbBidRequestApp->domain);
-			endif;
+			$rtb_ids = \util\WorkflowHelper::getIdsFromRtbRequest($this->RtbBidRequest);
 			
-			if (!empty($parse) && isset($parse['host'])):
-				$tld = $parse['host'];
-			else:
-				if (isset($this->RtbBidRequest->RtbBidRequestSite->page)):
-					$parse = parse_url($this->RtbBidRequest->RtbBidRequestSite->page);
-				elseif (isset($this->RtbBidRequest->RtbBidRequestApp->page)):
-					$parse = parse_url($this->RtbBidRequest->RtbBidRequestApp->page);
-				endif;
-				if (!empty($parse) && isset($parse['host'])):
-					$tld = $parse['host'];
-				endif;
-			endif;
+			$tld = $rtb_ids["tld"];
 
 			$this->user_ip_hash = md5($this->RtbBidRequest->RtbBidRequestDevice->ip);
 			
@@ -250,6 +235,8 @@ abstract class RtbBuyV22Bid extends RtbBuyBid {
 				$RtbBidResponseSeatBid->RtbBidResponseBidList[] = $RtbBidResponseBid;
 				$spend_offered_in_bids += floatval($InsertionOrderLineItem->BidAmount / 1000);
 				$total_bids++;
+				
+				\util\FrequencyHelper::incrementLineItemBidFrequencyCount($this->config, $InsertionOrderLineItem->InsertionOrderLineItemID);
 				
 			endforeach;
 
@@ -300,59 +287,16 @@ abstract class RtbBuyV22Bid extends RtbBuyBid {
 			*/
 
 			$buyside_partner_name 				= $this->rtb_ssp_friendly_name;
-			$rtb_channel_site_id 				= "N/A";
-			$rtb_channel_site_name				= "N/A";
-			$rtb_channel_publisher_name			= "N/A";
 			$rtb_channel_site_domain			= $tld;
-			$rtb_channel_site_iab_category		= null;
-			$impressions_offered_counter 		= 0;
 			$auction_bids_counter 				= $total_bids;
 				
-			if (isset($this->RtbBidRequest->RtbBidRequestSite->id)):
-				$rtb_channel_site_id = $this->RtbBidRequest->RtbBidRequestSite->id;
-			elseif (isset($this->RtbBidRequest->RtbBidRequestApp->id)):
-				$rtb_channel_site_id = $this->RtbBidRequest->RtbBidRequestApp->id;
-			endif;
-			if (isset($this->RtbBidRequest->RtbBidRequestSite->name)):
-				$rtb_channel_site_name = $this->RtbBidRequest->RtbBidRequestSite->name;
-			elseif (isset($this->RtbBidRequest->RtbBidRequestApp->name)):
-				$rtb_channel_site_name = $this->RtbBidRequest->RtbBidRequestApp->name;
-			endif;
-			if (isset($this->RtbBidRequest->RtbBidRequestSite->RtbBidRequestPublisher->name)):
-				$rtb_channel_publisher_name = $this->RtbBidRequest->RtbBidRequestSite->RtbBidRequestPublisher->name;
-			elseif (isset($this->RtbBidRequest->RtbBidRequestApp->RtbBidRequestPublisher->name)):
-				$rtb_channel_publisher_name = $this->RtbBidRequest->RtbBidRequestApp->RtbBidRequestPublisher->name;
-			endif;
+			$rtb_ids = \util\WorkflowHelper::getIdsFromRtbRequest($this->RtbBidRequest);
 			
-			if (isset($this->RtbBidRequest->RtbBidRequestSite->cat[0])):
-				$rtb_channel_site_iab_category = $this->RtbBidRequest->RtbBidRequestSite->cat[0];
-			elseif (isset($this->RtbBidRequest->RtbBidRequestApp->cat[0])):
-				$rtb_channel_site_iab_category = $this->RtbBidRequest->RtbBidRequestApp->cat[0];
-			endif;
-			
-			if ($rtb_channel_site_iab_category === null && isset($this->RtbBidRequest->RtbBidRequestSite->sectioncat[0])):
-				$rtb_channel_site_iab_category = $this->RtbBidRequest->RtbBidRequestSite->sectioncat[0];
-			elseif ($rtb_channel_site_iab_category === null && isset($this->RtbBidRequest->RtbBidRequestApp->sectioncat[0])):
-				$rtb_channel_site_iab_category = $this->RtbBidRequest->RtbBidRequestApp->sectioncat[0];
-			endif;
-			
-			if ($rtb_channel_site_iab_category === null && isset($this->RtbBidRequest->RtbBidRequestSite->pagecat[0])):
-				$rtb_channel_site_iab_category = $this->RtbBidRequest->RtbBidRequestSite->pagecat[0];
-			elseif ($rtb_channel_site_iab_category === null && isset($this->RtbBidRequest->RtbBidRequestApp->pagecat[0])):
-				$rtb_channel_site_iab_category = $this->RtbBidRequest->RtbBidRequestApp->pagecat[0];
-			endif;
-			
-			if ($rtb_channel_site_iab_category !== null):
-				$rtb_channel_site_iab_category = array_search($rtb_channel_site_iab_category,
-											\buyrtb\parsers\openrtb\parselets\common\ParseWebsite::$vertical_map);
-			endif;
-			if ($rtb_channel_site_iab_category === null || $rtb_channel_site_iab_category === false):
-					$rtb_channel_site_iab_category = "N/A";
-			endif;
-			
-			if (isset($this->RtbBidRequest->RtbBidRequestImpList) && is_array($this->RtbBidRequest->RtbBidRequestImpList)):
-				$impressions_offered_counter = count($this->RtbBidRequest->RtbBidRequestImpList);
-			endif;
+			$rtb_channel_site_id 			= $rtb_ids["rtb_channel_site_id"];
+			$rtb_channel_site_name 			= $rtb_ids["rtb_channel_site_name"];
+			$rtb_channel_publisher_name 	= $rtb_ids["rtb_channel_publisher_name"];
+			$rtb_channel_site_iab_category 	= $rtb_ids["rtb_channel_site_iab_category"];
+			$impressions_offered_counter 	= $rtb_ids["impressions_offered_counter"];
 			
 			$floor_price_if_any = 0;
 			
