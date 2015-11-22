@@ -7,7 +7,7 @@
  * @license GPLv3
  */
 
-namespace buyrtbfidelity\workflows\tasklets\display\insertionorderlineitem;
+namespace buyrtb\workflows\tasklets\display\insertionorderlineitem;
 
 class CheckIsCorrectType {
 	
