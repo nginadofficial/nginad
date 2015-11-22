@@ -66,6 +66,11 @@ class BannerRestrictionsWorkflow {
 			return false;
 		endif;
 		
+		// Check bid frequency
+		if (\buyrtb\workflows\tasklets\common\insertionordermediarestrictions\CheckFrequency::execute($Logger, $ParentWorkflow, $RtbBidRequest, $RtbBidRequestImp, $InsertionOrderLineItem, $InsertionOrderLineItemRestrictions) === false):
+			return false;
+		endif;
+		
 		return true;
 	}
 	
