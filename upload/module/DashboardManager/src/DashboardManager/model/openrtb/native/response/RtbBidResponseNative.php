@@ -11,9 +11,9 @@ namespace model\openrtb\native\response;
 
 class RtbBidResponseNative {
 	
-	public $ver;
+	public $ver = 1;
 	
-	public $assets = array();
+	public $RtbBidResponseNativeAssetList = array();
 	
 	public $link;
 	

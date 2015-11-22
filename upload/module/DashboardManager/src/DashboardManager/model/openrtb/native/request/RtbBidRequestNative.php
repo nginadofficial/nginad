@@ -11,15 +11,15 @@ namespace model\openrtb\native\request;
 
 class RtbBidRequestNative {
 
-	public $ver;
+	public $ver = 1;
 	
 	public $layout;
 	
 	public $adunit;
 	
-	public $plcmtcnt;
+	public $plcmtcnt = 1;
 	
-	public $seq;
+	public $seq = 0;
 	
 	public $RtbBidRequestAssetList = array();
 	

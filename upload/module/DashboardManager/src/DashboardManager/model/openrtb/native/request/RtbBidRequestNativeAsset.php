@@ -13,7 +13,7 @@ class RtbBidRequestNativeAsset {
 
 	public $id;
 	
-	public $required;
+	public $required = 0;
 	
 	public $RtbBidRequestNativeTitle;
 	

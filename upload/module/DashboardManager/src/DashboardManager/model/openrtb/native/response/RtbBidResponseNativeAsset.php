@@ -13,7 +13,7 @@ class RtbBidResponseNativeAsset {
 	
 	public $id;
 	
-	public $required;
+	public $required = 0;
 	
 	public $title;
 	
@@ -26,5 +26,9 @@ class RtbBidResponseNativeAsset {
 	public $link;
 	
 	public $ext;
+	
+	// used internally
+	
+	public $assetType;
 
 }
