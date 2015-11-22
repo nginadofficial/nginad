@@ -437,39 +437,51 @@ class DemandController extends DemandAbstractActionController {
 		$user_id 		= $this->getRequest()->getQuery('markupuserid');
 		$user_markup 	= $this->getRequest()->getQuery('user-markup');
 
-		$UserMarkupDemandFactory = \_factory\UserMarkupDemand::get_instance();
+		$authUsersFactory = \_factory\authUsers::get_instance();
 		$params = array();
-		$params["UserID"] = $user_id;
-		$UserMarkupDemand = $UserMarkupDemandFactory->get_row($params);
-
-		$user_markup = floatval($user_markup) / 100;
-
-			if ($user_markup <= 0):
-				die("User Markup can not be less than or equal to zero percent");
-			endif;
-
-			if ($user_markup >= 1):
-				die("User Markup can not be greater than or equal to one hundred percent");
-			endif;
-
-		$user_markup = sprintf("%1.2f", $user_markup);
-
-		$_UserMarkupDemand = new \model\UserMarkupDemand();
-		$_UserMarkupDemand->UserID 	= $user_id;
-		$_UserMarkupDemand->MarkupRate = $user_markup;
-
-			if ($UserMarkupDemand != null):
+		$params["user_id"] = $user_id;
+		$authUser = $authUsersFactory->get_row($params);
+		
+		if ($authUser != null && $authUser->DemandCustomerInfoID != null):
+		
+			$UserMarkupDemandFactory = \_factory\UserMarkupDemand::get_instance();
+			$params = array();
+			$params["UserID"] = $user_id;
+			$UserMarkupDemand = $UserMarkupDemandFactory->get_row($params);
 	
-				$UserMarkupDemandFactory->updateUserMarkupDemand($_UserMarkupDemand);
+			$user_markup = floatval($user_markup) / 100;
 	
-			else:
+				if ($user_markup <= 0):
+					die("User Markup can not be less than or equal to zero percent");
+				endif;
 	
-				$UserMarkupDemandFactory->insertUserMarkupDemand($_UserMarkupDemand);
+				if ($user_markup >= 1):
+					die("User Markup can not be greater than or equal to one hundred percent");
+				endif;
 	
-			endif;
-
-		return $this->redirect()->toRoute('private-exchange');
-
+			$user_markup = sprintf("%1.2f", $user_markup);
+	
+			$_UserMarkupDemand = new \model\UserMarkupDemand();
+			$_UserMarkupDemand->UserID 	= $user_id;
+			$_UserMarkupDemand->MarkupRate = $user_markup;
+	
+				if ($UserMarkupDemand != null):
+		
+					$UserMarkupDemandFactory->updateUserMarkupDemand($_UserMarkupDemand);
+		
+				else:
+		
+					$UserMarkupDemandFactory->insertUserMarkupDemand($_UserMarkupDemand);
+		
+				endif;
+	
+			return $this->redirect()->toRoute('private-exchange');
+			
+		elseif ($authUser != null && $authUser->DemandCustomerInfoID == null):
+			\util\RestHelper::dieHttpPostOrRestParam($this, "UserID belongs to a publisher");
+		else:
+			\util\RestHelper::dieHttpPostOrRestParam($this, "UserID does not exist");
+		endif;
 	}
 
 	/**
@@ -505,22 +517,32 @@ class DemandController extends DemandAbstractActionController {
 
 		$campaign_markup = sprintf("%1.2f", $campaign_markup);
 
-		$_InsertionOrderMarkup = new \model\InsertionOrderMarkup();
-		$_InsertionOrderMarkup->InsertionOrderID 	= $campaign_id;
-		$_InsertionOrderMarkup->MarkupRate 		= $campaign_markup;
-
-			if ($InsertionOrderMarkup != null):
+		$InsertionOrderFactory = \_factory\InsertionOrder::get_instance();
+		$params = array();
+		$params["InsertionOrderID"] = $campaign_id;
+		$InsertionOrder = $InsertionOrderFactory->get_row($params);
+		
+		if ($InsertionOrder != null):
+		
+			$_InsertionOrderMarkup = new \model\InsertionOrderMarkup();
+			$_InsertionOrderMarkup->InsertionOrderID 	= $campaign_id;
+			$_InsertionOrderMarkup->MarkupRate 		= $campaign_markup;
 	
-				$InsertionOrderMarkupFactory->updateInsertionOrderMarkup($_InsertionOrderMarkup);
+				if ($InsertionOrderMarkup != null):
+		
+					$InsertionOrderMarkupFactory->updateInsertionOrderMarkup($_InsertionOrderMarkup);
+		
+				else:
+		
+					$InsertionOrderMarkupFactory->insertInsertionOrderMarkup($_InsertionOrderMarkup);
+		
+				endif;
 	
-			else:
-	
-				$InsertionOrderMarkupFactory->insertInsertionOrderMarkup($_InsertionOrderMarkup);
-	
-			endif;
-
-		return $this->redirect()->toRoute('private-exchange');
-
+			return $this->redirect()->toRoute('private-exchange');
+			
+		else:
+			\util\RestHelper::dieHttpPostOrRestParam($this, "InsertionOrderID does not exist");
+		endif;
 	}
 
 	/**
@@ -538,7 +560,7 @@ class DemandController extends DemandAbstractActionController {
 
 		$id = $this->getEvent()->getRouteMatch()->getParam('param1');
 		if ($id == null):
-			die("Invalid Campaign Preview ID");
+			die("Invalid InsertionOrderID");
 		endif;
 
 		// copy the preview campaign and its elements into the production campaign
@@ -599,7 +621,7 @@ class DemandController extends DemandAbstractActionController {
 	public function cancelcampaignAction() {
 		$id = $this->getEvent()->getRouteMatch()->getParam('param1');
 		if ($id == null):
-			die("Invalid Campaign Preview ID");
+			die("Invalid InsertionOrderID");
 		endif;
 
 		$initialized = $this->initialize();
@@ -630,7 +652,7 @@ class DemandController extends DemandAbstractActionController {
 
 		$id = $this->getEvent()->getRouteMatch()->getParam('param1');
 		if ($id == null):
-			die("Invalid Campaign Preview ID");
+			die("Invalid InsertionOrderID");
 		endif;
 
 		$InsertionOrderPreviewFactory = \_factory\InsertionOrderPreview::get_instance();
@@ -699,8 +721,7 @@ class DemandController extends DemandAbstractActionController {
 		$success = true;
 		$id = $this->getEvent()->getRouteMatch()->getParam('param1');
 		if ($id == null):
-			//die("Invalid Banner ID");
-			$error_msg = "Invalid Banner ID";
+			$error_msg = "Invalid InsertionOrderLineItemID";
 			$success = false;
 			$data = array(
 					'success' => $success,
@@ -1106,7 +1127,7 @@ class DemandController extends DemandAbstractActionController {
 	public function deliveryfiltervideoAction() {
 		$id = $this->getEvent()->getRouteMatch()->getParam('param1');
 		if ($id == null):
-			die("Invalid Banner ID");
+			die("Invalid InsertionOrderLineItemID");
 		endif;
 	
 		$initialized = $this->initialize();
@@ -1338,7 +1359,7 @@ class DemandController extends DemandAbstractActionController {
 	public function deliveryfilterAction() {
 		$id = $this->getEvent()->getRouteMatch()->getParam('param1');
 			if ($id == null):
-				die("Invalid Banner ID");
+				die("Invalid InsertionOrderLineItemID");
 			endif;
 
 		$initialized = $this->initialize();
@@ -1527,7 +1548,7 @@ class DemandController extends DemandAbstractActionController {
 	public function viewexclusiveinclusionAction() {
 		$id = $this->getEvent()->getRouteMatch()->getParam('param1');
 		if ($id == null):
-			die("Invalid Banner ID");
+			die("Invalid InsertionOrderLineItemID");
 		endif;
 
 		$initialized = $this->initialize();
@@ -1618,7 +1639,6 @@ class DemandController extends DemandAbstractActionController {
 
 		$id = $this->getEvent()->getRouteMatch()->getParam('param1');
 		if ($id == null):
-			//die("Invalid DomainExclusiveInclusion ID");
 			$error_msg = "Invalid DomainExclusiveInclusion ID";
 		    $success = false;
 		    $data = array(
@@ -1648,7 +1668,6 @@ class DemandController extends DemandAbstractActionController {
 			$rtb_domain_exclusive_inclusion = $InsertionOrderLineItemDomainExclusiveInclusionFactory->get_row($params);
 
 			if ($rtb_domain_exclusive_inclusion == null):
-				//die("Invalid InsertionOrderLineItemDomainExclusiveInclusion ID");
 				$error_msg = "Invalid InsertionOrderLineItemDomainExclusiveInclusion ID";
 			    $success = false;
 			    $data = array(
@@ -1710,7 +1729,6 @@ class DemandController extends DemandAbstractActionController {
 			$rtb_domain_exclusive_inclusion_preview = $InsertionOrderLineItemDomainExclusiveInclusionPreviewFactory->get_row($params);
 
 			if ($rtb_domain_exclusive_inclusion_preview == null):
-				//die("Invalid InsertionOrderLineItemDomainExclusiveInclusionPreview ID");
 				$error_msg = "Invalid InsertionOrderLineItemDomainExclusiveInclusionPreview ID";
 			    $success = false;
 			    $data = array(
@@ -1761,7 +1779,7 @@ class DemandController extends DemandAbstractActionController {
 	public function createexclusiveinclusionAction() {
 		$id = $this->getEvent()->getRouteMatch()->getParam('param1');
 		if ($id == null):
-			die("Invalid Banner ID");
+			die("Invalid InsertionOrderLineItemID");
 		endif;
 
 		$initialized = $this->initialize();
@@ -1894,7 +1912,7 @@ class DemandController extends DemandAbstractActionController {
 	public function viewdomainexclusionAction() {
 		$id = $this->getEvent()->getRouteMatch()->getParam('param1');
 		if ($id == null):
-			die("Invalid Banner ID");
+			die("Invalid InsertionOrderLineItemID");
 		endif;
 
 		$initialized = $this->initialize();
@@ -1984,7 +2002,6 @@ class DemandController extends DemandAbstractActionController {
 		$success = true;
 		$id = $this->getEvent()->getRouteMatch()->getParam('param1');
 		if ($id == null):
-			//die("Invalid DomainExclusion ID");
 			$error_msg = "Invalid Domain Exclusion ID";
 		    $success = false;
 		    $data = array(
@@ -2014,8 +2031,7 @@ class DemandController extends DemandAbstractActionController {
 			$rtb_domain_exclusion = $InsertionOrderLineItemDomainExclusionFactory->get_row($params);
 
 			if ($rtb_domain_exclusion == null):
-				//die("Invalid InsertionOrderLineItemDomainExclusion ID");
-				$error_msg = "Invalid InsertionOrderLineItem Domain Exclusion ID";
+				$error_msg = "Invalid InsertionOrderLineItemDomainExclusionID";
 			    $success = false;
 			    $data = array(
 		         'success' => $success,
@@ -2078,8 +2094,7 @@ class DemandController extends DemandAbstractActionController {
 			$rtb_domain_exclusion_preview = $InsertionOrderLineItemDomainExclusionPreviewFactory->get_row($params);
 
 			if ($rtb_domain_exclusion_preview == null):
-				//die("Invalid InsertionOrderLineItemDomainExclusionPreview ID");
-				$error_msg = "Invalid InsertionOrderLineItem Domain Exclusion Preview ID";
+				$error_msg = "Invalid InsertionOrderLineItemDomainExclusionPreviewID";
 			    $success = false;
 			    $data = array(
 		         'success' => $success,
@@ -2094,7 +2109,6 @@ class DemandController extends DemandAbstractActionController {
 			$exclusion_preview_id = $rtb_domain_exclusion_preview->InsertionOrderLineItemDomainExclusionPreviewID;
 
 			// ACL PREVIEW PERMISSIONS CHECK
-			//transformation\CheckPermissions::checkEditPermissionInsertionOrderLineItemPreview($banner_preview_id, $auth, $config);
 			$response = transformation\CheckPermissions::checkEditPermissionInsertionOrderLineItemPreview($banner_preview_id, $this->auth, $this->config_handle);
 			
 			
@@ -2132,7 +2146,7 @@ class DemandController extends DemandAbstractActionController {
 	public function createdomainexclusionAction() {
 		$id = $this->getEvent()->getRouteMatch()->getParam('param1');
 		if ($id == null):
-			die("Invalid Banner ID");
+			die("Invalid InsertionOrderLineItemID");
 		endif;
 
 		$initialized = $this->initialize();
@@ -2266,8 +2280,7 @@ class DemandController extends DemandAbstractActionController {
 		$success = true;
 		$id = $this->getEvent()->getRouteMatch()->getParam('param1');
 		if ($id == null):
-		  //die("Invalid Banner ID");
-		   $error_msg = "Invalid Banner ID";
+		   $error_msg = "Invalid InsertionOrderLineItemID";
 		   $success = false;
 		   $data = array(
 	         'success' => $success,
@@ -2333,8 +2346,7 @@ class DemandController extends DemandAbstractActionController {
 		$InsertionOrderLineItemPreview = $InsertionOrderLineItemPreviewFactory->get_row($params);
 
 		if ($InsertionOrderLineItemPreview == null):
-		  //die("Invalid Banner ID");
-		  $error_msg = "Invalid Banner ID";
+		  $error_msg = "Invalid InsertionOrderLineItemID";
 		   $success = false;
 		   $data = array(
 	         'success' => $success,
@@ -2373,7 +2385,7 @@ class DemandController extends DemandAbstractActionController {
 	public function viewlineitemAction() {
 	    $id = $this->getEvent()->getRouteMatch()->getParam('param1');
         if ($id == null):
-            die("Invalid Campaign ID");
+            die("Invalid InsertionOrderID");
         endif;
 
 		$initialized = $this->initialize();
@@ -2445,7 +2457,7 @@ class DemandController extends DemandAbstractActionController {
 	public function createlineitemAction() {
 	    $id = $this->getEvent()->getRouteMatch()->getParam('param1');
         if ($id == null):
-            die("Invalid Campaign ID");
+            die("Invalid InsertionOrderID");
         endif;
 
 		$initialized = $this->initialize();
@@ -2987,7 +2999,7 @@ class DemandController extends DemandAbstractActionController {
 
 		$id = $this->getEvent()->getRouteMatch()->getParam('param1');
 		if ($id == null):
-		  die("Invalid Banner ID");
+		  die("Invalid InsertionOrderLineItemID");
 		endif;
 
 		$initialized = $this->initialize();
@@ -3059,7 +3071,7 @@ class DemandController extends DemandAbstractActionController {
 		endif;
 
 		if ($InsertionOrderLineItem == null):
-		  die("Invalid $InsertionOrderLineItem ID");
+		  die("Invalid InsertionOrderLineItemID");
 		endif;
 
 		$campaignid               = isset($InsertionOrderLineItem->InsertionOrderID) ? $InsertionOrderLineItem->InsertionOrderID : "";
@@ -3260,8 +3272,7 @@ class DemandController extends DemandAbstractActionController {
 		$success = true;
 		$id = $this->getEvent()->getRouteMatch()->getParam('param1');
 		if ($id == null):
-		  //die("Invalid Campaign ID");
-		  $error_msg = "Invalid Campaign ID";
+		  $error_msg = "Invalid InsertionOrderID";
 		  $success = false;
 		  $data = array(
 	        'success' => $success,
@@ -3327,8 +3338,7 @@ class DemandController extends DemandAbstractActionController {
 		$InsertionOrderPreview = $InsertionOrderPreviewFactory->get_row($params);
 
 		if ($InsertionOrderPreview == null):
-		  //die("Invalid InsertionOrder Preview ID");
-		  $error_msg = "Invalid InsertionOrder Preview ID";
+		  $error_msg = "Invalid InsertionOrderPreviewID";
 		  $success = false;
 		  $data = array(
 	        'success' => $success,
@@ -3378,7 +3388,7 @@ class DemandController extends DemandAbstractActionController {
 	public function editinsertionorderAction() {
 		$id = $this->getEvent()->getRouteMatch()->getParam('param1');
 		if ($id == null):
-			die("Invalid Campaign ID");
+			die("Invalid InsertionOrderID");
 		endif;
 
 		$initialized = $this->initialize();
@@ -3442,7 +3452,7 @@ class DemandController extends DemandAbstractActionController {
 		endif;
 
 		if ($InsertionOrder == null):
-			die("Invalid InsertionOrder ID");
+			die("Invalid InsertionOrderID");
 		endif;
 
 		$campaignname              = $InsertionOrder->Name;

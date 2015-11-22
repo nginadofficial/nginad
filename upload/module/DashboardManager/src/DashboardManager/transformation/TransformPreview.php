@@ -78,8 +78,7 @@ class TransformPreview {
 			$InsertionOrder = $InsertionOrderFactory->get_row($params);
 
 			if ($InsertionOrder == null):
-				//die("No Such Ad Campaign");
-				$params["error"] = "No Such Ad Campaign";
+				$params["error"] = "No Such Insertion Order";
 				return $params;
 			endif;
 			
@@ -115,7 +114,7 @@ class TransformPreview {
 		$InsertionOrderPreview = $InsertionOrderPreviewFactory->get_row($params);
 
 		if ($InsertionOrderPreview == null):
-			die("No Such Preview Ad Campaign");
+			die("No Such Preview Insertion Order");
 		endif;
 
 		if ($went_live == true):
@@ -273,7 +272,7 @@ class TransformPreview {
 		$InsertionOrderPreview = $InsertionOrderPreviewFactory->get_row($params);
 
 		if ($InsertionOrderPreview == null):
-			die("Invalid InsertionOrderPreview ID");
+			die("Invalid InsertionOrderPreviewID");
 		endif;
 
 		/*
@@ -474,7 +473,6 @@ class TransformPreview {
 					$VideoRestrictions->DateUpdated 						= date("Y-m-d H:i:s");
 	
 					$InsertionOrderLineItemVideoRestrictionsFactory->saveInsertionOrderLineItemVideoRestrictions($VideoRestrictions);
-					$InsertionOrderLineItemRestrictionsFactory->deleteInsertionOrderLineItemRestrictions($banner_id);
 				endif;
 				
 			else:
@@ -516,7 +514,6 @@ class TransformPreview {
 					$BannerRestrictions->DateUpdated 						= date("Y-m-d H:i:s");
 					
 					$InsertionOrderLineItemRestrictionsFactory->saveInsertionOrderLineItemRestrictions($BannerRestrictions);
-					$InsertionOrderLineItemVideoRestrictionsFactory->deleteInsertionOrderLineItemVideoRestrictions($banner_id);
 				endif;
 					
 			endif;
