@@ -24,7 +24,7 @@
 
 // path to unit_test/logfile_rollup.php on servers
 
-$path_to_logfile_rollup = '/home/nginad/unit_test/';
+$path_to_logfile_rollup = '/home/nginad/upload/unit_test/';
 
 // NginAd Server IPs and auth info:
 
