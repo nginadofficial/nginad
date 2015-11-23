@@ -9,9 +9,13 @@ class CheckPrivateMarketPlace {
 		/*
 		 * Skip this decision for the test user installed
 		 * user_login = suckmedia
+		 * 
+		 * Also enable the global exchange PMP selection
+		 * bypass if set to true in config/autoload/global.php
 		 */
 		
-		if ($InsertionOrderLineItem->UserID == TEST_USER_DEMAND):
+		if ($InsertionOrderLineItem->UserID == TEST_USER_DEMAND
+			|| $Workflow->config['settings']['pmp_channel_bypass'] === true):
 			return true;
 		endif;
 		

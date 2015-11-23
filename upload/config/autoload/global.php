@@ -42,6 +42,14 @@ return array(
 				 */
 				'ssp_channel_bypass'			=> false,
 				/*
+				 * Bypass private exchange channel selections
+				 * completely and bid on all PMP(Private Marketplace/Platform Exchange) traffic.
+				 *
+				 * Set this to true if you are using NginAd as a bidder
+				 * and are not hosting private exchange customers.
+				 */
+				'pmp_channel_bypass'			=> false,
+				/*
 				 * publisher settings
 				 */ 
 				'publisher' => array(

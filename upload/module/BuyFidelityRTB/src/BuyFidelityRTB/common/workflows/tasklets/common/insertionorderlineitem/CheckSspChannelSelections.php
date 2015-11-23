@@ -7,6 +7,19 @@ class CheckSspChannelSelections {
 	public static function execute(&$Logger, &$Workflow, \model\openrtb\RtbBidRequest &$RtbBidRequest, \model\openrtb\RtbBidRequestImp &$RtbBidRequestImp, &$InsertionOrderLineItem) {
 		
 		/*
+		 * Skip this decision for the test user installed
+		 * user_login = suckmedia
+		 * 
+		 * Also enable the global exchange SSP selection
+		 * bypass if set to true in config/autoload/global.php
+		 */
+		
+		if ($InsertionOrderLineItem->UserID == TEST_USER_DEMAND
+			|| $Workflow->config['settings']['ssp_channel_bypass'] === true):
+			return true;
+		endif;
+		
+		/*
 		 * From NginAd 1.6 on, SSP inventory will only be available
 		 * to private exchange Domain Admins on an explicit basis.
 		 * That means that all demand customers must have chosen
