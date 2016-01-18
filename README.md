@@ -4,7 +4,7 @@ nginad
 January 18, 2016
 ------------------
  
-An minor bug fix update.
+A minor bug fix update.
 This is a minor version update to version 1.6.7
 
 November 21, 2015
