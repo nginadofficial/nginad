@@ -128,7 +128,7 @@ class DeliveryFilterOptions {
 			"IAB14"=>"Society",			 
 			"IAB15"=>"Science",			
 			"IAB16"=>"Pets",			
-			"IAB16"=>"Sports",			
+			"IAB17"=>"Sports",			
 			"IAB18"=>"Style & Fashion",			
 			"IAB19"=>"Technology & Computing",			
 			"IAB20"=>"Travel",			

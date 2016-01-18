@@ -465,7 +465,7 @@ class ParseWebsite {
 			"IAB14"=>"38",			// Society
 			"IAB15"=>"34",			// Science
 			"IAB16"=>"1",			// Pets
-			"IAB16"=>"33",			// Sports
+			"IAB17"=>"33",			// Sports
 			"IAB18"=>"38",			// Style & Fashion
 			"IAB19"=>"34",			// Technology & Computing
 			"IAB20"=>"36",			// Travel
