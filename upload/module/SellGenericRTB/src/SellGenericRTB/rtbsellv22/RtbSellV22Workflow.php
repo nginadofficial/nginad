@@ -10,7 +10,7 @@
 namespace rtbsell;
 use rtbsell\RtbSellWorkflow;
 
-abstract class RtbSell22Workflow extends RtbSellWorkflow {
+abstract class RtbSellV22Workflow extends RtbSellWorkflow {
 	
 	protected $rtb_provider = "none";
 	public static $rtb_child_class_name = "none";
