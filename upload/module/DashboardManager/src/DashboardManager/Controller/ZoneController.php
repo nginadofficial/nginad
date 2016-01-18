@@ -1010,8 +1010,6 @@ class ZoneController extends PublisherAbstractActionController {
 	    	$PublisherWebsiteID = intval($this->params()->fromRoute('param1', 0));
 	    	
 	    	$PublisherAdZoneFactory = \_factory\PublisherAdZone::get_instance();
-	    	$PublisherAdZoneVideoFactory = \_factory\PublisherAdZoneVideo::get_instance();
-	    	$PublisherWebsiteFactory = \_factory\PublisherWebsite::get_instance();
 	    	
 	    	$params = array();
 	    	$params["PublisherAdZoneID"] = $PublisherAdZoneID;
