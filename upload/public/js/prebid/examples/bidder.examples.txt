@@ -1,0 +1,214 @@
+        var adUnits = [{
+            code: 'div-medium-rectangle-300x250',
+            sizes: [[300, 250]],
+            bids: [{
+                bidder: 'appnexus',
+                params: {
+                   placementId: '4799418'
+                }
+            },
+            {
+                bidder: 'rubicon',
+                params: {
+                   rp_account : '9707',
+                   rp_site: '17955',
+                   rp_zonesize : '50983-15',
+                   rp_tracking : 'affiliate-1701207318',
+                   rp_inventory : '{ deals : "mobv3_excl,atf,demo1849,csm1834,znexcl1,exunisite,exmars,extargt,ldacomp,ent19116,rn14858,ukent,g03070,qc12170,qc2690,qc2695,qc1988,asov1,qc12172,qc12169,qc27434,rn24858,ent29116,lngen,cntq,cntauto,anthea,smg_blklist,amnetctr,ntflxblk,amtblk,zentend,nortb,deschoeff,js,excltop," }',
+                   rp_floor : '0.1'
+                }
+            },
+            {
+                bidder: 'openx',
+                params: {
+                    unit: 537245128,
+                    pageURL : 'http://drudgereport.com',
+                    refererURL : 'http://drudgereport.com',
+                    jstag_url : 'http://ox-d.intermarkets.net/w/1.0/jstag'
+                }
+            },
+            {
+                bidder: 'pubmatic',
+                params: {
+                    publisherId: 39741,
+                    adSlot: '39620189@300x250'
+                }
+            },
+            {
+                bidder: 'criteo',
+                params: {
+                    nid: '2612',
+                    cookiename: 'cto_topix',
+                    varname : 'crtg_content'
+                }
+            },
+            {
+                bidder: 'casale',
+                params: {
+                    slotId: 2,
+                    casaleUrl: 'http://js.indexww.com/ht/elitedaily.js'
+                }
+            },
+            {
+                bidder: 'casale',
+                params: {
+                    slotId: 3
+                }                          
+            },
+            {
+                bidder: 'yieldbot',
+                params: {
+                    pub: 'id',
+                    name: 'name'
+                }
+            }, 
+            {
+                bidder: 'amazon',
+                params: {
+                    aId : 3080
+                }
+            }      
+        ]
+        },{
+            code: 'div-wide-skyscraper-100x600',
+            sizes: [[100, 600]],
+            bids: [{
+                bidder: 'appnexus',
+                params: {
+                   placementId: '4799418'
+                }
+            },
+            {
+                bidder: 'rubicon',
+                params: {
+                   rp_account : '9707',
+                   rp_site: '17955',
+                   rp_zonesize : '50983-15',
+                   rp_tracking : 'affiliate-1701207318',
+                   rp_inventory : '{ deals : "mobv3_excl,atf,demo1849,csm1834,znexcl1,exunisite,exmars,extargt,ldacomp,ent19116,rn14858,ukent,g03070,qc12170,qc2690,qc2695,qc1988,asov1,qc12172,qc12169,qc27434,rn24858,ent29116,lngen,cntq,cntauto,anthea,smg_blklist,amnetctr,ntflxblk,amtblk,zentend,nortb,deschoeff,js,excltop," }',
+                   rp_floor : '0.1'
+                }
+            },
+            {
+                bidder: 'openx',
+                params: {
+                    unit: 537245128,
+                    pageURL : 'http://drudgereport.com',
+                    refererURL : 'http://drudgereport.com',
+                    jstag_url : 'http://ox-d.intermarkets.net/w/1.0/jstag'
+                }
+            },
+            {
+                bidder: 'pubmatic',
+                params: {
+                    publisherId: 39741,
+                    adSlot: '39620189@300x250'
+                }
+            },
+            {
+                bidder: 'criteo',
+                params: {
+                    nid: '2612',
+                    cookiename: 'cto_topix',
+                    varname : 'crtg_content'
+                }
+            },
+            {
+                bidder: 'casale',
+                params: {
+                    slotId: 2,
+                    casaleUrl: 'http://js.indexww.com/ht/elitedaily.js'
+                }
+            },
+            {
+                bidder: 'casale',
+                params: {
+                    slotId: 3
+                }                          
+            },
+            {
+                bidder: 'yieldbot',
+                params: {
+                    pub: 'id',
+                    name: 'name'
+                }
+            }, 
+            {
+                bidder: 'amazon',
+                params: {
+                    aId : 3080
+                }
+            }      
+        ]
+       	},{
+         	code: 'div-leaderboard-728x90',
+         	sizes: [[728, 90]],
+            bids: [{
+                bidder: 'appnexus',
+                params: {
+                   placementId: '4799418'
+                }
+            },
+            {
+                bidder: 'rubicon',
+                params: {
+                   rp_account : '9707',
+                   rp_site: '17955',
+                   rp_zonesize : '50983-15',
+                   rp_tracking : 'affiliate-1701207318',
+                   rp_inventory : '{ deals : "mobv3_excl,atf,demo1849,csm1834,znexcl1,exunisite,exmars,extargt,ldacomp,ent19116,rn14858,ukent,g03070,qc12170,qc2690,qc2695,qc1988,asov1,qc12172,qc12169,qc27434,rn24858,ent29116,lngen,cntq,cntauto,anthea,smg_blklist,amnetctr,ntflxblk,amtblk,zentend,nortb,deschoeff,js,excltop," }',
+                   rp_floor : '0.1'
+                }
+            },
+            {
+                bidder: 'openx',
+                params: {
+                    unit: 537245128,
+                    pageURL : 'http://drudgereport.com',
+                    refererURL : 'http://drudgereport.com',
+                    jstag_url : 'http://ox-d.intermarkets.net/w/1.0/jstag'
+                }
+            },
+            {
+                bidder: 'pubmatic',
+                params: {
+                    publisherId: 39741,
+                    adSlot: '39620189@300x250'
+                }
+            },
+            {
+                bidder: 'criteo',
+                params: {
+                    nid: '2612',
+                    cookiename: 'cto_topix',
+                    varname : 'crtg_content'
+                }
+            },
+            {
+                bidder: 'casale',
+                params: {
+                    slotId: 2,
+                    casaleUrl: 'http://js.indexww.com/ht/elitedaily.js'
+                }
+            },
+            {
+                bidder: 'casale',
+                params: {
+                    slotId: 3
+                }                          
+            },
+            {
+                bidder: 'yieldbot',
+                params: {
+                    pub: 'id',
+                    name: 'name'
+                }
+            }, 
+            {
+                bidder: 'amazon',
+                params: {
+                    aId : 3080
+                }
+            }      
+        ]
+	}];
