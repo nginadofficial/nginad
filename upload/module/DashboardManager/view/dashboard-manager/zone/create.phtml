@@ -44,6 +44,15 @@ $(function() {
     <div class="controls error">
     <textarea class="zone-txtbox" maxlength="255" id="Description" name="Description"></textarea>   </div>
     </div>
+<div class="control-group">
+    <label for="ImpressionType" class="control-label">Auction Type</label>
+    <div class="controls error">
+		<select id="AuctionType" name="AuctionType" class="zone-txtarea" onchange="switchAuctionType();">
+			<option value="rtb">RTB</option>
+			<option value="header">Header Bidding</option>
+		</select>
+		</div>
+    </div>
 <div class="control-group" id="passback-cg">
     <label for="PassbackAdTag" id="passbackTag" class="control-label">Passback Ad Tag</label>
     <div class="controls error">
@@ -89,6 +98,37 @@ $(function() {
     <input type="text" value="" class="input-mini" size="5" maxlength="10" id="Height" name="Height">   </div>
     </div> 
                
+	  <div class="control-group ifheaderbid" style="display: none;">
+	  	<input type="button" class="btn btn-margin" id="PageHeader" name="PageHeader" value="Add Zone to new Page Header" style="display: none;" onclick="newPageHeader();" />
+	  	<div id="add-page-header">
+	  		<input type="text" value="" class="input-mini" size="5" maxlength="10" id="new-page-header" name="new-page-header"> 
+	  	</div>
+	  	<div id="existing-page-header">
+	  		<select id="PageHeaderID" name="PageHeaderID" class="zone-txtarea">
+	  			<option value="">- Select Existing Page Header -</option>
+				<?php foreach ($page_header_id_list as $name => $value): ?>
+					<option value="<?php echo $name;?>"><?php echo $value;?></option>
+				<?php endforeach; ?>
+			</select>
+		</div>
+	  </div>       
+	  <div class="control-group ifheaderbid" style="display: none;">
+	  	<input type="button" class="btn btn-margin" id="AddHeaderBiddingType" name="AddHeaderBiddingType" value="Add Header Bidding Ad Network to Zone" onclick="newHeaderBiddingType();" />
+	  		<select id="HeaderBiddingType" name="HeaderBiddingType" class="zone-txtarea">
+				<option value="appnexus">AppNexus</option>
+				<option value="brealtime">bRealtime/CPX Interactive</option>
+				<option value="rubicon">Rubicon</option>
+				<option value="openx">OpenX</option>
+				<option value="pubmatic">Pubmatic</option>
+				<option value="criteo">Criteo</option>
+				<option value="yieldbot">Yieldbot</option>
+				<option value="indexExchange">IndexExchange</option>
+				<option value="casale">Casale</option>
+				<option value="sovrn">Sovrn</option>
+				<option value="aol">AOL</option>
+				<option value="pulsepoint">PulsePoint</option>
+			</select>
+	  </div>  
     <div class="control-group nobanner" style="display: none;">
     <label for="MinDuration" class="control-label">Minimum Ad Duration : <span class="hlp"><small><i>(required)</i></small></span></label>
     <div class="controls">
@@ -227,3 +267,357 @@ $(function() {
     <input type="hidden" value="<?php echo $domain_obj->PublisherWebsiteID;?>" name="PublisherWebsiteID">					  
 </form>
 </div>
+
+<!-- START DYNAMIC HEADER BIDDING DOM ELEMENTS -->
+
+		<div id="header-bidding-type-template" style="display: none;">
+			<input type="hidden" name="HeaderBiddingType_N_" value="network" />
+			<h3>Header Bidding Ad Networks</h3>
+			<div class="control-group">
+				<label for="HeaderBiddingType_N_" class="control-label">Ad Network : <span
+					class="hlp"><small><i>(required, ctrl+shift to select mutliple)</i></small></span></label>
+				<div class="controls">
+					<select id="HeaderBiddingType_N_" name="HeaderBiddingType_N_[]" multiple
+						class="zone-txtarea" style="min-height: 100px">
+					    <?php foreach ($header_bidding_adxs_list as $name => $value): ?>
+					    	<option value="<?php echo $name;?>"><?php echo $name;?></option>
+					    <?php endforeach; ?>
+					</select>
+				</div>
+			</div>
+		</div>
+		
+		<div id="header-bidding-type-appnexus" style="display: none;">
+			<input type="hidden" name="HBType_N_" value="appnexus" />
+			<h3>AppNexus Header Bidder - <small><i><a target="_blank" href="http://prebid.org/dev-docs/bidders.html#appnexus">[ See Options ]</a></i></small></h3>
+			<div class="control-group">
+				<label for="PlacementID_N_" class="control-label">placementId
+					: <span class="hlp"><small><i>(required)</i></small></span>
+				</label>
+				<div class="controls">
+					<input type="text" placeholder="50" class="input-mini"
+						size="5" maxlength="10" id="PlacementID_N_" name="PlacementID_N_">
+				</div>
+			</div>
+			<div class="n-button-container">
+				<input type="button" class="btn btn-margin" name="RemoveHBType_N_" value="Remove AppNexus Bidder" onclick="removeHBType('_N_');" />
+			</div>
+		</div>
+		
+		<div id="header-bidding-type-brealtime" style="display: none;">
+			<input type="hidden" name="HBType_N_" value="brealtime" />
+			<h3>bRealtime Header Bidder - <small><i><a target="_blank" href="http://prebid.org/dev-docs/bidders.html#appnexus">[ See Options ]</a></i></small></h3>
+			<div class="control-group">
+				<label for="PlacementID_N_" class="control-label">placementId
+					: <span class="hlp"><small><i>(required)</i></small></span>
+				</label>
+				<div class="controls">
+					<input type="text" placeholder="50" class="input-mini"
+						size="5" maxlength="10" id="PlacementID_N_" name="PlacementID_N_">
+				</div>
+			</div>
+			<div class="n-button-container">
+				<input type="button" class="btn btn-margin" name="RemoveHBType_N_" value="Remove bRealtime Bidder" onclick="removeHBType('_N_');" />
+			</div>
+		</div>
+		
+		<div id="header-bidding-type-rubicon" style="display: none;">
+			<input type="hidden" name="HBType_N_" value="rubicon" />
+			<h3>Rubicon Header Bidder - <small><i><a target="_blank" href="http://prebid.org/dev-docs/bidders.html#rubicon">[ See Options ]</a></i></small></h3>
+			<div class="control-group">
+				<label for="RpAccount_N_" class="control-label">rp_account
+					: <span class="hlp"><small><i>(required)</i></small></span>
+				</label>
+				<div class="controls">
+					<input type="text" placeholder="50" class="input-mini"
+						size="5" maxlength="10" id="RpAccount_N_" name="RpAccount_N_">
+				</div>
+			</div>
+			<div class="control-group">
+				<label for="RpSite_N_" class="control-label">rp_site
+					: <span class="hlp"><small><i>(required)</i></small></span>
+				</label>
+				<div class="controls">
+					<input type="text" placeholder="50" class="input-mini"
+						size="5" maxlength="10" id="RpSite_N_" name="RpSite_N_">
+				</div>
+			</div>
+			<div class="control-group">
+				<label for="RpZoneSize_N_" class="control-label">rp_zonesize
+					: <span class="hlp"><small><i>(required)</i></small></span>
+				</label>
+				<div class="controls">
+					<input type="text" placeholder="50" class="input-mini"
+						size="5" maxlength="10" id="RpZoneSize_N_" name="RpZoneSize_N_">
+				</div>
+			</div>
+			<div class="n-button-container">
+				<input type="button" class="btn btn-margin" name="RemoveHBType_N_" value="Remove Rubicon Bidder" onclick="removeHBType('_N_');" />
+			</div>
+		</div>
+		
+		<div id="header-bidding-type-openx" style="display: none;">
+			<input type="hidden" name="HBType_N_" value="openx" />
+			<h3>OpenX Header Bidder - <small><i><a target="_blank" href="http://prebid.org/dev-docs/bidders.html#openx">[ See Options ]</a></i></small></h3>
+			<div class="control-group">
+				<label for="JsTagUrl_N_" class="control-label">jstag_url
+					: <span class="hlp"><small><i>(required)</i></small></span>
+				</label>
+				<div class="controls">
+					<input type="text" placeholder="50" class="input-mini"
+						size="5" maxlength="10" id="JsTagUrl_N_" name="JsTagUrl_N_">
+				</div>
+			</div>
+			<div class="control-group">
+				<label for="PgId_N_" class="control-label">pgid
+					: <span class="hlp"><small><i>(required)</i></small></span>
+				</label>
+				<div class="controls">
+					<input type="text" placeholder="50" class="input-mini"
+						size="5" maxlength="10" id="PgId_N_" name="PgId_N_">
+				</div>
+			</div>
+			<div class="control-group">
+				<label for="Unit_N_" class="control-label">unit
+					: <span class="hlp"><small><i>(required)</i></small></span>
+				</label>
+				<div class="controls">
+					<input type="text" placeholder="50" class="input-mini"
+						size="5" maxlength="10" id="Unit_N_" name="Unit_N_">
+				</div>
+			</div>
+			<div class="n-button-container">
+				<input type="button" class="btn btn-margin" name="RemoveHBType_N_" value="Remove OpenX Bidder" onclick="removeHBType('_N_');" />
+			</div>
+		</div>
+		
+		<div id="header-bidding-type-pubmatic" style="display: none;">
+			<input type="hidden" name="HBType_N_" value="pubmatic" />
+			<h3>Pubmatic Header Bidder - <small><i><a target="_blank" href="http://prebid.org/dev-docs/bidders.html#pubmatic">[ See Options ]</a></i></small></h3>
+			<div class="control-group">
+				<label for="PublisherID_N_" class="control-label">publisherId
+					: <span class="hlp"><small><i>(required)</i></small></span>
+				</label>
+				<div class="controls">
+					<input type="text" placeholder="50" class="input-mini"
+						size="5" maxlength="10" id="PublisherID_N_" name="PublisherID_N_">
+				</div>
+			</div>
+			<div class="control-group">
+				<label for="AdSlot_N_" class="control-label">adSlot
+					: <span class="hlp"><small><i>(required)</i></small></span>
+				</label>
+				<div class="controls">
+					<input type="text" placeholder="50" class="input-mini"
+						size="5" maxlength="10" id="AdSlot_N_" name="AdSlot_N_">
+				</div>
+			</div>
+			<div class="n-button-container">
+				<input type="button" class="btn btn-margin" name="RemoveHBType_N_" value="Remove Pubmatic Bidder" onclick="removeHBType('_N_');" />
+			</div>
+		</div>
+		
+		<div id="header-bidding-type-criteo" style="display: none;">
+			<input type="hidden" name="HBType_N_" value="criteo" />
+			<h3>Criteo Header Bidder - <small><i><a target="_blank" href="http://prebid.org/dev-docs/bidders.html#criteo">[ See Options ]</a></i></small></h3>
+			<div class="control-group">
+				<label for="NID_N_" class="control-label">nid
+					: <span class="hlp"><small><i>(required)</i></small></span>
+				</label>
+				<div class="controls">
+					<input type="text" placeholder="50" class="input-mini"
+						size="5" maxlength="10" id="NID_N_" name="NID_N_">
+				</div>
+			</div>
+			<div class="control-group">
+				<label for="CookieName_N_" class="control-label">cookiename
+					: <span class="hlp"><small><i>(required)</i></small></span>
+				</label>
+				<div class="controls">
+					<input type="text" placeholder="50" class="input-mini"
+						size="5" maxlength="10" id="CookieName_N_" name="CookieName_N_">
+				</div>
+			</div>
+			<div class="control-group">
+				<label for="VarName_N_" class="control-label">varname
+					: <span class="hlp"><small><i>(optional)</i></small></span>
+				</label>
+				<div class="controls">
+					<input type="text" placeholder="50" class="input-mini"
+						size="5" maxlength="10" id="VarName_N_" name="VarName_N_">
+				</div>
+			</div>
+			<div class="n-button-container">
+				<input type="button" class="btn btn-margin" name="RemoveHBType_N_" value="Remove Criteo Bidder" onclick="removeHBType('_N_');" />
+			</div>
+		</div>
+		
+		<div id="header-bidding-type-yieldbot" style="display: none;">
+			<input type="hidden" name="HBType_N_" value="yieldbot" />
+			<h3>Yieldbot Header Bidder - <small><i><a target="_blank" href="http://prebid.org/dev-docs/bidders.html#yieldbot">[ See Options ]</a></i></small></h3>
+			<div class="control-group">
+				<label for="Psn_N_" class="control-label">psn
+					: <span class="hlp"><small><i>(required)</i></small></span>
+				</label>
+				<div class="controls">
+					<input type="text" placeholder="50" class="input-mini"
+						size="5" maxlength="10" id="Psn_N_" name="Psn_N_">
+				</div>
+			</div>
+			<div class="control-group">
+				<label for="Slot_N_" class="control-label">slot
+					: <span class="hlp"><small><i>(required)</i></small></span>
+				</label>
+				<div class="controls">
+					<input type="text" placeholder="50" class="input-mini"
+						size="5" maxlength="10" id="Slot_N_" name="Slot_N_">
+				</div>
+			</div>
+			<div class="n-button-container">
+				<input type="button" class="btn btn-margin" name="RemoveHBType_N_" value="Remove Yieldbot Bidder" onclick="removeHBType('_N_');" />
+			</div>
+		</div>
+		
+		<div id="header-bidding-type-casale" style="display: none;">
+			<input type="hidden" name="HBType_N_" value="casale" />
+			<h3>Casale Header Bidder - <small><i><a target="_blank" href="http://prebid.org/dev-docs/bidders.html#casale-index">[ See Options ]</a></i></small></h3>
+			<div class="control-group">
+				<label for="ID_N_" class="control-label">id
+					: <span class="hlp"><small><i>(required)</i></small></span>
+				</label>
+				<div class="controls">
+					<input type="text" placeholder="50" class="input-mini"
+						size="5" maxlength="10" id="ID_N_" name="ID_N_">
+				</div>
+			</div>
+			<div class="control-group">
+				<label for="SiteID_N_" class="control-label">siteID
+					: <span class="hlp"><small><i>(required)</i></small></span>
+				</label>
+				<div class="controls">
+					<input type="text" placeholder="50" class="input-mini"
+						size="5" maxlength="10" id="SiteID_N_" name="SiteID_N_">
+				</div>
+			</div>
+			<div class="control-group">
+				<label for="Tier2SiteID_N_" class="control-label">tier2SiteID
+					: <span class="hlp"><small><i>(optional)</i></small></span>
+				</label>
+				<div class="controls">
+					<input type="text" placeholder="50" class="input-mini"
+						size="5" maxlength="10" id="Tier2SiteID_N_" name="Tier2SiteID_N_">
+				</div>
+			</div>
+			<div class="control-group">
+				<label for="Tier3SiteID_N_" class="control-label">tier3SiteID
+					: <span class="hlp"><small><i>(optional)</i></small></span>
+				</label>
+				<div class="controls">
+					<input type="text" placeholder="50" class="input-mini"
+						size="5" maxlength="10" id="Tier3SiteID_N_" name="Tier3SiteID_N_">
+				</div>
+			</div>
+			<div class="n-button-container">
+				<input type="button" class="btn btn-margin" name="RemoveHBType_N_" value="Remove Casale Bidder" onclick="removeHBType('_N_');" />
+			</div>
+		</div>
+		
+		<div id="header-bidding-type-sovrn" style="display: none;">
+			<input type="hidden" name="HBType_N_" value="sovrn" />
+			<h3>Sovrn Header Bidder - <small><i><a target="_blank" href="http://prebid.org/dev-docs/bidders.html#sovrn">[ See Options ]</a></i></small></h3>
+			<div class="control-group">
+				<label for="TagID_N_" class="control-label">tag_id
+					: <span class="hlp"><small><i>(required)</i></small></span>
+				</label>
+				<div class="controls">
+					<input type="text" placeholder="50" class="input-mini"
+						size="5" maxlength="10" id="TagID_N_" name="TagID_N_">
+				</div>
+			</div>
+			<div class="n-button-container">
+				<input type="button" class="btn btn-margin" name="RemoveHBType_N_" value="Remove Sovrn Bidder" onclick="removeHBType('_N_');" />
+			</div>
+		</div>
+		
+		<div id="header-bidding-type-aol" style="display: none;">
+			<input type="hidden" name="HBType_N_" value="aol" />
+			<h3>AOL Header Bidder - <small><i><a target="_blank" href="http://prebid.org/dev-docs/bidders.html#aol">[ See Options ]</a></i></small></h3>
+			<div class="control-group">
+				<label for="Placement_N_" class="control-label">placement
+					: <span class="hlp"><small><i>(required)</i></small></span>
+				</label>
+				<div class="controls">
+					<input type="text" placeholder="50" class="input-mini"
+						size="5" maxlength="10" id="Placement_N_" name="Placement_N_">
+				</div>
+			</div>
+			<div class="control-group">
+				<label for="Network_N_" class="control-label">network
+					: <span class="hlp"><small><i>(required)</i></small></span>
+				</label>
+				<div class="controls">
+					<input type="text" placeholder="50" class="input-mini"
+						size="5" maxlength="10" id="Network_N_" name="Network_N_">
+				</div>
+			</div>
+			<div class="control-group">
+				<label for="SizeID_N_" class="control-label">sizeId
+					: <span class="hlp"><small><i>(optional)</i></small></span>
+				</label>
+				<div class="controls">
+					<input type="text" placeholder="50" class="input-mini"
+						size="5" maxlength="10" id="SizeID_N_" name="SizeID_N_">
+				</div>
+			</div>
+			<div class="control-group">
+				<label for="Alias_N_" class="control-label">alias
+					: <span class="hlp"><small><i>(optional)</i></small></span>
+				</label>
+				<div class="controls">
+					<input type="text" placeholder="50" class="input-mini"
+						size="5" maxlength="10" id="Alias_N_" name="Alias_N_">
+				</div>
+			</div>
+			<div class="n-button-container">
+				<input type="button" class="btn btn-margin" name="RemoveHBType_N_" value="Remove AOL Bidder" onclick="removeHBType('_N_');" />
+			</div>
+		</div>
+		
+		<div id="header-bidding-type-pulsepoint" style="display: none;">
+			<input type="hidden" name="HBType_N_" value="pulsepoint" />
+			<h3>PulsePoint Header Bidder - <small><i><a target="_blank" href="http://prebid.org/dev-docs/bidders.html#pulsepoint">[ See Options ]</a></i></small></h3>
+			<div class="control-group">
+				<label for="Cf_N_" class="control-label">cf
+					: <span class="hlp"><small><i>(required)</i></small></span>
+				</label>
+				<div class="controls">
+					<input type="text" placeholder="50" class="input-mini"
+						size="5" maxlength="10" id="Cf_N_" name="Cf_N_">
+				</div>
+			</div>
+			<div class="control-group">
+				<label for="Cp_N_" class="control-label">cp
+					: <span class="hlp"><small><i>(required)</i></small></span>
+				</label>
+				<div class="controls">
+					<input type="text" placeholder="50" class="input-mini"
+						size="5" maxlength="10" id="Cp_N_" name="Cp_N_">
+				</div>
+			</div>
+			<div class="control-group">
+				<label for="Ct_N_" class="control-label">ct
+					: <span class="hlp"><small><i>(required)</i></small></span>
+				</label>
+				<div class="controls">
+					<input type="text" placeholder="50" class="input-mini"
+						size="5" maxlength="10" id="Ct_N_" name="Ct_N_">
+				</div>
+			</div>
+			<div class="n-button-container">
+				<input type="button" class="btn btn-margin" name="RemoveHBType_N_" value="Remove PulsePoint Bidder" onclick="removeHBType('_N_');" />
+			</div>
+		</div>
+		
+<!-- END DYNAMIC HEADER BIDDING DOM ELEMENTS -->
+
+		

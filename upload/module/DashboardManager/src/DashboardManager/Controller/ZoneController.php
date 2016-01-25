@@ -441,6 +441,7 @@ class ZoneController extends PublisherAbstractActionController {
         		'apis_supported' => \util\BannerOptions::$apis_supported,
         		'protocols' => \util\BannerOptions::$protocols,
         		'mimes' => \util\BannerOptions::$mimes,
+        		'header_bidding_adxs_list' => \util\BannerOptions::$header_bidding_adxs,
         		
         		'current_fold_pos' => $current_fold_pos,
         		'current_linearity' => $current_linearity,

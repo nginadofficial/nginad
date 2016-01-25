@@ -126,5 +126,68 @@ class BannerOptions {
     		"7" => "Fullscreen",
     );
     
-    
+    public static $header_bidding_adxs = array(
+    		"appnexus" => array(
+    			'placementId'
+    		),
+    		// CPX Interactive/brealtime is using AppNexus so it's the same
+    		"brealtime" => array(
+    			'placementId'
+    		),
+    		"rubicon" => array(
+    			'rp_account',
+    			'rp_site',
+    			'rp_zonesize',
+    		),
+    		"openx" => array(
+    			'jstag_url',
+    			'pgid',
+    			'unit'
+    		),
+    		"pubmatic" => array(
+    			'publisherId',
+    			'adSlot'
+    		),
+    		"criteo" => array(
+    			'nid',
+    			'cookiename',
+    			'varname'
+    		),
+    		"yieldbot" => array(
+    			'psn',
+    			'slot'
+    		),
+    		"casale" => array(
+    			'id',
+    			'siteID',
+    			'tier2SiteID',
+    			'tier3SiteID'
+    		),
+    		"sovrn" => array(
+    			'tagid'
+    		),
+    		"aol" => array(
+    			'placement',
+    			'network',
+    			'sizeId',
+    			'alias'
+    		),
+    		"pulsepoint" => array(
+    			'cf',
+    			'cp',
+    			'ct'
+    		)
+    );
 }
+
+
+
+
+
+
+
+
+
+
+
+

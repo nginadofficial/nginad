@@ -8,6 +8,20 @@
                 }
             },
             {
+                bidder: 'sovrn',
+                    params: {
+                        tagid: '123' // <String> tag Id
+                    }
+            },
+            {
+                bidder: 'pulsepoint',
+                params: {
+                        cf: '300X250',
+                        cp: 521732,
+                        ct: 76835
+                }
+            }
+            {
                 bidder: 'rubicon',
                 params: {
                    rp_account : '9707',

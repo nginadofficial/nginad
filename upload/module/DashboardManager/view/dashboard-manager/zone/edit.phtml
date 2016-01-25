@@ -51,6 +51,15 @@ $(function() {
     <div class="controls">
     <textarea class="zone-txtbox" maxlength="255" id="Description" name="Description"><?php echo $editResultObj->Description;?></textarea>    </div>
     </div>
+<div class="control-group">
+    <label for="ImpressionType" class="control-label">Auction Type</label>
+    <div class="controls error">
+		<select id="AuctionType" name="AuctionType" class="zone-txtarea" onchange="switchAuctionType();">
+			<option value="rtb">RTB</option>
+			<option value="header-bidding">Header Bidding</option>
+		</select>
+		</div>
+    </div>
 <div class="control-group" id="passback-cg">
     <label for="PassbackAdTag" id="passbackTag" class="control-label">Passback Ad Tag</label>
     <div class="controls">
