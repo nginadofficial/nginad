@@ -211,6 +211,7 @@ class ZoneController extends PublisherAbstractActionController {
 	        
 		    $needed_input = array(
 		    		'AdName',
+		    		'AuctionType',
 		    		'Description',
 		    		'Width',
 		    		'Height'
@@ -231,6 +232,8 @@ class ZoneController extends PublisherAbstractActionController {
                 $PublisherAdZoneFactory = \_factory\PublisherAdZone::get_instance();
                 
                 $ad->AdName					= strip_tags($request->getPost("AdName"));
+                $ad->AuctionType			= strip_tags($request->getPost("AuctionType"));
+                $ad->HeaderBiddingAdUnitID	= strip_tags($request->getPost("HeaderBiddingAdUnitID"));
 				$ad->Description	 		= strip_tags($request->getPost("Description"));
 				$ad->PassbackAdTag 			= $request->getPost("PassbackAdTag");
 				$floor_price 				= $request->getPost("FloorPrice") == null ? 0 : $request->getPost("FloorPrice");
@@ -500,6 +503,7 @@ class ZoneController extends PublisherAbstractActionController {
         
 	        	$needed_input = array(
 	        			'AdName',
+	        			'AuctionType',
 	        			'Description',
 	        			'Width',
 	        			'Height'
@@ -577,6 +581,8 @@ class ZoneController extends PublisherAbstractActionController {
             			if ($validate):        			
 
 	                    	$editResultObj->AdName 					= strip_tags($request->getPost("AdName"));
+            				$editResultObj->AuctionType 			= strip_tags($request->getPost("AuctionType"));
+            				$editResultObj->HeaderBiddingAdUnitID 	= strip_tags($request->getPost("HeaderBiddingAdUnitID"));
 							$editResultObj->Description 			= strip_tags($request->getPost("Description"));
 							$editResultObj->PassbackAdTag 			= $request->getPost("PassbackAdTag");
 							$floor_price 							= $request->getPost("FloorPrice") == null ? 0 : $request->getPost("FloorPrice");

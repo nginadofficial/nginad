@@ -201,6 +201,14 @@ class PublisherAdZone extends \_factory\CachedTableRead
    	$data['AdName'] = substr($rawData->AdName,0,100);
    	$data['Description'] = $rawData->Description;
    	
+   	$data['HeaderBiddingAdUnitID'] = $rawData->HeaderBiddingAdUnitID;
+   	
+   	if ($rawData->AuctionType == 'header'):
+   		$data['AuctionType'] = 'header';
+   	else:
+   		$data['AuctionType'] = 'rtb';
+   	endif;
+   	
    	if ($rawData->ImpressionType == 'banner'):
    		$data['ImpressionType'] = 'banner';
    	else:

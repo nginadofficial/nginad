@@ -47,6 +47,10 @@ class PingManager {
 	
 	private $ImpressionType;
 	
+	private $AuctionType;
+	
+	private $HeaderBiddingAdUnitID;
+	
 	private $is_second_price_auction;
 	
 	private $publisher_markup_rate = 10;
@@ -66,6 +70,9 @@ class PingManager {
 		$this->AdName 					= $AdName;
 		$this->WebDomain 				= $WebDomain;
 		$this->ImpressionType			= $ImpressionType;
+		$this->AuctionType				= $AuctionType;
+		$this->HeaderBiddingAdUnitID	= $HeaderBiddingAdUnitID;
+		
 		$this->is_second_price_auction	= $this->config['settings']['rtb']['second_price_auction'];
 		
 		$this->publisher_markup_rate 					= \util\Markup::getPublisherMarkupRate($this->PublisherWebsiteID, $this->PublisherInfoID, $this->config);

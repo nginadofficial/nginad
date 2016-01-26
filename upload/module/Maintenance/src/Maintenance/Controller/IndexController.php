@@ -172,6 +172,8 @@ class IndexController extends AbstractActionController {
 	    	$PublisherAdZoneNew->PublisherAdZoneID = $PublisherAdZone->PublisherAdZoneID;
 	    	$PublisherAdZoneNew->PublisherWebsiteID = $PublisherAdZone->PublisherWebsiteID;
 	    	$PublisherAdZoneNew->ImpressionType = $PublisherAdZone->ImpressionType;
+	    	$PublisherAdZoneNew->AuctionType = $PublisherAdZone->AuctionType;
+	    	$PublisherAdZoneNew->HeaderBiddingAdUnitID = $PublisherAdZone->HeaderBiddingAdUnitID;
 	    	$PublisherAdZoneNew->AdOwnerID = $PublisherAdZone->AdOwnerID;
 	    	$PublisherAdZoneNew->AdName = $PublisherAdZone->AdName;
 	    	$PublisherAdZoneNew->Description = $PublisherAdZone->Description;

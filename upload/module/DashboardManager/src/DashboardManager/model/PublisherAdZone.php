@@ -19,6 +19,8 @@ class PublisherAdZone  implements InputFilterAwareInterface
     public $PublisherAdZoneID;
     public $PublisherWebsiteID;
     public $ImpressionType;
+    public $AuctionType;
+    public $HeaderBiddingAdUnitID;
     public $AdName;
     public $Description;
     public $PassbackAdTag;
@@ -80,6 +82,24 @@ class PublisherAdZone  implements InputFilterAwareInterface
 
             $inputFilter->add($factory->createInput(array(
             		'name' => 'ImpressionType',
+            		'required' => true,
+            		'filters' => array(
+            				array('name' => 'StripTags'),
+            				array('name' => 'StringTrim'),
+            		),
+            )));
+            
+            $inputFilter->add($factory->createInput(array(
+            		'name' => 'AuctionType',
+            		'required' => true,
+            		'filters' => array(
+            				array('name' => 'StripTags'),
+            				array('name' => 'StringTrim'),
+            		),
+            )));
+            
+            $inputFilter->add($factory->createInput(array(
+            		'name' => 'HeaderBiddingAdUnitID',
             		'required' => true,
             		'filters' => array(
             				array('name' => 'StripTags'),

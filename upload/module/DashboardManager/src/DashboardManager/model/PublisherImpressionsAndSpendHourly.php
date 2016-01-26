@@ -15,6 +15,8 @@ class PublisherImpressionsAndSpendHourly {
     public $PublisherName;
     public $AdName;
     public $Impressions;
+    public $AuctionType;
+    public $HeaderBiddingAdUnitID;
     public $Revenue;
     public $eCPM;
     public $GrossRevenue;
