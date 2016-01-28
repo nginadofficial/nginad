@@ -128,7 +128,8 @@ class BannerOptions {
     
     public static $header_bidding_adxs = array(
     		"appnexus" => array(
-    			'placementId'
+    			'placementId',
+    			'randomeKey'
     		),
     		// CPX Interactive/brealtime is using AppNexus so it's the same
     		"brealtime" => array(
@@ -157,7 +158,7 @@ class BannerOptions {
     			'psn',
     			'slot'
     		),
-    		"casale" => array(
+    		"indexExchange" => array(
     			'id',
     			'siteID',
     			'tier2SiteID',

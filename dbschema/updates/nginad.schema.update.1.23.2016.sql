@@ -20,6 +20,7 @@ CREATE TABLE `HeaderBiddingAdUnit` (
   `HeaderBiddingAdUnitID` int(11) NOT NULL,
   `HeaderBiddingPageID` int(11) NOT NULL,
   `PublisherAdZoneID` int(11) NOT NULL,
+  `AdExchange` char(100) NOT NULL,
   `DivID` char(100) NOT NULL,
   `Height` int(11) NOT NULL,
   `Width` int(11) NOT NULL,

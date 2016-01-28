@@ -45,7 +45,7 @@ $(function() {
     <textarea class="zone-txtbox" maxlength="255" id="Description" name="Description"></textarea>   </div>
     </div>
 <div class="control-group">
-    <label for="ImpressionType" class="control-label">Auction Type</label>
+    <label for="AuctionType" class="control-label">Auction Type</label>
     <div class="controls error">
 		<select id="AuctionType" name="AuctionType" class="zone-txtarea" onchange="switchAuctionType();">
 			<option value="rtb">RTB</option>
@@ -53,10 +53,12 @@ $(function() {
 		</select>
 		</div>
     </div>
-<div class="control-group" id="passback-cg">
+
+<div class="control-group" id="passback-wrapper" style="margin: 0px; padding: 0px;">    
+	<div class="control-group" id="passback-cg">
     <label for="PassbackAdTag" id="passbackTag" class="control-label">Passback Ad Tag</label>
     <div class="controls error">
- <textarea class="zone-txtbox ignore" maxlength="5000" id="PassbackAdTag" name="PassbackAdTag"></textarea>    </div>
+ 	<textarea class="zone-txtbox ignore" maxlength="5000" id="PassbackAdTag" name="PassbackAdTag"></textarea>    </div>
     </div>
     <div class="control-group" id="floor-cg">
     <label for="FloorPrice" class="control-label">Floor Price</label>
@@ -65,7 +67,51 @@ $(function() {
 	<span class="add-on">$</span>
     <input type="text" value="0" class="input-mini" maxlength="20" id="FloorPrice" name="FloorPrice"></div>
     </div>
+	</div>
+</div>
+<div class="control-group" id="header-bidding-wrapper" style="margin: 0px; padding: 0px; display: none;">   
+
+	  <div class="control-group ifheaderbid" id='cg-header-page' >
+	  <label for="PageHeader" id="PageHeaderLabel" class="control-label">Add Zone to New Page Header</label>
+	  	<div class="controls error">
+	  		<input type="text" value="" class="zone-txtbox" size="35" maxlength="50" id="new-page-header" name="new-page-header"> 
+	  		<input type="button" class="btn btn-margin" id="PageHeader" name="PageHeader" value="Add" onclick="newPageHeader();" />
+	  	</div>
+	  	<div class="controls error">
+	  	<div id="existing-page-header" style="margin-top: 20px;">
+	  		<select id="PageHeaderID" name="PageHeaderID" class="zone-txtarea">
+	  			<option value="">- Select Existing Page Header -</option>
+				<?php foreach ($page_header_id_list as $name => $value): ?>
+					<option value="<?php echo $name;?>"><?php echo $value;?></option>
+				<?php endforeach; ?>
+			</select>
+		</div>
+		</div>
+	  </div>       
+	  <div class="control-group ifheaderbid" id='cg-header-ad-network'>
+	  <label for="HeaderBiddingType" id="HeaderBiddingTypeLabel" class="control-label">Add Header Bidding Ad Network to Zone</label>
+	  <div class="controls error">
+	  		<select id="HeaderBiddingType" name="HeaderBiddingType" class="zone-txtarea">
+				<option value="appnexus">AppNexus</option>
+				<option value="rubicon">Rubicon</option>
+				<option value="openx">OpenX</option>
+				<option value="pubmatic">Pubmatic</option>
+				<option value="criteo">Criteo</option>
+				<option value="yieldbot">Yieldbot</option>
+				<option value="indexExchange">Casale</option>
+				<option value="sovrn">Sovrn</option>
+				<option value="aol">AOL</option>
+				<option value="pulsepoint">PulsePoint</option>
+			</select>
+			<input type="button" class="btn btn-margin" id="AddHeaderBiddingType" name="AddHeaderBiddingType" value="Add" onclick="newHeaderBiddingAdNetwork();" />
+		</div>
+	  </div>  
+	  
+    <div id="HeaderBiddingItems" class="ifheaderbid">
+    	
     </div>
+
+</div>
     <div class="control-group novideo">
      <label for="IsMobileFlag" class="control-label">Is Mobile?</label>
     <div class="controls">
@@ -98,37 +144,6 @@ $(function() {
     <input type="text" value="" class="input-mini" size="5" maxlength="10" id="Height" name="Height">   </div>
     </div> 
                
-	  <div class="control-group ifheaderbid" style="display: none;">
-	  	<input type="button" class="btn btn-margin" id="PageHeader" name="PageHeader" value="Add Zone to new Page Header" style="display: none;" onclick="newPageHeader();" />
-	  	<div id="add-page-header">
-	  		<input type="text" value="" class="input-mini" size="5" maxlength="10" id="new-page-header" name="new-page-header"> 
-	  	</div>
-	  	<div id="existing-page-header">
-	  		<select id="PageHeaderID" name="PageHeaderID" class="zone-txtarea">
-	  			<option value="">- Select Existing Page Header -</option>
-				<?php foreach ($page_header_id_list as $name => $value): ?>
-					<option value="<?php echo $name;?>"><?php echo $value;?></option>
-				<?php endforeach; ?>
-			</select>
-		</div>
-	  </div>       
-	  <div class="control-group ifheaderbid" style="display: none;">
-	  	<input type="button" class="btn btn-margin" id="AddHeaderBiddingType" name="AddHeaderBiddingType" value="Add Header Bidding Ad Network to Zone" onclick="newHeaderBiddingType();" />
-	  		<select id="HeaderBiddingType" name="HeaderBiddingType" class="zone-txtarea">
-				<option value="appnexus">AppNexus</option>
-				<option value="brealtime">bRealtime/CPX Interactive</option>
-				<option value="rubicon">Rubicon</option>
-				<option value="openx">OpenX</option>
-				<option value="pubmatic">Pubmatic</option>
-				<option value="criteo">Criteo</option>
-				<option value="yieldbot">Yieldbot</option>
-				<option value="indexExchange">IndexExchange</option>
-				<option value="casale">Casale</option>
-				<option value="sovrn">Sovrn</option>
-				<option value="aol">AOL</option>
-				<option value="pulsepoint">PulsePoint</option>
-			</select>
-	  </div>  
     <div class="control-group nobanner" style="display: none;">
     <label for="MinDuration" class="control-label">Minimum Ad Duration : <span class="hlp"><small><i>(required)</i></small></span></label>
     <div class="controls">
@@ -270,23 +285,6 @@ $(function() {
 
 <!-- START DYNAMIC HEADER BIDDING DOM ELEMENTS -->
 
-		<div id="header-bidding-type-template" style="display: none;">
-			<input type="hidden" name="HeaderBiddingType_N_" value="network" />
-			<h3>Header Bidding Ad Networks</h3>
-			<div class="control-group">
-				<label for="HeaderBiddingType_N_" class="control-label">Ad Network : <span
-					class="hlp"><small><i>(required, ctrl+shift to select mutliple)</i></small></span></label>
-				<div class="controls">
-					<select id="HeaderBiddingType_N_" name="HeaderBiddingType_N_[]" multiple
-						class="zone-txtarea" style="min-height: 100px">
-					    <?php foreach ($header_bidding_adxs_list as $name => $value): ?>
-					    	<option value="<?php echo $name;?>"><?php echo $name;?></option>
-					    <?php endforeach; ?>
-					</select>
-				</div>
-			</div>
-		</div>
-		
 		<div id="header-bidding-type-appnexus" style="display: none;">
 			<input type="hidden" name="HBType_N_" value="appnexus" />
 			<h3>AppNexus Header Bidder - <small><i><a target="_blank" href="http://prebid.org/dev-docs/bidders.html#appnexus">[ See Options ]</a></i></small></h3>
@@ -295,29 +293,29 @@ $(function() {
 					: <span class="hlp"><small><i>(required)</i></small></span>
 				</label>
 				<div class="controls">
-					<input type="text" placeholder="50" class="input-mini"
+					<input type="text" placeholder="234234" class="input-small"
 						size="5" maxlength="10" id="PlacementID_N_" name="PlacementID_N_">
 				</div>
 			</div>
-			<div class="n-button-container">
-				<input type="button" class="btn btn-margin" name="RemoveHBType_N_" value="Remove AppNexus Bidder" onclick="removeHBType('_N_');" />
-			</div>
-		</div>
-		
-		<div id="header-bidding-type-brealtime" style="display: none;">
-			<input type="hidden" name="HBType_N_" value="brealtime" />
-			<h3>bRealtime Header Bidder - <small><i><a target="_blank" href="http://prebid.org/dev-docs/bidders.html#appnexus">[ See Options ]</a></i></small></h3>
 			<div class="control-group">
-				<label for="PlacementID_N_" class="control-label">placementId
-					: <span class="hlp"><small><i>(required)</i></small></span>
+				<label for="RandomKey_N_" class="control-label">randomeKey
+					: <span class="hlp"><small><i>(optional)</i></small></span>
 				</label>
 				<div class="controls">
-					<input type="text" placeholder="50" class="input-mini"
-						size="5" maxlength="10" id="PlacementID_N_" name="PlacementID_N_">
+					<input type="text" placeholder="Key Value" class="input-small"
+						size="5" maxlength="10" id="RandomKey_N_" name="RandomKey_N_">
 				</div>
 			</div>
-			<div class="n-button-container">
-				<input type="button" class="btn btn-margin" name="RemoveHBType_N_" value="Remove bRealtime Bidder" onclick="removeHBType('_N_');" />
+			<div class="control-group">
+		    	<label for="NetworkAdTag_N_" class="control-label">Ad Tag</label>
+		    	<div class="controls error">
+		 			<textarea class="zone-txtbox ignore" maxlength="5000" id="NetworkAdTag_N_" name="NetworkAdTag_N_"></textarea>    
+		 		</div>
+		    </div>
+		    <div class="control-group">
+				<div class="n-button-container">
+					<input type="button" class="btn btn-margin" name="RemoveHBType_N_" value="Remove AppNexus Bidder" onclick="removeHeaderBiddingAdNetwork('_N_');" />
+				</div>
 			</div>
 		</div>
 		
@@ -329,7 +327,7 @@ $(function() {
 					: <span class="hlp"><small><i>(required)</i></small></span>
 				</label>
 				<div class="controls">
-					<input type="text" placeholder="50" class="input-mini"
+					<input type="text" placeholder="4934" class="input-small"
 						size="5" maxlength="10" id="RpAccount_N_" name="RpAccount_N_">
 				</div>
 			</div>
@@ -338,7 +336,7 @@ $(function() {
 					: <span class="hlp"><small><i>(required)</i></small></span>
 				</label>
 				<div class="controls">
-					<input type="text" placeholder="50" class="input-mini"
+					<input type="text" placeholder="13945" class="input-mini"
 						size="5" maxlength="10" id="RpSite_N_" name="RpSite_N_">
 				</div>
 			</div>
@@ -347,12 +345,20 @@ $(function() {
 					: <span class="hlp"><small><i>(required)</i></small></span>
 				</label>
 				<div class="controls">
-					<input type="text" placeholder="50" class="input-mini"
+					<input type="text" placeholder="23948-15" class="input-small"
 						size="5" maxlength="10" id="RpZoneSize_N_" name="RpZoneSize_N_">
 				</div>
 			</div>
-			<div class="n-button-container">
-				<input type="button" class="btn btn-margin" name="RemoveHBType_N_" value="Remove Rubicon Bidder" onclick="removeHBType('_N_');" />
+			<div class="control-group">
+		    	<label for="NetworkAdTag_N_" class="control-label">Ad Tag</label>
+		    	<div class="controls error">
+		 			<textarea class="zone-txtbox ignore" maxlength="5000" id="NetworkAdTag_N_" name="NetworkAdTag_N_"></textarea>    
+		 		</div>
+		    </div>
+		    <div class="control-group">
+				<div class="n-button-container">
+					<input type="button" class="btn btn-margin" name="RemoveHBType_N_" value="Remove Rubicon Bidder" onclick="removeHeaderBiddingAdNetwork('_N_');" />
+				</div>
 			</div>
 		</div>
 		
@@ -364,7 +370,7 @@ $(function() {
 					: <span class="hlp"><small><i>(required)</i></small></span>
 				</label>
 				<div class="controls">
-					<input type="text" placeholder="50" class="input-mini"
+					<input type="text" placeholder="ox-d.xyz.servedbyopenx.com/w/1.0/jstag?ef=db&nc=23923-EF" class="input-medium"
 						size="5" maxlength="10" id="JsTagUrl_N_" name="JsTagUrl_N_">
 				</div>
 			</div>
@@ -373,7 +379,7 @@ $(function() {
 					: <span class="hlp"><small><i>(required)</i></small></span>
 				</label>
 				<div class="controls">
-					<input type="text" placeholder="50" class="input-mini"
+					<input type="text" placeholder="534205285" class="input-small"
 						size="5" maxlength="10" id="PgId_N_" name="PgId_N_">
 				</div>
 			</div>
@@ -382,12 +388,20 @@ $(function() {
 					: <span class="hlp"><small><i>(required)</i></small></span>
 				</label>
 				<div class="controls">
-					<input type="text" placeholder="50" class="input-mini"
+					<input type="text" placeholder="538562284" class="input-small"
 						size="5" maxlength="10" id="Unit_N_" name="Unit_N_">
 				</div>
 			</div>
-			<div class="n-button-container">
-				<input type="button" class="btn btn-margin" name="RemoveHBType_N_" value="Remove OpenX Bidder" onclick="removeHBType('_N_');" />
+			<div class="control-group">
+		    	<label for="NetworkAdTag_N_" class="control-label">Ad Tag</label>
+		    	<div class="controls error">
+		 			<textarea class="zone-txtbox ignore" maxlength="5000" id="NetworkAdTag_N_" name="NetworkAdTag_N_"></textarea>    
+		 		</div>
+		    </div>
+		    <div class="control-group">
+				<div class="n-button-container">
+					<input type="button" class="btn btn-margin" name="RemoveHBType_N_" value="Remove OpenX Bidder" onclick="removeHeaderBiddingAdNetwork('_N_');" />
+				</div>
 			</div>
 		</div>
 		
@@ -399,7 +413,7 @@ $(function() {
 					: <span class="hlp"><small><i>(required)</i></small></span>
 				</label>
 				<div class="controls">
-					<input type="text" placeholder="50" class="input-mini"
+					<input type="text" placeholder="32572" class="input-small"
 						size="5" maxlength="10" id="PublisherID_N_" name="PublisherID_N_">
 				</div>
 			</div>
@@ -408,12 +422,20 @@ $(function() {
 					: <span class="hlp"><small><i>(required)</i></small></span>
 				</label>
 				<div class="controls">
-					<input type="text" placeholder="50" class="input-mini"
+					<input type="text" placeholder="38519891@300x250" class="input-large"
 						size="5" maxlength="10" id="AdSlot_N_" name="AdSlot_N_">
 				</div>
 			</div>
-			<div class="n-button-container">
-				<input type="button" class="btn btn-margin" name="RemoveHBType_N_" value="Remove Pubmatic Bidder" onclick="removeHBType('_N_');" />
+			<div class="control-group">
+		    	<label for="NetworkAdTag_N_" class="control-label">Ad Tag</label>
+		    	<div class="controls error">
+		 			<textarea class="zone-txtbox ignore" maxlength="5000" id="NetworkAdTag_N_" name="NetworkAdTag_N_"></textarea>    
+		 		</div>
+		    </div>
+		    <div class="control-group">
+				<div class="n-button-container">
+					<input type="button" class="btn btn-margin" name="RemoveHBType_N_" value="Remove Pubmatic Bidder" onclick="removeHeaderBiddingAdNetwork('_N_');" />
+				</div>
 			</div>
 		</div>
 		
@@ -425,7 +447,7 @@ $(function() {
 					: <span class="hlp"><small><i>(required)</i></small></span>
 				</label>
 				<div class="controls">
-					<input type="text" placeholder="50" class="input-mini"
+					<input type="text" placeholder="1234" class="input-small"
 						size="5" maxlength="10" id="NID_N_" name="NID_N_">
 				</div>
 			</div>
@@ -434,7 +456,7 @@ $(function() {
 					: <span class="hlp"><small><i>(required)</i></small></span>
 				</label>
 				<div class="controls">
-					<input type="text" placeholder="50" class="input-mini"
+					<input type="text" placeholder="ckn_pub" class="input-small"
 						size="5" maxlength="10" id="CookieName_N_" name="CookieName_N_">
 				</div>
 			</div>
@@ -443,12 +465,20 @@ $(function() {
 					: <span class="hlp"><small><i>(optional)</i></small></span>
 				</label>
 				<div class="controls">
-					<input type="text" placeholder="50" class="input-mini"
+					<input type="text" placeholder="crtg_content" class="input-small"
 						size="5" maxlength="10" id="VarName_N_" name="VarName_N_">
 				</div>
 			</div>
-			<div class="n-button-container">
-				<input type="button" class="btn btn-margin" name="RemoveHBType_N_" value="Remove Criteo Bidder" onclick="removeHBType('_N_');" />
+			<div class="control-group">
+		    	<label for="NetworkAdTag_N_" class="control-label">Ad Tag</label>
+		    	<div class="controls error">
+		 			<textarea class="zone-txtbox ignore" maxlength="5000" id="NetworkAdTag_N_" name="NetworkAdTag_N_"></textarea>    
+		 		</div>
+		    </div>
+		    <div class="control-group">
+				<div class="n-button-container">
+					<input type="button" class="btn btn-margin" name="RemoveHBType_N_" value="Remove Criteo Bidder" onclick="removeHeaderBiddingAdNetwork('_N_');" />
+				</div>
 			</div>
 		</div>
 		
@@ -460,7 +490,7 @@ $(function() {
 					: <span class="hlp"><small><i>(required)</i></small></span>
 				</label>
 				<div class="controls">
-					<input type="text" placeholder="50" class="input-mini"
+					<input type="text" placeholder="" class="input-small"
 						size="5" maxlength="10" id="Psn_N_" name="Psn_N_">
 				</div>
 			</div>
@@ -469,24 +499,32 @@ $(function() {
 					: <span class="hlp"><small><i>(required)</i></small></span>
 				</label>
 				<div class="controls">
-					<input type="text" placeholder="50" class="input-mini"
+					<input type="text" placeholder="" class="input-small"
 						size="5" maxlength="10" id="Slot_N_" name="Slot_N_">
 				</div>
 			</div>
-			<div class="n-button-container">
-				<input type="button" class="btn btn-margin" name="RemoveHBType_N_" value="Remove Yieldbot Bidder" onclick="removeHBType('_N_');" />
+			<div class="control-group">
+		    	<label for="NetworkAdTag_N_" class="control-label">Ad Tag</label>
+		    	<div class="controls error">
+		 			<textarea class="zone-txtbox ignore" maxlength="5000" id="NetworkAdTag_N_" name="NetworkAdTag_N_"></textarea>    
+		 		</div>
+		    </div>
+		    <div class="control-group">
+				<div class="n-button-container">
+					<input type="button" class="btn btn-margin" name="RemoveHBType_N_" value="Remove Yieldbot Bidder" onclick="removeHeaderBiddingAdNetwork('_N_');" />
+				</div>
 			</div>
 		</div>
 		
-		<div id="header-bidding-type-casale" style="display: none;">
-			<input type="hidden" name="HBType_N_" value="casale" />
+		<div id="header-bidding-type-indexexchange" style="display: none;">
+			<input type="hidden" name="HBType_N_" value="indexexchange" />
 			<h3>Casale Header Bidder - <small><i><a target="_blank" href="http://prebid.org/dev-docs/bidders.html#casale-index">[ See Options ]</a></i></small></h3>
 			<div class="control-group">
 				<label for="ID_N_" class="control-label">id
 					: <span class="hlp"><small><i>(required)</i></small></span>
 				</label>
 				<div class="controls">
-					<input type="text" placeholder="50" class="input-mini"
+					<input type="text" placeholder="" class="input-small"
 						size="5" maxlength="10" id="ID_N_" name="ID_N_">
 				</div>
 			</div>
@@ -495,7 +533,7 @@ $(function() {
 					: <span class="hlp"><small><i>(required)</i></small></span>
 				</label>
 				<div class="controls">
-					<input type="text" placeholder="50" class="input-mini"
+					<input type="text" placeholder="" class="input-small"
 						size="5" maxlength="10" id="SiteID_N_" name="SiteID_N_">
 				</div>
 			</div>
@@ -504,7 +542,7 @@ $(function() {
 					: <span class="hlp"><small><i>(optional)</i></small></span>
 				</label>
 				<div class="controls">
-					<input type="text" placeholder="50" class="input-mini"
+					<input type="text" placeholder="" class="input-small"
 						size="5" maxlength="10" id="Tier2SiteID_N_" name="Tier2SiteID_N_">
 				</div>
 			</div>
@@ -513,12 +551,20 @@ $(function() {
 					: <span class="hlp"><small><i>(optional)</i></small></span>
 				</label>
 				<div class="controls">
-					<input type="text" placeholder="50" class="input-mini"
+					<input type="text" placeholder="" class="input-small"
 						size="5" maxlength="10" id="Tier3SiteID_N_" name="Tier3SiteID_N_">
 				</div>
 			</div>
-			<div class="n-button-container">
-				<input type="button" class="btn btn-margin" name="RemoveHBType_N_" value="Remove Casale Bidder" onclick="removeHBType('_N_');" />
+			<div class="control-group">
+		    	<label for="NetworkAdTag_N_" class="control-label">Ad Tag</label>
+		    	<div class="controls error">
+		 			<textarea class="zone-txtbox ignore" maxlength="5000" id="NetworkAdTag_N_" name="NetworkAdTag_N_"></textarea>    
+		 		</div>
+		    </div>
+		    <div class="control-group">
+				<div class="n-button-container">
+					<input type="button" class="btn btn-margin" name="RemoveHBType_N_" value="Remove Casale Bidder" onclick="removeHeaderBiddingAdNetwork('_N_');" />
+				</div>
 			</div>
 		</div>
 		
@@ -530,12 +576,20 @@ $(function() {
 					: <span class="hlp"><small><i>(required)</i></small></span>
 				</label>
 				<div class="controls">
-					<input type="text" placeholder="50" class="input-mini"
+					<input type="text" placeholder="315045" class="input-small"
 						size="5" maxlength="10" id="TagID_N_" name="TagID_N_">
 				</div>
 			</div>
-			<div class="n-button-container">
-				<input type="button" class="btn btn-margin" name="RemoveHBType_N_" value="Remove Sovrn Bidder" onclick="removeHBType('_N_');" />
+			<div class="control-group">
+		    	<label for="NetworkAdTag_N_" class="control-label">Ad Tag</label>
+		    	<div class="controls error">
+		 			<textarea class="zone-txtbox ignore" maxlength="5000" id="NetworkAdTag_N_" name="NetworkAdTag_N_"></textarea>    
+		 		</div>
+		    </div>
+		    <div class="control-group">
+				<div class="n-button-container">
+					<input type="button" class="btn btn-margin" name="RemoveHBType_N_" value="Remove Sovrn Bidder" onclick="removeHeaderBiddingAdNetwork('_N_');" />
+				</div>
 			</div>
 		</div>
 		
@@ -547,7 +601,7 @@ $(function() {
 					: <span class="hlp"><small><i>(required)</i></small></span>
 				</label>
 				<div class="controls">
-					<input type="text" placeholder="50" class="input-mini"
+					<input type="text" placeholder="23324932" class="input-small"
 						size="5" maxlength="10" id="Placement_N_" name="Placement_N_">
 				</div>
 			</div>
@@ -556,7 +610,7 @@ $(function() {
 					: <span class="hlp"><small><i>(required)</i></small></span>
 				</label>
 				<div class="controls">
-					<input type="text" placeholder="50" class="input-mini"
+					<input type="text" placeholder="" class="input-small"
 						size="5" maxlength="10" id="Network_N_" name="Network_N_">
 				</div>
 			</div>
@@ -565,7 +619,7 @@ $(function() {
 					: <span class="hlp"><small><i>(optional)</i></small></span>
 				</label>
 				<div class="controls">
-					<input type="text" placeholder="50" class="input-mini"
+					<input type="text" placeholder="170" class="input-small"
 						size="5" maxlength="10" id="SizeID_N_" name="SizeID_N_">
 				</div>
 			</div>
@@ -574,12 +628,20 @@ $(function() {
 					: <span class="hlp"><small><i>(optional)</i></small></span>
 				</label>
 				<div class="controls">
-					<input type="text" placeholder="50" class="input-mini"
+					<input type="text" placeholder="desktop_articlepage_something_box_300_250" class="input-xlarge"
 						size="5" maxlength="10" id="Alias_N_" name="Alias_N_">
 				</div>
 			</div>
-			<div class="n-button-container">
-				<input type="button" class="btn btn-margin" name="RemoveHBType_N_" value="Remove AOL Bidder" onclick="removeHBType('_N_');" />
+			<div class="control-group">
+		    	<label for="NetworkAdTag_N_" class="control-label">Ad Tag</label>
+		    	<div class="controls error">
+		 			<textarea class="zone-txtbox ignore" maxlength="5000" id="NetworkAdTag_N_" name="NetworkAdTag_N_"></textarea>    
+		 		</div>
+		    </div>
+		    <div class="control-group">
+				<div class="n-button-container">
+					<input type="button" class="btn btn-margin" name="RemoveHBType_N_" value="Remove AOL Bidder" onclick="removeHeaderBiddingAdNetwork('_N_');" />
+				</div>
 			</div>
 		</div>
 		
@@ -591,7 +653,7 @@ $(function() {
 					: <span class="hlp"><small><i>(required)</i></small></span>
 				</label>
 				<div class="controls">
-					<input type="text" placeholder="50" class="input-mini"
+					<input type="text" placeholder="300X250" class="input-small"
 						size="5" maxlength="10" id="Cf_N_" name="Cf_N_">
 				</div>
 			</div>
@@ -600,7 +662,7 @@ $(function() {
 					: <span class="hlp"><small><i>(required)</i></small></span>
 				</label>
 				<div class="controls">
-					<input type="text" placeholder="50" class="input-mini"
+					<input type="text" placeholder="12345" class="input-small"
 						size="5" maxlength="10" id="Cp_N_" name="Cp_N_">
 				</div>
 			</div>
@@ -609,12 +671,20 @@ $(function() {
 					: <span class="hlp"><small><i>(required)</i></small></span>
 				</label>
 				<div class="controls">
-					<input type="text" placeholder="50" class="input-mini"
+					<input type="text" placeholder="12345" class="input-small"
 						size="5" maxlength="10" id="Ct_N_" name="Ct_N_">
 				</div>
 			</div>
-			<div class="n-button-container">
-				<input type="button" class="btn btn-margin" name="RemoveHBType_N_" value="Remove PulsePoint Bidder" onclick="removeHBType('_N_');" />
+			<div class="control-group">
+		    	<label for="NetworkAdTag_N_" class="control-label">Ad Tag</label>
+		    	<div class="controls error">
+		 			<textarea class="zone-txtbox ignore" maxlength="5000" id="NetworkAdTag_N_" name="NetworkAdTag_N_"></textarea>    
+		 		</div>
+		    </div>
+		    <div class="control-group">
+				<div class="n-button-container">
+					<input type="button" class="btn btn-margin" name="RemoveHBType_N_" value="Remove PulsePoint Bidder" onclick="removeHeaderBiddingAdNetwork('_N_');" />
+				</div>
 			</div>
 		</div>
 		

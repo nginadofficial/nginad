@@ -745,3 +745,17 @@ input.next {
 #startdateicon, #enddateicon, #stats-date-pc-icon, #stats-date-ssp-icon {
 	cursor: pointer;
 }
+
+.n-header-bidding-item {
+	margin-bottom: 20px;
+	border: 1px solid #CCC;
+	width: 550px;
+}
+
+.n-header-bidding-item h3 {
+	margin-left: 23px;
+}
+
+.n-button-container {
+	margin-left: 180px;
+}
