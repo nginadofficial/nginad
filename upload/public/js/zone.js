@@ -244,6 +244,8 @@ function removeHeaderBiddingAdNetwork(id) {
 
 function newHeaderBiddingAdNetwork(id, headerBiddingType) {
 	
+	var newElement = false;
+	
 	if (!headerBiddingType) {
 		headerBiddingType = $("#HeaderBiddingType").val();
 	}
@@ -251,6 +253,7 @@ function newHeaderBiddingAdNetwork(id, headerBiddingType) {
 	var elementHtml = $("#header-bidding-type-" + headerBiddingType.toLowerCase()).html();
 	
 	if (!id) {
+		newElement = true
 		id = newHeaderBiddingId();
 	}
 	
@@ -259,6 +262,12 @@ function newHeaderBiddingAdNetwork(id, headerBiddingType) {
 	elementHtml = '<div class="n-header-bidding-item header-bidding-' + headerBiddingType.toLowerCase() + '" id="n-header-bidding-id-' + id + '">' + elementHtml + '</div>';
 	
 	$("#HeaderBiddingItems").append(elementHtml);
+	
+	if (newElement == true) {
+	    $('html, body').animate({
+	        scrollTop: $('#n-header-bidding-id-' + id).offset().top - 100
+	    }, 2000);
+	}
 	
 	return id;
 }
