@@ -81,13 +81,14 @@ class HeaderBiddingPage extends \_factory\CachedTableRead
     		return $obj_list;
     }
 
-    public function saveHeaderBiddingAdUnit(\model\HeaderBiddingPage $HeaderBiddingPage) {
+    public function saveHeaderBiddingPage(\model\HeaderBiddingPage $HeaderBiddingPage) {
     	$data = array(
+    			'PublisherWebsiteID'                    => $HeaderBiddingPage->PublisherWebsiteID,
     	        'PageName'                       		=> $HeaderBiddingPage->PageName,
     	        'JSHeaderFileUnqName'             		=> $HeaderBiddingPage->JSHeaderFileUnqName,
     			'DateCreated'                        	=> $HeaderBiddingPage->DateCreated
     	);
-    	$header_bidding_page_id = (int)$HeaderBiddingAdUnit->HeaderBiddingPageID;
+    	$header_bidding_page_id = (int)$HeaderBiddingPage->HeaderBiddingPageID;
     	if ($header_bidding_page_id === 0): 
     		$this->insert($data);
     		return $this->getLastInsertValue();

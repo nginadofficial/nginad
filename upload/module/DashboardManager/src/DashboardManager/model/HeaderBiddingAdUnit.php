@@ -12,7 +12,9 @@ namespace model;
 class HeaderBiddingAdUnit {
 
     public $HeaderBiddingAdUnitID;
+    public $HeaderBiddingPageID;
     public $PublisherAdZoneID;
+    public $AdExchange;
     public $DivID;
     public $Height;
     public $Width;

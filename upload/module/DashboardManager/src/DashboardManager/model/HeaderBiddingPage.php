@@ -12,6 +12,7 @@ namespace model;
 class HeaderBiddingPage {
 
     public $HeaderBiddingPageID;
+    public $PublisherWebsiteID;
     public $PageName;
     public $JSHeaderFileUnqName;
     public $DateCreated;

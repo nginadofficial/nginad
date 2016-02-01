@@ -31,6 +31,7 @@ function switchImpressionType() {
 }
 
 function newPageHeader() {
+	
 	var newPage = $.trim($("#new-page-header").val());
 	
 	var exists = false;
@@ -47,21 +48,22 @@ function newPageHeader() {
 		alert('That Page Header ID Already Exists');
 		return;
 	}
-	
-	pageNewID++;
-	var newValue = "NEW_PAGE_" + pageNewID;
-	
+
 	$("#PageHeaderID").append($('<option>', {
-	    value: newValue,
+	    value: newPage,
 	    text: newPage
 	}));
 	
-	$('#PageHeaderID option[value=' + newValue + ']').attr('selected','selected');
+	$('#PageHeaderID option[value=' + newPage + ']').attr('selected','selected');
 }
 
-function switchAuctionType() {
+function switchAuctionType(auctionType) {
 	
-	var auctionType = $("#AuctionType").val();
+	if (!auctionType) {
+		auctionType = $("#AuctionType").val();
+	} else {
+		$("#AuctionType").val(auctionType);
+	}
 	
 	if (auctionType == 'header') {
 		
@@ -76,18 +78,18 @@ function switchAuctionType() {
 	
 }
 
-function initializeNativeAssets() {
+function initializeHeaderBiddingAdNetworks() {
 	
 	var currentHeaderBiddingAdNetworkList = jQuery.parseJSON(current_header_bidding_ad_network_json);
 
 	for (i = 0; i < currentHeaderBiddingAdNetworkList.length; i++) {
 
-		initializeAsset(currentHeaderBiddingAdNetworkList[i]);
+		initializeHeaderBiddingAdNetwork(currentHeaderBiddingAdNetworkList[i]);
 	    
 	}
 }
 
-function initializeAsset(currentHeaderBiddingAdNetworks) {
+function initializeHeaderBiddingAdNetwork(currentHeaderBiddingAdNetworks) {
 	
     var HeaderBiddingAdUnitID 				= currentHeaderBiddingAdNetworks.HeaderBiddingAdUnitID;
     var HeaderBiddingPageID 				= currentHeaderBiddingAdNetworks.HeaderBiddingPageID;
@@ -99,10 +101,10 @@ function initializeAsset(currentHeaderBiddingAdNetworks) {
     var CustomParams 						= currentHeaderBiddingAdNetworks.CustomParams;
     var AdTag 								= currentHeaderBiddingAdNetworks.AdTag;
     
-    var id 									= newHeaderBiddingAdNetwork(null, AdExchange);
+    var id 									= newHeaderBiddingAdNetwork(null, AdExchange, true);
     
-    if (CustomParams.AdTag) {
-    	$("#NetworkAdTag" + id).val(CustomParams.AdTag);
+    if (AdTag) {
+    	$("#NetworkAdTag" + id).val(AdTag);
     }
     
     if (AdExchange == 'appnexus') {
@@ -242,7 +244,7 @@ function removeHeaderBiddingAdNetwork(id) {
 	$("#n-header-bidding-id-" + id).remove();
 }
 
-function newHeaderBiddingAdNetwork(id, headerBiddingType) {
+function newHeaderBiddingAdNetwork(id, headerBiddingType, skipScroll) {
 	
 	var newElement = false;
 	
@@ -263,10 +265,12 @@ function newHeaderBiddingAdNetwork(id, headerBiddingType) {
 	
 	$("#HeaderBiddingItems").append(elementHtml);
 	
-	if (newElement == true) {
-	    $('html, body').animate({
-	        scrollTop: $('#n-header-bidding-id-' + id).offset().top - 100
-	    }, 2000);
+	if (skipScroll != true) {
+		if (newElement == true) {
+		    $('html, body').animate({
+		        scrollTop: $('#n-header-bidding-id-' + id).offset().top - 100
+		    }, 2000);
+		}
 	}
 	
 	return id;

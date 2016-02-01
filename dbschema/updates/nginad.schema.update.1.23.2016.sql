@@ -3,7 +3,8 @@
 -- ----------------------------
 DROP TABLE IF EXISTS `HeaderBiddingPage`;
 CREATE TABLE `HeaderBiddingPage` (
-  `HeaderBiddingPageID` int(11) NOT NULL,
+  `HeaderBiddingPageID` int(11) NOT NULL AUTO_INCREMENT,
+  `PublisherWebsiteID` int(11) NOT NULL,
   `PageName` char(100) NOT NULL,
   `JSHeaderFileUnqName` char(100) NOT NULL,
   `DateCreated` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
@@ -17,7 +18,7 @@ CREATE TABLE `HeaderBiddingPage` (
 -- ----------------------------
 DROP TABLE IF EXISTS `HeaderBiddingAdUnit`;
 CREATE TABLE `HeaderBiddingAdUnit` (
-  `HeaderBiddingAdUnitID` int(11) NOT NULL,
+  `HeaderBiddingAdUnitID` int(11) NOT NULL AUTO_INCREMENT,
   `HeaderBiddingPageID` int(11) NOT NULL,
   `PublisherAdZoneID` int(11) NOT NULL,
   `AdExchange` char(100) NOT NULL,

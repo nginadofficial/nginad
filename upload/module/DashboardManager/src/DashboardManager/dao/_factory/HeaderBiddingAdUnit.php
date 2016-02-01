@@ -83,7 +83,9 @@ class HeaderBiddingAdUnit extends \_factory\CachedTableRead
 
     public function saveHeaderBiddingAdUnit(\model\HeaderBiddingAdUnit $HeaderBiddingAdUnit) {
     	$data = array(
+    			'HeaderBiddingPageID'                   => $HeaderBiddingAdUnit->HeaderBiddingPageID,
     	        'PublisherAdZoneID'                   	=> $HeaderBiddingAdUnit->PublisherAdZoneID,
+    			'AdExchange'                       		=> $HeaderBiddingAdUnit->AdExchange,
     			'DivID'                       			=> $HeaderBiddingAdUnit->DivID,
     	        'Height'                         		=> $HeaderBiddingAdUnit->Height,
     			'Width'                         		=> $HeaderBiddingAdUnit->Width,
@@ -91,6 +93,7 @@ class HeaderBiddingAdUnit extends \_factory\CachedTableRead
     			'AdTag'                         		=> $HeaderBiddingAdUnit->AdTag,
     			'DateCreated'                        	=> $HeaderBiddingAdUnit->DateCreated
     	);
+
     	$header_bidding_ad_unit_id = (int)$HeaderBiddingAdUnit->HeaderBiddingAdUnitID;
     	if ($header_bidding_ad_unit_id === 0): 
     		$this->insert($data);

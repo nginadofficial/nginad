@@ -232,8 +232,8 @@ class ZoneController extends PublisherAbstractActionController {
                 $PublisherAdZoneFactory = \_factory\PublisherAdZone::get_instance();
                 
                 $ad->AdName					= strip_tags($request->getPost("AdName"));
-                $ad->AuctionType			= strip_tags($request->getPost("AuctionType"));
-                $ad->HeaderBiddingAdUnitID	= strip_tags($request->getPost("HeaderBiddingAdUnitID"));
+                $ad->AuctionType			= 'rtb';
+                $ad->HeaderBiddingAdUnitID	= null;
 				$ad->Description	 		= strip_tags($request->getPost("Description"));
 				$ad->PassbackAdTag 			= $request->getPost("PassbackAdTag");
 				$floor_price 				= $request->getPost("FloorPrice") == null ? 0 : $request->getPost("FloorPrice");
@@ -308,6 +308,8 @@ class ZoneController extends PublisherAbstractActionController {
 				else:
 					$ad->AdStatus = 0;
 				endif;
+				
+				$rebuild_header_id = null;
 
                 // Check to see if an entry exists with the same name for the same website domain. A NULL means there are no duplicates.
                 if ($PublisherAdZoneFactory->get_row(array("PublisherWebsiteID" => $DomainObj->PublisherWebsiteID, "AdName" => $ad->AdName)) === null):
@@ -325,6 +327,10 @@ class ZoneController extends PublisherAbstractActionController {
                     try {
                     	
 	                    $publisher_ad_zone_id = $PublisherAdZoneFactory->save_ads($ad);
+	                    
+	                    $ad->PublisherAdZoneID											= $publisher_ad_zone_id;
+	                    
+	                    $auction_type													= strip_tags($request->getPost("AuctionType"));
 	                    
 	                    // If this publisher zone is for video save the extra table info
 	                    if ($ad->ImpressionType == 'video'):
@@ -347,8 +353,95 @@ class ZoneController extends PublisherAbstractActionController {
 
 	                    	$PublisherAdZoneVideoFactory->savePublisherAdZoneVideo($PublisherAdZoneVideo);
 	                    	
+	                    elseif ($auction_type == 'header'):
+
+	                   	 	$page_header_id		 										= $request->getPost("PageHeaderID");
+	                    
+		                    $header_bidding_type 										= $request->getPost("HeaderBiddingType");
+		                    
+		                    $HeaderBiddingPageFactory = \_factory\HeaderBiddingPage::get_instance();
+		                    $HeaderBiddingAdUnitFactory = \_factory\HeaderBiddingAdUnit::get_instance();
+		                    
+		                    $params = array();
+		                    $params["PageName"] 										= $page_header_id;
+		                    $params["PublisherWebsiteID"] 								= $DomainObj->PublisherWebsiteID;
+		                    $HeaderBiddingPage											= $HeaderBiddingPageFactory->get_row($params);
+
+		                    if ($HeaderBiddingPage == null):
+			                    	
+			                    $HeaderBiddingPage 										= new \model\HeaderBiddingPage();
+			                    $HeaderBiddingPage->PublisherWebsiteID 					= $DomainObj->PublisherWebsiteID;
+			                    $HeaderBiddingPage->PageName 							= $page_header_id;
+			                    $HeaderBiddingPage->JSHeaderFileUnqName 				= \util\ZoneHelper::unique_js_filename() . '-'. \util\ZoneHelper::unique_js_filename() . '.js';
+			                    $HeaderBiddingPage->DateCreated							= date("Y-m-d H:i:s");
+			                    	
+			                    $HeaderBiddingPage->HeaderBiddingPageID 				= $HeaderBiddingPageFactory->saveHeaderBiddingPage($HeaderBiddingPage);
+
+		                    endif;
+		                    
+		                    if ($HeaderBiddingPage->HeaderBiddingPageID):
+
+			                    $ad->HeaderBiddingAdUnitID								= $HeaderBiddingPage->HeaderBiddingPageID;
+		                    
+		            			$rebuild_header_id										= $ad->HeaderBiddingAdUnitID;
+		                    
+			                    $ad->AuctionType										= 'header';
+
+			                    $PublisherAdZoneFactory->save_ads($ad);
+			                    
+		    					$post = $this->getRequest()->getPost();                
+	
+		                    	/* 
+		                    	 * _NEW_ for new header bidding items which are being created
+		                    	 * existing header bidding items are deleted each time in an update
+		                    	 */
+		                    	$key_type = '_NEW_';
+		                    
+		                    	// returns an array of new header bidding item ids
+		                    	$new_keys = \util\ZoneHelper::getHeaderBiddingKeys($post, $key_type);
+		                    	
+		                    	// returns an associative array of new header bidding items id => type
+		                    	$header_bidding_types = \util\ZoneHelper::getHeaderBiddingTypes($request, $new_keys, $key_type);
+		                    	
+		                    	// returns an associative array of new header bidding type => array of header bidding of that type
+		                    	$header_bidding_items_new = \util\ZoneHelper::getHeaderBiddingItems($request, $ad, $ad->HeaderBiddingAdUnitID, $header_bidding_types, $key_type);
+
+		                    	/*
+		                    	 * On an edit you would delete existing bidders, since this is a create, we don't need to
+		                    	 * $HeaderBiddingAdUnitFactory->delete_assets($header_bidding_item["PublisherAdZoneID"]);
+		                    	 */ 
+		                    	
+								foreach ($header_bidding_items_new as $bidder_type => $header_bidding_items_list):
+									
+									foreach ($header_bidding_items_list as $header_bidding_item):
+									
+										$HeaderBiddingAdUnit = new \model\HeaderBiddingAdUnit();
+										$HeaderBiddingAdUnit->HeaderBiddingPageID 						= $HeaderBiddingPage->HeaderBiddingPageID;
+										$HeaderBiddingAdUnit->PublisherAdZoneID 						= $header_bidding_item["PublisherAdZoneID"];
+										$HeaderBiddingAdUnit->AdExchange 								= $bidder_type;
+										$HeaderBiddingAdUnit->DivID		 								= $header_bidding_item["DivID"];
+										$HeaderBiddingAdUnit->Height		 							= $header_bidding_item["Height"];
+										$HeaderBiddingAdUnit->Width		 								= $header_bidding_item["Width"];
+										$HeaderBiddingAdUnit->CustomParams		 						= $header_bidding_item["CustomParams"];
+										$HeaderBiddingAdUnit->AdTag		 								= $header_bidding_item["AdTag"];
+										$HeaderBiddingAdUnit->DateCreated								= date("Y-m-d H:i:s");
+
+										$header_bidding_ad_unit_id = $HeaderBiddingAdUnitFactory->saveHeaderBiddingAdUnit($HeaderBiddingAdUnit);
+
+									endforeach;
+									
+								endforeach;
+
+							endif;
+	                    	
 	                    endif;
 
+	                    if ($rebuild_header_id != null):
+	                    
+	                    	\util\ZoneHelper::rebuild_header_bidder($rebuild_header_id);
+	                     
+	                    endif;
+	                    
 	                    if ($this->config_handle['mail']['subscribe']['zones'] === true):
 		                
 			                $is_approved = $ad->AdStatus == 1 ? 'Yes' : 'No';
@@ -444,7 +537,8 @@ class ZoneController extends PublisherAbstractActionController {
         		'apis_supported' => \util\BannerOptions::$apis_supported,
         		'protocols' => \util\BannerOptions::$protocols,
         		'mimes' => \util\BannerOptions::$mimes,
-        		'header_bidding_adxs_list' => \util\BannerOptions::$header_bidding_adxs,
+        		'header_bidding_adxs_list' => \util\ZoneHelper::$header_bidding_adxs,
+        		'header_bidding_providers' => \util\ZoneHelper::$header_bidding_providers,
         		
         		'current_fold_pos' => $current_fold_pos,
         		'current_linearity' => $current_linearity,
@@ -472,6 +566,8 @@ class ZoneController extends PublisherAbstractActionController {
         $PublisherAdZoneFactory = \_factory\PublisherAdZone::get_instance();
         $InsertionOrderLineItemFactory = \_factory\InsertionOrderLineItem::get_instance();
         $PublisherAdZoneVideoFactory = \_factory\PublisherAdZoneVideo::get_instance();
+        $HeaderBiddingPageFactory = \_factory\HeaderBiddingPage::get_instance();
+        $HeaderBiddingAdUnitFactory = \_factory\HeaderBiddingAdUnit::get_instance();
         
         $editResultObj = new \model\PublisherAdZone();
         
@@ -529,6 +625,19 @@ class ZoneController extends PublisherAbstractActionController {
             $current_linearity 				= "";
             $current_fold_pos 				= "";
 
+            $current_header_bidding_json 	= "";
+            
+            $rebuild_previous_header_id = null;
+            $rebuild_header_id = null;
+            
+            $current_header_bidding_pagename 		= "";
+            $current_header_bidding_pagename_list 	= "";
+            $current_page_header_id		 			= "";
+            
+            $current_auction_type					= "rtb";
+            
+            $current_header_bidding_json 			= "";
+            
             // Make sure the value provided is valid.
             $AdSpaceID = intval($this->params()->fromRoute('id', 0));
 
@@ -573,7 +682,43 @@ class ZoneController extends PublisherAbstractActionController {
 		                endif;
 		                
 		            endif;
-		                
+		            
+		        	$params = array();
+		       		$params["PublisherAdZoneID"] 								= $editResultObj->PublisherAdZoneID;
+		     		$HeaderBiddingAdUnit										= $HeaderBiddingAdUnitFactory->get_row($params);
+		            
+		            if ($HeaderBiddingAdUnit != null):
+			            
+		            	$current_auction_type									= $editResultObj->AuctionType;
+		            
+			            $params = array();
+			            $params["HeaderBiddingPageID"] 							= $HeaderBiddingAdUnit->HeaderBiddingPageID;
+			            $HeaderBiddingPage										= $HeaderBiddingPageFactory->get_row($params);
+		            
+			            $current_page_header_id		 							= $HeaderBiddingAdUnit->HeaderBiddingPageID;
+			            $current_header_bidding_pagename 						= $HeaderBiddingPage->PageName;
+			            
+			            $params = array();
+			            $params["PublisherWebsiteID"] 							= $editResultObj->PublisherWebsiteID;
+			            $current_header_bidding_pagename_list					= $HeaderBiddingPageFactory->get($params);
+
+			            $params 							= array();
+			            $params["PublisherAdZoneID"] 		= $editResultObj->PublisherAdZoneID;
+			             
+			            $HeaderBiddingAdUnitList 			= $HeaderBiddingAdUnitFactory->get($params);
+			            
+			            foreach ($HeaderBiddingAdUnitList as $key => $HeaderBiddingAdUnit):
+			            	
+			            	if ($HeaderBiddingAdUnitList[$key]['CustomParams'] != null):
+			            		$HeaderBiddingAdUnitList[$key]['CustomParams'] = unserialize($HeaderBiddingAdUnitList[$key]['CustomParams']);
+			            	endif;
+			            	
+			            endforeach;
+			            
+			            $current_header_bidding_json 		= json_encode($HeaderBiddingAdUnitList);
+			             
+		            endif;
+
                     if ($request->isPost()):
                 
                     	$validate = $this->validateInput($needed_input, false);
@@ -586,12 +731,18 @@ class ZoneController extends PublisherAbstractActionController {
 							$editResultObj->Description 			= strip_tags($request->getPost("Description"));
 							$editResultObj->PassbackAdTag 			= $request->getPost("PassbackAdTag");
 							$floor_price 							= $request->getPost("FloorPrice") == null ? 0 : $request->getPost("FloorPrice");
-							$editResultObj->FloorPrice 						= floatval($floor_price);
+							$editResultObj->FloorPrice 				= floatval($floor_price);
 							$editResultObj->AdTemplateID 			= $request->getPost("AdTemplateID");
 							$editResultObj->IsMobileFlag 			= $request->getPost("IsMobileFlag");
 							$editResultObj->Width 					= $request->getPost("Width");
 							$editResultObj->Height 					= $request->getPost("Height");
 
+							if ($editResultObj->HeaderBiddingAdUnitID != null):
+							
+								$rebuild_previous_header_id 		= $editResultObj->HeaderBiddingAdUnitID;
+							
+							endif;
+							
 							$auto_approve_zones = $this->config_handle['settings']['publisher']['auto_approve_zones'];
 							$editResultObj->AutoApprove = ($auto_approve_zones == true) ? 1 : 0;
 							
@@ -603,12 +754,12 @@ class ZoneController extends PublisherAbstractActionController {
                             endif;
                     	    
                 			$editResultObj->PublisherWebsiteID = $DomainObj->PublisherWebsiteID;
-                			if($editResultObj->AdTemplateID != null) {
+                			if($editResultObj->AdTemplateID != null):
 								$AdTemplatesFactory = \_factory\AdTemplates::get_instance();
 								$AdTemplatesObj = $AdTemplatesFactory->get_row(array("AdTemplateID" => $editResultObj->AdTemplateID));
 								$editResultObj->Width = $AdTemplatesObj->Width;
 								$editResultObj->Height = $AdTemplatesObj->Height;
-							}
+							endif;
                 			
 							$editResultObj->ImpressionType				= $request->getPost("ImpressionType") == 'video' ? 'video' : 'banner';
 							
@@ -651,7 +802,88 @@ class ZoneController extends PublisherAbstractActionController {
 									
 								$fold_pos 					= $request->getPost("FoldPos");
 									
+	                    elseif ($auction_type == 'header'):
+
+	                   	 	$page_header_id		 										= $request->getPost("PageHeaderID");
+	                    
+		                    $header_bidding_type 										= $request->getPost("HeaderBiddingType");
+
+		                    if ($HeaderBiddingPage == null):
+			                    	
+			                    $HeaderBiddingPage 										= new \model\HeaderBiddingPage();
+			                    $HeaderBiddingPage->PublisherWebsiteID 					= $DomainObj->PublisherWebsiteID;
+			                    $HeaderBiddingPage->PageName 							= $page_header_id;
+			                    $HeaderBiddingPage->JSHeaderFileUnqName 				= \util\ZoneHelper::unique_js_filename() . '-' . \util\ZoneHelper::unique_js_filename() . '.js';
+			                    $HeaderBiddingPage->DateCreated							= date("Y-m-d H:i:s");
+			                    	
+			                    $HeaderBiddingPage->HeaderBiddingPageID 				= $HeaderBiddingPageFactory->saveHeaderBiddingPage($HeaderBiddingPage);
+
+		                    endif;
+		                    
+		                    if ($HeaderBiddingPage->HeaderBiddingPageID):
+		                    	
+		                    	/*
+		                    	 * Last header associated to this publisher ad zone was different
+		                    	 * so recompile the header bidding code for the page header
+		                    	 */
+		                    	if ($editResultObj->HeaderBiddingAdUnitID != $HeaderBiddingPage->HeaderBiddingPageID):
+		                    		
+		                    		$rebuild_previous_header_id = $editResultObj->HeaderBiddingAdUnitID;
+		                    		
+		                    	endif;
+		                    
+			                    $editResultObj->HeaderBiddingAdUnitID					= $HeaderBiddingPage->HeaderBiddingPageID;
+			                    $editResultObj->AuctionType								= 'header';
+			                    
+		    					$post = $this->getRequest()->getPost();                
+	
+		                    	/* 
+		                    	 * _NEW_ for new header bidding items which are being created
+		                    	 * existing header bidding items are deleted each time in an update
+		                    	 */
+		                    	$key_type = '_NEW_';
+		                    
+		                    	// returns an array of new header bidding item ids
+		                    	$new_keys = \util\ZoneHelper::getHeaderBiddingKeys($post, $key_type);
+		                    	
+		                    	// returns an associative array of new header bidding items id => type
+		                    	$header_bidding_types = \util\ZoneHelper::getHeaderBiddingTypes($request, $new_keys, $key_type);
+		                    	
+		                    	// returns an associative array of new header bidding type => array of header bidding of that type
+		                    	$header_bidding_items_new = \util\ZoneHelper::getHeaderBiddingItems($request, $editResultObj, $editResultObj->HeaderBiddingAdUnitID, $header_bidding_types, $key_type);
+
+		                    	/*
+		                    	 * On an edit you would delete existing bidders
+		                    	 */ 
+		                    	
+		                    	$HeaderBiddingAdUnitFactory->deleteHeaderBiddingAdUnitByPublisherAdZoneID($header_bidding_item["PublisherAdZoneID"]);
+		                    	
+		                    	$rebuild_header_id = $HeaderBiddingPage->HeaderBiddingPageID;
+		                    	
+								foreach ($header_bidding_items_new as $bidder_type => $header_bidding_items_list):
+									
+									foreach ($header_bidding_items_list as $header_bidding_item):
+									
+										$HeaderBiddingAdUnit = new \model\HeaderBiddingAdUnit();
+										$HeaderBiddingAdUnit->HeaderBiddingPageID 						= $HeaderBiddingPage->HeaderBiddingPageID;
+										$HeaderBiddingAdUnit->PublisherAdZoneID 						= $header_bidding_item["PublisherAdZoneID"];
+										$HeaderBiddingAdUnit->AdExchange 								= $bidder_type;
+										$HeaderBiddingAdUnit->DivID		 								= $header_bidding_item["DivID"];
+										$HeaderBiddingAdUnit->Height		 							= $header_bidding_item["Height"];
+										$HeaderBiddingAdUnit->Width		 								= $header_bidding_item["Width"];
+										$HeaderBiddingAdUnit->CustomParams		 						= $header_bidding_item["CustomParams"];
+										$HeaderBiddingAdUnit->AdTag		 								= $header_bidding_item["AdTag"];
+										$HeaderBiddingAdUnit->DateCreated								= date("Y-m-d H:i:s");
+
+										$header_bidding_ad_unit_id = $HeaderBiddingAdUnitFactory->saveHeaderBiddingAdUnit($HeaderBiddingAdUnit);
+
+									endforeach;
+									
+								endforeach;
+
 							endif;
+	                    	
+	                    endif;
 							
                 			
                 			try {
@@ -679,7 +911,23 @@ class ZoneController extends PublisherAbstractActionController {
 	                				 * Create a new entry each time since video is optional
 	                				 */
 	                				$PublisherAdZoneVideoFactory->savePublisherAdZoneVideo($PublisherAdZoneVideo);
-	                				
+
+	                			endif;
+                				
+                				if ($rebuild_header_id != null):
+
+                					\util\ZoneHelper::rebuild_header_bidder($rebuild_header_id);
+                					
+                				endif;
+                				
+                				if ($rebuild_previous_header_id != null):
+                				 
+                					\util\ZoneHelper::rebuild_header_bidder($rebuild_previous_header_id);
+                				 
+                				endif;
+                				
+                				if ($auction_type == 'header' && $rebuild_header_id != null):
+                					\util\HeaderBiddingHelper::rebuild_header($rebuild_header_id);
                 				endif;
                 				
                 				if ($this->config_handle['mail']['subscribe']['zones'] === true):
@@ -781,7 +1029,15 @@ class ZoneController extends PublisherAbstractActionController {
         		
         		'current_min_duration' => $current_min_duration,
         		'current_max_duration' => $current_max_duration,
+
+        		'header_bidding_adxs_list' => \util\ZoneHelper::$header_bidding_adxs,
+        		'header_bidding_providers' => \util\ZoneHelper::$header_bidding_providers,
         		
+        		'current_auction_type' => $current_auction_type,
+        		'current_header_bidding_pagename_list' => $current_header_bidding_pagename_list,
+        		'current_header_bidding_pagename' => $current_header_bidding_pagename,
+        		'current_header_bidding_json' => $current_header_bidding_json,
+
         		'current_apis_supported' => $current_apis_supported,
         		'current_protocols' => $current_protocols,
         		'current_delivery_methods' => $current_delivery_methods,

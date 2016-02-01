@@ -92,16 +92,9 @@ $(function() {
 	  <label for="HeaderBiddingType" id="HeaderBiddingTypeLabel" class="control-label">Add Header Bidding Ad Network to Zone</label>
 	  <div class="controls error">
 	  		<select id="HeaderBiddingType" name="HeaderBiddingType" class="zone-txtarea">
-				<option value="appnexus">AppNexus</option>
-				<option value="rubicon">Rubicon</option>
-				<option value="openx">OpenX</option>
-				<option value="pubmatic">Pubmatic</option>
-				<option value="criteo">Criteo</option>
-				<option value="yieldbot">Yieldbot</option>
-				<option value="indexExchange">Casale</option>
-				<option value="sovrn">Sovrn</option>
-				<option value="aol">AOL</option>
-				<option value="pulsepoint">PulsePoint</option>
+				<?php foreach ($header_bidding_providers as $name => $value): ?>
+					<option value="<?php echo $name;?>"><?php echo $value;?></option>
+				<?php endforeach; ?>
 			</select>
 			<input type="button" class="btn btn-margin" id="AddHeaderBiddingType" name="AddHeaderBiddingType" value="Add" onclick="newHeaderBiddingAdNetwork();" />
 		</div>
