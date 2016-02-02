@@ -804,6 +804,7 @@ class ZoneController extends PublisherAbstractActionController {
 									
 								$fold_pos 					= $request->getPost("FoldPos");
 									
+								$editResultObj->HeaderBiddingPageID = null;
 								$HeaderBiddingAdUnitFactory->deleteHeaderBiddingAdUnitByPublisherAdZoneID($editResultObj->PublisherAdZoneID);
 								
 	                    elseif ($auction_type == 'header'):
@@ -894,6 +895,7 @@ class ZoneController extends PublisherAbstractActionController {
 	                    	
 						else:
 						
+							$editResultObj->HeaderBiddingPageID = null;
 							$HeaderBiddingAdUnitFactory->deleteHeaderBiddingAdUnitByPublisherAdZoneID($editResultObj->PublisherAdZoneID);
 							
 	                    endif;
