@@ -201,7 +201,7 @@ class PublisherAdZone extends \_factory\CachedTableRead
    	$data['AdName'] = substr($rawData->AdName,0,100);
    	$data['Description'] = $rawData->Description;
    	
-   	$data['HeaderBiddingAdUnitID'] = $rawData->HeaderBiddingAdUnitID;
+   	$data['HeaderBiddingPageID'] = $rawData->HeaderBiddingPageID;
    	
    	if ($rawData->AuctionType == 'header'):
    		$data['AuctionType'] = 'header';

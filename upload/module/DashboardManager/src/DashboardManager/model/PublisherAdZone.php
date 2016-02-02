@@ -20,7 +20,7 @@ class PublisherAdZone  implements InputFilterAwareInterface
     public $PublisherWebsiteID;
     public $ImpressionType;
     public $AuctionType;
-    public $HeaderBiddingAdUnitID;
+    public $HeaderBiddingPageID;
     public $AdName;
     public $Description;
     public $PassbackAdTag;
@@ -99,7 +99,7 @@ class PublisherAdZone  implements InputFilterAwareInterface
             )));
             
             $inputFilter->add($factory->createInput(array(
-            		'name' => 'HeaderBiddingAdUnitID',
+            		'name' => 'HeaderBiddingPageID',
             		'required' => true,
             		'filters' => array(
             				array('name' => 'StripTags'),

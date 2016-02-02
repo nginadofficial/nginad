@@ -74,7 +74,7 @@ class ZoneHelper {
     			'ct'
     		)
     );
-	
+    
 	public static function getHeaderBiddingItems($request, $PublisherAdZone, $publisher_ad_zone_page_header_id, $header_bidding_types, $key_name) {
 	
 		$header_bidding_item_list = array();

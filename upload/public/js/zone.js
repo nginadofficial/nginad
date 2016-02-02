@@ -54,6 +54,7 @@ function newPageHeader() {
 	    text: newPage
 	}));
 	
+	$('#PageHeaderID option').attr('selected','');
 	$('#PageHeaderID option[value=' + newPage + ']').attr('selected','selected');
 }
 

@@ -378,12 +378,12 @@ class ZoneController extends PublisherAbstractActionController {
 			                    $HeaderBiddingPage->HeaderBiddingPageID 				= $HeaderBiddingPageFactory->saveHeaderBiddingPage($HeaderBiddingPage);
 
 		                    endif;
-		                    
+
 		                    if ($HeaderBiddingPage->HeaderBiddingPageID):
 
-			                    $ad->HeaderBiddingAdUnitID								= $HeaderBiddingPage->HeaderBiddingPageID;
+			                    $ad->HeaderBiddingPageID								= $HeaderBiddingPage->HeaderBiddingPageID;
 		                    
-		            			$rebuild_header_id										= $ad->HeaderBiddingAdUnitID;
+		            			$rebuild_header_id										= $ad->HeaderBiddingPageID;
 		                    
 			                    $ad->AuctionType										= 'header';
 
@@ -438,7 +438,7 @@ class ZoneController extends PublisherAbstractActionController {
 
 	                    if ($rebuild_header_id != null):
 	                    
-	                    	\util\ZoneHelper::rebuild_header_bidder($rebuild_header_id);
+	                    	\util\HeaderBiddingHelper::rebuild_header_bidder($rebuild_header_id);
 	                     
 	                    endif;
 	                    
@@ -719,6 +719,8 @@ class ZoneController extends PublisherAbstractActionController {
 			             
 		            endif;
 
+		            $auction_type							= strip_tags($request->getPost("AuctionType"));
+		            
                     if ($request->isPost()):
                 
                     	$validate = $this->validateInput($needed_input, false);
@@ -727,7 +729,7 @@ class ZoneController extends PublisherAbstractActionController {
 
 	                    	$editResultObj->AdName 					= strip_tags($request->getPost("AdName"));
             				$editResultObj->AuctionType 			= strip_tags($request->getPost("AuctionType"));
-            				$editResultObj->HeaderBiddingAdUnitID 	= strip_tags($request->getPost("HeaderBiddingAdUnitID"));
+            				$editResultObj->HeaderBiddingPageID 	= strip_tags($request->getPost("HeaderBiddingPageID"));
 							$editResultObj->Description 			= strip_tags($request->getPost("Description"));
 							$editResultObj->PassbackAdTag 			= $request->getPost("PassbackAdTag");
 							$floor_price 							= $request->getPost("FloorPrice") == null ? 0 : $request->getPost("FloorPrice");
@@ -737,9 +739,9 @@ class ZoneController extends PublisherAbstractActionController {
 							$editResultObj->Width 					= $request->getPost("Width");
 							$editResultObj->Height 					= $request->getPost("Height");
 
-							if ($editResultObj->HeaderBiddingAdUnitID != null):
+							if ($editResultObj->HeaderBiddingPageID != null):
 							
-								$rebuild_previous_header_id 		= $editResultObj->HeaderBiddingAdUnitID;
+								$rebuild_previous_header_id 		= $editResultObj->HeaderBiddingPageID;
 							
 							endif;
 							
@@ -802,12 +804,19 @@ class ZoneController extends PublisherAbstractActionController {
 									
 								$fold_pos 					= $request->getPost("FoldPos");
 									
+								$HeaderBiddingAdUnitFactory->deleteHeaderBiddingAdUnitByPublisherAdZoneID($editResultObj->PublisherAdZoneID);
+								
 	                    elseif ($auction_type == 'header'):
 
 	                   	 	$page_header_id		 										= $request->getPost("PageHeaderID");
 	                    
 		                    $header_bidding_type 										= $request->getPost("HeaderBiddingType");
 
+		                    $params = array();
+		                    $params["PageName"] 										= $page_header_id;
+		                    $params["PublisherWebsiteID"] 								= $DomainObj->PublisherWebsiteID;
+		                    $HeaderBiddingPage											= $HeaderBiddingPageFactory->get_row($params);
+		                    
 		                    if ($HeaderBiddingPage == null):
 			                    	
 			                    $HeaderBiddingPage 										= new \model\HeaderBiddingPage();
@@ -821,18 +830,18 @@ class ZoneController extends PublisherAbstractActionController {
 		                    endif;
 		                    
 		                    if ($HeaderBiddingPage->HeaderBiddingPageID):
-		                    	
+
+		                    	$editResultObj->HeaderBiddingPageID = $HeaderBiddingPage->HeaderBiddingPageID;
 		                    	/*
 		                    	 * Last header associated to this publisher ad zone was different
 		                    	 * so recompile the header bidding code for the page header
 		                    	 */
-		                    	if ($editResultObj->HeaderBiddingAdUnitID != $HeaderBiddingPage->HeaderBiddingPageID):
+		                    	if ($editResultObj->HeaderBiddingPageID != $HeaderBiddingPage->HeaderBiddingPageID):
 		                    		
-		                    		$rebuild_previous_header_id = $editResultObj->HeaderBiddingAdUnitID;
+		                    		$rebuild_previous_header_id = $editResultObj->HeaderBiddingPageID;
 		                    		
 		                    	endif;
 		                    
-			                    $editResultObj->HeaderBiddingAdUnitID					= $HeaderBiddingPage->HeaderBiddingPageID;
 			                    $editResultObj->AuctionType								= 'header';
 			                    
 		    					$post = $this->getRequest()->getPost();                
@@ -850,13 +859,13 @@ class ZoneController extends PublisherAbstractActionController {
 		                    	$header_bidding_types = \util\ZoneHelper::getHeaderBiddingTypes($request, $new_keys, $key_type);
 		                    	
 		                    	// returns an associative array of new header bidding type => array of header bidding of that type
-		                    	$header_bidding_items_new = \util\ZoneHelper::getHeaderBiddingItems($request, $editResultObj, $editResultObj->HeaderBiddingAdUnitID, $header_bidding_types, $key_type);
+		                    	$header_bidding_items_new = \util\ZoneHelper::getHeaderBiddingItems($request, $editResultObj, $editResultObj->HeaderBiddingPageID, $header_bidding_types, $key_type);
 
 		                    	/*
 		                    	 * On an edit you would delete existing bidders
 		                    	 */ 
 		                    	
-		                    	$HeaderBiddingAdUnitFactory->deleteHeaderBiddingAdUnitByPublisherAdZoneID($header_bidding_item["PublisherAdZoneID"]);
+		                    	$HeaderBiddingAdUnitFactory->deleteHeaderBiddingAdUnitByPublisherAdZoneID($editResultObj->PublisherAdZoneID);
 		                    	
 		                    	$rebuild_header_id = $HeaderBiddingPage->HeaderBiddingPageID;
 		                    	
@@ -883,9 +892,12 @@ class ZoneController extends PublisherAbstractActionController {
 
 							endif;
 	                    	
+						else:
+						
+							$HeaderBiddingAdUnitFactory->deleteHeaderBiddingAdUnitByPublisherAdZoneID($editResultObj->PublisherAdZoneID);
+							
 	                    endif;
 							
-                			
                 			try {
                 				
                 				$PublisherAdZoneFactory->save_ads($editResultObj);
@@ -913,27 +925,23 @@ class ZoneController extends PublisherAbstractActionController {
 	                				$PublisherAdZoneVideoFactory->savePublisherAdZoneVideo($PublisherAdZoneVideo);
 
 	                			endif;
-                				
-                				if ($rebuild_header_id != null):
 
-                					\util\ZoneHelper::rebuild_header_bidder($rebuild_header_id);
-                					
-                				endif;
-                				
                 				if ($rebuild_previous_header_id != null):
                 				 
-                					\util\ZoneHelper::rebuild_header_bidder($rebuild_previous_header_id);
+                					\util\HeaderBiddingHelper::rebuild_header_bidder($rebuild_previous_header_id);
                 				 
                 				endif;
                 				
                 				if ($auction_type == 'header' && $rebuild_header_id != null):
-                					\util\HeaderBiddingHelper::rebuild_header($rebuild_header_id);
+                				
+                					\util\HeaderBiddingHelper::rebuild_header_bidder($rebuild_header_id);
+                				
                 				endif;
                 				
                 				if ($this->config_handle['mail']['subscribe']['zones'] === true):
 	                			
 	                				$is_approved = $editResultObj->AdStatus == 1 ? 'Yes' : 'No';
-	                				$is_mobile = $ad->IsMobileFlag == 1 ? 'Yes' : 'No';
+	                				$is_mobile = $editResultObj->IsMobileFlag == 1 ? 'Yes' : 'No';
 	                			
 		                			// if this zone was not created by the admin, then send out a notification email
 		                			$message = '<b>New NginAd Publisher Zone Edited by ' . $this->true_user_name . '.</b><br /><br />';
@@ -1001,7 +1009,7 @@ class ZoneController extends PublisherAbstractActionController {
                 $error_message = "An invalid Ad Zone ID was provided.";
             endif;
         endif;
-        
+
         return array(
         		'error_message' => $error_message,
         		'is_super_admin' => $this->is_super_admin,

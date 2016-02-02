@@ -34,4 +34,4 @@ CREATE TABLE `HeaderBiddingAdUnit` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 ALTER TABLE  `PublisherAdZone` ADD  `AuctionType` char(10) NOT NULL DEFAULT 'rtb' AFTER `ImpressionType` ;
-ALTER TABLE  `PublisherAdZone` ADD  `HeaderBiddingAdUnitID` int(11) DEFAULT NULL AFTER `AuctionType` ;
+ALTER TABLE  `PublisherAdZone` ADD  `HeaderBiddingPageID` int(11) DEFAULT NULL AFTER `AuctionType` ;
