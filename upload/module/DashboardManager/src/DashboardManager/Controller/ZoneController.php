@@ -438,7 +438,7 @@ class ZoneController extends PublisherAbstractActionController {
 
 	                    if ($rebuild_header_id != null):
 	                    
-	                    	\util\HeaderBiddingHelper::rebuild_header_bidder($rebuild_header_id);
+	                    	\util\HeaderBiddingHelper::rebuild_header_bidder($this->config_handle, $rebuild_header_id);
 	                     
 	                    endif;
 	                    
@@ -930,13 +930,13 @@ class ZoneController extends PublisherAbstractActionController {
 
                 				if ($rebuild_previous_header_id != null):
                 				 
-                					\util\HeaderBiddingHelper::rebuild_header_bidder($rebuild_previous_header_id);
+                					\util\HeaderBiddingHelper::rebuild_header_bidder($this->config_handle, $rebuild_previous_header_id);
                 				 
                 				endif;
                 				
                 				if ($auction_type == 'header' && $rebuild_header_id != null):
                 				
-                					\util\HeaderBiddingHelper::rebuild_header_bidder($rebuild_header_id);
+                					\util\HeaderBiddingHelper::rebuild_header_bidder($this->config_handle, $rebuild_header_id);
                 				
                 				endif;
                 				
