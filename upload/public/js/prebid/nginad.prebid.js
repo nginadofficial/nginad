@@ -257,8 +257,14 @@ var AolAdapter = function AolAdapter() {
 
 		var placementId = parseInt(bid.params.placement);
 		
-		nginadBidderIdMap[placementId] = bid.params.hb_nginad_bidder_id;
-		
+		nginadBidderIdMap[placementId] = { 
+											"hb_nginad_bidder_id" 	: bid.params.hb_nginad_bidder_id,
+											"hb_nginad_pub_id" 		: bid.params.hb_nginad_pub_id,
+											"hb_nginad_zone_height" : bid.params.hb_nginad_zone_height,
+											"hb_nginad_zone_width" 	: bid.params.hb_nginad_zone_width,
+											"hb_nginad_zone_tld" 	: bid.params.hb_nginad_zone_tld
+										};
+	
 		return {
 			adContainerId: _dummyUnit(bid.params.adContainerId),
 			server: bid.params.server, // By default, DAC.js will use the US region endpoint (adserver.adtechus.com)
@@ -378,8 +384,14 @@ var AppNexusAdapter = function AppNexusAdapter() {
 		for (var i = 0; i < bidsCount; i++) {
 			var bidReqeust = anArr[i];
 			
-			nginadBidderIdMap[bidReqeust.params.placementId] = bidReqeust.params.hb_nginad_bidder_id;
-			
+			nginadBidderIdMap[bidReqeust.params.placementId] = { 
+																	"hb_nginad_bidder_id" 	: bidReqeust.params.hb_nginad_bidder_id,
+																	"hb_nginad_pub_id" 		: bidReqeust.params.hb_nginad_pub_id,
+																	"hb_nginad_zone_height" : bidReqeust.params.hb_nginad_zone_height,
+																	"hb_nginad_zone_width" 	: bidReqeust.params.hb_nginad_zone_width,
+																	"hb_nginad_zone_tld" 	: bidReqeust.params.hb_nginad_zone_tld
+																};
+				
 			var callbackId = utils.getUniqueIdentifierStr();
 			adloader.loadScript(buildJPTCall(bidReqeust, callbackId));
 			//store a reference to the bidRequest from the callback id
@@ -602,7 +614,14 @@ var CriteoAdapter = function CriteoAdapter() {
 		var nids = [];
 		bids.forEach(function(bid) {
 			map[bid.params.nid] = bid;
-			nginadBidderIdMap[bid.params.nid] = bid.params.hb_nginad_bidder_id;
+			nginadBidderIdMap[bid.params.nid] = { 
+													"hb_nginad_bidder_id" 	: bid.params.hb_nginad_bidder_id,
+													"hb_nginad_pub_id" 		: bid.params.hb_nginad_pub_id,
+													"hb_nginad_zone_height" : bid.params.hb_nginad_zone_height,
+													"hb_nginad_zone_width" 	: bid.params.hb_nginad_zone_width,
+													"hb_nginad_zone_tld" 	: bid.params.hb_nginad_zone_tld
+												};
+
 		});
 		for (key in map) {
 			if (map.hasOwnProperty(key)) {
@@ -900,7 +919,13 @@ var IndexExchangeAdapter = function IndexExchangeAdapter() {
 				}
 			}
 
-			var nginadBidId = bid.params.hb_nginad_bidder_id;
+			var nginadBidId = { 
+									"hb_nginad_bidder_id" 	: bid.params.hb_nginad_bidder_id,
+									"hb_nginad_pub_id" 		: bid.params.hb_nginad_pub_id,
+									"hb_nginad_zone_height" : bid.params.hb_nginad_zone_height,
+									"hb_nginad_zone_width" 	: bid.params.hb_nginad_zone_width,
+									"hb_nginad_zone_tld" 	: bid.params.hb_nginad_zone_tld
+								};
 			
 			if (bid.params.timeout && typeof cygnus_index_args.timeout === 'undefined') {
 				cygnus_index_args.timeout = bid.params.timeout;
@@ -991,7 +1016,7 @@ var IndexExchangeAdapter = function IndexExchangeAdapter() {
 							
 							nginadBidderIdMap[adUnitCode] = nginadBidId;
 							
-							bidmanager.addBidResponse(adUnitCode, nginadBidId, bid);
+							bidmanager.addBidResponse(adUnitCode, nginadBidderIdMap[adUnitCode], bid);
 							
 						}
 					});
@@ -1102,7 +1127,13 @@ var OpenxAdapter = function OpenxAdapter(options) {
 					for (i = 0; i < bids.length; i++) {
 						bid = bids[i];
 
-						nginadBidderIdMap[bid.placementCode] = bid.params.hb_nginad_bidder_id;
+						nginadBidderIdMap[bid.placementCode] = { 
+																	"hb_nginad_bidder_id" 	: bid.params.hb_nginad_bidder_id,
+																	"hb_nginad_pub_id" 		: bid.params.hb_nginad_pub_id,
+																	"hb_nginad_zone_height" : bid.params.hb_nginad_zone_height,
+																	"hb_nginad_zone_width" 	: bid.params.hb_nginad_zone_width,
+																	"hb_nginad_zone_tld" 	: bid.params.hb_nginad_zone_tld
+																};
 						
 						// Get ad response
 						adUnit = response.getOrCreateAdUnit(bid.params.unit);
@@ -1169,7 +1200,13 @@ var PubmaticAdapter = function PubmaticAdapter() {
 		for (var i = 0; i < bids.length; i++) {
 			var bid = bids[i];
 			bidmanager.pbCallbackMap['' + bid.params.adSlot] = bid;
-			nginadBidderIdMap['' + bid.params.adSlot] = bid.params.hb_nginad_bidder_id;
+			nginadBidderIdMap['' + bid.params.adSlot] = { 
+															"hb_nginad_bidder_id" 	: bid.params.hb_nginad_bidder_id,
+															"hb_nginad_pub_id" 		: bid.params.hb_nginad_pub_id,
+															"hb_nginad_zone_height" : bid.params.hb_nginad_zone_height,
+															"hb_nginad_zone_width" 	: bid.params.hb_nginad_zone_width,
+															"hb_nginad_zone_tld" 	: bid.params.hb_nginad_zone_tld
+														};
 			_pm_pub_id = _pm_pub_id || bid.params.publisherId;
 			_pm_optimize_adslots.push(bid.params.adSlot);
 		}
@@ -1307,8 +1344,14 @@ var PulsePointAdapter = function PulsePointAdapter() {
                 callback: callback
             });
             
-            nginadBidderIdMap[bidRequest.placementCode] = bidRequest.params.hb_nginad_bidder_id;
-            
+            nginadBidderIdMap[bidRequest.placementCode] = { 
+																"hb_nginad_bidder_id" 	: bidRequest.params.hb_nginad_bidder_id,
+																"hb_nginad_pub_id" 		: bidRequest.params.hb_nginad_pub_id,
+																"hb_nginad_zone_height" : bidRequest.params.hb_nginad_zone_height,
+																"hb_nginad_zone_width" 	: bidRequest.params.hb_nginad_zone_width,
+																"hb_nginad_zone_tld" 	: bidRequest.params.hb_nginad_zone_tld
+															};
+
             ppBidRequest.display();
         }
     }
@@ -1368,7 +1411,13 @@ var RubiconAdapter = function RubiconAdapter() {
 			var iframeContents = createRequestContent(bid, 'window.parent.pbjs.handleRubiconCallback', width, height);
 			var iframeId = loadIframeContent(iframeContents);
 			bid.iframeId = iframeId;
-			nginadBidderIdMap = bid.params.hb_nginad_bidder_id;
+			nginadBidderIdMap = { 
+									"hb_nginad_bidder_id" 	: bidRequest.params.hb_nginad_bidder_id,
+									"hb_nginad_pub_id" 		: bidRequest.params.hb_nginad_pub_id,
+									"hb_nginad_zone_height" : bidRequest.params.hb_nginad_zone_height,
+									"hb_nginad_zone_width" 	: bidRequest.params.hb_nginad_zone_width,
+									"hb_nginad_zone_tld" 	: bidRequest.params.hb_nginad_zone_tld
+								};
 			bidmanager.pbCallbackMap[getBidId(bid)] = bid;
 		}
 
@@ -1616,7 +1665,13 @@ var SovrnAdapter = function SovrnAdapter() {
 				};
 			sovrnImps.push(imp);
 			bidmanager.pbCallbackMap[imp.id] = bid;
-			nginadBidderIdMap[imp.id] = bid.params.hb_nginad_bidder_id;
+			nginadBidderIdMap[imp.id] = { 
+											"hb_nginad_bidder_id" 	: bidRequest.params.hb_nginad_bidder_id,
+											"hb_nginad_pub_id" 		: bidRequest.params.hb_nginad_pub_id,
+											"hb_nginad_zone_height" : bidRequest.params.hb_nginad_zone_height,
+											"hb_nginad_zone_width" 	: bidRequest.params.hb_nginad_zone_width,
+											"hb_nginad_zone_tld" 	: bidRequest.params.hb_nginad_zone_tld
+										};
 		});
 
 		// build bid request with impressions
@@ -1831,7 +1886,13 @@ var YieldbotAdapter = function YieldbotAdapter() {
                     ybotlib.definedSlots.push(cbId);
                 });
                 
-                nginadBidderIdMap[bid.slot] = bid.params.hb_nginad_bidder_id;
+                nginadBidderIdMap[bid.slot] = { 
+													"hb_nginad_bidder_id" 	: bidRequest.params.hb_nginad_bidder_id,
+													"hb_nginad_pub_id" 		: bidRequest.params.hb_nginad_pub_id,
+													"hb_nginad_zone_height" : bidRequest.params.hb_nginad_zone_height,
+													"hb_nginad_zone_width" 	: bidRequest.params.hb_nginad_zone_width,
+													"hb_nginad_zone_tld" 	: bidRequest.params.hb_nginad_zone_tld
+												};
 
                 yieldbot.enableAsync();
                 yieldbot.go();
@@ -2118,7 +2179,7 @@ exports.getExpectedBidsCount = getExpectedBidsCount;
 /*
  *   This function should be called to by the BidderObject to register a new bid is in
  */
-exports.addBidResponse = function(adUnitCode, nginadBidderId, bid) {
+exports.addBidResponse = function(adUnitCode, nginadBidderObj, bid) {
 	var bidResponseObj = {},
 		statusPending = {
 			code: 0,
@@ -2158,8 +2219,12 @@ exports.addBidResponse = function(adUnitCode, nginadBidderId, bid) {
 		bid.pbMg = priceStringsObj.med;
 		bid.pbHg = priceStringsObj.high;
 
-		bid.nginadBidderId = nginadBidderId;
-		
+		bid.nginadBidderId 		= nginadBidderObj.hb_nginad_bidder_id;
+		bid.nginadPubId 		= nginadBidderObj.hb_nginad_pub_id;
+		bid.nginadZoneHeight 	= nginadBidderObj.hb_nginad_zone_width;
+		bid.nginadZoneWidth 	= nginadBidderObj.hb_nginad_zone_height;
+		bid.nginadZoneTld		= nginadBidderObj.hb_nginad_zone_tld;
+
 		//put adUnitCode into bid
 		bid.adUnitCode = adUnitCode;
 

@@ -78,6 +78,26 @@ var PREBID_TIMEOUT = 700;
                 val: function(bidResponse) {
                     return bidResponse.nginadBidderId;
                 }
+            }, {
+                key: "hb_nginad_pub_id",
+                val: function(bidResponse) {
+                    return bidResponse.nginadPubId;
+                }
+            }, {
+                key: "hb_nginad_zone_height",
+                val: function(bidResponse) {
+                    return bidResponse.nginadZoneHeight;
+                }
+            }, {
+                key: "hb_nginad_zone_width",
+                val: function(bidResponse) {
+                    return bidResponse.nginadZoneWidth;
+                }
+            }, {
+                key: "hb_nginad_zone_tld",
+                val: function(bidResponse) {
+                    return bidResponse.nginadZoneTld;
+                }
             }
             ]
         }
@@ -85,8 +105,47 @@ var PREBID_TIMEOUT = 700;
 
 });
     
+    function loadAdTagDivWithTag(divId, queryStringParams, bidderProvider) {
+    	
+	    var nginads = document.createElement('script');
+	    nginads.async = true;
+	    nginads.type = 'text/javascript';
+	    var useSSL = 'https:' == document.location.protocol;
+	    var protocol = useSSL ? 'https:' : 'http:';
+	    
+	    var ord = Math.random()*10000000000000000;
+	    var scriptSrc = protocol + '//__NGINAD_SERVER_DOMAIN__/ad/nginad.js?hb=true&' + queryStringParams + 'cb=' + ord;
+	    nginads.src = scriptSrc;
+
+	    console.log('divId: ');
+	    console.log(divId);
+	    
+	    var node = document.getElementById(divId);
+	    
+	    console.log('node: ');
+	    console.log(node);
+	    
+	    if (node && node != 'undefined') {
+	    	node.appendChild(nginads);
+	    	console.log('successfully loaded adtag in divId: ' + divId);
+	    } else {
+	    	console.log('failed at loading adtag in divId: ' + divId);
+	    }
+	    
+    }
+    
     function loadNginAdTag() {
 
+    	var divIdList = [];
+    	var divIdHadAuctionResultList = [];
+    	
+    	for (var k in adUnits) {
+    		
+    		var adUnit = adUnits[k];
+    		divIdList.push(adUnit.code);
+    		
+    	}
+    	
 		var adTargetInfo = pbjs.getAdserverTargeting();
 	
 		console.log(adTargetInfo);
@@ -104,32 +163,61 @@ var PREBID_TIMEOUT = 700;
 			
 			console.log(k);
 			
+			var bidderType = 'nginad'; // default
+			
 			if (adTargetInfo.hasOwnProperty(k)) {
 				var qp = '';
 				for (var v in adTargetInfo[k]) {
-					qp += v + "=" + adTargetInfo[k][v] + "&";
+					
+					if (v == 'hb_bidder') {
+						bidderType = adTargetInfo[k][v];
+					} 
+
+					if (v == 'hb_nginad_pub_id') {
+						qp += "pzoneid=" + adTargetInfo[k][v] + "&";
+					} else if (v == 'hb_nginad_zone_height') {
+						qp += "height=" + adTargetInfo[k][v] + "&";
+					} else if (v == 'hb_nginad_zone_width') {
+						qp += "width=" + adTargetInfo[k][v] + "&";
+					} else if (v == 'hb_nginad_zone_tld') {
+						qp += "tld=" + adTargetInfo[k][v] + "&";
+					} else {
+						qp += v + "=" + adTargetInfo[k][v] + "&";
+					}
 				}
 			}	
 			
-			qp += 'adTagDiv=' + k + '&';
+			var divId = k;
 			
-			queryParams += 'divId[]=' + encodeURIComponent(qp) + '&';
-			hasAd = true;
+			if (divIdList.indexOf(divId) != -1) {
+				 divIdHadAuctionResultList.push(divId);
+			}
+			
+			loadAdTagDivWithTag(divId, qp, bidderType);
+			
 		}
 		
-		if (hasAd == false) {
-			queryParams += 'houseAds=true';
+		for (var k in adUnits) {
+			
+			var auctionDivId = adUnits[k].code;
+			
+			console.log(auctionDivId);
+			
+			if (divIdHadAuctionResultList.indexOf(auctionDivId) == -1) {
+				
+				var bids = adUnits[k].bids;
+				if (bids.length >= 1) {
+					
+					var firstBid = bids[0];
+					var qp = 'houseAds=true&';
+					qp += "hb_nginad_bidder_id=" + firstBid.params.hb_nginad_bidder_id + "&";
+					qp += "pzoneid=" + firstBid.params.hb_nginad_pub_id + "&";
+					qp += "height=" + firstBid.params.hb_nginad_zone_height + "&";
+					qp += "width=" + firstBid.params.hb_nginad_zone_width + "&";
+					qp += "tld=" + firstBid.params.hb_nginad_zone_tld + "&";
+					
+					loadAdTagDivWithTag(divIdList[k], qp, 'nginad');
+				}
+			}
 		}
-
-	    var nginads = document.createElement('script');
-	    nginads.async = true;
-	    nginads.type = 'text/javascript';
-	    var useSSL = 'https:' == document.location.protocol;
-	    var protocol = useSSL ? 'https:' : 'http:';
-	    var scriptSrc = protocol + '//__NGINAD_SERVER_DOMAIN__/ad/nginad.js?' + queryParams;
-	    nginads.src = scriptSrc;
-
-	    var node = document.getElementsByTagName('script')[0];
-	    node.parentNode.insertBefore(nginads, node);
-        
 }

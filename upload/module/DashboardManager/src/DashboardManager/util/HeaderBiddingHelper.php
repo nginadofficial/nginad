@@ -16,6 +16,7 @@ class HeaderBiddingHelper {
     	$HeaderBiddingPageFactory = \_factory\HeaderBiddingPage::get_instance();
     	$HeaderBiddingAdUnitFactory = \_factory\HeaderBiddingAdUnit::get_instance();
     	$PublisherAdZoneFactory = \_factory\PublisherAdZone::get_instance();
+    	$PublisherWebsiteFactory = \_factory\PublisherWebsite::get_instance();
     	
     	$params 							= array();
     	$params["HeaderBiddingPageID"]		= $rebuild_header_id;
@@ -46,6 +47,14 @@ class HeaderBiddingHelper {
     	
     	foreach ($PublisherAdZoneList as $PublisherAdZone):
     	
+	    	$params 							= array();
+	    	$params["PublisherWebsiteID"]		= $PublisherAdZone->PublisherWebsiteID;
+	    	$PublisherWebsite 					= $PublisherWebsiteFactory->get_row($params);
+	    	 
+	    	if ($PublisherWebsite == null):
+	    		continue;
+	    	endif;
+
 	    	$params 							= array();
 	    	$params["PublisherAdZoneID"]		= $PublisherAdZone->PublisherAdZoneID;
 	    	$HeaderBiddingAdUnitList 			= $HeaderBiddingAdUnitFactory->get($params);
@@ -96,8 +105,12 @@ class HeaderBiddingHelper {
 		    		
 	    		endif;
 	    		
-	    		$bidder['params']['hb_nginad_bidder_id'] = $HeaderBiddingAdUnit->HeaderBiddingAdUnitID;
-	    		$ad_unit['bids'][]			= $bidder;
+	    		$bidder['params']['hb_nginad_bidder_id'] 	= $HeaderBiddingAdUnit->HeaderBiddingAdUnitID;
+	    		$bidder['params']['hb_nginad_pub_id'] 		= $PublisherAdZone->PublisherAdZoneID;
+	    		$bidder['params']['hb_nginad_zone_width'] 	= $PublisherAdZone->Width;
+	    		$bidder['params']['hb_nginad_zone_height'] 	= $PublisherAdZone->Height;
+	    		$bidder['params']['hb_nginad_zone_tld'] 	= $PublisherWebsite->WebDomain;
+	    		$ad_unit['bids'][]							= $bidder;
 
 	    	endforeach;
 	    	
