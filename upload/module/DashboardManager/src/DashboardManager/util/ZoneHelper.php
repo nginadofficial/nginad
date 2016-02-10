@@ -77,15 +77,54 @@ class ZoneHelper {
     
 	public static function getHeaderBiddingItems($request, $PublisherAdZone, $publisher_ad_zone_page_header_id, $header_bidding_types, $key_name) {
 	
+		$HeaderBiddingAdUnitFactory = \_factory\HeaderBiddingAdUnit::get_instance();
+		
 		$header_bidding_item_list = array();
 	
 		$div_id = self::unique_js_filename() . '-' . self::unique_js_filename();
 		
 		foreach ($header_bidding_types as $id => $bidder_type):
 		
-			$header_bidding_item = array();
+			$HeaderBiddingAdUnitID				= $request->getPost('HeaderBiddingAdUnitID' . $key_name . $id);
+			$params = array();
+			$params['HeaderBiddingAdUnitID'] 	= $HeaderBiddingAdUnitID;
+			$HeaderBiddingAdUnit 				= $HeaderBiddingAdUnitFactory->get_row($params);
+			
+			if ($HeaderBiddingAdUnit != null):
+			
+				$div_id = $HeaderBiddingAdUnit->DivID;
+				break;
+				
+			endif;
+ 		
+		endforeach;
 		
+		foreach ($header_bidding_types as $id => $bidder_type):
+		
+			$header_bidding_item = array();
+				
+			$HeaderBiddingAdUnitID							= $request->getPost('HeaderBiddingAdUnitID' . $key_name . $id);
+		
+			if ($HeaderBiddingAdUnitID != null && $HeaderBiddingAdUnitID != 'new' && intval($HeaderBiddingAdUnitID)):
+			
+				$params = array();
+				$params['HeaderBiddingAdUnitID'] 			= $HeaderBiddingAdUnitID;
+				$HeaderBiddingAdUnit 						= $HeaderBiddingAdUnitFactory->get_row($params);
+				
+				if ($HeaderBiddingAdUnit->PublisherAdZoneID != $PublisherAdZone->PublisherAdZoneID):
+					
+					$HeaderBiddingAdUnitID = 'new';
+					
+				endif;
+				
+			else:
+				
+				$HeaderBiddingAdUnitID = 'new';
+				
+			endif;
+
 			$header_bidding_item['HeaderBiddingPageID'] 	= $publisher_ad_zone_page_header_id;
+			$header_bidding_item['HeaderBiddingAdUnitID']	= $HeaderBiddingAdUnitID;
 			$header_bidding_item['PublisherAdZoneID'] 		= $PublisherAdZone->PublisherAdZoneID;
 			$header_bidding_item['DivID'] 					= $div_id;
 			$header_bidding_item['Height'] 					= $PublisherAdZone->Height;

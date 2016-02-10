@@ -133,6 +133,47 @@ class HeaderBiddingHelper {
     	fclose($file_handle);
 
     }
+    
+    public static function record_header_auction_publisher_nginad_bid_loss($config, $WebDomain, $PublisherAdZoneID, $AdName) {
+    	
+    	$PublisherHourlyBids = new \model\PublisherHourlyBids();
+    		
+    	$PublisherHourlyBids->PublisherAdZoneID						= $PublisherAdZoneID;
+    	$PublisherHourlyBids->AuctionCounter						= 1;
+    	$PublisherHourlyBids->BidsWonCounter						= 0;
+    	$PublisherHourlyBids->BidsLostCounter						= 1;
+    	$PublisherHourlyBids->BidsErrorCounter						= 0;
+    	$PublisherHourlyBids->SpendTotalGross						= 0;
+    	$PublisherHourlyBids->SpendTotalPrivateExchangeGross		= 0;
+    	$PublisherHourlyBids->SpendTotalNet							= 0;
+    	
+    	\util\CachedStatsWrites::incrementPublisherBidsCounterCached($config, $PublisherHourlyBids);
+    	
+    	$log_header = "----------------------------------------------------------------\n";
+    	$log_header.= "NEW BID RESPONSE, WEBSITE: " . $WebDomain . ", PubZoneID: " . $PublisherAdZoneID . ", AD: " . $AdName;
+    	
+    	\rtbsellv22\RtbSellV22Logger::get_instance()->log[] = $log_header;
+    	
+    	$log_header = "NEW BID RESPONSE, WEBSITE: " . $WebDomain . ", PubZoneID: " . $PublisherAdZoneID . ", AD: " . $AdName;
+    	
+    	\rtbsellv22\RtbSellV22Logger::get_instance()->min_log[] = $log_header;
+    	
+    	$log = "----------------------------------------------------------------";
+    	$log.= "\nDate: " 		. date('m-d-Y H:i:s');
+    	$log.= "\nHeader Bid Other Exchange Direct Tag Win";
+    	$log.= "\nTotal Bids: 1";
+    	$log.= "\nBids Won: 0" ;
+    	$log.= "\nBids Lost: 1" ;
+    	$log.= "\nBid Errors: 0";
+    	$log.= "\nError List: ";
+    	
+    	$log.= "\n----------------------------------------------------------------\n";
+    	
+    	\rtbsellv22\RtbSellV22Logger::get_instance()->log[] = $log;
+    	\rtbsellv22\RtbSellV22Logger::get_instance()->min_log[] = $log;
+    	
+    	
+    }
 }
 
 

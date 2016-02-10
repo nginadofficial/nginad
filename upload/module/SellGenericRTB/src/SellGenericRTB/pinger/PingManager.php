@@ -44,11 +44,7 @@ class PingManager {
 	private $AdName;
 	
 	private $WebDomain;
-	
-	private $ImpressionType;
-	
-	private $AuctionType;
-	
+
 	private $HeaderBiddingAdUnitID;
 	
 	private $is_second_price_auction;
@@ -70,8 +66,6 @@ class PingManager {
 		$this->AdName 					= $AdName;
 		$this->WebDomain 				= $WebDomain;
 		$this->ImpressionType			= $ImpressionType;
-		$this->AuctionType				= $AuctionType;
-		$this->HeaderBiddingAdUnitID	= $HeaderBiddingAdUnitID;
 		
 		$this->is_second_price_auction	= $this->config['settings']['rtb']['second_price_auction'];
 		

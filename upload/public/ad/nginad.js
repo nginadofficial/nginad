@@ -443,6 +443,14 @@ var sndprc = getQueryStringArg(qs, 'sndprc', "");
 var ui = getQueryStringArg(qs, 'ui', "");
 var cb = Math.round(new Date().getTime() / 1000);
 
+var hb 						= getQueryStringArg(qs, 'hb', "false");
+var hb_adid 				= getQueryStringArg(qs, 'hb_adid', "");
+var hb_bidder 				= getQueryStringArg(qs, 'hb_bidder', "");
+var hb_nginad_bidder_id 	= getQueryStringArg(qs, 'hb_nginad_bidder_id', "");
+var hb_pb 					= getQueryStringArg(qs, 'hb_pb', "");
+var houseAds 				= getQueryStringArg(qs, 'houseAds', "");
+
+
 //fire off cookie matching pixels first
 fireCookieMatchingPixels();
 
@@ -461,6 +469,15 @@ adQueryString += "&ui=" + ui;
 adQueryString += "&ct=" + escape(ct_url);
 adQueryString += "&org_tld=" + escape(org_tld);
 adQueryString += "&cb=" + cb;
+
+if (hb == "true") {
+	adQueryString += "&hb=" 					+ hb;
+	adQueryString += "&hb_adid=" 				+ hb_adid;
+	adQueryString += "&hb_bidder=" 				+ hb_bidder;
+	adQueryString += "&hb_nginad_bidder_id=" 	+ hb_nginad_bidder_id;
+	adQueryString += "&hb_pb=" 					+ hb_pb;
+	adQueryString += "&houseAds=" 				+ houseAds;
+}
 
 var fpTag = '<scr'+'ipt type="text/javascript" src="http://' + domain + delivery_path
 			  + adQueryString + '"></scr' + 'ipt>';

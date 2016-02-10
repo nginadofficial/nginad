@@ -189,10 +189,8 @@ var PREBID_TIMEOUT = 700;
 			
 			var divId = k;
 			
-			if (divIdList.indexOf(divId) != -1) {
-				 divIdHadAuctionResultList.push(divId);
-			}
-			
+			divIdHadAuctionResultList.push(divId);
+
 			loadAdTagDivWithTag(divId, qp, bidderType);
 			
 		}
@@ -200,8 +198,6 @@ var PREBID_TIMEOUT = 700;
 		for (var k in adUnits) {
 			
 			var auctionDivId = adUnits[k].code;
-			
-			console.log(auctionDivId);
 			
 			if (divIdHadAuctionResultList.indexOf(auctionDivId) == -1) {
 				
@@ -215,7 +211,7 @@ var PREBID_TIMEOUT = 700;
 					qp += "height=" + firstBid.params.hb_nginad_zone_height + "&";
 					qp += "width=" + firstBid.params.hb_nginad_zone_width + "&";
 					qp += "tld=" + firstBid.params.hb_nginad_zone_tld + "&";
-					
+
 					loadAdTagDivWithTag(divIdList[k], qp, 'nginad');
 				}
 			}

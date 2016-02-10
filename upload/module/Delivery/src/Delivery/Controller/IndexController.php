@@ -53,7 +53,14 @@ class IndexController extends AbstractActionController
     	$banner_request["tld"] 					= $this->getRequest()->getQuery('tld');
     	$banner_request["ui"] 					= $this->getRequest()->getQuery('ui');
     	
-    	$config 								= $this->getServiceLocator()->get('Config');    	
+    	$banner_request["hb"] 					= $this->getRequest()->getQuery('hb');
+    	$banner_request["hb_adid"] 				= $this->getRequest()->getQuery('hb_adid');
+    	$banner_request["hb_bidder"] 			= $this->getRequest()->getQuery('hb_bidder');
+    	$banner_request["hb_nginad_bidder_id"] 	= $this->getRequest()->getQuery('hb_nginad_bidder_id');
+    	$banner_request["hb_pb"] 				= $this->getRequest()->getQuery('hb_pb');
+    	$banner_request["houseAds"] 			= $this->getRequest()->getQuery('houseAds');
+
+    	$config 								= $this->getServiceLocator()->get('Config');
     	
     	/*
     	 * Validate that the banner_id is an integer before continuing
@@ -77,10 +84,14 @@ class IndexController extends AbstractActionController
 	
     		$this->process_demand_tag($config, $banner_request);
 
+    	elseif ($banner_request["hb"] == 'true' && $banner_request["hb_bidder"] != 'nginad'):
+    	
+    		$this->process_header_bidding_tag($config, $banner_request);
+    	
     	elseif (intval($banner_request["publisher_banner_id"])):
     	
     		$this->process_publisher_tag($config, $banner_request);
-    	
+
     	endif; 
 
     	// default case:
@@ -121,6 +132,59 @@ class IndexController extends AbstractActionController
     	
     }
 
+    private function process_header_bidding_tag($config, $banner_request) {
+    	
+    	$PublisherAdZoneFactory = \_factory\PublisherAdZone::get_instance();
+    	$PublisherWebsiteFactory = \_factory\PublisherWebsite::get_instance();
+    	$HeaderBiddingAdUnitFactory = \_factory\HeaderBiddingAdUnit::get_instance();
+    	
+    	$params = array();
+    	$params["AdStatus"] = 1;
+    	$params["PublisherAdZoneID"] 	= $banner_request["publisher_banner_id"];
+    	$PublisherAdZone 				= $PublisherAdZoneFactory->get_row_cached($config, $params);
+    	
+    	if ($PublisherAdZone == null):
+    		return;
+    	endif;
+    	
+    	$params = array();
+    	$params["HeaderBiddingAdUnitID"] 	= $banner_request["hb_nginad_bidder_id"];
+    	$HeaderBiddingAdUnit 				= $HeaderBiddingAdUnitFactory->get_row_cached($config, $params);
+    	
+    	if ($HeaderBiddingAdUnit == null):
+	    	if ($PublisherAdZone->PassbackAdTag != null
+	    		&& !empty($PublisherAdZone->PassbackAdTag)):
+	    	 
+	    		$winning_ad_tag = $PublisherAdZone->PassbackAdTag;
+	    	else:
+	    		return;
+	    	endif;
+	    else:
+	   		$winning_ad_tag = $HeaderBiddingAdUnit->AdTag;
+    	endif;
+    	 
+    	$params = array();
+    	$params["PublisherWebsiteID"] 	= $PublisherAdZone->PublisherWebsiteID;
+    	$PublisherWebsite 				= $PublisherWebsiteFactory->get_row_cached($config, $params);
+    	 
+    	if ($PublisherWebsite == null):
+    		return;
+    	endif;
+    	
+    	\util\HeaderBiddingHelper::record_header_auction_publisher_nginad_bid_loss($config, $PublisherWebsite->WebDomain, $PublisherAdZone->PublisherAdZoneID, $PublisherAdZone->AdName);
+    	
+    	$this->track_header_bid_impression($config, $banner_request);
+    	
+    	// credit publisher account here
+    	 
+    	header("Content-type: application/javascript");
+    	$output = "document.write(" . json_encode($winning_ad_tag) . ");";
+    	echo $output;
+    	
+    	exit;
+
+    }
+    
     private function process_publisher_tag($config, $banner_request) {
 
     	$PublisherAdZoneFactory = \_factory\PublisherAdZone::get_instance();
@@ -756,9 +820,46 @@ class IndexController extends AbstractActionController
     	exit;
     }
     
+    private function track_header_bid_impression($config, $banner_request) {
+    
+    	$error_message 			= "Error";
+    
+    	$hb		 				= $banner_request['hb'];
+    	$hb_bidder 				= $banner_request['hb_bidder'];
+    	$hb_adid 				= $banner_request['hb_adid'];
+    	$hb_nginad_bidder_id 	= $banner_request['hb_nginad_bidder_id'];
+    	$hb_pb 					= $banner_request['hb_pb'];
+    	$houseAds 				= $banner_request['houseAds'] == 'true' ? 'true' : 'false';
+
+    	$auction_log = date('m-d-Y H:i:s') 
+    	. ",hb:" . $hb
+    	. ",hb_bidder:" . $hb_bidder
+    	. ",hb_adid:" . $hb_adid
+    	. ",HeaderBiddingAdUnit:" . $hb_nginad_bidder_id
+    	. ",hb_pb:" . $hb_pb
+    	. ",houseAds:" . $houseAds . "\n";
+    	 
+    	$this->output_header_bid_notice_results($auction_log);
+
+    }
+    
+    private function output_header_bid_notice_results($auction_log) {
+    
+    	$log_file_dir_prefix = "logs/header_bid_notices/";
+    
+    	$this->output_notice_results($auction_log, $log_file_dir_prefix);
+    }
+    
     private function output_win_notice_results($auction_log, $vendor) {
     
-    	$log_file_dir = "logs/" . $vendor . "_logs/win_notices/" . date('m.d.Y');
+    	$log_file_dir_prefix = "logs/" . $vendor . "_logs/win_notices/";
+    
+    	$this->output_notice_results($auction_log, $log_file_dir_prefix);
+    }
+    
+    private function output_notice_results($auction_log, $log_file_dir_prefix) {
+    
+    	$log_file_dir = $log_file_dir_prefix . date('m.d.Y');
     
     	if (!file_exists($log_file_dir)):
     		mkdir($log_file_dir, 0777, true);

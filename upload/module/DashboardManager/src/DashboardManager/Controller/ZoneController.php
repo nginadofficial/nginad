@@ -406,11 +406,6 @@ class ZoneController extends PublisherAbstractActionController {
 		                    	// returns an associative array of new header bidding type => array of header bidding of that type
 		                    	$header_bidding_items_new = \util\ZoneHelper::getHeaderBiddingItems($request, $ad, $ad->HeaderBiddingAdUnitID, $header_bidding_types, $key_type);
 
-		                    	/*
-		                    	 * On an edit you would delete existing bidders, since this is a create, we don't need to
-		                    	 * $HeaderBiddingAdUnitFactory->delete_assets($header_bidding_item["PublisherAdZoneID"]);
-		                    	 */ 
-		                    	
 								foreach ($header_bidding_items_new as $bidder_type => $header_bidding_items_list):
 									
 									foreach ($header_bidding_items_list as $header_bidding_item):
@@ -862,29 +857,54 @@ class ZoneController extends PublisherAbstractActionController {
 		                    	// returns an associative array of new header bidding type => array of header bidding of that type
 		                    	$header_bidding_items_new = \util\ZoneHelper::getHeaderBiddingItems($request, $editResultObj, $editResultObj->HeaderBiddingPageID, $header_bidding_types, $key_type);
 
-		                    	/*
-		                    	 * On an edit you would delete existing bidders
-		                    	 */ 
-		                    	
-		                    	$HeaderBiddingAdUnitFactory->deleteHeaderBiddingAdUnitByPublisherAdZoneID($editResultObj->PublisherAdZoneID);
-		                    	
 		                    	$rebuild_header_id = $HeaderBiddingPage->HeaderBiddingPageID;
 		                    	
 								foreach ($header_bidding_items_new as $bidder_type => $header_bidding_items_list):
 									
 									foreach ($header_bidding_items_list as $header_bidding_item):
-									
-										$HeaderBiddingAdUnit = new \model\HeaderBiddingAdUnit();
-										$HeaderBiddingAdUnit->HeaderBiddingPageID 						= $HeaderBiddingPage->HeaderBiddingPageID;
-										$HeaderBiddingAdUnit->PublisherAdZoneID 						= $header_bidding_item["PublisherAdZoneID"];
-										$HeaderBiddingAdUnit->AdExchange 								= $bidder_type;
-										$HeaderBiddingAdUnit->DivID		 								= $header_bidding_item["DivID"];
-										$HeaderBiddingAdUnit->Height		 							= $header_bidding_item["Height"];
-										$HeaderBiddingAdUnit->Width		 								= $header_bidding_item["Width"];
-										$HeaderBiddingAdUnit->CustomParams		 						= $header_bidding_item["CustomParams"];
-										$HeaderBiddingAdUnit->AdTag		 								= $header_bidding_item["AdTag"];
-										$HeaderBiddingAdUnit->DateCreated								= date("Y-m-d H:i:s");
 
+										if ($header_bidding_item['HeaderBiddingAdUnitID'] != 'new'):
+									
+											$params = array();
+											$params['HeaderBiddingAdUnitID'] 	= $header_bidding_item['HeaderBiddingAdUnitID'];
+											$HeaderBiddingAdUnit 				= $HeaderBiddingAdUnitFactory->get_row($params);
+										
+											if ($HeaderBiddingAdUnit != null):
+												
+												$HeaderBiddingAdUnit = new \model\HeaderBiddingAdUnit();
+												$HeaderBiddingAdUnit->HeaderBiddingAdUnitID 					= $header_bidding_item['HeaderBiddingAdUnitID'];;
+												$HeaderBiddingAdUnit->HeaderBiddingPageID 						= $HeaderBiddingPage->HeaderBiddingPageID;
+												$HeaderBiddingAdUnit->PublisherAdZoneID 						= $header_bidding_item["PublisherAdZoneID"];
+												$HeaderBiddingAdUnit->AdExchange 								= $bidder_type;
+												$HeaderBiddingAdUnit->DivID		 								= $header_bidding_item["DivID"];
+												$HeaderBiddingAdUnit->Height		 							= $header_bidding_item["Height"];
+												$HeaderBiddingAdUnit->Width		 								= $header_bidding_item["Width"];
+												$HeaderBiddingAdUnit->CustomParams		 						= $header_bidding_item["CustomParams"];
+												$HeaderBiddingAdUnit->AdTag		 								= $header_bidding_item["AdTag"];
+												$HeaderBiddingAdUnit->DateCreated								= date("Y-m-d H:i:s");	
+													
+											else:
+											
+												// error
+												continue;
+												
+											endif;
+										
+										else:
+											
+											$HeaderBiddingAdUnit = new \model\HeaderBiddingAdUnit();
+											$HeaderBiddingAdUnit->HeaderBiddingPageID 						= $HeaderBiddingPage->HeaderBiddingPageID;
+											$HeaderBiddingAdUnit->PublisherAdZoneID 						= $header_bidding_item["PublisherAdZoneID"];
+											$HeaderBiddingAdUnit->AdExchange 								= $bidder_type;
+											$HeaderBiddingAdUnit->DivID		 								= $header_bidding_item["DivID"];
+											$HeaderBiddingAdUnit->Height		 							= $header_bidding_item["Height"];
+											$HeaderBiddingAdUnit->Width		 								= $header_bidding_item["Width"];
+											$HeaderBiddingAdUnit->CustomParams		 						= $header_bidding_item["CustomParams"];
+											$HeaderBiddingAdUnit->AdTag		 								= $header_bidding_item["AdTag"];
+											$HeaderBiddingAdUnit->DateCreated								= date("Y-m-d H:i:s");
+												
+										endif;
+										
 										$header_bidding_ad_unit_id = $HeaderBiddingAdUnitFactory->saveHeaderBiddingAdUnit($HeaderBiddingAdUnit);
 
 									endforeach;

@@ -108,6 +108,10 @@ function initializeHeaderBiddingAdNetwork(currentHeaderBiddingAdNetworks) {
     	$("#NetworkAdTag" + id).val(AdTag);
     }
     
+    if (HeaderBiddingAdUnitID) {
+    	$("#HeaderBiddingAdUnitID" + id).val(HeaderBiddingAdUnitID);
+    }
+    
     if (AdExchange == 'appnexus') {
     	
     	if (CustomParams.placementId) {
