@@ -147,10 +147,13 @@ class IndexController extends AbstractActionController
     		return;
     	endif;
     	
-    	$params = array();
-    	$params["HeaderBiddingAdUnitID"] 	= $banner_request["hb_nginad_bidder_id"];
-    	$HeaderBiddingAdUnit 				= $HeaderBiddingAdUnitFactory->get_row_cached($config, $params);
+    	$HeaderBiddingAdUnit 			= null;
     	
+    	if (floatval($banner_request["hb_pb"]) > 0):
+	    	$params = array();
+	    	$params["HeaderBiddingAdUnitID"] 	= $banner_request["hb_nginad_bidder_id"];
+	    	$HeaderBiddingAdUnit 				= $HeaderBiddingAdUnitFactory->get_row_cached($config, $params);
+		endif;
     	if ($HeaderBiddingAdUnit == null):
 	    	if ($PublisherAdZone->PassbackAdTag != null
 	    		&& !empty($PublisherAdZone->PassbackAdTag)):
@@ -171,9 +174,18 @@ class IndexController extends AbstractActionController
     		return;
     	endif;
     	
+    	$header_bid_below_floor 		= false;
+    	
+    	if (floatval($banner_request["hb_pb"]) < floatval($PublisherAdZone->FloorPrice)):
+    		$winning_ad_tag 			= $PublisherAdZone->PassbackAdTag;
+    		$header_bid_below_floor 	= true;
+    	else:
+    		\util\HeaderBiddingHelper::record_header_auction_publisher_nginad_bid_loss($config, $PublisherWebsite->WebDomain, $PublisherAdZone->PublisherAdZoneID, $PublisherAdZone->AdName);
+    	endif;
+    	
     	\util\HeaderBiddingHelper::record_header_auction_publisher_nginad_bid_loss($config, $PublisherWebsite->WebDomain, $PublisherAdZone->PublisherAdZoneID, $PublisherAdZone->AdName);
     	
-    	$this->track_header_bid_impression($config, $banner_request);
+    	$this->track_header_bid_impression($config, $banner_request, $header_bid_below_floor);
     	
     	// credit publisher account here
     	 
@@ -820,7 +832,7 @@ class IndexController extends AbstractActionController
     	exit;
     }
     
-    private function track_header_bid_impression($config, $banner_request) {
+    private function track_header_bid_impression($config, $banner_request, $header_bid_below_floor = false) {
     
     	$error_message 			= "Error";
     
@@ -830,14 +842,17 @@ class IndexController extends AbstractActionController
     	$hb_nginad_bidder_id 	= $banner_request['hb_nginad_bidder_id'];
     	$hb_pb 					= $banner_request['hb_pb'];
     	$houseAds 				= $banner_request['houseAds'] == 'true' ? 'true' : 'false';
-
+    	$passback_shown 		= $header_bid_below_floor == true ? 'true' : 'false';
+    	
     	$auction_log = date('m-d-Y H:i:s') 
     	. ",hb:" . $hb
     	. ",hb_bidder:" . $hb_bidder
     	. ",hb_adid:" . $hb_adid
     	. ",HeaderBiddingAdUnit:" . $hb_nginad_bidder_id
     	. ",hb_pb:" . $hb_pb
-    	. ",houseAds:" . $houseAds . "\n";
+    	. ",houseAds:" . $houseAds
+    	. ",headerBidBelowFloor:" . (string)$header_bid_below_floor
+    	. ",passBackShown:" . $passback_shown . "\n";
     	 
     	$this->output_header_bid_notice_results($auction_log);
 
