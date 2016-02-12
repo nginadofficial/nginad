@@ -53,6 +53,7 @@ function submitForm() {
 	                    $ad_id = $zone_list_raw[$row_number]["PublisherAdZoneID"];
 	                    
 	                    $impression_type = $zone_list_raw[$row_number]["ImpressionType"];
+	                    $auction_type = $zone_list_raw[$row_number]["AuctionType"];
                         
                                 // Change display format according to column specified.
                                 switch($zone_list["meta"][$column_key]):
@@ -118,7 +119,10 @@ function submitForm() {
                     	<a href="/publisher/zone/<?php echo $domain_id;?>/edit/<?php echo $ad_id;?>">Edit 
 
 Zone</a>&nbsp;&nbsp;&nbsp;
-<?php if ($impression_type == 'video'): ?>
+<?php if ($auction_type == 'header'): ?><hr />
+                    	<a href="javascript:void(0);" onclick="HbInvocationShow(<?php echo 
+$domain_id;?>, <?php echo $zone_list_raw[$row_number]["PublisherAdZoneID"];?>)">Header Bidding<br />Invocation Code</a>
+<?php elseif ($impression_type == 'video'): ?>
                     	<a href="javascript:void(0);" onclick="VastInvocationShow(<?php echo 
 $domain_id;?>, <?php echo $zone_list_raw[$row_number]["PublisherAdZoneID"];?>)">Get VAST URL</a>
 <?php else: ?>
@@ -131,7 +135,7 @@ $domain_id;?>, <?php echo $zone_list_raw[$row_number]["PublisherAdZoneID"];?>)">
                     <?php else: ?>
                         &nbsp;
                     <?php endif; ?>
-                    </td>
+                    </td>zz
                 </tr>
             <?php 
                 endforeach;
@@ -197,6 +201,37 @@ $domain_id;?>, <?php echo $zone_list_raw[$row_number]["PublisherAdZoneID"];?>)">
   </div>
 </div>
 <!-- Invocation Code Modal VAST -->
+
+<!-- Invocation Code Modal Header Bidding -->
+<div class="modal fade" id="InvocationCodeModalHeaderBidding" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="myModalLabelHeaderBidding">Use Header Bidding with multiple Ad Exchanges</h4>
+      </div>
+      <div class="modal-body">
+        <div>
+			<p><strong>Header Bidding Code:</strong> Use this HTML snippet in the &lt;header&gt; of the page.
+			<br /><br /> <small><i><strong>NOTE:</strong> If you have multiple ad zones which share the same header bidding code snippet,
+			only copy/paste the snippet <strong>once in the page header</strong></i></small>
+			</p>
+			<div id="adtag_progress_bar_hb" class="progress progress-striped active">
+	             <div class="bar" style="width: 100%;"></div>
+	        </div>
+			<textarea rows="2" name="adtag-hb-header" id="adtag-hb-header" style="min-width: 516px;display: none;"></textarea>
+		</div>
+        <div>
+			<p><strong>Ad Tag Code:</strong> For most websites just copy & paste the code below into the HTML source of the page where you want to the ad to display.</p>
+			<textarea rows="2" name="adtag-hb-code" id="adtag-hb-code" style="min-width: 516px;display: none;"></textarea>
+		</div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Invocation Code Modal Header Bidding -->
 
 <!-- Zone Delete Modal -->
 <input  type="hidden" name="modal_domain_id" id="modal_domain_id" value="0" />

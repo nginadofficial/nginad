@@ -37,6 +37,29 @@ function validateUser(username) {
 
 }
 
+
+//Header Bidding Invocation code (Publisher/website/zone)
+function HbInvocationShow ( domain_id, ad_id ) {
+
+	$('#adtag-hb-header').html("");
+	$('#adtag-hb-header').css("display","none");
+	$('#adtag-hb-code').html("");
+	$('#adtag-hb-code').css("display","none");
+	$('#adtag_progress_bar_hb').css("display","block");
+	
+	$('#InvocationCodeModalHeaderBidding').modal('show');
+	
+	$.post("/publisher/zone/" + domain_id + "/generatehbtag", { ad_id: ad_id }, function( data ) {
+		$('#adtag_progress_bar_hb').css("display","none");
+		$('#adtag-hb-header').html(data.data.header_tag);
+		$('#adtag-hb-header').css("display","block");
+		$('#adtag-hb-code').html(data.data.code_tag);
+		$('#adtag-hb-code').css("display","block");
+	},'json');
+
+}
+
+
 // VAST Invocation code  (Publisher/website/zone)
 function VastInvocationShow ( domain_id, ad_id ) {
 

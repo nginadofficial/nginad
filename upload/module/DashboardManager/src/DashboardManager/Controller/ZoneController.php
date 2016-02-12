@@ -1286,6 +1286,92 @@ class ZoneController extends PublisherAbstractActionController {
     }
     
     /**
+     * Header Bidding Ad Tag generation for zone.
+     *
+     * @return Header Bidding Ad Tag
+     */
+    public function generateHbTagAction()
+    {
+    
+    	$initialized = $this->initialize();
+    	if ($initialized !== true) return $initialized;
+    	$request = $this->getRequest();
+    	 
+    	if ($request->isPost()):
+	    	 
+	    	$PublisherAdZoneID = $this->getRequest()->getPost('ad_id');
+	    	$PublisherWebsiteID = intval($this->params()->fromRoute('param1', 0));
+	    
+	    	$PublisherAdZoneFactory = \_factory\PublisherAdZone::get_instance();
+	    	$HeaderBiddingPageFactory = \_factory\HeaderBiddingPage::get_instance();
+	    	$HeaderBiddingAdUnitFactory = \_factory\HeaderBiddingAdUnit::get_instance();
+	    	
+	    	$params = array();
+	    	$params["PublisherAdZoneID"] 	= $PublisherAdZoneID;
+	    	$PublisherAdZone		 		= $PublisherAdZoneFactory->get_row($params);
+	    	
+	    	if ($PublisherAdZone == null):
+		    	
+		    	$data = array(
+		    			'result' => true,
+		    			'data' => array(
+		    					'header_tag' => htmlentities('There was a database error, please contact the administrator'),
+		    					'code_tag' => htmlentities('There was a database error, please contact the administrator')
+		    			)
+		    	);
+		    	
+		    	$this->setJsonHeader();
+		    	return $this->getResponse()->setContent(json_encode($data));
+	    	
+	    	endif;
+	    	
+	    	$params = array();
+	    	$params["HeaderBiddingPageID"] 	= $PublisherAdZone->HeaderBiddingPageID;
+	    	$HeaderBiddingPage		 		= $HeaderBiddingPageFactory->get_row($params);
+	    	
+	    	$params = array();
+	    	$params["PublisherAdZoneID"] 	= $PublisherAdZoneID;
+	    	$HeaderBiddingAdUnit		 	= $HeaderBiddingAdUnitFactory->get_row($params);
+	    	
+	    	if ($HeaderBiddingPage == null
+	    		|| $HeaderBiddingAdUnit == null):
+	    		
+	    		$data = array(
+	    				'result' => true,
+	    				'data' => array(
+	    						'header_tag' => htmlentities('There was a database error, please contact the administrator'),
+	    						'code_tag' => htmlentities('There was a database error, please contact the administrator')
+	    				)
+	    		);
+	    		 
+	    		$this->setJsonHeader();
+	    		return $this->getResponse()->setContent(json_encode($data));
+	    		
+	    	endif;
+	    	
+	    	$div_id 						= $HeaderBiddingAdUnit->DivID;
+	
+	    	$delivery_site_url 				= $this->config_handle['delivery']['site_url'];
+	    	
+	    	$code_tag						= "<div id='" . $div_id . "' style='display: inline; margin: 0px; padding: 0px; height:" . $PublisherAdZone->Height . "px; width:" . $PublisherAdZone->Width . "px;'></div>";
+	          
+	    	$header_tag						= "<script type='text/javascript' src='" . $delivery_site_url . "/headerbid/" . $PublisherAdZone->AdOwnerID . "/" . $HeaderBiddingPage->JSHeaderFileUnqName . "'></script>";
+	          
+	    	$data = array(
+	    			'result' => true,
+	    			'data' => array(
+	    							'header_tag' => htmlentities($header_tag),
+	    							'code_tag' => htmlentities($code_tag)
+	    							)
+	    	);
+	    
+	    	$this->setJsonHeader();
+	    	return $this->getResponse()->setContent(json_encode($data));
+	    
+    	endif;
+    }
+    
+    /**
      * VAST Ad Tag generation for zone.
      *
      * @return VAST Ad Tag
