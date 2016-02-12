@@ -859,6 +859,44 @@ class ZoneController extends PublisherAbstractActionController {
 
 		                    	$rebuild_header_id = $HeaderBiddingPage->HeaderBiddingPageID;
 		                    	
+		                    	$header_bidding_ad_unit_id_list = array();
+		                    	
+		                    	foreach ($header_bidding_items_new as $bidder_type => $header_bidding_items_list):
+		                    		
+		                    		foreach ($header_bidding_items_list as $header_bidding_item):
+		                    			
+		                    			$header_bidding_ad_unit_id_list[] = $header_bidding_item['HeaderBiddingAdUnitID'];
+		                    			
+		                    		endforeach;
+		                    			
+		                    	endforeach;
+		                    	
+		                    	/* Start: DELETE HeaderBiddingAdUnits no longer being used */
+		                    	
+		                    	$header_bidding_ad_unit_to_delete_id_list = array();
+		                    	
+		                    	$params = array();
+		                    	$params["PublisherAdZoneID"]		= $editResultObj->PublisherAdZoneID;
+		                    	$HeaderBiddingAdUnitList 			= $HeaderBiddingAdUnitFactory->get($params);
+		                    	
+		                    	foreach ($HeaderBiddingAdUnitList as $HeaderBiddingAdUnit):
+		                    			
+		                    		if (!in_array($HeaderBiddingAdUnit->HeaderBiddingAdUnitID, $header_bidding_ad_unit_id_list)):
+		                    			
+		                    			$header_bidding_ad_unit_to_delete_id_list[] = $HeaderBiddingAdUnit->HeaderBiddingAdUnitID;
+		                    			
+		                    		endif;
+		                    		
+		                    	endforeach;
+		                    	
+		                    	foreach ($header_bidding_ad_unit_to_delete_id_list as $header_bidding_ad_unit_to_delete_id):
+		                    	
+		                    		$HeaderBiddingAdUnitFactory->deleteHeaderBiddingAdUnit($header_bidding_ad_unit_to_delete_id);
+		                    	
+		                    	endforeach;
+		                    	
+		                    	/* End: DELETE HeaderBiddingAdUnits no longer being used */
+		                    	
 								foreach ($header_bidding_items_new as $bidder_type => $header_bidding_items_list):
 									
 									foreach ($header_bidding_items_list as $header_bidding_item):

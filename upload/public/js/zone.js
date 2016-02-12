@@ -68,13 +68,11 @@ function switchAuctionType(auctionType) {
 	
 	if (auctionType == 'header') {
 		
-		$("#passback-wrapper").hide();
 		$("#header-bidding-wrapper").show();
 		
 	} else {
 		
 		$("#header-bidding-wrapper").hide();
-		$("#passback-wrapper").show();
 	}
 	
 }
