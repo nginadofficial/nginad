@@ -81,8 +81,9 @@ class HeaderBiddingHelper {
 	    		
 	    		if (!isset($ad_unit['sizes'])):
 	    		
-	    			$ad_unit['sizes']			= '[[' . $HeaderBiddingAdUnit->Width . ', ' . $HeaderBiddingAdUnit->Height . ']]';
-	    		
+	    			$hw					= array(intval($HeaderBiddingAdUnit->Width), intval($HeaderBiddingAdUnit->Height));
+	    			$ad_unit['sizes'][] = $hw;
+
 	    		endif;
 	    		
 	    		$bidder						= array();

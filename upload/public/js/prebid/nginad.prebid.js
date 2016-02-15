@@ -1411,12 +1411,12 @@ var RubiconAdapter = function RubiconAdapter() {
 			var iframeContents = createRequestContent(bid, 'window.parent.pbjs.handleRubiconCallback', width, height);
 			var iframeId = loadIframeContent(iframeContents);
 			bid.iframeId = iframeId;
-			nginadBidderIdMap = { 
-									"hb_nginad_bidder_id" 	: bidRequest.params.hb_nginad_bidder_id,
-									"hb_nginad_pub_id" 		: bidRequest.params.hb_nginad_pub_id,
-									"hb_nginad_zone_height" : bidRequest.params.hb_nginad_zone_height,
-									"hb_nginad_zone_width" 	: bidRequest.params.hb_nginad_zone_width,
-									"hb_nginad_zone_tld" 	: bidRequest.params.hb_nginad_zone_tld
+			nginadBidderIdMap[getBidId(bid)] = { 
+									"hb_nginad_bidder_id" 	: bid.params.hb_nginad_bidder_id,
+									"hb_nginad_pub_id" 		: bid.params.hb_nginad_pub_id,
+									"hb_nginad_zone_height" : bid.params.hb_nginad_zone_height,
+									"hb_nginad_zone_width" 	: bid.params.hb_nginad_zone_width,
+									"hb_nginad_zone_tld" 	: bid.params.hb_nginad_zone_tld
 								};
 			bidmanager.pbCallbackMap[getBidId(bid)] = bid;
 		}
@@ -1571,9 +1571,9 @@ var RubiconAdapter = function RubiconAdapter() {
 			}
 
 		}
-
+				
 		//add the bid response here
-		bidmanager.addBidResponse(placementCode, nginadBidderIdMap[placementCode], bid);
+		bidmanager.addBidResponse(placementCode, nginadBidderIdMap[getBidId(response)], bid);
 
 	};
 
@@ -1663,15 +1663,18 @@ var SovrnAdapter = function SovrnAdapter() {
 					tagid: tagId,
 					bidfloor: bidFloor
 				};
+
 			sovrnImps.push(imp);
 			bidmanager.pbCallbackMap[imp.id] = bid;
+						
 			nginadBidderIdMap[imp.id] = { 
-											"hb_nginad_bidder_id" 	: bidRequest.params.hb_nginad_bidder_id,
-											"hb_nginad_pub_id" 		: bidRequest.params.hb_nginad_pub_id,
-											"hb_nginad_zone_height" : bidRequest.params.hb_nginad_zone_height,
-											"hb_nginad_zone_width" 	: bidRequest.params.hb_nginad_zone_width,
-											"hb_nginad_zone_tld" 	: bidRequest.params.hb_nginad_zone_tld
+											"hb_nginad_bidder_id" 	: bid.params.hb_nginad_bidder_id,
+											"hb_nginad_pub_id" 		: bid.params.hb_nginad_pub_id,
+											"hb_nginad_zone_height" : bid.params.hb_nginad_zone_height,
+											"hb_nginad_zone_width" 	: bid.params.hb_nginad_zone_width,
+											"hb_nginad_zone_tld" 	: bid.params.hb_nginad_zone_tld
 										};
+		
 		});
 
 		// build bid request with impressions
@@ -1686,6 +1689,7 @@ var SovrnAdapter = function SovrnAdapter() {
 
 		var scriptUrl = '//'+sovrnUrl+'?callback=window.pbjs.sovrnResponse' +
 			'&br=' + encodeURIComponent(JSON.stringify(sovrnBidReq));
+
 		adloader.loadScript(scriptUrl, null);
 	}
 
@@ -1762,13 +1766,13 @@ var SovrnAdapter = function SovrnAdapter() {
 				//no response data
 				bid = bidfactory.createBid(2);
 				bid.bidderCode = 'sovrn';
-				bidmanager.addBidResponse(defaultPlacementForBadBid, nginadBidderIdMap[id], bid);
+				bidmanager.addBidResponse(defaultPlacementForBadBid, null, bid);
 			}
 		} else {
 			//no response data
 			bid = bidfactory.createBid(2);
 			bid.bidderCode = 'sovrn';
-			bidmanager.addBidResponse(defaultPlacementForBadBid, nginadBidderIdMap[sovrnResponseObj.id], bid);
+			bidmanager.addBidResponse(defaultPlacementForBadBid, null, bid);
 		}
 
 	}; // sovrnResponse
@@ -2219,12 +2223,18 @@ exports.addBidResponse = function(adUnitCode, nginadBidderObj, bid) {
 		bid.pbMg = priceStringsObj.med;
 		bid.pbHg = priceStringsObj.high;
 
-		bid.nginadBidderId 		= nginadBidderObj.hb_nginad_bidder_id;
-		bid.nginadPubId 		= nginadBidderObj.hb_nginad_pub_id;
-		bid.nginadZoneHeight 	= nginadBidderObj.hb_nginad_zone_width;
-		bid.nginadZoneWidth 	= nginadBidderObj.hb_nginad_zone_height;
-		bid.nginadZoneTld		= nginadBidderObj.hb_nginad_zone_tld;
+		if (nginadBidderObj) {
+		
+			bid.nginadBidderId 		= nginadBidderObj.hb_nginad_bidder_id;
+			bid.nginadPubId 		= nginadBidderObj.hb_nginad_pub_id;
+			bid.nginadZoneHeight 	= nginadBidderObj.hb_nginad_zone_width;
+			bid.nginadZoneWidth 	= nginadBidderObj.hb_nginad_zone_height;
+			bid.nginadZoneTld		= nginadBidderObj.hb_nginad_zone_tld;
 
+		}
+		
+		
+		
 		//put adUnitCode into bid
 		bid.adUnitCode = adUnitCode;
 
