@@ -1,0 +1,26 @@
+<?php 
+$press = '';
+$company = '';
+$testimonials = '';
+$jobs = '';
+$leadership = '';
+if($this->sidebar_active == "press"):
+	 $press = 'class="active"';
+elseif($this->sidebar_active == "company"):
+	 $company = 'class="active"';
+elseif($this->sidebar_active == "testimonials"):
+	 $testimonials = 'class="active"';
+elseif($this->sidebar_active == "jobs"):
+	 $jobs = 'class="active"';
+elseif($this->sidebar_active == "leadership"):
+	 $leadership = 'class="active"';
+endif;
+?>
+<ul class="nav nav-tabs nav-stacked left_nav left_navigation">
+	<li <?php echo $company;?>><a href="<?php echo $this->serverUrl('/company');?>">Company<i class="icon-chevron-right pull-right"></i></a></li>
+	<li <?php echo $jobs;?>><a href="<?php echo $this->serverUrl('/company/jobs');?>">Jobs<i class="icon-chevron-right pull-right"></i></a></li>
+	<li <?php echo $leadership;?>><a href="<?php echo $this->serverUrl('/company/leadership');?>">Leadership<i class="icon-chevron-right pull-right"></i></a></li>
+	
+	<li <?php echo $press;?>><a href="<?php echo $this->serverUrl('/company/press');?>">Press<i class="icon-chevron-right pull-right"></i></a></li>
+	<li <?php echo $testimonials;?>><a href="<?php echo $this->serverUrl('/company/testimonials');?>">Testimonials<i class="icon-chevron-right pull-right"></i></a></li>
+</ul>
