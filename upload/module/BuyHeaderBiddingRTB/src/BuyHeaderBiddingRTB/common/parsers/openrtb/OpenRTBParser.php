@@ -101,24 +101,6 @@ class OpenRTBParser {
 	        	throw new Exception($e->getMessage(), $e->getCode(), $e->getPrevious());
 	        }
         endif;
-       
-		/*
-		 * FIDELITY MOD:
-		 * Parse Request Extensions
-		 */
-        if (isset($this->json_post["ext"])):
-	        
-	        $rtb_extensions = $this->json_post["ext"];
-	        $RtbBidRequestExtensions = new \model\openrtb\RtbBidRequestExtensions();
-	        
-	        try {
-	        	\buyrtbheaderbidding\parsers\openrtb\parselets\common\ParseExtensions::execute($logger, $this, $this->RtbBidRequest, $RtbBidRequestExtensions, $rtb_extensions);
-	        	$this->RtbBidRequest->RtbBidRequestExtensions = $RtbBidRequestExtensions;
-	        } catch (Exception $e) {
-	        	throw new Exception($e->getMessage(), $e->getCode(), $e->getPrevious());
-	        }
-	        
-        endif;
         
         // Parse App
         if (isset($this->json_post["app"])):
@@ -277,52 +259,6 @@ class OpenRTBParser {
 				}
 			
 			endif;
-			
-			/*
-			 * FIDELITY MOD:
-			 * Parse Imp Extensions
-			 */
-			
-			if (isset($ad_impression["ext"])):
-				 
-				$rtb_imp_extensions = $ad_impression["ext"];
-				$RtbBidRequestImpExtensions = new \model\openrtb\RtbBidRequestImpExtensions();
-				 
-				try {
-					\buyrtbheaderbidding\parsers\openrtb\parselets\common\imp\ParseImpExtensions::execute($logger, $this, $this->RtbBidRequest, $RtbBidRequestImpExtensions, $rtb_imp_extensions);
-					$RtbBidRequestImp->RtbBidRequestImpExtensions = $RtbBidRequestImpExtensions;
-				} catch (Exception $e) {
-					throw new Exception($e->getMessage(), $e->getCode(), $e->getPrevious());
-				}
-				 
-			endif;
-			
-			/*
-			 * FIDELITY MOD:
-			 * Video ads will presently not be supported.
-			 *
-			 *
-	        if (isset($ad_impression["banner"])):
-	        	// this is a banner
-	        	$ad_impression_banner = $ad_impression["banner"];
-	        	$RtbBidRequestImp->media_type = "banner";
-	       		$RtbBidRequestImp->RtbBidRequestBanner = new \model\openrtb\RtbBidRequestBanner();
-	       		$DisplayParser = new \buyrtbheaderbidding\parsers\openrtb\DisplayParser();
-	       		$DisplayParser->parse_request($logger, $this, $RtbBidRequestImp->RtbBidRequestBanner, $ad_impression_banner);
-
-	       	elseif (isset($ad_impression["video"])):
-	       		// this is a video
-	       		$ad_impression_video = $ad_impression["video"];
-	       		$RtbBidRequestImp->media_type = "video";
-	       		$RtbBidRequestImp->RtbBidRequestVideo = new \model\openrtb\RtbBidRequestVideo();	
-	       		$VideoParser = new \buyrtbheaderbidding\parsers\openrtb\VideoParser();
-	       		$VideoParser->parse_request($logger, $this, $RtbBidRequestImp->RtbBidRequestVideo, $ad_impression_video);
-	       		
-	        else:
-	       		throw new Exception($this->expeption_missing_min_bid_request_params . ": at least one banner or video object in the imp");
-	        endif;
-	         *
-	         */
 			
 			if (isset($ad_impression["banner"])):
 				// this is a banner

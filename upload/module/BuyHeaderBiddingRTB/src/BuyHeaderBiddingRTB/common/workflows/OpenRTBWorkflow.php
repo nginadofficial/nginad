@@ -45,12 +45,6 @@ class OpenRTBWorkflow
     	$InsertionOrderLineItemDomainExclusionFactory = \_factory\InsertionOrderLineItemDomainExclusion::get_instance();
     	$InsertionOrderLineItemExclusiveInclusionFactory = \_factory\InsertionOrderLineItemDomainExclusiveInclusion::get_instance();
     	$InsertionOrderLineItemRestrictionsFactory = \_factory\InsertionOrderLineItemRestrictions::get_instance();
-    	/*
-    	 * FIDELITY MOD: 
-    	 * Video ads will presently not be supported.
-    	 * 
-    	 * $InsertionOrderLineItemVideoRestrictionsFactory = \_factory\InsertionOrderLineItemVideoRestrictions::get_instance();
-    	 */
     	
     	// match ip against country code
     	\buyrtbheaderbidding\workflows\tasklets\common\insertionorder\GetGeoCodeCountry::execute($logger, $this, $RtbBidRequest);
@@ -123,26 +117,6 @@ class OpenRTBWorkflow
 		        	if (\buyrtbheaderbidding\workflows\tasklets\common\insertionorderlineitem\CheckDomainExclusion::execute($logger, $this, $RtbBidRequest, $RtbBidRequestImp, $InsertionOrderLineItem, $InsertionOrderLineItemDomainExclusionFactory) === false):
 		        		continue;
 		        	endif;
-		        	
-		        	/*
-		        	 * FIDELITY MOD:
-		        	 * Video ads will presently not be supported.
-		        	 * 
-		        	 * 
-					if (!empty($RtbBidRequestImp->RtbBidRequestVideo)):
-						
-						// Video Workflow
-						$VideoWorkflow = new \buyrtbheaderbidding\workflows\VideoWorkflow();
-						$passed_child_workflow = $VideoWorkflow->process_business_rules_workflow($logger, $this, $RtbBidRequest, $RtbBidRequestImp, $InsertionOrderLineItem, $InsertionOrderLineItemVideoRestrictionsFactory);
-							
-					else:
-					
-						// Display Banner Workflow - Default
-						$DisplayWorkflow = new \buyrtbheaderbidding\workflows\DisplayWorkflow();
-						$passed_child_workflow = $DisplayWorkflow->process_business_rules_workflow($logger, $this, $RtbBidRequest, $RtbBidRequestImp, $InsertionOrderLineItem, $InsertionOrderLineItemRestrictionsFactory);
-
-					endif;
-					*/
 		        	
 		        	// Display Banner Workflow
 		        	$DisplayWorkflow = new \buyrtbheaderbidding\workflows\DisplayWorkflow();

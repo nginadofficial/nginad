@@ -198,9 +198,8 @@ abstract class RtbBuyHeaderBiddingBid extends \rtbbuy\RtbBuyBid {
 	}
 	
 	/*
-	 * FIDELITY MOD:
-	* One bid per request only. Multiple bid/seat responses won’t be accepted.
-	*/
+	 * One bid per request only. Multiple bid/seat responses won't be accepted.
+	 */
 	public function headerbidding_dedupe_bid_response() {
 	
 		$high_bid = null;

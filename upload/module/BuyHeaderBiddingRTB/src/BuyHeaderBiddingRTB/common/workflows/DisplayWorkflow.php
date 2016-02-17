@@ -12,11 +12,6 @@ namespace buyrtbheaderbidding\workflows;
 class DisplayWorkflow
 {
     public function process_business_rules_workflow(&$Logger, &$ParentWorkflow, \model\openrtb\RtbBidRequest &$RtbBidRequest, &$RtbBidRequestImp, &$InsertionOrderLineItem, &$InsertionOrderLineItemRestrictionsFactory) {
-
-    	// Check banner type: FIDELITY SPECIFIC REQUIREMENT
-    	if (\buyrtbheaderbidding\workflows\tasklets\display\insertionorderlineitem\CheckIsCorrectType::execute($Logger, $ParentWorkflow, $RtbBidRequest, $RtbBidRequestImp, $InsertionOrderLineItem) === false):
-    		return false;
-    	endif;
     	
     	// Check banner height and width match
     	if (\buyrtbheaderbidding\workflows\tasklets\display\insertionorderlineitem\CheckDisplayBannerDimensions::execute($Logger, $ParentWorkflow, $RtbBidRequest, $RtbBidRequestImp, $InsertionOrderLineItem) === false):
