@@ -27,6 +27,17 @@ return array (
 							'secret_key'		=> '',
 							
 					),
+					
+					// SPECIAL PARTNER
+					// DO NOT REMOVE BuyHeaderBiddingPartner, as it is needed
+					'BuyHeaderBiddingPartner' => array(
+							'module_name' 		=> 'HeaderBiddingBuysidePartner',
+							'partner_name' 		=> 'BuyHeader Bidding Partner for Live Publisher Campaigns',
+							'buyer_id'			=> '7878787',
+							'response_seat_id'	=> '6767676',
+							'secret_key'		=> '',
+									
+					),
 						
 					// This is the default buy side partner
 					// You may remove this partner if you do not wish to buy impressions via
