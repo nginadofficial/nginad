@@ -1601,7 +1601,7 @@ module.exports = RubiconAdapter;
 	 * Adapter for requesting bids from NginAd
 	 */
 	var NginAdAdapter = function NginAdAdapter() {
-		var nginadUrl = 'server.nginad.com/rtb/bid';
+		var nginadUrl = 'server.nginad.com/bid/rtb';
 
 		var nginadBidderIdMap = {};
 		
@@ -1615,16 +1615,16 @@ module.exports = RubiconAdapter;
 		function _getUniqueTagids(bids) {
 			var key;
 			var map = {};
-			var Tagids = [];
+			var PubZoneIds = [];
 			bids.forEach(function(bid) {
-				map[utils.getBidIdParamater('tagid', bid.params)] = bid;
+				map[utils.getBidIdParamater('pzoneid', bid.params)] = bid;
 			});
 			for (key in map) {
 				if (map.hasOwnProperty(key)) {
-					Tagids.push(map[key]);
+					PubZoneIds.push(map[key]);
 				}
 			}
-			return Tagids;
+			return PubZoneIds;
 		}
 
 		function getWidthAndHeight(bid) {
@@ -1655,7 +1655,7 @@ module.exports = RubiconAdapter;
 
 			//build impression array for nginad
 			utils._each(bidReqs, function(bid) {
-				var tagId = utils.getBidIdParamater('tagid', bid.params);
+				var tagId = utils.getBidIdParamater('pzoneid', bid.params);
 				var bidFloor = utils.getBidIdParamater('bidfloor', bid.params);
 				var adW=0,adH=0;
 

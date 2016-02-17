@@ -77,6 +77,8 @@ if (isset($_SERVER['HTTP_HOST'])):
 	endif;
 endif;
 
+$request_uri = isset($_SERVER["REQUEST_URI"]) ? $_SERVER["REQUEST_URI"] : "";
+
 $modules = array();
 $config_glob_paths = array();
 
@@ -133,6 +135,22 @@ elseif (isset($_GET["secret_key"])
 			
 		endif;
 	endforeach;
+	
+	$config_glob_paths = array(
+			'config/autoload/{global,local}.php',
+			'config/autoload/database.{local,staging,production}.php',
+			'config/autoload/delivery.{local,staging,production}.php',
+			'config/autoload/rtb.config.{local,staging,production}.php',
+	);
+	
+elseif (strpos($request_uri, '/bid/rtb') === 0 
+		&& isset($_GET["callback"]) 
+		&& isset($_GET["br"])):
+	
+	$config 			= Zend\Config\Factory::fromFile('config/autoload/rtb.config.local.php');
+
+	$partner_entry 		= $config['buyside_rtb']['supply_partners']['BuyHeaderBiddingPartner'];
+	$modules 			= array( $partner_entry['module_name'] );
 	
 	$config_glob_paths = array(
 			'config/autoload/{global,local}.php',

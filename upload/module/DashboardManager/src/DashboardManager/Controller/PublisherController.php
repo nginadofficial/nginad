@@ -523,9 +523,6 @@ class PublisherController extends PublisherAbstractActionController {
         	            }
         	            catch(\Zend\Db\Adapter\Exception\InvalidQueryException $e) {
         	            	
-        	            	var_dump($e->getMessage());
-        	            	exit;
-        	            	
         	                $error_msg ="ERROR: A database error has occurred, please contact customer service.";
         	                return array(
         	                    'error_message' => $error_msg,
