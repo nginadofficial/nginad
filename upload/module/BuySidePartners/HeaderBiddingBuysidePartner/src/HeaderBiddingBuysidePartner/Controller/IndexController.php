@@ -56,38 +56,14 @@ class IndexController extends AbstractActionController
 	        	$request_id = $HeaderBiddingBuysidePartnerBid->RtbBidRequest->id;
 	        	$HeaderBiddingBuysidePartnerBid->process_business_logic();
         	endif;
-        	
-    		/*
-    		 * FIDELITY MOD:
-    		 * One bid per request only. Multiple bid/seat responses won’t be accepted.
-    		 */
-        	$HeaderBiddingBuysidePartnerBid->headerbidding_dedupe_bid_response();
-        	
         	$HeaderBiddingBuysidePartnerBid->convert_ads_to_bid_response();
         	$HeaderBiddingBuysidePartnerBid->build_outgoing_bid_response();
-        	
-        	if ($HeaderBiddingBuysidePartnerBid->had_bid_response === false):
-        		/*
-        		 * SSP must provide access to a test server that supports the URL parameters testbid=bid and testbid=nobid. 
-        		 * In the first case a test bid has to be returned to our test bid request, in the latter case a “no bid” 
-        		 * response has to be returned (normally represented by an HTTP return code 204, see OpenRTB specification).
-        		 */
-        	
-        		var_dump('204 No Response');
-        		exit;
-        	
-        		// http_response_code(204);
-        		\buyheaderbiddingbuysidepartner\HeaderBiddingBuysidePartnerLogger::get_instance()->output_auction_results($request_id, true);
-        	else:
-	        	$HeaderBiddingBuysidePartnerBid->send_bid_response();
-        		\buyheaderbiddingbuysidepartner\HeaderBiddingBuysidePartnerLogger::get_instance()->output_auction_results($request_id, false, $HeaderBiddingBuysidePartnerBid->RtbBidResponse->RtbBidResponseSeatBidList[0]->RtbBidResponseBidList[0]->price);
+        	$HeaderBiddingBuysidePartnerBid->send_bid_response();
+        	if ($HeaderBiddingBuysidePartnerBid->had_bid_response == true || \buyheaderbiddingbuysidepartner\HeaderBiddingBuysidePartnerLogger::get_instance()->setting_only_log_bids == false):
+            	\buyheaderbiddingbuysidepartner\HeaderBiddingBuysidePartnerLogger::get_instance()->output_log();
         	endif;
-        	
-        	if ($HeaderBiddingBuysidePartnerBid->had_bid_response === true || \buyheaderbiddingbuysidepartner\HeaderBiddingBuysidePartnerLogger::get_instance()->setting_only_log_bids == false):
-        		\buyheaderbiddingbuysidepartner\HeaderBiddingBuysidePartnerLogger::get_instance()->output_log();
-        	endif;
+
         } catch (Exception $e) {
-        	\buyheaderbiddingbuysidepartner\HeaderBiddingBuysidePartnerLogger::get_instance()->output_auction_results($request_id, true, 0, $e->getMessage());
             \buyheaderbiddingbuysidepartner\HeaderBiddingBuysidePartnerLogger::get_instance()->log[] = "BID EXCEPTION: ID: " . $request_id . " MESSAGE: " . $e->getMessage();
             header("Content-type: application/json");
             echo '{"nbr":2}';
