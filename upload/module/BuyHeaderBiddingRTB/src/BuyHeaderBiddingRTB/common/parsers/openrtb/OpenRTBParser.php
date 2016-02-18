@@ -136,18 +136,13 @@ class OpenRTBParser {
         
         $RtbBidRequestDevice = new \model\openrtb\RtbBidRequestDevice();
         
-        if (isset($this->json_post["device"])):
-        
-	        $device = $this->json_post["device"];
-	        
-	        try {
-	        	\buyrtbheaderbidding\parsers\openrtb\parselets\common\device\ParseDevice::execute($logger, $this, $this->RtbBidRequest, $RtbBidRequestDevice, $device);
-	        	$logger->log[] = "Is Mobile: " . $RtbBidRequestDevice->devicetype != 2;
-	        
-	        } catch (Exception $e) {
-	        	throw new Exception($e->getMessage(), $e->getCode(), $e->getPrevious());
-	        }
-	    endif;
+        try {
+        	\buyrtbheaderbidding\parsers\openrtb\parselets\common\device\ParseDevice::execute($logger, $this, $this->RtbBidRequest, $RtbBidRequestDevice);
+        	$logger->log[] = "Is Mobile: " . $RtbBidRequestDevice->devicetype != 2;
+        	 
+        } catch (Exception $e) {
+        	throw new Exception($e->getMessage(), $e->getCode(), $e->getPrevious());
+        }
 	    
 	    $this->RtbBidRequest->RtbBidRequestDevice = $RtbBidRequestDevice;
 	    

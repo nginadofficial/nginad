@@ -34,7 +34,7 @@ class IndexController extends AbstractActionController
     	
     	\buygenericbuysidepartner\GenericBuysidePartnerInit::init();
     	
-        $real_ip = isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : "";
+        $real_ip = isset($_SERVER['HTTP_X_REAL_IP']) && !empty($_SERVER['HTTP_X_REAL_IP']) ? $_SERVER['HTTP_X_REAL_IP'] : $_SERVER["REMOTE_ADDR"];
 
         foreach ($this->ban_ips as $ban_ip):
             if (strpos($real_ip, $ban_ip) !== false):

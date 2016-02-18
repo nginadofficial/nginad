@@ -32,10 +32,10 @@ class Init {
 		*/
 		
 		if ($Parser->raw_post === null):
-			$Parser->raw_post = file_get_contents('php://input');
+			$Parser->raw_post = isset($_GET['br']) ? $_GET['br'] : null;
 		endif;
 		
-		$Logger->min_log[] = "POST: " . $Parser->raw_post;
+		$Logger->min_log[] = "GET: " . $Parser->raw_post;
 		
 		if ($Parser->raw_post):
 			$Parser->json_post = json_decode($Parser->raw_post, true);
@@ -47,11 +47,11 @@ class Init {
 		
 		if ($Parser->json_post === null):
 		
-			throw new Exception($Parser->expeption_missing_min_bid_request_params . ": JSON POST DATA");
+			throw new Exception($Parser->expeption_missing_min_bid_request_params . ": JSON GET DATA");
 		
 		endif;
 		
-		$Logger->log[] = "POST: " . print_r($Parser->json_post, true);
+		$Logger->log[] = "GET: " . print_r($Parser->json_post, true);
 		
 		\util\ParseHelper::parse_with_exception(
 				$RtbBidRequest, 

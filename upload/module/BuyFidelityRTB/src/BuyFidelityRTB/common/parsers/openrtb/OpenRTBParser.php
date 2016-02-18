@@ -228,12 +228,17 @@ class OpenRTBParser {
 	        		$ad_impression,
 	        		"instl");
 	        
-	        // Parse SSP tag id DOM parent of RTB Auction Ad Zone in Publisher web page
-	        
-	        \util\ParseHelper::parse_item(
-	        		$RtbBidRequestImp,
-	        		$ad_impression,
-	        		"tagid");
+	        // Parse NginAd PublisherAdZoneID as tagid
+
+	        try {
+	        	\util\ParseHelper::parse_with_exception(
+	        			$RtbBidRequestImp,
+	        			$ad_impression,
+	        			$this->expeption_missing_min_bid_request_params . ": tagid",
+	        			"tagid");
+	        } catch (Exception $e) {
+	        	throw new Exception($e->getMessage(), $e->getCode(), $e->getPrevious());
+	        }
 	        
 	        // Parse Imp Floor Price
 	        

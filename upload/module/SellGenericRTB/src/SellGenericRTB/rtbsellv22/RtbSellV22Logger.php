@@ -45,7 +45,7 @@ class RtbSellV22Logger extends RtbSellLogger
         endif;
         $fh = fopen($log_file_dir . "/" . date('g_A') . '.log', "a");
 
-        $real_ip = isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : "";
+        $real_ip = isset($_SERVER['HTTP_X_REAL_IP']) && !empty($_SERVER['HTTP_X_REAL_IP']) ? $_SERVER['HTTP_X_REAL_IP'] : $_SERVER["REMOTE_ADDR"];
 
         $log_header = "\n\n";
         $log_header.= 'BID REQUEST : ' . date('m-d-Y H:i:s') . " : FROM : " . $real_ip . "\n";
@@ -93,7 +93,7 @@ class RtbSellV22Logger extends RtbSellLogger
 
         $fh = fopen($log_file_dir . "/" . date('g_A') . '.log', "a");
 
-        $real_ip = isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : "";
+        $real_ip = isset($_SERVER['HTTP_X_REAL_IP']) && !empty($_SERVER['HTTP_X_REAL_IP']) ? $_SERVER['HTTP_X_REAL_IP'] : $_SERVER["REMOTE_ADDR"];
 
         $log_header = "\n\n";
 
