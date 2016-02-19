@@ -104,16 +104,29 @@ class WorkflowHelper {
 		$parse = null;
 		
 		if (isset($RtbBidRequest->RtbBidRequestSite->domain)):
+			if (strpos($RtbBidRequest->RtbBidRequestSite->domain, 'http') !== 0):
+				$RtbBidRequest->RtbBidRequestSite->domain = 'http://' . $RtbBidRequest->RtbBidRequestSite->domain;
+			endif;
 			$parse = parse_url($RtbBidRequest->RtbBidRequestSite->domain);
 		elseif (isset($RtbBidRequest->RtbBidRequestApp->domain)):
+			if (strpos($RtbBidRequest->RtbBidRequestApp->domain, 'http') !== 0):
+				$RtbBidRequest->RtbBidRequestApp->domain = 'http://' . $RtbBidRequest->RtbBidRequestApp->domain;
+			endif;
 			$parse = parse_url($RtbBidRequest->RtbBidRequestApp->domain);
 		endif;
+		
 		if (!empty($parse) && isset($parse['host'])):
 			$tld = $parse['host'];
 		else:
 			if (isset($RtbBidRequest->RtbBidRequestSite->page)):
+				if (strpos($RtbBidRequest->RtbBidRequestSite->page, 'http') !== 0):
+					$RtbBidRequest->RtbBidRequestSite->page = 'http://' . $RtbBidRequest->RtbBidRequestSite->page;
+				endif;
 				$parse = parse_url($RtbBidRequest->RtbBidRequestSite->page);
 			elseif (isset($RtbBidRequest->RtbBidRequestApp->page)):
+				if (strpos($RtbBidRequest->RtbBidRequestApp->page, 'http') !== 0):
+					$RtbBidRequest->RtbBidRequestApp->page = 'http://' . $RtbBidRequest->RtbBidRequestApp->page;
+				endif;
 				$parse = parse_url($RtbBidRequest->RtbBidRequestApp->page);
 			endif;
 			if (!empty($parse) && isset($parse['host'])):
