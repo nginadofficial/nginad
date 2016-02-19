@@ -64,9 +64,13 @@ class IndexController extends AbstractActionController
         	endif;
 
         } catch (Exception $e) {
-            \buyheaderbiddingbuysidepartner\HeaderBiddingBuysidePartnerLogger::get_instance()->log[] = "BID EXCEPTION: ID: " . $request_id . " MESSAGE: " . $e->getMessage();
-            header("Content-type: application/json");
-            echo '{"nbr":2}';
+        	
+        	$error_response = array('error'=>array('entry'=>$e->getMessage()));
+        	\buyheaderbiddingbuysidepartner\HeaderBiddingBuysidePartnerLogger::get_instance()->log[] = "BID EXCEPTION: ID: " . $request_id . " MESSAGE: " . $e->getMessage();
+        	 
+        	header("Content-type: application/x-javascript");
+        	echo $this->javascript_callback . '(' . json_encode($error_response) . ')';
+        	
         }
         
         if (\buyheaderbiddingbuysidepartner\HeaderBiddingBuysidePartnerLogger::get_instance()->setting_only_log_bids == false):

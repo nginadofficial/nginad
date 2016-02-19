@@ -18,6 +18,8 @@ abstract class RtbBuyHeaderBiddingBid extends \rtbbuy\RtbBuyBid {
 
 	protected $rtb_provider = "none";
 	
+	protected $javascript_callback = "window.pbjs.nginadResponse";
+	
 	protected $rtb_ssp_friendly_name = "none";
 
 	// will be used for stats
@@ -58,6 +60,10 @@ abstract class RtbBuyHeaderBiddingBid extends \rtbbuy\RtbBuyBid {
 		$this->rtb_seat_id 		= $rtb_seat_id !== null ? $rtb_seat_id : $this->rtb_provider;
 		$this->response_seat_id = $response_seat_id !== null ? $response_seat_id : 'na';
 		$this->config 			= $config;
+		
+		if (isset($_GET['callback'])):
+			$this->javascript_callback 	= $_GET['callback'];
+		endif;
 	}
 
 	private function generate_transaction_id() {
@@ -74,9 +80,18 @@ abstract class RtbBuyHeaderBiddingBid extends \rtbbuy\RtbBuyBid {
 
 	    \rtbbuyheaderbidding\RtbBuyHeaderBiddingLogger::get_instance()->log[] = $log_header;
 
-			header("Content-type: application/json");
+			header("Content-type: application/x-javascript");
 		    $bid_response = $this->bid_responses;
-			echo $bid_response;
+		    
+		    if (strlen($bid_response) < 10 && strpos($bid_response, 'nbr') !== false):
+				$decoded_response = json_decode($bid_response);
+		    	if (isset($decoded_response->nbr)):
+		    		$error_response = array('error'=>array('entry'=>array('nbr'=>$decoded_response->nbr)));
+		    		$bid_response = json_encode($error_response);
+		    	endif;
+		    endif;
+
+			echo $this->javascript_callback . '(' . $bid_response . ')';
 			\rtbbuyheaderbidding\RtbBuyHeaderBiddingLogger::get_instance()->log[] = $bid_response;
 			\rtbbuyheaderbidding\RtbBuyHeaderBiddingLogger::get_instance()->min_log[] = $bid_response;
 	}
@@ -87,73 +102,49 @@ abstract class RtbBuyHeaderBiddingBid extends \rtbbuy\RtbBuyBid {
 		$this->bid_responses = \buyrtbheaderbidding\encoders\openrtb\RtbBidResponseJsonEncoder::execute($this->RtbBidResponse);
 	}
 
-	private function get_effective_ad_tag(&$InsertionOrderLineItem, $tld) {
+	private function get_effective_ad_tag($PublisherAdZoneID, $tld) {
 
 			/*
-			 * This is an ad tag somebody copy pasted into the RTB Manager
-			 * which is not using our Revive ad server. Lets send back
-			 * an on the fly iframe ad tag to our delivery mechanism
-			 * which will send back the client's Javascript or an IFrame
-			 * and count the ad impression.
+			 * This is ad tag should just be the same as the publisher 
+			 * ad tag since this was a mock bid to get the price
 			 */
-
-			$delivery_adtag_js = $this->config['delivery']['adtag'];
-			
-			$classname = $this->random_classname();
-
-			$winning_bid_auction_param = "";
-			
-			$cache_buster = time();
-
-			if ($this->rtb_provider != "BuyLoopbackPartner"):
-				$winning_bid_auction_param = "&winbid=\${AUCTION_PRICE}";
-			endif;
-			
-			$effective_tag = "<script type='text/javascript' src='" . $delivery_adtag_js . "?zoneid=" . $InsertionOrderLineItem->InsertionOrderLineItemID . "&buyerid=" . $this->rtb_seat_id . "&height=" . $InsertionOrderLineItem->Height . "&width=" . $InsertionOrderLineItem->Width . "&tld=" . $tld . "&clktrc={NGINCLKTRK}" . $winning_bid_auction_param . "&ui=" . $this->user_ip_hash . "&cb=" . $cache_buster . "'></script>";
-			
-			// return rawurlencode($effective_tag);
-			
-			return $effective_tag;
-	}
-	
-	private function get_banner_notice_url(&$InsertionOrderLineItem, $tld, $request_id, $price) {
-	
-		$delivery_adtag = $this->config['delivery']['url'];
-			
-		$classname = $this->random_classname();
-	
-		$vendor = "headerbidding";
 		
-		$winning_bid_auction_param = "";
-			
-		$cache_buster = time();
-	
-		if ($this->rtb_provider != "BuyLoopbackPartner"):
-			$winning_bid_auction_param = "&winbid=\${AUCTION_PRICE}";
+		$PublisherAdZoneFactory = \_factory\PublisherAdZone::get_instance();
+		$params = array();
+		$params['PublisherAdZoneID'] = $PublisherAdZoneID;
+		$PublisherAdZone = $PublisherAdZoneFactory->get_row($params);
+		
+		if ($PublisherAdZone == null):
+			return '<!-- INVALID PUBLISHER AD ZONE TAG ID -->';
 		endif;
-	
-		$notice_tag = $delivery_adtag . "?nurl=true&zoneid=" . $InsertionOrderLineItem->InsertionOrderLineItemID . "&buyerid=" . $this->rtb_seat_id . "&orgprc=" . $price . "&request_id=" . $request_id . "&vendor=" . $vendor . "&tld=" . $tld . $winning_bid_auction_param . "&ui=" . $this->user_ip_hash . "&cb=" . $cache_buster;
-	
-		return $notice_tag;
-	}
-	
-	private function get_video_notice_url(&$InsertionOrderLineItem, $tld) {
-	
-		$delivery_adtag = $this->config['delivery']['url'];
-			
-		$classname = $this->random_classname();
-	
-		$winning_bid_auction_param = "";
-			
-		$cache_buster = time();
-	
-		if ($this->rtb_provider != "BuyLoopbackPartner"):
-			$winning_bid_auction_param = "&winbid=\${AUCTION_PRICE}";
-		endif;
+		
+		$width = 0;
+		$height = 0;
 
-		$notice_tag = $delivery_adtag . "?video=vast&zoneid=" . $InsertionOrderLineItem->InsertionOrderLineItemID . "&buyerid=" . $this->rtb_seat_id . "&tld=" . $tld . "&clktrc={NGINCLKTRK}" . $winning_bid_auction_param . "&ui=" . $this->user_ip_hash . "&cb=" . $cache_buster;
-	
-		return $notice_tag;
+		if($PublisherAdZone->AdTemplateID != NULL && $PublisherAdZone->AdTemplateID != 0):
+		
+			$AdTemplatesFactory = \_factory\AdTemplates::get_instance();
+			$params = array();
+			$params['AdTemplateID'] = $PublisherAdZone->AdTemplateID;
+			$AdTemplatesObject = $AdTemplatesFactory->get_row_object($params);
+			$height = $AdTemplatesObject->Height;
+			$width = $AdTemplatesObject->Width;
+			
+		else:
+		 
+			$height = $PublisherAdZone->Height;
+			$width = $PublisherAdZone->Width;
+			
+		endif;
+		
+		$delivery_adtag = $this->config['delivery']['adtag'];
+		
+		$cache_buster = time();
+		 
+		$effective_tag = "<script type='text/javascript' src='" . $delivery_adtag . "?pzoneid=" . $PublisherAdZone->PublisherAdZoneID . "&height=" . $height . "&width=" . $width . "&tld=" . $tld . "&cb=" . $cache_buster . "'></script>";
+		
+		return $effective_tag;
+		
 	}
 
 	private function random_classname()
@@ -250,9 +241,17 @@ abstract class RtbBuyHeaderBiddingBid extends \rtbbuy\RtbBuyBid {
 
 		$rtb_ids = null;
 		
+		$PublisherAdZoneID = null;
+		
 		if ($this->RtbBidRequest != null):
 		
 			$rtb_ids = \util\WorkflowHelper::getIdsFromRtbRequest($this->RtbBidRequest);
+
+			if (isset($this->RtbBidRequest->RtbBidRequestImpList[0]->tagid)):
+				
+				$PublisherAdZoneID = $this->RtbBidRequest->RtbBidRequestImpList[0]->tagid;
+				
+			endif;
 			
 			$tld = $rtb_ids["tld"];
 			
@@ -261,6 +260,8 @@ abstract class RtbBuyHeaderBiddingBid extends \rtbbuy\RtbBuyBid {
 			$RtbBidResponse->id = $this->RtbBidRequest->id;
 			
 		endif;
+		
+
 		
 		$RtbBidResponse->RtbBidResponseSeatBidList = array();
 		
@@ -285,20 +286,11 @@ abstract class RtbBuyHeaderBiddingBid extends \rtbbuy\RtbBuyBid {
 				$RtbBidResponseBid	= new \model\openrtb\RtbBidResponseBid();
 					
 				$RtbBidResponseBid->id			= $this->generate_transaction_id();
-				$RtbBidResponseBid->adid		= $RtbBidResponseBid->id;
 				$RtbBidResponseBid->impid		= $bid_imp_id;
 				$RtbBidResponseBid->price		= $InsertionOrderLineItem->BidAmount;
 		
-				if ($InsertionOrderLineItem->ImpressionType == 'video'):
-					$RtbBidResponseBid->nurl 	= $this->get_video_notice_url($InsertionOrderLineItem, $tld);
-				else:
-					$RtbBidResponseBid->adm		= $this->get_effective_ad_tag($InsertionOrderLineItem, $tld);
-					$RtbBidResponseBid->nurl 	= $this->get_banner_notice_url($InsertionOrderLineItem, $tld, $this->RtbBidRequest->id, $InsertionOrderLineItem->BidAmount);
-				endif;
-				
-				$RtbBidResponseBid->adomain[] 	= $InsertionOrderLineItem->LandingPageTLD;
-				$RtbBidResponseBid->cid	 		= "nginad_" . $InsertionOrderLineItem->InsertionOrderID;
-				$RtbBidResponseBid->crid	 	= "nginad_" . $InsertionOrderLineItem->InsertionOrderLineItemID;
+				$RtbBidResponseBid->adm		= $this->get_effective_ad_tag($PublisherAdZoneID, $tld);
+
 				$this->had_bid_response = true;
 				
 				$RtbBidResponseSeatBid->RtbBidResponseBidList[] = $RtbBidResponseBid;
@@ -309,16 +301,9 @@ abstract class RtbBuyHeaderBiddingBid extends \rtbbuy\RtbBuyBid {
 				
 			endforeach;
 			
-			$RtbBidResponseSeatBid->seat						= $user_id;
 			$RtbBidResponse->RtbBidResponseSeatBidList[] 		= $RtbBidResponseSeatBid;
 			
 		endforeach;
-			
-		if (isset($InsertionOrderLineItemObj["currency"]) && $currency == null):
-			$RtbBidResponse->cur				= $currency;
-		else:
-			$RtbBidResponse->cur				= $this->config['settings']['rtb']['auction_currency'];
-		endif;
 		
 		if (!count($RtbBidResponse->RtbBidResponseSeatBidList)):
 				
