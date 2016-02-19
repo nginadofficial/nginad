@@ -50,6 +50,16 @@ return array(
 				 */
 				'pmp_channel_bypass'			=> false,
 				/*
+				 * header bidding settings
+				*/
+				'header_bidding' => array(
+						/*
+						 * Cache time in minutes for header bid requests that 
+						 * were previously calculated
+						 */
+						'cache_time_minutes' 	=> 1
+				),
+				/*
 				 * publisher settings
 				 */ 
 				'publisher' => array(

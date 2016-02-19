@@ -57,7 +57,18 @@ class OpenRTBWorkflow
     	 * The minutely cache interval will be settable via the application config.
     	 */
     	
+    	$cache_params = \util\HeaderBiddingHelper::get_params_from_bid_request($this->config, $RtbBidRequest);
     	
+    	if ($cache_params === false):
+    		return array();
+    	endif;
+
+    	$cached_inventory_response = \util\HeaderBiddingHelper::get_stored_rtb_matching_line_items($this->config, $cache_params);
+    	
+    	if ($cached_inventory_response !== null):
+    		return $cached_inventory_response;
+    	endif;    	
+
     	/*
     	 * The bidding price in the test bid response has to be between 0.01 and 1 (USD),
     	* and as always, it must not be lower than the specified bid floor.
@@ -211,6 +222,10 @@ class OpenRTBWorkflow
 	    		return array();
 	    	endif;
     	
+    	endif;
+    	
+    	if ($cached_inventory_response === null):
+    		\util\HeaderBiddingHelper::store_rtb_matching_line_items($this->config, $cache_params, $InsertionOrderLineItem_Match_List);
     	endif;
     	
     	return $InsertionOrderLineItem_Match_List;

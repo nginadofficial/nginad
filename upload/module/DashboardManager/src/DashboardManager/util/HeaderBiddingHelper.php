@@ -11,6 +11,8 @@ namespace util;
 
 class HeaderBiddingHelper {
 
+	protected static $class_name = 'HeaderBiddingHelper';
+	
     public static function rebuild_header_bidder($config, $rebuild_header_id) {
     	
     	$HeaderBiddingPageFactory = \_factory\HeaderBiddingPage::get_instance();
@@ -175,6 +177,58 @@ class HeaderBiddingHelper {
     	
     	
     }
-}
+    
+    
+    public static function get_params_from_bid_request($config, &$RtbBidRequest) {
 
+    	if (!isset($RtbBidRequest->RtbBidRequestImpList[0]->tagid)
+    		|| !isset($RtbBidRequest->RtbBidRequestImpList[0]->RtbBidRequestBanner)):
+    	
+    		return false;
+
+    	endif;
+    	
+    	$PublisherAdZoneID 				= $RtbBidRequest->RtbBidRequestImpList[0]->tagid;
+    	
+    	$domain							= $RtbBidRequest->RtbBidRequestSite->domain;
+    	$page							= $RtbBidRequest->RtbBidRequestSite->page;
+    	$banner_width					= $RtbBidRequest->RtbBidRequestImpList[0]->RtbBidRequestBanner->w;
+    	$banner_height					= $RtbBidRequest->RtbBidRequestImpList[0]->RtbBidRequestBanner->h;
+
+    	$params 								= array();
+    	$params["PublisherAdZoneID"] 			= $PublisherAdZoneID;
+    	$params["domain"] 						= $domain;
+    	$params["page"] 						= $page;
+    	$params["banner_width"] 				= $banner_width;
+    	$params["banner_height"] 				= $banner_height;
+    	 
+    	return $params;
+    
+    }
+    
+    public static function store_rtb_matching_line_items($config, $params, $line_items) {
+
+    	$cache_time_minutes 		= intval($config['settings']['header_bidding']['cache_time_minutes']);
+    	
+    	$one_minute_in_seconds 		= 60;
+    	
+    	$cache_time_minutes 		= $cache_time_minutes * $one_minute_in_seconds;
+    	
+    	\util\CacheSql::put_cached_read_result_apc($config, $params, self::$class_name, $line_items, $cache_time_minutes);
+
+    }
+    
+    public static function get_stored_rtb_matching_line_items($config, $params) {
+    	
+    	$stored_response = \util\CacheSql::get_cached_read_result_apc($config, $params, self::$class_name);
+    	
+    	if ($stored_response == null):
+    		return $stored_response;
+    	endif;
+    	
+    	return $stored_response;
+    	
+    }
+    
+}
 
