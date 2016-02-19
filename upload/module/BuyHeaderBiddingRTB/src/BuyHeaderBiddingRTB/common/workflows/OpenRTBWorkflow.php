@@ -23,8 +23,40 @@ class OpenRTBWorkflow
 
     	$this->config = $config;
     	$this->rtb_seat_id = $rtb_seat_id;
+
+    	/*
+    	 * NGIAND HEADER BIDDING IMPLEMENTATION DETAILS
+    	 * --------------------------------------------------------------------------
+    	 * 
+    	 * There are 2 ways header bidding could be implemented
+    	 * on the bidder side.
+    	 * 
+    	 * 1. A mock bid where the header RTB request sent out to the Ad Exchange
+    	 * 		responds with a mock bid, and in theory that bid should be similar
+    	 * 		to the one they get when the actual ad tag is called to the same
+    	 * 		ad exchange.
+    	 * 
+    	 * 2. A token/match system where the header RTB request sent out to the 
+    	 * 		Ad Exchange registers a unique identifier for the bid request
+    	 * 		and saves the winning ad tag from the exchange keyed to the header bid
+    	 * 		unique identifier. When the win notice or ad tag is invoked, the actual
+    	 * 		winner's tag from that ad exchange is sent back and displayed.
+    	 * 
+    	 * In NginAd we will implement #1 since a lot of NginAd users do not have access
+    	 * to the big data systems can take to implement solution #2 where hashes for
+    	 * every single header bid ad slot would need to be stored in the database
+    	 * and propogated across the RTB backend cluster in real time.
+    	 * 
+    	 * Because we are using #1 and mock bidding we don't need to worry about 
+    	 * other NginAd RTB servers behind the load balancer being synchronized 
+    	 * against winners' unique ids.
+    	 *  
+    	 * Since we want to reduce the load put on NginAd by header bidding here we 
+    	 * will cache mock bid responses to header bids keyed by the request ids.
+    	 * 
+    	 * The minutely cache interval will be settable via the application config.
+    	 */
     	
-    	// $logger = \buyrtbheaderbidding\RtbBuyHeaderBiddingLogger::get_instance();
     	
     	/*
     	 * The bidding price in the test bid response has to be between 0.01 and 1 (USD),
