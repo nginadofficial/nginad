@@ -1760,11 +1760,11 @@ module.exports = RubiconAdapter;
 
 				//The bid is a mock bid, the true bidding process happens after the publisher tag is called
 				bid.ad = decodeURIComponent(responseAd);
-				
+
 				var whArr = getWidthAndHeight(bidObj);
-				var adW = whArr[0];
-				var adH = whArr[1];
-				
+				bid.width = whArr[0];
+				bid.height = whArr[1];
+
 				bidmanager.addBidResponse(placementCode, nginadBidderIdMap[id], bid);
 
 			});
@@ -3071,6 +3071,7 @@ function isEmptyObject(obj) {
 
 function getWinningBid(bidArray) {
 	var winningBid = {};
+
 	if (bidArray && bidArray.length !== 0) {
 		bidArray.sort(function(a, b) {
 			//put the highest CPM first
@@ -3143,14 +3144,13 @@ function buildBidResponse(bidArray) {
 	var bidArrayTargeting = [];
 	var bidClone = {};
 	if (bidArray && bidArray[0] && bidArray[0].adUnitCode) {
-		// init the pb_targetingMap for the adUnitCode
+		// init the pb_targetingMap for the adUnitCode		
 		adUnitCode = bidArray[0] && bidArray[0].adUnitCode;
 		pb_targetingMap[adUnitCode] = {};
 		for (var i = 0; i < bidArray.length; i++) {
 			var bid = bidArray[i];
 			//clone by json parse. This also gets rid of unwanted function properties
 			bidClone = getCloneBid(bid);
-
 			if (bid.alwaysUseBid && bidClone.adserverTargeting) { // add the bid if alwaysUse and bid has returned
 				// push key into targeting
 				pb_targetingMap[bidClone.adUnitCode] = utils.extend(pb_targetingMap[bidClone.adUnitCode], bidClone.adserverTargeting);
@@ -3160,14 +3160,14 @@ function buildBidResponse(bidArray) {
 					cpm: bid.cpm,
 					bid: bid
 				});
-			}
+			} 
 			//put all bids into bidArray by default
 			bidResponseArray.push(bidClone);
 		}
 	}
 
 	// push the winning bid into targeting map
-	if (adUnitCode && bidArrayTargeting.length !== 0) {
+	if (adUnitCode && bidArrayTargeting.length !== 0) {	
 		var winningBid = getWinningBid(bidArrayTargeting);
 		var keyValues = winningBid.adserverTargeting;
 		pb_targetingMap[adUnitCode] = utils.extend(pb_targetingMap[adUnitCode], keyValues);
