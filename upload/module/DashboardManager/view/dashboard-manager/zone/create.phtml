@@ -81,8 +81,12 @@ $(function() {
 	  	<div id="existing-page-header" style="margin-top: 20px;">
 	  		<select id="PageHeaderID" name="PageHeaderID" class="zone-txtarea">
 	  			<option value="">- Select Existing Page Header -</option>
-				<?php foreach ($page_header_id_list as $name => $value): ?>
-					<option value="<?php echo $name;?>"><?php echo $value;?></option>
+				<?php foreach ($current_header_bidding_pagename_list as $name => $value): ?>
+					<?php if ($value["PageName"] == $current_header_bidding_pagename): ?>
+					<option selected="selected" value="<?php echo $value["PageName"];?>"><?php echo $value["PageName"];?></option>
+					<?php else: ?>
+					<option value="<?php echo $value["PageName"];?>"><?php echo $value["PageName"];?></option>
+					<?php endif; ?>
 				<?php endforeach; ?>
 			</select>
 		</div>

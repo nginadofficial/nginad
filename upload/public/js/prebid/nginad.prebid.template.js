@@ -217,6 +217,8 @@ var PREBID_TIMEOUT = 850;
 						qp += "width=" + adTargetInfo[k][v] + "&";
 					} else if (v == 'hb_nginad_zone_tld') {
 						qp += "tld=" + adTargetInfo[k][v] + "&";
+					} else if (v == 'adUrl') {
+						adUrl = adTargetInfo[k][v];
 					} else {
 						qp += v + "=" + adTargetInfo[k][v] + "&";
 					}

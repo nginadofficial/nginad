@@ -501,6 +501,7 @@ class ZoneController extends PublisherAbstractActionController {
              // If first coming to this form, set the Ad Owner ID.
         endif;
         
+        $current_header_bidding_pagename_list 	= "";
         $current_fold_pos = "";
         $current_linearity = "";
         $current_start_delay = "0";
@@ -510,6 +511,12 @@ class ZoneController extends PublisherAbstractActionController {
         $current_protocols = array();
         $current_mimes = array();
         
+        
+        $HeaderBiddingPageFactory 								= \_factory\HeaderBiddingPage::get_instance();
+        $params = array();
+        $params["PublisherWebsiteID"] 							= $DomainObj->PublisherWebsiteID;
+        $current_header_bidding_pagename_list					= $HeaderBiddingPageFactory->get($params);
+
         return array(
         		'error_message' => $error_message,
         		'is_super_admin' => $this->is_super_admin,
@@ -534,6 +541,7 @@ class ZoneController extends PublisherAbstractActionController {
         		'mimes' => \util\BannerOptions::$mimes,
         		'header_bidding_adxs_list' => \util\ZoneHelper::$header_bidding_adxs,
         		'header_bidding_providers' => \util\ZoneHelper::$header_bidding_providers,
+        		'current_header_bidding_pagename_list' => $current_header_bidding_pagename_list,
         		
         		'current_fold_pos' => $current_fold_pos,
         		'current_linearity' => $current_linearity,
