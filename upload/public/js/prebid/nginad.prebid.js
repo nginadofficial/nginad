@@ -385,7 +385,7 @@ var AppNexusAdapter = function AppNexusAdapter() {
 
 		for (var i = 0; i < bidsCount; i++) {
 			var bidReqeust = anArr[i];
-			
+
 			nginadBidderIdMap[bidReqeust.params.placementId] = { 
 																	"hb_nginad_bidder_id" 	: bidReqeust.params.hb_nginad_bidder_id,
 																	"hb_nginad_pub_id" 		: bidReqeust.params.hb_nginad_pub_id,
@@ -532,6 +532,8 @@ var AppNexusAdapter = function AppNexusAdapter() {
 				//place ad response on bidmanager._adResponsesByBidderId
 			}
 
+			var placementId = bidObj.params.placementId;
+			
 			var bid = [];
 			if (jptResponseObj.result && jptResponseObj.result.cpm && jptResponseObj.result.cpm !== 0) {
 				responseCPM = parseInt(jptResponseObj.result.cpm, 10);
@@ -552,8 +554,7 @@ var AppNexusAdapter = function AppNexusAdapter() {
 				bid.width = jptResponseObj.result.width;
 				bid.height = jptResponseObj.result.height;
 				bid.dealId = jptResponseObj.result.deal_id;
-
-				bidmanager.addBidResponse(placementCode, nginadBidderIdMap[placementCode], bid);
+				bidmanager.addBidResponse(placementCode, nginadBidderIdMap[placementId], bid);
 
 
 			} else {
@@ -1706,7 +1707,7 @@ module.exports = RubiconAdapter;
 			//no response data
 			bid = bidfactory.createBid(2);
 			bid.bidderCode = 'nginad';
-			bidmanager.addBidResponse(placementCode, nginadBidderIdMap[id], bid);
+			bidmanager.addBidResponse(id, nginadBidderIdMap[id], bid);
 		}
 		
 		//expose the callback to the global object:
@@ -1750,9 +1751,6 @@ module.exports = RubiconAdapter;
 				nginadBid.size = bidObj.sizes;
 				var responseAd = nginadBid.adm;
 
-				// build impression url from response
-				var responseNurl = '<img src="'+nginadBid.nurl+'">';
-
 				//store bid response
 				//bid status is good (indicating 1)
 				bid = bidfactory.createBid(1);
@@ -1760,9 +1758,8 @@ module.exports = RubiconAdapter;
 				bid.bidderCode = 'nginad';
 				bid.cpm = responseCPM;
 
-				//set ad content + impression url
-				// nginad returns <script> block, so use bid.ad, not bid.adurl
-				bid.ad = decodeURIComponent(responseAd + responseNurl);
+				//The bid is a mock bid, the true bidding process happens after the publisher tag is called
+				bid.ad = decodeURIComponent(responseAd);
 				
 				var whArr = getWidthAndHeight(bidObj);
 				var adW = whArr[0];
@@ -3082,6 +3079,11 @@ function getWinningBid(bidArray) {
 		//the first item has the highest cpm
 		winningBid = bidArray[0];
 		//TODO : if winning bid CPM === 0 - we need to indicate no targeting should be set
+	}
+	if (winningBid.bid.adUrl) {
+		winningBid.bid.adserverTargeting.adUrl = winningBid.bid.adUrl;
+	} else {
+		winningBid.bid.adserverTargeting.adUrl = "";
 	}
 	return winningBid.bid;
 

@@ -92,6 +92,8 @@ class HeaderBiddingHelper {
 	    		
 	    		$bidder['bidder']			= $HeaderBiddingAdUnit->AdExchange;
 	    		
+	    		$bidder['params']			= array();
+	    		
 	    		$custom_params =  unserialize($HeaderBiddingAdUnit->CustomParams);
 	    		
 	    		if ($custom_params != null && count($custom_params)):
@@ -117,10 +119,25 @@ class HeaderBiddingHelper {
 
 	    	endforeach;
 	    	
-	    	$ad_units[]						= $ad_unit;
+	    	/*
+	    	 * Add the house NginAd Bidder as the last header bidder on the list
+	    	 * for each publisher zone
+	    	 */
+	    	$bidder										= array();
+	    	$bidder['bidder']							= 'nginad';
+	    	$bidder['params']							= array();
+	    	$bidder['params']['pzoneid'] 				= $PublisherAdZone->PublisherAdZoneID;
+	    	$bidder['params']['hb_nginad_bidder_id'] 	= '7878787';
+	    	$bidder['params']['hb_nginad_pub_id'] 		= $PublisherAdZone->PublisherAdZoneID;
+	    	$bidder['params']['hb_nginad_zone_width'] 	= $PublisherAdZone->Width;
+	    	$bidder['params']['hb_nginad_zone_height'] 	= $PublisherAdZone->Height;
+	    	$bidder['params']['hb_nginad_zone_tld'] 	= $PublisherWebsite->WebDomain;
+	    	$ad_unit['bids'][]							= $bidder;
+	    	 
+	    	$ad_units[]									= $ad_unit;
 	    	
     	endforeach;
-
+    	
     	$prebid_helper_template				= file_get_contents('public/js/prebid/nginad.prebid.template.js');	
     	
     	$encoded_data	 					= json_encode($ad_units, JSON_PRETTY_PRINT);
