@@ -15,10 +15,13 @@ class HeaderBiddingHelper {
 	
     public static function rebuild_header_bidder($config, $rebuild_header_id) {
     	
-    	$HeaderBiddingPageFactory = \_factory\HeaderBiddingPage::get_instance();
-    	$HeaderBiddingAdUnitFactory = \_factory\HeaderBiddingAdUnit::get_instance();
-    	$PublisherAdZoneFactory = \_factory\PublisherAdZone::get_instance();
-    	$PublisherWebsiteFactory = \_factory\PublisherWebsite::get_instance();
+    	$site_url							= $config['delivery']['site_url'];
+    	$site_url							= str_replace(array('http://', 'https://'), array('', ''), $site_url);
+    	
+    	$HeaderBiddingPageFactory 			= \_factory\HeaderBiddingPage::get_instance();
+    	$HeaderBiddingAdUnitFactory 		= \_factory\HeaderBiddingAdUnit::get_instance();
+    	$PublisherAdZoneFactory 			= \_factory\PublisherAdZone::get_instance();
+    	$PublisherWebsiteFactory 			= \_factory\PublisherWebsite::get_instance();
     	
     	$params 							= array();
     	$params["HeaderBiddingPageID"]		= $rebuild_header_id;
@@ -127,6 +130,7 @@ class HeaderBiddingHelper {
 	    	$bidder['bidder']							= 'nginad';
 	    	$bidder['params']							= array();
 	    	$bidder['params']['pzoneid'] 				= $PublisherAdZone->PublisherAdZoneID;
+	    	$bidder['params']['nginad_domain'] 			= $site_url;
 	    	$bidder['params']['hb_nginad_bidder_id'] 	= '7878787';
 	    	$bidder['params']['hb_nginad_pub_id'] 		= $PublisherAdZone->PublisherAdZoneID;
 	    	$bidder['params']['hb_nginad_zone_width'] 	= $PublisherAdZone->Width;

@@ -1602,8 +1602,9 @@ module.exports = RubiconAdapter;
 	 * Adapter for requesting bids from NginAd
 	 */
 	var NginAdAdapter = function NginAdAdapter() {
-		var nginadUrl = 'server.nginad.com/bid/rtb';
 
+		var rtbServerDomain = 'server.nginad.com';
+		
 		var nginadBidderIdMap = {};
 		
 		function _callBids(params) {
@@ -1677,6 +1678,8 @@ module.exports = RubiconAdapter;
 				nginadImps.push(imp);
 				bidmanager.pbCallbackMap[imp.id] = bid;
 							
+				rtbServerDomain = bid.params.nginad_domain;
+				
 				nginadBidderIdMap[imp.id] = { 
 												"hb_nginad_bidder_id" 	: bid.params.hb_nginad_bidder_id,
 												"hb_nginad_pub_id" 		: bid.params.hb_nginad_pub_id,
@@ -1697,7 +1700,7 @@ module.exports = RubiconAdapter;
 				}
 			};
 
-			var scriptUrl = '//'+nginadUrl+'?callback=window.pbjs.nginadResponse' +
+			var scriptUrl = '//' + rtbServerDomain + '/bid/rtb?callback=window.pbjs.nginadResponse' +
 				'&br=' + encodeURIComponent(JSON.stringify(nginadBidReq));
 
 			adloader.loadScript(scriptUrl, null);
