@@ -1,4 +1,4 @@
-var PREBID_TIMEOUT = 700;
+var PREBID_TIMEOUT = 850;
 	
 /* 1. Register bidder tag Ids */
 
@@ -37,11 +37,6 @@ var PREBID_TIMEOUT = 700;
 
     //add the adUnits
     pbjs.addAdUnits(adUnits);
-
-    //register a callback handler
-    pbjs.addCallback('adUnitBidsBack', function(adUnitCode){
-        console.log('ad unit bids back for : ' + adUnitCode);
-    });
 
      /* Request bids for the added ad units. If adUnits or adUnitCodes are
            not specified, the function will request bids for all added ad units.
