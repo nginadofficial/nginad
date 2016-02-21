@@ -16,6 +16,41 @@ Date: 2014-12-12 10:22:07
 SET FOREIGN_KEY_CHECKS=0;
 
 -- ----------------------------
+-- Table structure for HeaderBiddingPage
+-- ----------------------------
+DROP TABLE IF EXISTS `HeaderBiddingPage`;
+CREATE TABLE `HeaderBiddingPage` (
+  `HeaderBiddingPageID` int(11) NOT NULL AUTO_INCREMENT,
+  `PublisherWebsiteID` int(11) NOT NULL,
+  `PageName` char(100) NOT NULL,
+  `JSHeaderFileUnqName` char(100) NOT NULL,
+  `DateCreated` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `DateUpdated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`HeaderBiddingPageID`),
+  UNIQUE KEY `HeaderBiddingPageID` (`HeaderBiddingPageID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- ----------------------------
+-- Table structure for HeaderBiddingAdUnit
+-- ----------------------------
+DROP TABLE IF EXISTS `HeaderBiddingAdUnit`;
+CREATE TABLE `HeaderBiddingAdUnit` (
+  `HeaderBiddingAdUnitID` int(11) NOT NULL AUTO_INCREMENT,
+  `HeaderBiddingPageID` int(11) NOT NULL,
+  `PublisherAdZoneID` int(11) NOT NULL,
+  `AdExchange` char(100) NOT NULL,
+  `DivID` char(100) NOT NULL,
+  `Height` int(11) NOT NULL,
+  `Width` int(11) NOT NULL,
+  `CustomParams` text NOT NULL,
+  `AdTag` text NOT NULL,
+  `DateCreated` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `DateUpdated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`HeaderBiddingAdUnitID`),
+  UNIQUE KEY `HeaderBiddingAdUnitID` (`HeaderBiddingAdUnitID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- ----------------------------
 -- Table structure for InsertionOrder
 -- ----------------------------
 DROP TABLE IF EXISTS `InsertionOrder`;
@@ -706,6 +741,8 @@ CREATE TABLE `PublisherAdZone` (
   `PublisherAdZoneID` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `PublisherWebsiteID` int(10) unsigned NOT NULL,
   `ImpressionType` char(10) NOT NULL DEFAULT 'banner',
+  `AuctionType` char(10) NOT NULL DEFAULT 'rtb',
+  `HeaderBiddingPageID` int(11) DEFAULT NULL,
   `AdOwnerID` int(10) unsigned NOT NULL,
   `AdName` varchar(100) NOT NULL,
   `Description` char(255) DEFAULT NULL,
@@ -731,7 +768,7 @@ CREATE TABLE `PublisherAdZone` (
 -- ----------------------------
 -- Records of PublisherAdZone
 -- ----------------------------
-INSERT INTO `PublisherAdZone` VALUES ('6', '4', 'banner', '3', 'Leaderboard Top Banner', 'This leaderboard ad tag will be shown at the top of all the pages on the website.', '<script language=\"Javascript\">\r\nvar zflag_nid=\"2674\"; var zflag_cid=\"1\"; var zflag_sid=\"1\"; var zflag_width=\"728\"; var zflag_height=\"90\"; var zflag_sz=\"14\";\r\n</script>\r\n<script language=\"Javascript\" src=\"http://xp2.zedo.com/jsc/xp2/fo.js\"></script>', '1', '0', '3', '0', '728', '90', '0.10', '0', '0', '0.00', '2014-09-03 22:40:17', '2014-09-03 22:40:56');
+INSERT INTO `PublisherAdZone` VALUES ('6', '4', 'banner', 'rtb', '0', '3', 'Leaderboard Top Banner', 'This leaderboard ad tag will be shown at the top of all the pages on the website.', '<script language=\"Javascript\">\r\nvar zflag_nid=\"2674\"; var zflag_cid=\"1\"; var zflag_sid=\"1\"; var zflag_width=\"728\"; var zflag_height=\"90\"; var zflag_sz=\"14\";\r\n</script>\r\n<script language=\"Javascript\" src=\"http://xp2.zedo.com/jsc/xp2/fo.js\"></script>', '1', '0', '3', '0', '728', '90', '0.10', '0', '0', '0.00', '2014-09-03 22:40:17', '2014-09-03 22:40:56');
 
 -- ----------------------------
 -- Table structure for PublisherAdZoneVideo
