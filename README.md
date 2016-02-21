@@ -1,6 +1,16 @@
 nginad
 =======
 
+February 20, 2016
+------------------
+ 
+This is a release where a complete header bidding implementation has been added.
+Both an implementation where NginAd hosts the header bidding auction for other Ad Exchanges via code snippets in the publisher dashboard,
+and an implementation where Prebid.js with DFP hosts the header bidding auction have been completed.
+This is a minor version update to version 1.6.8
+
+Usage Documentation: https://nginad.atlassian.net/wiki/display/NGIN/Using+Header+Bidding
+
 January 18, 2016
 ------------------
  
