@@ -3641,8 +3641,12 @@ class DemandController extends DemandAbstractActionController {
 			    endif;
 			    
 			else:
-				
-				$ret_val = \util\AuthHelper::domain_user_authorized_publisher_passthru($this->auth->getEffectiveUserID(), $PublisherWebsite->DomainOwnerID);
+            	$PublisherWebsiteFactory = \_factory\PublisherWebsite::get_instance();
+     			$domain_object = new \model\PublisherWebsite();
+         		$parameters = array("PublisherWebsiteID" => $exchange_feed_id);
+             	$domain_object = $PublisherWebsiteFactory->get_row_object($parameters);
+                                
+				$ret_val = \util\AuthHelper::domain_user_authorized_publisher_passthru($this->auth->getEffectiveUserID(), $domain_object->DomainOwnerID);
 				if ($ret_val === true):
 					$is_local = true;
 				endif;
