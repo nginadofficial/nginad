@@ -105,7 +105,7 @@ this.registerBidAdapter(NginAdAdapter(),'nginad');
 this.registerBidAdapter(AolAdapter(), 'aol');
 this.registerBidAdapter(PulsePointAdapter(),'pulsepoint');
 
-},{"./adapters/aol":3,"./adapters/appnexus.js":4,"./adapters/criteo":5,"./adapters/indexExchange":6,"./adapters/openx":7,"./adapters/pubmatic.js":8,"./adapters/pulsepoint.js":9,"./adapters/rubicon.js":10,"./adapters/sovrn":11,"./adapters/nginad":22,"./adapters/yieldbot":12,"./bidmanager.js":15,"./constants.json":16,"./events":17,"./utils.js":20}],2:[function(require,module,exports){
+},{"./adapters/aol":3,"./adapters/appnexus.js":4,"./adapters/criteo":5,"./adapters/indexExchange":6,"./adapters/openx":7,"./adapters/pubmatic.js":8,"./adapters/pulsepoint.js":9,"./adapters/rubicon.js":10,"./adapters/sovrn":11,"./adapters/nginad":23,"./adapters/yieldbot":12,"./bidmanager.js":15,"./constants.json":16,"./events":17,"./utils.js":20}],2:[function(require,module,exports){
 function Adapter(code){
 	var bidderCode = code;
 
@@ -1589,7 +1589,7 @@ var RubiconAdapter = function RubiconAdapter() {
 
 module.exports = RubiconAdapter;
 
-},{"../adloader":13,"../bidfactory.js":14,"../bidmanager.js":15,"../constants.json":16,"../utils.js":20}],22:[function(require,module,exports){
+},{"../adloader":13,"../bidfactory.js":14,"../bidmanager.js":15,"../constants.json":16,"../utils.js":20}],23:[function(require,module,exports){
 	var CONSTANTS = require('../constants.json');
 	var utils = require('../utils.js');
 	var bidfactory = require('../bidfactory.js');
