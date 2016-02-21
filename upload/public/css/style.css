@@ -759,3 +759,8 @@ input.next {
 .n-button-container {
 	margin-left: 180px;
 }
+
+.n-header-bidding-item .zone-txtbox {
+	height: 250px;
+	width: 300px;
+}
