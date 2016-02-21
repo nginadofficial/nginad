@@ -45,13 +45,15 @@ $(function() {
     <textarea class="zone-txtbox" maxlength="255" id="Description" name="Description"></textarea>   </div>
     </div>
 <div class="control-group">
-    <label for="AuctionType" class="control-label">Auction Type</label>
-    <div class="controls error">
-		<select id="AuctionType" name="AuctionType" class="zone-txtarea" onchange="switchAuctionType();">
-			<option value="rtb">RTB</option>
-			<option value="header">Header Bidding</option>
-		</select>
-		</div>
+	<div id="auction-type-wrapper" style="margin: 0px; padding: 0px;">
+	    <label for="AuctionType" class="control-label">Auction Type</label>
+	    <div class="controls error">
+			<select id="AuctionType" name="AuctionType" class="zone-txtarea" onchange="switchAuctionType();">
+				<option value="rtb">RTB</option>
+				<option value="header">Header Bidding</option>
+			</select>
+			</div>
+	    </div>
     </div>
 
 <div class="control-group" id="passback-wrapper" style="margin: 0px; padding: 0px;">    

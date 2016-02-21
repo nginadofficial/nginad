@@ -18,7 +18,9 @@ function switchImpressionType() {
 		$("#passbackTag").html("Passback VAST XML (VAST URL also OK)");
 		$("label[for=Height]").html('Video Height');
 		$("label[for=Width]").html('Video Width');
-		
+		$("#header-bidding-wrapper").hide();
+		$("#auction-type-wrapper").hide();
+	
 	} else {
 		
 		$(".novideo").show();
@@ -26,6 +28,8 @@ function switchImpressionType() {
 		$("#passbackTag").html("Passback Ad Tag");
 		$("label[for=Height]").html("Ad Height");
 		$("label[for=Width]").html("Ad Width");
+		$("#header-bidding-wrapper").show();
+		$("#auction-type-wrapper").show();
 	}
 	
 }

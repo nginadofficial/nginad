@@ -60,6 +60,7 @@ $this->headScript()->captureEnd();  ?>
     <textarea class="zone-txtbox" maxlength="255" id="Description" name="Description"><?php echo $editResultObj->Description;?></textarea>    </div>
     </div>
 <div class="control-group">
+<div id="auction-type-wrapper" style="margin: 0px; padding: 0px;">
     <label for="ImpressionType" class="control-label">Auction Type</label>
     <div class="controls error">
 		<select id="AuctionType" name="AuctionType" class="zone-txtarea" onchange="switchAuctionType();">
@@ -72,6 +73,7 @@ $this->headScript()->captureEnd();  ?>
 		</select>
 		</div>
     </div>
+</div>
 <div class="control-group" id="passback-wrapper" style="margin: 0px; padding: 0px;">    
 <div class="control-group" id="passback-cg">
     <label for="PassbackAdTag" id="passbackTag" class="control-label">Passback Ad Tag</label>
