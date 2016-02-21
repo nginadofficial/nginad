@@ -11,6 +11,8 @@ This is a minor version update to version 1.6.8
 
 Usage Documentation: https://nginad.atlassian.net/wiki/display/NGIN/Using+Header+Bidding
 
+If you are upgrading from 1.6.7 please execute the SQL update in dbschema/releases/1.6/header-bidding-update-1.6.8/header-bidding-update.sql
+
 January 18, 2016
 ------------------
  
