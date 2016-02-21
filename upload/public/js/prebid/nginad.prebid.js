@@ -1603,7 +1603,7 @@ module.exports = RubiconAdapter;
 	 */
 	var NginAdAdapter = function NginAdAdapter() {
 
-		var rtbServerDomain = 'server.nginad.com';
+		var rtbServerDomain = 'placeholder.for.nginad.server.com';
 		
 		var nginadBidderIdMap = {};
 		
