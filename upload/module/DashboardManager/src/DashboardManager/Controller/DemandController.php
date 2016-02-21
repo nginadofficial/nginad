@@ -3603,6 +3603,7 @@ class DemandController extends DemandAbstractActionController {
     	$InsertionOrderPreview->WentLiveDate              = '0000-00-00 00:00:00';
     	 
 	    $InsertionOrderPreviewFactory = \_factory\InsertionOrderPreview::get_instance();
+	    $PublisherWebsiteFactory = \_factory\PublisherWebsite::get_instance();
 	    $new_campaign_preview_id = $InsertionOrderPreviewFactory->saveInsertionOrderPreview($InsertionOrderPreview);
 	    
 	    /*
@@ -3641,7 +3642,7 @@ class DemandController extends DemandAbstractActionController {
 			    endif;
 			    
 			else:
-            	$PublisherWebsiteFactory = \_factory\PublisherWebsite::get_instance();
+            	
      			$domain_object = new \model\PublisherWebsite();
          		$parameters = array("PublisherWebsiteID" => $exchange_feed_id);
              	$domain_object = $PublisherWebsiteFactory->get_row_object($parameters);
