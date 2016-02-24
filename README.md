@@ -1,6 +1,19 @@
 nginad
 =======
 
+February 24, 2016
+------------------
+
+A bug fix update. The update fixes statistics for domain admins. Previously the statistics for domain admins included publishers from 
+other domain admins on other private exchanges. This issue is now fixed and domain admins only have access to their own statistics.
+
+It should also be noted that most of the statistics are still stored as text files in the /upload/logs folder and you need to build
+your own report manager interface to view those visually.
+
+There are still only very limited statistics available via the reports functionality in the existing user interface.
+
+This is a minor version update to version 1.6.9
+
 February 20, 2016
 ------------------
  
@@ -12,6 +25,14 @@ This is a minor version update to version 1.6.8
 Usage Documentation: https://nginad.atlassian.net/wiki/display/NGIN/Using+Header+Bidding
 
 If you are upgrading from 1.6.7 please execute the SQL update in dbschema/releases/1.6/header-bidding-update-1.6.8/header-bidding-update.sql
+
+Also note that if you are upgrading from a prior version you need to add new lines to your nginx configurations from:
+
+* /server.configs/load.balancer/etc/nginx/conf.d/default.conf
+* /server.configs/slave.instance/etc/nginx/conf.d/default.conf
+
+You need to add the new HTTP header forwarding for X-Real-UA to the load balancer
+and the fastcgi_param HTTP_USER_AGENT in the nginx upstream back-end servers.
 
 January 18, 2016
 ------------------
