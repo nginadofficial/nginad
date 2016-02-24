@@ -62,6 +62,8 @@ class ReportController extends PublisherAbstractActionController {
 
         $impression = \_factory\PublisherImpressionsAndSpendHourly::get_instance($this->config_handle);
 
+        $extra_params['DemandCustomerInfoID'] = $this->DemandCustomerInfoID;
+        
         $stats	= json_decode($this->getPerTime($impression, $extra_params, $this->is_domain_admin), TRUE);
         
         if ($this->is_domain_admin):
@@ -607,7 +609,7 @@ class ReportController extends PublisherAbstractActionController {
     	if ($initialized !== true) return $initialized;
     	
     	$extra_params = array();
-    	
+
     	if ($this->PublisherInfoID != null):
     		$user_role = 2;
     		$extra_params = array('PublisherInfoID' => $this->PublisherInfoID);
@@ -621,6 +623,8 @@ class ReportController extends PublisherAbstractActionController {
     		die("bad request");
     	endif;
     	
+		$extra_params['DemandCustomerInfoID'] = $this->DemandCustomerInfoID;
+
     	$this->setJsonHeader();
     	return $this->getResponse()->setContent(
         		$this->getPerTime(\_factory\PublisherImpressionsAndSpendHourly::get_instance($this->config_handle), $extra_params, $this->is_domain_admin)

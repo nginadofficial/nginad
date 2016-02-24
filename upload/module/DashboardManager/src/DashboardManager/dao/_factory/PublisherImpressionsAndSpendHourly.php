@@ -133,8 +133,12 @@ class PublisherImpressionsAndSpendHourly extends \_factory\CachedTableRead {
 
     public function getPerTimeCustom($where_params = null, $is_super_admin = false, $is_domain_admin = false) {
 
+    	$demand_customer_info_id = isset($where_params['DemandCustomerInfoID']) ? $where_params['DemandCustomerInfoID'] : null;
+    	
+    	unset($where_params['DemandCustomerInfoID']);
+    	
     	$obj_list = array();
-    
+
     
     	$sql = new Sql($this->adapter);
     	$select = $sql->select();
@@ -167,14 +171,25 @@ class PublisherImpressionsAndSpendHourly extends \_factory\CachedTableRead {
     			$select->where->lessThanOrEqualTo('DateCreated', $where_params['DateCreatedLower'])
     	);
     	endif;
-    	
+
     	foreach ($where_params as $name => $value):
 	    	if ($name != 'DateCreatedLower' && $name != 'DateCreatedGreater'):
 		    	$select->where(
 		    			$select->where->equalTo($name, $value)
-		    	);
+		  		);
 	    	endif;
     	endforeach;
+    	
+    	if ($is_super_admin !== true && !isset($where_params['PublisherInfoID'])):
+    	
+	        $publisher_info_list = $this->get_publisher_id_list_from_demand_customer_info_id($demand_customer_info_id);
+	        
+	        $select->where(
+	        		$select ->where->addPredicate(new \Zend\Db\Sql\Predicate\Expression('PublisherInfoID IN (?)',
+	        				$publisher_info_list))
+	        );
+	        
+        endif;
     	
     	$select->group('PublisherAdZoneID');
     	$select->order('PublisherAdZoneID');
@@ -237,6 +252,10 @@ class PublisherImpressionsAndSpendHourly extends \_factory\CachedTableRead {
     
     public function getPerTime($where_params = null, $is_super_admin = false, $is_domain_admin = false) {
 
+    	$demand_customer_info_id = isset($where_params['DemandCustomerInfoID']) ? $where_params['DemandCustomerInfoID'] : null;
+    	
+    	unset($where_params['DemandCustomerInfoID']);
+    	
         $obj_list = array();
 
         $low_range = $high_range = time();
@@ -280,6 +299,17 @@ class PublisherImpressionsAndSpendHourly extends \_factory\CachedTableRead {
 		        );
 	        endif;
         endforeach;
+        
+        if ($is_super_admin !== true && !isset($where_params['PublisherInfoID'])):
+        
+	        $publisher_info_list = $this->get_publisher_id_list_from_demand_customer_info_id($demand_customer_info_id);
+	        
+	        $select->where(
+	        		$select ->where->addPredicate(new \Zend\Db\Sql\Predicate\Expression('PublisherInfoID IN (?)',
+	        				$publisher_info_list))
+	        );
+	        
+        endif;
         
         $statement = $sql->prepareStatementForSqlObject($select);
         $results = $statement->execute();
@@ -338,6 +368,46 @@ class PublisherImpressionsAndSpendHourly extends \_factory\CachedTableRead {
         return $obj_list;
     }
 
+    protected function get_publisher_id_list_from_demand_customer_info_id($demand_customer_info_id) {
+
+    	if ($demand_customer_info_id === null || !intval($demand_customer_info_id)):
+    		return null;
+    	endif;
+    	 
+    	$authUsersFactory = \_factory\authUsers::get_instance();
+    	$params = array();
+    	$params['DemandCustomerInfoID'] = $demand_customer_info_id;
+    	
+    	$authUsers = $authUsersFactory->get_row($params);
+    	
+    	if ($authUsers == null):
+    		return null;
+    	endif;
+    	
+    	$authUsersFactory = \_factory\authUsers::get_instance();
+    	$params = array();
+    	$params['parent_id'] = $authUsers->user_id;
+    	 
+    	$authUsersList = $authUsersFactory->get($params);
+    	
+    	if (!count($authUsersList)):
+    		return null;
+    	endif;
+    	
+    	$publisher_info_list = array();
+    	
+    	foreach ($authUsersList as $authUsers):
+    		$publisher_info_list[] = $authUsers->PublisherInfoID;
+    	endforeach;
+    	 
+    	if (!count($publisher_info_list)):
+    		return null;
+    	endif;
+    	
+    	return $publisher_info_list;
+
+    }
+    
     public function getPerTimeHeader($is_super_admin = false) {
 
         $metadata = new Metadata($this->adapter);
