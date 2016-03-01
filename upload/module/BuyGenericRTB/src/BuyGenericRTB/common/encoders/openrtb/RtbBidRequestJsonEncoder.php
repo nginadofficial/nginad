@@ -15,7 +15,7 @@ class RtbBidRequestJsonEncoder {
 	
 		$bid_request = array();
 		
-		\util\ParseHelper::setArrayParam($RtbBidRequest, $bid_request, 'id');
+		\util\ParseHelper::setArrayParam($RtbBidRequest, $bid_request, 'id', 'string');
 	
 		$bid_request["imp"] 	= self::getRtbBidRequestImpList($RtbBidRequest);
 	
@@ -43,19 +43,19 @@ class RtbBidRequestJsonEncoder {
 	
 		endif;
 	
-		\util\ParseHelper::setArrayParam($RtbBidRequest, $bid_request, 'at');
+		\util\ParseHelper::setArrayParam($RtbBidRequest, $bid_request, 'at', 'integer');
 		
-		\util\ParseHelper::setArrayParam($RtbBidRequest, $bid_request, 'tmax');
+		\util\ParseHelper::setArrayParam($RtbBidRequest, $bid_request, 'tmax', 'integer');
 		
-		\util\ParseHelper::setArrayParam($RtbBidRequest, $bid_request, 'wseat');
+		\util\ParseHelper::setArrayParam($RtbBidRequest, $bid_request, 'wseat', 'array');
 		
-		\util\ParseHelper::setArrayParam($RtbBidRequest, $bid_request, 'allimps');
+		\util\ParseHelper::setArrayParam($RtbBidRequest, $bid_request, 'allimps', 'integer');
 	
-		\util\ParseHelper::setArrayParam($RtbBidRequest, $bid_request, 'cur');
+		\util\ParseHelper::setArrayParam($RtbBidRequest, $bid_request, 'cur', 'array');
 		
-		\util\ParseHelper::setArrayParam($RtbBidRequest, $bid_request, 'bcat');
+		\util\ParseHelper::setArrayParam($RtbBidRequest, $bid_request, 'bcat', 'array');
 		
-		\util\ParseHelper::setArrayParam($RtbBidRequest, $bid_request, 'badv');
+		\util\ParseHelper::setArrayParam($RtbBidRequest, $bid_request, 'badv', 'array');
 	
 		if ($RtbBidRequest->RtbBidRequestRegulations != null):
 	
@@ -77,40 +77,40 @@ class RtbBidRequestJsonEncoder {
 			
 			$impression 				=  array();
 		
-			\util\ParseHelper::setArrayParam($RtbBidRequestImp, $impression, 'id');
+			\util\ParseHelper::setArrayParam($RtbBidRequestImp, $impression, 'id', 'string');
 
 			if ($RtbBidRequestImp->media_type == "banner"):
 			
-				$impression['banner'] =		self::getRtbBidRequestBanner($RtbBidRequestImp->RtbBidRequestBanner);
+				$impression['banner'] =		self::getRtbBidRequestBanner($RtbBidRequestImp->RtbBidRequestBanner, 'object');
 			
 			elseif 	($RtbBidRequestImp->media_type == "video"):
 
-				$impression['video'] =		self::getRtbBidRequestVideo($RtbBidRequestImp->RtbBidRequestVideo);
+				$impression['video'] =		self::getRtbBidRequestVideo($RtbBidRequestImp->RtbBidRequestVideo, 'object');
 			
 			endif;
 			
-			\util\ParseHelper::setArrayParam($RtbBidRequestImp, $impression, 'displaymanager');
+			\util\ParseHelper::setArrayParam($RtbBidRequestImp, $impression, 'displaymanager', 'string');
 			
-			\util\ParseHelper::setArrayParam($RtbBidRequestImp, $impression, 'displaymanagerver');
+			\util\ParseHelper::setArrayParam($RtbBidRequestImp, $impression, 'displaymanagerver', 'string');
 			
-			\util\ParseHelper::setArrayParam($RtbBidRequestImp, $impression, 'instl');
+			\util\ParseHelper::setArrayParam($RtbBidRequestImp, $impression, 'instl', 'integer');
 			
-			\util\ParseHelper::setArrayParam($RtbBidRequestImp, $impression, 'tagid');
+			\util\ParseHelper::setArrayParam($RtbBidRequestImp, $impression, 'tagid', 'string');
 			
-			\util\ParseHelper::setArrayParam($RtbBidRequestImp, $impression, 'bidfloor');
+			\util\ParseHelper::setArrayParam($RtbBidRequestImp, $impression, 'bidfloor', 'float');
 			
-			\util\ParseHelper::setArrayParam($RtbBidRequestImp, $impression, 'bidfloorcur');
+			\util\ParseHelper::setArrayParam($RtbBidRequestImp, $impression, 'bidfloorcur', 'string');
 			
-			\util\ParseHelper::setArrayParam($RtbBidRequestImp, $impression, 'secure');
+			\util\ParseHelper::setArrayParam($RtbBidRequestImp, $impression, 'secure', 'integer');
 			
-			\util\ParseHelper::setArrayParam($RtbBidRequestImp, $impression, 'iframebuster');
+			\util\ParseHelper::setArrayParam($RtbBidRequestImp, $impression, 'iframebuster', 'array');
 
 			if ($RtbBidRequestImp->RtbBidRequestPmp != null && count($RtbBidRequestImp->RtbBidRequestPmp)
 								&& count($RtbBidRequestImp->RtbBidRequestPmp->RtbBidRequestDirectDealsList)):
 			 
 				$impression['pmp'] = array();
 			
-				\util\ParseHelper::setArrayParam($RtbBidRequestImp->RtbBidRequestPmp, $impression['pmp'], 'private_auction');
+				\util\ParseHelper::setArrayParam($RtbBidRequestImp->RtbBidRequestPmp, $impression['pmp'], 'private_auction', 'object');
 			
 				foreach ($RtbBidRequestImp->RtbBidRequestPmp->RtbBidRequestDirectDealsList as $RtbBidRequestDirectDeals):
 			
@@ -132,17 +132,17 @@ class RtbBidRequestJsonEncoder {
 	
 		$pmpdeal	 		=  array();
 
-		\util\ParseHelper::setArrayParam($RtbBidRequestDirectDeals, $pmpdeal, 'id');
+		\util\ParseHelper::setArrayParam($RtbBidRequestDirectDeals, $pmpdeal, 'id', 'string');
 		
-		\util\ParseHelper::setArrayParam($RtbBidRequestDirectDeals, $pmpdeal, 'bidfloor');
+		\util\ParseHelper::setArrayParam($RtbBidRequestDirectDeals, $pmpdeal, 'bidfloor', 'float');
 		
-		\util\ParseHelper::setArrayParam($RtbBidRequestDirectDeals, $pmpdeal, 'bidfloorcur');
+		\util\ParseHelper::setArrayParam($RtbBidRequestDirectDeals, $pmpdeal, 'bidfloorcur', 'string');
 		
-		\util\ParseHelper::setArrayParam($RtbBidRequestDirectDeals, $pmpdeal, 'wseat');
+		\util\ParseHelper::setArrayParam($RtbBidRequestDirectDeals, $pmpdeal, 'wseat', 'array');
 		
-		\util\ParseHelper::setArrayParam($RtbBidRequestDirectDeals, $pmpdeal, 'wadomain');
+		\util\ParseHelper::setArrayParam($RtbBidRequestDirectDeals, $pmpdeal, 'wadomain', 'array');
 		
-		\util\ParseHelper::setArrayParam($RtbBidRequestDirectDeals, $pmpdeal, 'at');
+		\util\ParseHelper::setArrayParam($RtbBidRequestDirectDeals, $pmpdeal, 'at', 'integer');
 	
 		return (object)$pmpdeal;
 	
@@ -152,29 +152,27 @@ class RtbBidRequestJsonEncoder {
 	
 		$app 				= array();
 	
-		\util\ParseHelper::setArrayParam($RtbBidRequestApp, $app, 'id');
+		\util\ParseHelper::setArrayParam($RtbBidRequestApp, $app, 'id', 'string');
 	
-		\util\ParseHelper::setArrayParam($RtbBidRequestApp, $app, 'name');
+		\util\ParseHelper::setArrayParam($RtbBidRequestApp, $app, 'name', 'string');
 	
-		\util\ParseHelper::setArrayParam($RtbBidRequestApp, $app, 'domain');
+		\util\ParseHelper::setArrayParam($RtbBidRequestApp, $app, 'domain', 'string');
 	
-		\util\ParseHelper::setArrayParam($RtbBidRequestApp, $app, 'cat');
+		\util\ParseHelper::setArrayParam($RtbBidRequestApp, $app, 'cat', 'array');
 	
-		\util\ParseHelper::setArrayParam($RtbBidRequestApp, $app, 'sectioncat');
+		\util\ParseHelper::setArrayParam($RtbBidRequestApp, $app, 'sectioncat', 'array');
 	
-		\util\ParseHelper::setArrayParam($RtbBidRequestApp, $app, 'pagecat');
+		\util\ParseHelper::setArrayParam($RtbBidRequestApp, $app, 'pagecat', 'array');
 	
-		\util\ParseHelper::setArrayParam($RtbBidRequestApp, $app, 'page');
+		\util\ParseHelper::setArrayParam($RtbBidRequestApp, $app, 'page', 'string');
 	
-		\util\ParseHelper::setArrayParam($RtbBidRequestApp, $app, 'privacypolicy');
+		\util\ParseHelper::setArrayParam($RtbBidRequestApp, $app, 'privacypolicy', 'integer');
 	
-		\util\ParseHelper::setArrayParam($RtbBidRequestApp, $app, 'ref');
+		\util\ParseHelper::setArrayParam($RtbBidRequestApp, $app, 'paid', 'integer');
 	
-		\util\ParseHelper::setArrayParam($RtbBidRequestApp, $app, 'search');
+		\util\ParseHelper::setArrayParam($RtbBidRequestApp, $app, 'keywords', 'string');
 	
-		\util\ParseHelper::setArrayParam($RtbBidRequestApp, $app, 'keywords');
-	
-		\util\ParseHelper::setArrayParam($RtbBidRequestApp, $app, 'storeurl');
+		\util\ParseHelper::setArrayParam($RtbBidRequestApp, $app, 'storeurl', 'string');
 	
 		if ($RtbBidRequestApp->RtbBidRequestPublisher != null):
 	
@@ -196,33 +194,33 @@ class RtbBidRequestJsonEncoder {
 		
 		$banner 			= array();
 		
-		\util\ParseHelper::setArrayParam($RtbBidRequestBanner, $banner, 'w');
+		\util\ParseHelper::setArrayParam($RtbBidRequestBanner, $banner, 'w', 'integer');
 		
-		\util\ParseHelper::setArrayParam($RtbBidRequestBanner, $banner, 'h');
+		\util\ParseHelper::setArrayParam($RtbBidRequestBanner, $banner, 'h', 'integer');
 		
-		\util\ParseHelper::setArrayParam($RtbBidRequestBanner, $banner, 'wmax');
+		\util\ParseHelper::setArrayParam($RtbBidRequestBanner, $banner, 'wmax', 'integer');
 		
-		\util\ParseHelper::setArrayParam($RtbBidRequestBanner, $banner, 'hmax');
+		\util\ParseHelper::setArrayParam($RtbBidRequestBanner, $banner, 'hmax', 'integer');
 		
-		\util\ParseHelper::setArrayParam($RtbBidRequestBanner, $banner, 'wmin');
+		\util\ParseHelper::setArrayParam($RtbBidRequestBanner, $banner, 'wmin', 'integer');
 		
-		\util\ParseHelper::setArrayParam($RtbBidRequestBanner, $banner, 'hmin');
+		\util\ParseHelper::setArrayParam($RtbBidRequestBanner, $banner, 'hmin', 'integer');
 
-		\util\ParseHelper::setArrayParam($RtbBidRequestBanner, $banner, 'id');
+		\util\ParseHelper::setArrayParam($RtbBidRequestBanner, $banner, 'id', 'string');
 		
-		\util\ParseHelper::setArrayParam($RtbBidRequestBanner, $banner, 'pos');
+		\util\ParseHelper::setArrayParam($RtbBidRequestBanner, $banner, 'pos', 'integer');
 		
-		\util\ParseHelper::setArrayParam($RtbBidRequestBanner, $banner, 'btype');
+		\util\ParseHelper::setArrayParam($RtbBidRequestBanner, $banner, 'btype', 'array');
 		
-		\util\ParseHelper::setArrayParam($RtbBidRequestBanner, $banner, 'battr');
+		\util\ParseHelper::setArrayParam($RtbBidRequestBanner, $banner, 'battr', 'array');
 		
-		\util\ParseHelper::setArrayParam($RtbBidRequestBanner, $banner, 'mimes');
+		\util\ParseHelper::setArrayParam($RtbBidRequestBanner, $banner, 'mimes', 'array');
 		
-		\util\ParseHelper::setArrayParam($RtbBidRequestBanner, $banner, 'topframe');
+		\util\ParseHelper::setArrayParam($RtbBidRequestBanner, $banner, 'topframe', 'integer');
 		
-		\util\ParseHelper::setArrayParam($RtbBidRequestBanner, $banner, 'expdir');
+		\util\ParseHelper::setArrayParam($RtbBidRequestBanner, $banner, 'expdir', 'array');
 		
-		\util\ParseHelper::setArrayParam($RtbBidRequestBanner, $banner, 'api');
+		\util\ParseHelper::setArrayParam($RtbBidRequestBanner, $banner, 'api', 'array');
 		
 		return (object)$banner;
 		
@@ -232,41 +230,41 @@ class RtbBidRequestJsonEncoder {
 	
 		$video 			= array();
 		
-		\util\ParseHelper::setArrayParam($RtbBidRequestVideo, $video, 'mimes');
+		\util\ParseHelper::setArrayParam($RtbBidRequestVideo, $video, 'mimes', 'array');
 		
-		\util\ParseHelper::setArrayParam($RtbBidRequestVideo, $video, 'minduration');
+		\util\ParseHelper::setArrayParam($RtbBidRequestVideo, $video, 'minduration', 'integer');
 		
-		\util\ParseHelper::setArrayParam($RtbBidRequestVideo, $video, 'maxduration');
+		\util\ParseHelper::setArrayParam($RtbBidRequestVideo, $video, 'maxduration', 'integer');
 		
-		\util\ParseHelper::setArrayParam($RtbBidRequestVideo, $video, 'protocol');
+		\util\ParseHelper::setArrayParam($RtbBidRequestVideo, $video, 'protocol', 'integer');
 		
-		\util\ParseHelper::setArrayParam($RtbBidRequestVideo, $video, 'protocols');
+		\util\ParseHelper::setArrayParam($RtbBidRequestVideo, $video, 'protocols', 'array');
 		
-		\util\ParseHelper::setArrayParam($RtbBidRequestVideo, $video, 'w');
+		\util\ParseHelper::setArrayParam($RtbBidRequestVideo, $video, 'w', 'integer');
 		
-		\util\ParseHelper::setArrayParam($RtbBidRequestVideo, $video, 'h');
+		\util\ParseHelper::setArrayParam($RtbBidRequestVideo, $video, 'h', 'integer');
 		
-		\util\ParseHelper::setArrayParam($RtbBidRequestVideo, $video, 'startdelay');
+		\util\ParseHelper::setArrayParam($RtbBidRequestVideo, $video, 'startdelay', 'integer');
 		
-		\util\ParseHelper::setArrayParam($RtbBidRequestVideo, $video, 'linearity');
+		\util\ParseHelper::setArrayParam($RtbBidRequestVideo, $video, 'linearity', 'integer');
 		
-		\util\ParseHelper::setArrayParam($RtbBidRequestVideo, $video, 'sequence');
+		\util\ParseHelper::setArrayParam($RtbBidRequestVideo, $video, 'sequence', 'integer');
 		
-		\util\ParseHelper::setArrayParam($RtbBidRequestVideo, $video, 'battr');
+		\util\ParseHelper::setArrayParam($RtbBidRequestVideo, $video, 'battr', 'array');
 		
-		\util\ParseHelper::setArrayParam($RtbBidRequestVideo, $video, 'maxextended');
+		\util\ParseHelper::setArrayParam($RtbBidRequestVideo, $video, 'maxextended', 'integer');
 		
-		\util\ParseHelper::setArrayParam($RtbBidRequestVideo, $video, 'minbitrate');
+		\util\ParseHelper::setArrayParam($RtbBidRequestVideo, $video, 'minbitrate', 'integer');
 		
-		\util\ParseHelper::setArrayParam($RtbBidRequestVideo, $video, 'maxbitrate');
+		\util\ParseHelper::setArrayParam($RtbBidRequestVideo, $video, 'maxbitrate', 'integer');
 		
-		\util\ParseHelper::setArrayParam($RtbBidRequestVideo, $video, 'boxingallowed');
+		\util\ParseHelper::setArrayParam($RtbBidRequestVideo, $video, 'boxingallowed', 'integer');
 		
-		\util\ParseHelper::setArrayParam($RtbBidRequestVideo, $video, 'playbackmethod');
+		\util\ParseHelper::setArrayParam($RtbBidRequestVideo, $video, 'playbackmethod', 'array');
 		
-		\util\ParseHelper::setArrayParam($RtbBidRequestVideo, $video, 'delivery');
+		\util\ParseHelper::setArrayParam($RtbBidRequestVideo, $video, 'delivery', 'array');
 		
-		\util\ParseHelper::setArrayParam($RtbBidRequestVideo, $video, 'pos');
+		\util\ParseHelper::setArrayParam($RtbBidRequestVideo, $video, 'pos', 'integer');
 		
 		if (count($RtbBidRequestVideo->RtbBidRequestBannerList)):
 		
@@ -278,9 +276,9 @@ class RtbBidRequestJsonEncoder {
 		
 		endif;
 		
-		\util\ParseHelper::setArrayParam($RtbBidRequestVideo, $video, 'api');
+		\util\ParseHelper::setArrayParam($RtbBidRequestVideo, $video, 'api', 'array');
 		
-		\util\ParseHelper::setArrayParam($RtbBidRequestVideo, $video, 'companiontype');
+		\util\ParseHelper::setArrayParam($RtbBidRequestVideo, $video, 'companiontype', 'array');
 
 		return (object)$video;
 	
@@ -290,29 +288,27 @@ class RtbBidRequestJsonEncoder {
 		
 		$site 				= array();
 
-		\util\ParseHelper::setArrayParam($RtbBidRequestSite, $site, 'id');
+		\util\ParseHelper::setArrayParam($RtbBidRequestSite, $site, 'id', 'string');
 		
-		\util\ParseHelper::setArrayParam($RtbBidRequestSite, $site, 'name');
+		\util\ParseHelper::setArrayParam($RtbBidRequestSite, $site, 'name', 'string');
 		
-		\util\ParseHelper::setArrayParam($RtbBidRequestSite, $site, 'domain');
+		\util\ParseHelper::setArrayParam($RtbBidRequestSite, $site, 'domain', 'string');
 		
-		\util\ParseHelper::setArrayParam($RtbBidRequestSite, $site, 'cat');
+		\util\ParseHelper::setArrayParam($RtbBidRequestSite, $site, 'cat', 'array');
 		
-		\util\ParseHelper::setArrayParam($RtbBidRequestSite, $site, 'sectioncat');
+		\util\ParseHelper::setArrayParam($RtbBidRequestSite, $site, 'sectioncat', 'array');
 		
-		\util\ParseHelper::setArrayParam($RtbBidRequestSite, $site, 'pagecat');
+		\util\ParseHelper::setArrayParam($RtbBidRequestSite, $site, 'pagecat', 'array');
 		
-		\util\ParseHelper::setArrayParam($RtbBidRequestSite, $site, 'page');
+		\util\ParseHelper::setArrayParam($RtbBidRequestSite, $site, 'page', 'string');
 		
-		\util\ParseHelper::setArrayParam($RtbBidRequestSite, $site, 'privacypolicy');
+		\util\ParseHelper::setArrayParam($RtbBidRequestSite, $site, 'privacypolicy', 'integer');
 		
-		\util\ParseHelper::setArrayParam($RtbBidRequestSite, $site, 'ref');
+		\util\ParseHelper::setArrayParam($RtbBidRequestSite, $site, 'ref', 'string');
 		
-		\util\ParseHelper::setArrayParam($RtbBidRequestSite, $site, 'search');
+		\util\ParseHelper::setArrayParam($RtbBidRequestSite, $site, 'search', 'string');
 		
-		\util\ParseHelper::setArrayParam($RtbBidRequestSite, $site, 'keywords');
-		
-		\util\ParseHelper::setArrayParam($RtbBidRequestSite, $site, 'storeurl');
+		\util\ParseHelper::setArrayParam($RtbBidRequestSite, $site, 'keywords', 'string');
 
 		if ($RtbBidRequestSite->RtbBidRequestPublisher != null):
 		
@@ -334,11 +330,11 @@ class RtbBidRequestJsonEncoder {
 	
 		$device 				= array();
 	
-		\util\ParseHelper::setArrayParam($RtbBidRequestDevice, $device, 'dnt');
+		\util\ParseHelper::setArrayParam($RtbBidRequestDevice, $device, 'dnt', 'integer');
 		
-		\util\ParseHelper::setArrayParam($RtbBidRequestDevice, $device, 'ua');
+		\util\ParseHelper::setArrayParam($RtbBidRequestDevice, $device, 'ua', 'string');
 		
-		\util\ParseHelper::setArrayParam($RtbBidRequestDevice, $device, 'ip');
+		\util\ParseHelper::setArrayParam($RtbBidRequestDevice, $device, 'ip', 'string');
 		
 		if ($RtbBidRequestDevice->RtbBidRequestGeo != null):
 		
@@ -346,41 +342,41 @@ class RtbBidRequestJsonEncoder {
 		
 		endif;
 		
-		\util\ParseHelper::setArrayParam($RtbBidRequestDevice, $device, 'didsha1');
+		\util\ParseHelper::setArrayParam($RtbBidRequestDevice, $device, 'didsha1', 'string');
 		
-		\util\ParseHelper::setArrayParam($RtbBidRequestDevice, $device, 'didmd5');
+		\util\ParseHelper::setArrayParam($RtbBidRequestDevice, $device, 'didmd5', 'string');
 	 
-		\util\ParseHelper::setArrayParam($RtbBidRequestDevice, $device, 'dpidsha1');
+		\util\ParseHelper::setArrayParam($RtbBidRequestDevice, $device, 'dpidsha1', 'string');
 		
-		\util\ParseHelper::setArrayParam($RtbBidRequestDevice, $device, 'dpidmd5');
+		\util\ParseHelper::setArrayParam($RtbBidRequestDevice, $device, 'dpidmd5', 'string');
 		
-		\util\ParseHelper::setArrayParam($RtbBidRequestDevice, $device, 'macsha1');
+		\util\ParseHelper::setArrayParam($RtbBidRequestDevice, $device, 'macsha1', 'string');
 		
-		\util\ParseHelper::setArrayParam($RtbBidRequestDevice, $device, 'macmd5');
+		\util\ParseHelper::setArrayParam($RtbBidRequestDevice, $device, 'macmd5', 'string');
 		
-		\util\ParseHelper::setArrayParam($RtbBidRequestDevice, $device, 'ipv6');
+		\util\ParseHelper::setArrayParam($RtbBidRequestDevice, $device, 'ipv6', 'string');
 		
-		\util\ParseHelper::setArrayParam($RtbBidRequestDevice, $device, 'carrier');
+		\util\ParseHelper::setArrayParam($RtbBidRequestDevice, $device, 'carrier', 'string');
 		
-		\util\ParseHelper::setArrayParam($RtbBidRequestDevice, $device, 'language');
+		\util\ParseHelper::setArrayParam($RtbBidRequestDevice, $device, 'language', 'string');
 		
-		\util\ParseHelper::setArrayParam($RtbBidRequestDevice, $device, 'make');
+		\util\ParseHelper::setArrayParam($RtbBidRequestDevice, $device, 'make', 'string');
 		
-		\util\ParseHelper::setArrayParam($RtbBidRequestDevice, $device, 'model');
+		\util\ParseHelper::setArrayParam($RtbBidRequestDevice, $device, 'model', 'string');
 		
-		\util\ParseHelper::setArrayParam($RtbBidRequestDevice, $device, 'os');
+		\util\ParseHelper::setArrayParam($RtbBidRequestDevice, $device, 'os', 'string');
 		
-		\util\ParseHelper::setArrayParam($RtbBidRequestDevice, $device, 'osv');
+		\util\ParseHelper::setArrayParam($RtbBidRequestDevice, $device, 'osv', 'string');
 		
-		\util\ParseHelper::setArrayParam($RtbBidRequestDevice, $device, 'js');
+		\util\ParseHelper::setArrayParam($RtbBidRequestDevice, $device, 'js', 'integer');
 		
-		\util\ParseHelper::setArrayParam($RtbBidRequestDevice, $device, 'connectiontype');
+		\util\ParseHelper::setArrayParam($RtbBidRequestDevice, $device, 'connectiontype', 'integer');
 		
-		\util\ParseHelper::setArrayParam($RtbBidRequestDevice, $device, 'devicetype');
+		\util\ParseHelper::setArrayParam($RtbBidRequestDevice, $device, 'devicetype', 'integer');
 		
-		\util\ParseHelper::setArrayParam($RtbBidRequestDevice, $device, 'flashver');
+		\util\ParseHelper::setArrayParam($RtbBidRequestDevice, $device, 'flashver', 'string');
 		
-		\util\ParseHelper::setArrayParam($RtbBidRequestDevice, $device, 'ifa');
+		\util\ParseHelper::setArrayParam($RtbBidRequestDevice, $device, 'ifa', 'string');
 	
 		return (object)$device;
 	
@@ -390,23 +386,23 @@ class RtbBidRequestJsonEncoder {
 	
 		$geo 				= array();
 	 
-		\util\ParseHelper::setArrayParam($RtbBidRequestGeo, $geo, 'lat');
+		\util\ParseHelper::setArrayParam($RtbBidRequestGeo, $geo, 'lat', 'float');
 		
-		\util\ParseHelper::setArrayParam($RtbBidRequestGeo, $geo, 'lon');
+		\util\ParseHelper::setArrayParam($RtbBidRequestGeo, $geo, 'lon', 'float');
 		
-		\util\ParseHelper::setArrayParam($RtbBidRequestGeo, $geo, 'country');
+		\util\ParseHelper::setArrayParam($RtbBidRequestGeo, $geo, 'country', 'string');
 		
-		\util\ParseHelper::setArrayParam($RtbBidRequestGeo, $geo, 'region');
+		\util\ParseHelper::setArrayParam($RtbBidRequestGeo, $geo, 'region', 'string');
 		
-		\util\ParseHelper::setArrayParam($RtbBidRequestGeo, $geo, 'regionfips104');
+		\util\ParseHelper::setArrayParam($RtbBidRequestGeo, $geo, 'regionfips104', 'string');
 		
-		\util\ParseHelper::setArrayParam($RtbBidRequestGeo, $geo, 'metro');
+		\util\ParseHelper::setArrayParam($RtbBidRequestGeo, $geo, 'metro', 'string');
 		
-		\util\ParseHelper::setArrayParam($RtbBidRequestGeo, $geo, 'city');
+		\util\ParseHelper::setArrayParam($RtbBidRequestGeo, $geo, 'city', 'string');
 		
-		\util\ParseHelper::setArrayParam($RtbBidRequestGeo, $geo, 'zip');
+		\util\ParseHelper::setArrayParam($RtbBidRequestGeo, $geo, 'zip', 'string');
 		
-		\util\ParseHelper::setArrayParam($RtbBidRequestGeo, $geo, 'type');
+		\util\ParseHelper::setArrayParam($RtbBidRequestGeo, $geo, 'type', 'integer');
 
 		return (object)$geo;
 	
@@ -416,17 +412,17 @@ class RtbBidRequestJsonEncoder {
 	
 		$user 				= array();
 	
-		\util\ParseHelper::setArrayParam($RtbBidRequestUser, $user, 'id');
+		\util\ParseHelper::setArrayParam($RtbBidRequestUser, $user, 'id', 'string');
 		
-		\util\ParseHelper::setArrayParam($RtbBidRequestUser, $user, 'buyeruid');
+		\util\ParseHelper::setArrayParam($RtbBidRequestUser, $user, 'buyeruid', 'string');
 		
-		\util\ParseHelper::setArrayParam($RtbBidRequestUser, $user, 'yob');
+		\util\ParseHelper::setArrayParam($RtbBidRequestUser, $user, 'yob', 'integer');
 		
-		\util\ParseHelper::setArrayParam($RtbBidRequestUser, $user, 'gender');
+		\util\ParseHelper::setArrayParam($RtbBidRequestUser, $user, 'gender', 'string');
 		
-		\util\ParseHelper::setArrayParam($RtbBidRequestUser, $user, 'keywords');
+		\util\ParseHelper::setArrayParam($RtbBidRequestUser, $user, 'keywords', 'string');
 		
-		\util\ParseHelper::setArrayParam($RtbBidRequestUser, $user, 'customdata');
+		\util\ParseHelper::setArrayParam($RtbBidRequestUser, $user, 'customdata', 'string');
 		
 		if ($RtbBidRequestUser->RtbBidRequestGeo != null):
 		
@@ -452,9 +448,9 @@ class RtbBidRequestJsonEncoder {
 	
 		$data 				= array();
 	
-		\util\ParseHelper::setArrayParam($RtbBidRequestData, $data, 'id');
+		\util\ParseHelper::setArrayParam($RtbBidRequestData, $data, 'id', 'string');
 		
-		\util\ParseHelper::setArrayParam($RtbBidRequestData, $data, 'name');
+		\util\ParseHelper::setArrayParam($RtbBidRequestData, $data, 'name', 'string');
 		
 		if (count($RtbBidRequestData->RtbBidRequestSegmentList)):
 		
@@ -474,11 +470,11 @@ class RtbBidRequestJsonEncoder {
 	
 		$segment 				= array();
 	
-		\util\ParseHelper::setArrayParam($RtbBidRequestSegment, $segment, 'id');
+		\util\ParseHelper::setArrayParam($RtbBidRequestSegment, $segment, 'id', 'string');
 	
-		\util\ParseHelper::setArrayParam($RtbBidRequestSegment, $segment, 'name');
+		\util\ParseHelper::setArrayParam($RtbBidRequestSegment, $segment, 'name', 'string');
 	
-		\util\ParseHelper::setArrayParam($RtbBidRequestSegment, $segment, 'value');
+		\util\ParseHelper::setArrayParam($RtbBidRequestSegment, $segment, 'value', 'string');
 	
 		return (object)$segment;
 	
@@ -488,13 +484,13 @@ class RtbBidRequestJsonEncoder {
 	
 		$producer 				= array();
 	
-		\util\ParseHelper::setArrayParam($RtbBidRequestProducer, $producer, 'id');
+		\util\ParseHelper::setArrayParam($RtbBidRequestProducer, $producer, 'id', 'string');
 		
-		\util\ParseHelper::setArrayParam($RtbBidRequestProducer, $producer, 'name');
+		\util\ParseHelper::setArrayParam($RtbBidRequestProducer, $producer, 'name', 'string');
 		
-		\util\ParseHelper::setArrayParam($RtbBidRequestProducer, $producer, 'cat');
+		\util\ParseHelper::setArrayParam($RtbBidRequestProducer, $producer, 'cat', 'array');
 
-		\util\ParseHelper::setArrayParam($RtbBidRequestProducer, $producer, 'domain');
+		\util\ParseHelper::setArrayParam($RtbBidRequestProducer, $producer, 'domain', 'string');
 		
 		return (object)$producer;
 	}
@@ -504,33 +500,33 @@ class RtbBidRequestJsonEncoder {
 	
 		$content 				= array();
 	
-		\util\ParseHelper::setArrayParam($RtbBidRequestContent, $content, 'id');
+		\util\ParseHelper::setArrayParam($RtbBidRequestContent, $content, 'id', 'string');
 	
-		\util\ParseHelper::setArrayParam($RtbBidRequestContent, $content, 'episode');
+		\util\ParseHelper::setArrayParam($RtbBidRequestContent, $content, 'episode', 'integer');
 		
-		\util\ParseHelper::setArrayParam($RtbBidRequestContent, $content, 'title');
+		\util\ParseHelper::setArrayParam($RtbBidRequestContent, $content, 'title', 'string');
 		
-		\util\ParseHelper::setArrayParam($RtbBidRequestContent, $content, 'series');
+		\util\ParseHelper::setArrayParam($RtbBidRequestContent, $content, 'series', 'string');
 		
-		\util\ParseHelper::setArrayParam($RtbBidRequestContent, $content, 'season');
+		\util\ParseHelper::setArrayParam($RtbBidRequestContent, $content, 'season', 'string');
 		
-		\util\ParseHelper::setArrayParam($RtbBidRequestContent, $content, 'url');
+		\util\ParseHelper::setArrayParam($RtbBidRequestContent, $content, 'url', 'string');
 		
-		\util\ParseHelper::setArrayParam($RtbBidRequestContent, $content, 'cat');
+		\util\ParseHelper::setArrayParam($RtbBidRequestContent, $content, 'cat', 'array');
 		
-		\util\ParseHelper::setArrayParam($RtbBidRequestContent, $content, 'videoquality');
+		\util\ParseHelper::setArrayParam($RtbBidRequestContent, $content, 'videoquality', 'integer');
 	
-		\util\ParseHelper::setArrayParam($RtbBidRequestContent, $content, 'keywords');
+		\util\ParseHelper::setArrayParam($RtbBidRequestContent, $content, 'keywords', 'string');
 	
-		\util\ParseHelper::setArrayParam($RtbBidRequestContent, $content, 'contentrating');
+		\util\ParseHelper::setArrayParam($RtbBidRequestContent, $content, 'contentrating', 'string');
 		
-		\util\ParseHelper::setArrayParam($RtbBidRequestContent, $content, 'userrating');
+		\util\ParseHelper::setArrayParam($RtbBidRequestContent, $content, 'userrating', 'string');
 		
-		\util\ParseHelper::setArrayParam($RtbBidRequestContent, $content, 'context');
+		\util\ParseHelper::setArrayParam($RtbBidRequestContent, $content, 'context', 'integer');
 		
-		\util\ParseHelper::setArrayParam($RtbBidRequestContent, $content, 'livestream');
+		\util\ParseHelper::setArrayParam($RtbBidRequestContent, $content, 'livestream', 'integer');
 		
-		\util\ParseHelper::setArrayParam($RtbBidRequestContent, $content, 'sourcerelationship');
+		\util\ParseHelper::setArrayParam($RtbBidRequestContent, $content, 'sourcerelationship', 'integer');
 	
 		if ($RtbBidRequestContent->RtbBidRequestProducer != null):
 		
@@ -538,13 +534,13 @@ class RtbBidRequestJsonEncoder {
 		
 		endif;
 		
-		\util\ParseHelper::setArrayParam($RtbBidRequestContent, $content, 'len');
+		\util\ParseHelper::setArrayParam($RtbBidRequestContent, $content, 'len', 'integer');
 		
-		\util\ParseHelper::setArrayParam($RtbBidRequestContent, $content, 'qagmediarating');
+		\util\ParseHelper::setArrayParam($RtbBidRequestContent, $content, 'qagmediarating', 'integer');
 		
-		\util\ParseHelper::setArrayParam($RtbBidRequestContent, $content, 'embeddable');
+		\util\ParseHelper::setArrayParam($RtbBidRequestContent, $content, 'embeddable', 'integer');
 		
-		\util\ParseHelper::setArrayParam($RtbBidRequestContent, $content, 'language');
+		\util\ParseHelper::setArrayParam($RtbBidRequestContent, $content, 'language', 'string');
 	
 		return (object)$content;
 	
@@ -554,13 +550,13 @@ class RtbBidRequestJsonEncoder {
 	
 		$publisher 				= array();
 		
-		\util\ParseHelper::setArrayParam($RtbBidRequestPublisher, $publisher, 'id');
+		\util\ParseHelper::setArrayParam($RtbBidRequestPublisher, $publisher, 'id', 'string');
 		
-		\util\ParseHelper::setArrayParam($RtbBidRequestPublisher, $publisher, 'name');
+		\util\ParseHelper::setArrayParam($RtbBidRequestPublisher, $publisher, 'name', 'string');
 		
-		\util\ParseHelper::setArrayParam($RtbBidRequestPublisher, $publisher, 'cat');
+		\util\ParseHelper::setArrayParam($RtbBidRequestPublisher, $publisher, 'cat', 'array');
 		
-		\util\ParseHelper::setArrayParam($RtbBidRequestPublisher, $publisher, 'domain');
+		\util\ParseHelper::setArrayParam($RtbBidRequestPublisher, $publisher, 'domain', 'string');
 	
 		return (object)$publisher;
 	
@@ -570,7 +566,7 @@ class RtbBidRequestJsonEncoder {
 	
 		$regs 				= array();
 	
-		\util\ParseHelper::setArrayParam($RtbBidRequestRegulations, $regs, 'coppa');
+		\util\ParseHelper::setArrayParam($RtbBidRequestRegulations, $regs, 'coppa', 'integer');
 
 		return (object)$regs;
 	

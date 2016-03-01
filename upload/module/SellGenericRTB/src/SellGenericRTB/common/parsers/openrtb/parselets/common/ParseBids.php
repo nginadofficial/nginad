@@ -66,7 +66,7 @@ class ParseBids {
 			\util\ParseHelper::parse_item(
 					$RtbBidResponseBid,
 					$bid,
-					"lurl");
+					"iurl");
 			
 			\util\ParseHelper::parse_item(
 					$RtbBidResponseBid,

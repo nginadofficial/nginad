@@ -16,14 +16,14 @@ class RtbBidResponseJsonEncoder {
 		
 		$bid_response = array();
 		
-		\util\ParseHelper::setArrayParam($RtbBidResponse, $bid_response, 'id');
+		\util\ParseHelper::setArrayParam($RtbBidResponse, $bid_response, 'id', 'string');
 		
 		$bid_response["seatbid"] 	= self::getRtbBidResponseSeatBidList($RtbBidResponse);
 		
-		\util\ParseHelper::setArrayParam($RtbBidResponse, $bid_response, 'bidid');
-		\util\ParseHelper::setArrayParam($RtbBidResponse, $bid_response, 'cur');
-		\util\ParseHelper::setArrayParam($RtbBidResponse, $bid_response, 'customdata');
-		\util\ParseHelper::setArrayParam($RtbBidResponse, $bid_response, 'nbr');
+		\util\ParseHelper::setArrayParam($RtbBidResponse, $bid_response, 'bidid', 'string');
+		\util\ParseHelper::setArrayParam($RtbBidResponse, $bid_response, 'cur', 'string');
+		\util\ParseHelper::setArrayParam($RtbBidResponse, $bid_response, 'customdata', 'string');
+		\util\ParseHelper::setArrayParam($RtbBidResponse, $bid_response, 'nbr', 'integer');
 
 		if (isset($bid_response['nbr'])):
 			unset($bid_response["seatbid"]);
@@ -43,8 +43,8 @@ class RtbBidResponseJsonEncoder {
 
 			$seatbid = array();
 			$seatbid['bid'] =  self::getRtbBidResponseBidList($RtbBidResponseSeatBid);
-			\util\ParseHelper::setArrayParam($RtbBidResponseSeatBid, $seatbid, 'seat');
-			\util\ParseHelper::setArrayParam($RtbBidResponseSeatBid, $seatbid, 'group');
+			\util\ParseHelper::setArrayParam($RtbBidResponseSeatBid, $seatbid, 'seat', 'string');
+			\util\ParseHelper::setArrayParam($RtbBidResponseSeatBid, $seatbid, 'group', 'integer');
 
 			$seatbid_list[] = (object)$seatbid;
 				
@@ -62,20 +62,20 @@ class RtbBidResponseJsonEncoder {
 	
 			$bid = array();
 
-			\util\ParseHelper::setArrayParam($RtbBidResponseBid, $bid, 'id');
-			\util\ParseHelper::setArrayParam($RtbBidResponseBid, $bid, 'impid');
-			\util\ParseHelper::setArrayParam($RtbBidResponseBid, $bid, 'price');
-			\util\ParseHelper::setArrayParam($RtbBidResponseBid, $bid, 'adid');
-			\util\ParseHelper::setArrayParam($RtbBidResponseBid, $bid, 'nurl');
-			\util\ParseHelper::setArrayParam($RtbBidResponseBid, $bid, 'adm');
-			\util\ParseHelper::setArrayParam($RtbBidResponseBid, $bid, 'adomain');
-			\util\ParseHelper::setArrayParam($RtbBidResponseBid, $bid, 'lurl');
-			\util\ParseHelper::setArrayParam($RtbBidResponseBid, $bid, 'cid');
-			\util\ParseHelper::setArrayParam($RtbBidResponseBid, $bid, 'crid');
-			\util\ParseHelper::setArrayParam($RtbBidResponseBid, $bid, 'attr');
-			\util\ParseHelper::setArrayParam($RtbBidResponseBid, $bid, 'dealid');
-			\util\ParseHelper::setArrayParam($RtbBidResponseBid, $bid, 'h');
-			\util\ParseHelper::setArrayParam($RtbBidResponseBid, $bid, 'w');
+			\util\ParseHelper::setArrayParam($RtbBidResponseBid, $bid, 'id', 'string');
+			\util\ParseHelper::setArrayParam($RtbBidResponseBid, $bid, 'impid', 'string');
+			\util\ParseHelper::setArrayParam($RtbBidResponseBid, $bid, 'price', 'float');
+			\util\ParseHelper::setArrayParam($RtbBidResponseBid, $bid, 'adid', 'string');
+			\util\ParseHelper::setArrayParam($RtbBidResponseBid, $bid, 'nurl', 'string');
+			\util\ParseHelper::setArrayParam($RtbBidResponseBid, $bid, 'adm', 'string');
+			\util\ParseHelper::setArrayParam($RtbBidResponseBid, $bid, 'adomain', 'array');
+			\util\ParseHelper::setArrayParam($RtbBidResponseBid, $bid, 'iurl', 'string');
+			\util\ParseHelper::setArrayParam($RtbBidResponseBid, $bid, 'cid', 'string');
+			\util\ParseHelper::setArrayParam($RtbBidResponseBid, $bid, 'crid', 'string');
+			\util\ParseHelper::setArrayParam($RtbBidResponseBid, $bid, 'attr', 'array');
+			\util\ParseHelper::setArrayParam($RtbBidResponseBid, $bid, 'dealid', 'string');
+			\util\ParseHelper::setArrayParam($RtbBidResponseBid, $bid, 'h', 'integer');
+			\util\ParseHelper::setArrayParam($RtbBidResponseBid, $bid, 'w', 'integer');
 		
 			$bid_list[] = (object)$bid;
 		

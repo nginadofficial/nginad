@@ -77,10 +77,24 @@ class ParseHelper {
 		endif;
 	}
 	
-	public static function setArrayParam(&$obj, &$arr, $name) {
+	public static function setArrayParam(&$obj, &$arr, $name, $type) {
 		if (!empty($obj->$name) ||
 			(isset($obj->$name) && is_numeric($obj->$name))):
+			
+			if ($type == 'string'):
+				$arr[$name] = (string)$obj->$name;
+			elseif ($type == 'integer'):
+				$arr[$name] = intval($obj->$name);
+			elseif ($type == 'float'):
+				$arr[$name] = floatval($obj->$name);
+			elseif ($type == 'object'):
+				$arr[$name] = (object)($obj->$name);
+			elseif ($type == 'array'):
+				$arr[$name] = (array)($obj->$name);
+			else:
+				// default same type
 				$arr[$name] = $obj->$name;
+			endif;
 		endif;
 	}
 	

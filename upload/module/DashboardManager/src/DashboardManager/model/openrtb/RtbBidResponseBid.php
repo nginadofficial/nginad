@@ -25,7 +25,7 @@ class RtbBidResponseBid {
 	
 	public $adomain;
 	
-	public $lurl;
+	public $iurl;
 	
 	public $cid;
 	
