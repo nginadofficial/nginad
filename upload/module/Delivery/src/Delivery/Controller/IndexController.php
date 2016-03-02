@@ -318,12 +318,14 @@ class IndexController extends AbstractActionController
 		 	* NGINCLKTRK: The click tracking URL, TBD, generic click tracking not yet implemented.
 		 	* Try implementing your own custom CTR rate tracking
 		 	*
-		 	* NGINWBIDPRC: The winning bid price expressed as CPM.
+		 	* AUCTION_PRICE: The winning bid price expressed as CPM.
 		 	* If this was a 2nd price auction, the value would be the second price expressed as CPM
+		 	* 
+		 	* If you have an encryption method set with your partner, you will want to encrypt the value here before replacing it
 		 	*/
 		 		
 		 	$winning_ad_tag = str_replace("{NGINCLKTRK}", "", $winning_ad_tag);
-		 	$winning_ad_tag = str_replace("{NGINWBIDPRC}", $AuctionPopo->winning_bid_price, $winning_ad_tag);
+		 	$winning_ad_tag = str_replace('${AUCTION_PRICE}', $AuctionPopo->winning_bid_price, $winning_ad_tag);
 		 		
 	 	endif;
 	 		
