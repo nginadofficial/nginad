@@ -25,35 +25,35 @@ var quality_scoring_pixels = [
 
 var cookie_matching_pixels = [                   
 	// ZENOVIA EXCHANGE
-	// "http://sync.nj.zenoviaexchange.com/usersync2/partner_id", 		
+	// "//sync.nj.zenoviaexchange.com/usersync2/partner_id", 		
 	// TURN
-	// "http://ad.turn.com/server/pixel.htm?fpid=13&r=12345", 	
+	// "//ad.turn.com/server/pixel.htm?fpid=13&r=12345", 	
 	// MEDIA MATH
-	// "http://pixel.mathtag.com/sync/js?sync=auto",				
+	// "//pixel.mathtag.com/sync/js?sync=auto",				
 	// DSTILLERY
-	// "http://idpix.media6degrees.com/orbserv/hbpix?pixId=1",		
+	// "//idpix.media6degrees.com/orbserv/hbpix?pixId=1",		
 	// CHANGO
-	// "http://lj.d.chango.com/m/lj?r=12345",	
+	// "//lj.d.chango.com/m/lj?r=12345",	
 	// RFI HUB
-	// "http://p.rfihub.com/cm?in=1&pub=1",					
+	// "//p.rfihub.com/cm?in=1&pub=1",					
 	// APPNEXUS
-	// "http://ib.adnxs.com/getuid?http://mydomain.com/merge?pid=12&3pid=$UID",	
+	// "//ib.adnxs.com/getuid?http://mydomain.com/merge?pid=12&3pid=$UID",	
 	// RTB BIDDER
-	// "http://match.rtbidder.net/match?p=31&ord=12345",			
+	// "//match.rtbidder.net/match?p=31&ord=12345",			
 	// SITE SCOUT
-	// "http://pixel.sitescout.com/dmp/pixelSync?network=partner_id",	
+	// "//pixel.sitescout.com/dmp/pixelSync?network=partner_id",	
 	// CASALE MEDIA
-	// "http://ip.casalemedia.com/usermatch?s=178636&cb=http%3A%2F%2Fmydomain.com%2Fmerge%3Fpid%3D18%263pid%3D",	
+	// "//ip.casalemedia.com/usermatch?s=178636&cb=http%3A%2F%2Fmydomain.com%2Fmerge%3Fpid%3D18%263pid%3D",	
 	// IPONWEB:
-	// "http://x.bidswitch.net/sync?ssp=fmx",
+	// "//x.bidswitch.net/sync?ssp=partner_id",
 	// TRADE DESK
-	// "http://data.adsrvr.org/track/cmf/generic?ttd_pid=partner_id",
+	// "//data.adsrvr.org/track/cmf/generic?ttd_pid=partner_id",
 	// RUBICON PROJECT
-	// "http://pixel.rubiconproject.com/tap.php?v=other&nid=partner_id&put={user_token}&expires={days}",
+	// "//pixel.rubiconproject.com/tap.php?v=other&nid=partner_id&put={user_token}&expires={days}",
 	// AUDIENCE SCIENCE
-	// "http://pix04.revsci.net/D08734/a3/0/3/0.302?matchId=100&PV=0"
+	// "//pix04.revsci.net/D08734/a3/0/3/0.302?matchId=100&PV=0",
 	// FIDELITY MEDIA
-	// http://x.fidelity-media.com/pixel.gif?dsp=<DSP-ID>&url=<DSP-Redirect-URL>&<DSP-ID-Variable>=<DSPUser-ID>&<SSP-ID-Variable>=<SSP-User-ID>
+	// "//x.fidelity-media.com/pixel.gif?dsp=<DSP-ID>&url=<DSP-Redirect-URL>&<DSP-ID-Variable>=<DSPUser-ID>&<SSP-ID-Variable>=<SSP-User-ID>"
 ];
                            
 function createTrackingPixel(url) {
