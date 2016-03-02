@@ -136,6 +136,7 @@ class OpenRTBWorkflow {
     	$AuctionPopo->winning_adjusted_amount_before_private_exchange_markup_bid_price	= sprintf("%1.4f", $winning_adjusted_amount_before_private_exchange_markup_bid_price);
     	
     	$AuctionPopo->winning_partner_id		= $WinningRTBPinger->partner_id;
+    	$AuctionPopo->winning_partner_pinger	= $WinningRTBPinger;
     	
     	$popo_seat_bid_key						= \util\WorkflowHelper::get_first_key($WinningRTBPinger->RtbBidResponse->RtbBidResponseSeatBidList);
     	$AuctionPopo->winning_seat				= $WinningRTBPinger->RtbBidResponse->RtbBidResponseSeatBidList[$popo_seat_bid_key]->seat;

@@ -237,14 +237,14 @@ class IndexController extends AbstractActionController
 	 	$banner_request = $this->build_request_array($config, $banner_request);   	
 	
 	 	$RtbSellV22Bid = new \rtbsellv22\RtbSellV22Bid();
-	 		
+
 	 	$RtbSellV22Bid->create_rtb_request_from_publisher_display_impression($config, $banner_request);
 	 		
 	 	/* 
 	 	 * We build the OpenRTB request destined for demand
 	 	 * that is local to this NginAd instance
 	 	 */
-	 	
+
 	 	$PmpDealPublisherWebsiteToInsertionOrderLineItemFactory = \_factory\PmpDealPublisherWebsiteToInsertionOrderLineItem::get_instance();
 	 	
 	 	$params = array();
@@ -282,7 +282,7 @@ class IndexController extends AbstractActionController
 		endif;
 		
 	 	$PingManager->ping_rtb_ping_clients();
-	 	
+
 	 	$AuctionPopo   		= $PingManager->process_rtb_ping_responses();
 
 	 	$auction_was_won 	= $AuctionPopo->auction_was_won;
@@ -365,6 +365,9 @@ class IndexController extends AbstractActionController
 	 			
 	 	else:
 		 		
+	 		// track the DSP win so we can do numbers matching
+		 		
+	 		$this->track_dsp_win($config, $banner_request, $AuctionPopo);
 
 	 		if ($banner_request["ImpressionType"] == 'video'):
 		 		header("Content-type: text/xml");
@@ -375,9 +378,7 @@ class IndexController extends AbstractActionController
 	 			endif;
 
 	 		else:
-	 			
-	 			// credit publisher account here
-		 		
+	 		
 		 		header("Content-type: application/javascript");
 			 	$output = "document.write(" . json_encode($winning_ad_tag) . ");";
 			 	echo $output;
@@ -801,6 +802,36 @@ class IndexController extends AbstractActionController
     	exit;
     }
     
+    private function track_dsp_win($config, $banner_request, $AuctionPopo) {
+    
+    	// winning_adjusted_bid
+    	
+    	$error_message 			= "Error";
+    
+    	$zone_id 				= $banner_request['publisher_banner_id'];
+    	$buyerid 				= isset($AuctionPopo->winning_partner_pinger->RtbBidResponse->RtbBidResponseSeatBidList[0]->seat) ? $AuctionPopo->winning_partner_pinger->RtbBidResponse->RtbBidResponseSeatBidList[0]->seat : "N/A";
+    	$px_price 				= $AuctionPopo->winning_adjusted_amount_before_private_exchange_markup_bid_price;
+    	$net_price 				= $AuctionPopo->winning_adjusted_bid_price;
+    	$request_id 			= isset($AuctionPopo->winning_partner_pinger->RtbBidResponse->id) ? $AuctionPopo->winning_partner_pinger->RtbBidResponse->id : "N/A";
+    	$tld 					= $banner_request['tld'];
+    	$winbid 				= $AuctionPopo->winning_bid_price;
+    	$partner_name			= strtolower($AuctionPopo->winning_partner_pinger->partner_name);
+    	$vendor 				= str_replace("sellsidepartner", "", $partner_name);
+    	 
+    	if ($winbid == '${AUCTION_PRICE}') $winbid = 'na';
+    	 
+    	$auction_log = date('m-d-Y H:i:s') . ",request_id:" . $request_id
+    	. ",zone_id:" . $zone_id
+    	. ",buyerid:" . $buyerid
+    	. ",netprc:" . $net_price
+    	. ",px_price:" . $px_price
+    	. ",winbid:" . $winbid
+    	. ",tld:" . $tld . "\n";
+
+    	$this->output_dsp_win_notice_results($auction_log, $vendor);
+    
+    }
+    
     private function track_banner_impression($config, $banner_request) {
     	 
     	$error_message 			= "Error";
@@ -870,6 +901,13 @@ class IndexController extends AbstractActionController
     private function output_win_notice_results($auction_log, $vendor) {
     
     	$log_file_dir_prefix = "logs/" . $vendor . "_logs/win_notices/";
+    
+    	$this->output_notice_results($auction_log, $log_file_dir_prefix);
+    }
+    
+    private function output_dsp_win_notice_results($auction_log, $vendor) {
+    
+    	$log_file_dir_prefix = "logs/dsp/" . $vendor . "_logs/win_notices/";
     
     	$this->output_notice_results($auction_log, $log_file_dir_prefix);
     }
