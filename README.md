@@ -1,6 +1,16 @@
 nginad
 =======
 
+March 2, 2016
+------------------
+
+An update to the sell side module for DSPs for the OpenRTB 2.3 specification. 
+The JSON types sent in RTB requests are now correct according to the spec and are cast to the recommended types where as before they were all set as strings.
+
+A new DSP logging configuration has been added as well as a DSP numbers matching script found in /upload/unit_test_dsp/
+
+This is a minor version update to version 1.6.10
+
 February 24, 2016
 ------------------
 
