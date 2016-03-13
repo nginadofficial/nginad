@@ -1,6 +1,11 @@
 nginad
 =======
 
+March 13, 2016
+
+Some Zend Framework author got overzealous with warnings.
+ * See: https://github.com/zendframework/zend-mvc/issues/87
+
 March 2, 2016
 ------------------
 
