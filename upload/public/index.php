@@ -11,7 +11,13 @@
  * This makes our life easier when dealing with paths. Everything is relative
  * to the application root now.
  */
-error_reporting(E_ALL);
+
+/*
+ * Some Zend Framework author got overzealous with warnings.
+ * See: https://github.com/zendframework/zend-mvc/issues/87
+ */
+error_reporting(E_ALL & ~E_USER_DEPRECATED);
+
 ini_set('display_errors', true);
 chdir(dirname(__DIR__));
 
