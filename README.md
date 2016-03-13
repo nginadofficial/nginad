@@ -2,9 +2,12 @@ nginad
 =======
 
 March 13, 2016
+------------------
 
 Some Zend Framework author got overzealous with warnings.
  * See: https://github.com/zendframework/zend-mvc/issues/87
+ 
+ This is a minor version update to version 1.6.11
 
 March 2, 2016
 ------------------
