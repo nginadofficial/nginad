@@ -12,7 +12,6 @@ namespace model;
 class NativeAd
 {
     public $NativeAdID;
-    public $InsertionOrderLineItemID;
     public $BidUnit;
     public $LinkUrl;
     public $LinkClickTrackerUrlsCommaSeparated;

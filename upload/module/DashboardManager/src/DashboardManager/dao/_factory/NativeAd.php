@@ -93,11 +93,8 @@ class NativeAd extends \_factory\CachedTableRead
     }
    
    public function saveNativeAd(\model\NativeAd $NativeAd) {
-   	
-   		$this->delete_zone($NativeAd->InsertionOrderLineItemID);
-   		
+
 	   	$data = array(
-	   			'InsertionOrderLineItemID'         		=> $NativeAd->InsertionOrderLineItemID,
 	   			'BidUnit'         						=> $NativeAd->BidUnit,
 	   			'LinkUrl'         						=> $NativeAd->LinkUrl,
 	   			'LinkClickTrackerUrlsCommaSeparated'	=> $NativeAd->LinkClickTrackerUrlsCommaSeparated,
@@ -118,25 +115,13 @@ class NativeAd extends \_factory\CachedTableRead
    /**
     * Delete the Ad specified.
     * 
-    * @param int $InsertionOrderLineItemID The integer ID of the Ad to delete.
+    * @param int $NativeAdID The integer ID of the Ad to delete.
     * @throws \InvalidArgumentException is thrown when an invalid integer is provided.
     * @return boolean|int Returns the rows affected, or FALSE if failure.
     */
-   public function delete_zone($InsertionOrderLineItemID)
+   public function delete_assets($NativeAdID)
    {
-   		$params = array();
-   		$params["InsertionOrderLineItemID"] = $InsertionOrderLineItemID;
-   		$NativeAd = $this->get_row($params);
-   		
-   		$NativeAdAssetFactory = \_factory\NativeAdAsset::get_instance();
-   		
-   		if ($NativeAd != null):
-   		
-	   		$NativeAdAssetFactory->delete_assets($NativeAd->NativeAdID);
-	   		
-	       	$result = $this->delete(array("InsertionOrderLineItemID" => intval($InsertionOrderLineItemID)));
-	   		
-   		endif;
+       $result = $this->delete(array("NativeAdID" => intval($NativeAdID)));
    }
    
 };
