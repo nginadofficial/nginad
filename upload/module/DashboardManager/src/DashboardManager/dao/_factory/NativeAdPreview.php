@@ -140,4 +140,3 @@ class NativeAdPreview extends \_factory\CachedTableRead
    }
    
 };
-?>

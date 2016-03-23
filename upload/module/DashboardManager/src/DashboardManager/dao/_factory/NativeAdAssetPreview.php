@@ -132,4 +132,3 @@ class NativeAdAssetPreview extends \_factory\CachedTableRead
    }
    
 };
-?>
