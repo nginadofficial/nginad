@@ -63,6 +63,16 @@ return array(
             				),
             		),
             ),
+            'pxassetlibrary' => array(
+            		'type'    => 'segment',
+            		'options' => array(
+            				'route'    =>  '/private-exchange-tools/asset-library[/]',
+            				'defaults' => array(
+            						'controller' => 'DashboardManager\Controller\AssetLibrary',
+            						'action'     => 'index',
+            				),
+            		),
+            ),
             'pxpublishers' => array(
             		'type'    => 'segment',
             		'options' => array(
@@ -398,7 +408,8 @@ return array(
             'DashboardManager\Controller\Report' => 'DashboardManager\Controller\ReportController',
             'DashboardManager\Controller\Zone' => 'DashboardManager\Controller\ZoneController',
             'DashboardManager\Controller\Website' => 'DashboardManager\Controller\WebsiteController',
-        	'DashboardManager\Controller\Services' => 'DashboardManager\Controller\ServicesController'
+        	'DashboardManager\Controller\Services' => 'DashboardManager\Controller\ServicesController',
+        	'DashboardManager\Controller\AssetLibrary' => 'DashboardManager\Controller\AssetLibraryController'
         ),
     ),
     'view_manager' => array(
