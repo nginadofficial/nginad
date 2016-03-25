@@ -10,15 +10,14 @@ namespace DashboardManager\Controller;
 
 use DashboardManager\ParentControllers\DemandAbstractActionController;
 use Zend\View\Model\ViewModel;
-//use Zend\Session\Container; // We need this when using sessions (No longer used?)
 use transformation;
 use Zend\Mail\Message;
 use Zend\Mime;
 
 /**
  * @author Christopher Gu
- * This is the Demand Manager Controller class that controls the management
- * of demand functions.
+ * This is the Media Library Controller class that controls the management
+ * of media items used in IO Line Items
  */
 class MediaLibraryController extends DemandAbstractActionController {
  
