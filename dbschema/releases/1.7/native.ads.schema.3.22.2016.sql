@@ -4,6 +4,10 @@
 DROP TABLE IF EXISTS `NativeAd`;
 CREATE TABLE `NativeAd` (
   `NativeAdID` int(11) NOT NULL AUTO_INCREMENT,
+  `UserID` int(11) NOT NULL,
+  `AdName` varchar(100) NOT NULL,
+  `Description` char(255) DEFAULT NULL,
+  `MediaType` enum('Native Ad','Display','Video') NOT NULL DEFAULT 'Native Ad',
   `LinkUrl` char(255) NOT NULL,
   `LinkClickTrackerUrlsCommaSeparated` text DEFAULT NULL,
   `LinkFallback` char(255) DEFAULT NULL,

@@ -95,6 +95,10 @@ class NativeAd extends \_factory\CachedTableRead
    public function saveNativeAd(\model\NativeAd $NativeAd) {
 
 	   	$data = array(
+	   			'AdName'         						=> $NativeAd->AdName,
+	   			'UserID'         						=> $NativeAd->UserID,
+	   			'Description'         					=> $NativeAd->Description,
+	   			'MediaType'         					=> $NativeAd->MediaType,
 	   			'BidUnit'         						=> $NativeAd->BidUnit,
 	   			'LinkUrl'         						=> $NativeAd->LinkUrl,
 	   			'LinkClickTrackerUrlsCommaSeparated'	=> $NativeAd->LinkClickTrackerUrlsCommaSeparated,
