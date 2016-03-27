@@ -65,10 +65,34 @@ class MediaLibraryController extends DemandAbstractActionController {
 				'effective_id' => $this->auth->getEffectiveIdentityID(),
 				'impersonate_id' => $this->ImpersonateID,
 	    		'ad_media_list' => $ad_media_list,
+	    		'header_title' => '<a href="/private-exchange-tools/media-library/createnativead">Create Native Ad</a>'
 
 	    ));
-	    
+
 	    return $view;
+	}
+	
+	public function createnativeadAction() {
+	
+		$initialized = $this->initialize();
+		
+	    $view = new ViewModel(array(
+	    		'is_super_admin' => $this->auth->isSuperAdmin($this->config_handle),
+	    		'is_domain_admin' => $this->auth->isDomainAdmin($this->config_handle),
+	    		'user_id_list' => $this->user_id_list_demand_customer,
+	    		'effective_id' => $this->auth->getEffectiveIdentityID(),
+	    		'dashboard_view' => 'private-exchange',
+	    		'user_identity' => $this->identity(),
+	    		'true_user_name' => $this->auth->getUserName(),
+				'is_super_admin' => $this->is_super_admin,
+				'effective_id' => $this->auth->getEffectiveIdentityID(),
+				'impersonate_id' => $this->ImpersonateID,
+	    		'native_ad_data_types' => \util\NativeAdsHelper::getNativeAdDataTypes()
+
+	    ));
+
+	    return $view;
+		
 	}
 
 }

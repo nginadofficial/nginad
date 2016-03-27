@@ -1,0 +1,99 @@
+<?php
+$this->headScript()->appendFile($this->basePath() . '/js/3rdparty/jquery-ui-1.9.2.custom.min.js');
+$this->headLink()->appendStylesheet($this->basePath() . '/css/upload/dropzone.css');
+$this->headLink()->appendStylesheet($this->basePath() . '/css/media-library/ml-style.css');
+$this->headLink()->appendStylesheet($this->basePath() . '/css/jquery-ui/smoothness/jquery-ui-1.9.2.custom.min.css');
+$this->headScript()->appendFile($this->basePath() . '/js/script.js');
+$this->headScript()->appendFile($this->basePath() . '/js/upload/dropzone.js');
+
+$this->headScript()->captureStart() ?>
+
+var insertion_order_id = null;
+
+Dropzone.autoDiscover = false;
+
+$(function() {
+    var myDropzone = new Dropzone("div#dr-zone", { 
+    		url: "/private-exchange/uploadcreative/",
+    		acceptedFiles: "image/jpg, image/jpeg,image/png,image/gif,application/x-shockwave-flash",
+    		paramName: "file",
+  			maxFilesize: 2, // MB
+  			uploadMultiple: false,
+  			success: function(file, storedName) { $("#imageurl").val(storedName); updateImageAd(false); alert("Creative Upload Set"); },
+  			error: function(file, errorMessage) { alert("Error: " + errorMessage); },
+  			init: function() {
+				    this.on("addedfile", function() {
+				      if (this.files[1]!=null){
+				        this.removeFile(this.files[0]);
+				      }
+				    });
+			}
+    		});
+});
+<?php $this->headScript()->captureEnd();  ?>
+
+ <ul class="breadcrumb">
+    <li><a href="/private-exchange-tools/media-library">Media Library</a> <span class="divider">/</span></li>
+    <li><a href="/private-exchange-tools/media-library?category=nativeads">Native Ads</a><span class="divider">/</span></li>
+    <li class="active">Create Native Ad</li>
+    </ul>
+
+<div id="cdn_form_msg" class="alert alert-error" style="margin: 5px; display: none;"></div>
+<form onsubmit="highlightSelects();" id="bannerform" name="bannerform" method="POST" action="/private-exchange/newlineitem">
+<fieldset>
+<div class="span7">
+	   <div class="form-group">
+		<label for="bannername">Native Ad Name</label>
+		<input type="text" class="txtbox-width" name="bannername">
+	</div>
+	
+	<!-- 
+	
+	Initially, we set up an image native ad with a title with the preview on the right side
+	to set up a default so the user can visualize what the ad looks like, then we specify
+	options so they can customize including adding multiple native ads to the bid.
+	
+	 -->
+	
+	<div class="form-group">
+		<label for="MediaType">Select Media Type</label>
+		<select id="MediaType" name="MediaType" class="selbox-width" onchange="switchImpressionType();">
+			<option selected value="banner">Image</option>
+			<option value="image">Video</option>
+		</select>
+	</div>
+	<div class="form-group">
+		<label for="AttributeType">Add Data Attributes</label>
+		<select id="AttributeType" name="AttributeType" class="selbox-width" onchange="">
+			<?php foreach ($native_ad_data_types as $key => $value): ?>
+				<option value="<?php echo $key; ?>"><?php echo $value; ?></option>
+			<?php endforeach; ?>
+		</select>
+	</div>
+	<div class="control-group imagead">
+		<div id="dr-zone" action="/file-upload" class="dropzone"></div>
+	</div>	
+	 <div class="control-group imagead">
+		<label for="imageurl">Image Ad URL : <span class="hlp"><small><i>( eg. http://www.iab.net/media/image/120x20.png )</i></small></span></label>
+		<span id="imageurlwrapper">
+			<input value="" class="input-xxlarge" type="text" id="imageurl" name="imageurl" />
+		</span>
+	</div>	
+	 <div class="control-group imagead">
+		<label for="landingpageurl">Image Ad Landing Page URL : <span class="hlp"><small><i>( eg. http://www.example.com/landing-page.html )</i></small></span></label>
+		<span id="landingpageurlwrapper">
+			<input value="" class="input-xxlarge" type="text" id="landingpageurl" name="landingpageurl" />
+		</span>
+	</div>	
+
+	</div>
+	<div class="span7">
+PREVIEW
+	</div>
+	<div class="span12">
+	<div class="form-group">
+	   <input type="submit" id="create-button" class="btn btn-primary" name="B1" value="Create New Banner" />
+	   </div>
+	</div>
+</fieldset>
+</form>
