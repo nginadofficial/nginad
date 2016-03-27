@@ -50,6 +50,21 @@ return array(
 				 */
 				'pmp_channel_bypass'			=> false,
 				/*
+				 * Zencoder.com SaaS for transcoding video
+				 * This is used for the new VAST/VPAID features
+				*/
+				'video_features' => array(
+					'zendcoder' =>	array(
+						/*
+						* Use the test credentials for 5 second maximum
+						* clips until you are ready to go live, then use
+						* the Full API key from the Account tab in the 
+						* Zencoder dashboard
+						*/
+								'api_key' 	=> '[MY_API_KEY]'
+						)
+				),
+				/*
 				 * header bidding settings
 				*/
 				'header_bidding' => array(
