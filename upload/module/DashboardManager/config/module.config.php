@@ -66,7 +66,7 @@ return array(
             'pxassetlibrary' => array(
             		'type'    => 'segment',
             		'options' => array(
-            				'route'    =>  '/private-exchange-tools/media-library[/]',
+            				'route'    =>  '/private-exchange-tools/media-library[/[:action[/[:param1[/]]]]]',
             				'defaults' => array(
             						'controller' => 'DashboardManager\Controller\MediaLibrary',
             						'action'     => 'index',
