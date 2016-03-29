@@ -3,6 +3,7 @@ $this->headScript()->appendFile($this->basePath() . '/js/3rdparty/jquery-ui-1.9.
 $this->headLink()->appendStylesheet($this->basePath() . '/css/upload/dropzone.css');
 $this->headLink()->appendStylesheet($this->basePath() . '/css/media-library/ml-style.css');
 $this->headLink()->appendStylesheet($this->basePath() . '/css/jquery-ui/smoothness/jquery-ui-1.9.2.custom.min.css');
+$this->headScript()->appendFile($this->basePath() . '/js/media-library/nativead.js');
 $this->headScript()->appendFile($this->basePath() . '/js/script.js');
 $this->headScript()->appendFile($this->basePath() . '/js/upload/dropzone.js');
 
@@ -43,7 +44,7 @@ $(function() {
 <fieldset>
 <div class="span7">
 	   <div class="form-group">
-		<label for="bannername">Native Ad Name</label>
+		<label for="bannername">Ad Name</label>
 		<input type="text" class="txtbox-width" name="bannername">
 	</div>
 	
@@ -54,20 +55,21 @@ $(function() {
 	options so they can customize including adding multiple native ads to the bid.
 	
 	 -->
-	
+	 
+	 <h3 style="color: #666; font-weight: normal;">Native Ad Builder</h3>
+	 <hr />
+	 
+	 <div class="control-group">
+		<label for="data-title">Title : </label>
+		<span id="data-title">
+			<input value="" placeholder="Learn about this awesome thing" class="input-xlarge" type="text" id="data-title" name="data-title" />
+		</span>
+	</div>	
 	<div class="form-group">
 		<label for="MediaType">Select Media Type</label>
 		<select id="MediaType" name="MediaType" class="selbox-width" onchange="switchImpressionType();">
 			<option selected value="banner">Image</option>
 			<option value="image">Video</option>
-		</select>
-	</div>
-	<div class="form-group">
-		<label for="AttributeType">Add Data Attributes</label>
-		<select id="AttributeType" name="AttributeType" class="selbox-width" onchange="">
-			<?php foreach ($native_ad_data_types as $key => $value): ?>
-				<option value="<?php echo $key; ?>"><?php echo $value; ?></option>
-			<?php endforeach; ?>
 		</select>
 	</div>
 	<div class="control-group imagead">
@@ -85,10 +87,51 @@ $(function() {
 			<input value="" class="input-xxlarge" type="text" id="landingpageurl" name="landingpageurl" />
 		</span>
 	</div>	
-
+	
+	<div class="control-group">
+		<label for="data-description">Description : </label>
+		<span id="data-description">
+			<input value="" placeholder="Learn all about this awesome story of someone using my product." class="input-xxlarge" type="text" id="data-description" name="data-description" />
+		</span>
+	</div>	
+	
+	<div class="control-group">
+		<label for="data-sponsored">Sponsored By : </label>
+		<span id="data-sponsored">
+			<input value="" placeholder="My Brand" class="input-large" type="text" id="data-sponsored" name="data-sponsored" />
+		</span>
+	</div>	
+	
+	<div class="form-group">
+		<label for="AttributeType">Add Data Attributes</label>
+		<select id="AttributeType" name="AttributeType" class="selbox-width" onchange="">
+			<?php foreach ($native_ad_data_types as $key => $value): ?>
+				<?php if (intval($key) > 2): ?>
+					<option value="<?php echo $key; ?>"><?php echo $value; ?></option>
+				<?php endif; ?>
+			<?php endforeach; ?>
+		</select>
+		<span class="add-button-container">
+				<input type="button" value="Add" class="btn btn-margin" style="margin-top: 10px;" onclick="newDataElement();" />
+		</span>
+	</div>
+	
+	<div id="native-data"></div>
+	
 	</div>
 	<div class="span7">
-PREVIEW
+<h1 id="preview-header">PREVIEW</h1>
+<hr id="preview-separator" />
+<div id="floating-pane-container">
+<div id="floating-preview-pane">
+<div id="native-preview-image">
+	<img src="/images/media-library/native.default.img.jpg" />
+</div>
+<div id="native-preview-title">Learn about this awesome thing</div>
+<div id="native-preview-description">Learn all about this awesome story of someone using my product.</div>
+<div id="native-preview-sponsored">Promoted by <span id="native-preview-brand">My Brand</span></div>
+</div>
+</div>
 	</div>
 	<div class="span12">
 	<div class="form-group">
@@ -97,3 +140,45 @@ PREVIEW
 	</div>
 </fieldset>
 </form>
+
+<!-- START NATIVE AD DATA ASSETS -->
+
+    	<div id="data-template" style="display: none;">
+    		<input type="hidden" name="DataAssetType_N_" value="" />
+    		<h3>Add Data</h3>
+			<div class="control-group ifnative" style="display: none;">
+				<label for="DataAssetRequired_N_" class="control-label" style="display: inline;">Required to Show Ad : &nbsp; </label>
+				<div class="controls" style="display: inline;" id="DataAssetRequiredContainer_N_">
+					<input type="radio" value="1" class="required-on" name="DataAssetRequired_N_" />&nbsp; Yes
+					&nbsp; <input type="radio" value="0" class="required-off" name="DataAssetRequired_N_" />&nbsp; No
+				</div>
+				<div>
+					<span class="hlp"><small><i>(optional - Bid on the native zone even if this asset does not match.)</i></small></span>
+				</div>
+			</div>
+				<div class="control-group">
+					<label for="DataLabel_N_" class="control-label">Data Label : 
+						<span class="hlp"><small><i>(optional)</i></small></span>
+					</label>
+					<div class="controls">
+						<input type="text" class="input-large"
+							size="5" maxlength="255" id="DataLabel_N_" name="DataLabel_N_">
+					</div>
+				</div>
+				<div class="control-group">
+					<label for="DataValue_N_" class="control-label">Data Value : <span class="hlp"><small><i>(required)</i></small></span>
+					</label>
+					<div class="controls">
+						<input type="text" class="input-large"
+							size="5" maxlength="255" id="DataValue_N_" name="DataValue_N_">
+					</div>
+				</div>
+			<div class="n-button-container">
+				<input type="button" class="btn btn-margin remove-data-element" name="RemoveDataElement_N_" value="Remove Data" onclick="removeDataElement('_N_');" />
+			</div>
+			<div class="n-link-container">
+			
+			</div>
+		</div>
+
+<!-- END NATIVE AD DATA ASSETS -->

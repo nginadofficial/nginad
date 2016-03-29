@@ -1,6 +1,75 @@
 @CHARSET "ISO-8859-1";
 
 .headbreadcrumb {
-	
 	padding: 10px 15px;
 }
+
+.n-data {
+	border: 1px #666 solid;
+	width: 270px;
+	padding-left: 20px;
+	margin-bottom: 20px;
+}
+
+.n-data .n-button-container {
+	margin-left: 70px;
+}
+
+#dr-zone {
+	width: 400px;
+}
+
+/* Floating Preview Pane */
+
+#preview-header {
+	text-align: center;
+}
+
+#floating-pane-container {
+	position: relative;
+	width: 540px;
+}
+
+#floating-preview-pane {
+	border: 1px #666 solid;
+	height: 310px;
+	width: 300px;
+	margin-left: auto;
+	margin-right: auto;
+	background-color: #f5f5f5;
+}
+
+#native-preview-image {
+	margin-left: 10px;
+}
+
+#native-preview-title {
+	margin: 10px 5px 5px 10px;
+	width: 280px;
+	font-size: 20px;
+	font-weight: bold;
+	word-wrap: break-word;
+	line-height: 120%;
+}
+
+#native-preview-description {
+	margin: 10px 5px 5px 10px;
+	width: 280px;
+	font-size: 12px;
+	font-weight: normal;
+	word-wrap: break-word;
+	line-height: 120%;
+}
+
+#native-preview-sponsored {
+	margin: 10px 5px 5px 10px;
+	width: 280px;
+	font-size: 11px;
+	font-weight: bold;
+}
+
+#native-preview-brand {
+	font-weight: bold;
+}
+
+
