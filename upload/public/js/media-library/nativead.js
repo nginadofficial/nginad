@@ -1,3 +1,7 @@
+var nativePreviewTitleText = 'Learn about this awesome thing';
+var nativePreviewDescriptionText = 'Learn all about this awesome story of someone using my product.';
+var nativePreviewSponsoredText = 'My Brand';
+
 function initializeNativeAssets() {
 	
 	if (!native_ad_data_json || native_ad_data_json == "") return;
@@ -81,13 +85,44 @@ function newDataId() {
     return '_NEW_' + result;
 }
 
-$().ready(function() {
-	  $(window).scroll(function(){
-		    var aTop = 180;
+function scrollPreviewToViewport() {
+	var aTop = 180;
 
-		    if($(this).scrollTop() >= aTop) {
-			    $('#floating-preview-pane').css('margin-top', $(this).scrollTop() - aTop);
-		    }
-		  });
+	if($(this).scrollTop() >= aTop) {
+		$('#floating-preview-pane').css('margin-top', $(this).scrollTop() - aTop);
+	}
+}
+
+$().ready(function() {
+	
+	$('#data-title').keyup(function(){
+			var txt = $('#data-title').val();
+			if (!txt) {
+				txt = nativePreviewTitleText;
+			}
+			$('#native-preview-title').html(txt);
+	});
+	
+	$('#data-description').keyup(function(){
+		var txt = $('#data-description').val();
+		if (!txt) {
+			txt = nativePreviewDescriptionText;
+		}
+		$('#native-preview-description').html(txt);
+	});
+	
+	$('#data-sponsored').keyup(function(){
+		var txt = $('#data-sponsored').val();
+		if (!txt) {
+			txt = nativePreviewSponsoredText;
+		}
+		$('#native-preview-brand').html(txt);
+	});
+	
+	$(window).scroll(function(){
+		scrollPreviewToViewport();
+	});
+
+	scrollPreviewToViewport();
 });
 	
