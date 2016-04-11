@@ -452,6 +452,77 @@ $().ready(function() {
 			$(element).parent().removeClass("error");
 		}
 	});
+	  
+	// Native form validation
+	var validator = $("#nativeform").bind("invalid-form.validate", function() {
+				$("#cdn_form_msg").html("Required fields are missing.");
+			}).validate({
+			rules: {
+				nativeadname: {
+					required: true
+				},
+				data_title: {
+	               required: true
+	           },
+	           imageurl: {
+					required:  {
+		                depends:function(){
+		                    return $("#MediaType").val() == 'image';
+		                }   
+		            }
+				},
+				landingpageurl: {
+					required:  {
+		                depends:function(){
+		                    return $("#MediaType").val() == 'image';
+		                }   
+					}
+		        },
+		        video_vast_tag: {
+					required:  {
+		                depends:function(){
+		                    return $("#MediaType").val() == 'video';
+		                }   
+					}
+		        },
+		        video_duration: {
+					required:  {
+		                depends:function(){
+		                    return $("#MediaType").val() == 'video';
+		                }   
+					},
+					number: true
+		        },
+		        video_mimes: {
+					required:  {
+		                depends:function(){
+		                    return $("#MediaType").val() == 'video';
+		                }   
+					}
+		        },
+		        data_description: {
+					required: true
+				},
+				data_sponsored: {
+					required: true
+				}
+		},
+		errorContainer: $("#cdn_form_msg"),
+		errorClass: 'cdn_form_error',
+		highlight: function(element, errorClass, validClass) {
+			$(element).parent().addClass("error");
+			$("#submitbutton").prop("disabled", false);
+			$("#cdn_form_msg").html("Required fields are missing.");
+		},
+		unhighlight: function(element, errorClass, validClass) {
+			$(element).parent().removeClass("error");
+		},
+		messages: {
+			bidamount: {
+				number: "Please enter a valid bid." 
+			}
+		}
+	});
 	
 	// Banner form validation
 	var validator = $("#bannerform").bind("invalid-form.validate", function() {

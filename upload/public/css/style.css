@@ -172,6 +172,7 @@ width:175px;
 	bottom: 0px;
     position: fixed;
     width: 100%;
+	z-index: 9999;
 }
 
 .bottom-container {

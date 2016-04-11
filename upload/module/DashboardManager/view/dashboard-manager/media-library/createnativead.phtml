@@ -20,7 +20,7 @@ $(function() {
     		paramName: "file",
   			maxFilesize: 2, // MB
   			uploadMultiple: false,
-  			success: function(file, storedName) { $("#imageurl").val(storedName); updateImageAd(false); alert("Creative Upload Set"); },
+  			success: function(file, storedName) { $("#imageurl").val(storedName); updateImageAd(false); },
   			error: function(file, errorMessage) { alert("Error: " + errorMessage); },
   			init: function() {
 				    this.on("addedfile", function() {
@@ -40,12 +40,12 @@ $(function() {
     </ul>
 
 <div id="cdn_form_msg" class="alert alert-error" style="margin: 5px; display: none;"></div>
-<form onsubmit="highlightSelects();" id="bannerform" name="bannerform" method="POST" action="/private-exchange/newlineitem">
+<form id="nativeform" name="nativeform" method="POST" action="/private-exchange-tools/media-library/newnativead">
 <fieldset>
 <div class="span7">
 	   <div class="form-group">
-		<label for="bannername">Ad Name</label>
-		<input type="text" class="txtbox-width" name="bannername">
+		<label for="nativeadname">Ad Name</label>
+		<input type="text" class="txtbox-width" name="nativeadname">
 	</div>
 	
 	<!-- 
@@ -60,45 +60,93 @@ $(function() {
 	 <hr />
 	 
 	 <div class="control-group">
-		<label for="data-title">Title : </label>
+		<label for="data_title">Title : </label>
 		<span class="data-title-wrapper">
-			<input value="" placeholder="Learn about this awesome thing" class="input-xlarge" type="text" id="data-title" name="data-title" />
+			<input value="" placeholder="Learn about this awesome thing" class="input-xlarge" type="text" id="data_title" name="data_title" />
 		</span>
 	</div>	
 	<div class="form-group">
 		<label for="MediaType">Select Media Type</label>
-		<select id="MediaType" name="MediaType" class="selbox-width" onchange="switchImpressionType();">
-			<option selected value="banner">Image</option>
-			<option value="image">Video</option>
+		<select id="MediaType" name="MediaType" class="selbox-width" onchange="switchMediaType();">
+			<option selected value="image">Image</option>
+			<option value="video">Video</option>
 		</select>
 	</div>
-	<div class="control-group imagead">
-		<div id="dr-zone" action="/file-upload" class="dropzone"></div>
-	</div>	
-	 <div class="control-group imagead">
-		<label for="imageurl">Image Ad URL : <span class="hlp"><small><i>( eg. http://www.iab.net/media/image/120x20.png )</i></small></span></label>
-		<span id="imageurlwrapper">
-			<input value="" class="input-xxlarge" type="text" id="imageurl" name="imageurl" />
-		</span>
-	</div>	
-	 <div class="control-group imagead">
-		<label for="landingpageurl">Image Ad Landing Page URL : <span class="hlp"><small><i>( eg. http://www.example.com/landing-page.html )</i></small></span></label>
-		<span id="landingpageurlwrapper">
-			<input value="" class="input-xxlarge" type="text" id="landingpageurl" name="landingpageurl" />
-		</span>
-	</div>	
+	<div id="media-type-image">
+		<div class="control-group imagead">
+			<div id="dr-zone" action="/file-upload" class="dropzone"></div>
+		</div>	
+		 <div class="control-group imagead">
+			<label for="imageurl">Image Ad URL : <span class="hlp"><small><i>( eg. http://www.iab.net/media/image/120x20.png )</i></small></span></label>
+			<span id="imageurlwrapper">
+				<input placeholder="<?php echo $site_url ?>/images/media-library/native.default.img.jpg" value="" class="input-xxlarge" type="text" id="imageurl" name="imageurl" />
+			</span>
+		</div>	
+		 <div class="control-group imagead">
+			<label for="landingpageurl">Image Ad Landing Page URL : <span class="hlp"><small><i>( eg. http://www.example.com/landing-page.html )</i></small></span></label>
+			<span id="landingpageurlwrapper">
+				<input placeholder="http://www.example.com/landing-page.html" value="" class="input-xxlarge" type="text" id="landingpageurl" name="landingpageurl" />
+			</span>
+		</div>	
+	</div>
+	
+	<div id="media-type-video" style="display: none;">
+		<div class="form-group">
+			<label for="video_vast_tag">VAST Ad XML : <span
+				class="hlp"><small><i>(required - <a target="_blank" style="color: blue; text-decoration: underline;"  href="http://www.iab.com/insights/vast-2-0-xml-samples-for-testing/">Vast XML</a>)</i></small></span></label> <span class="video_vast_tag_wrapper"> <textarea
+					class="txtbox-width" style="height:  150px; width: 500px;"
+					id="video_vast_tag" name="video_vast_tag" rows="6"></textarea>
+			</span>
+		</div>
+
+		<div class="control-group">
+			<label for="video_duration" class="control-label">Video Duration
+				: <span class="hlp"><small><i>(required - Video Length in Seconds)</i></small></span>
+			</label>
+			<div class="controls">
+				<input type="text" placeholder="90" class="input-mini"
+					size="5" maxlength="10" id="video_duration" name="video_duration">
+			</div>
+		</div>
+			
+		<div class="control-group">
+			<label for="video_mimes" class="control-label">Mimes : <span class="hlp"><small><i>(required,
+							ctrl+shift to select mutliple)</i></small></span></label>
+			<div class="controls">
+				<select id="video_mimes" name="video_mimes" multiple class="zone-txtarea"
+					style="min-height: 170px">
+				    <?php foreach ($mimes as $name): ?>
+				    	<option value="<?php echo $name;?>" selected="selected"><?php echo $name;?></option>
+				    <?php endforeach; ?>
+				</select>
+			</div>
+		</div>
+
+		<div class="control-group">
+			<label for="video_protocols" class="control-label">Protocols : <span
+				class="hlp"><small><i>(ctrl+shift to select mutliple)</i></small></span></label>
+			<div class="controls">
+				<select id="video_protocols" name="video_protocols" multiple
+					class="zone-txtarea" style="min-height: 50px">
+					<?php foreach ($protocols as $code => $name): ?>
+					     <option value="<?php echo $code;?>"><?php echo $name;?></option>
+					<?php endforeach; ?>
+				</select>
+			</div>
+		</div>
+	</div>
 	
 	<div class="control-group">
-		<label for="data-description">Description : </label>
+		<label for="data_description">Description : </label>
 		<span class="data-description-wrapper">
-			<input value="" placeholder="Learn all about this awesome story of someone using my product." class="input-xxlarge" type="text" id="data-description" name="data-description" />
+			<input value="" placeholder="Learn all about this awesome story of someone using my product." class="input-xxlarge" type="text" id="data_description" name="data_description" />
 		</span>
 	</div>	
 	
 	<div class="control-group">
-		<label for="data-sponsored">Sponsored By : </label>
+		<label for="data_sponsored">Sponsored By : </label>
 		<span class="data-sponsored-wrapper">
-			<input value="" placeholder="My Brand" class="input-large" type="text" id="data-sponsored" name="data-sponsored" />
+			<input value="" placeholder="My Brand" class="input-large" type="text" id="data_sponsored" name="data_sponsored" />
 		</span>
 	</div>	
 	
@@ -125,7 +173,7 @@ $(function() {
 <div id="floating-pane-container">
 <div id="floating-preview-pane">
 <div id="native-preview-image">
-	<img src="/images/media-library/native.default.img.jpg" />
+	<a class="preview-target-link" target="_blank" href="http://www.example.com/landing-page.html"><img style="border: 0px; height: 175px; width: 280px;" src="/images/media-library/native.default.img.jpg" /></a>
 </div>
 <div id="native-preview-title">Learn about this awesome thing</div>
 <div id="native-preview-description">Learn all about this awesome story of someone using my product.</div>
@@ -135,29 +183,32 @@ $(function() {
 	</div>
 	<div class="span12">
 	<div class="form-group">
-	   <input type="submit" id="create-button" class="btn btn-primary" name="B1" value="Create New Banner" />
+	   <input type="submit" id="create-button" class="btn btn-primary" name="B1" value="Create Native Ad" />
 	   </div>
 	</div>
 </fieldset>
 </form>
 
 <!-- START NATIVE AD DATA ASSETS -->
-
+		<div id="data-template-preview" style="display: none;">
+			<div id='data-tpl-preview-_N_' class="data-tpl-preview"><span class="tpl-data-preview-label">_LABEL_</span> <span class="tpl-data-preview-value">_VALUE_</span></div>
+		</div>
+		
     	<div id="data-template" style="display: none;">
-    		<input type="hidden" name="DataAssetType_N_" value="" />
-    		<h3>Add Data</h3>
-			<div class="control-group ifnative" style="display: none;">
-				<label for="DataAssetRequired_N_" class="control-label" style="display: inline;">Required to Show Ad : &nbsp; </label>
-				<div class="controls" style="display: inline;" id="DataAssetRequiredContainer_N_">
-					<input type="radio" value="1" class="required-on" name="DataAssetRequired_N_" />&nbsp; Yes
-					&nbsp; <input type="radio" value="0" class="required-off" name="DataAssetRequired_N_" />&nbsp; No
+    		<input type="hidden" id="DataType_N_" name="DataType_N_" value="" />
+    		<h3 class="dataplt-title">Add Data</h3>
+			<div class="control-group tpl-required">
+				<label for="DataRequired_N_" class="control-label" style="display: inline;">Required to Show Ad : &nbsp; </label>
+				<div class="controls" style="display: inline;" id="DataRequiredContainer_N_">
+					<input type="radio" value="1" class="required-on" name="DataRequired_N_" />&nbsp; Yes
+					&nbsp; <input type="radio" value="0" class="required-off" name="DataRequired_N_" />&nbsp; No
 				</div>
 				<div>
 					<span class="hlp"><small><i>(optional - Bid on the native zone even if this asset does not match.)</i></small></span>
 				</div>
 			</div>
 				<div class="control-group">
-					<label for="DataLabel_N_" class="control-label">Data Label : 
+					<label for="DataLabel_N_" class="control-label"><span class="dataplt-label">Data Label</span> : 
 						<span class="hlp"><small><i>(optional)</i></small></span>
 					</label>
 					<div class="controls">
@@ -166,7 +217,7 @@ $(function() {
 					</div>
 				</div>
 				<div class="control-group">
-					<label for="DataValue_N_" class="control-label">Data Value : <span class="hlp"><small><i>(required)</i></small></span>
+					<label for="DataValue_N_" class="control-label"><span class="dataplt-value">Data Value</span> : <span class="hlp"><small><i>(required)</i></small></span>
 					</label>
 					<div class="controls">
 						<input type="text" class="input-large"

@@ -21,6 +21,9 @@ use Zend\Mime;
  */
 class MediaLibraryController extends DemandAbstractActionController {
  
+	protected $default_image_height			= 400;
+	protected $default_image_width			= 400;
+	
     /**
      * Will Show the dashboard index page.
      * (non-PHPdoc)
@@ -39,7 +42,8 @@ class MediaLibraryController extends DemandAbstractActionController {
 		 * too which share the same interface: MediaLibraryItem
 		 */
 		
-		$NativeAdFactory = \_factory\NativeAd::get_instance();
+		$NativeAdResponseItemFactory = \_factory\NativeAdResponseItem::get_instance();
+		$NativeAdResponseItemAssetFactory = \_factory\NativeAdResponseItemAsset::get_instance();
 		
 		$params = array();
 	    if ($this->is_domain_admin):
@@ -47,10 +51,21 @@ class MediaLibraryController extends DemandAbstractActionController {
 	    else:
 	    	$params["UserID"] = $this->auth->getEffectiveUserID();
 		endif;
-		$NativeAdList = $NativeAdFactory->get($params);
+		$NativeAdResponseItemList = $NativeAdResponseItemFactory->get($params);
 		
-		foreach ($NativeAdList as $NativeAd):
-			$ad_media_list[] = $NativeAd;
+		foreach ($NativeAdResponseItemList as $NativeAdResponseItem):
+			$params = array();
+			$params["NativeAdResponseItemID"] 		= $NativeAdResponseItem->NativeAdResponseItemID;
+			$params["AssetType"]					= 'data';
+			$params["DataType"]						= DATA_ASSET_DESC;
+			$NativeAdResponseItemAssetData 			= $NativeAdResponseItemAssetFactory->get_row($params);
+			if ($NativeAdResponseItemAssetData !== null):
+				$NativeAdResponseItem->Description 	= $NativeAdResponseItemAssetData->DataValue;
+			else:
+				$NativeAdResponseItem->Description 	= 'Not Available';
+			endif;
+			
+			$ad_media_list[] = $NativeAdResponseItem;
 		endforeach;
 
 	    $view = new ViewModel(array(
@@ -76,6 +91,8 @@ class MediaLibraryController extends DemandAbstractActionController {
 	
 		$initialized = $this->initialize();
 		
+		$site_url = $this->config_handle['delivery']['site_url'];
+		
 	    $view = new ViewModel(array(
 	    		'is_super_admin' => $this->auth->isSuperAdmin($this->config_handle),
 	    		'is_domain_admin' => $this->auth->isDomainAdmin($this->config_handle),
@@ -87,11 +104,229 @@ class MediaLibraryController extends DemandAbstractActionController {
 				'is_super_admin' => $this->is_super_admin,
 				'effective_id' => $this->auth->getEffectiveIdentityID(),
 				'impersonate_id' => $this->ImpersonateID,
+	    		
+	    		'protocols' => \util\BannerOptions::$protocols,
+	    		'mimes' => \util\BannerOptions::$mimes,
+	    		
+	    		'site_url' => $site_url,
 	    		'native_ad_data_types' => \util\NativeAdsHelper::getNativeAdDataTypes()
 
 	    ));
 
 	    return $view;
+		
+	}
+	
+	public function newnativeadAction() {
+
+		$initialized = $this->initialize();
+		
+		$request 													= $this->getRequest();
+			
+		$post 														= $request->getPost();
+		
+		$native_media_type 											= $request->getPost("MediaType");
+		
+		if ($native_media_type != 'image' && $native_media_type != 'video'):
+			die("Required Field: MediaType was missing");
+		endif;
+		
+		$needed_input_image = array(
+				'nativeadname',
+				'data_title',
+				'data_description',
+				'data_sponsored',
+				'imageurl',
+				'landingpageurl'
+		);
+		
+		$needed_input_video = array(
+				'nativeadname',
+				'data_title',
+				'data_description',
+				'data_sponsored',
+				'video_vast_tag',
+				'video_duration',
+				'video_mimes'
+		);
+		
+		if ($native_media_type == 'video'):
+			$this->validateInput($needed_input_video);
+		else:
+			$this->validateInput($needed_input_image);
+		endif;
+		
+		$native_ad_name 											= $request->getPost("nativeadname");
+		
+		$native_data_title 											= $request->getPost("data_title");
+
+		$native_image_url 											= $request->getPost("imageurl");
+		
+		$native_landing_page_url 									= $request->getPost("landingpageurl");
+		
+		$native_video_vast_tag 										= $request->getPost("video_vast_tag");
+		
+		$native_video_duration 										= $request->getPost("video_duration");
+		
+		$native_video_mimes 										= $request->getPost("video_mimes");
+		
+		$native_video_protocols 									= $request->getPost("video_protocols");
+		
+		$native_data_description 									= $request->getPost("data_description");
+		
+		$native_data_sponsored 										= $request->getPost("data_sponsored");
+		
+		
+		/*
+		 * _NEW_ for new native data
+		*/
+		$key_type = '_NEW_';
+			
+		// returns an array of new native data ids
+		$new_keys = \util\NativeAdsHelper::getNativeDataKeys($post, $key_type);
+
+		// returns an associative array of new native data
+		$native_data_new_list = \util\NativeAdsHelper::getNativeData($request, $key_type, $new_keys);
+		
+		if ($this->is_domain_admin):
+			$user_id = $this->auth->getUserID();
+		else:
+			$user_id = $this->auth->getEffectiveUserID();
+		endif;
+		
+		$NativeAdResponseItemFactory 							= new \_factory\NativeAdResponseItem();
+		$NativeAdResponseItemAssetFactory 						= new \_factory\NativeAdResponseItemAsset();
+		
+		$NativeAdResponseItem 									= new \model\NativeAdResponseItem();
+		
+		$NativeAdResponseItem->UserID							= $user_id;
+		$NativeAdResponseItem->AdName							= $native_ad_name;
+		$NativeAdResponseItem->MediaType						= $native_media_type;
+		$NativeAdResponseItem->DateCreated						= date("Y-m-d H:i:s");
+		
+		$native_ad_response_item_id 							= $NativeAdResponseItemFactory->saveNativeAdResponseItem($NativeAdResponseItem);
+		
+		$NativeAdResponseItemAsset 								= new \model\NativeAdResponseItemAsset();
+		$NativeAdResponseItemAsset->NativeAdResponseItemID 		= $native_ad_response_item_id;
+		$NativeAdResponseItemAsset->AssetRequired				= 1;
+		$NativeAdResponseItemAsset->DateCreated					= date("Y-m-d H:i:s");
+		
+		if ($native_media_type == 'video'):
+
+			if ($native_video_mimes && is_array($native_video_mimes) && count($native_video_mimes) > 0):
+				$native_video_mimes = join(',', $native_video_mimes);
+			endif;
+
+			if ($native_video_protocols && is_array($native_video_protocols) && count($native_video_protocols) > 0):
+				$native_video_protocols = join(',', $native_video_protocols);
+			endif;
+			
+			$NativeAdResponseItemAsset->AssetType 						= 'video';
+			$NativeAdResponseItemAsset->VideoVastTag 					= $native_video_vast_tag;
+			$NativeAdResponseItemAsset->VideoDuration 					= $native_video_duration;
+			$NativeAdResponseItemAsset->VideoMimesCommaSeparated 		= $native_video_mimes;
+			$NativeAdResponseItemAsset->VideoProtocolsCommaSeparated 	= $native_video_protocols;
+		else:
+			$NativeAdResponseItemAsset->AssetType 						= 'image';
+			$NativeAdResponseItemAsset->ImageUrl 						= $native_image_url;
+			
+			try {
+				list($width, $height) 									= getimagesize($native_image_url);
+				$NativeAdResponseItemAsset->ImageWidth 					= $width;
+				$NativeAdResponseItemAsset->ImageHeight 				= $height;
+				$NativeAdResponseItem->ImageWidth 						= $width;
+				$NativeAdResponseItem->ImageHeight						= $height;
+				$NativeAdResponseItem->NativeAdResponseItemID 			= $native_ad_response_item_id;
+				$NativeAdResponseItemFactory->saveNativeAdResponseItem($NativeAdResponseItem);
+			} catch (Exception $e) {
+				
+			}
+			
+		endif;
+		
+		$NativeAdResponseItemAssetFactory->saveNativeAdResponseItemAsset($NativeAdResponseItemAsset);
+
+		$native_ad_data_types 		= \util\NativeAdsHelper::getNativeAdDataTypes();
+		
+		$data_asset = array();
+		$data_asset['DataRequired'] = 0;
+		$data_asset['DataType']		= DATA_ASSET_SPONSORED;
+		$data_asset['DataLabel']	= $native_ad_data_types[(string)DATA_ASSET_SPONSORED];
+		$data_asset['DataValue']	= $native_data_sponsored;
+		$native_data_new_list[]		= $data_asset;
+		
+		$data_asset = array();
+		$data_asset['DataRequired'] = 0;
+		$data_asset['DataType']		= DATA_ASSET_DESC;
+		$data_asset['DataLabel']	= $native_ad_data_types[(string)DATA_ASSET_DESC];
+		$data_asset['DataValue']	= $native_data_description;
+		$native_data_new_list[]		= $data_asset;
+		
+		if ($native_ad_response_item_id):
+				
+			foreach ($native_data_new_list as $native_data):
+				$NativeAdResponseItemAsset = new \model\NativeAdResponseItemAsset();
+				$NativeAdResponseItemAsset->NativeAdResponseItemID = $native_ad_response_item_id;
+				$NativeAdResponseItemAsset->AssetType = 'data';
+					
+				if (isset($native_data["DataRequired"])):
+					$NativeAdResponseItemAsset->AssetRequired						= $native_data["DataRequired"];
+				endif;
+				if (isset($native_data["TitleText"])):
+					$NativeAdResponseItemAsset->TitleText							= $native_data["TitleText"];
+				endif;
+				if (isset($native_data["ImageUrl"])):
+					$NativeAdResponseItemAsset->ImageUrl							= $native_data["ImageUrl"];
+				endif;
+				if (isset($native_data["ImageWidth"])):
+					$NativeAdResponseItemAsset->ImageWidth							= $native_data["ImageWidth"];
+				endif;
+				if (isset($native_data["ImageHeight"])):
+					$NativeAdResponseItemAsset->ImageHeight							= $native_data["ImageHeight"];
+				endif;
+				if (isset($native_data["VideoVastTag"])):
+					$NativeAdResponseItemAsset->VideoVastTag						= $native_data["VideoVastTag"];
+				endif;
+				if (isset($native_data["VideoDuration"])):
+					$NativeAdResponseItemAsset->VideoDuration						= $native_data["VideoDuration"];
+				endif;
+				if (isset($native_data["VideoMimesCommaSeparated"])):
+					$NativeAdResponseItemAsset->VideoMimesCommaSeparated			= $native_data["VideoMimesCommaSeparated"];
+				endif;
+				if (isset($native_data["VideoProtocolsCommaSeparated"])):
+					$NativeAdResponseItemAsset->VideoProtocolsCommaSeparated		= $native_data["VideoProtocolsCommaSeparated"];
+				endif;
+				if (isset($native_data["DataType"])):
+					$NativeAdResponseItemAsset->DataType							= $native_data["DataType"];
+				endif;
+				if (isset($native_data["DataLabel"])):
+					$NativeAdResponseItemAsset->DataLabel							= $native_data["DataLabel"];
+				endif;
+				if (isset($native_data["DataValue"])):
+					$NativeAdResponseItemAsset->DataValue							= $native_data["DataValue"];
+				endif;
+				if (isset($native_data["LinkUrl"])):
+					$NativeAdResponseItemAsset->LinkUrl								= $native_data["LinkUrl"];
+				endif;
+				if (isset($native_data["LinkClickTrackerUrlsCommaSeparated"])):
+					$NativeAdResponseItemAsset->LinkClickTrackerUrlsCommaSeparated 	= $native_data["LinkClickTrackerUrlsCommaSeparated"];
+				endif;
+				if (isset($native_data["LinkFallback"])):
+					$NativeAdResponseItemAsset->LinkFallback						= $native_data["LinkFallback"];
+				endif;
+					
+				$NativeAdResponseItemAsset->DateCreated								= date("Y-m-d H:i:s");
+					
+				$NativeAdResponseItemAssetFactory->saveNativeAdResponseItemAsset($NativeAdResponseItemAsset);
+					
+			endforeach;
+			
+		endif;
+			
+		$refresh_url = "/private-exchange-tools/media-library/?filter=nativeads";
+		$viewModel = new ViewModel(array('refresh_url' => $refresh_url));
+		
+		return $viewModel->setTemplate('dashboard-manager/demand/interstitial.phtml');
 		
 	}
 

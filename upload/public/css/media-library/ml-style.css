@@ -6,7 +6,7 @@
 
 .n-data {
 	border: 1px #666 solid;
-	width: 270px;
+	width: 280px;
 	padding-left: 20px;
 	margin-bottom: 20px;
 }
@@ -32,7 +32,7 @@
 
 #floating-preview-pane {
 	border: 1px #666 solid;
-	height: 310px;
+	min-height: 310px;
 	width: 300px;
 	margin-left: auto;
 	margin-right: auto;
@@ -72,4 +72,17 @@
 	font-weight: bold;
 }
 
+.data-tpl-preview {
+	margin: 10px 5px 5px 10px;
+	width: 280px;
+	font-size: 12px;
+}
 
+.tpl-data-preview-label {
+	font-weight: bold;
+}
+
+.tpl-required {
+    margin-left: -10px;
+    width: 260px;
+}
