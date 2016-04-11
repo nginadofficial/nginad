@@ -9,10 +9,10 @@
 
 namespace model;
 
-class NativeAdAsset
+class NativeAdRequestAsset
 {
-    public $NativeAdAssetID;
-    public $NativeAdID;
+    public $NativeAdRequestAssetID;
+    public $NativeAdRequestID;
     public $AssetType;
     public $AssetRequired;
     public $TitleText;

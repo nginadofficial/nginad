@@ -11,7 +11,7 @@ namespace _factory;
 
 use Zend\Db\TableGateway\Feature;
 
-class NativeAd extends \_factory\CachedTableRead
+class NativeAdRequest extends \_factory\CachedTableRead
 {
 
 	static protected $instance = null;
@@ -19,7 +19,7 @@ class NativeAd extends \_factory\CachedTableRead
 	public static function get_instance() {
 
 		if (self::$instance == null):
-			self::$instance = new \_factory\NativeAd();
+			self::$instance = new \_factory\NativeAdRequest();
 		endif;
 		return self::$instance;
 	}
@@ -27,7 +27,7 @@ class NativeAd extends \_factory\CachedTableRead
 
     function __construct() {
 
-            $this->table = 'NativeAd';
+            $this->table = 'NativeAdRequest';
             $this->featureSet = new Feature\FeatureSet();
             $this->featureSet->addFeature(new Feature\GlobalAdapterFeature());
             $this->initialize();
@@ -51,7 +51,7 @@ class NativeAd extends \_factory\CachedTableRead
         	);
         	endforeach;
         	$select->limit(1, 0);
-        	$select->order(array('NativeAdID'));
+        	$select->order(array('NativeAdRequestID'));
 
         }
         	);
@@ -81,7 +81,7 @@ class NativeAd extends \_factory\CachedTableRead
     		);
     		endforeach;
     		//$select->limit(10, 0);
-    		$select->order(array('NativeAdID'));
+    		$select->order(array('NativeAdRequestID'));
     	}
     		);
     
@@ -92,24 +92,20 @@ class NativeAd extends \_factory\CachedTableRead
     		return $obj_list;
     }
    
-   public function saveNativeAd(\model\NativeAd $NativeAd) {
+   public function saveNativeAdRequest(\model\NativeAdRequest $NativeAdRequest) {
 
 	   	$data = array(
-	   			'AdName'         						=> $NativeAd->AdName,
-	   			'UserID'         						=> $NativeAd->UserID,
-	   			'Description'         					=> $NativeAd->Description,
-	   			'MediaType'         					=> $NativeAd->MediaType,
-	   			'BidUnit'         						=> $NativeAd->BidUnit,
-	   			'LinkUrl'         						=> $NativeAd->LinkUrl,
-	   			'LinkClickTrackerUrlsCommaSeparated'	=> $NativeAd->LinkClickTrackerUrlsCommaSeparated,
-	   			'LinkFallback'         					=> $NativeAd->LinkFallback,
-	   			'TrackerUrlsCommaSeparated'    			=> $NativeAd->TrackerUrlsCommaSeparated === "" ? null : $NativeAd->TrackerUrlsCommaSeparated,
-	   			'JsLinkTracker'         				=> $NativeAd->JsLinkTracker === "" ? null : $NativeAd->JsLinkTracker,
-	   			'AllowedLayoutsCommaSeparated'    		=> $NativeAd->AllowedLayoutsCommaSeparated === "" ? null : $NativeAd->AllowedLayoutsCommaSeparated,
-	   			'AllowedAdUnitsCommaSeparated'    		=> $NativeAd->AllowedAdUnitsCommaSeparated === "" ? null : $NativeAd->AllowedAdUnitsCommaSeparated,
-	   			'MaxPlacements'         				=> $NativeAd->MaxPlacements === "" ? null : $NativeAd->MaxPlacements,
-	   			'MaxSequence'         					=> $NativeAd->MaxSequence === "" ? null : $NativeAd->MaxSequence,
-	   			'DateCreated'         					=> $NativeAd->DateCreated
+	   			'PublisherAdZoneID'         			=> $NativeAdRequest->PublisherAdZoneID,
+	   			'LinkUrl'         						=> $NativeAdRequest->LinkUrl,
+	   			'LinkClickTrackerUrlsCommaSeparated'	=> $NativeAdRequest->LinkClickTrackerUrlsCommaSeparated,
+	   			'LinkFallback'         					=> $NativeAdRequest->LinkFallback,
+	   			'TrackerUrlsCommaSeparated'    			=> $NativeAdRequest->TrackerUrlsCommaSeparated === "" ? null : $NativeAdRequest->TrackerUrlsCommaSeparated,
+	   			'JsLinkTracker'         				=> $NativeAdRequest->JsLinkTracker === "" ? null : $NativeAdRequest->JsLinkTracker,
+	   			'AllowedLayoutsCommaSeparated'    		=> $NativeAdRequest->AllowedLayoutsCommaSeparated === "" ? null : $NativeAdRequest->AllowedLayoutsCommaSeparated,
+	   			'AllowedAdUnitsCommaSeparated'    		=> $NativeAdRequest->AllowedAdUnitsCommaSeparated === "" ? null : $NativeAdRequest->AllowedAdUnitsCommaSeparated,
+	   			'MaxPlacements'         				=> $NativeAdRequest->MaxPlacements === "" ? null : $NativeAdRequest->MaxPlacements,
+	   			'MaxSequence'         					=> $NativeAdRequest->MaxSequence === "" ? null : $NativeAdRequest->MaxSequence,
+	   			'DateCreated'         					=> $NativeAdRequest->DateCreated
 	   	);
 
 		$this->insert($data);
@@ -119,13 +115,13 @@ class NativeAd extends \_factory\CachedTableRead
    /**
     * Delete the Ad specified.
     * 
-    * @param int $NativeAdID The integer ID of the Ad to delete.
+    * @param int $NativeAdRequestID The integer ID of the Ad to delete.
     * @throws \InvalidArgumentException is thrown when an invalid integer is provided.
     * @return boolean|int Returns the rows affected, or FALSE if failure.
     */
-   public function delete_assets($NativeAdID)
+   public function delete_assets($NativeAdRequestID)
    {
-       $result = $this->delete(array("NativeAdID" => intval($NativeAdID)));
+       $result = $this->delete(array("NativeAdRequestID" => intval($NativeAdRequestID)));
    }
    
 };

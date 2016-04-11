@@ -11,27 +11,20 @@ namespace model;
 
 use \model\interfaces\MediaLibraryItem;
 
-class NativeAd implements MediaLibraryItem
+class NativeAdResponseItem implements MediaLibraryItem
 {
-    public $NativeAdID;
+    public $NativeAdResponseItemID;
     public $UserID;
     public $AdName;
-    public $Description;
     public $MediaType;
-    public $BidUnit;
     public $LinkUrl;
-    public $LinkClickTrackerUrlsCommaSeparated;
-    public $LinkFallback;
     public $TrackerUrlsCommaSeparated;
     public $JsLinkTracker;
-    public $AllowedLayoutsCommaSeparated;
-    public $AllowedAdUnitsCommaSeparated;
-    public $MaxPlacements;
-    public $MaxSequence;
+    public $ImageHeight;
+    public $ImageWidth;
     public $DateCreated;
     public $DateUpdated;
-    
-    
+
     /**
      * Retrieve UserID
      *
