@@ -17,7 +17,7 @@ use Zend\Authentication\Storage;
 use Zend\Authentication\AuthenticationService;
 use Zend\Authentication\Adapter\DbTable as DbTableAuthAdapter;
 use Zend\Mvc\Application;
-use WebsiteCustom\view\Helper\Loginhelper;
+use \util\LoginHelper;
 
 class Module implements AutoloaderProviderInterface
 {

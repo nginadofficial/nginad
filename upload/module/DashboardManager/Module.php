@@ -19,7 +19,7 @@ use Zend\Mvc\MvcEvent;
 use _factory;
 use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
 use Zend\Authentication\Adapter\DbTable as DbTableAuthAdapter;
-use DashboardManager\view\Helper\Loginhelper;
+use \util\LoginHelper;
 use auth\UserAuthenticationStorage;
 use auth\UserIdentityProvider;
 use Zend\Mail\Transport\Sendmail;
@@ -180,7 +180,7 @@ class Module implements AutoloaderProviderInterface
 
     /**
      * 
-     * @return multitype:multitype:NULL  |\DashboardManager\View\Helper\Loginhelper
+     * @return multitype:multitype:NULL  |\util\LoginHelper
      */
     public function getViewHelperConfig()
     {
@@ -188,7 +188,7 @@ class Module implements AutoloaderProviderInterface
     			'factories' => array(
     					'Login_bool' => function ($helperPluginManager) {
     						$serviceLocator = $helperPluginManager->getServiceLocator();
-    						$viewHelper = new Loginhelper();
+    						$viewHelper = new LoginHelper();
     						$viewHelper->setServiceLocator($serviceLocator);
     						return $viewHelper;
     					}

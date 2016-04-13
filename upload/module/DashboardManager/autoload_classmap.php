@@ -101,5 +101,5 @@ return array(
   'util\LijitWorkflow'                                                   => __DIR__ . '/src/DashboardManager/util/LijitWorkflow.php',
   'util\Maintenance'                                                     => __DIR__ . '/src/DashboardManager/util/Maintenance.php',
   'util\Markup'                                                          => __DIR__ . '/src/DashboardManager/util/Markup.php',
-  'DashboardManager\view\Helper\Loginhelper'                             => __DIR__ . '/src/DashboardManager/view/Helper/Loginhelper.php',
+  'util\LoginHelper'                             						 => __DIR__ . '/src/DashboardManager/util/LoginHelper.php',
 );
