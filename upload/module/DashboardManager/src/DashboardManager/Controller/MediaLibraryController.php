@@ -34,6 +34,8 @@ class MediaLibraryController extends DemandAbstractActionController {
 		$initialized = $this->initialize();
 		if ($initialized !== true) return $initialized;
 		
+		$search_query			= $this->getRequest()->getQuery("q", "");
+		
 		$ad_media_list = array();
 		
 		/*
@@ -51,21 +53,34 @@ class MediaLibraryController extends DemandAbstractActionController {
 	    else:
 	    	$params["UserID"] = $this->auth->getEffectiveUserID();
 		endif;
+		
 		$NativeAdResponseItemList = $NativeAdResponseItemFactory->get($params);
 		
 		foreach ($NativeAdResponseItemList as $NativeAdResponseItem):
 			$params = array();
 			$params["NativeAdResponseItemID"] 		= $NativeAdResponseItem->NativeAdResponseItemID;
-			$params["AssetType"]					= 'data';
-			$params["DataType"]						= DATA_ASSET_DESC;
+			$params["AssetType"]					= 'title';
 			$NativeAdResponseItemAssetData 			= $NativeAdResponseItemAssetFactory->get_row($params);
 			if ($NativeAdResponseItemAssetData !== null):
-				$NativeAdResponseItem->Description 	= $NativeAdResponseItemAssetData->DataValue;
+				$NativeAdResponseItem->Description 	= $NativeAdResponseItemAssetData->TitleText;
 			else:
 				$NativeAdResponseItem->Description 	= 'Not Available';
 			endif;
-			
-			$ad_media_list[] = $NativeAdResponseItem;
+
+			if (!empty($search_query)):
+				$search_query_compare	= strtolower($search_query);
+				$search_ad_name 		= strtolower($NativeAdResponseItem->AdName);
+				$search_description 	= strtolower($NativeAdResponseItem->Description);
+				
+				if (strpos($search_ad_name, $search_query_compare) !== false	
+					|| strpos($search_description, $search_query_compare) !== false):
+					
+					$ad_media_list[] = $NativeAdResponseItem;
+				endif;
+			else:
+				$ad_media_list[] = $NativeAdResponseItem;
+			endif;
+
 		endforeach;
 
 	    $view = new ViewModel(array(
@@ -80,11 +95,29 @@ class MediaLibraryController extends DemandAbstractActionController {
 				'effective_id' => $this->auth->getEffectiveIdentityID(),
 				'impersonate_id' => $this->ImpersonateID,
 	    		'ad_media_list' => $ad_media_list,
-	    		'header_title' => '<a href="/private-exchange-tools/media-library/createnativead">Create Native Ad</a>'
+	    		'search_query' => $search_query
 
 	    ));
+	    
+	    if ($this->is_super_admin == false
+	    || ($this->is_super_admin == true && $this->DemandCustomerInfoID != null && $this->auth->getEffectiveIdentityID() != 0)):
+	    
+	    	$view->header_title = '<a href="/private-exchange-tools/media-library/createnativead">Create Native Ad</a>';
+	    else:
+	    	$view->header_title = '&nbsp;';
+	    endif;
 
 	    return $view;
+	}
+	
+	/**
+	 * Allows an administrator to "login as another user", to impersonate a lower user to manage another user's objects.
+	 * @return Ambigous <\Zend\Http\Response, \Zend\Stdlib\ResponseInterface>
+	 */
+	public function loginasAction()
+	{
+		$this->ImpersonateUser();
+		return $this->redirect()->toRoute('pxassetlibrary');
 	}
 	
 	public function createnativeadAction() {

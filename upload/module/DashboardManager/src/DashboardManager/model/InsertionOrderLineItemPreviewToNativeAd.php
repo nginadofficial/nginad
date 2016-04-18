@@ -13,7 +13,7 @@ class InsertionOrderLineItemPreviewToNativeAd {
 
 	public $InsertionOrderLineItemPreviewToNativeAdID;
 	public $InsertionOrderLineItemPreviewID;
-	public $NativeAdID;
+	public $NativeAdResponseItemID;
 	public $DateCreated;
 	
 }
