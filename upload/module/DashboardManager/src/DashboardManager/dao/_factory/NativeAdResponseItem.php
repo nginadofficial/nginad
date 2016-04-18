@@ -126,7 +126,7 @@ class NativeAdResponseItem extends \_factory\CachedTableRead
 			return $this->getLastInsertValue();
 			
 		else:
-			$data['DateUpdated']  = $NativeAdResponseItem->DateCreated;
+			$data['NativeAdResponseItemID']  = $NativeAdResponseItemID;
 			return $this->update($data, array('NativeAdResponseItemID' => $NativeAdResponseItemID));
 		endif;
 		

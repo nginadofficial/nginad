@@ -1,0 +1,243 @@
+<?php
+$this->headScript()->appendFile($this->basePath() . '/js/3rdparty/jquery-ui-1.9.2.custom.min.js');
+$this->headLink()->appendStylesheet($this->basePath() . '/css/upload/dropzone.css');
+$this->headLink()->appendStylesheet($this->basePath() . '/css/media-library/ml-style.css');
+$this->headLink()->appendStylesheet($this->basePath() . '/css/jquery-ui/smoothness/jquery-ui-1.9.2.custom.min.css');
+$this->headScript()->appendFile($this->basePath() . '/js/media-library/nativead.js');
+$this->headScript()->appendFile($this->basePath() . '/js/script.js');
+$this->headScript()->appendFile($this->basePath() . '/js/upload/dropzone.js');
+
+$this->headScript()->captureStart() ?>
+
+var insertion_order_id = null;
+
+Dropzone.autoDiscover = false;
+
+$(function() {
+    var myDropzone = new Dropzone("div#dr-zone", { 
+    		url: "/private-exchange/uploadcreative/",
+    		acceptedFiles: "image/jpg, image/jpeg,image/png,image/gif,application/x-shockwave-flash",
+    		paramName: "file",
+  			maxFilesize: 2, // MB
+  			uploadMultiple: false,
+  			success: function(file, storedName) { $("#imageurl").val(storedName); updateImageAd(false); },
+  			error: function(file, errorMessage) { alert("Error: " + errorMessage); },
+  			init: function() {
+				    this.on("addedfile", function() {
+				      if (this.files[1]!=null){
+				        this.removeFile(this.files[0]);
+				      }
+				    });
+			}
+    		});
+});
+
+var native_ad_data_json = '<?php echo $current_native_ad_response_assets_json ?>';
+
+$().ready(function() {
+	initializeNativeDataAssets();
+});
+
+<?php $this->headScript()->captureEnd();  ?>
+
+ <ul class="breadcrumb">
+    <li><a href="/private-exchange-tools/media-library">Media Library</a> <span class="divider">/</span></li>
+    <li><a href="/private-exchange-tools/media-library?category=nativeads">Native Ads</a><span class="divider">/</span></li>
+    <li class="active">Create Native Ad</li>
+    </ul>
+
+<div id="cdn_form_msg" class="alert alert-error" style="margin: 5px; display: none;"></div>
+<form id="nativeform" name="nativeform" method="POST" action="/private-exchange-tools/media-library/newnativead">
+<input type="hidden" id="nativeadresponseitemid" name="nativeadresponseitemid" value="<?php echo $native_ad_response_item_id ?>">
+<fieldset>
+<div class="span7">
+	   <div class="form-group">
+		<label for="nativeadname">Ad Name</label>
+		<input type="text" class="txtbox-width" name="nativeadname" value="<?php echo $ad_name ?>">
+	</div>
+	
+	<!-- 
+	
+	Initially, we set up an image native ad with a title with the preview on the right side
+	to set up a default so the user can visualize what the ad looks like, then we specify
+	options so they can customize including adding multiple native ads to the bid.
+	
+	 -->
+	 
+	 <h3 style="color: #666; font-weight: normal;">Native Ad Builder</h3>
+	 <hr />
+	 
+	 <div class="control-group">
+		<label for="data_title">Title : </label>
+		<span class="data-title-wrapper">
+			<input value="" placeholder="Learn about this awesome thing" class="input-xlarge" type="text" id="data_title" name="data_title" />
+		</span>
+	</div>	
+	<div class="form-group">
+		<label for="MediaType">Select Media Type</label>
+		<select id="MediaType" name="MediaType" class="selbox-width" onchange="switchMediaType();">
+			<option selected value="image">Image</option>
+			<option value="video">Video</option>
+		</select>
+	</div>
+	<div id="media-type-image">
+		<div class="control-group imagead">
+			<div id="dr-zone" action="/file-upload" class="dropzone"></div>
+		</div>	
+		 <div class="control-group imagead">
+			<label for="imageurl">Image Ad URL : <span class="hlp"><small><i>( eg. http://www.iab.net/media/image/120x20.png )</i></small></span></label>
+			<span id="imageurlwrapper">
+				<input placeholder="<?php echo $site_url ?>/images/media-library/native.default.img.jpg" value="" class="input-xxlarge" type="text" id="imageurl" name="imageurl" />
+			</span>
+		</div>	
+		 <div class="control-group imagead">
+			<label for="landingpageurl">Image Ad Landing Page URL : <span class="hlp"><small><i>( eg. http://www.example.com/landing-page.html )</i></small></span></label>
+			<span id="landingpageurlwrapper">
+				<input value="<?php echo $link_url ?>" placeholder="http://www.example.com/landing-page.html" value="" class="input-xxlarge" type="text" id="landingpageurl" name="landingpageurl" />
+			</span>
+		</div>	
+	</div>
+	
+	<div id="media-type-video" style="display: none;">
+		<div class="form-group">
+			<label for="video_vast_tag">VAST Ad XML : <span
+				class="hlp"><small><i>(required - <a target="_blank" style="color: blue; text-decoration: underline;"  href="http://www.iab.com/insights/vast-2-0-xml-samples-for-testing/">Vast XML</a>)</i></small></span></label> <span class="video_vast_tag_wrapper"> <textarea
+					class="txtbox-width" style="height:  150px; width: 500px;"
+					id="video_vast_tag" name="video_vast_tag" rows="6"></textarea>
+			</span>
+		</div>
+
+		<div class="control-group">
+			<label for="video_duration" class="control-label">Video Duration
+				: <span class="hlp"><small><i>(required - Video Length in Seconds)</i></small></span>
+			</label>
+			<div class="controls">
+				<input type="text" placeholder="90" class="input-mini"
+					size="5" maxlength="10" id="video_duration" name="video_duration">
+			</div>
+		</div>
+			
+		<div class="control-group">
+			<label for="video_mimes" class="control-label">Mimes : <span class="hlp"><small><i>(required,
+							ctrl+shift to select mutliple)</i></small></span></label>
+			<div class="controls">
+				<select id="video_mimes" name="video_mimes" multiple class="zone-txtarea"
+					style="min-height: 170px">
+				    <?php foreach ($mimes as $name): ?>
+				    	<option value="<?php echo $name;?>" selected="selected"><?php echo $name;?></option>
+				    <?php endforeach; ?>
+				</select>
+			</div>
+		</div>
+
+		<div class="control-group">
+			<label for="video_protocols" class="control-label">Protocols : <span
+				class="hlp"><small><i>(ctrl+shift to select mutliple)</i></small></span></label>
+			<div class="controls">
+				<select id="video_protocols" name="video_protocols" multiple
+					class="zone-txtarea" style="min-height: 50px">
+					<?php foreach ($protocols as $code => $name): ?>
+					     <option value="<?php echo $code;?>"><?php echo $name;?></option>
+					<?php endforeach; ?>
+				</select>
+			</div>
+		</div>
+	</div>
+	
+	<div class="control-group">
+		<label for="data_description">Description : </label>
+		<span class="data-description-wrapper">
+			<input value="" placeholder="Learn all about this awesome story of someone using my product." class="input-xxlarge" type="text" id="data_description" name="data_description" />
+		</span>
+	</div>	
+	
+	<div class="control-group">
+		<label for="data_sponsored">Sponsored By : </label>
+		<span class="data-sponsored-wrapper">
+			<input value="" placeholder="My Brand" class="input-large" type="text" id="data_sponsored" name="data_sponsored" />
+		</span>
+	</div>	
+	
+	<div class="form-group">
+		<label for="AttributeType">Add Data Attributes</label>
+		<select id="AttributeType" name="AttributeType" class="selbox-width" onchange="">
+			<?php foreach ($native_ad_data_types as $key => $value): ?>
+				<?php if (intval($key) > 2): ?>
+					<option value="<?php echo $key; ?>"><?php echo $value; ?></option>
+				<?php endif; ?>
+			<?php endforeach; ?>
+		</select>
+		<span class="add-button-container">
+				<input type="button" value="Add" class="btn btn-margin" style="margin-top: 10px;" onclick="newDataElement();" />
+		</span>
+	</div>
+	
+	<div id="native-data"></div>
+	
+	</div>
+	<div class="span7">
+<h1 id="preview-header">PREVIEW</h1>
+<hr id="preview-separator" />
+<div id="floating-pane-container">
+<div id="floating-preview-pane">
+<div id="native-preview-image">
+	<a class="preview-target-link" target="_blank" href="http://www.example.com/landing-page.html"><img style="border: 0px; height: 175px; width: 280px;" src="/images/media-library/native.default.img.jpg" /></a>
+</div>
+<div id="native-preview-title">Learn about this awesome thing</div>
+<div id="native-preview-description">Learn all about this awesome story of someone using my product.</div>
+<div id="native-preview-sponsored">Promoted by <span id="native-preview-brand">My Brand</span></div>
+</div>
+</div>
+	</div>
+	<div class="span12">
+	<div class="form-group">
+	   <input type="submit" id="create-button" class="btn btn-primary" name="B1" value="Edit Native Ad" />
+	   </div>
+	</div>
+</fieldset>
+</form>
+
+<!-- START NATIVE AD DATA ASSETS -->
+		<div id="data-template-preview" style="display: none;">
+			<div id='data-tpl-preview-_N_' class="data-tpl-preview"><span class="tpl-data-preview-label">_LABEL_</span> <span class="tpl-data-preview-value">_VALUE_</span></div>
+		</div>
+		
+    	<div id="data-template" style="display: none;">
+    		<input type="hidden" id="DataType_N_" name="DataType_N_" value="" />
+    		<h3 class="dataplt-title">Add Data</h3>
+			<div class="control-group tpl-required">
+				<label for="DataRequired_N_" class="control-label" style="display: inline;">Required to Show Ad : &nbsp; </label>
+				<div class="controls" style="display: inline;" id="DataRequiredContainer_N_">
+					<input type="radio" value="1" class="required-on" name="DataRequired_N_" />&nbsp; Yes
+					&nbsp; <input type="radio" value="0" class="required-off" name="DataRequired_N_" />&nbsp; No
+				</div>
+				<div>
+					<span class="hlp"><small><i>(optional - Bid on the native zone even if this asset does not match.)</i></small></span>
+				</div>
+			</div>
+				<div class="control-group">
+					<label for="DataLabel_N_" class="control-label"><span class="dataplt-label">Data Label</span> : 
+						<span class="hlp"><small><i>(optional)</i></small></span>
+					</label>
+					<div class="controls">
+						<input type="text" class="input-large"
+							value="" size="5" maxlength="255" id="DataLabel_N_" name="DataLabel_N_">
+					</div>
+				</div>
+				<div class="control-group">
+					<label for="DataValue_N_" class="control-label"><span class="dataplt-value">Data Value</span> : <span class="hlp"><small><i>(required)</i></small></span>
+					</label>
+					<div class="controls">
+						<input type="text" class="input-large"
+							value="" size="5" maxlength="255" id="DataValue_N_" name="DataValue_N_">
+					</div>
+				</div>
+			<div class="n-button-container">
+				<input type="button" class="btn btn-margin remove-data-element" name="RemoveDataElement_N_" value="Remove Data" onclick="removeDataElement('_N_');" />
+			</div>
+			<div class="n-link-container">
+			
+			</div>
+		</div>
+
+<!-- END NATIVE AD DATA ASSETS -->

@@ -117,6 +117,71 @@ class MediaLibraryController extends DemandAbstractActionController {
 		
 	}
 	
+	public function editnativeadAction() {
+	
+		$initialized = $this->initialize();
+	
+		$id = $this->getEvent()->getRouteMatch()->getParam('param1');
+		if ($id == null):
+			die("Invalid NativeAdResponseItemID");
+		endif;
+		
+		$NativeAdResponseItemFactory = \_factory\NativeAdResponseItem::get_instance();
+		$NativeAdResponseItemAssetFactory = \_factory\NativeAdResponseItemAsset::get_instance();
+		
+		$params = array();
+		$params["NativeAdResponseItemID"] 		= $id;
+		$NativeAdResponseItem		 			= $NativeAdResponseItemFactory->get_row($params);
+		
+		if ($NativeAdResponseItem == null):
+			die("Invalid NativeAdResponseItemID");
+		endif;
+		
+		$params = array();
+		$params["NativeAdResponseItemID"] 		= $id;
+		$NativeAdResponseItemAssetList		 	= $NativeAdResponseItemAssetFactory->get($params);
+		
+		foreach ($NativeAdResponseItemAssetList as $key => $NativeAdResponseItemAsset):
+			
+			$NativeAdResponseItemAssetList[$key]->VideoVastTag = rawurlencode($NativeAdResponseItemAssetList[$key]->VideoVastTag);
+			
+		endforeach;
+			
+		$current_native_ad_response_assets_json = json_encode($NativeAdResponseItemAssetList);
+		
+		$site_url = $this->config_handle['delivery']['site_url'];
+	
+		$view = new ViewModel(array(
+				'is_super_admin' => $this->auth->isSuperAdmin($this->config_handle),
+				'is_domain_admin' => $this->auth->isDomainAdmin($this->config_handle),
+				'user_id_list' => $this->user_id_list_demand_customer,
+				'effective_id' => $this->auth->getEffectiveIdentityID(),
+				'dashboard_view' => 'asset-library',
+				'user_identity' => $this->identity(),
+				'true_user_name' => $this->auth->getUserName(),
+				'is_super_admin' => $this->is_super_admin,
+				'effective_id' => $this->auth->getEffectiveIdentityID(),
+				'impersonate_id' => $this->ImpersonateID,
+		   
+				'protocols' => \util\BannerOptions::$protocols,
+				'mimes' => \util\BannerOptions::$mimes,
+		   
+				'site_url' => $site_url,
+				'ad_name' => $NativeAdResponseItem->AdName,
+				'link_url' => $NativeAdResponseItem->LinkUrl,
+				'ad_name' => $NativeAdResponseItem->AdName,
+				'native_ad_response_item_id' => $NativeAdResponseItem->NativeAdResponseItemID,
+				'native_ad_data_types' => \util\NativeAdsHelper::getNativeAdDataTypes(),
+				
+				'current_native_ad_response' => $NativeAdResponseItem,
+				'current_native_ad_response_assets_json' => $current_native_ad_response_assets_json
+				
+		));
+	
+		return $view;
+	
+	}
+	
 	public function newnativeadAction() {
 
 		$initialized = $this->initialize();
@@ -176,6 +241,7 @@ class MediaLibraryController extends DemandAbstractActionController {
 		
 		$native_data_sponsored 										= $request->getPost("data_sponsored");
 		
+		$native_ad_response_item_id									= $request->getPost("nativeadresponseitemid");
 		
 		/*
 		 * _NEW_ for new native data
@@ -197,13 +263,38 @@ class MediaLibraryController extends DemandAbstractActionController {
 		$NativeAdResponseItemFactory 							= new \_factory\NativeAdResponseItem();
 		$NativeAdResponseItemAssetFactory 						= new \_factory\NativeAdResponseItemAsset();
 		
+		$params = array();
+		$params["UserID"] 										= $user_id;
+		$params["NativeAdResponseItemID"] 						= $native_ad_response_item_id;
+		$_NativeAdResponseItem	 								= $NativeAdResponseItemFactory->get_row($params);
+		
 		$NativeAdResponseItem 									= new \model\NativeAdResponseItem();
 		
-		$NativeAdResponseItem->UserID							= $user_id;
-		$NativeAdResponseItem->AdName							= $native_ad_name;
-		$NativeAdResponseItem->MediaType						= $native_media_type;
-		$NativeAdResponseItem->DateCreated						= date("Y-m-d H:i:s");
+		if ($_NativeAdResponseItem == null):
+			$NativeAdResponseItem->DateCreated						= date("Y-m-d H:i:s");
+			$NativeAdResponseItem->UserID							= $user_id;
+		else: 
+
+			$NativeAdResponseItemAssetFactory->delete_assets($native_ad_response_item_id);
 		
+			$NativeAdResponseItem->NativeAdResponseItemID			= $_NativeAdResponseItem->NativeAdResponseItemID;
+			$NativeAdResponseItem->UserID							= $_NativeAdResponseItem->UserID;
+			$NativeAdResponseItem->AdName							= $_NativeAdResponseItem->AdName;
+			$NativeAdResponseItem->MediaType						= $_NativeAdResponseItem->MediaType;
+			$NativeAdResponseItem->LinkUrl							= $_NativeAdResponseItem->LinkUrl;
+			$NativeAdResponseItem->TrackerUrlsCommaSeparated		= $_NativeAdResponseItem->TrackerUrlsCommaSeparated;
+			$NativeAdResponseItem->JsLinkTracker					= $_NativeAdResponseItem->JsLinkTracker;
+			$NativeAdResponseItem->ImageHeight						= $_NativeAdResponseItem->ImageHeight;
+			$NativeAdResponseItem->ImageWidth						= $_NativeAdResponseItem->ImageWidth;
+			$NativeAdResponseItem->DateCreated						= $_NativeAdResponseItem->DateCreated;
+			$NativeAdResponseItem->DateUpdated						= $_NativeAdResponseItem->DateUpdated;
+			
+		endif;
+					
+		$NativeAdResponseItem->AdName							= $native_ad_name;
+		$NativeAdResponseItem->LinkUrl							= $native_landing_page_url;
+		$NativeAdResponseItem->MediaType						= $native_media_type;
+
 		$native_ad_response_item_id 							= $NativeAdResponseItemFactory->saveNativeAdResponseItem($NativeAdResponseItem);
 		
 		$NativeAdResponseItemAsset 								= new \model\NativeAdResponseItemAsset();
@@ -246,6 +337,15 @@ class MediaLibraryController extends DemandAbstractActionController {
 		
 		$NativeAdResponseItemAssetFactory->saveNativeAdResponseItemAsset($NativeAdResponseItemAsset);
 
+		$NativeAdResponseItemAsset 								= new \model\NativeAdResponseItemAsset();
+		$NativeAdResponseItemAsset->NativeAdResponseItemID 		= $native_ad_response_item_id;
+		$NativeAdResponseItemAsset->AssetRequired				= 1;
+		$NativeAdResponseItemAsset->AssetType 					= 'title';
+		$NativeAdResponseItemAsset->TitleText 					= $native_data_title;
+		$NativeAdResponseItemAsset->DateCreated					= date("Y-m-d H:i:s");
+		
+		$NativeAdResponseItemAssetFactory->saveNativeAdResponseItemAsset($NativeAdResponseItemAsset);
+		
 		$native_ad_data_types 		= \util\NativeAdsHelper::getNativeAdDataTypes();
 		
 		$data_asset = array();
