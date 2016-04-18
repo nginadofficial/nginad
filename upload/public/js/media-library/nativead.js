@@ -293,20 +293,20 @@ function updateLandingPageUrl() {
 
 function updateDynamicLabel(id, dataType) {
 	
-	var dataTypeLabel = dataTypeList[dataType].Label;
+	var dataTypeDataLabel = dataTypeList[dataType].DataLabel;
 	var txt = $('#DataLabel' + id).val();
 	if (!txt) {
-		txt = dataTypeLabel + ':';
+		txt = dataTypeDataLabel;
 	}
 	$('#data-tpl-preview-' + id + ' .tpl-data-preview-label').html(txt + ':');
 }
 
 function updateDynamicValue(id, dataType) {
 	
-	var dataTypeDataLabel = dataTypeList[dataType].DataLabel;
+	var dataTypeDefaultDataValue = dataTypeList[dataType].DefaultDataValue;
 	var txt = $('#DataValue' + id).val();
 	if (!txt) {
-		txt = dataTypeValue + ':';
+		txt = dataTypeDefaultDataValue;
 	}
 	$('#data-tpl-preview-' + id + ' .tpl-data-preview-value').html(txt);
 }
