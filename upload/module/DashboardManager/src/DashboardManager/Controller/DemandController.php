@@ -2516,6 +2516,14 @@ class DemandController extends DemandAbstractActionController {
         $imageurl						= "";
         $landingpageurl					= "";
         
+        if ($this->is_domain_admin):
+        	$user_id = $this->auth->getUserID();
+        else:
+        	$user_id = $this->auth->getEffectiveUserID();
+        endif;
+
+        $native_ad_response_items = \util\NativeAdsHelper::getNativeAdsSelectOptionsList($user_id);
+
         return new ViewModel(array(
         		'imageurl'					=> $imageurl,
         		'landingpageurl'			=> $landingpageurl,
@@ -2536,6 +2544,8 @@ class DemandController extends DemandAbstractActionController {
 				'effective_id' => $this->auth->getEffectiveIdentityID(),
 				'impersonate_id' => $this->ImpersonateID,
         		
+				'native_ad_response_items' => $native_ad_response_items,
+				
         		'linearity' => \util\BannerOptions::$linearity,
         		'start_delay' => \util\BannerOptions::$start_delay,
         		'playback_methods' => \util\BannerOptions::$playback_methods,
@@ -3013,6 +3023,14 @@ class DemandController extends DemandAbstractActionController {
 		endif;
 		$banner_preview_id = "";
 
+		if ($this->is_domain_admin):
+			$user_id = $this->auth->getUserID();
+		else:
+			$user_id = $this->auth->getEffectiveUserID();
+		endif;
+		
+		$native_ad_response_items = \util\NativeAdsHelper::getNativeAdsSelectOptionsList($user_id);
+
 		if ($is_preview == true):
 
 			// ACL PREVIEW PERMISSIONS CHECK
@@ -3041,6 +3059,8 @@ class DemandController extends DemandAbstractActionController {
 			$params["InsertionOrderLineItemPreviewID"] = $banner_preview_id;
 			$SspRtbChannelToInsertionOrderLineItemList = $SspRtbChannelToInsertionOrderLineItemPreviewFactory->get($params);
 			
+			$current_native_ad_response_selected_items = \util\NativeAdsHelper::getNativeAdsSelectedOptionsPreviewList($native_ad_response_items, $banner_preview_id);
+			
 		else:
 			// ACL PERMISSIONS CHECK
 			transformation\CheckPermissions::checkEditPermissionInsertionOrderLineItem($id, $this->auth, $this->config_handle);
@@ -3067,6 +3087,8 @@ class DemandController extends DemandAbstractActionController {
 			$params = array();
 			$params["InsertionOrderLineItemID"] = $id;
 			$SspRtbChannelToInsertionOrderLineItemList = $SspRtbChannelToInsertionOrderLineItemFactory->get($params);
+			
+			$current_native_ad_response_selected_items = \util\NativeAdsHelper::getNativeAdsSelectedOptionsList($native_ad_response_items, $id);
 			
 		endif;
 
@@ -3233,6 +3255,9 @@ class DemandController extends DemandAbstractActionController {
 				'effective_id' => $this->auth->getEffectiveIdentityID(),
 				'impersonate_id' => $this->ImpersonateID,
 				'ImpressionType' => $ImpressionType,
+				
+				'native_ad_response_items' => $native_ad_response_items,
+				'current_native_ad_response_selected_items' => $current_native_ad_response_selected_items,
 				
 				'linearity' => \util\BannerOptions::$linearity,
 				'start_delay' => \util\BannerOptions::$start_delay,

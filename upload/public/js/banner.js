@@ -117,7 +117,20 @@ function switchImpressionType(adtagtype) {
 		storedVastTagURL = adtagval;
 	}
 	
-	if (impType == 'video') {
+	if (impType == 'native') {
+		
+		$('#adtag').prop('readonly', true).hide();
+		$('#ad-tag-field-wrapper, #landing_page-url-wrapper').hide();
+		$(".imagead").hide();
+		$(".novideo").hide();
+		$(".nobanner").hide();
+		$(".nativeonly").show();
+		$("#update-button").val("Update Native Item");
+		$("#create-button").val("Create New Native Item");
+	
+	} else if (impType == 'video') {
+		
+		$('#ad-tag-field-wrapper, #landing_page-url-wrapper').show();
 		
 		var tagTextXML = 'Video VAST XML <br/> <span class="hlp">'
 			+ '<small><i>If you have a VAST <a target="_blank" style="color: blue; text-decoration: underline;"  href="http://ad3.liverail.com/?LR_PUBLISHER_ID=1331&LR_CAMPAIGN_ID=229&LR_SCHEMA=vast2">tag URL</a> from LiveRail or another exchange (<a target="_blank" style="color: blue; text-decoration: underline;"  href="http://www.iab.com/insights/vast-2-0-xml-samples-for-testing/">IAB Examples</a>),<br />just copy/paste the XML into the text area below</small>'
@@ -145,6 +158,7 @@ function switchImpressionType(adtagtype) {
 		$('#adtag').prop('readonly', false);
 		$(".imagead").hide();
 		$(".novideo").hide();
+		$(".nativeonly").hide();
 		$(".nobanner").show();
 		$("#update-button").val("Update Video");
 		$("#create-button").val("Create New Video");
@@ -152,9 +166,10 @@ function switchImpressionType(adtagtype) {
 		
 	} else {
 		
+		$('#ad-tag-field-wrapper, #landing_page-url-wrapper').show();
 		$("#adtagwrapper").html(defaultAdTagInput);
 		$("#adtag").val(storedVastTagXML);
-		
+		$(".nativeonly").hide();
 		$(".novideo").show();
 		$(".nobanner").hide();
 

@@ -132,6 +132,7 @@ $(function() {
 		<label for="ImpressionType">Ad Delivery Type</label>
 		<select id="ImpressionType" name="ImpressionType" class="selbox-width" onchange="switchImpressionType();">
 			<option value="banner">Banner Ad</option>
+			<option value="native">Native Ad</option>
 			<option value="image">Image Ad</option>
 			<option value="video">Video Ad</option>
 		</select>
@@ -261,7 +262,7 @@ $(function() {
 			<input value="<?php echo $landingpageurl;?>" class="input-xxlarge" type="text" id="landingpageurl" name="landingpageurl" />
 		</span>
 	</div>	
-	<div class="form-group">
+	<div class="form-group" id="ad-tag-field-wrapper">
 		<label for="adtag">Ad Tag</label>
 		<span id="adtagwrapper">
 			<textarea class="txtbox-width" style="height: 200px; width: 500px;" id="adtag" name="adtag" rows="6"></textarea>
@@ -308,7 +309,19 @@ $(function() {
 
 	</div>
 	
-<div class="form-group">
+	 <div class="control-group nativeonly" style="display: none">
+
+		<label for="NativeAdResponseItems">Native Ads : <span class="hlp"><small><i>(ctrl+shift to select mutliple)</i></small></span></label>
+		<select id="NativeAdResponseItems" name="NativeAdResponseItems[]" multiple class="zone-txtarea" style="min-height: 275px; min-width: 400px;">
+    <?php foreach ($native_ad_response_items as $key => $name): ?>
+            <option value="<?php echo $key;?>"><?php echo $name;?></option>
+    <?php endforeach; ?>
+</select>
+	 <div style="margin-bottom: 20px;"><span class="hlp"><a style="color: #dd0000;" target="_blank" href="/private-exchange-tools/media-library">[ Media Library Reference ]</a></span></div>
+	 
+	</div>
+	
+<div class="form-group" id="landing_page-url-wrapper">
 		<label for="landingpagetld" class="input">LandingPage TLD [top level domain] <br/>
 		<span class="hlp">
 		<small><i>(eg. nginad.com - required by RTB [if not known just use the tld of the tag])</i></small></span><nobr></nobr></label>

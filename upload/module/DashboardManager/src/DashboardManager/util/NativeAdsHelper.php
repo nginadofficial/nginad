@@ -135,4 +135,84 @@ class NativeAdsHelper {
 	
 	}
 	
+	public static function getNativeAdsSelectedOptionsList($native_ad_response_items, $insertion_order_line_item_id) {
+		
+		$native_ad_response_item_select_option_list = array_keys($native_ad_response_items);
+		
+		$InsertionOrderLineItemToNativeAdFactory = \_factory\InsertionOrderLineItemToNativeAd::get_instance();
+		
+		$params = array();
+		$params['NativeAdResponseItemID'] = $insertion_order_line_item_id;
+		
+		$InsertionOrderLineItemToNativeAdList = $InsertionOrderLineItemToNativeAdFactory->get($params);
+		
+		$native_ad_response_item_selected_option_list = array();
+		
+		foreach ($InsertionOrderLineItemToNativeAdList as $InsertionOrderLineItemToNativeAd):
+			
+			if (in_array($InsertionOrderLineItemToNativeAd->NativeAdResponseItemID, $native_ad_response_item_select_option_list)):
+				$native_ad_response_item_selected_option_list[] = $InsertionOrderLineItemToNativeAd->NativeAdResponseItemID;
+			endif;
+			
+		endforeach;
+		
+		return $native_ad_response_item_selected_option_list;
+		
+	}
+	
+	public static function getNativeAdsSelectedOptionsPreviewList($native_ad_response_items, $insertion_order_line_item_preview_id) {
+		
+		$native_ad_response_item_select_option_list = array_keys($native_ad_response_items);
+		
+		$InsertionOrderLineItemPreviewToNativeAdFactory = \_factory\InsertionOrderLineItemPreviewToNativeAd::get_instance();
+
+		$params = array();
+		$params['NativeAdResponseItemPreviewID'] = $insertion_order_line_item_preview_id;
+		
+		$InsertionOrderLineItemPreviewToNativeAdList = $InsertionOrderLineItemPreviewToNativeAdFactory->get($params);
+		
+		$native_ad_response_item_selected_option_list = array();
+		
+		foreach ($InsertionOrderLineItemPreviewToNativeAdList as $InsertionOrderLineItemPreviewToNativeAd):
+				
+			if (in_array($InsertionOrderLineItemPreviewToNativeAd->NativeAdResponseItemID, $native_ad_response_item_select_option_list)):
+				$native_ad_response_item_selected_option_list[] = $InsertionOrderLineItemPreviewToNativeAd->NativeAdResponseItemID;
+			endif;
+				
+		endforeach;
+		
+		return $native_ad_response_item_selected_option_list;
+	}
+	
+	public static function getNativeAdsSelectOptionsList($user_id) {
+		
+			$NativeAdResponseItemFactory = \_factory\NativeAdResponseItem::get_instance();
+			$NativeAdResponseItemAssetFactory = \_factory\NativeAdResponseItemAsset::get_instance();
+			
+			$params = array();
+			$params["UserID"] = $user_id;
+
+			$native_ad_response_item_select_option_list = array();
+			
+			$NativeAdResponseItemList = $NativeAdResponseItemFactory->get($params);
+			
+			foreach ($NativeAdResponseItemList as $NativeAdResponseItem):
+			
+				$option_description = $NativeAdResponseItem->AdName;
+			
+				$params = array();
+				$params["NativeAdResponseItemID"] 		= $NativeAdResponseItem->NativeAdResponseItemID;
+				$params["AssetType"]					= 'title';
+				$NativeAdResponseItemAssetData 			= $NativeAdResponseItemAssetFactory->get_row($params);
+				if ($NativeAdResponseItemAssetData !== null):
+					$option_description.= " - " . $NativeAdResponseItemAssetData->TitleText;
+				endif;
+				
+				$native_ad_response_item_select_option_list[$NativeAdResponseItem->NativeAdResponseItemID] = $option_description;
+
+			endforeach;
+			
+			return $native_ad_response_item_select_option_list;
+	}
+	
 }
