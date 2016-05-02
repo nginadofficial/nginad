@@ -160,6 +160,27 @@ class AuthHelper {
 	
 	}
 	
+	public static function domain_user_authorized_to_use_library_item($config, $user_id, $library_item_id, $library_item_type = 'native') {
+
+		
+		if ($library_item_type == 'native'):
+		
+			$NativeAdResponseItemFactory 		= \_factory\NativeAdResponseItem::get_instance();
+			$params = array();
+			$params["NativeAdResponseItemID"] 	= $library_item_id;
+			$params["UserID"] 					= $user_id;
+			$NativeAdResponseItem		 		= $NativeAdResponseItemFactory->get_row($params);
+		
+			if ($NativeAdResponseItem !== null):
+				return true;
+			endif;
+			
+		endif;
+	
+		return false;
+	
+	}
+	
 	public static function domain_user_authorized_ssp_passthru($parent_id, $ssp_channel_id) {
 	
 		/*

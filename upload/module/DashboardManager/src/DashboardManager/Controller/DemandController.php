@@ -2628,7 +2628,7 @@ class DemandController extends DemandAbstractActionController {
 
 		$ImpressionType = $this->getRequest()->getPost('ImpressionType');
 		
-		if ($ImpressionType != 'banner' && $ImpressionType != 'image' && $ImpressionType != 'video'):
+		if ($ImpressionType != 'banner' && $ImpressionType != 'native' && $ImpressionType != 'image' && $ImpressionType != 'video'):
 			die("Required Field: ImpressionType was missing");
 		endif;
 		
@@ -2654,9 +2654,18 @@ class DemandController extends DemandAbstractActionController {
 				'landingpagetld'
 		);
 		
+		$needed_input_native = array(
+				'bannername',
+				'startdate',
+				'enddate',
+				'bidamount'
+		);
+		
 		$adtag = $this->getRequest()->getPost('adtag');
 		
-		if ($ImpressionType == 'video'):
+		if ($ImpressionType == 'native'):
+			$this->validateInput($needed_input_native);
+		elseif ($ImpressionType == 'video'):
 			$this->validateInput($needed_input_video);
 		elseif ($ImpressionType == 'image'):
 			$this->validateInput($needed_input_banner);
@@ -2731,8 +2740,33 @@ class DemandController extends DemandAbstractActionController {
 		$bidamount = $this->getRequest()->getPost('bidamount');
 		$landingpagetld = $this->getRequest()->getPost('landingpagetld');
 		$bannerid = $this->getRequest()->getPost('bannerid');
+		$NativeAdResponseItemIDs = $this->getRequest()->getPost('NativeAdResponseItems');
 
-		if ($ImpressionType == 'video'):
+		if ($ImpressionType == 'native'):
+
+			if (!$NativeAdResponseItemIDs || !is_array($NativeAdResponseItemIDs) || count($NativeAdResponseItemIDs) <= 0):
+				die('You Selected a native ad type, but have not added any native ad items. Please visit the <a target="_blank" href="/private-exchange-tools/media-library">media library</a> to create new native ad items to associate to the line item.');
+			endif;
+			
+			/*
+			 * Validate that this domain admin is the owner of these media library items
+			 */
+			
+			if (!$this->is_super_admin):
+
+				foreach ($NativeAdResponseItemIDs as $NativeAdResponseItemID):
+		
+						$authorized = \util\AuthHelper::domain_user_authorized_to_use_library_item($this->config_handle, $this->auth->getUserID(), $NativeAdResponseItemID, 'native');
+							
+						if ($authorized !== true):
+							die('You Selected an invalid media library item. Please visit the <a target="_blank" href="/private-exchange-tools/media-library">media library</a> to create new native ad items to associate to the line item.');
+						endif;
+	
+				endforeach;
+
+			endif;
+			
+		elseif ($ImpressionType == 'video'):
 
 			$mimes 						= $this->getRequest()->getPost("Mimes");
 			if ($mimes && is_array($mimes) && count($mimes) > 0):
@@ -2783,7 +2817,7 @@ class DemandController extends DemandAbstractActionController {
 		$BannerPreview->UserID             	= $this->auth->getEffectiveUserID();
 
 		$BannerPreview->Name                      = $bannername;
-		$BannerPreview->InsertionOrderPreviewID       = $campaign_preview_id;
+		$BannerPreview->InsertionOrderPreviewID   = $campaign_preview_id;
 		$BannerPreview->StartDate                 = date("Y-m-d H:i:s", strtotime($startdate));
 		$BannerPreview->EndDate                   = date("Y-m-d H:i:s", strtotime($enddate));
 		
@@ -2819,7 +2853,25 @@ class DemandController extends DemandAbstractActionController {
 		$InsertionOrderLineItemVideoRestrictionsPreviewFactory = \_factory\InsertionOrderLineItemVideoRestrictionsPreview::get_instance();
 		$InsertionOrderLineItemRestrictionsPreviewFactory = \_factory\InsertionOrderLineItemRestrictionsPreview::get_instance();
 		
-		if ($ImpressionType == 'video'):
+		if ($ImpressionType == 'native'):
+
+			$InsertionOrderLineItemPreviewToNativeAdFactory = \_factory\InsertionOrderLineItemPreviewToNativeAd::get_instance();
+
+			// clear any previous items
+			$InsertionOrderLineItemPreviewToNativeAdFactory->deleteInsertionOrderLineItemPreviewToNativeAd($banner_preview_id);
+		
+			foreach ($NativeAdResponseItemIDs as $NativeAdResponseItemID):
+				
+				$InsertionOrderLineItemPreviewToNativeAd 									= new \model\InsertionOrderLineItemPreviewToNativeAd();
+				$InsertionOrderLineItemPreviewToNativeAd->InsertionOrderLineItemPreviewID 	= $banner_preview_id;
+				$InsertionOrderLineItemPreviewToNativeAd->NativeAdResponseItemID		 	= $NativeAdResponseItemID;
+				$InsertionOrderLineItemPreviewToNativeAd->DateUpdated						= date("Y-m-d H:i:s");
+				
+				$InsertionOrderLineItemPreviewToNativeAdFactory->saveInsertionOrderLineItemPreviewToNativeAd($InsertionOrderLineItemPreviewToNativeAd);
+				
+			endforeach;
+			
+		elseif ($ImpressionType == 'video'):
 
 			$params = array();
 			$params["InsertionOrderLineItemPreviewID"] = $banner_preview_id;

@@ -142,7 +142,7 @@ class NativeAdsHelper {
 		$InsertionOrderLineItemToNativeAdFactory = \_factory\InsertionOrderLineItemToNativeAd::get_instance();
 		
 		$params = array();
-		$params['NativeAdResponseItemID'] = $insertion_order_line_item_id;
+		$params['InsertionOrderLineItemID'] = $insertion_order_line_item_id;
 		
 		$InsertionOrderLineItemToNativeAdList = $InsertionOrderLineItemToNativeAdFactory->get($params);
 		
@@ -167,8 +167,8 @@ class NativeAdsHelper {
 		$InsertionOrderLineItemPreviewToNativeAdFactory = \_factory\InsertionOrderLineItemPreviewToNativeAd::get_instance();
 
 		$params = array();
-		$params['NativeAdResponseItemPreviewID'] = $insertion_order_line_item_preview_id;
-		
+		$params['InsertionOrderLineItemPreviewID'] = $insertion_order_line_item_preview_id;
+
 		$InsertionOrderLineItemPreviewToNativeAdList = $InsertionOrderLineItemPreviewToNativeAdFactory->get($params);
 		
 		$native_ad_response_item_selected_option_list = array();

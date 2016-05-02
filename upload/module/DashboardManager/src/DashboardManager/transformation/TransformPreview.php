@@ -303,8 +303,11 @@ class TransformPreview {
 
 		$ad_campaign_id = $InsertionOrderFactory->saveInsertionOrder($InsertionOrder);
 		
+		
+		$InsertionOrderLineItemPreviewToNativeAdFactory = \_factory\InsertionOrderLineItemPreviewToNativeAd::get_instance();
 		$PmpDealPublisherWebsiteToInsertionOrderPreviewFactory = \_factory\PmpDealPublisherWebsiteToInsertionOrderPreview::get_instance();
 		$SspRtbChannelToInsertionOrderPreviewFactory = \_factory\SspRtbChannelToInsertionOrderPreview::get_instance();
+		$InsertionOrderLineItemToNativeAdFactory = \_factory\InsertionOrderLineItemToNativeAd::get_instance();
 		$PmpDealPublisherWebsiteToInsertionOrderFactory = \_factory\PmpDealPublisherWebsiteToInsertionOrder::get_instance();
 		$SspRtbChannelToInsertionOrderFactory = \_factory\SspRtbChannelToInsertionOrder::get_instance();
 
@@ -357,6 +360,9 @@ class TransformPreview {
 			$SspRtbChannelToInsertionOrderFactory->saveSspRtbChannelToInsertionOrder($SspRtbChannelToInsertionOrder);
 				
 		endforeach;
+		
+		// first delete the existing ones, then re-insert
+		$InsertionOrderLineItemToNativeAdFactory->deleteInsertionOrderLineItemToNativeAdByCampaignID($ad_campaign_id);
 		
 		$InsertionOrderLineItemPreviewFactory = \_factory\InsertionOrderLineItemPreview::get_instance();
 		$params = array();
@@ -437,11 +443,34 @@ class TransformPreview {
 				continue;
 			endif;
 			
+			if ($Banner->ImpressionType == 'native'):
+			
+				/*
+				 * NATIVE RESTRICTIONS
+				 */
+
+				$params = array();
+				$params["InsertionOrderLineItemPreviewID"] = $banner_preview_id;
+				$InsertionOrderLineItemPreviewToNativeAdList = $InsertionOrderLineItemPreviewToNativeAdFactory->get($params);
+				
+				foreach ($InsertionOrderLineItemPreviewToNativeAdList as $InsertionOrderLineItemPreviewToNativeAd):
+					
+					$InsertionOrderLineItemToNativeAd 									= new \model\InsertionOrderLineItemToNativeAd();
+					$InsertionOrderLineItemToNativeAd->InsertionOrderLineItemID 		= $banner_id;
+					$InsertionOrderLineItemToNativeAd->NativeAdResponseItemID		 	= $InsertionOrderLineItemPreviewToNativeAd->NativeAdResponseItemID;
+					$InsertionOrderLineItemToNativeAd->DateUpdated						= date("Y-m-d H:i:s");
+					
+					$InsertionOrderLineItemToNativeAdFactory->saveInsertionOrderLineItemToNativeAd($InsertionOrderLineItemToNativeAd);
+	
+				endforeach;
+
+			endif;
+			
 			if ($Banner->ImpressionType == 'video'):
 
 				/*
 				 * VIDEO RESTRICTIONS
-				*/
+				 */
 	
 				$params = array();
 				$params["InsertionOrderLineItemPreviewID"] = $banner_preview_id;
@@ -685,6 +714,9 @@ class TransformPreview {
 		$params["Active"] = 1;
 		$InsertionOrderLineItemList = $InsertionOrderLineItemFactory->get($params);
 
+		$InsertionOrderLineItemToNativeAdFactory = \_factory\InsertionOrderLineItemToNativeAd::get_instance();
+		$InsertionOrderLineItemPreviewToNativeAdFactory = \_factory\InsertionOrderLineItemPreviewToNativeAd::get_instance();
+		
 		$InsertionOrderLineItemPreviewFactory = \_factory\InsertionOrderLineItemPreview::get_instance();
 		$InsertionOrderLineItemRestrictionsFactory = \_factory\InsertionOrderLineItemRestrictions::get_instance();
 		$InsertionOrderLineItemRestrictionsPreviewFactory = \_factory\InsertionOrderLineItemRestrictionsPreview::get_instance();
@@ -795,7 +827,29 @@ class TransformPreview {
 
 			endif;
 
-			
+			if ($BannerPreview->ImpressionType == 'native'):
+				
+				/*
+				 * NATIVE RESTRICTIONS
+				 */
+						
+				$params = array();
+				$params["InsertionOrderLineItemID"] = $banner_id;
+				$InsertionOrderLineItemToNativeAdList = $InsertionOrderLineItemToNativeAdFactory->get($params);
+				
+				foreach ($InsertionOrderLineItemToNativeAdList as $InsertionOrderLineItemToNativeAd):
+						
+					$InsertionOrderLineItemPreviewToNativeAd 									= new \model\InsertionOrderLineItemPreviewToNativeAd();
+					$InsertionOrderLineItemPreviewToNativeAd->InsertionOrderLineItemPreviewID 	= $InsertionOrderLineItemPreviewID;
+					$InsertionOrderLineItemPreviewToNativeAd->NativeAdResponseItemID		 	= $InsertionOrderLineItemToNativeAd->NativeAdResponseItemID;
+					$InsertionOrderLineItemPreviewToNativeAd->DateUpdated						= date("Y-m-d H:i:s");
+						
+					$InsertionOrderLineItemPreviewToNativeAdFactory->saveInsertionOrderLineItemPreviewToNativeAd($InsertionOrderLineItemPreviewToNativeAd);
+					
+				endforeach;
+					
+			endif;
+				
 			if ($BannerPreview->ImpressionType == 'video'):
 			
 				/*

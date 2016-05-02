@@ -96,7 +96,7 @@ class InsertionOrderLineItemPreviewToNativeAd extends \_factory\CachedTableRead
    	
 	   	$data = array(
 	   			'InsertionOrderLineItemPreviewID'   	=> $InsertionOrderLineItemPreviewToNativeAd->InsertionOrderLineItemPreviewID,
-	   			'NativeAdID'							=> $InsertionOrderLineItemPreviewToNativeAd->NativeAdID,
+	   			'NativeAdResponseItemID'				=> $InsertionOrderLineItemPreviewToNativeAd->NativeAdResponseItemID,
 	   			'DateCreated'         					=> $InsertionOrderLineItemPreviewToNativeAd->DateCreated
 	   	);
 
@@ -107,13 +107,13 @@ class InsertionOrderLineItemPreviewToNativeAd extends \_factory\CachedTableRead
    /**
     * Delete the Ad specified.
     * 
-    * @param int $InsertionOrderLineItemPreviewToNativeAdID The integer ID of the Ad to delete.
+    * @param int $InsertionOrderLineItemPreviewID The integer ID of the Ad to delete.
     * @throws \InvalidArgumentException is thrown when an invalid integer is provided.
     * @return boolean|int Returns the rows affected, or FALSE if failure.
     */
-   public function deleteInsertionOrderLineItemPreviewToNativeAd($InsertionOrderLineItemPreviewToNativeAdID)
+   public function deleteInsertionOrderLineItemPreviewToNativeAd($InsertionOrderLineItemPreviewID)
    {
-       $result = $this->delete(array("InsertionOrderLineItemToNativeAdID" => intval($InsertionOrderLineItemToNativeAdID)));
+       $result = $this->delete(array("InsertionOrderLineItemPreviewID" => intval($InsertionOrderLineItemPreviewID)));
    }
    
 };

@@ -96,7 +96,7 @@ class InsertionOrderLineItemToNativeAd extends \_factory\CachedTableRead
 
 	   	$data = array(
 	   			'InsertionOrderLineItemID'         		=> $InsertionOrderLineItemToNativeAd->InsertionOrderLineItemID,
-	   			'NativeAdID'							=> $InsertionOrderLineItemToNativeAd->NativeAdID,
+	   			'NativeAdResponseItemID'				=> $InsertionOrderLineItemToNativeAd->NativeAdResponseItemID,
 	   			'DateCreated'         					=> $InsertionOrderLineItemToNativeAd->DateCreated
 	   	);
 
@@ -107,13 +107,23 @@ class InsertionOrderLineItemToNativeAd extends \_factory\CachedTableRead
    /**
     * Delete the Ad specified.
     * 
-    * @param int $InsertionOrderLineItemToNativeAdID The integer ID of the Ad to delete.
+    * @param int $InsertionOrderID The integer ID of the Ad Campaign to delete.
     * @throws \InvalidArgumentException is thrown when an invalid integer is provided.
     * @return boolean|int Returns the rows affected, or FALSE if failure.
     */
-   public function deleteInsertionOrderLineItemToNativeAd($InsertionOrderLineItemToNativeAdID)
+   public function deleteInsertionOrderLineItemToNativeAdByCampaignID($InsertionOrderID)
    {
-       $result = $this->delete(array("InsertionOrderLineItemToNativeAdID" => intval($InsertionOrderLineItemToNativeAdID)));
+	   	$InsertionOrderLineItemFactory = \_factory\InsertionOrderLineItem::get_instance();
+	   	$params = array();
+	   	$params["InsertionOrderID"] = $InsertionOrderID;
+   	
+	   	$InsertionOrderLineItemList = $InsertionOrderLineItemFactory->get($params);
+	   	
+	   	foreach ($InsertionOrderLineItemList as $InsertionOrderLineItem):
+	   	
+       		$result = $this->delete(array("InsertionOrderLineItemID" => $InsertionOrderLineItem->InsertionOrderLineItemID));
+       	
+       	endforeach;
    }
    
 };
