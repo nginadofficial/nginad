@@ -8,7 +8,7 @@ A bug was introduced in Release 1.6.10, which cast private_auction to "object" i
  
  This is a minor version update to version 1.6.12
 
-*NOTE:* Please note that the upcoming version 1.7 will be the last version in PHP. NginAd 2.0 is being written with Spring Boot, JPA and Annotations, using Hadoop
+*NOTE:* Please note that the upcoming version 1.7 will be the last version in PHP. NginAd 2.0 is being written with Spring Boot, JPA and Annotations, using Java MVC and Hadoop
 
 March 13, 2016
 ------------------
