@@ -40,8 +40,8 @@ class DemandImpressionsAndSpendHourly extends \_factory\CachedTableRead {
         $this->adminFields = array_merge($this->adminFields, array(
         	'DemandCustomerInfoID',
         	'DemandCustomerName',
-            'Cost',
-            'CPM',
+        	'GrossCost',
+        	'GrossCPM',
         	'DateCreated'
         ));
         $this->initialize();

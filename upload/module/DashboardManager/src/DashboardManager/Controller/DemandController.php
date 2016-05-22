@@ -53,6 +53,10 @@ class DemandController extends DemandAbstractActionController {
 	    $params["Active"] = 1;
 	    // admin should see campaigns requiring approval and the user they belong to ONLY
 	    if ($this->is_domain_admin):
+	   		// clear publisher impersonate, and set to the demand customer
+	    	if ($this->auth->getEffectiveUserID() > 0):
+	    		$this->ImpersonateUser();
+	    	endif;
 	    	$params["UserID"] = $this->auth->getUserID();
 	    else:
 	    	$params["UserID"] = $this->auth->getEffectiveUserID();
