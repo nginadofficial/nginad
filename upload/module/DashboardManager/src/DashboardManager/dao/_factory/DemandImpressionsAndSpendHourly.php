@@ -40,8 +40,6 @@ class DemandImpressionsAndSpendHourly extends \_factory\CachedTableRead {
         $this->adminFields = array_merge($this->adminFields, array(
         	'DemandCustomerInfoID',
         	'DemandCustomerName',
-            'Cost',
-            'CPM',
         	'DateCreated'
         ));
         $this->initialize();
@@ -107,12 +105,12 @@ class DemandImpressionsAndSpendHourly extends \_factory\CachedTableRead {
     			'DemandCustomerName',
     			'DemandCustomerInfoID',
     			'BannerName',
-    			'PublisherTLD' => new \Zend\Db\Sql\Expression("CONCAT('N/','A')"),
+    			'PublisherTLDs' => new \Zend\Db\Sql\Expression("CONCAT('N/','A')"),
     			'Impressions' => new \Zend\Db\Sql\Expression('SUM(Impressions)'),
     			'Cost' => new \Zend\Db\Sql\Expression('SUM(Cost)'),
-    			'GrossCost' => new \Zend\Db\Sql\Expression('SUM(GrossCost)'),
+    			'Exchange Fees Cost' => new \Zend\Db\Sql\Expression('SUM(GrossCost) - SUM(Cost)'),
     			'CPM' => new \Zend\Db\Sql\Expression("IFNULL(AVG(CPM), '')"),
-    			'GrossCPM' => new \Zend\Db\Sql\Expression("IFNULL(AVG(GrossCPM), '')"),
+    			'Exchange Fees CPM' => new \Zend\Db\Sql\Expression("IFNULL(AVG(GrossCPM), 0) - IFNULL(AVG(CPM), 0)"),
     			'DateCreated' => new \Zend\Db\Sql\Expression('MAX(DateCreated)')
     			
     	));
@@ -232,8 +230,51 @@ class DemandImpressionsAndSpendHourly extends \_factory\CachedTableRead {
 		    	endif;
 	    	endif;
 
+	    	
+	    	$obj['Exchange Fees CPM'] = floatval($obj['GrossCPM']) - floatval($obj['CPM']);
+	    	$obj['Exchange Fees CPM'] = (string)$obj['Exchange Fees CPM'];
+	    	unset($obj['GrossCPM']);
+	    	
+	    	$obj['Exchange Fees Cost'] = floatval($obj['GrossCost']) - floatval($obj['Cost']);
+	    	$obj['Exchange Fees Cost'] = (string)$obj['Exchange Fees Cost'];
+	    	unset($obj['GrossCost']);
+
             $obj['MDYH'] = $this->re_normalize_time($obj['MDYH']);
-            $obj_list[] = $obj;
+
+            $reOrder = array(
+            		'MDYH' => $obj['MDYH'],
+            		'InsertionOrderLineItemID' => $obj['InsertionOrderLineItemID'],
+            		'DemandCustomerName' => null,
+            		'DemandCustomerInfoID' => null,
+            		'BannerName' => $obj['BannerName'],
+            		'PublisherTLDs' => $obj['PublisherTLDs'],
+            		'Impressions' => $obj['Impressions'],
+            		'Cost' => $obj['Cost'],
+            		'Exchange Fees Cost' => $obj['Exchange Fees Cost'],
+            		'CPM' => $obj['CPM'],
+            		'Exchange Fees CPM' => $obj['Exchange Fees CPM'],
+            		'DateCreated' => null
+            );
+            
+            if (isset($obj['DemandCustomerName'])):
+            	$reOrder['DemandCustomerName'] = $obj['DemandCustomerName'];
+           	else:
+           		unset($reOrder['DemandCustomerName']);
+            endif;
+            
+            if (isset($obj['DemandCustomerInfoID'])):
+            	$reOrder['DemandCustomerInfoID'] = $obj['DemandCustomerInfoID'];
+           	else:
+           		unset($reOrder['DemandCustomerInfoID']);
+            endif;
+            
+            if (isset($obj['DateCreated'])):
+            	$reOrder['DateCreated'] = $obj['DateCreated'];
+           	else:
+           		unset($reOrder['DateCreated']);
+            endif;
+            
+            $obj_list[] = $reOrder;
         endforeach;
 
         return $obj_list;
@@ -243,6 +284,16 @@ class DemandImpressionsAndSpendHourly extends \_factory\CachedTableRead {
 
         $metadata = new Metadata($this->adapter);
         $header = $metadata->getColumnNames('DemandImpressionsAndSpendHourly');
+
+        foreach ($header as $key => $value):
+        
+        	if ($header[$key] == 'GrossCost'):
+        		$header[$key] = 'Exchange Fees Cost';
+        	elseif ($header[$key] == 'GrossCPM'):
+        		$header[$key] = 'Exchange Fees CPM';
+        	endif;
+        
+        endforeach;
         
         return ($is_super_admin) ? $header : array_values(array_diff($header, $this->adminFields));
     }
