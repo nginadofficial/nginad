@@ -298,5 +298,3 @@ class DemandImpressionsAndSpendHourly extends \_factory\CachedTableRead {
         return ($is_super_admin) ? $header : array_values(array_diff($header, $this->adminFields));
     }
 }
-
-;

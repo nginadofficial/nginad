@@ -591,7 +591,7 @@ class ReportController extends PublisherAbstractActionController {
     	endif;
     
     	$impression = \_factory\DemandImpressionsAndSpendHourly::get_instance();
-    
+
     	$stats	= json_decode($this->getPerTime($impression, $extra_params), TRUE);
     	 
     	$impression_headers = $impression->getPerTimeHeader($this->is_super_admin);
@@ -653,6 +653,8 @@ class ReportController extends PublisherAbstractActionController {
 
     	$impression = \_factory\PublisherImpressionsAndSpendHourly::get_instance($this->config_handle);
     	 
+    	$extra_params['DemandCustomerInfoID'] = $this->DemandCustomerInfoID;
+    	
     	$stats	= json_decode($this->getPerTime($impression, $extra_params, $this->is_domain_admin), TRUE);
     	
     	if ($this->is_domain_admin):
