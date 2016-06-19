@@ -30,13 +30,13 @@ return array(
     	// if SMTP is false sendmail will be used
     	'smtp'	  => true,
         'options' => array(
-            'name'              => 'smtp.mandrillapp.com',
-            'host'              => 'smtp.mandrillapp.com',
+            'name'              => 'smtp-relay.sendinblue.com',
+            'host'              => 'smtp-relay.sendinblue.com',
             'port'              => 587,
             'connection_class'  => 'plain',
             'connection_config' => array(
                 'username' => 'username@domain.com',
-                'password' => '_my_mandrill_api_key',
+                'password' => '_my_sendinblue_api_key',
                 'ssl' => 'tls'
             ),
         ),  

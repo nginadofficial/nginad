@@ -110,7 +110,7 @@ class RtbBidRequestJsonEncoder {
 			 
 				$impression['pmp'] = array();
 			
-				\util\ParseHelper::setArrayParam($RtbBidRequestImp->RtbBidRequestPmp, $impression['pmp'], 'private_auction', 'object');
+				\util\ParseHelper::setArrayParam($RtbBidRequestImp->RtbBidRequestPmp, $impression['pmp'], 'private_auction', 'integer');
 			
 				foreach ($RtbBidRequestImp->RtbBidRequestPmp->RtbBidRequestDirectDealsList as $RtbBidRequestDirectDeals):
 			

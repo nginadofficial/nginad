@@ -1,6 +1,15 @@
 nginad
 =======
 
+May 16, 2016
+------------------
+
+A bug was introduced in Release 1.6.10, which cast private_auction to "object" instead of "integer". This caused the PMP tasklet to fail on Private Exchange domain admins bidding on their own publishers' inventory. private_auction is now cast to integer before the JSON encoding fixing the tasklet as well in the workflow.
+ 
+ This is a minor version update to version 1.6.12
+
+*NOTE:* Please note that the upcoming version 1.7 will be the last version in PHP. NginAd 2.0 is being written with Spring Boot, JPA and Annotations, using Java MVC and Hadoop
+
 March 13, 2016
 ------------------
 
